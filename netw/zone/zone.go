@@ -76,7 +76,7 @@ func (c *Zone) Set(vsys string, e ...Entry) error {
         d.Data = append(d.Data, fn(e[i]))
         names[i] = e[i].Name
     }
-    c.con.LogAction("(set) zone(s): %v", names)
+    c.con.LogAction("(set) zones: %v", names)
 
     // Set xpath.
     path := c.xpath(vsys, names)

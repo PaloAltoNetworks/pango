@@ -93,7 +93,7 @@ func (c *Eth) Set(vsys string, e ...Entry) error {
         d.Data = append(d.Data, fn(e[i]))
         names[i] = e[i].Name
     }
-    c.con.LogAction("(set) ethernet interface(s): %v", names)
+    c.con.LogAction("(set) ethernet interfaces: %v", names)
 
     // Set xpath.
     path := c.xpath(names)

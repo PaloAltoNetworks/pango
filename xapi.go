@@ -79,6 +79,7 @@ import (
     "github.com/PaloAltoNetworks/xapi/netw"
     "github.com/PaloAltoNetworks/xapi/dev"
     "github.com/PaloAltoNetworks/xapi/poli"
+    "github.com/PaloAltoNetworks/xapi/objs"
 )
 
 
@@ -96,10 +97,8 @@ const (
     LogReceive
 )
 
-
 // DefaultLogging is the default logging for a client (LogAction).
 const DefaultLogging uint32 = LogAction
-
 
 // Client is the main connector struct.  It provides wrapper functions for
 // invoking the various PANOS XPath API methods.  After creating the client,
@@ -128,6 +127,7 @@ type Client struct {
     Network *netw.Netw
     Device *dev.Dev
     Policies *poli.Poli
+    Objects *objs.Objs
 
     // Internal variables.
     con *http.Client
@@ -711,6 +711,9 @@ func (c *Client) initNamespaces() {
 
     c.Policies = &poli.Poli{}
     c.Policies.Initialize(c)
+
+    c.Objects = &objs.Objs{}
+    c.Objects.Initialize(c)
 }
 
 
