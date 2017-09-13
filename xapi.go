@@ -116,9 +116,7 @@ type Client struct {
 
     // Variables determined at runtime.
     Version version.Number
-    Platform string
-    Serial string
-    VsysEnabled string
+    SystemInfo map[string] string
 
     // Logging level.
     Logging uint32
@@ -165,7 +163,8 @@ func (c *Client) Versioning() version.Number {
 
 // Initialize does some initial setup of the Client connection, retrieves
 // the API key if it was not already present, then performs "show system
-// info" to get the PANOS version.
+// info" to get the PANOS version.  The full results are saved into the
+// client's SystemInfo map.
 //
 // If not specified, the following is assumed:
 //  * Protocol: https
@@ -331,7 +330,6 @@ func (c *Client) vsysImport(loc, vsys string, names []string) error {
     _, err := c.Set(path, obj.Config(), nil, nil)
     return err
 }
-
 
 func (c *Client) vsysUnimport(loc, vsys string, names []string) error {
     if len(names) == 0 {
@@ -669,17 +667,24 @@ func (c *Client) initApiKey() error {
 func (c *Client) initSystemInfo() error {
     var err error
 
-    // Get the version number
+    // Run "show system info"
     type system_info_req struct {
         XMLName xml.Name `xml:"show"`
         Cmd string `xml:"system>info"`
     }
 
+    type tagVal struct {
+        XMLName xml.Name
+        Value string `xml:",chardata"`
+    }
+
+    type sysTag struct {
+        XMLName xml.Name `xml:"system"`
+        Tag []tagVal `xml:",any"`
+    }
+
     type system_info_ans struct {
-        Version string `xml:"result>system>sw-version"`
-        Platform string `xml:"result>system>model"`
-        Serial string `xml:"result>system>serial"`
-        VsysEnabled string `xml:"result>system>multi-vsys"`
+        System sysTag `xml:"result>system"`
     }
 
     req := system_info_req{}
@@ -690,17 +695,19 @@ func (c *Client) initSystemInfo() error {
         return fmt.Errorf("Error getting system info: %s", err)
     }
 
-    c.Version, err = version.New(ans.Version)
-    if err != nil {
-        return fmt.Errorf("Error parsing version %s: %s", ans.Version, err)
+    c.SystemInfo = make(map[string] string, len(ans.System.Tag))
+    for i := range ans.System.Tag {
+        c.SystemInfo[ans.System.Tag[i].XMLName.Local] = ans.System.Tag[i].Value
+        if ans.System.Tag[i].XMLName.Local == "sw-version" {
+            c.Version, err = version.New(ans.System.Tag[i].Value)
+            if err != nil {
+                return fmt.Errorf("Error parsing version %s: %s", ans.System.Tag[i].Value, err)
+            }
+        }
     }
-    c.Platform = ans.Platform
-    c.Serial = ans.Serial
-    c.VsysEnabled = ans.VsysEnabled
 
     return nil
 }
-
 
 func (c *Client) initNamespaces() {
     c.Network = &netw.Netw{}
@@ -715,7 +722,6 @@ func (c *Client) initNamespaces() {
     c.Objects = &objs.Objs{}
     c.Objects.Initialize(c)
 }
-
 
 func (c *Client) typeConfig(action string, data url.Values, extras, ans interface{}) (*[]byte, error) {
     var err error

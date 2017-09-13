@@ -7,6 +7,7 @@ import (
 
     "github.com/PaloAltoNetworks/xapi/netw/eth"
     "github.com/PaloAltoNetworks/xapi/netw/zone"
+    "github.com/PaloAltoNetworks/xapi/netw/mngtprof"
 )
 
 
@@ -14,6 +15,7 @@ import (
 type Netw struct {
     EthernetInterface *eth.Eth
     Zone *zone.Zone
+    ManagementProfile *mngtprof.MngtProf
 }
 
 // Initialize is invoked on client.Initialize().
@@ -23,4 +25,7 @@ func (c *Netw) Initialize(i util.XapiClient) {
 
     c.Zone = &zone.Zone{}
     c.Zone.Initialize(i)
+
+    c.ManagementProfile = &mngtprof.MngtProf{}
+    c.ManagementProfile.Initialize(i)
 }
