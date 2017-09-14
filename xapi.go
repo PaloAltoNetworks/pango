@@ -84,14 +84,16 @@ import (
 
 
 // These constants control what is logged by the xapi.Client:
-//  * LogAction: action being performed, such as API key retrieval, Set, or Delete
-//  * LogQuery: when Get/Show/GetList/ShowList is invoked.
-//  * LogXpath: the xpath
+//  * LogAction: action being performed (Set / Delete functions)
+//  * LogQuery: queries being run (Get / Show functions)
+//  * LogOp: operation commands (Op functions)
+//  * LogXpath: the resultant xpath
 //  * LogSend: xml docuemnt being sent
-//  * LogReceive: xml responses
+//  * LogReceive: xml responses being received
 const (
     LogAction = 1 << (iota + 1)
     LogQuery
+    LogOp
     LogXpath
     LogSend
     LogReceive
@@ -214,7 +216,6 @@ func (c *Client) RetrieveApiKey() error {
     return nil
 }
 
-
 // EntryListUsing retrieves an list of entries using the given function, either
 // Get or Show.
 func (c *Client) EntryListUsing(fn func(interface{}, interface{}, interface{}) (*[]byte, error), path []string) ([]string, error) {
@@ -246,7 +247,6 @@ func (c *Client) EntryListUsing(fn func(interface{}, interface{}, interface{}) (
     return ans, nil
 }
 
-
 // MemberListUsing retrieves an list of members using the given function, either
 // Get or Show.
 func (c *Client) MemberListUsing(fn func(interface{}, interface{}, interface{}) (*[]byte, error), path []string) ([]string, error) {
@@ -267,7 +267,6 @@ func (c *Client) MemberListUsing(fn func(interface{}, interface{}, interface{}) 
 
     return resp.Members, nil
 }
-
 
 // RequestPasswordHash requests a password hash of the given string.
 func (c *Client) RequestPasswordHash(val string) (string, error) {
@@ -314,48 +313,41 @@ func (c *Client) UnimportInterfaces(vsys string, names []string) error {
     return c.vsysUnimport("interface", vsys, names)
 }
 
-func (c *Client) vsysImport(loc, vsys string, names []string) error {
-    path := c.xpathImport(vsys)
-    if len(names) == 0 || vsys == "" {
-        return nil
-    } else if len(names) == 1 {
-        path = append(path, loc)
+// RequestLicenses returns the licenses currently installed.
+func (c *Client) RequestLicenses() ([]util.License, error) {
+    type lic_req struct {
+        XMLName xml.Name `xml:"request"`
+        Cmd string `xml:"license>info"`
     }
 
-    obj := util.BulkElement{XMLName: xml.Name{Local: loc}}
-    for i := range names {
-        obj.Data = append(obj.Data, vis{xml.Name{Local: "member"}, names[i]})
+    c.LogOp("(op) request license info")
+    return c.returnLicenseList(lic_req{})
+}
+
+// FetchLicenses fetches licenses from the license server.
+func (c *Client) FetchLicenses() ([]util.License, error) {
+    type fetch struct {
+        XMLName xml.Name `xml:"request"`
+        Cmd string `xml:"license>fetch"`
     }
 
-    _, err := c.Set(path, obj.Config(), nil, nil)
+    c.LogOp("(op) request license fetch")
+    return c.returnLicenseList(fetch{})
+}
+
+// ActivateLicense updates a license using the given auth code.
+func (c *Client) ActivateLicense(auth string) error {
+    type auth_req struct {
+        XMLName xml.Name `xml:"request"`
+        Code string `xml:"license>fetch>auth-code"`
+    }
+
+    c.LogOp("(op) request license fetch auth-code %q", auth)
+    _, err := c.Op(c.auth_req{Code: auth}, "", "", nil, nil)
     return err
 }
 
-func (c *Client) vsysUnimport(loc, vsys string, names []string) error {
-    if len(names) == 0 {
-        return nil
-    }
-
-    path := c.xpathImport(vsys)
-    path = append(path, loc, util.AsMemberXpath(names))
-
-    _, err := c.Delete(path, nil, nil)
-    return err
-}
-
-func (c *Client) xpathImport(vsys string) ([]string) {
-    return []string {
-        "config",
-        "devices",
-        util.AsEntryXpath([]string{"localhost.localdomain"}),
-        "vsys",
-        util.AsEntryXpath([]string{vsys}),
-        "import",
-        "network",
-    }
-}
-
-// LogAction writes a log message for GET/SET operations if LogAction is set.
+// LogAction writes a log message for SET/DELETE operations if LogAction is set.
 func (c *Client) LogAction(msg string, i ...interface{}) {
     if c.Logging & LogAction == LogAction {
         log.Printf(msg, i...)
@@ -365,6 +357,13 @@ func (c *Client) LogAction(msg string, i ...interface{}) {
 // LogQuery writes a log message for GET/SHOW operations if LogQuery is set.
 func (c *Client) LogQuery(msg string, i ...interface{}) {
     if c.Logging & LogQuery == LogQuery {
+        log.Printf(msg, i...)
+    }
+}
+
+// LogOp writes a log message for OP operations if LogOp is set.
+func (c *Client) LogOp(msg string, i ...interface{}) {
+    if c.Logging & LogOp == LogOp {
         log.Printf(msg, i...)
     }
 }
@@ -446,7 +445,6 @@ func (c *Client) Communicate(data url.Values, ans interface{}) (*[]byte, error) 
     return &body, nil
 }
 
-
 // Op runs an "op" type command.
 //
 // The req param can be either a properly formatted XML string or a struct
@@ -481,7 +479,6 @@ func (c *Client) Op(req interface{}, vsys, target string, extras, ans interface{
     return c.Communicate(data, ans)
 }
 
-
 // Show runs a "show" type command.
 //
 // The ans param should be a pointer to a struct to unmarshal the response
@@ -497,7 +494,6 @@ func (c *Client) Show(path, extras, ans interface{}) (*[]byte, error) {
 
     return c.typeConfig("show", data, extras, ans)
 }
-
 
 // Get runs a "get" type command.
 //
@@ -515,7 +511,6 @@ func (c *Client) Get(path, extras, ans interface{}) (*[]byte, error) {
     return c.typeConfig("get", data, extras, ans)
 }
 
-
 // Delete runs a "delete" type command, removing the supplied xpath and
 // everything underneath it.
 //
@@ -532,7 +527,6 @@ func (c *Client) Delete(path, extras, ans interface{}) (*[]byte, error) {
 
     return c.typeConfig("delete", data, extras, ans)
 }
-
 
 // Set runs a "set" type command, creating the element at the given xpath.
 //
@@ -557,7 +551,6 @@ func (c *Client) Set(path, element, extras, ans interface{}) (*[]byte, error) {
 
     return c.typeConfig("set", data, extras, ans)
 }
-
 
 // Edit runs a "edit" type command, modifying what is at the given xpath
 // with the supplied element.
@@ -584,7 +577,6 @@ func (c *Client) Edit(path, element, extras, ans interface{}) (*[]byte, error) {
     return c.typeConfig("edit", data, extras, ans)
 }
 
-
 // Move does a "move" type command.
 func (c *Client) Move(path interface{}, where, dst string, extras, ans interface{}) (*[]byte, error) {
     data := url.Values{}
@@ -603,9 +595,7 @@ func (c *Client) Move(path interface{}, where, dst string, extras, ans interface
     return c.typeConfig("move", data, extras, ans)
 }
 
-
 /*** Internal functions ***/
-
 
 func (c *Client) initCon() error {
     var tout time.Duration
@@ -654,7 +644,6 @@ func (c *Client) initCon() error {
     return nil
 }
 
-
 func (c *Client) initApiKey() error {
     if c.ApiKey != "" {
         return nil
@@ -663,9 +652,9 @@ func (c *Client) initApiKey() error {
     return c.RetrieveApiKey()
 }
 
-
 func (c *Client) initSystemInfo() error {
     var err error
+    c.LogOp("(op) show system info")
 
     // Run "show system info"
     type system_info_req struct {
@@ -745,6 +734,62 @@ func (c *Client) logXpath(p string) {
     }
 }
 
+func (c *Client) vsysImport(loc, vsys string, names []string) error {
+    path := c.xpathImport(vsys)
+    if len(names) == 0 || vsys == "" {
+        return nil
+    } else if len(names) == 1 {
+        path = append(path, loc)
+    }
+
+    obj := util.BulkElement{XMLName: xml.Name{Local: loc}}
+    for i := range names {
+        obj.Data = append(obj.Data, vis{xml.Name{Local: "member"}, names[i]})
+    }
+
+    _, err := c.Set(path, obj.Config(), nil, nil)
+    return err
+}
+
+func (c *Client) vsysUnimport(loc, vsys string, names []string) error {
+    if len(names) == 0 {
+        return nil
+    }
+
+    path := c.xpathImport(vsys)
+    path = append(path, loc, util.AsMemberXpath(names))
+
+    _, err := c.Delete(path, nil, nil)
+    return err
+}
+
+func (c *Client) xpathImport(vsys string) ([]string) {
+    return []string {
+        "config",
+        "devices",
+        util.AsEntryXpath([]string{"localhost.localdomain"}),
+        "vsys",
+        util.AsEntryXpath([]string{vsys}),
+        "import",
+        "network",
+    }
+}
+
+func (c *Client) returnLicenseList(req interface{}) ([]util.License, error) {
+    type lic_resp struct {
+        XMLName xml.Name `xml:"response"`
+        Data []util.License `xml:"result>licenses>entry"`
+    }
+
+    ans := lic_resp{}
+
+    if _, err := c.Op(req, "", "", nil, &ans); err != nil {
+        return nil, fmt.Errorf("Failed to get licenses: %s", err)
+    }
+
+    return ans.Data, nil
+}
+
 /** Non-struct private functions **/
 
 func mergeUrlValues(data *url.Values, extras interface{}) error {
@@ -798,7 +843,6 @@ func asString(i interface{}, attemptMarshal bool) (string, error) {
         return string(rb), nil
     }
 }
-
 
 type panosStatus struct {
     ResponseStatus string `xml:"status,attr"`

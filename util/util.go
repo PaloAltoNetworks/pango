@@ -39,7 +39,6 @@ type XapiClient interface {
     UnimportInterfaces(string, []string) error
 }
 
-
 // BulkElement is a generic bulk container for bulk operations.
 type BulkElement struct {
     XMLName xml.Name
@@ -54,10 +53,13 @@ func (o BulkElement) Config() interface{} {
     return o
 }
 
+// Member defines a member config node used for sending and receiving XML
+// from PANOS.
 type Member struct {
     Text string `xml:"member"`
 }
 
+// MemToStr takes a list of Member objects and returns a list of strings.
 func MemToStr(e []Member) []string {
     if e == nil {
         return nil
@@ -71,6 +73,7 @@ func MemToStr(e []Member) []string {
     return m
 }
 
+// StrToMem takes a list of strings and returns a list of Member objects.
 func StrToMem(e []string) []Member {
     if e == nil {
         return nil
@@ -84,11 +87,14 @@ func StrToMem(e []string) []Member {
     return m
 }
 
+// Entry defines an entry config node used for sending and receiving XML
+// from PANOS.
 type Entry struct {
     XMLName xml.Name `xml:"entry"`
     Name string `xml:"name,attr"`
 }
 
+// EntToStr takes a list of Entry objects and returns a list of strings.
 func EntToStr(e []Entry) []string {
     if e == nil {
         return nil
@@ -102,6 +108,7 @@ func EntToStr(e []Entry) []string {
     return m
 }
 
+// StrToEnt takes a list of strings and returns a list of Entry objects.
 func StrToEnt(e []string) []Entry {
     if e == nil {
         return nil
@@ -114,17 +121,6 @@ func StrToEnt(e []string) []Entry {
 
     return m
 }
-
-type XapiContainer interface {
-    Normalize() (interface{})
-}
-
-type PanosEncapsulation interface {
-    Load(map[int] []string, bool) error
-    Dump() (map[int] []string)
-    Element() (interface{})
-}
-
 
 // YesNo returns "yes" on true, "no" on false.
 func YesNo(v bool) string {
@@ -174,12 +170,14 @@ func AsMemberXpath(vals []string) string {
     return fmt.Sprintf("member[%s]", strings.Join(inner, " or "))
 }
 
-
-// Gms retrieves a string from the given map, if present, else return the
-// given default value.
-func Gms(m map[int] []string, key int, dv string) string {
-    if val, ok := m[key]; ok {
-        return val[0]
-    }
-    return dv
+// License defines a license entry.
+type License struct {
+    XMLName xml.Name `xml:"entry"`
+    Feature string `xml:"feature"`
+    Description string `xml:"description"`
+    Serial string `xml:"serial"`
+    Issued string `xml:"issued"`
+    Expires string `xml:"expires"`
+    Expired string `xml:"expired"`
+    AuthCode string `xml:"authcode"`
 }
