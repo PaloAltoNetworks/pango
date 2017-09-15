@@ -343,7 +343,7 @@ func (c *Client) ActivateLicense(auth string) error {
     }
 
     c.LogOp("(op) request license fetch auth-code %q", auth)
-    _, err := c.Op(c.auth_req{Code: auth}, "", "", nil, nil)
+    _, err := c.Op(auth_req{Code: auth}, "", "", nil, nil)
     return err
 }
 
