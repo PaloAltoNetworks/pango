@@ -25,6 +25,7 @@ type XapiClient interface {
     RetrieveApiKey() error
     LogAction(string, ...interface{})
     LogQuery(string, ...interface{})
+    LogOp(string, ...interface{})
     Op(interface{}, string, string, interface{}, interface{}) (*[]byte, error)
     Show(interface{}, interface{}, interface{}) (*[]byte, error)
     Get(interface{}, interface{}, interface{}) (*[]byte, error)

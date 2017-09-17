@@ -80,6 +80,7 @@ import (
     "github.com/PaloAltoNetworks/xapi/dev"
     "github.com/PaloAltoNetworks/xapi/poli"
     "github.com/PaloAltoNetworks/xapi/objs"
+    "github.com/PaloAltoNetworks/xapi/licen"
 )
 
 
@@ -128,6 +129,7 @@ type Client struct {
     Device *dev.Dev
     Policies *poli.Poli
     Objects *objs.Objs
+    Licensing *licen.Licen
 
     // Internal variables.
     con *http.Client
@@ -270,6 +272,7 @@ func (c *Client) MemberListUsing(fn func(interface{}, interface{}, interface{}) 
 
 // RequestPasswordHash requests a password hash of the given string.
 func (c *Client) RequestPasswordHash(val string) (string, error) {
+    c.LogOp("(op) creating password hash")
     type phash_req struct {
         XMLName xml.Name `xml:"request"`
         Val string `xml:"password-hash>password"`
@@ -311,40 +314,6 @@ func (c *Client) ImportInterfaces(vsys string, names []string) error {
 // vsys given is not an empty string.
 func (c *Client) UnimportInterfaces(vsys string, names []string) error {
     return c.vsysUnimport("interface", vsys, names)
-}
-
-// RequestLicenses returns the licenses currently installed.
-func (c *Client) RequestLicenses() ([]util.License, error) {
-    type lic_req struct {
-        XMLName xml.Name `xml:"request"`
-        Cmd string `xml:"license>info"`
-    }
-
-    c.LogOp("(op) request license info")
-    return c.returnLicenseList(lic_req{})
-}
-
-// FetchLicenses fetches licenses from the license server.
-func (c *Client) FetchLicenses() ([]util.License, error) {
-    type fetch struct {
-        XMLName xml.Name `xml:"request"`
-        Cmd string `xml:"license>fetch"`
-    }
-
-    c.LogOp("(op) request license fetch")
-    return c.returnLicenseList(fetch{})
-}
-
-// ActivateLicense updates a license using the given auth code.
-func (c *Client) ActivateLicense(auth string) error {
-    type auth_req struct {
-        XMLName xml.Name `xml:"request"`
-        Code string `xml:"license>fetch>auth-code"`
-    }
-
-    c.LogOp("(op) request license fetch auth-code %q", auth)
-    _, err := c.Op(auth_req{Code: auth}, "", "", nil, nil)
-    return err
 }
 
 // LogAction writes a log message for SET/DELETE operations if LogAction is set.
@@ -710,6 +679,9 @@ func (c *Client) initNamespaces() {
 
     c.Objects = &objs.Objs{}
     c.Objects.Initialize(c)
+
+    c.Licensing = &licen.Licen{}
+    c.Licensing.Initialize(c)
 }
 
 func (c *Client) typeConfig(action string, data url.Values, extras, ans interface{}) (*[]byte, error) {
@@ -773,21 +745,6 @@ func (c *Client) xpathImport(vsys string) ([]string) {
         "import",
         "network",
     }
-}
-
-func (c *Client) returnLicenseList(req interface{}) ([]util.License, error) {
-    type lic_resp struct {
-        XMLName xml.Name `xml:"response"`
-        Data []util.License `xml:"result>licenses>entry"`
-    }
-
-    ans := lic_resp{}
-
-    if _, err := c.Op(req, "", "", nil, &ans); err != nil {
-        return nil, fmt.Errorf("Failed to get licenses: %s", err)
-    }
-
-    return ans.Data, nil
 }
 
 /** Non-struct private functions **/
