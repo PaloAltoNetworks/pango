@@ -26,18 +26,21 @@ type XapiClient interface {
     LogAction(string, ...interface{})
     LogQuery(string, ...interface{})
     LogOp(string, ...interface{})
-    Op(interface{}, string, string, interface{}, interface{}) (*[]byte, error)
-    Show(interface{}, interface{}, interface{}) (*[]byte, error)
-    Get(interface{}, interface{}, interface{}) (*[]byte, error)
-    Delete(interface{}, interface{}, interface{}) (*[]byte, error)
-    Set(interface{}, interface{}, interface{}, interface{}) (*[]byte, error)
-    Edit(interface{}, interface{}, interface{}, interface{}) (*[]byte, error)
-    Move(interface{}, string, string, interface{}, interface{}) (*[]byte, error)
-    EntryListUsing(func(interface{}, interface{}, interface{}) (*[]byte, error), []string) ([]string, error)
-    MemberListUsing(func(interface{}, interface{}, interface{}) (*[]byte, error), []string) ([]string, error)
+    Op(interface{}, string, string, interface{}, interface{}) ([]byte, error)
+    Show(interface{}, interface{}, interface{}) ([]byte, error)
+    Get(interface{}, interface{}, interface{}) ([]byte, error)
+    Delete(interface{}, interface{}, interface{}) ([]byte, error)
+    Set(interface{}, interface{}, interface{}, interface{}) ([]byte, error)
+    Edit(interface{}, interface{}, interface{}, interface{}) ([]byte, error)
+    Move(interface{}, string, string, interface{}, interface{}) ([]byte, error)
+    EntryListUsing(func(interface{}, interface{}, interface{}) ([]byte, error), []string) ([]string, error)
+    MemberListUsing(func(interface{}, interface{}, interface{}) ([]byte, error), []string) ([]string, error)
     RequestPasswordHash(string) (string, error)
     ImportInterfaces(string, []string) error
     UnimportInterfaces(string, []string) error
+    ImportVlans(string, []string) error
+    UnimportVlans(string, []string) error
+    WaitForJob(uint, interface{}) error
 }
 
 // BulkElement is a generic bulk container for bulk operations.
@@ -181,4 +184,19 @@ type License struct {
     Expires string `xml:"expires"`
     Expired string `xml:"expired"`
     AuthCode string `xml:"authcode"`
+}
+
+// JobResponse parses a XML response that includes a job ID.
+type JobResponse struct {
+    XMLName xml.Name `xml:"response"`
+    Id uint `xml:"result>job"`
+}
+
+// BasicJob is a struct for parsing minimal information about a submitted
+// job to PANOS.
+type BasicJob struct {
+    XMLName xml.Name `xml:"response"`
+    Result string `xml:"result>job>result"`
+    Progress uint `xml:"result>job>progress"`
+    Details []string `xml:"result>job>details>line"`
 }

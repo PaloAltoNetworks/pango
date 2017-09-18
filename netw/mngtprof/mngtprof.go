@@ -133,7 +133,7 @@ func (c *MngtProf) versioning() (normalizer, func(Entry) (interface{})) {
     return &container_v1{}, specify_v1
 }
 
-func (c *MngtProf) details(fn func(interface{}, interface{}, interface{}) (*[]byte, error), name string) (Entry, error) {
+func (c *MngtProf) details(fn func(interface{}, interface{}, interface{}) ([]byte, error), name string) (Entry, error) {
     path := c.xpath([]string{name})
     obj, _ := c.versioning()
     _, err := fn(path, nil, obj)

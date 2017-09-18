@@ -86,7 +86,7 @@ func (c *General) versioning() (normalizer, func(Config) (interface{})) {
     return &container_v1{}, specify_v1
 }
 
-func (c *General) details(fn func(interface{}, interface{}, interface{}) (*[]byte, error)) (Config, error) {
+func (c *General) details(fn func(interface{}, interface{}, interface{}) ([]byte, error)) (Config, error) {
     path := c.xpath()
     obj, _ := c.versioning()
     if _, err := fn(path, nil, obj); err != nil {

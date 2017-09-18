@@ -6,16 +6,18 @@ import (
     "github.com/PaloAltoNetworks/xapi/util"
 
     "github.com/PaloAltoNetworks/xapi/netw/eth"
-    "github.com/PaloAltoNetworks/xapi/netw/zone"
     "github.com/PaloAltoNetworks/xapi/netw/mngtprof"
+    "github.com/PaloAltoNetworks/xapi/netw/vlan"
+    "github.com/PaloAltoNetworks/xapi/netw/zone"
 )
 
 
 // Netw is the client.Network namespace.
 type Netw struct {
     EthernetInterface *eth.Eth
-    Zone *zone.Zone
     ManagementProfile *mngtprof.MngtProf
+    Vlan *vlan.Vlan
+    Zone *zone.Zone
 }
 
 // Initialize is invoked on client.Initialize().
@@ -23,9 +25,12 @@ func (c *Netw) Initialize(i util.XapiClient) {
     c.EthernetInterface = &eth.Eth{}
     c.EthernetInterface.Initialize(i)
 
-    c.Zone = &zone.Zone{}
-    c.Zone.Initialize(i)
-
     c.ManagementProfile = &mngtprof.MngtProf{}
     c.ManagementProfile.Initialize(i)
+
+    c.Vlan = &vlan.Vlan{}
+    c.Vlan.Initialize(i)
+
+    c.Zone = &zone.Zone{}
+    c.Zone.Initialize(i)
 }

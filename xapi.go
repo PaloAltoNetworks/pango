@@ -220,7 +220,7 @@ func (c *Client) RetrieveApiKey() error {
 
 // EntryListUsing retrieves an list of entries using the given function, either
 // Get or Show.
-func (c *Client) EntryListUsing(fn func(interface{}, interface{}, interface{}) (*[]byte, error), path []string) ([]string, error) {
+func (c *Client) EntryListUsing(fn func(interface{}, interface{}, interface{}) ([]byte, error), path []string) ([]string, error) {
     var err error
     type Entry struct {
         Name string `xml:"name,attr"`
@@ -251,7 +251,7 @@ func (c *Client) EntryListUsing(fn func(interface{}, interface{}, interface{}) (
 
 // MemberListUsing retrieves an list of members using the given function, either
 // Get or Show.
-func (c *Client) MemberListUsing(fn func(interface{}, interface{}, interface{}) (*[]byte, error), path []string) ([]string, error) {
+func (c *Client) MemberListUsing(fn func(interface{}, interface{}, interface{}) ([]byte, error), path []string) ([]string, error) {
     type resp_struct struct {
         Members []string `xml:"result>member"`
     }
@@ -292,10 +292,22 @@ func (c *Client) RequestPasswordHash(val string) (string, error) {
     return ans.Hash, nil
 }
 
-// vis is a vsys import struct.
-type vis struct {
-    XMLName xml.Name
-    Text string `xml:",chardata"`
+// ImportVlans imports VLANs into the vsys specified.  VLANs must be
+// imported into a vsys before they can be used.
+//
+// This is invoked automatically when creating VLANs as long as the vsys given
+// is not an empty string.
+func (c *Client) ImportVlans(vsys string, names []string) error {
+    return c.vsysImport("vlan", vsys, names)
+}
+
+// UnimportVlans unimports VLANs from the vsys specified.  VLANs that are
+// imported into an vsys cannot be deleted.
+//
+// This is invoked automatically when deleting VLANs as long as the vsys given
+// is not an empty string.
+func (c *Client) UnimportVlans(vsys string, names []string) error {
+    return c.vsysUnimport("vlan", vsys, names)
 }
 
 // ImportInterfaces imports interfaces into the vsys specified.  Interfaces
@@ -308,12 +320,90 @@ func (c *Client) ImportInterfaces(vsys string, names []string) error {
 }
 
 // UnimportInterfaces unimports interfaces from the vsys specified.  Interfaces
-// that are imported into an interface cannot be deleted.
+// that are imported into an vsys cannot be deleted.
 //
 // This is invoked automatically when deleting interfaces as long as the
 // vsys given is not an empty string.
 func (c *Client) UnimportInterfaces(vsys string, names []string) error {
     return c.vsysUnimport("interface", vsys, names)
+}
+
+// ValidateConfig performs a commit config validation check.
+//
+// Setting sync to true means that this function will block until the job
+// finishes.
+//
+// This function returns the job ID and if any errors were encountered.
+func (c *Client) ValidateConfig(sync bool) (uint, error) {
+    var err error
+
+    c.LogOp("(op) validating config")
+    type op_req struct {
+        XMLName xml.Name `xml:"validate"`
+        Cmd string `xml:"full"`
+    }
+    job_ans := util.JobResponse{}
+    _, err = c.Op(op_req{}, "", "", nil, &job_ans)
+    if err != nil {
+        return 0, err
+    }
+
+    id := job_ans.Id
+    if !sync {
+        return id, nil
+    }
+
+    return id, c.WaitForJob(id, nil)
+}
+
+// WaitForJob polls the device, waiting for the specified job to finish.
+//
+// If you want to unmarshal the response into a struct, then pass in a
+// pointer to the struct for the "resp" param.  If you just want to know if
+// the job completed with a status other than "FAIL", you only need to check
+// the returned error message.
+//
+// In the case that there are multiple errors returned from the job, the first
+// error is returned as the error string, and no unmarshaling is attempted.
+func (c *Client) WaitForJob(id uint, resp interface{}) error {
+    var err error
+    var prev uint
+    var data []byte
+
+    c.LogOp("(op) waiting for job %d", id)
+    type op_req struct {
+        XMLName xml.Name `xml:"show"`
+        Id uint `xml:"jobs>id"`
+    }
+    req := op_req{Id: id}
+
+    ans := util.BasicJob{}
+    for ans.Progress != 100 {
+        // Get current percent complete.
+        data, err = c.Op(req, "", "", nil, &ans)
+        if err != nil {
+            return err
+        }
+        // Output percent complete if it's new.
+        if ans.Progress != prev {
+            prev = ans.Progress
+            c.LogOp("(op) job %d: %d percent complete", id, prev)
+        }
+    }
+
+    if ans.Result == "FAIL" {
+        if len(ans.Details) > 0 {
+            return fmt.Errorf(ans.Details[0])
+        } else {
+            return fmt.Errorf("Job %d has failed to complete successfully", id)
+        }
+    }
+
+    if resp == nil {
+        return nil
+    }
+
+    return xml.Unmarshal(data, resp)
 }
 
 // LogAction writes a log message for SET/DELETE operations if LogAction is set.
@@ -350,7 +440,7 @@ func (c *Client) LogOp(msg string, i ...interface{}) {
 // performed.
 //
 // If the API key is set, but not present in the given data, then it is added in.
-func (c *Client) Communicate(data url.Values, ans interface{}) (*[]byte, error) {
+func (c *Client) Communicate(data url.Values, ans interface{}) ([]byte, error) {
     if c.ApiKey != "" && data.Get("key") == "" {
         data.Set("key", c.ApiKey)
     }
@@ -389,29 +479,29 @@ func (c *Client) Communicate(data url.Values, ans interface{}) (*[]byte, error) 
     // a result.
     if errType1.Failed() {
         if err == nil && errType1.Error() != "" {
-            return &body, errType1
+            return body, errType1
         }
         errType2 := panosErrorResponseWithLine{}
         err = xml.Unmarshal(body, &errType2)
         if err == nil && errType2.Error() != "" {
-            return &body, errType2
+            return body, errType2
         }
         // Still an error, but some unknown format.
-        return &body, fmt.Errorf("Unknown error format: %s", body)
+        return body, fmt.Errorf("Unknown error format: %s", body)
     }
 
     // Return the body string if we weren't given something to unmarshal into
     if ans == nil {
-        return &body, nil
+        return body, nil
     }
 
     // Unmarshal using the struct passed in
     err = xml.Unmarshal(body, ans)
     if err != nil {
-        return &body, fmt.Errorf("Error unmarshaling into provided interface: %s", err)
+        return body, fmt.Errorf("Error unmarshaling into provided interface: %s", err)
     }
 
-    return &body, nil
+    return body, nil
 }
 
 // Op runs an "op" type command.
@@ -424,7 +514,7 @@ func (c *Client) Communicate(data url.Values, ans interface{}) (*[]byte, error) 
 //
 // Any response received from the server is returned, along with any errors
 // encountered.
-func (c *Client) Op(req interface{}, vsys, target string, extras, ans interface{}) (*[]byte, error) {
+func (c *Client) Op(req interface{}, vsys, target string, extras, ans interface{}) ([]byte, error) {
     var err error
     data := url.Values{}
     data.Set("type", "op")
@@ -455,7 +545,7 @@ func (c *Client) Op(req interface{}, vsys, target string, extras, ans interface{
 //
 // Any response received from the server is returned, along with any errors
 // encountered.
-func (c *Client) Show(path, extras, ans interface{}) (*[]byte, error) {
+func (c *Client) Show(path, extras, ans interface{}) ([]byte, error) {
     data := url.Values{}
     xp := util.AsXpath(path)
     c.logXpath(xp)
@@ -471,7 +561,7 @@ func (c *Client) Show(path, extras, ans interface{}) (*[]byte, error) {
 //
 // Any response received from the server is returned, along with any errors
 // encountered.
-func (c *Client) Get(path, extras, ans interface{}) (*[]byte, error) {
+func (c *Client) Get(path, extras, ans interface{}) ([]byte, error) {
     data := url.Values{}
     xp := util.AsXpath(path)
     c.logXpath(xp)
@@ -488,7 +578,7 @@ func (c *Client) Get(path, extras, ans interface{}) (*[]byte, error) {
 //
 // Any response received from the server is returned, along with any errors
 // encountered.
-func (c *Client) Delete(path, extras, ans interface{}) (*[]byte, error) {
+func (c *Client) Delete(path, extras, ans interface{}) ([]byte, error) {
     data := url.Values{}
     xp := util.AsXpath(path)
     c.logXpath(xp)
@@ -507,7 +597,7 @@ func (c *Client) Delete(path, extras, ans interface{}) (*[]byte, error) {
 //
 // Any response received from the server is returned, along with any errors
 // encountered.
-func (c *Client) Set(path, element, extras, ans interface{}) (*[]byte, error) {
+func (c *Client) Set(path, element, extras, ans interface{}) ([]byte, error) {
     var err error
     data := url.Values{}
     xp := util.AsXpath(path)
@@ -532,7 +622,7 @@ func (c *Client) Set(path, element, extras, ans interface{}) (*[]byte, error) {
 //
 // Any response received from the server is returned, along with any errors
 // encountered.
-func (c *Client) Edit(path, element, extras, ans interface{}) (*[]byte, error) {
+func (c *Client) Edit(path, element, extras, ans interface{}) ([]byte, error) {
     var err error
     data := url.Values{}
     xp := util.AsXpath(path)
@@ -547,7 +637,7 @@ func (c *Client) Edit(path, element, extras, ans interface{}) (*[]byte, error) {
 }
 
 // Move does a "move" type command.
-func (c *Client) Move(path interface{}, where, dst string, extras, ans interface{}) (*[]byte, error) {
+func (c *Client) Move(path interface{}, where, dst string, extras, ans interface{}) ([]byte, error) {
     data := url.Values{}
     xp := util.AsXpath(path)
     c.logXpath(xp)
@@ -684,7 +774,7 @@ func (c *Client) initNamespaces() {
     c.Licensing.Initialize(c)
 }
 
-func (c *Client) typeConfig(action string, data url.Values, extras, ans interface{}) (*[]byte, error) {
+func (c *Client) typeConfig(action string, data url.Values, extras, ans interface{}) ([]byte, error) {
     var err error
 
     data.Set("type", "config")
@@ -724,7 +814,7 @@ func (c *Client) vsysImport(loc, vsys string, names []string) error {
 }
 
 func (c *Client) vsysUnimport(loc, vsys string, names []string) error {
-    if len(names) == 0 {
+    if len(names) == 0 || vsys == "" {
         return nil
     }
 
@@ -844,4 +934,10 @@ func (e panosErrorResponseWithoutLine) Error() string {
     } else {
         return e.ResponseMsg1
     }
+}
+
+// vis is a vsys import struct.
+type vis struct {
+    XMLName xml.Name
+    Text string `xml:",chardata"`
 }
