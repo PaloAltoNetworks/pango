@@ -49,7 +49,7 @@ func (c *Licen) Activate(auth string) error {
     }
 
     c.con.LogOp("(op) request license fetch auth-code \"********\"")
-    _, err := c.con.Op(auth_req{Code: auth}, "", "", nil, nil)
+    _, err := c.con.Op(auth_req{Code: auth}, "", nil, nil)
     return err
 }
 
@@ -63,7 +63,7 @@ func (c *Licen) returnLicenseList(req interface{}) ([]util.License, error) {
 
     ans := lic_resp{}
 
-    if _, err := c.con.Op(req, "", "", nil, &ans); err != nil {
+    if _, err := c.con.Op(req, "", nil, &ans); err != nil {
         return nil, fmt.Errorf("Failed to get licenses: %s", err)
     }
 

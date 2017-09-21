@@ -81,6 +81,7 @@ import (
     "github.com/PaloAltoNetworks/xapi/poli"
     "github.com/PaloAltoNetworks/xapi/objs"
     "github.com/PaloAltoNetworks/xapi/licen"
+    "github.com/PaloAltoNetworks/xapi/userid"
 )
 
 
@@ -95,6 +96,7 @@ const (
     LogAction = 1 << (iota + 1)
     LogQuery
     LogOp
+    LogUid
     LogXpath
     LogSend
     LogReceive
@@ -130,6 +132,7 @@ type Client struct {
     Policies *poli.Poli
     Objects *objs.Objs
     Licensing *licen.Licen
+    UserId *userid.UserId
 
     // Internal variables.
     con *http.Client
@@ -285,7 +288,7 @@ func (c *Client) RequestPasswordHash(val string) (string, error) {
     req := phash_req{Val: val}
     ans := phash_ans{}
 
-    if _, err := c.Op(req, "", "", nil, &ans); err != nil {
+    if _, err := c.Op(req, "", nil, &ans); err != nil {
         return "", err
     }
 
@@ -343,7 +346,7 @@ func (c *Client) ValidateConfig(sync bool) (uint, error) {
         Cmd string `xml:"full"`
     }
     job_ans := util.JobResponse{}
-    _, err = c.Op(op_req{}, "", "", nil, &job_ans)
+    _, err = c.Op(op_req{}, "", nil, &job_ans)
     if err != nil {
         return 0, err
     }
@@ -380,7 +383,7 @@ func (c *Client) WaitForJob(id uint, resp interface{}) error {
     ans := util.BasicJob{}
     for ans.Progress != 100 {
         // Get current percent complete.
-        data, err = c.Op(req, "", "", nil, &ans)
+        data, err = c.Op(req, "", nil, &ans)
         if err != nil {
             return err
         }
@@ -423,6 +426,13 @@ func (c *Client) LogQuery(msg string, i ...interface{}) {
 // LogOp writes a log message for OP operations if LogOp is set.
 func (c *Client) LogOp(msg string, i ...interface{}) {
     if c.Logging & LogOp == LogOp {
+        log.Printf(msg, i...)
+    }
+}
+
+// LogUid writes a log message for User-Id operations if LogUid is set.
+func (c *Client) LogUid(msg string, i ...interface{}) {
+    if c.Logging & LogUid == LogUid {
         log.Printf(msg, i...)
     }
 }
@@ -514,7 +524,7 @@ func (c *Client) Communicate(data url.Values, ans interface{}) ([]byte, error) {
 //
 // Any response received from the server is returned, along with any errors
 // encountered.
-func (c *Client) Op(req interface{}, vsys, target string, extras, ans interface{}) ([]byte, error) {
+func (c *Client) Op(req interface{}, vsys string, extras, ans interface{}) ([]byte, error) {
     var err error
     data := url.Values{}
     data.Set("type", "op")
@@ -527,8 +537,8 @@ func (c *Client) Op(req interface{}, vsys, target string, extras, ans interface{
         data.Set("vsys", vsys)
     }
 
-    if target != "" {
-        data.Set("target", target)
+    if c.Target != "" {
+        data.Set("target", c.Target)
     }
 
     if err = mergeUrlValues(&data, extras); err != nil {
@@ -654,6 +664,31 @@ func (c *Client) Move(path interface{}, where, dst string, extras, ans interface
     return c.typeConfig("move", data, extras, ans)
 }
 
+// Uid performs User-ID API calls.
+func (c *Client) Uid(cmd interface{}, vsys string, extras, ans interface{}) ([]byte, error) {
+    var err error
+    data := url.Values{}
+    data.Set("type", "user-id")
+
+    if err = addToData("cmd", cmd, true, &data); err != nil {
+        return nil, err
+    }
+
+    if vsys != "" {
+        data.Set("vsys", vsys)
+    }
+
+    if c.Target != "" {
+        data.Set("target", c.Target)
+    }
+
+    if err = mergeUrlValues(&data, extras); err != nil {
+        return nil, err
+    }
+
+    return c.Communicate(data, ans)
+}
+
 /*** Internal functions ***/
 
 func (c *Client) initCon() error {
@@ -738,7 +773,7 @@ func (c *Client) initSystemInfo() error {
     req := system_info_req{}
     ans := system_info_ans{}
 
-    _, err = c.Op(req, "", "", nil, &ans)
+    _, err = c.Op(req, "", nil, &ans)
     if err != nil {
         return fmt.Errorf("Error getting system info: %s", err)
     }
@@ -772,6 +807,9 @@ func (c *Client) initNamespaces() {
 
     c.Licensing = &licen.Licen{}
     c.Licensing.Initialize(c)
+
+    c.UserId = &userid.UserId{}
+    c.UserId.Initialize(c)
 }
 
 func (c *Client) typeConfig(action string, data url.Values, extras, ans interface{}) ([]byte, error) {
