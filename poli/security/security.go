@@ -222,7 +222,6 @@ func (o *container_v1) Normalize() Entry {
         ans.DisableServerResponseInspection = util.AsBool(o.Answer.Options.DisableServerResponseInspection)
     }
     if o.Answer.TargetInfo != nil {
-        // TODO(gfreeman) - pick up here
         ans.NegateTarget = util.AsBool(o.Answer.TargetInfo.NegateTarget)
         ans.Target = util.EntToStr(o.Answer.TargetInfo.Target)
     }
@@ -247,18 +246,18 @@ type entry_v1 struct {
     Name string `xml:"name,attr"`
     Type string `xml:"rule-type"`
     Description string `xml:"description"`
-    Tags []util.Member `xml:"tag"`
-    From []util.Member `xml:"from"`
-    To []util.Member `xml:"to"`
-    Source []util.Member `xml:"source"`
+    Tags *util.Member `xml:"tag"`
+    From *util.Member `xml:"from"`
+    To *util.Member `xml:"to"`
+    Source *util.Member `xml:"source"`
     NegateSource string `xml:"negate-source"`
-    SourceUser []util.Member `xml:"source-user"`
-    HipProfile []util.Member `xml:"hip-profiles"`
-    Destination []util.Member `xml:"destination"`
+    SourceUser *util.Member `xml:"source-user"`
+    HipProfile *util.Member `xml:"hip-profiles"`
+    Destination *util.Member `xml:"destination"`
     NegateDestination string `xml:"negate-destination"`
-    Application []util.Member `xml:"application"`
-    Service []util.Member `xml:"service"`
-    Category []util.Member `xml:"category"`
+    Application *util.Member `xml:"application"`
+    Service *util.Member `xml:"service"`
+    Category *util.Member `xml:"category"`
     Action string `xml:"action"`
     LogSetting string `xml:"log-setting,omitempty"`
     LogStart string `xml:"log-start"`
@@ -276,23 +275,23 @@ type secOptions struct {
 }
 
 type targetInfo struct {
-    Target []util.Entry `xml:"devices"`
+    Target *util.Entry `xml:"devices"`
     NegateTarget string `xml:"negate,omitempty"`
 }
 
 type profileSettings struct {
-    Group []util.Member `xml:"group"`
+    Group *util.Member `xml:"group"`
     Profiles *profileSettingsProfile `xml:"profiles"`
 }
 
 type profileSettingsProfile struct {
-    Virus []util.Member `xml:"virus"`
-    Spyware []util.Member `xml:"spyware"`
-    Vulnerability []util.Member `xml:"vulnerability"`
-    UrlFiltering []util.Member `xml:"url-filtering"`
-    FileBlocking []util.Member `xml:"file-blocking"`
-    WildFireAnalysis []util.Member `xml:"wildfire-analysis"`
-    DataFiltering []util.Member `xml:"data-filtering"`
+    Virus *util.Member `xml:"virus"`
+    Spyware *util.Member `xml:"spyware"`
+    Vulnerability *util.Member `xml:"vulnerability"`
+    UrlFiltering *util.Member `xml:"url-filtering"`
+    FileBlocking *util.Member `xml:"file-blocking"`
+    WildFireAnalysis *util.Member `xml:"wildfire-analysis"`
+    DataFiltering *util.Member `xml:"data-filtering"`
 }
 
 func specify_v1(e Entry) interface{} {

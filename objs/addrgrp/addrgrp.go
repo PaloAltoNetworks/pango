@@ -1,7 +1,7 @@
-// Package srvc is the client.Objects.Services namespace.
+// Package addrgrp is the client.Objects.AddressGroup namespace.
 //
 // Normalized object:  Entry
-package srvc
+package addrgrp
 
 import (
     "fmt"
@@ -11,57 +11,60 @@ import (
 )
 
 
-// Entry is a normalized, version independent representation of a service
-// object.
+// Entry is a normalized, version independent representation of an address
+// group.  The value set in Dynamic should be something like the following:
 //
-// Type should be either "tcp" or "udp".
+//  * 'tag1'
+//  * 'tag1' or 'tag2' and 'tag3'
+//
+// The tags param is for administrative tags for this address object
+// group itself.
 type Entry struct {
     Name string
     Description string
-    Type string
-    SourcePort string
-    DestinationPort string
+    Static []string
+    Dynamic string
     Tag []string
 }
 
-// Srvc is a namespace struct, included as part of xapi.Client.
-type Srvc struct {
+// AddrGrp is a namespace struct, included as part of xapi.Client.
+type AddrGrp struct {
     con util.XapiClient
 }
 
 // Initialize is invoked when Initialize on the xapi.Client is called.
-func (c *Srvc) Initialize(con util.XapiClient) {
+func (c *AddrGrp) Initialize(con util.XapiClient) {
     c.con = con
 }
 
-// GetList performs GET to retrieve a list of service objects.
-func (c *Srvc) GetList(vsys string) ([]string, error) {
-    c.con.LogQuery("(get) list of service objects")
+// GetList performs GET to retrieve a list of address groups.
+func (c *AddrGrp) GetList(vsys string) ([]string, error) {
+    c.con.LogQuery("(get) list of address groups")
     path := c.xpath(vsys, nil)
     return c.con.EntryListUsing(c.con.Get, path[:len(path) - 1])
 }
 
-// ShowList performs SHOW to retrieve a list of service objects.
-func (c *Srvc) ShowList(vsys string) ([]string, error) {
-    c.con.LogQuery("(show) list of service objects")
+// ShowList performs SHOW to retrieve a list of address groups.
+func (c *AddrGrp) ShowList(vsys string) ([]string, error) {
+    c.con.LogQuery("(show) list of address groups")
     path := c.xpath(vsys, nil)
     return c.con.EntryListUsing(c.con.Show, path[:len(path) - 1])
 }
 
-// Get performs GET to retrieve information for the given service object.
-func (c *Srvc) Get(vsys, name string) (Entry, error) {
-    c.con.LogQuery("(get) service object %q", name)
+// Get performs GET to retrieve information for the given address group.
+func (c *AddrGrp) Get(vsys, name string) (Entry, error) {
+    c.con.LogQuery("(get) address group %q", name)
     return c.details(c.con.Get, vsys, name)
 }
 
-// Get performs SHOW to retrieve information for the given service object.
-func (c *Srvc) Show(vsys, name string) (Entry, error) {
-    c.con.LogQuery("(show) service object %q", name)
+// Get performs SHOW to retrieve information for the given address group.
+func (c *AddrGrp) Show(vsys, name string) (Entry, error) {
+    c.con.LogQuery("(show) address group %q", name)
     return c.details(c.con.Show, vsys, name)
 }
 
-// Set creates / updates one or more service objects.
-func (c *Srvc) Set(vsys string, e ...Entry) error {
+// Set creates / updates one or more address groups.
+func (c *AddrGrp) Set(vsys string, e ...Entry) error {
     var err error
 
     if len(e) == 0 {
@@ -72,12 +75,12 @@ func (c *Srvc) Set(vsys string, e ...Entry) error {
     names := make([]string, len(e))
 
     // Build up the struct with the given configs.
-    d := util.BulkElement{XMLName: xml.Name{Local: "service"}}
+    d := util.BulkElement{XMLName: xml.Name{Local: "address-group"}}
     for i := range e {
         d.Data = append(d.Data, fn(e[i]))
         names[i] = e[i].Name
     }
-    c.con.LogAction("(set) service objects: %v", names)
+    c.con.LogAction("(set) address groups: %v", names)
 
     // Set xpath.
     path := c.xpath(vsys, names)
@@ -92,10 +95,10 @@ func (c *Srvc) Set(vsys string, e ...Entry) error {
     return err
 }
 
-// Delete removes the given service objects from the firewall.
+// Delete removes the given address groups from the firewall.
 //
-// Address objects can be either a string or a addr.Entry object.
-func (c *Srvc) Delete(vsys string, e ...interface{}) error {
+// Address groups can be either a string or a addr.Entry object.
+func (c *AddrGrp) Delete(vsys string, e ...interface{}) error {
     var err error
 
     if len(e) == 0 {
@@ -113,20 +116,20 @@ func (c *Srvc) Delete(vsys string, e ...interface{}) error {
             return fmt.Errorf("Unsupported type to delete: %s", v)
         }
     }
-    c.con.LogAction("(delete) service objects: %v", names)
+    c.con.LogAction("(delete) address groups: %v", names)
 
     path := c.xpath(vsys, names)
     _, err = c.con.Delete(path, nil, nil)
     return err
 }
 
-/** Internal functions for the Srvc struct **/
+/** Internal functions for the AddrGrp struct **/
 
-func (c *Srvc) versioning() (normalizer, func(Entry) (interface{})) {
+func (c *AddrGrp) versioning() (normalizer, func(Entry) (interface{})) {
     return &container_v1{}, specify_v1
 }
 
-func (c *Srvc) details(fn func(interface{}, interface{}, interface{}) ([]byte, error), vsys, name string) (Entry, error) {
+func (c *AddrGrp) details(fn func(interface{}, interface{}, interface{}) ([]byte, error), vsys, name string) (Entry, error) {
     path := c.xpath(vsys, []string{name})
     obj, _ := c.versioning()
     _, err := fn(path, nil, obj)
@@ -138,7 +141,7 @@ func (c *Srvc) details(fn func(interface{}, interface{}, interface{}) ([]byte, e
     return ans, nil
 }
 
-func (c *Srvc) xpath(vsys string, vals []string) []string {
+func (c *AddrGrp) xpath(vsys string, vals []string) []string {
     if vsys == "" {
         vsys = "vsys1"
     }
@@ -149,7 +152,7 @@ func (c *Srvc) xpath(vsys string, vals []string) []string {
         util.AsEntryXpath([]string{"localhost.localdomain"}),
         "vsys",
         util.AsEntryXpath([]string{vsys}),
-        "service",
+        "address-group",
         util.AsEntryXpath(vals),
     }
 }
@@ -168,17 +171,11 @@ func (o *container_v1) Normalize() Entry {
     ans := Entry{
         Name: o.Answer.Name,
         Description: o.Answer.Description,
+        Static: util.MemToStr(o.Answer.Static),
         Tag: util.MemToStr(o.Answer.Tag),
     }
-    switch {
-    case o.Answer.TcpProto != nil:
-        ans.Type = "tcp"
-        ans.SourcePort = o.Answer.TcpProto.SourcePort
-        ans.DestinationPort = o.Answer.TcpProto.DestinationPort
-    case o.Answer.UdpProto != nil:
-        ans.Type = "udp"
-        ans.SourcePort = o.Answer.UdpProto.SourcePort
-        ans.DestinationPort = o.Answer.UdpProto.DestinationPort
+    if o.Answer.Dynamic != nil {
+        ans.Dynamic = *o.Answer.Dynamic
     }
 
     return ans
@@ -187,34 +184,21 @@ func (o *container_v1) Normalize() Entry {
 type entry_v1 struct {
     XMLName xml.Name `xml:"entry"`
     Name string `xml:"name,attr"`
-    TcpProto *protoDef `xml:"protocol>tcp"`
-    UdpProto *protoDef `xml:"protocol>udp"`
     Description string `xml:"description"`
+    Static *util.Member `xml:"static"`
+    Dynamic *string `xml:"dynamic>filter"`
     Tag *util.Member `xml:"tag"`
-}
-
-type protoDef struct {
-    SourcePort string `xml:"source-port"`
-    DestinationPort string `xml:"port"`
 }
 
 func specify_v1(e Entry) interface{} {
     ans := entry_v1{
         Name: e.Name,
         Description: e.Description,
+        Static: util.StrToMem(e.Static),
         Tag: util.StrToMem(e.Tag),
     }
-    switch e.Type {
-    case "tcp":
-        ans.TcpProto = &protoDef{
-            e.SourcePort,
-            e.DestinationPort,
-        }
-    case "udp":
-        ans.UdpProto = &protoDef{
-            e.SourcePort,
-            e.DestinationPort,
-        }
+    if e.Dynamic != "" {
+        ans.Dynamic = &e.Dynamic
     }
 
     return ans

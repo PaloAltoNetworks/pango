@@ -265,19 +265,19 @@ type entry_v1 struct {
 type emptyMode struct {}
 
 type otherMode struct {
-    LldpEnabled string `xml:"lldp>enable,omitempty"`
-    LldpProfile string `xml:"lldp>profile,omitempty"`
-    NetflowProfile string `xml:"netflow-profile,omitempty"`
+    LldpEnabled string `xml:"lldp>enable"`
+    LldpProfile string `xml:"lldp>profile"`
+    NetflowProfile string `xml:"netflow-profile"`
 }
 
 type l3Mode_v1 struct {
-    Ipv6Enabled string `xml:"ipv6>enabled,omitempty"`
-    ManagementProfile string `xml:"interface-management-profile,omitempty"`
+    Ipv6Enabled string `xml:"ipv6>enabled"`
+    ManagementProfile string `xml:"interface-management-profile"`
     Mtu int `xml:"mtu,omitempty"`
-    NetflowProfile string `xml:"netflow-profile,omitempty"`
-    AdjustTcpMss string `xml:"adjust-tcp-mss,omitempty"`
+    NetflowProfile string `xml:"netflow-profile"`
+    AdjustTcpMss string `xml:"adjust-tcp-mss"`
     StaticIps []staticIpv4 `xml:"ip"`
-    Dhcp *dhcpSettings `xml:"dhcp-client,omitempty"`
+    Dhcp *dhcpSettings `xml:"dhcp-client"`
 }
 
 type staticIpv4 struct {
@@ -286,8 +286,8 @@ type staticIpv4 struct {
 }
 
 type dhcpSettings struct {
-    Enable string `xml:"enable,omitempty"`
-    CreateDefaultRoute string `xml:"create-default-route,omitempty"`
+    Enable string `xml:"enable"`
+    CreateDefaultRoute string `xml:"create-default-route"`
     Metric int `xml:"default-route-metric,omitempty"`
 }
 
@@ -364,15 +364,15 @@ type entry_v2 struct {
 }
 
 type l3Mode_v2 struct {
-    Ipv6Enabled string `xml:"ipv6>enabled,omitempty"`
-    ManagementProfile string `xml:"interface-management-profile,omitempty"`
+    Ipv6Enabled string `xml:"ipv6>enabled"`
+    ManagementProfile string `xml:"interface-management-profile"`
     Mtu int `xml:"mtu,omitempty"`
-    NetflowProfile string `xml:"netflow-profile,omitempty"`
-    AdjustTcpMss string `xml:"adjust-tcp-mss>enable,omitempty"`
+    NetflowProfile string `xml:"netflow-profile"`
+    AdjustTcpMss string `xml:"adjust-tcp-mss>enable"`
     Ipv4MssAdjust int `xml:"adjust-tcp-mss>ipv4-mss-adjustment,omitempty"`
     Ipv6MssAdjust int `xml:"adjust-tcp-mss>ipv6-mss-adjustment,omitempty"`
     StaticIps []staticIpv4 `xml:"ip"`
-    Dhcp *dhcpSettings `xml:"dhcp-client,omitempty"`
+    Dhcp *dhcpSettings `xml:"dhcp-client"`
 }
 
 

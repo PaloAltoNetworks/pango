@@ -62,70 +62,63 @@ func (o BulkElement) Config() interface{} {
 // Member defines a member config node used for sending and receiving XML
 // from PANOS.
 type Member struct {
-    Text string `xml:"member"`
+    Member []string `xml:"member"`
 }
 
-// MemToStr takes a list of Member objects and returns a list of strings.
-func MemToStr(e []Member) []string {
+// MemToStr takes a pointer of a Member object and returns a list of strings.
+func MemToStr(e *Member) []string {
     if e == nil {
         return nil
     }
 
-    m := make([]string, len(e))
-    for i := range e {
-        m[i] = e[i].Text
-    }
-
-    return m
+    return e.Member
 }
 
 // StrToMem takes a list of strings and returns a list of Member objects.
-func StrToMem(e []string) []Member {
+func StrToMem(e []string) *Member {
     if e == nil {
         return nil
     }
 
-    m := make([]Member, len(e))
-    for i := range e {
-        m[i] = Member{e[i]}
-    }
-
-    return m
+    return &Member{e}
 }
 
 // Entry defines an entry config node used for sending and receiving XML
 // from PANOS.
 type Entry struct {
-    XMLName xml.Name `xml:"entry"`
+    Entry []innerEntry `xml:"entry"`
+}
+
+type innerEntry struct {
     Name string `xml:"name,attr"`
 }
 
 // EntToStr takes a list of Entry objects and returns a list of strings.
-func EntToStr(e []Entry) []string {
+func EntToStr(e *Entry) []string {
     if e == nil {
         return nil
     }
 
-    m := make([]string, len(e))
-    for i := range e {
-        m[i] = e[i].Name
+    m := make([]string, len(e.Entry))
+    for i := range e.Entry {
+        m[i] = e.Entry[i].Name
     }
 
     return m
 }
 
 // StrToEnt takes a list of strings and returns a list of Entry objects.
-func StrToEnt(e []string) []Entry {
+func StrToEnt(e []string) *Entry {
     if e == nil {
         return nil
     }
 
-    m := make([]Entry, len(e))
+    m := make([]innerEntry, len(e))
     for i := range e {
-        m[i] = Entry{Name: e[i]}
+        m[i] = innerEntry{e[i]}
     }
 
-    return m
+    return &Entry{m}
 }
 
 // YesNo returns "yes" on true, "no" on false.

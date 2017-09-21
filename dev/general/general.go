@@ -177,18 +177,18 @@ func (o *container_v1) Normalize() Config {
 
 type config_v1 struct {
     XMLName xml.Name `xml:"system"`
-    Hostname string `xml:"hostname,omitempty"`
-    IpAddress string `xml:"ip-address,omitempty"`
-    Netmask string `xml:"netmask,omitempty"`
-    Gateway string `xml:"default-gateway,omitempty"`
-    Timezone string `xml:"timezone,omitempty"`
+    Hostname string `xml:"hostname"`
+    IpAddress string `xml:"ip-address"`
+    Netmask string `xml:"netmask"`
+    Gateway string `xml:"default-gateway"`
+    Timezone string `xml:"timezone"`
     Dns *deviceDns `xml:"dns-setting"`
     Ntp *deviceNtp `xml:"ntp-servers"`
 }
 
 type deviceDns struct {
-    Primary string `xml:"servers>primary,omitempty"`
-    Secondary string `xml:"servers>secondary,omitempty"`
+    Primary string `xml:"servers>primary"`
+    Secondary string `xml:"servers>secondary"`
 }
 
 type deviceNtp struct {

@@ -194,8 +194,8 @@ type entry_v1 struct {
     IpNetmask *valType `xml:"ip-netmask"`
     IpRange *valType `xml:"ip-range"`
     Fqdn *valType `xml:"fqdn"`
-    Description string `xml:"description,omitempty"`
-    Tag []util.Member `xml:"tag"`
+    Description string `xml:"description"`
+    Tag *util.Member `xml:"tag"`
 }
 
 type valType struct {
