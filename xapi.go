@@ -89,6 +89,7 @@ import (
 //  * LogAction: action being performed (Set / Delete functions)
 //  * LogQuery: queries being run (Get / Show functions)
 //  * LogOp: operation commands (Op functions)
+//  * LogUid: User-Id commands (Uid functions)
 //  * LogXpath: the resultant xpath
 //  * LogSend: xml docuemnt being sent
 //  * LogReceive: xml responses being received
