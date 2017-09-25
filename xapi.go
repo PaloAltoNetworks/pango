@@ -332,6 +332,24 @@ func (c *Client) UnimportInterfaces(vsys string, names []string) error {
     return c.vsysUnimport("interface", vsys, names)
 }
 
+// ImportVirtualRouters imports virtual routers into the vsys specified.
+// Virtual routers that are imported into a vsys cannot be deleted.
+//
+// This is invoked automatically when creating virtual routers as long as the
+// vsys given is not an empty string.
+func (c *Client) ImportVirtualRouters(vsys string, names []string) error {
+    return c.vsysImport("virtual-router", vsys, names)
+}
+
+// UnimportVirtualRouters unimports virtual routers from the vsys specified.
+// Virtual routers that are imported into an vsys cannot be deleted.
+//
+// This is invoked automatically when deleting virtual routers as long as the
+// vsys given is not an empty string.
+func (c *Client) UnimportVirtualRouters(vsys string, names []string) error {
+    return c.vsysUnimport("virtual-router", vsys, names)
+}
+
 // ValidateConfig performs a commit config validation check.
 //
 // Setting sync to true means that this function will block until the job
@@ -358,6 +376,127 @@ func (c *Client) ValidateConfig(sync bool) (uint, error) {
     }
 
     return id, c.WaitForJob(id, nil)
+}
+
+// RevertToRunningConfig discards any changes made and reverts to the last
+// config committed.
+func (c *Client) RevertToRunningConfig() error {
+    c.LogOp("(op) reverting to running config")
+    _, err := c.Op("<load><config><from>running-config.xml</from></config></load>", "", nil, nil)
+    return err
+}
+
+// ConfigLocks returns any config locks that are currently in place.
+//
+// If vsys is an empty string, then the vsys will default to "shared".
+func (c *Client) ConfigLocks(vsys string) ([]util.Lock, error) {
+    if vsys == "" {
+        vsys = "shared"
+    }
+
+    c.LogOp("(op) getting config locks for scope %q", vsys)
+    ans := configLocks{}
+    _, err := c.Op("<show><config-locks /></show>", vsys, nil, &ans)
+    if err != nil {
+        return nil, err
+    }
+    return ans.Locks, nil
+}
+
+// LockConfig locks the config for the given scope with the given comment.
+//
+// If vsys is an empty string, the scope defaults to "shared".
+func (c *Client) LockConfig(vsys, comment string) error {
+    if vsys == "" {
+        vsys = "shared"
+    }
+    c.LogOp("(op) locking config for scope %q", vsys)
+
+    var inner string
+    if comment == "" {
+        inner = "<add />"
+    } else {
+        inner = fmt.Sprintf("<add><comment>%s</comment></add>", comment)
+    }
+    cmd := fmt.Sprintf("<request><config-lock>%s</config-lock></request>", inner)
+
+    _, err := c.Op(cmd, vsys, nil, nil)
+    return err
+}
+
+// UnlockConfig removes the config lock on the given scope.
+//
+// If vsys is an empty string, the scope defaults to "shared".
+func (c *Client) UnlockConfig(vsys string) error {
+    if vsys == "" {
+        vsys = "shared"
+    }
+
+    type cmd struct {
+        XMLName xml.Name `xml:"request"`
+        Cmd string `xml:"config-lock>remove"`
+    }
+
+    c.LogOp("(op) unlocking config for scope %q", vsys)
+    _, err := c.Op(cmd{}, vsys, nil, nil)
+    return err
+}
+
+// CommitLocks returns any commit locks that are currently in place.
+//
+// If vsys is an empty string, then the vsys will default to "shared".
+func (c *Client) CommitLocks(vsys string) ([]util.Lock, error) {
+    if vsys == "" {
+        vsys = "shared"
+    }
+
+    c.LogOp("(op) getting commit locks for scope %q", vsys)
+    ans := commitLocks{}
+    _, err := c.Op("<show><commit-locks /></show>", vsys, nil, &ans)
+    if err != nil {
+        return nil, err
+    }
+    return ans.Locks, nil
+}
+
+// LockCommits locks commits for the given scope with the given comment.
+//
+// If vsys is an empty string, the scope defaults to "shared".
+func (c *Client) LockCommits(vsys, comment string) error {
+    if vsys == "" {
+        vsys = "shared"
+    }
+    c.LogOp("(op) locking commits for scope %q", vsys)
+
+    var inner string
+    if comment == "" {
+        inner = "<add />"
+    } else {
+        inner = fmt.Sprintf("<add><comment>%s</comment></add>", comment)
+    }
+    cmd := fmt.Sprintf("<request><commit-lock>%s</commit-lock></request>", inner)
+
+    _, err := c.Op(cmd, vsys, nil, nil)
+    return err
+}
+
+// UnlockCommits removes the commit lock on the given scope owned by the given
+// admin, if this admin is someone other than the current acting admin.
+//
+// If vsys is an empty string, the scope defaults to "shared".
+func (c *Client) UnlockCommits(vsys, admin string) error {
+    if vsys == "" {
+        vsys = "shared"
+    }
+
+    type cmd struct {
+        XMLName xml.Name `xml:"request"`
+        Admin string `xml:"commit-lock>remove>admin,omitempty"`
+    }
+
+    c.LogOp("(op) unlocking commits for scope %q", vsys)
+    _, err := c.Op(cmd{Admin: admin}, vsys, nil, nil)
+    return err
 }
 
 // WaitForJob polls the device, waiting for the specified job to finish.
@@ -979,4 +1118,12 @@ func (e panosErrorResponseWithoutLine) Error() string {
 type vis struct {
     XMLName xml.Name
     Text string `xml:",chardata"`
+}
+
+type configLocks struct {
+    Locks []util.Lock `xml:"result>config-locks>entry"`
+}
+
+type commitLocks struct {
+    Locks []util.Lock `xml:"result>commit-locks>entry"`
 }

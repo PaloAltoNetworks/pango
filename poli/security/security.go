@@ -49,6 +49,66 @@ type Entry struct {
     DataFiltering []string
 }
 
+// Defaults sets params with uninitialized values to their GUI default setting.
+//
+// The defaults are as follows:
+//      * Type: "universal"
+//      * From: ["any"]
+//      * To: ["any"]
+//      * Source: ["any"]
+//      * SourceUser: ["any"]
+//      * HipProfile: ["any"]
+//      * Destination: ["any"]
+//      * Application: ["any"]
+//      * Service: ["application-default"]
+//      * Category: ["any"]
+//      * LogEnd: true
+func (e *Entry) Defaults() {
+    if e.Type == "" {
+        e.Type = "universal"
+    }
+
+    if len(e.From) == 0 {
+        e.From = []string{"any"}
+    }
+
+    if len(e.To) == 0 {
+        e.To = []string{"any"}
+    }
+
+    if len(e.Source) == 0 {
+        e.Source = []string{"any"}
+    }
+
+    if len(e.SourceUser) == 0 {
+        e.SourceUser = []string{"any"}
+    }
+
+    if len(e.HipProfile) == 0 {
+        e.HipProfile = []string{"any"}
+    }
+
+    if len(e.Destination) == 0 {
+        e.Destination = []string{"any"}
+    }
+
+    if len(e.Application) == 0 {
+        e.Application = []string{"any"}
+    }
+
+    if len(e.Service) == 0 {
+        e.Service = []string{"application-default"}
+    }
+
+    if len(e.Category) == 0 {
+        e.Category = []string{"any"}
+    }
+
+    if !e.LogEnd {
+        e.LogEnd = true
+    }
+}
+
 // Security is the client.Policies.Security namespace.
 type Security struct {
     con util.XapiClient

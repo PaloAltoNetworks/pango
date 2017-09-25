@@ -9,6 +9,7 @@ import (
     "github.com/PaloAltoNetworks/xapi/netw/mngtprof"
     "github.com/PaloAltoNetworks/xapi/netw/vlan"
     "github.com/PaloAltoNetworks/xapi/netw/zone"
+    "github.com/PaloAltoNetworks/xapi/netw/router"
 )
 
 
@@ -18,6 +19,7 @@ type Netw struct {
     ManagementProfile *mngtprof.MngtProf
     Vlan *vlan.Vlan
     Zone *zone.Zone
+    VirtualRouter *router.Router
 }
 
 // Initialize is invoked on client.Initialize().
@@ -33,4 +35,7 @@ func (c *Netw) Initialize(i util.XapiClient) {
 
     c.Zone = &zone.Zone{}
     c.Zone.Initialize(i)
+
+    c.VirtualRouter = &router.Router{}
+    c.VirtualRouter.Initialize(i)
 }

@@ -42,6 +42,8 @@ type XapiClient interface {
     UnimportInterfaces(string, []string) error
     ImportVlans(string, []string) error
     UnimportVlans(string, []string) error
+    ImportVirtualRouters(string, []string) error
+    UnimportVirtualRouters(string, []string) error
     WaitForJob(uint, interface{}) error
 }
 
@@ -179,6 +181,20 @@ type License struct {
     Expires string `xml:"expires"`
     Expired string `xml:"expired"`
     AuthCode string `xml:"authcode"`
+}
+
+// Lock represents either a config lock or a commit lock.
+type Lock struct {
+    XMLName xml.Name `xml:"entry"`
+    Owner string `xml:"name,attr"`
+    Name string `xml:"name"`
+    Type string `xml:"type"`
+    LoggedIn string `xml:"loggedin"`
+    Comment CdataText `xml:"comment"`
+}
+
+type CdataText struct {
+    Text string `xml:",cdata"`
 }
 
 // JobResponse parses a XML response that includes a job ID.
