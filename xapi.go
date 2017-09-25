@@ -1,25 +1,26 @@
 /*
-Package xapi is a cross version mechanism for interacting with Palo Alto
+Package xapi is a golang cross version mechanism for interacting with Palo Alto
 Networks devices (including physical and virtualized Next-generation Firewalls
-and Panorama).
+and Panorama).  Versioning support is in place for PANOS 6.1 to 8.0.
 
 To start, create a client connection with the desired parameters and then
 initialize the connection:
 
-    c := xapi.Client{
+    var err error
+    c := xapi.Firewall{Client: xapi.Client{
         Hostname: "127.0.0.1",
         Username: "admin",
         Password: "admin",
-    }
-    err := c.Initialize()
-    if err != nil {
+        Logging: xapi.LogAction | xapi.LogOp,
+    }}
+    if err = c.Initialize(); err != nil {
         log.Printf("Failed to initialize client: %s", err)
         return
     }
 
 Initializing the connection creates the API key (if it was not already
 specified), then performs "show system info" to get the PANOS version.  Once
-the client connection is created, you can query and configure the Palo
+the firewall client is created, you can query and configure the Palo
 Alto Networks device from the functions inside the various namespaces of the
 client connection.  Namespaces correspond to the various configuration areas
 available in the GUI.  For example:
@@ -41,7 +42,10 @@ Get and Set functions take and return normalized, version independent objects.
 These version safe objects are typically named Entry, which corresponds to
 how the object is placed in the PANOS XPATH.  For any version safe object,
 attempting to configure a parameter that your PANOS doesn't support will be
-safely ignored in the resultant XML sent to the firewall / Panorama.
+safely ignored in the resultant XML sent to the firewall / Panorama.  These
+objects may also have a special function, Defaults(), that will set default
+values for some of the object's params.  What the defaults are and which params
+are affected are called out in the documentation.
 
 Those more familiar with PANOS XAPI may notice the lack of Edit above.  Due
 to singular focus of functions in package xapi and how Edit truncates config,
@@ -85,16 +89,26 @@ import (
 )
 
 
-// These constants control what is logged by the xapi.Client:
-//  * LogAction: action being performed (Set / Delete functions)
-//  * LogQuery: queries being run (Get / Show functions)
-//  * LogOp: operation commands (Op functions)
-//  * LogUid: User-Id commands (Uid functions)
-//  * LogXpath: the resultant xpath
-//  * LogSend: xml docuemnt being sent
-//  * LogReceive: xml responses being received
+// These bit flags control what is logged by client connections.  Of the flags
+// available for use, LogSend and LogReceive will log ALL communication between
+// the connection object and the PANOS XML API.  The API key being used for
+// communication will be blanked out, but no other sensitive data will be.  As
+// such, those two flags should be considered for debugging only.  To disable
+// all logging, set the logging level as LogQuiet.
+//
+// The bit-wise flags are as follows:
+//
+//      * LogQuiet: disables all logging
+//      * LogAction: action being performed (Set / Delete functions)
+//      * LogQuery: queries being run (Get / Show functions)
+//      * LogOp: operation commands (Op functions)
+//      * LogUid: User-Id commands (Uid functions)
+//      * LogXpath: the resultant xpath
+//      * LogSend: xml docuemnt being sent
+//      * LogReceive: xml responses being received
 const (
-    LogAction = 1 << (iota + 1)
+    LogQuiet = 1 << (iota + 1)
+    LogAction
     LogQuery
     LogOp
     LogUid
@@ -103,10 +117,7 @@ const (
     LogReceive
 )
 
-// DefaultLogging is the default logging for a client (LogAction).
-const DefaultLogging uint32 = LogAction
-
-// Client is the main connector struct.  It provides wrapper functions for
+// Client is a generic connector struct.  It provides wrapper functions for
 // invoking the various PANOS XPath API methods.  After creating the client,
 // invoke Initialize() to prepare it for use.
 type Client struct {
@@ -127,6 +138,25 @@ type Client struct {
     // Logging level.
     Logging uint32
 
+    // Internal variables.
+    con *http.Client
+    api_url string
+}
+
+// Firewall is a firewall specific client, providing version safe functions
+// for the PANOS Xpath API methods.  After creating the object, invoke
+// Initialize() to prepare it for use.
+//
+// It has the following namespaces:
+//      * Network
+//      * Device
+//      * Policies
+//      * Objects
+//      * Licensing
+//      * UserId
+type Firewall struct {
+    Client
+
     // Namespaces
     Network *netw.Netw
     Device *dev.Dev
@@ -134,10 +164,21 @@ type Client struct {
     Objects *objs.Objs
     Licensing *licen.Licen
     UserId *userid.UserId
+}
 
-    // Internal variables.
-    con *http.Client
-    api_url string
+// Panorama is a panorama specific client, providing version safe functions
+// for the PANOS Xpath API methods.  After creating the object, invoke
+// Initialize() to prepare it for use.
+//
+// It has the following namespaces:
+//      * Licensing
+//      * UserId
+type Panorama struct {
+    Client
+
+    // Namespaces
+    Licensing *licen.Licen
+    UserId *userid.UserId
 }
 
 // String is the string representation of a client connection.  Both the
@@ -178,8 +219,57 @@ func (c *Client) Versioning() version.Number {
 //  * Protocol: https
 //  * Port: (unspecified)
 //  * Timeout: 10
-//  * Logging: DefaultLogging
+//  * Logging: LogAction | LogUid
 func (c *Client) Initialize() error {
+    var e error
+
+    if e = c.initCon(); e != nil {
+        return e
+    } else if e = c.initApiKey(); e != nil {
+        return e
+    } else if e = c.initSystemInfo(); e != nil {
+        return e
+    }
+
+    return nil
+}
+
+// Initialize does some initial setup of the Firewall connection, retrieves
+// the API key if it was not already present, then performs "show system
+// info" to get the PANOS version.  The full results are saved into the
+// client's SystemInfo map.
+//
+// If not specified, the following is assumed:
+//  * Protocol: https
+//  * Port: (unspecified)
+//  * Timeout: 10
+//  * Logging: LogAction | LogUid
+func (c *Firewall) Initialize() error {
+    var e error
+
+    if e = c.initCon(); e != nil {
+        return e
+    } else if e = c.initApiKey(); e != nil {
+        return e
+    } else if e = c.initSystemInfo(); e != nil {
+        return e
+    }
+    c.initNamespaces()
+
+    return nil
+}
+
+// Initialize does some initial setup of the Panorama connection, retrieves
+// the API key if it was not already present, then performs "show system
+// info" to get the PANOS version.  The full results are saved into the
+// client's SystemInfo map.
+//
+// If not specified, the following is assumed:
+//  * Protocol: https
+//  * Port: (unspecified)
+//  * Timeout: 10
+//  * Logging: LogAction | LogUid
+func (c *Panorama) Initialize() error {
     var e error
 
     if e = c.initCon(); e != nil {
@@ -836,7 +926,7 @@ func (c *Client) initCon() error {
 
     // Sets the logging level.
     if c.Logging == 0 {
-        c.Logging = DefaultLogging
+        c.Logging = LogAction | LogUid
     }
 
     // Set the timeout
@@ -932,7 +1022,7 @@ func (c *Client) initSystemInfo() error {
     return nil
 }
 
-func (c *Client) initNamespaces() {
+func (c *Firewall) initNamespaces() {
     c.Network = &netw.Netw{}
     c.Network.Initialize(c)
 
@@ -945,6 +1035,14 @@ func (c *Client) initNamespaces() {
     c.Objects = &objs.Objs{}
     c.Objects.Initialize(c)
 
+    c.Licensing = &licen.Licen{}
+    c.Licensing.Initialize(c)
+
+    c.UserId = &userid.UserId{}
+    c.UserId.Initialize(c)
+}
+
+func (c *Panorama) initNamespaces() {
     c.Licensing = &licen.Licen{}
     c.Licensing.Initialize(c)
 
