@@ -35,6 +35,8 @@ type Entry struct {
     Comment string
     Ipv4MssAdjust int
     Ipv6MssAdjust int
+
+    raw map[string] string
 }
 
 // Eth is the client.Network.EthernetInterface namespace.
@@ -111,6 +113,30 @@ func (c *Eth) Set(vsys string, e ...Entry) error {
 
     // Perform vsys import next.
     return c.con.ImportInterfaces(vsys, names)
+}
+
+// Edit creates / updates the specified ethernet interface.
+//
+// Specify a non-empty vsys to import the interface(s) into the given vsys
+// after creating, allowing the vsys to use them.
+func (c *Eth) Edit(vsys string, e Entry) error {
+    var err error
+
+    _, fn := c.versioning()
+
+    c.con.LogAction("(edit) ethernet interface: %v", e.Name)
+
+    // Set xpath.
+    path := c.xpath([]string{e.Name})
+
+    // Create the interface.
+    _, err = c.con.Edit(path, fn(e), nil, nil)
+    if err != nil {
+        return err
+    }
+
+    // Perform vsys import next.
+    return c.con.ImportInterfaces(vsys, []string{e.Name})
 }
 
 // Delete removes the given interface(s) from the firewall.
@@ -207,27 +233,34 @@ func (o *container_v1) Normalize() Entry {
     switch {
         case o.Answer.ModeL3 != nil:
             ans.Mode = "layer3"
-            ans.Ipv6Enabled = util.AsBool(o.Answer.ModeL3.Ipv6Enabled)
+            ans.Ipv6Enabled = util.AsBool(o.Answer.ModeL3.Ipv6.Enabled)
             ans.ManagementProfile = o.Answer.ModeL3.ManagementProfile
             ans.Mtu = o.Answer.ModeL3.Mtu
             ans.NetflowProfile = o.Answer.ModeL3.NetflowProfile
             ans.AdjustTcpMss = util.AsBool(o.Answer.ModeL3.AdjustTcpMss)
-            if o.Answer.ModeL3.StaticIps != nil {
-                ans.StaticIps = make([]string, len(o.Answer.ModeL3.StaticIps))
-                for i := range o.Answer.ModeL3.StaticIps {
-                    ans.StaticIps[i] = o.Answer.ModeL3.StaticIps[i].IpAddress
-                }
-            }
+            ans.StaticIps = util.EntToStr(o.Answer.ModeL3.StaticIps)
             if o.Answer.ModeL3.Dhcp != nil {
                 ans.EnableDhcp = util.AsBool(o.Answer.ModeL3.Dhcp.Enable)
                 ans.CreateDhcpDefaultRoute = util.AsBool(o.Answer.ModeL3.Dhcp.CreateDefaultRoute)
                 ans.DhcpDefaultRouteMetric = o.Answer.ModeL3.Dhcp.Metric
+            }
+            if o.Answer.ModeL3.Arp != nil {
+                ans.raw["arp"] = util.CleanRawXml(o.Answer.ModeL3.Arp.Text)
+            }
+            if o.Answer.ModeL3.Subinterface != nil {
+                ans.raw["l3subinterface"] = util.CleanRawXml(o.Answer.ModeL3.Subinterface.Text)
+            }
+            if o.Answer.ModeL3.Ipv6.Address != nil {
+                ans.raw["ipv6"] = util.CleanRawXml(o.Answer.ModeL3.Ipv6.Address.Text)
             }
         case o.Answer.ModeL2 != nil:
             ans.Mode = "layer2"
             ans.LldpEnabled = util.AsBool(o.Answer.ModeL2.LldpEnabled)
             ans.LldpProfile = o.Answer.ModeL2.LldpProfile
             ans.NetflowProfile = o.Answer.ModeL2.NetflowProfile
+            if o.Answer.ModeL2.Subinterface != nil {
+                ans.raw["l2subinterface"] = util.CleanRawXml(o.Answer.ModeL2.Subinterface.Text)
+            }
         case o.Answer.ModeVwire != nil:
             ans.Mode = "virtual-wire"
             ans.LldpEnabled = util.AsBool(o.Answer.ModeVwire.LldpEnabled)
@@ -267,22 +300,25 @@ type emptyMode struct {}
 type otherMode struct {
     LldpEnabled string `xml:"lldp>enable"`
     LldpProfile string `xml:"lldp>profile"`
-    NetflowProfile string `xml:"netflow-profile"`
+    NetflowProfile string `xml:"netflow-profile,omitempty"`
+    Subinterface *util.RawXml `xml:"units"`
 }
 
 type l3Mode_v1 struct {
-    Ipv6Enabled string `xml:"ipv6>enabled"`
-    ManagementProfile string `xml:"interface-management-profile"`
+    Ipv6 ipv6 `xml:"ipv6"`
+    ManagementProfile string `xml:"interface-management-profile,omitempty"`
     Mtu int `xml:"mtu,omitempty"`
-    NetflowProfile string `xml:"netflow-profile"`
+    NetflowProfile string `xml:"netflow-profile,omitempty"`
     AdjustTcpMss string `xml:"adjust-tcp-mss"`
-    StaticIps []staticIpv4 `xml:"ip"`
+    StaticIps *util.Entry `xml:"ip"`
     Dhcp *dhcpSettings `xml:"dhcp-client"`
+    Arp *util.RawXml `xml:"arp"`
+    Subinterface *util.RawXml `xml:"units"`
 }
 
-type staticIpv4 struct {
-    XMLName xml.Name `xml:"entry`
-    IpAddress string `xml:"name,attr"`
+type ipv6 struct {
+    Enabled string `xml:"enabled"`
+    Address *util.RawXml `xml:"address"`
 }
 
 type dhcpSettings struct {
@@ -303,32 +339,40 @@ func (o *container_v2) Normalize() Entry {
         LinkState: o.Answer.LinkState,
         Comment: o.Answer.Comment,
     }
+    ans.raw = make(map[string] string, 0)
     switch {
         case o.Answer.ModeL3 != nil:
             ans.Mode = "layer3"
-            ans.Ipv6Enabled = util.AsBool(o.Answer.ModeL3.Ipv6Enabled)
+            ans.Ipv6Enabled = util.AsBool(o.Answer.ModeL3.Ipv6.Enabled)
             ans.ManagementProfile = o.Answer.ModeL3.ManagementProfile
             ans.Mtu = o.Answer.ModeL3.Mtu
             ans.NetflowProfile = o.Answer.ModeL3.NetflowProfile
             ans.AdjustTcpMss = util.AsBool(o.Answer.ModeL3.AdjustTcpMss)
             ans.Ipv4MssAdjust = o.Answer.ModeL3.Ipv4MssAdjust
             ans.Ipv6MssAdjust = o.Answer.ModeL3.Ipv6MssAdjust
-            if o.Answer.ModeL3.StaticIps != nil {
-                ans.StaticIps = make([]string, len(o.Answer.ModeL3.StaticIps))
-                for i := range o.Answer.ModeL3.StaticIps {
-                    ans.StaticIps[i] = o.Answer.ModeL3.StaticIps[i].IpAddress
-                }
-            }
+            ans.StaticIps = util.EntToStr(o.Answer.ModeL3.StaticIps)
             if o.Answer.ModeL3.Dhcp != nil {
                 ans.EnableDhcp = util.AsBool(o.Answer.ModeL3.Dhcp.Enable)
                 ans.CreateDhcpDefaultRoute = util.AsBool(o.Answer.ModeL3.Dhcp.CreateDefaultRoute)
                 ans.DhcpDefaultRouteMetric = o.Answer.ModeL3.Dhcp.Metric
+            }
+            if o.Answer.ModeL3.Arp != nil {
+                ans.raw["arp"] = util.CleanRawXml(o.Answer.ModeL3.Arp.Text)
+            }
+            if o.Answer.ModeL3.Subinterface != nil {
+                ans.raw["l3subinterface"] = util.CleanRawXml(o.Answer.ModeL3.Subinterface.Text)
+            }
+            if o.Answer.ModeL3.Ipv6.Address != nil {
+                ans.raw["ipv6"] = util.CleanRawXml(o.Answer.ModeL3.Ipv6.Address.Text)
             }
         case o.Answer.ModeL2 != nil:
             ans.Mode = "layer2"
             ans.LldpEnabled = util.AsBool(o.Answer.ModeL2.LldpEnabled)
             ans.LldpProfile = o.Answer.ModeL2.LldpProfile
             ans.NetflowProfile = o.Answer.ModeL2.NetflowProfile
+            if o.Answer.ModeL2.Subinterface != nil {
+                ans.raw["l2subinterface"] = util.CleanRawXml(o.Answer.ModeL2.Subinterface.Text)
+            }
         case o.Answer.ModeVwire != nil:
             ans.Mode = "virtual-wire"
             ans.LldpEnabled = util.AsBool(o.Answer.ModeVwire.LldpEnabled)
@@ -364,17 +408,18 @@ type entry_v2 struct {
 }
 
 type l3Mode_v2 struct {
-    Ipv6Enabled string `xml:"ipv6>enabled"`
-    ManagementProfile string `xml:"interface-management-profile"`
+    Ipv6 ipv6 `xml:"ipv6"`
+    ManagementProfile string `xml:"interface-management-profile,omitempty"`
     Mtu int `xml:"mtu,omitempty"`
-    NetflowProfile string `xml:"netflow-profile"`
+    NetflowProfile string `xml:"netflow-profile,omitempty"`
     AdjustTcpMss string `xml:"adjust-tcp-mss>enable"`
     Ipv4MssAdjust int `xml:"adjust-tcp-mss>ipv4-mss-adjustment,omitempty"`
     Ipv6MssAdjust int `xml:"adjust-tcp-mss>ipv6-mss-adjustment,omitempty"`
-    StaticIps []staticIpv4 `xml:"ip"`
+    StaticIps *util.Entry `xml:"ip"`
     Dhcp *dhcpSettings `xml:"dhcp-client"`
+    Arp *util.RawXml `xml:"arp"`
+    Subinterface *util.RawXml `xml:"units"`
 }
-
 
 func specify_v1(e Entry) interface{} {
     ans := entry_v1{
@@ -388,19 +433,13 @@ func specify_v1(e Entry) interface{} {
     switch e.Mode {
     case "layer3":
         i := &l3Mode_v1{
-            Ipv6Enabled: util.YesNo(e.Ipv6Enabled),
+            StaticIps: util.StrToEnt(e.StaticIps),
             ManagementProfile: e.ManagementProfile,
             Mtu: e.Mtu,
             NetflowProfile: e.NetflowProfile,
             AdjustTcpMss: util.YesNo(e.AdjustTcpMss),
         }
-        if len(e.StaticIps) > 0 {
-            nfo := make([]staticIpv4, len(e.StaticIps))
-            for j := range e.StaticIps {
-                nfo = append(nfo, staticIpv4{IpAddress: e.StaticIps[j]})
-            }
-            i.StaticIps = nfo
-        }
+        i.Ipv6.Enabled = util.YesNo(e.Ipv6Enabled)
         if e.EnableDhcp || e.CreateDhcpDefaultRoute || e.DhcpDefaultRouteMetric != 0 {
             i.Dhcp = &dhcpSettings{
                 Enable: util.YesNo(e.EnableDhcp),
@@ -408,12 +447,24 @@ func specify_v1(e Entry) interface{} {
                 Metric: e.DhcpDefaultRouteMetric,
             }
         }
+        if text, present := e.raw["arp"]; present {
+            i.Arp = &util.RawXml{text}
+        }
+        if text, present := e.raw["l3subinterface"]; present {
+            i.Subinterface = &util.RawXml{text}
+        }
+        if text, present := e.raw["ipv6"]; present {
+            i.Ipv6.Address = &util.RawXml{text}
+        }
         ans.ModeL3 = i
     case "layer2":
         i := &otherMode{
             LldpEnabled: util.YesNo(e.LldpEnabled),
             LldpProfile: e.LldpProfile,
             NetflowProfile: e.NetflowProfile,
+        }
+        if text, present := e.raw["l2subinterface"]; present {
+            i.Subinterface = &util.RawXml{text}
         }
         ans.ModeL2 = i
     case "virtual-wire":
@@ -448,7 +499,7 @@ func specify_v2(e Entry) interface{} {
     switch e.Mode {
     case "layer3":
         i := &l3Mode_v2{
-            Ipv6Enabled: util.YesNo(e.Ipv6Enabled),
+            StaticIps: util.StrToEnt(e.StaticIps),
             ManagementProfile: e.ManagementProfile,
             Mtu: e.Mtu,
             NetflowProfile: e.NetflowProfile,
@@ -456,18 +507,22 @@ func specify_v2(e Entry) interface{} {
             Ipv4MssAdjust: e.Ipv4MssAdjust,
             Ipv6MssAdjust: e.Ipv6MssAdjust,
         }
-        if len(e.StaticIps) > 0 {
-            nfo := make([]staticIpv4, len(e.StaticIps))
-            for j := range e.StaticIps {
-                nfo = append(nfo, staticIpv4{IpAddress: e.StaticIps[j]})
-            }
-            i.StaticIps = nfo
-        } else if e.EnableDhcp || e.CreateDhcpDefaultRoute || e.DhcpDefaultRouteMetric != 0 {
+        i.Ipv6.Enabled = util.YesNo(e.Ipv6Enabled)
+        if e.EnableDhcp || e.CreateDhcpDefaultRoute || e.DhcpDefaultRouteMetric != 0 {
             i.Dhcp = &dhcpSettings{
                 Enable: util.YesNo(e.EnableDhcp),
                 CreateDefaultRoute: util.YesNo(e.CreateDhcpDefaultRoute),
                 Metric: e.DhcpDefaultRouteMetric,
             }
+        }
+        if text, present := e.raw["arp"]; present {
+            i.Arp = &util.RawXml{text}
+        }
+        if text, present := e.raw["l3subinterface"]; present {
+            i.Subinterface = &util.RawXml{text}
+        }
+        if text, present := e.raw["ipv6"]; present {
+            i.Ipv6.Address = &util.RawXml{text}
         }
         ans.ModeL3 = i
     case "layer2":
@@ -475,6 +530,9 @@ func specify_v2(e Entry) interface{} {
             LldpEnabled: util.YesNo(e.LldpEnabled),
             LldpProfile: e.LldpProfile,
             NetflowProfile: e.NetflowProfile,
+        }
+        if text, present := e.raw["l2subinterface"]; present {
+            i.Subinterface = &util.RawXml{text}
         }
         ans.ModeL2 = i
     case "virtual-wire":
@@ -496,4 +554,3 @@ func specify_v2(e Entry) interface{} {
 
     return ans
 }
-

@@ -57,15 +57,6 @@ an Edit if desired, but creating the XPATH and XML document is up to you:
 */
 package xapi
 
-/*
-·         Global Service Creation
-·         NAT rules
-·         Security Rules
-·         Change username / password using ssh
-·         Interface configuration
-·         Setup dns and ntp
-*/
-
 import (
     "crypto/tls"
     "encoding/xml"

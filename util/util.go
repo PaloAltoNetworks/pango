@@ -6,6 +6,7 @@ package util
 import (
     "encoding/xml"
     "fmt"
+    "regexp"
     "strings"
 
     "github.com/PaloAltoNetworks/xapi/version"
@@ -195,6 +196,15 @@ type Lock struct {
 
 type CdataText struct {
     Text string `xml:",cdata"`
+}
+
+type RawXml struct {
+    Text string `xml:",innerxml"`
+}
+
+func CleanRawXml(v string) string {
+    re := regexp.MustCompile(` admin="\S+" dirtyId="\d+" time="\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2}"`)
+    return re.ReplaceAllString(v, "")
 }
 
 // JobResponse parses a XML response that includes a job ID.
