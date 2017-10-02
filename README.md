@@ -38,13 +38,13 @@ Initializing the connection creates the API key (if it was not already specified
 
 Generally speaking, there are the following functions inside each namespace:
 
-    * `GetList`
-    * `ShowList`
-    * `Get`
-    * `Show`
-    * `Set`
-    * `Edit`
-    * `Delete`
+  * `GetList()`
+  * `ShowList()`
+  * `Get()`
+  * `Show()`
+  * `Set()`
+  * `Edit()`
+  * `Delete()`
 
 These functions correspond with PANOS `Get`, `Show`, `Set`, `Edit`, and `Delete` API calls.  `Get()`, `Set()`, and `Edit()` take and return normalized, version independent objects.  These version safe objects are typically named `Entry`, which corresponds to how the object is placed in the PANOS XPATH.  For any version safe object, attempting to configure a parameter that your PANOS doesn't support will be safely ignored in the resultant XML sent to the firewall / Panorama.
 
