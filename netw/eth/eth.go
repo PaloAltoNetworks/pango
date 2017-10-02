@@ -129,7 +129,7 @@ func (c *Eth) Edit(vsys string, e Entry) error {
     // Set xpath.
     path := c.xpath([]string{e.Name})
 
-    // Create the interface.
+    // Edit the interface.
     _, err = c.con.Edit(path, fn(e), nil, nil)
     if err != nil {
         return err

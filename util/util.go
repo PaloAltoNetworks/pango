@@ -194,14 +194,19 @@ type Lock struct {
     Comment CdataText `xml:"comment"`
 }
 
+// CdataText is for getting CDATA contents of XML docs.
 type CdataText struct {
     Text string `xml:",cdata"`
 }
 
+// RawXml is what allows the use of Edit commands on a XPATH without
+// truncating any other child objects that may be attached to it.
 type RawXml struct {
     Text string `xml:",innerxml"`
 }
 
+// CleanRawXml removes extra XML attributes from RawXml objects without
+// requiring us to have to parse everything.
 func CleanRawXml(v string) string {
     re := regexp.MustCompile(` admin="\S+" dirtyId="\d+" time="\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2}"`)
     return re.ReplaceAllString(v, "")
