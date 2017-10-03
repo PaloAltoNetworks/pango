@@ -95,6 +95,22 @@ func (c *Addr) Set(vsys string, e ...Entry) error {
     return err
 }
 
+// Edit creates / updates an address object.
+func (c *Addr) Edit(vsys string, e Entry) error {
+    var err error
+
+    _, fn := c.versioning()
+
+    c.con.LogAction("(edit) address object %q", e.Name)
+
+    // Set xpath.
+    path := c.xpath(vsys, []string{e.Name})
+
+    // Create the objects.
+    _, err = c.con.Edit(path, fn(e), nil, nil)
+    return err
+}
+
 // Delete removes the given address objects from the firewall.
 //
 // Address objects can be either a string or a addr.Entry object.

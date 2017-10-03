@@ -18,9 +18,6 @@ import (
 // UserId is the client.UserId namespace.
 type UserId struct {
     con util.XapiClient
-
-    vsys string
-    msg uid
 }
 
 // Initialize is invoked on client.Initialize().
@@ -37,7 +34,7 @@ func (c *UserId) Initialize(i util.XapiClient) {
 //  * unregister ip/tags
 //
 // Both logins and logouts are maps where the username is the key and the IP
-// IP address is the value.
+// address is the value.
 //
 // Both reg and unreg are maps where the IP address is the key and the list
 // of tags are the values.

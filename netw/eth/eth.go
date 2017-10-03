@@ -124,7 +124,7 @@ func (c *Eth) Edit(vsys string, e Entry) error {
 
     _, fn := c.versioning()
 
-    c.con.LogAction("(edit) ethernet interface: %v", e.Name)
+    c.con.LogAction("(edit) ethernet interface %q", e.Name)
 
     // Set xpath.
     path := c.xpath([]string{e.Name})
@@ -230,6 +230,7 @@ func (o *container_v1) Normalize() Entry {
         LinkState: o.Answer.LinkState,
         Comment: o.Answer.Comment,
     }
+    ans.raw = make(map[string] string, 3)
     switch {
         case o.Answer.ModeL3 != nil:
             ans.Mode = "layer3"
@@ -339,7 +340,7 @@ func (o *container_v2) Normalize() Entry {
         LinkState: o.Answer.LinkState,
         Comment: o.Answer.Comment,
     }
-    ans.raw = make(map[string] string, 0)
+    ans.raw = make(map[string] string, 3)
     switch {
         case o.Answer.ModeL3 != nil:
             ans.Mode = "layer3"

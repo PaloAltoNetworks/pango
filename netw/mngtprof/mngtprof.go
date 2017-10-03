@@ -99,6 +99,22 @@ func (c *MngtProf) Set(e ...Entry) error {
     return err
 }
 
+// Edit creates / updates an interface management profile.
+func (c *MngtProf) Edit(e Entry) error {
+    var err error
+
+    _, fn := c.versioning()
+
+    c.con.LogAction("(edit) interface management profile %q", e.Name)
+
+    // Set xpath.
+    path := c.xpath([]string{e.Name})
+
+    // Edit the profile.
+    _, err = c.con.Edit(path, fn(e), nil, nil)
+    return err
+}
+
 // Delete removes the given interface management profile(s) from the firewall.
 //
 // Profiles can be either a string or a mngtprof.Entry object.

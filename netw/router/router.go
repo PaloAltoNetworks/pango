@@ -25,6 +25,8 @@ type Entry struct {
     IbgpDist int
     EbgpDist int
     RipDist int
+
+    raw map[string] string
 }
 
 // Defaults sets params with uninitialized values to their GUI default setting.
@@ -153,6 +155,30 @@ func (c *Router) Set(vsys string, e ...Entry) error {
     return c.con.ImportVirtualRouters(vsys, names)
 }
 
+// Edit creates / updates a virtual router.
+//
+// Specify a non-empty vsys to import the virtual router into the given vsys
+// after creating, allowing the vsys to use them.
+func (c *Router) Edit(vsys string, e Entry) error {
+    var err error
+
+    _, fn := c.versioning()
+
+    c.con.LogAction("(edit) virtual router %q", e.Name)
+
+    // Set xpath.
+    path := c.xpath([]string{e.Name})
+
+    // Edit the virtual router.
+    _, err = c.con.Edit(path, fn(e), nil, nil)
+    if err != nil {
+        return err
+    }
+
+    // Perform vsys import next.
+    return c.con.ImportVirtualRouters(vsys, []string{e.Name})
+}
+
 // Delete removes the given virtual routers from the firewall.
 //
 // Specify a non-empty vsys to have this function remove the virtual routers
@@ -243,6 +269,19 @@ func (o *container_v1) Normalize() Entry {
         EbgpDist: o.Answer.Dist.EbgpDist,
         RipDist: o.Answer.Dist.RipDist,
     }
+    ans.raw = make(map[string] string, 4)
+    if o.Answer.Ecmp != nil {
+        ans.raw["ecmp"] = util.CleanRawXml(o.Answer.Ecmp.Text)
+    }
+    if o.Answer.Multicast != nil {
+        ans.raw["multicast"] = util.CleanRawXml(o.Answer.Multicast.Text)
+    }
+    if o.Answer.Protocol != nil {
+        ans.raw["protocol"] = util.CleanRawXml(o.Answer.Protocol.Text)
+    }
+    if o.Answer.Routing != nil {
+        ans.raw["routing"] = util.CleanRawXml(o.Answer.Routing.Text)
+    }
 
     return ans
 }
@@ -252,6 +291,10 @@ type entry_v1 struct {
     Name string `xml:"name,attr"`
     Interfaces *util.Member `xml:"interface"`
     Dist dist `xml:"admin-dists"`
+    Ecmp *util.RawXml `xml:"ecmp"`
+    Multicast *util.RawXml `xml:"multicast"`
+    Protocol *util.RawXml `xml:"protocol"`
+    Routing *util.RawXml `xml:"routing-table"`
 }
 
 type dist struct {
@@ -281,6 +324,18 @@ func specify_v1(e Entry) interface{} {
             EbgpDist: e.EbgpDist,
             RipDist: e.RipDist,
         },
+    }
+    if text, present := e.raw["ecmp"]; present {
+        ans.Ecmp = &util.RawXml{text}
+    }
+    if text, present := e.raw["multicast"]; present {
+        ans.Multicast = &util.RawXml{text}
+    }
+    if text, present := e.raw["protocol"]; present {
+        ans.Protocol = &util.RawXml{text}
+    }
+    if text, present := e.raw["routing"]; present {
+        ans.Routing = &util.RawXml{text}
     }
 
     return ans

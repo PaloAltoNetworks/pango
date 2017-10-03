@@ -156,7 +156,7 @@ func (c *Security) Set(vsys, base string, e ...Entry) error {
     _, fn := c.versioning()
     names := make([]string, len(e))
 
-    // Build up the struct with the given zone configs.
+    // Build up the struct with the given security policy configs.
     d := util.BulkElement{XMLName: xml.Name{Local: "rules"}}
     for i := range e {
         d.Data = append(d.Data, fn(e[i]))
@@ -172,14 +172,30 @@ func (c *Security) Set(vsys, base string, e ...Entry) error {
         path = path[:len(path) - 2]
     }
 
-    // Create the zones.
+    // Create the security policies.
     _, err = c.con.Set(path, d.Config(), nil, nil)
+    return err
+}
+
+// Edit creates / updates a security policy.
+func (c *Security) Edit(vsys, base string, e Entry) error {
+    var err error
+
+    _, fn := c.versioning()
+
+    c.con.LogAction("(edit) security policy %q", e.Name)
+
+    // Set xpath.
+    path := c.xpath(vsys, base, []string{e.Name})
+
+    // Edit the security policy.
+    _, err = c.con.Edit(path, fn(e), nil, nil)
     return err
 }
 
 // Delete removes the given security policies.
 //
-// Security policies can be either a string or a zone.Entry object.
+// Security policies can be either a string or an Entry object.
 func (c *Security) Delete(vsys, base string, e ...interface{}) error {
     var err error
 

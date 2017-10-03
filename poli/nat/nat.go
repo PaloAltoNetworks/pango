@@ -177,6 +177,22 @@ func (c *Nat) Set(vsys, base string, e ...Entry) error {
     return err
 }
 
+// Edit creates / updates a NAT policy.
+func (c *Nat) Edit(vsys, base string, e Entry) error {
+    var err error
+
+    _, fn := c.versioning()
+
+    c.con.LogAction("(edit) NAT policy %q", e.Name)
+
+    // Set xpath.
+    path := c.xpath(vsys, base, []string{e.Name})
+
+    // Edit the NAT policy.
+    _, err = c.con.Edit(path, fn(e), nil, nil)
+    return err
+}
+
 // Delete removes the given NAT policies.
 //
 // NAT policies can be either a string or a zone.Entry object.

@@ -91,6 +91,22 @@ func (c *Zone) Set(vsys string, e ...Entry) error {
     return err
 }
 
+// Edit creates / updates a zone.
+func (c *Zone) Edit(vsys string, e Entry) error {
+    var err error
+
+    _, fn := c.versioning()
+
+    c.con.LogAction("(edit) zone %q", e.Name)
+
+    // Set xpath.
+    path := c.xpath(vsys, []string{e.Name})
+
+    // Create the zones.
+    _, err = c.con.Edit(path, fn(e), nil, nil)
+    return err
+}
+
 // Delete removes the given zone(s) from the firewall.
 //
 // Zones can be either a string or a zone.Entry object.

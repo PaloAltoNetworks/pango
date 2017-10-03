@@ -1,7 +1,7 @@
 Palo Alto Networks xapi
 =======================
 
-Package xapi is a golang cross version mechanism for interacting with Palo Alto Networks devices (including physical and virtualized Next-generation Firewalls and Panorama).
+Package xapi is a golang cross version mechanism for interacting with Palo Alto Networks devices (including physical and virtualized Next-generation Firewalls and Panorama).  Versioning support is in place for PANOS 6.1 to 8.0.
 
 To start, create a client connection with the desired parameters and then initialize the connection:
 
@@ -26,10 +26,11 @@ func main() {
         log.Printf("Failed to initialize client: %s", err)
         return
     }
+    log.Printf("Initialize ok")
 }
 ```
 
-Initializing the connection creates the API key (if it was not already specified), then performs `show system info` to get the PANOS version.  Once the client connection is created, you can query and configure the Palo Alto Networks device from the functions inside the various namespaces of the client connection.  Namespaces correspond to the various configuration areas available in the GUI.  For example:
+Initializing the connection creates the API key (if it was not already specified), then performs `show system info` to get the PANOS version.  Once the firewall client connection is created, you can query and configure the Palo Alto Networks device from the functions inside the various namespaces of the client connection.  Namespaces correspond to the various configuration areas available in the GUI.  For example:
 
 ```go
     err = c.Network.EthernetInterface.Set(...)

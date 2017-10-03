@@ -98,6 +98,30 @@ func (c *Vlan) Set(vsys string, e ...Entry) error {
     return c.con.ImportVlans(vsys, names)
 }
 
+// Edit creates / updates a VLAN.
+//
+// Specify a non-empty vsys to import the VLAN into the given vsys
+// after creating, allowing the vsys to use it.
+func (c *Vlan) Edit(vsys string, e Entry) error {
+    var err error
+
+    _, fn := c.versioning()
+
+    c.con.LogAction("(edit) VLAN %q", e.Name)
+
+    // Set xpath.
+    path := c.xpath([]string{e.Name})
+
+    // Edit the VLAN.
+    _, err = c.con.Edit(path, fn(e), nil, nil)
+    if err != nil {
+        return err
+    }
+
+    // Perform vsys import next.
+    return c.con.ImportVlans(vsys, []string{e.Name})
+}
+
 // Delete removes the given VLAN(s) from the firewall.
 //
 // Specify a non-empty vsys to have this function remove the VLAN(s) from
