@@ -89,10 +89,11 @@ func StrToMem(e []string) *Member {
 // Entry defines an entry config node used for sending and receiving XML
 // from PANOS.
 type Entry struct {
-    Entry []innerEntry `xml:"entry"`
+    Entry []InnerEntry `xml:"entry"`
 }
 
-type innerEntry struct {
+// InnerEntry is the inner struct for util.Entry, containing the name field.
+type InnerEntry struct {
     Name string `xml:"name,attr"`
 }
 
@@ -116,9 +117,9 @@ func StrToEnt(e []string) *Entry {
         return nil
     }
 
-    m := make([]innerEntry, len(e))
+    m := make([]InnerEntry, len(e))
     for i := range e {
-        m[i] = innerEntry{e[i]}
+        m[i] = InnerEntry{e[i]}
     }
 
     return &Entry{m}

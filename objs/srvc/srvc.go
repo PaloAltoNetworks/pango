@@ -14,11 +14,11 @@ import (
 // Entry is a normalized, version independent representation of a service
 // object.
 //
-// Type should be either "tcp" or "udp".
+// Protocol should be either "tcp" or "udp".
 type Entry struct {
     Name string
     Description string
-    Type string
+    Protocol string
     SourcePort string
     DestinationPort string
     Tag []string
@@ -188,11 +188,11 @@ func (o *container_v1) Normalize() Entry {
     }
     switch {
     case o.Answer.TcpProto != nil:
-        ans.Type = "tcp"
+        ans.Protocol = "tcp"
         ans.SourcePort = o.Answer.TcpProto.SourcePort
         ans.DestinationPort = o.Answer.TcpProto.DestinationPort
     case o.Answer.UdpProto != nil:
-        ans.Type = "udp"
+        ans.Protocol = "udp"
         ans.SourcePort = o.Answer.UdpProto.SourcePort
         ans.DestinationPort = o.Answer.UdpProto.DestinationPort
     }
@@ -220,7 +220,7 @@ func specify_v1(e Entry) interface{} {
         Description: e.Description,
         Tag: util.StrToMem(e.Tag),
     }
-    switch e.Type {
+    switch e.Protocol {
     case "tcp":
         ans.TcpProto = &protoDef{
             e.SourcePort,
