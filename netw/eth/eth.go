@@ -77,8 +77,10 @@ func (c *Eth) Show(name string) (Entry, error) {
 
 // Set creates / updates one or more ethernet interfaces.
 //
-// Specify a non-empty vsys to import the interface(s) into the given vsys
-// after creating, allowing the vsys to use them.
+// Specifying a non-empty vsys will import the interfaces into that vsys,
+// allowing the vsys to use them, as long as the interface does not have a
+// mode of "ha" or "aggregate-group".  Interfaces that have either of those
+// modes are omitted from this function's followup vsys import.
 func (c *Eth) Set(vsys string, e ...Entry) error {
     var err error
 
@@ -87,18 +89,22 @@ func (c *Eth) Set(vsys string, e ...Entry) error {
     }
 
     _, fn := c.versioning()
-    names := make([]string, len(e))
+    n1 := make([]string, len(e))
+    n2 := make([]string, 0, len(e))
 
     // Build up the struct with the given interface configs.
     d := util.BulkElement{XMLName: xml.Name{Local: "ethernet"}}
     for i := range e {
         d.Data = append(d.Data, fn(e[i]))
-        names[i] = e[i].Name
+        n1[i] = e[i].Name
+        if e[i].Mode != "ha" && e[i].Mode != "aggregate-group" {
+            n2 = append(n2, e[i].Name)
+        }
     }
-    c.con.LogAction("(set) ethernet interfaces: %v", names)
+    c.con.LogAction("(set) ethernet interfaces: %v", n1)
 
     // Set xpath.
-    path := c.xpath(names)
+    path := c.xpath(n1)
     if len(e) == 1 {
         path = path[:len(path) - 1]
     } else {
@@ -112,13 +118,15 @@ func (c *Eth) Set(vsys string, e ...Entry) error {
     }
 
     // Perform vsys import next.
-    return c.con.ImportInterfaces(vsys, names)
+    return c.con.ImportInterfaces(vsys, n2)
 }
 
 // Edit creates / updates the specified ethernet interface.
 //
-// Specify a non-empty vsys to import the interface(s) into the given vsys
-// after creating, allowing the vsys to use them.
+// Specifying a non-empty vsys will import the interface into that vsys,
+// allowing the vsys to use it, as long as the interface does not have a
+// mode of "ha" or "aggregate-group".  Interfaces that have either of those
+// modes are omitted from this function's followup vsys import.
 func (c *Eth) Edit(vsys string, e Entry) error {
     var err error
 
@@ -135,7 +143,12 @@ func (c *Eth) Edit(vsys string, e Entry) error {
         return err
     }
 
-    // Perform vsys import next.
+    // Skip the import step for certain interface types.
+    if e.Mode == "ha" || e.Mode == "aggregate-group" {
+        return nil
+    }
+
+    // Perform vsys import.
     return c.con.ImportInterfaces(vsys, []string{e.Name})
 }
 
