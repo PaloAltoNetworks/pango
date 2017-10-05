@@ -210,7 +210,7 @@ type entry_v1 struct {
 }
 
 type protoDef struct {
-    SourcePort string `xml:"source-port"`
+    SourcePort string `xml:"source-port,omitempty"`
     DestinationPort string `xml:"port"`
 }
 
