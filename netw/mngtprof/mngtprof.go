@@ -67,7 +67,7 @@ func (c *MngtProf) Show(name string) (Entry, error) {
     return c.details(c.con.Show, name)
 }
 
-// Set creates / updates one or more interface management profiles.
+// Set performs SET to create / update one or more interface management profiles.
 func (c *MngtProf) Set(e ...Entry) error {
     var err error
 
@@ -99,7 +99,7 @@ func (c *MngtProf) Set(e ...Entry) error {
     return err
 }
 
-// Edit creates / updates an interface management profile.
+// Edit performs EDIT to create / update an interface management profile.
 func (c *MngtProf) Edit(e Entry) error {
     var err error
 
@@ -117,7 +117,7 @@ func (c *MngtProf) Edit(e Entry) error {
 
 // Delete removes the given interface management profile(s) from the firewall.
 //
-// Profiles can be either a string or a mngtprof.Entry object.
+// Profiles can be either a string or an Entry object.
 func (c *MngtProf) Delete(e ...interface{}) error {
     var err error
 

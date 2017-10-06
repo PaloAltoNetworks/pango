@@ -63,7 +63,7 @@ func (c *Addr) Show(vsys, name string) (Entry, error) {
     return c.details(c.con.Show, vsys, name)
 }
 
-// Set creates / updates one or more address objects.
+// Set performs SET to create / update one or more address objects.
 func (c *Addr) Set(vsys string, e ...Entry) error {
     var err error
 
@@ -95,7 +95,7 @@ func (c *Addr) Set(vsys string, e ...Entry) error {
     return err
 }
 
-// Edit creates / updates an address object.
+// Edit performs EDIT to create / update an address object.
 func (c *Addr) Edit(vsys string, e Entry) error {
     var err error
 
@@ -113,7 +113,7 @@ func (c *Addr) Edit(vsys string, e Entry) error {
 
 // Delete removes the given address objects from the firewall.
 //
-// Address objects can be either a string or a addr.Entry object.
+// Address objects can be either a string or an Entry object.
 func (c *Addr) Delete(vsys string, e ...interface{}) error {
     var err error
 

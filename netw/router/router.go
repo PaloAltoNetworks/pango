@@ -115,7 +115,7 @@ func (c *Router) Show(name string) (Entry, error) {
     return c.details(c.con.Show, name)
 }
 
-// Set creates / updates one or more virtual routers.
+// Set performs SET to create / update one or more virtual routers.
 //
 // Specify a non-empty vsys to import the virtual routers into the given vsys
 // after creating, allowing the vsys to use them.
@@ -155,7 +155,7 @@ func (c *Router) Set(vsys string, e ...Entry) error {
     return c.con.ImportVirtualRouters(vsys, names)
 }
 
-// Edit creates / updates a virtual router.
+// Edit performs EDIT to create / update a virtual router.
 //
 // Specify a non-empty vsys to import the virtual router into the given vsys
 // after creating, allowing the vsys to use them.
@@ -184,7 +184,7 @@ func (c *Router) Edit(vsys string, e Entry) error {
 // Specify a non-empty vsys to have this function remove the virtual routers
 // from the vsys prior to deleting them.
 //
-// Virtual routers can be a string or a router.Entry object.
+// Virtual routers can be a string or an Entry object.
 func (c *Router) Delete(vsys string, e ...interface{}) error {
     var err error
 

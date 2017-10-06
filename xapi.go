@@ -48,31 +48,31 @@ Generally speaking, there are the following functions inside each namespace:
     * Edit
     * Delete
 
-These functions correspond with PANOS `Get`, `Show`, `Set`, `Edit`, and
-`Delete` API calls.  `Get()`, `Set()`, and `Edit()` take and return normalized,
+These functions correspond with PANOS Get, Show, Set, Edit, and
+Delete API calls.  Get(), Set(), and Edit() take and return normalized,
 version independent objects.  These version safe objects are typically named
-`Entry`, which corresponds to how the object is placed in the PANOS XPATH.
+Entry, which corresponds to how the object is placed in the PANOS XPATH.
 
-Some `Entry` objects have a special function, `Defaults()`.  Invoking this
-function will initialize the object with some default values.  Each `Entry`
-that implements `Defaults()` calls out in its documentation what parameters
+Some Entry objects have a special function, Defaults().  Invoking this
+function will initialize the object with some default values.  Each Entry
+that implements Defaults() calls out in its documentation what parameters
 are affected by this, and what the defaults are.
 
 For any version safe object, attempting to configure a parameter that your
 PANOS doesn't support will be safely ignored in the resultant XML sent to the
 firewall / Panorama.
 
+Using Edit Functions
 
-Using `Edit` Functions
-======================
-
-The PANOS XML API `Edit` command can be used to both create as well as update
+The PANOS XML API Edit command can be used to both create as well as update
 existing config, however it can also truncate config for the given XPATH.  Due
-to this, if you want to use `Edit()`, you need to make sure that you perform
-either a `Get()` or a `Show()` first, make your modification, then invoke
-`Edit()` using that object.  If you don't do this, you will truncate any sub
+to this, if you want to use Edit(), you need to make sure that you perform
+either a Get() or a Show() first, make your modification, then invoke
+Edit() using that object.  If you don't do this, you will truncate any sub
 config.
 
+To learn more about PANOS XML API, please refer to the Palo Alto Netowrks
+API documentation.
 
 Example 1: Creating an ethernet interface
 =========================================

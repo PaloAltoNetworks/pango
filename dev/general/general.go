@@ -67,7 +67,7 @@ func (c *General) Get() (Config, error) {
     return c.details(c.con.Get)
 }
 
-// Set creates / updates the device's general settings.
+// Set performs SET to create / update the device's general settings.
 func (c *General) Set(e Config) error {
     var err error
     _, fn := c.versioning()

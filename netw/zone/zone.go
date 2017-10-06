@@ -59,7 +59,7 @@ func (c *Zone) Show(vsys, name string) (Entry, error) {
     return c.details(c.con.Show, vsys, name)
 }
 
-// Set creates / updates one or more zones.
+// Set performs SET to create / update one or more zones.
 func (c *Zone) Set(vsys string, e ...Entry) error {
     var err error
 
@@ -91,7 +91,7 @@ func (c *Zone) Set(vsys string, e ...Entry) error {
     return err
 }
 
-// Edit creates / updates a zone.
+// Edit performs EDIT to creates / updates a zone.
 func (c *Zone) Edit(vsys string, e Entry) error {
     var err error
 
@@ -109,7 +109,7 @@ func (c *Zone) Edit(vsys string, e Entry) error {
 
 // Delete removes the given zone(s) from the firewall.
 //
-// Zones can be either a string or a zone.Entry object.
+// Zones can be either a string or an Entry object.
 func (c *Zone) Delete(vsys string, e ...interface{}) error {
     var err error
 

@@ -63,7 +63,7 @@ func (c *AddrGrp) Show(vsys, name string) (Entry, error) {
     return c.details(c.con.Show, vsys, name)
 }
 
-// Set creates / updates one or more address groups.
+// Set performs SET to create / update one or more address groups.
 func (c *AddrGrp) Set(vsys string, e ...Entry) error {
     var err error
 
@@ -95,7 +95,7 @@ func (c *AddrGrp) Set(vsys string, e ...Entry) error {
     return err
 }
 
-// Edit creates / updates an address group.
+// Edit performs EDIT to create / update an address group.
 func (c *AddrGrp) Edit(vsys string, e Entry) error {
     var err error
 
@@ -113,7 +113,7 @@ func (c *AddrGrp) Edit(vsys string, e Entry) error {
 
 // Delete removes the given address groups from the firewall.
 //
-// Address groups can be either a string or a addr.Entry object.
+// Address groups can be either a string or an Entry object.
 func (c *AddrGrp) Delete(vsys string, e ...interface{}) error {
     var err error
 

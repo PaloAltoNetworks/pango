@@ -60,7 +60,7 @@ func (c *Srvc) Show(vsys, name string) (Entry, error) {
     return c.details(c.con.Show, vsys, name)
 }
 
-// Set creates / updates one or more service objects.
+// Set performs SET to create / update one or more service objects.
 func (c *Srvc) Set(vsys string, e ...Entry) error {
     var err error
 
@@ -92,7 +92,7 @@ func (c *Srvc) Set(vsys string, e ...Entry) error {
     return err
 }
 
-// Edit creates / updates a service object.
+// Edit performs EDIT to create / update a service object.
 func (c *Srvc) Edit(vsys string, e Entry) error {
     var err error
 
@@ -110,7 +110,7 @@ func (c *Srvc) Edit(vsys string, e Entry) error {
 
 // Delete removes the given service objects from the firewall.
 //
-// Address objects can be either a string or a addr.Entry object.
+// Service objects can be either a string or an Entry object.
 func (c *Srvc) Delete(vsys string, e ...interface{}) error {
     var err error
 

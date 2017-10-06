@@ -75,7 +75,7 @@ func (c *Eth) Show(name string) (Entry, error) {
     return c.details(c.con.Show, name)
 }
 
-// Set creates / updates one or more ethernet interfaces.
+// Set performs SET to create / update one or more ethernet interfaces.
 //
 // Specifying a non-empty vsys will import the interfaces into that vsys,
 // allowing the vsys to use them, as long as the interface does not have a
@@ -121,7 +121,7 @@ func (c *Eth) Set(vsys string, e ...Entry) error {
     return c.con.ImportInterfaces(vsys, n2)
 }
 
-// Edit creates / updates the specified ethernet interface.
+// Edit performs EDIT to create / update the specified ethernet interface.
 //
 // Specifying a non-empty vsys will import the interface into that vsys,
 // allowing the vsys to use it, as long as the interface does not have a
@@ -157,7 +157,7 @@ func (c *Eth) Edit(vsys string, e Entry) error {
 // Specify a non-empty vsys to have this function remove the interface(s) from
 // the vsys prior to deleting them.
 //
-// Interfaces can be a string or an eth.Entry object.
+// Interfaces can be a string or an Entry object.
 func (c *Eth) Delete(vsys string, e ...interface{}) error {
     var err error
 

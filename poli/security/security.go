@@ -18,13 +18,13 @@ type Entry struct {
     Type string
     Description string
     Tags []string
-    From []string
-    To []string
-    Source []string
+    SourceZone []string
+    SourceAddress []string
     NegateSource bool
     SourceUser []string
     HipProfile []string
-    Destination []string
+    DestinationZone []string
+    DestinationAddress []string
     NegateDestination bool
     Application []string
     Service []string
@@ -53,31 +53,32 @@ type Entry struct {
 //
 // The defaults are as follows:
 //      * Type: "universal"
-//      * From: ["any"]
-//      * To: ["any"]
-//      * Source: ["any"]
+//      * SourceZone: ["any"]
+//      * SourceAddress: ["any"]
 //      * SourceUser: ["any"]
 //      * HipProfile: ["any"]
-//      * Destination: ["any"]
+//      * DestinationZone: ["any"]
+//      * DestinationAddress: ["any"]
 //      * Application: ["any"]
 //      * Service: ["application-default"]
 //      * Category: ["any"]
+//      * Action: "allow"
 //      * LogEnd: true
 func (e *Entry) Defaults() {
     if e.Type == "" {
         e.Type = "universal"
     }
 
-    if len(e.From) == 0 {
-        e.From = []string{"any"}
+    if len(e.SourceZone) == 0 {
+        e.SourceZone = []string{"any"}
     }
 
-    if len(e.To) == 0 {
-        e.To = []string{"any"}
+    if len(e.DestinationZone) == 0 {
+        e.DestinationZone = []string{"any"}
     }
 
-    if len(e.Source) == 0 {
-        e.Source = []string{"any"}
+    if len(e.SourceAddress) == 0 {
+        e.SourceAddress = []string{"any"}
     }
 
     if len(e.SourceUser) == 0 {
@@ -88,8 +89,8 @@ func (e *Entry) Defaults() {
         e.HipProfile = []string{"any"}
     }
 
-    if len(e.Destination) == 0 {
-        e.Destination = []string{"any"}
+    if len(e.DestinationAddress) == 0 {
+        e.DestinationAddress = []string{"any"}
     }
 
     if len(e.Application) == 0 {
@@ -102,6 +103,10 @@ func (e *Entry) Defaults() {
 
     if len(e.Category) == 0 {
         e.Category = []string{"any"}
+    }
+
+    if e.Action == "" {
+        e.Action = "allow"
     }
 
     if !e.LogEnd {
@@ -145,7 +150,7 @@ func (c *Security) Show(vsys, base, name string) (Entry, error) {
     return c.details(c.con.Show, vsys, base, name)
 }
 
-// Set creates / updates one or more security policies.
+// Set performs SET to create / update one or more security policies.
 func (c *Security) Set(vsys, base string, e ...Entry) error {
     var err error
 
@@ -177,7 +182,7 @@ func (c *Security) Set(vsys, base string, e ...Entry) error {
     return err
 }
 
-// Edit creates / updates a security policy.
+// Edit performs EDIT to create / update a security policy.
 func (c *Security) Edit(vsys, base string, e Entry) error {
     var err error
 
@@ -275,13 +280,13 @@ func (o *container_v1) Normalize() Entry {
         Type: o.Answer.Type,
         Description: o.Answer.Description,
         Tags: util.MemToStr(o.Answer.Tags),
-        From: util.MemToStr(o.Answer.From),
-        To: util.MemToStr(o.Answer.To),
-        Source: util.MemToStr(o.Answer.Source),
+        SourceZone: util.MemToStr(o.Answer.SourceZone),
+        DestinationZone: util.MemToStr(o.Answer.DestinationZone),
+        SourceAddress: util.MemToStr(o.Answer.SourceAddress),
         NegateSource: util.AsBool(o.Answer.NegateSource),
         SourceUser: util.MemToStr(o.Answer.SourceUser),
         HipProfile: util.MemToStr(o.Answer.HipProfile),
-        Destination: util.MemToStr(o.Answer.Destination),
+        DestinationAddress: util.MemToStr(o.Answer.DestinationAddress),
         NegateDestination: util.AsBool(o.Answer.NegateDestination),
         Application: util.MemToStr(o.Answer.Application),
         Service: util.MemToStr(o.Answer.Service),
@@ -323,13 +328,13 @@ type entry_v1 struct {
     Type string `xml:"rule-type"`
     Description string `xml:"description"`
     Tags *util.Member `xml:"tag"`
-    From *util.Member `xml:"from"`
-    To *util.Member `xml:"to"`
-    Source *util.Member `xml:"source"`
+    SourceZone *util.Member `xml:"from"`
+    DestinationZone *util.Member `xml:"to"`
+    SourceAddress *util.Member `xml:"source"`
     NegateSource string `xml:"negate-source"`
     SourceUser *util.Member `xml:"source-user"`
     HipProfile *util.Member `xml:"hip-profiles"`
-    Destination *util.Member `xml:"destination"`
+    DestinationAddress *util.Member `xml:"destination"`
     NegateDestination string `xml:"negate-destination"`
     Application *util.Member `xml:"application"`
     Service *util.Member `xml:"service"`
@@ -376,13 +381,13 @@ func specify_v1(e Entry) interface{} {
         Type: e.Type,
         Description: e.Description,
         Tags: util.StrToMem(e.Tags),
-        From: util.StrToMem(e.From),
-        To: util.StrToMem(e.To),
-        Source: util.StrToMem(e.Source),
+        SourceZone: util.StrToMem(e.SourceZone),
+        DestinationZone: util.StrToMem(e.DestinationZone),
+        SourceAddress: util.StrToMem(e.SourceAddress),
         NegateSource: util.YesNo(e.NegateSource),
         SourceUser: util.StrToMem(e.SourceUser),
         HipProfile: util.StrToMem(e.HipProfile),
-        Destination: util.StrToMem(e.Destination),
+        DestinationAddress: util.StrToMem(e.DestinationAddress),
         NegateDestination: util.YesNo(e.NegateDestination),
         Application: util.StrToMem(e.Application),
         Service: util.StrToMem(e.Service),

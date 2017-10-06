@@ -58,7 +58,7 @@ func (c *Vlan) Show(name string) (Entry, error) {
     return c.details(c.con.Show, name)
 }
 
-// Set creates / updates one or more VLANs.
+// Set performs SET to create / update one or more VLANs.
 //
 // Specify a non-empty vsys to import the VLAN(s) into the given vsys
 // after creating, allowing the vsys to use them.
@@ -98,7 +98,7 @@ func (c *Vlan) Set(vsys string, e ...Entry) error {
     return c.con.ImportVlans(vsys, names)
 }
 
-// Edit creates / updates a VLAN.
+// Edit performs EDIT to create / update a VLAN.
 //
 // Specify a non-empty vsys to import the VLAN into the given vsys
 // after creating, allowing the vsys to use it.
@@ -127,7 +127,7 @@ func (c *Vlan) Edit(vsys string, e Entry) error {
 // Specify a non-empty vsys to have this function remove the VLAN(s) from
 // the vsys prior to deleting them.
 //
-// VLANs can be a string or a vlan.Entry object.
+// VLANs can be a string or an Entry object.
 func (c *Vlan) Delete(vsys string, e ...interface{}) error {
     var err error
 

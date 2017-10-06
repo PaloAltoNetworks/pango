@@ -37,6 +37,42 @@ const (
 // policy.  The prefix "Sat" stands for "Source Address Translation" while
 // the prefix "Dat" stands for "Destination Address Translation".
 //
+// The following Sat params are linked:
+//
+// SatType = nat.DynamicIpAndPort && SatAddressType = nat.TranslatedAddress:
+//
+//      * SatTranslatedAddress
+//
+// SatType = nat.DynamicIpAndPort && SatAddressType = nat.InterfaceAddress:
+//
+//      * SatInterface
+//      * SatIpAddress
+//
+// For ALL SatType = nat.DynamicIp:
+//
+//      * SatTranslatedAddress
+//
+// For ALL SatType = nat.DynamicIp and SatFallbackType = nat.InterfaceAddress:
+//
+//      * SatFallbackInterface
+//
+// SatType = nat.DynamicIp && SatFallbackType = nat.InterfaceAddress && SatFallbackIpType = nat.Ip:
+//
+//      * SatFallbackIpAddress
+//
+// SatType = nat.DynamicIp && SatFallbackType = nat.InterfaceAddress && SatFallbackIpType = nat.FloatingIp:
+//
+//      * SatFallbackIpAddress
+//
+// SatType = nat.DynamicIp and SatFallbackType = nat.TranslatedAddress:
+//
+//      * SatFallbackTranslatedAddress
+//
+// SatType = nat.Static:
+//
+//      * SatStaticTranslatedAddress
+//      * SatStaticBiDirectional
+//
 // If both DatAddress and DatPort are unintialized, then no destination
 // address translation will be enabled.
 type Entry struct {
@@ -79,8 +115,6 @@ type Entry struct {
 //      * Destination: ["any"]
 //      * SatType: None
 //      * SatFallbackType: None
-func (e *Entry) Defaults() {
-    if e.Type == "" {
         e.Type = "ipv4"
     }
 
@@ -145,7 +179,7 @@ func (c *Nat) Show(vsys, base, name string) (Entry, error) {
     return c.details(c.con.Show, vsys, base, name)
 }
 
-// Set creates / updates one or more NAT policies.
+// Set performs SET to create / update one or more NAT policies.
 func (c *Nat) Set(vsys, base string, e ...Entry) error {
     var err error
 
@@ -177,7 +211,7 @@ func (c *Nat) Set(vsys, base string, e ...Entry) error {
     return err
 }
 
-// Edit creates / updates a NAT policy.
+// Edit performs EDIT to create / update a NAT policy.
 func (c *Nat) Edit(vsys, base string, e Entry) error {
     var err error
 
@@ -195,7 +229,7 @@ func (c *Nat) Edit(vsys, base string, e Entry) error {
 
 // Delete removes the given NAT policies.
 //
-// NAT policies can be either a string or a zone.Entry object.
+// NAT policies can be either a string or an Entry object.
 func (c *Nat) Delete(vsys, base string, e ...interface{}) error {
     var err error
 
