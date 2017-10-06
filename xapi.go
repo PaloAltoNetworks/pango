@@ -74,8 +74,7 @@ config.
 To learn more about PANOS XML API, please refer to the Palo Alto Netowrks
 API documentation.
 
-Example 1: Creating an ethernet interface
-=========================================
+Example 1: Creating an Ethernet interface
 
 The following program will create ethernet1/7 as a DHCP interface and import
 it into vsys1 if it isn't already present:
