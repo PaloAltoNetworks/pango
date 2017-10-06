@@ -115,6 +115,8 @@ type Entry struct {
 //      * Destination: ["any"]
 //      * SatType: None
 //      * SatFallbackType: None
+func (e *Entry) Defaults() {
+    if e.Type == "" {
         e.Type = "ipv4"
     }
 
