@@ -1,14 +1,5 @@
 package xapi
 
-/*
-https://blog.golang.org/examples
-https://golang.org/pkg/testing
-https://github.com/ContainerSolutions/terraform-provider-template/blob/v0.1.1/main.go
-https://www.terraform.io/guides/writing-custom-terraform-providers.html
-https://golang.org/pkg/
-https://github.com/hashicorp/terraform/blob/master/.github/CONTRIBUTING.md
-*/
-
 import (
     "bytes"
     "log"
