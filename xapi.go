@@ -206,6 +206,11 @@ type Client struct {
     // Internal variables.
     con *http.Client
     api_url string
+
+    // Variables for testing, response bytes and response index.
+    rp []url.Values
+    rb [][]byte
+    ri int
 }
 
 // Firewall is a firewall specific client, providing version safe functions
@@ -286,14 +291,19 @@ func (c *Client) Versioning() version.Number {
 //  * Timeout: 10
 //  * Logging: LogAction | LogUid
 func (c *Client) Initialize() error {
-    var e error
+    if len(c.rb) == 0 {
+        var e error
 
-    if e = c.initCon(); e != nil {
-        return e
-    } else if e = c.initApiKey(); e != nil {
-        return e
-    } else if e = c.initSystemInfo(); e != nil {
-        return e
+        if e = c.initCon(); e != nil {
+            return e
+        } else if e = c.initApiKey(); e != nil {
+            return e
+        } else if e = c.initSystemInfo(); e != nil {
+            return e
+        }
+    } else {
+        c.Hostname = "localhost"
+        c.ApiKey = "password"
     }
 
     return nil
@@ -310,14 +320,19 @@ func (c *Client) Initialize() error {
 //  * Timeout: 10
 //  * Logging: LogAction | LogUid
 func (c *Firewall) Initialize() error {
-    var e error
+    if len(c.rb) == 0 {
+        var e error
 
-    if e = c.initCon(); e != nil {
-        return e
-    } else if e = c.initApiKey(); e != nil {
-        return e
-    } else if e = c.initSystemInfo(); e != nil {
-        return e
+        if e = c.initCon(); e != nil {
+            return e
+        } else if e = c.initApiKey(); e != nil {
+            return e
+        } else if e = c.initSystemInfo(); e != nil {
+            return e
+        }
+    } else {
+        c.Hostname = "localhost"
+        c.ApiKey = "password"
     }
     c.initNamespaces()
 
@@ -335,14 +350,19 @@ func (c *Firewall) Initialize() error {
 //  * Timeout: 10
 //  * Logging: LogAction | LogUid
 func (c *Panorama) Initialize() error {
-    var e error
+    if len(c.rb) == 0 {
+        var e error
 
-    if e = c.initCon(); e != nil {
-        return e
-    } else if e = c.initApiKey(); e != nil {
-        return e
-    } else if e = c.initSystemInfo(); e != nil {
-        return e
+        if e = c.initCon(); e != nil {
+            return e
+        } else if e = c.initApiKey(); e != nil {
+            return e
+        } else if e = c.initSystemInfo(); e != nil {
+            return e
+        }
+    } else {
+        c.Hostname = "localhost"
+        c.ApiKey = "password"
     }
     c.initNamespaces()
 
@@ -379,7 +399,7 @@ func (c *Client) RetrieveApiKey() error {
 
 // EntryListUsing retrieves an list of entries using the given function, either
 // Get or Show.
-func (c *Client) EntryListUsing(fn func(interface{}, interface{}, interface{}) ([]byte, error), path []string) ([]string, error) {
+func (c *Client) EntryListUsing(fn util.Retriever, path []string) ([]string, error) {
     var err error
     type Entry struct {
         Name string `xml:"name,attr"`
@@ -410,7 +430,7 @@ func (c *Client) EntryListUsing(fn func(interface{}, interface{}, interface{}) (
 
 // MemberListUsing retrieves an list of members using the given function, either
 // Get or Show.
-func (c *Client) MemberListUsing(fn func(interface{}, interface{}, interface{}) ([]byte, error), path []string) ([]string, error) {
+func (c *Client) MemberListUsing(fn util.Retriever, path []string) ([]string, error) {
     type resp_struct struct {
         Members []string `xml:"result>member"`
     }
@@ -761,13 +781,7 @@ func (c *Client) Communicate(data url.Values, ans interface{}) ([]byte, error) {
         }
     }
 
-    resp, err := c.con.PostForm(c.api_url, data)
-    if err != nil {
-        return nil, err
-    }
-
-    defer resp.Body.Close()
-    body, err := ioutil.ReadAll(resp.Body)
+    body, err := c.post(data)
     if err != nil {
         return nil, err
     }
@@ -1175,6 +1189,25 @@ func (c *Client) xpathImport(vsys string) ([]string) {
         util.AsEntryXpath([]string{vsys}),
         "import",
         "network",
+    }
+}
+
+func (c *Client) post(data url.Values) ([]byte, error) {
+    if len(c.rb) == 0 {
+        r, err := c.con.PostForm(c.api_url, data)
+        if err != nil {
+            return nil, err
+        }
+
+        defer r.Body.Close()
+        return ioutil.ReadAll(r.Body)
+    } else {
+        if c.ri < len(c.rb) {
+            c.rp = append(c.rp, data)
+        }
+        body := c.rb[c.ri % len(c.rb)]
+        c.ri++
+        return body, nil
     }
 }
 

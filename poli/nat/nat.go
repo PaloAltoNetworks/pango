@@ -68,7 +68,7 @@ const (
 //
 //      * SatFallbackTranslatedAddress
 //
-// SatType = nat.Static:
+// SatType = nat.StaticIp:
 //
 //      * SatStaticTranslatedAddress
 //      * SatStaticBiDirectional
@@ -504,6 +504,13 @@ func specify_v1(e Entry) interface{} {
         ans.Dat = &dstXlate{
             e.DatAddress,
             e.DatPort,
+        }
+    }
+
+    if len(e.Target) != 0 || e.NegateTarget {
+        ans.Target = &targetInfo{
+            Target: util.StrToEnt(e.Target),
+            NegateTarget: util.YesNo(e.NegateTarget),
         }
     }
 

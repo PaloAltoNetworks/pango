@@ -12,6 +12,10 @@ import (
     "github.com/PaloAltoNetworks/xapi/version"
 )
 
+// Retriever is a type that is intended to act as a stand-in for using
+// either the Get or Show xapi Client functions.
+type Retriever func(interface{}, interface{}, interface{}) ([]byte, error)
+
 // Rulebase constants for various policies.
 const (
     Rulebase = "rulebase"
@@ -23,7 +27,6 @@ const (
 type XapiClient interface {
     String() string
     Versioning() version.Number
-    RetrieveApiKey() error
     LogAction(string, ...interface{})
     LogQuery(string, ...interface{})
     LogOp(string, ...interface{})
@@ -36,8 +39,8 @@ type XapiClient interface {
     Edit(interface{}, interface{}, interface{}, interface{}) ([]byte, error)
     Move(interface{}, string, string, interface{}, interface{}) ([]byte, error)
     Uid(interface{}, string, interface{}, interface{}) ([]byte, error)
-    EntryListUsing(func(interface{}, interface{}, interface{}) ([]byte, error), []string) ([]string, error)
-    MemberListUsing(func(interface{}, interface{}, interface{}) ([]byte, error), []string) ([]string, error)
+    EntryListUsing(Retriever, []string) ([]string, error)
+    MemberListUsing(Retriever, []string) ([]string, error)
     RequestPasswordHash(string) (string, error)
     ImportInterfaces(string, []string) error
     UnimportInterfaces(string, []string) error
@@ -89,11 +92,11 @@ func StrToMem(e []string) *Member {
 // Entry defines an entry config node used for sending and receiving XML
 // from PANOS.
 type Entry struct {
-    Entry []InnerEntry `xml:"entry"`
+    Entry []innerEntry `xml:"entry"`
 }
 
-// InnerEntry is the inner struct for util.Entry, containing the name field.
-type InnerEntry struct {
+// innerEntry is the inner struct for util.Entry, containing the name field.
+type innerEntry struct {
     Name string `xml:"name,attr"`
 }
 
@@ -117,9 +120,9 @@ func StrToEnt(e []string) *Entry {
         return nil
     }
 
-    m := make([]InnerEntry, len(e))
+    m := make([]innerEntry, len(e))
     for i := range e {
-        m[i] = InnerEntry{e[i]}
+        m[i] = innerEntry{e[i]}
     }
 
     return &Entry{m}

@@ -95,6 +95,9 @@ func (c *Vlan) Set(vsys string, e ...Entry) error {
     }
 
     // Perform vsys import next.
+    if vsys == "" {
+        return nil
+    }
     return c.con.ImportVlans(vsys, names)
 }
 
@@ -119,6 +122,9 @@ func (c *Vlan) Edit(vsys string, e Entry) error {
     }
 
     // Perform vsys import next.
+    if vsys == "" {
+        return nil
+    }
     return c.con.ImportVlans(vsys, []string{e.Name})
 }
 
@@ -204,9 +210,11 @@ func (o *container_v1) Normalize() Entry {
         VlanInterface: o.Answer.VlanInterface,
         Interfaces: util.MemToStr(o.Answer.Interfaces),
     }
-    ans.StaticMacs = make(map[string] string, len(o.Answer.Mac.Entry))
-    for i := range o.Answer.Mac.Entry {
-        ans.StaticMacs[o.Answer.Mac.Entry[i].Mac] = o.Answer.Mac.Entry[i].Interface
+    if len(o.Answer.Mac.Entry) > 0 {
+        ans.StaticMacs = make(map[string] string, len(o.Answer.Mac.Entry))
+        for i := range o.Answer.Mac.Entry {
+            ans.StaticMacs[o.Answer.Mac.Entry[i].Mac] = o.Answer.Mac.Entry[i].Interface
+        }
     }
 
     return ans

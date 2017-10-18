@@ -152,6 +152,9 @@ func (c *Router) Set(vsys string, e ...Entry) error {
     }
 
     // Perform vsys import next.
+    if vsys == "" {
+        return nil
+    }
     return c.con.ImportVirtualRouters(vsys, names)
 }
 
@@ -176,6 +179,9 @@ func (c *Router) Edit(vsys string, e Entry) error {
     }
 
     // Perform vsys import next.
+    if vsys == "" {
+        return nil
+    }
     return c.con.ImportVirtualRouters(vsys, []string{e.Name})
 }
 
@@ -269,7 +275,7 @@ func (o *container_v1) Normalize() Entry {
         EbgpDist: o.Answer.Dist.EbgpDist,
         RipDist: o.Answer.Dist.RipDist,
     }
-    ans.raw = make(map[string] string, 4)
+    ans.raw = make(map[string] string)
     if o.Answer.Ecmp != nil {
         ans.raw["ecmp"] = util.CleanRawXml(o.Answer.Ecmp.Text)
     }
@@ -283,6 +289,9 @@ func (o *container_v1) Normalize() Entry {
         ans.raw["routing"] = util.CleanRawXml(o.Answer.Routing.Text)
     }
 
+    if len(ans.raw) == 0 {
+        ans.raw = nil
+    }
     return ans
 }
 

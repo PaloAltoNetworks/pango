@@ -118,6 +118,9 @@ func (c *Eth) Set(vsys string, e ...Entry) error {
     }
 
     // Perform vsys import next.
+    if vsys == "" || len(n2) == 0 {
+        return nil
+    }
     return c.con.ImportInterfaces(vsys, n2)
 }
 
@@ -143,8 +146,8 @@ func (c *Eth) Edit(vsys string, e Entry) error {
         return err
     }
 
-    // Skip the import step for certain interface types.
-    if e.Mode == "ha" || e.Mode == "aggregate-group" {
+    // Check if we should skip the import step.
+    if vsys == "" || e.Mode == "ha" || e.Mode == "aggregate-group" {
         return nil
     }
 
@@ -243,7 +246,7 @@ func (o *container_v1) Normalize() Entry {
         LinkState: o.Answer.LinkState,
         Comment: o.Answer.Comment,
     }
-    ans.raw = make(map[string] string, 3)
+    ans.raw = make(map[string] string)
     switch {
         case o.Answer.ModeL3 != nil:
             ans.Mode = "layer3"
@@ -290,6 +293,9 @@ func (o *container_v1) Normalize() Entry {
             ans.Mode = "aggregate-group"
     }
 
+    if len(ans.raw) == 0 {
+        ans.raw = nil
+    }
     return ans
 }
 
@@ -353,7 +359,7 @@ func (o *container_v2) Normalize() Entry {
         LinkState: o.Answer.LinkState,
         Comment: o.Answer.Comment,
     }
-    ans.raw = make(map[string] string, 3)
+    ans.raw = make(map[string] string)
     switch {
         case o.Answer.ModeL3 != nil:
             ans.Mode = "layer3"
@@ -402,6 +408,9 @@ func (o *container_v2) Normalize() Entry {
             ans.Mode = "aggregate-group"
     }
 
+    if len(ans.raw) == 0 {
+        ans.raw = nil
+    }
     return ans
 }
 
