@@ -64,54 +64,91 @@ type Entry struct {
 //      * Category: ["any"]
 //      * Action: "allow"
 //      * LogEnd: true
-func (e *Entry) Defaults() {
-    if e.Type == "" {
-        e.Type = "universal"
+func (o *Entry) Defaults() {
+    if o.Type == "" {
+        o.Type = "universal"
     }
 
-    if len(e.SourceZone) == 0 {
-        e.SourceZone = []string{"any"}
+    if len(o.SourceZone) == 0 {
+        o.SourceZone = []string{"any"}
     }
 
-    if len(e.DestinationZone) == 0 {
-        e.DestinationZone = []string{"any"}
+    if len(o.DestinationZone) == 0 {
+        o.DestinationZone = []string{"any"}
     }
 
-    if len(e.SourceAddress) == 0 {
-        e.SourceAddress = []string{"any"}
+    if len(o.SourceAddress) == 0 {
+        o.SourceAddress = []string{"any"}
     }
 
-    if len(e.SourceUser) == 0 {
-        e.SourceUser = []string{"any"}
+    if len(o.SourceUser) == 0 {
+        o.SourceUser = []string{"any"}
     }
 
-    if len(e.HipProfile) == 0 {
-        e.HipProfile = []string{"any"}
+    if len(o.HipProfile) == 0 {
+        o.HipProfile = []string{"any"}
     }
 
-    if len(e.DestinationAddress) == 0 {
-        e.DestinationAddress = []string{"any"}
+    if len(o.DestinationAddress) == 0 {
+        o.DestinationAddress = []string{"any"}
     }
 
-    if len(e.Application) == 0 {
-        e.Application = []string{"any"}
+    if len(o.Application) == 0 {
+        o.Application = []string{"any"}
     }
 
-    if len(e.Service) == 0 {
-        e.Service = []string{"application-default"}
+    if len(o.Service) == 0 {
+        o.Service = []string{"application-default"}
     }
 
-    if len(e.Category) == 0 {
-        e.Category = []string{"any"}
+    if len(o.Category) == 0 {
+        o.Category = []string{"any"}
     }
 
-    if e.Action == "" {
-        e.Action = "allow"
+    if o.Action == "" {
+        o.Action = "allow"
     }
 
-    if !e.LogEnd {
-        e.LogEnd = true
+    if !o.LogEnd {
+        o.LogEnd = true
     }
+}
+
+// Copy copies the information from source Entry `s` to this object.  As the
+// Name field relates to the XPATH of this object, this field is not copied.
+func (o *Entry) Copy(s Entry) {
+    o.Type = s.Type
+    o.Description = s.Description
+    o.Tags = s.Tags
+    o.SourceZone = s.SourceZone
+    o.SourceAddress = s.SourceAddress
+    o.NegateSource = s.NegateSource
+    o.SourceUser = s.SourceUser
+    o.HipProfile = s.HipProfile
+    o.DestinationZone = s.DestinationZone
+    o.DestinationAddress = s.DestinationAddress
+    o.NegateDestination = s.NegateDestination
+    o.Application = s.Application
+    o.Service = s.Service
+    o.Category = s.Category
+    o.Action = s.Action
+    o.LogSetting = s.LogSetting
+    o.LogStart = s.LogStart
+    o.LogEnd = s.LogEnd
+    o.Disabled = s.Disabled
+    o.Schedule = s.Schedule
+    o.IcmpUnreachable = s.IcmpUnreachable
+    o.DisableServerResponseInspection = s.DisableServerResponseInspection
+    o.Group = s.Group
+    o.Target = s.Target
+    o.NegateTarget = s.NegateTarget
+    o.Virus = s.Virus
+    o.Spyware = s.Spyware
+    o.Vulnerability = s.Vulnerability
+    o.UrlFiltering = s.UrlFiltering
+    o.FileBlocking = s.FileBlocking
+    o.WildFireAnalysis = s.WildFireAnalysis
+    o.DataFiltering = s.DataFiltering
 }
 
 // Security is the client.Policies.Security namespace.

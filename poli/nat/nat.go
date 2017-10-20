@@ -115,34 +115,65 @@ type Entry struct {
 //      * Destination: ["any"]
 //      * SatType: None
 //      * SatFallbackType: None
-func (e *Entry) Defaults() {
-    if e.Type == "" {
-        e.Type = "ipv4"
+func (o *Entry) Defaults() {
+    if o.Type == "" {
+        o.Type = "ipv4"
     }
 
-    if e.ToInterface == "" {
-        e.ToInterface = "any"
+    if o.ToInterface == "" {
+        o.ToInterface = "any"
     }
 
-    if e.Service == "" {
-        e.Service = "any"
+    if o.Service == "" {
+        o.Service = "any"
     }
 
-    if len(e.Source) == 0 {
-        e.Source = []string{"any"}
+    if len(o.Source) == 0 {
+        o.Source = []string{"any"}
     }
 
-    if len(e.Destination) == 0 {
-        e.Destination = []string{"any"}
+    if len(o.Destination) == 0 {
+        o.Destination = []string{"any"}
     }
 
-    if e.SatType == "" {
-        e.SatType = None
+    if o.SatType == "" {
+        o.SatType = None
     }
 
-    if e.SatFallbackType == "" {
-        e.SatFallbackType = None
+    if o.SatFallbackType == "" {
+        o.SatFallbackType = None
     }
+}
+
+// Copy copies the information from source Entry `s` to this object.  As the
+// Name field relates to the XPATH of this object, this field is not copied.
+func (o *Entry) Copy(s Entry) {
+    o.Description = s.Description
+    o.Type = s.Type
+    o.From = s.From
+    o.To = s.To
+    o.ToInterface = s.ToInterface
+    o.Service = s.Service
+    o.Source = s.Source
+    o.Destination = s.Destination
+    o.SatType = s.SatType
+    o.SatAddressType = s.SatAddressType
+    o.SatTranslatedAddress = s.SatTranslatedAddress
+    o.SatInterface = s.SatInterface
+    o.SatIpAddress = s.SatIpAddress
+    o.SatFallbackType = s.SatFallbackType
+    o.SatFallbackTranslatedAddress = s.SatFallbackTranslatedAddress
+    o.SatFallbackInterface = s.SatFallbackInterface
+    o.SatFallbackIpType = s.SatFallbackIpType
+    o.SatFallbackIpAddress = s.SatFallbackIpAddress
+    o.SatStaticTranslatedAddress = s.SatStaticTranslatedAddress
+    o.SatStaticBiDirectional = s.SatStaticBiDirectional
+    o.DatAddress = s.DatAddress
+    o.DatPort = s.DatPort
+    o.Disabled = s.Disabled
+    o.Target = s.Target
+    o.NegateTarget = s.NegateTarget
+    o.Tag = s.Tag
 }
 
 // Nat is the client.Policies.Nat namespace.

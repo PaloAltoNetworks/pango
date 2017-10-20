@@ -45,6 +45,70 @@ type Config struct {
     NtpSecondaryAuthKey string
 }
 
+// Merge copies non connectivity variables from source Config `s` to this
+// object.  The fields that are not copied are as follows:
+//
+//      * IpAddress
+//      * Netmask
+//      * Gateway
+func (o *Config) Merge(s Config) {
+    if s.Hostname != "" {
+        o.Hostname = s.Hostname
+    }
+
+    if s.Timezone != "" {
+        o.Timezone = s.Timezone
+    }
+
+    if s.DnsPrimary != "" {
+        o.DnsPrimary = s.DnsPrimary
+    }
+
+    if s.DnsSecondary != "" {
+        o.DnsSecondary = s.DnsSecondary
+    }
+
+    if s.NtpPrimaryAddress != "" {
+        o.NtpPrimaryAddress = s.NtpPrimaryAddress
+    }
+
+    if s.NtpPrimaryAuthType != "" {
+        o.NtpPrimaryAuthType = s.NtpPrimaryAuthType
+    }
+
+    if s.NtpPrimaryKeyId != 0 {
+        o.NtpPrimaryKeyId = s.NtpPrimaryKeyId
+    }
+
+    if s.NtpPrimaryAlgorithm != "" {
+        o.NtpPrimaryAlgorithm = s.NtpPrimaryAlgorithm
+    }
+
+    if s.NtpPrimaryAuthKey != "" {
+        o.NtpPrimaryAuthKey = s.NtpPrimaryAuthKey
+    }
+
+    if s.NtpSecondaryAddress != "" {
+        o.NtpSecondaryAddress = s.NtpSecondaryAddress
+    }
+
+    if s.NtpSecondaryAuthType != "" {
+        o.NtpSecondaryAuthType = s.NtpSecondaryAuthType
+    }
+
+    if s.NtpSecondaryKeyId != 0 {
+        o.NtpSecondaryKeyId = s.NtpSecondaryKeyId
+    }
+
+    if s.NtpSecondaryAlgorithm != "" {
+        o.NtpSecondaryAlgorithm = s.NtpSecondaryAlgorithm
+    }
+
+    if s.NtpSecondaryAuthKey != "" {
+        o.NtpSecondaryAuthKey = s.NtpSecondaryAuthKey
+    }
+}
+
 // Gset is a namespace struct, included as part of xapi.Client.
 type General struct {
     con util.XapiClient
@@ -77,6 +141,18 @@ func (c *General) Set(e Config) error {
     path = path[:len(path) - 1]
 
     _, err = c.con.Set(path, fn(e), nil, nil)
+    return err
+}
+
+// Edit performs EDIT to update the device's general settings.
+func (c *General) Edit(e Config) error {
+    var err error
+    _, fn := c.versioning()
+    c.con.LogAction("(edit) general settings")
+
+    path := c.xpath()
+
+    _, err = c.con.Edit(path, fn(e), nil, nil)
     return err
 }
 

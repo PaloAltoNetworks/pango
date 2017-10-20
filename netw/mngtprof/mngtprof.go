@@ -29,6 +29,23 @@ type Entry struct {
     PermittedIp []string
 }
 
+// Copy copies the information from source Entry `s` to this object.  As the
+// Name field relates to the XPATH of this object, this field is not copied.
+func (o *Entry) Copy(s Entry) {
+    o.Ping = s.Ping
+    o.Telnet = s.Telnet
+    o.Ssh = s.Ssh
+    o.Http = s.Http
+    o.HttpOcsp = s.HttpOcsp
+    o.Https = s.Https
+    o.Snmp = s.Snmp
+    o.ResponsePages = s.ResponsePages
+    o.UseridService = s.UseridService
+    o.UseridSyslogListenerSsl = s.UseridSyslogListenerSsl
+    o.UseridSyslogListenerUdp = s.UseridSyslogListenerUdp
+    o.PermittedIp = s.PermittedIp
+}
+
 // MngtProf is a namespace struct, included as part of xapi.Client.
 type MngtProf struct {
     con util.XapiClient

@@ -41,42 +41,57 @@ type Entry struct {
 //      * IbgpDist: 200
 //      * EbgpDist: 20
 //      * RipDist: 120
-func (e *Entry) Defaults() {
-    if e.StaticDist == 0 {
-        e.StaticDist = 10
+func (o *Entry) Defaults() {
+    if o.StaticDist == 0 {
+        o.StaticDist = 10
     }
 
-    if e.StaticIpv6Dist == 0 {
-        e.StaticIpv6Dist = 10
+    if o.StaticIpv6Dist == 0 {
+        o.StaticIpv6Dist = 10
     }
 
-    if e.OspfIntDist == 0 {
-        e.OspfIntDist = 30
+    if o.OspfIntDist == 0 {
+        o.OspfIntDist = 30
     }
 
-    if e.OspfExtDist == 0 {
-        e.OspfExtDist = 110
+    if o.OspfExtDist == 0 {
+        o.OspfExtDist = 110
     }
 
-    if e.Ospfv3IntDist == 0 {
-        e.Ospfv3IntDist = 30
+    if o.Ospfv3IntDist == 0 {
+        o.Ospfv3IntDist = 30
     }
 
-    if e.Ospfv3ExtDist == 0 {
-        e.Ospfv3ExtDist = 110
+    if o.Ospfv3ExtDist == 0 {
+        o.Ospfv3ExtDist = 110
     }
 
-    if e.IbgpDist == 0 {
-        e.IbgpDist = 200
+    if o.IbgpDist == 0 {
+        o.IbgpDist = 200
     }
 
-    if e.EbgpDist == 0 {
-        e.EbgpDist = 20
+    if o.EbgpDist == 0 {
+        o.EbgpDist = 20
     }
 
-    if e.RipDist == 0 {
-        e.RipDist = 120
+    if o.RipDist == 0 {
+        o.RipDist = 120
     }
+}
+
+// Copy copies the information from source Entry `s` to this object.  As the
+// Name field relates to the XPATH of this object, this field is not copied.
+func (o *Entry) Copy(s Entry) {
+    o.Interfaces = s.Interfaces
+    o.StaticDist = s.StaticDist
+    o.StaticIpv6Dist = s.StaticIpv6Dist
+    o.OspfIntDist = s.OspfIntDist
+    o.OspfExtDist = s.OspfExtDist
+    o.Ospfv3IntDist = s.Ospfv3IntDist
+    o.Ospfv3ExtDist = s.Ospfv3ExtDist
+    o.IbgpDist = s.IbgpDist
+    o.EbgpDist = s.EbgpDist
+    o.RipDist = s.RipDist
 }
 
 // Router is the client.Network.VirtualRouter namespace.

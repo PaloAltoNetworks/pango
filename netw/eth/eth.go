@@ -39,6 +39,30 @@ type Entry struct {
     raw map[string] string
 }
 
+// Copy copies the information from source Entry `s` to this object.  As the
+// Name field relates to the XPATH of this object, this field is not copied.
+func (o *Entry) Copy(s Entry) {
+    o.Mode = s.Mode
+    o.StaticIps = s.StaticIps
+    o.EnableDhcp = s.EnableDhcp
+    o.CreateDhcpDefaultRoute = s.CreateDhcpDefaultRoute
+    o.DhcpDefaultRouteMetric = s.DhcpDefaultRouteMetric
+    o.Ipv6Enabled = s.Ipv6Enabled
+    o.ManagementProfile = s.ManagementProfile
+    o.Mtu = s.Mtu
+    o.AdjustTcpMss = s.AdjustTcpMss
+    o.NetflowProfile = s.NetflowProfile
+    o.LldpEnabled = s.LldpEnabled
+    o.LldpProfile = s.LldpProfile
+    o.LinkSpeed = s.LinkSpeed
+    o.LinkDuplex = s.LinkDuplex
+    o.LinkState = s.LinkState
+    o.AggregateGroup = s.AggregateGroup
+    o.Comment = s.Comment
+    o.Ipv4MssAdjust = s.Ipv4MssAdjust
+    o.Ipv6MssAdjust = s.Ipv6MssAdjust
+}
+
 // Eth is the client.Network.EthernetInterface namespace.
 type Eth struct {
     con util.XapiClient

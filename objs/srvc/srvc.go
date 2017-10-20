@@ -24,6 +24,16 @@ type Entry struct {
     Tag []string
 }
 
+// Copy copies the information from source Entry `s` to this object.  As the
+// Name field relates to the XPATH of this object, this field is not copied.
+func (o *Entry) Copy(s Entry) {
+    o.Description = s.Description
+    o.Protocol = s.Protocol
+    o.SourcePort = s.SourcePort
+    o.DestinationPort = s.DestinationPort
+    o.Tag = s.Tag
+}
+
 // Srvc is a namespace struct, included as part of xapi.Client.
 type Srvc struct {
     con util.XapiClient

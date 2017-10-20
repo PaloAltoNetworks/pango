@@ -22,6 +22,14 @@ type Entry struct {
     StaticMacs map[string] string
 }
 
+// Copy copies the information from source Entry `s` to this object.  As the
+// Name field relates to the XPATH of this object, this field is not copied.
+func (o *Entry) Copy(s Entry) {
+    o.VlanInterface = s.VlanInterface
+    o.Interfaces = s.Interfaces
+    o.StaticMacs = s.StaticMacs
+}
+
 // Vlan is the client.Network.Vlan namespace.
 type Vlan struct {
     con util.XapiClient

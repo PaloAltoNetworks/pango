@@ -23,6 +23,18 @@ type Entry struct {
     ExcludeAcl []string
 }
 
+// Copy copies the information from source Entry `s` to this object.  As the
+// Name field relates to the XPATH of this object, this field is not copied.
+func (o *Entry) Copy(s Entry) {
+    o.Mode = s.Mode
+    o.Interfaces = s.Interfaces
+    o.ZoneProfile = s.ZoneProfile
+    o.LogSetting = s.LogSetting
+    o.EnableUserId = s.EnableUserId
+    o.IncludeAcl = s.IncludeAcl
+    o.ExcludeAcl = s.ExcludeAcl
+}
+
 // Zone is a namespace struct, included as part of xapi.Client.
 type Zone struct {
     con util.XapiClient

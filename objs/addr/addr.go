@@ -27,6 +27,15 @@ type Entry struct {
     Tag []string
 }
 
+// Copy copies the information from source Entry `s` to this object.  As the
+// Name field relates to the XPATH of this object, this field is not copied.
+func (o *Entry) Copy(s Entry) {
+    o.Value = s.Value
+    o.Type = s.Type
+    o.Description = s.Description
+    o.Tag = s.Tag
+}
+
 // Addr is a namespace struct, included as part of xapi.Client.
 type Addr struct {
     con util.XapiClient
