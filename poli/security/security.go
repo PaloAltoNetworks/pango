@@ -35,7 +35,7 @@ type Entry struct {
     LogEnd bool
     Disabled bool
     Schedule string
-    IcmpUnreachable string
+    IcmpUnreachable bool
     DisableServerResponseInspection bool
     Group []string
     Target []string
@@ -334,7 +334,7 @@ func (o *container_v1) Normalize() Entry {
         LogEnd: util.AsBool(o.Answer.LogEnd),
         Disabled: util.AsBool(o.Answer.Disabled),
         Schedule: o.Answer.Schedule,
-        IcmpUnreachable: o.Answer.IcmpUnreachable,
+        IcmpUnreachable: util.AsBool(o.Answer.IcmpUnreachable),
     }
     if o.Answer.Options != nil {
         ans.DisableServerResponseInspection = util.AsBool(o.Answer.Options.DisableServerResponseInspection)
@@ -382,7 +382,7 @@ type entry_v1 struct {
     LogEnd string `xml:"log-end"`
     Disabled string `xml:"disabled"`
     Schedule string `xml:"schedule,omitempty"`
-    IcmpUnreachable string `xml:"icmp-unreachable,omitempty"`
+    IcmpUnreachable string `xml:"icmp-unreachable"`
     Options *secOptions `xml:"option"`
     TargetInfo *targetInfo `xml:"target"`
     ProfileSettings *profileSettings `xml:"profile-setting"`
@@ -435,7 +435,7 @@ func specify_v1(e Entry) interface{} {
         LogEnd: util.YesNo(e.LogEnd),
         Disabled: util.YesNo(e.Disabled),
         Schedule: e.Schedule,
-        IcmpUnreachable: e.IcmpUnreachable,
+        IcmpUnreachable: util.YesNo(e.IcmpUnreachable),
         Options: &secOptions{util.YesNo(e.DisableServerResponseInspection)},
     }
     if e.Target != nil || e.NegateTarget {
