@@ -1,4 +1,4 @@
-package xapi
+package pango
 
 import (
     "bytes"
@@ -7,7 +7,7 @@ import (
     "strings"
     "testing"
 
-    "github.com/PaloAltoNetworks/xapi/testdata"
+    "github.com/PaloAltoNetworks/pango/testdata"
 )
 
 

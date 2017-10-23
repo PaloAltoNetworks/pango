@@ -3,11 +3,11 @@ package objs
 
 
 import (
-    "github.com/PaloAltoNetworks/xapi/util"
+    "github.com/PaloAltoNetworks/pango/util"
 
-    "github.com/PaloAltoNetworks/xapi/objs/addr"
-    "github.com/PaloAltoNetworks/xapi/objs/addrgrp"
-    "github.com/PaloAltoNetworks/xapi/objs/srvc"
+    "github.com/PaloAltoNetworks/pango/objs/addr"
+    "github.com/PaloAltoNetworks/pango/objs/addrgrp"
+    "github.com/PaloAltoNetworks/pango/objs/srvc"
 )
 
 

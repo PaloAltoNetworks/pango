@@ -1,5 +1,5 @@
 /*
-Package xapi is a golang cross version mechanism for interacting with Palo Alto
+Package pango is a golang cross version mechanism for interacting with Palo Alto
 Networks devices (including physical and virtualized Next-generation Firewalls
 and Panorama).  Versioning support is in place for PANOS 6.1 to 8.0.
 
@@ -10,16 +10,16 @@ initialize the connection:
     
     import (
         "log"
-        "github.com/PaloAltoNetworks/xapi"
+        "github.com/PaloAltoNetworks/pango"
     )
     
     func main() {
         var err error
-        c := xapi.Firewall{Client: xapi.Client{
+        c := pango.Firewall{Client: pango.Client{
             Hostname: "127.0.0.1",
             Username: "admin",
             Password: "admin",
-            Logging: xapi.LogAction | xapi.LogOp,
+            Logging: pango.LogAction | pango.LogOp,
         }}
         if err = c.Initialize(); err != nil {
             log.Printf("Failed to initialize client: %s", err)
@@ -83,18 +83,18 @@ it into vsys1 if it isn't already present:
     
     import (
         "log"
-        "github.com/PaloAltoNetworks/xapi"
-        "github.com/PaloAltoNetworks/xapi/netw/eth"
+        "github.com/PaloAltoNetworks/pango"
+        "github.com/PaloAltoNetworks/pango/netw/eth"
     )
     
     func main() {
         var err error
     
-        c := &xapi.Firewall{Client: xapi.Client{
+        c := &pango.Firewall{Client: pango.Client{
             Hostname: "127.0.0.1",
             Username: "admin",
             Password: "admin",
-            Logging: xapi.LogAction | xapi.LogOp,
+            Logging: pango.LogAction | pango.LogOp,
         }}
         if err = c.Initialize(); err != nil {
             log.Printf("Failed to initialize client: %s", err)
@@ -129,7 +129,7 @@ it into vsys1 if it isn't already present:
     }
 
 */
-package xapi
+package pango
 
 import (
     "crypto/tls"
@@ -141,16 +141,16 @@ import (
     "net/url"
     "time"
 
-    "github.com/PaloAltoNetworks/xapi/version"
-    "github.com/PaloAltoNetworks/xapi/util"
+    "github.com/PaloAltoNetworks/pango/version"
+    "github.com/PaloAltoNetworks/pango/util"
 
     // Various namespace imports.
-    "github.com/PaloAltoNetworks/xapi/netw"
-    "github.com/PaloAltoNetworks/xapi/dev"
-    "github.com/PaloAltoNetworks/xapi/poli"
-    "github.com/PaloAltoNetworks/xapi/objs"
-    "github.com/PaloAltoNetworks/xapi/licen"
-    "github.com/PaloAltoNetworks/xapi/userid"
+    "github.com/PaloAltoNetworks/pango/netw"
+    "github.com/PaloAltoNetworks/pango/dev"
+    "github.com/PaloAltoNetworks/pango/poli"
+    "github.com/PaloAltoNetworks/pango/objs"
+    "github.com/PaloAltoNetworks/pango/licen"
+    "github.com/PaloAltoNetworks/pango/userid"
 )
 
 

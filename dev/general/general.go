@@ -6,7 +6,7 @@ package general
 import (
     "encoding/xml"
 
-    "github.com/PaloAltoNetworks/xapi/util"
+    "github.com/PaloAltoNetworks/pango/util"
 )
 
 
@@ -109,7 +109,7 @@ func (o *Config) Merge(s Config) {
     }
 }
 
-// Gset is a namespace struct, included as part of xapi.Client.
+// Gset is a namespace struct, included as part of pango.Client.
 type General struct {
     con util.XapiClient
 }

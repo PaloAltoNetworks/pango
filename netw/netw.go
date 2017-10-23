@@ -3,13 +3,13 @@ package netw
 
 
 import (
-    "github.com/PaloAltoNetworks/xapi/util"
+    "github.com/PaloAltoNetworks/pango/util"
 
-    "github.com/PaloAltoNetworks/xapi/netw/eth"
-    "github.com/PaloAltoNetworks/xapi/netw/mngtprof"
-    "github.com/PaloAltoNetworks/xapi/netw/vlan"
-    "github.com/PaloAltoNetworks/xapi/netw/zone"
-    "github.com/PaloAltoNetworks/xapi/netw/router"
+    "github.com/PaloAltoNetworks/pango/netw/eth"
+    "github.com/PaloAltoNetworks/pango/netw/mngtprof"
+    "github.com/PaloAltoNetworks/pango/netw/vlan"
+    "github.com/PaloAltoNetworks/pango/netw/zone"
+    "github.com/PaloAltoNetworks/pango/netw/router"
 )
 
 

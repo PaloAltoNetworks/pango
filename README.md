@@ -1,7 +1,7 @@
-Palo Alto Networks xapi
-=======================
+Palo Alto Networks pango
+========================
 
-Package xapi is a golang cross version mechanism for interacting with Palo Alto Networks devices (including physical and virtualized Next-generation Firewalls and Panorama).  Versioning support is in place for PANOS 6.1 to 8.0.
+Package pango is a golang cross version mechanism for interacting with Palo Alto Networks devices (including physical and virtualized Next-generation Firewalls and Panorama).  Versioning support is in place for PANOS 6.1 to 8.0.
 
 To start, create a client connection with the desired parameters and then initialize the connection:
 
@@ -10,17 +10,17 @@ package main
 
 import (
     "log"
-    "github.com/PaloAltoNetworks/xapi"
+    "github.com/PaloAltoNetworks/pango"
 )
 
 func main() {
     var err error
 
-    c := &xapi.Firewall{Client: xapi.Client{
+    c := &pango.Firewall{Client: pango.Client{
         Hostname: "127.0.0.1",
         Username: "admin",
         Password: "admin",
-        Logging: xapi.LogAction | xapi.LogOp,
+        Logging: pango.LogAction | pango.LogOp,
     }}
     if err = c.Initialize(); err != nil {
         log.Printf("Failed to initialize client: %s", err)
@@ -70,18 +70,18 @@ package main
 
 import (
     "log"
-    "github.com/PaloAltoNetworks/xapi"
-    "github.com/PaloAltoNetworks/xapi/netw/eth"
+    "github.com/PaloAltoNetworks/pango"
+    "github.com/PaloAltoNetworks/pango/netw/eth"
 )
 
 func main() {
     var err error
 
-    c := &xapi.Firewall{Client: xapi.Client{
+    c := &pango.Firewall{Client: pango.Client{
         Hostname: "127.0.0.1",
         Username: "admin",
         Password: "admin",
-        Logging: xapi.LogAction | xapi.LogOp,
+        Logging: pango.LogAction | pango.LogOp,
     }}
     if err = c.Initialize(); err != nil {
         log.Printf("Failed to initialize client: %s", err)

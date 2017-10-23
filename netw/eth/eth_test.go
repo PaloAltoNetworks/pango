@@ -4,8 +4,8 @@ import (
     "testing"
     "reflect"
 
-    "github.com/PaloAltoNetworks/xapi/version"
-    "github.com/PaloAltoNetworks/xapi/testdata"
+    "github.com/PaloAltoNetworks/pango/version"
+    "github.com/PaloAltoNetworks/pango/testdata"
 )
 
 

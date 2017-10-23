@@ -4,8 +4,8 @@ import (
     "fmt"
     "encoding/xml"
 
-    "github.com/PaloAltoNetworks/xapi/version"
-    "github.com/PaloAltoNetworks/xapi/util"
+    "github.com/PaloAltoNetworks/pango/version"
+    "github.com/PaloAltoNetworks/pango/util"
 )
 
 

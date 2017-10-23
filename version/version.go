@@ -1,4 +1,4 @@
-// Package version contains a version number struct that xapi uses to make
+// Package version contains a version number struct that pango uses to make
 // decisions on the specific structs to use when sending XML to the PANOS
 // device.
 package version

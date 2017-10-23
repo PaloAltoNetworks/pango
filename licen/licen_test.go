@@ -3,7 +3,7 @@ package licen
 import (
     "testing"
 
-    "github.com/PaloAltoNetworks/xapi/testdata"
+    "github.com/PaloAltoNetworks/pango/testdata"
 )
 
 

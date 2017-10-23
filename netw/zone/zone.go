@@ -7,7 +7,7 @@ import (
     "fmt"
     "encoding/xml"
 
-    "github.com/PaloAltoNetworks/xapi/util"
+    "github.com/PaloAltoNetworks/pango/util"
 )
 
 
@@ -35,12 +35,12 @@ func (o *Entry) Copy(s Entry) {
     o.ExcludeAcl = s.ExcludeAcl
 }
 
-// Zone is a namespace struct, included as part of xapi.Client.
+// Zone is a namespace struct, included as part of pango.Client.
 type Zone struct {
     con util.XapiClient
 }
 
-// Initialize is invoked when Initialize on the xapi.Client is called.
+// Initialize is invoked when Initialize on the pango.Client is called.
 func (c *Zone) Initialize(con util.XapiClient) {
     c.con = con
 }

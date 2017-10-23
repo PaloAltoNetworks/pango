@@ -10,8 +10,8 @@ package userid
 import (
     "encoding/xml"
 
-    "github.com/PaloAltoNetworks/xapi/util"
-    "github.com/PaloAltoNetworks/xapi/version"
+    "github.com/PaloAltoNetworks/pango/util"
+    "github.com/PaloAltoNetworks/pango/version"
 )
 
 

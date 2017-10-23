@@ -2,9 +2,9 @@
 package dev
 
 import (
-    "github.com/PaloAltoNetworks/xapi/util"
+    "github.com/PaloAltoNetworks/pango/util"
 
-    "github.com/PaloAltoNetworks/xapi/dev/general"
+    "github.com/PaloAltoNetworks/pango/dev/general"
 )
 
 

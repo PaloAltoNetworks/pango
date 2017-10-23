@@ -2,10 +2,10 @@
 package poli
 
 import (
-    "github.com/PaloAltoNetworks/xapi/util"
+    "github.com/PaloAltoNetworks/pango/util"
 
-    "github.com/PaloAltoNetworks/xapi/poli/security"
-    "github.com/PaloAltoNetworks/xapi/poli/nat"
+    "github.com/PaloAltoNetworks/pango/poli/security"
+    "github.com/PaloAltoNetworks/pango/poli/nat"
 )
 
 

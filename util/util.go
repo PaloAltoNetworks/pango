@@ -1,5 +1,5 @@
 // Package util contains various shared structs and functions used across
-// the xapi package.
+// the pango package.
 package util
 
 
@@ -9,11 +9,11 @@ import (
     "regexp"
     "strings"
 
-    "github.com/PaloAltoNetworks/xapi/version"
+    "github.com/PaloAltoNetworks/pango/version"
 )
 
 // Retriever is a type that is intended to act as a stand-in for using
-// either the Get or Show xapi Client functions.
+// either the Get or Show pango Client functions.
 type Retriever func(interface{}, interface{}, interface{}) ([]byte, error)
 
 // Rulebase constants for various policies.
@@ -23,7 +23,7 @@ const (
     PostRulebase = "post-rulebase"
 )
 
-// XapiClient is the interface that describes an xapi.Client.
+// XapiClient is the interface that describes an pango.Client.
 type XapiClient interface {
     String() string
     Versioning() version.Number
