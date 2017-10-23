@@ -219,6 +219,26 @@ func (c *Security) Set(vsys, base string, e ...Entry) error {
     return err
 }
 
+// VerifiableSet behaves like Set(), except policies with LogEnd as true
+// will first be created with LogEnd as false, and then a second Set() is
+// performed which will do LogEnd as true.  This is due to the unique
+// combination of being a boolean value that is true by default, the XML
+// returned from querying the rule details will omit the LogEnd setting,
+// which will be interpreted as false, when in fact it is true.  We can
+// get around this by setting the value to a non-standard value, then back
+// again, in which case it will properly show up in the returned XML.
+func (c *Security) VerifiableSet(vsys, base string, e Entry) error {
+    again := e.LogEnd
+    e.LogEnd = false
+
+    if err := c.Set(vsys, base, e); err != nil || !again {
+        return err
+    }
+
+    e.LogEnd = true
+    return c.Set(vsys, base, e)
+}
+
 // Edit performs EDIT to create / update a security policy.
 func (c *Security) Edit(vsys, base string, e Entry) error {
     var err error
