@@ -724,6 +724,48 @@ func (c *Client) WaitForJob(id uint, resp interface{}) error {
     return xml.Unmarshal(data, resp)
 }
 
+// Commit performs a Firewall commit.
+//
+// Param desc is the optional commit description message you want associated
+// with the commit.
+//
+// Params dan and pao are advanced options for doing partial commits.  Setting
+// param dan to false excludes the Device and Network configuration, while
+// setting param pao to false excludes the Policy and Object configuration.
+//
+// Param force is if you want to force a commit even if no changes are
+// required.
+//
+// Param sync should be true if you want this function to block until the
+// commit job completes.
+//
+// Commits result in a job being submitted to the backend.  The job ID and
+// if an error was encountered or not are returned from this function.
+func (c *Firewall) Commit(desc string, dan, pao, force, sync bool) (uint, error) {
+    c.LogAction("(commit) %q", desc)
+
+    req := fwCommit{Description: desc}
+    if !dan || !pao {
+        req.Partial = &fwCommitPartial{}
+        if !dan {
+            req.Partial.Dan = "excluded"
+        }
+        if !pao {
+            req.Partial.Pao = "excluded"
+        }
+    }
+    if force {
+        req.Force = ""
+    }
+
+    job, _, err := c.CommitConfig(req, "", nil)
+    if err != nil || !sync || job == 0 {
+        return job, err
+    }
+
+    return job, c.WaitForJob(job, nil)
+}
+
 // LogAction writes a log message for SET/DELETE operations if LogAction is set.
 func (c *Client) LogAction(msg string, i ...interface{}) {
     if c.Logging & LogAction == LogAction {
@@ -823,10 +865,15 @@ func (c *Client) Communicate(data url.Values, ans interface{}) ([]byte, error) {
     return body, nil
 }
 
-// Op runs an "op" type command.
+// Op runs an operational or "op" type command.
 //
 // The req param can be either a properly formatted XML string or a struct
 // that can be marshalled into XML.
+//
+// The vsys param is the vsys the op command should be executed in, if any.
+//
+// The extras param should be either nil or a url.Values{} to be mixed in with
+// the constructed request.
 //
 // The ans param should be a pointer to a struct to unmarshal the response
 // into or nil.
@@ -859,6 +906,11 @@ func (c *Client) Op(req interface{}, vsys string, extras, ans interface{}) ([]by
 
 // Show runs a "show" type command.
 //
+// The path param should be either a string or a slice of strings.
+//
+// The extras param should be either nil or a url.Values{} to be mixed in with
+// the constructed request.
+//
 // The ans param should be a pointer to a struct to unmarshal the response
 // into or nil.
 //
@@ -874,6 +926,11 @@ func (c *Client) Show(path, extras, ans interface{}) ([]byte, error) {
 }
 
 // Get runs a "get" type command.
+//
+// The path param should be either a string or a slice of strings.
+//
+// The extras param should be either nil or a url.Values{} to be mixed in with
+// the constructed request.
 //
 // The ans param should be a pointer to a struct to unmarshal the response
 // into or nil.
@@ -892,6 +949,11 @@ func (c *Client) Get(path, extras, ans interface{}) ([]byte, error) {
 // Delete runs a "delete" type command, removing the supplied xpath and
 // everything underneath it.
 //
+// The path param should be either a string or a slice of strings.
+//
+// The extras param should be either nil or a url.Values{} to be mixed in with
+// the constructed request.
+//
 // The ans param should be a pointer to a struct to unmarshal the response
 // into or nil.
 //
@@ -908,8 +970,13 @@ func (c *Client) Delete(path, extras, ans interface{}) ([]byte, error) {
 
 // Set runs a "set" type command, creating the element at the given xpath.
 //
+// The path param should be either a string or a slice of strings.
+//
 // The element param can be either a string of properly formatted XML to send
 // or a struct which can be marshaled into a string.
+//
+// The extras param should be either nil or a url.Values{} to be mixed in with
+// the constructed request.
 //
 // The ans param should be a pointer to a struct to unmarshal the response
 // into or nil.
@@ -933,8 +1000,13 @@ func (c *Client) Set(path, element, extras, ans interface{}) ([]byte, error) {
 // Edit runs a "edit" type command, modifying what is at the given xpath
 // with the supplied element.
 //
+// The path param should be either a string or a slice of strings.
+//
 // The element param can be either a string of properly formatted XML to send
 // or a struct which can be marshaled into a string.
+//
+// The extras param should be either nil or a url.Values{} to be mixed in with
+// the constructed request.
 //
 // The ans param should be a pointer to a struct to unmarshal the response
 // into or nil.
@@ -996,6 +1068,46 @@ func (c *Client) Uid(cmd interface{}, vsys string, extras, ans interface{}) ([]b
     }
 
     return c.Communicate(data, ans)
+}
+
+// CommitConfig performs PANOS commits.  This is the underlying function
+// invoked by Firewall.Commit() and Panorama.Commit().
+//
+// The cmd param can be either a properly formatted XML string or a struct
+// that can be marshalled into XML.
+//
+// The action param is the commit action to be taken, if any (e.g. - "all").
+//
+// The extras param should be either nil or a url.Values{} to be mixed in with
+// the constructed request.
+//
+// Commits result in a job being submitted to the backend.  The job ID, assuming
+// the commit action was successfully submitted, the response from the server,
+// and if an error was encountered or not are all returned from this function.
+func (c *Client) CommitConfig(cmd interface{}, action string, extras interface{}) (uint, []byte, error) {
+    var err error
+    data := url.Values{}
+    data.Set("type", "commit")
+
+    if err = addToData("cmd", cmd, true, &data); err != nil {
+        return 0, nil, err
+    }
+
+    if action != "" {
+        data.Set("action", action)
+    }
+
+    if c.Target != "" {
+        data.Set("target", c.Target)
+    }
+
+    if err = mergeUrlValues(&data, extras); err != nil {
+        return 0, nil, err
+    }
+
+    ans := util.JobResponse{}
+    b, err := c.Communicate(data, &ans)
+    return ans.Id, b, err
 }
 
 /*** Internal functions ***/
@@ -1322,4 +1434,16 @@ type configLocks struct {
 
 type commitLocks struct {
     Locks []util.Lock `xml:"result>commit-locks>entry"`
+}
+
+type fwCommit struct {
+    XMLName xml.Name `xml:"commit"`
+    Description string `xml:"description,omitempty"`
+    Partial *fwCommitPartial `xml:"partial"`
+    Force interface{} `xml:"force"`
+}
+
+type fwCommitPartial struct {
+    Dan string `xml:"device-and-network,omitempty"`
+    Pao string `xml:"policy-and-objects,omitempty"`
 }
