@@ -180,7 +180,7 @@ func (c *Vlan) versioning() (normalizer, func(Entry) (interface{})) {
     return &container_v1{}, specify_v1
 }
 
-func (c *Vlan) details(fn func(interface{}, interface{}, interface{}) ([]byte, error), name string) (Entry, error) {
+func (c *Vlan) details(fn util.Retriever, name string) (Entry, error) {
     path := c.xpath([]string{name})
     obj, _ := c.versioning()
     if _, err := fn(path, nil, obj); err != nil {

@@ -294,7 +294,7 @@ func (c *Nat) versioning() (normalizer, func(Entry) (interface{})) {
     return &container_v1{}, specify_v1
 }
 
-func (c *Nat) details(fn func(interface{}, interface{}, interface{}) ([]byte, error), vsys, base, name string) (Entry, error) {
+func (c *Nat) details(fn util.Retriever, vsys, base, name string) (Entry, error) {
     path := c.xpath(vsys, base, []string{name})
     obj, _ := c.versioning()
     if _, err := fn(path, nil, obj); err != nil {

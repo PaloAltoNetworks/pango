@@ -229,7 +229,7 @@ func (c *Eth) versioning() (normalizer, func(Entry) (interface{})) {
     }
 }
 
-func (c *Eth) details(fn func(interface{}, interface{}, interface{}) ([]byte, error), name string) (Entry, error) {
+func (c *Eth) details(fn util.Retriever, name string) (Entry, error) {
     path := c.xpath([]string{name})
     obj, _ := c.versioning()
     if _, err := fn(path, nil, obj); err != nil {

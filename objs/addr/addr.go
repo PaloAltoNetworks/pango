@@ -154,7 +154,7 @@ func (c *Addr) versioning() (normalizer, func(Entry) (interface{})) {
     return &container_v1{}, specify_v1
 }
 
-func (c *Addr) details(fn func(interface{}, interface{}, interface{}) ([]byte, error), vsys, name string) (Entry, error) {
+func (c *Addr) details(fn util.Retriever, vsys, name string) (Entry, error) {
     path := c.xpath(vsys, []string{name})
     obj, _ := c.versioning()
     _, err := fn(path, nil, obj)
