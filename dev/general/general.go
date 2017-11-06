@@ -33,6 +33,7 @@ type Config struct {
     Timezone string
     Domain string
     UpdateServer string
+    VerifyUpdateServer bool
     DnsPrimary string
     DnsSecondary string
     NtpPrimaryAddress string
@@ -81,6 +82,8 @@ func (o *Config) Merge(s Config) {
     if s.UpdateServer != "" {
         o.UpdateServer = s.UpdateServer
     }
+
+    o.VerifyUpdateServer = s.VerifyUpdateServer
 
     if s.DnsPrimary != "" {
         o.DnsPrimary = s.DnsPrimary
@@ -224,6 +227,7 @@ func (o *container_v1) Normalize() Config {
         Timezone: o.Answer.Timezone,
         Domain: o.Answer.Domain,
         UpdateServer: o.Answer.UpdateServer,
+        VerifyUpdateServer: util.AsBool(o.Answer.VerifyUpdateServer),
     }
     if o.Answer.Dns != nil {
         ans.DnsPrimary = o.Answer.Dns.Primary
@@ -348,9 +352,6 @@ func (o *container_v1) Normalize() Config {
     if o.Answer.SecureProxyUser != nil {
         ans.raw["spu"] = util.CleanRawXml(o.Answer.SecureProxyUser.Text)
     }
-    if o.Answer.ServerVerification != nil {
-        ans.raw["sv"] = util.CleanRawXml(o.Answer.ServerVerification.Text)
-    }
     if o.Answer.Service != nil {
         ans.raw["service"] = util.CleanRawXml(o.Answer.Service.Text)
     }
@@ -388,6 +389,7 @@ type config_v1 struct {
     Timezone string `xml:"timezone"`
     Domain string `xml:"domain,omitempty"`
     UpdateServer string `xml:"update-server,omitempty"`
+    VerifyUpdateServer string `xml:"server-verification"`
     Dns *deviceDns `xml:"dns-setting"`
     Ntp *deviceNtp `xml:"ntp-servers"`
     AckLoginBanner *util.RawXml `xml:"ack-login-banner"`
@@ -415,7 +417,6 @@ type config_v1 struct {
     SecureProxyPort *util.RawXml `xml:"secure-proxy-port"`
     SecureProxyServer *util.RawXml `xml:"secure-proxy-server"`
     SecureProxyUser *util.RawXml `xml:"secure-proxy-user"`
-    ServerVerification *util.RawXml `xml:"server-verification"`
     Service *util.RawXml `xml:"service"`
     SnmpSetting *util.RawXml `xml:"snmp-setting"`
     SpeedDuplex *util.RawXml `xml:"speed-duplex"`
@@ -469,6 +470,7 @@ func specify_v1(c Config) interface{} {
         Timezone: c.Timezone,
         Domain: c.Domain,
         UpdateServer: c.UpdateServer,
+        VerifyUpdateServer: util.YesNo(c.VerifyUpdateServer),
     }
     if c.DnsPrimary != "" || c.DnsSecondary != "" {
         ans.Dns = &deviceDns{
@@ -600,9 +602,6 @@ func specify_v1(c Config) interface{} {
     }
     if text, present := c.raw["spu"]; present {
         ans.SecureProxyUser = &util.RawXml{text}
-    }
-    if text, present := c.raw["sv"]; present {
-        ans.ServerVerification = &util.RawXml{text}
     }
     if text, present := c.raw["service"]; present {
         ans.Service = &util.RawXml{text}
