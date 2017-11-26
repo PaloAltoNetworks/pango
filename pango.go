@@ -1379,11 +1379,53 @@ func asString(i interface{}, attemptMarshal bool) (string, error) {
 
 type panosStatus struct {
     ResponseStatus string `xml:"status,attr"`
+    ResponseCode int `xml:"code,attr"`
 }
 
 // Failed checks for a status of "failed" or "error".
 func (e panosStatus) Failed() bool {
-    return e.ResponseStatus == "failed" || e.ResponseStatus == "error"
+    if e.ResponseStatus == "failed" || e.ResponseStatus == "error" {
+        return true
+    } else if e.ResponseCode == 0 || e.ResponseCode == 19 || e.ResponseCode == 20 {
+        return false
+    } else {
+        return true
+    }
+}
+
+func (e panosStatus) codeError() string {
+    switch e.ResponseCode {
+    case 1:
+        return "Unknown command"
+    case 2, 3, 4, 5, 11:
+        return fmt.Sprintf("Internal error (%d) encountered", e.ResponseCode)
+    case 6:
+        return "Bad Xpath"
+    case 7:
+        return "Object not present"
+    case 8:
+        return "Object not unique"
+    case 10:
+        return "Reference count not zero"
+    case 12:
+        return "Invalid object"
+    case 14:
+        return "Operation not possible"
+    case 15:
+        return "Operation denied"
+    case 16:
+        return "Unauthorized"
+    case 17:
+        return "Invalid command"
+    case 18:
+        return "Malformed command"
+    case 0, 19, 20:
+        return ""
+    case 22:
+        return "Session timed out"
+    default:
+        return fmt.Sprintf("(%d) Unknown failure code, operation failed", e.ResponseCode)
+    }
 }
 
 // panosErrorResponseWithLine is one of a few known error formats that PANOS
@@ -1393,14 +1435,18 @@ func (e panosStatus) Failed() bool {
 type panosErrorResponseWithLine struct {
     XMLName xml.Name `xml:"response"`
     panosStatus
-    ResponseCode string `xml:"code,attr"`
     ResponseMsg string `xml:"msg>line"`
 }
 
 // Error retrieves the parsed error message.
 func (e panosErrorResponseWithLine) Error() string {
-    return e.ResponseMsg
+    if e.ResponseMsg != "" {
+        return e.ResponseMsg
+    } else {
+        return e.codeError()
+    }
 }
+
 
 // panosErrorResponseWithoutLine is one of a few known error formats that PANOS
 // outputs.  It checks two locations that the error could be, and returns the
@@ -1408,17 +1454,18 @@ func (e panosErrorResponseWithLine) Error() string {
 type panosErrorResponseWithoutLine struct {
     XMLName xml.Name `xml:"response"`
     panosStatus
-    ResponseCode string `xml:"code,attr"`
     ResponseMsg1 string `xml:"result>msg"`
     ResponseMsg2 string `xml:"msg"`
 }
 
 // Error retrieves the parsed error message.
 func (e panosErrorResponseWithoutLine) Error() string {
-    if e.ResponseMsg1 == "" {
+    if e.ResponseMsg1 != "" {
+        return e.ResponseMsg1
+    } else if e.ResponseMsg2 != "" {
         return e.ResponseMsg2
     } else {
-        return e.ResponseMsg1
+        return e.codeError()
     }
 }
 
