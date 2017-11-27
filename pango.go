@@ -1462,10 +1462,8 @@ type panosErrorResponseWithoutLine struct {
 func (e panosErrorResponseWithoutLine) Error() string {
     if e.ResponseMsg1 != "" {
         return e.ResponseMsg1
-    } else if e.ResponseMsg2 != "" {
-        return e.ResponseMsg2
     } else {
-        return e.codeError()
+        return e.ResponseMsg2
     }
 }
 
