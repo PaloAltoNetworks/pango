@@ -232,8 +232,8 @@ type entry_v1 struct {
     VWire *zoneInterfaceList `xml:"network>virtual-wire"`
     Tap *zoneInterfaceList `xml:"network>tap"`
     External *zoneInterfaceList `xml:"network>external"`
-    Profile string `xml:"network>zone-protection-profile"`
-    LogSetting string `xml:"network>log-setting"`
+    Profile string `xml:"network>zone-protection-profile,omitempty"`
+    LogSetting string `xml:"network>log-setting,omitempty"`
     EnableUserId string `xml:"enable-user-identification"`
     IncludeAcl *aclList `xml:"user-acl>include-list"`
     ExcludeAcl *aclList `xml:"user-acl>exclude-list"`
