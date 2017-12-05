@@ -80,7 +80,7 @@ type Entry struct {
     Description string
     Type string
     SourceZone []string
-    DestinationZone []string
+    DestinationZone string
     ToInterface string
     Service string
     SourceAddress []string
@@ -342,7 +342,7 @@ func (o *container_v1) Normalize() Entry {
         Description: o.Answer.Description,
         Type: o.Answer.Type,
         SourceZone: util.MemToStr(o.Answer.SourceZone),
-        DestinationZone: util.MemToStr(o.Answer.DestinationZone),
+        DestinationZone: o.Answer.DestinationZone,
         ToInterface: o.Answer.ToInterface,
         Service: o.Answer.Service,
         SourceAddress: util.MemToStr(o.Answer.SourceAddress),
@@ -410,7 +410,7 @@ type entry_v1 struct {
     Description string `xml:"description"`
     Type string `xml:"nat-type"`
     SourceZone *util.Member `xml:"from"`
-    DestinationZone *util.Member `xml:"to"`
+    DestinationZone string `xml:"to>member"`
     ToInterface string `xml:"to-interface"`
     Service string `xml:"service"`
     SourceAddress *util.Member `xml:"source"`
@@ -475,7 +475,7 @@ func specify_v1(e Entry) interface{} {
         Description: e.Description,
         Type: e.Type,
         SourceZone: util.StrToMem(e.SourceZone),
-        DestinationZone: util.StrToMem(e.DestinationZone),
+        DestinationZone: e.DestinationZone,
         ToInterface: e.ToInterface,
         Service: e.Service,
         SourceAddress: util.StrToMem(e.SourceAddress),
