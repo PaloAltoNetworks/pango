@@ -79,12 +79,12 @@ type Entry struct {
     Name string
     Description string
     Type string
-    From []string
-    To []string
+    SourceZone []string
+    DestinationZone []string
     ToInterface string
     Service string
-    Source []string
-    Destination []string
+    SourceAddress []string
+    DestinationAddress []string
     SatType string
     SatAddressType string
     SatTranslatedAddress []string
@@ -111,8 +111,8 @@ type Entry struct {
 //      * Type: "ipv4"
 //      * ToInterface: "any"
 //      * Service: "any"
-//      * Source: ["any"]
-//      * Destination: ["any"]
+//      * SourceAddress: ["any"]
+//      * DestinationAddress: ["any"]
 //      * SatType: None
 //      * SatFallbackType: None
 func (o *Entry) Defaults() {
@@ -128,12 +128,12 @@ func (o *Entry) Defaults() {
         o.Service = "any"
     }
 
-    if len(o.Source) == 0 {
-        o.Source = []string{"any"}
+    if len(o.SourceAddress) == 0 {
+        o.SourceAddress = []string{"any"}
     }
 
-    if len(o.Destination) == 0 {
-        o.Destination = []string{"any"}
+    if len(o.DestinationAddress) == 0 {
+        o.DestinationAddress = []string{"any"}
     }
 
     if o.SatType == "" {
@@ -150,12 +150,12 @@ func (o *Entry) Defaults() {
 func (o *Entry) Copy(s Entry) {
     o.Description = s.Description
     o.Type = s.Type
-    o.From = s.From
-    o.To = s.To
+    o.SourceZone = s.SourceZone
+    o.DestinationZone = s.DestinationZone
     o.ToInterface = s.ToInterface
     o.Service = s.Service
-    o.Source = s.Source
-    o.Destination = s.Destination
+    o.SourceAddress = s.SourceAddress
+    o.DestinationAddress = s.DestinationAddress
     o.SatType = s.SatType
     o.SatAddressType = s.SatAddressType
     o.SatTranslatedAddress = s.SatTranslatedAddress
@@ -341,12 +341,12 @@ func (o *container_v1) Normalize() Entry {
         Name: o.Answer.Name,
         Description: o.Answer.Description,
         Type: o.Answer.Type,
-        From: util.MemToStr(o.Answer.From),
-        To: util.MemToStr(o.Answer.To),
+        SourceZone: util.MemToStr(o.Answer.SourceZone),
+        DestinationZone: util.MemToStr(o.Answer.DestinationZone),
         ToInterface: o.Answer.ToInterface,
         Service: o.Answer.Service,
-        Source: util.MemToStr(o.Answer.Source),
-        Destination: util.MemToStr(o.Answer.Destination),
+        SourceAddress: util.MemToStr(o.Answer.SourceAddress),
+        DestinationAddress: util.MemToStr(o.Answer.DestinationAddress),
         Disabled: util.AsBool(o.Answer.Disabled),
         Tag: util.MemToStr(o.Answer.Tag),
     }
@@ -409,12 +409,12 @@ type entry_v1 struct {
     Name string `xml:"name,attr"`
     Description string `xml:"description"`
     Type string `xml:"nat-type"`
-    From *util.Member `xml:"from"`
-    To *util.Member `xml:"to"`
+    SourceZone *util.Member `xml:"from"`
+    DestinationZone *util.Member `xml:"to"`
     ToInterface string `xml:"to-interface"`
     Service string `xml:"service"`
-    Source *util.Member `xml:"source"`
-    Destination *util.Member `xml:"destination"`
+    SourceAddress *util.Member `xml:"source"`
+    DestinationAddress *util.Member `xml:"destination"`
     Sat *srcXlate `xml:"source-translation"`
     Dat *dstXlate `xml:"destination-translation"`
     Disabled string `xml:"disabled"`
@@ -474,12 +474,12 @@ func specify_v1(e Entry) interface{} {
         Name: e.Name,
         Description: e.Description,
         Type: e.Type,
-        From: util.StrToMem(e.From),
-        To: util.StrToMem(e.To),
+        SourceZone: util.StrToMem(e.SourceZone),
+        DestinationZone: util.StrToMem(e.DestinationZone),
         ToInterface: e.ToInterface,
         Service: e.Service,
-        Source: util.StrToMem(e.Source),
-        Destination: util.StrToMem(e.Destination),
+        SourceAddress: util.StrToMem(e.SourceAddress),
+        DestinationAddress: util.StrToMem(e.DestinationAddress),
         Disabled: util.YesNo(e.Disabled),
         Tag: util.StrToMem(e.Tag),
     }
