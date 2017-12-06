@@ -8,6 +8,7 @@ import (
     "github.com/PaloAltoNetworks/pango/objs/addr"
     "github.com/PaloAltoNetworks/pango/objs/addrgrp"
     "github.com/PaloAltoNetworks/pango/objs/srvc"
+    "github.com/PaloAltoNetworks/pango/objs/srvcgrp"
 )
 
 
