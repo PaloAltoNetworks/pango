@@ -114,7 +114,6 @@ type Entry struct {
 //      * SourceAddress: ["any"]
 //      * DestinationAddress: ["any"]
 //      * SatType: None
-//      * SatFallbackType: None
 func (o *Entry) Defaults() {
     if o.Type == "" {
         o.Type = "ipv4"
@@ -138,10 +137,6 @@ func (o *Entry) Defaults() {
 
     if o.SatType == "" {
         o.SatType = None
-    }
-
-    if o.SatFallbackType == "" {
-        o.SatFallbackType = None
     }
 }
 
