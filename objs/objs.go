@@ -16,6 +16,7 @@ type Objs struct {
     Address *addr.Addr
     AddressGroup *addrgrp.AddrGrp
     Services *srvc.Srvc
+    ServiceGroup *srvcgrp.SrvcGrp
 }
 
 // Initialize is invoked on client.Initialize().
@@ -28,4 +29,7 @@ func (c *Objs) Initialize(i util.XapiClient) {
 
     c.Services = &srvc.Srvc{}
     c.Services.Initialize(i)
+
+    c.ServiceGroup = &srvcgrp.SrvcGrp{}
+    c.ServiceGroup.Initialize(i)
 }

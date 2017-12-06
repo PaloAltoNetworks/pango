@@ -12,7 +12,7 @@ func TestInitialize(t *testing.T) {
     o := &Objs{}
     o.Initialize(mc)
 
-    if o.Address == nil || o.AddressGroup == nil || o.Services == nil {
+    if o.Address == nil || o.AddressGroup == nil || o.Services == nil || o.ServiceGroup == nil {
         t.Fail()
     }
 }
