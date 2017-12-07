@@ -435,7 +435,7 @@ type srcXlateDiap struct {
 
 type srcXlateDiapIa struct {
     Interface string `xml:"interface"`
-    Ip string `xml:"ip"`
+    Ip string `xml:"ip,omitempty"`
 }
 
 type srcXlateDi struct {
