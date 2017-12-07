@@ -238,6 +238,28 @@ func (c *Router) Delete(vsys string, e ...interface{}) error {
     return err
 }
 
+// CleanupDefault clears the `default` route configuration instead of deleting
+// it outright.  This involves unimporting the route "default" from the given
+// vsys, then performing an `EDIT` with an empty router.Entry object.
+func (c *Router) CleanupDefault(vsys string) error {
+    var err error
+
+    c.con.LogAction("(action) cleaning up default route")
+
+    // Unimport the default virtual router.
+    if err = c.con.UnimportVirtualRouters(vsys, []string{"default"}); err != nil {
+        return err
+    }
+
+    // Cleanup the interfaces the virtual router refers to.
+    info := Entry{Name: "default"}
+    if err = c.Edit("", info); err != nil {
+        return err
+    }
+
+    return nil
+}
+
 /** Internal functions for the Router struct **/
 
 func (c *Router) versioning() (normalizer, func(Entry) (interface{})) {
