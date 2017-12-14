@@ -50,6 +50,10 @@ func (c *UserId) Run(logins, logouts map[string] string, reg, unreg map[string] 
 
     msg := uid{Version: "1.0", Type: "update"}
 
+    if len(logins) == 0 && len(logouts) == 0 && len(reg) == 0 && len(unreg) == 0 {
+        return nil
+    }
+
     // Login users.
     if len(logins) > 0 {
         i = 0
