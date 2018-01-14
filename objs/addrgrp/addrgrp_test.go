@@ -17,24 +17,24 @@ func TestNormalization(t *testing.T) {
         {"test static no tags", "", Entry{
             Name: "one",
             Description: "my description",
-            Static: []string{"adr1", "adr2"},
+            StaticAddresses: []string{"adr1", "adr2"},
         }},
         {"test static with tags", "", Entry{
             Name: "one",
             Description: "my description",
-            Static: []string{"adr1", "adr2"},
-            Tag: []string{"tag1", "tag2"},
+            StaticAddresses: []string{"adr1", "adr2"},
+            Tags: []string{"tag1", "tag2"},
         }},
         {"test dynamic no tags", "", Entry{
             Name: "one",
             Description: "my description",
-            Dynamic: "'tag1' or 'tag2' and 'tag3'",
+            DynamicMatch: "'tag1' or 'tag2' and 'tag3'",
         }},
         {"test dynamic with tags", "", Entry{
             Name: "one",
             Description: "my description",
-            Dynamic: "'tag1' or 'tag2' and 'tag3'",
-            Tag: []string{"tag1", "tag2"},
+            DynamicMatch: "'tag1' or 'tag2' and 'tag3'",
+            Tags: []string{"tag1", "tag2"},
         }},
     }
 

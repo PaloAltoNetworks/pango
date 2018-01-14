@@ -19,14 +19,14 @@ func TestNormalization(t *testing.T) {
             Value: "10.1.1.0/24",
             Type: IpNetmask,
             Description: "my description",
-            Tag: []string{"tag1", "tag2"},
+            Tags: []string{"tag1", "tag2"},
         }},
         {"test ip range", "vsys2", Entry{
             Name: "two",
             Value: "10.1.1.1-10.1.1.254",
             Type: IpRange,
             Description: "my description",
-            Tag: []string{"tag3", "tag4"},
+            Tags: []string{"tag3", "tag4"},
         }},
         {"test fqdn", "vsys3", Entry{
             Name: "three",

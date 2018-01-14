@@ -16,12 +16,12 @@ func TestNormalization(t *testing.T) {
     }{
         {"test no services", "", Entry{
             Name: "one",
-            Tag: []string{"one", "two"},
+            Tags: []string{"one", "two"},
         }},
         {"test one service", "", Entry{
             Name: "two",
             Services: []string{"svc1"},
-            Tag: []string{"single"},
+            Tags: []string{"single"},
         }},
         {"test two services", "", Entry{
             Name: "three",

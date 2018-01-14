@@ -33,7 +33,7 @@ func TestNormalization(t *testing.T) {
         {"test3", Entry{
             Name: "test3",
             Ping: true,
-            PermittedIp: []string{"10.1.1.1", "10.2.2.2"},
+            PermittedIps: []string{"10.1.1.1", "10.2.2.2"},
         }},
     }
 

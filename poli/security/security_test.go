@@ -27,7 +27,7 @@ func TestNormalization(t *testing.T) {
         }},
         {"postrulebase rule with target", "vsys3", util.PostRulebase, true, Entry{
             Name: "rule3",
-            Target: []string{"fw1", "fw2"},
+            Targets: []string{"fw1", "fw2"},
             NegateTarget: true,
         }},
     }

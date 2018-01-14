@@ -25,7 +25,7 @@ func TestNormalization(t *testing.T) {
             Description: "my service",
             Protocol: "tcp",
             DestinationPort: "1234",
-            Tag: []string{"tag1", "tag2"},
+            Tags: []string{"tag1", "tag2"},
         }},
         {"tcp service with source port no tag", "", Entry{
             Name: "tcp3",
@@ -40,7 +40,7 @@ func TestNormalization(t *testing.T) {
             Protocol: "tcp",
             SourcePort: "1025",
             DestinationPort: "1234",
-            Tag: []string{"tag1", "tag2"},
+            Tags: []string{"tag1", "tag2"},
         }},
         {"udp service no source port no tag", "", Entry{
             Name: "udp1",
@@ -53,7 +53,7 @@ func TestNormalization(t *testing.T) {
             Description: "my service",
             Protocol: "udp",
             DestinationPort: "1234",
-            Tag: []string{"tag1", "tag2"},
+            Tags: []string{"tag1", "tag2"},
         }},
         {"udp service with source port no tag", "", Entry{
             Name: "udp3",
@@ -68,7 +68,7 @@ func TestNormalization(t *testing.T) {
             Protocol: "udp",
             SourcePort: "1025",
             DestinationPort: "1234",
-            Tag: []string{"tag1", "tag2"},
+            Tags: []string{"tag1", "tag2"},
         }},
     }
 
