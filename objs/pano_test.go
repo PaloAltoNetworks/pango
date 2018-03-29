@@ -7,9 +7,9 @@ import (
 )
 
 
-func TestInitialize(t *testing.T) {
+func TestPanoInitialize(t *testing.T) {
     mc := &testdata.MockClient{}
-    o := &Objs{}
+    o := &PanoObjs{}
     o.Initialize(mc)
 
     if o.Address == nil || o.AddressGroup == nil || o.Services == nil || o.ServiceGroup == nil || o.Tags == nil {

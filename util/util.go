@@ -246,4 +246,11 @@ type BasicJob struct {
     Result string `xml:"result>job>result"`
     Progress uint `xml:"result>job>progress"`
     Details []string `xml:"result>job>details>line"`
+    Devices []devJob `xml:"result>job>devices>entry"`
+}
+
+// Internally used by BasicJob for panorama commit-all.
+type devJob struct {
+    Serial string `xml:"serial-no"`
+    Result string `xml:"result"`
 }

@@ -1,4 +1,4 @@
-package addr
+package addrgrp
 
 import (
     "testing"
@@ -8,48 +8,50 @@ import (
 )
 
 
-func TestNormalization(t *testing.T) {
+func TestPanoNormalization(t *testing.T) {
     testCases := []struct{
         desc string
-        vsys string
+        dg string
         conf Entry
     }{
-        {"test ip netmask", "", Entry{
+        {"test static no tags", "", Entry{
             Name: "one",
-            Value: "10.1.1.0/24",
-            Type: IpNetmask,
             Description: "my description",
+            StaticAddresses: []string{"adr1", "adr2"},
+        }},
+        {"test static with tags", "", Entry{
+            Name: "one",
+            Description: "my description",
+            StaticAddresses: []string{"adr1", "adr2"},
             Tags: []string{"tag1", "tag2"},
         }},
-        {"test ip range", "vsys2", Entry{
-            Name: "two",
-            Value: "10.1.1.1-10.1.1.254",
-            Type: IpRange,
+        {"test dynamic no tags", "dg1", Entry{
+            Name: "one",
             Description: "my description",
-            Tags: []string{"tag3", "tag4"},
+            DynamicMatch: "'tag1' or 'tag2' and 'tag3'",
         }},
-        {"test fqdn", "vsys3", Entry{
-            Name: "three",
-            Value: "example.com",
-            Type: Fqdn,
+        {"test dynamic with tags", "dg2", Entry{
+            Name: "one",
             Description: "my description",
+            DynamicMatch: "'tag1' or 'tag2' and 'tag3'",
+            Tags: []string{"tag1", "tag2"},
         }},
     }
 
     mc := &testdata.MockClient{}
-    ns := &Addr{}
+    ns := &PanoAddrGrp{}
     ns.Initialize(mc)
 
     for _, tc := range testCases {
         t.Run(tc.desc, func(t *testing.T) {
             mc.Reset()
             mc.AddResp("")
-            err := ns.Set(tc.vsys, tc.conf)
+            err := ns.Set(tc.dg, tc.conf)
             if err != nil {
                 t.Errorf("Error in set: %s", err)
             } else {
                 mc.AddResp(mc.Elm)
-                r, err := ns.Get(tc.vsys, tc.conf.Name)
+                r, err := ns.Get(tc.dg, tc.conf.Name)
                 if err != nil {
                     t.Errorf("Error in get: %s", err)
                 } else if !reflect.DeepEqual(tc.conf, r) {

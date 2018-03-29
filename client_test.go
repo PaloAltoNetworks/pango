@@ -161,7 +161,7 @@ func TestLogUidEnabled(t *testing.T) {
 }
 
 func TestRetrieveApiKey(t *testing.T) {
-    c := &Firewall{}
+    c := &Client{}
     c.rb = [][]byte{
         []byte(testdata.ApiKeyXml),
     }

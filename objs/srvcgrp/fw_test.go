@@ -1,4 +1,4 @@
-package addrgrp
+package srvcgrp
 
 import (
     "testing"
@@ -8,38 +8,29 @@ import (
 )
 
 
-func TestNormalization(t *testing.T) {
+func TestFwNormalization(t *testing.T) {
     testCases := []struct{
         desc string
         vsys string
         conf Entry
     }{
-        {"test static no tags", "", Entry{
+        {"test no services", "", Entry{
             Name: "one",
-            Description: "my description",
-            StaticAddresses: []string{"adr1", "adr2"},
+            Tags: []string{"one", "two"},
         }},
-        {"test static with tags", "", Entry{
-            Name: "one",
-            Description: "my description",
-            StaticAddresses: []string{"adr1", "adr2"},
-            Tags: []string{"tag1", "tag2"},
+        {"test one service", "", Entry{
+            Name: "two",
+            Services: []string{"svc1"},
+            Tags: []string{"single"},
         }},
-        {"test dynamic no tags", "", Entry{
-            Name: "one",
-            Description: "my description",
-            DynamicMatch: "'tag1' or 'tag2' and 'tag3'",
-        }},
-        {"test dynamic with tags", "", Entry{
-            Name: "one",
-            Description: "my description",
-            DynamicMatch: "'tag1' or 'tag2' and 'tag3'",
-            Tags: []string{"tag1", "tag2"},
+        {"test two services", "", Entry{
+            Name: "three",
+            Services: []string{"svc1", "svc2"},
         }},
     }
 
     mc := &testdata.MockClient{}
-    ns := &AddrGrp{}
+    ns := &FwSrvcGrp{}
     ns.Initialize(mc)
 
     for _, tc := range testCases {

@@ -1,4 +1,4 @@
-package tags
+package addr
 
 import (
     "testing"
@@ -8,32 +8,36 @@ import (
 )
 
 
-func TestNormalization(t *testing.T) {
+func TestFwNormalization(t *testing.T) {
     testCases := []struct{
         desc string
         vsys string
         conf Entry
     }{
-        {"test with all fields", "", Entry{
+        {"test ip netmask", "", Entry{
             Name: "one",
-            Color: "color1",
-            Comment: "first test",
+            Value: "10.1.1.0/24",
+            Type: IpNetmask,
+            Description: "my description",
+            Tags: []string{"tag1", "tag2"},
         }},
-        {"test no color", "", Entry{
+        {"test ip range", "vsys2", Entry{
             Name: "two",
-            Comment: "second test",
+            Value: "10.1.1.1-10.1.1.254",
+            Type: IpRange,
+            Description: "my description",
+            Tags: []string{"tag3", "tag4"},
         }},
-        {"test no comment", "vsys1", Entry{
+        {"test fqdn", "vsys3", Entry{
             Name: "three",
-            Color: "color3",
-        }},
-        {"test no color or comment", "vsys2", Entry{
-            Name: "four",
+            Value: "example.com",
+            Type: Fqdn,
+            Description: "my description",
         }},
     }
 
     mc := &testdata.MockClient{}
-    ns := &Tags{}
+    ns := &FwAddr{}
     ns.Initialize(mc)
 
     for _, tc := range testCases {
