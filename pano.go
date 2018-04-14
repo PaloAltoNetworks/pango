@@ -7,6 +7,7 @@ import (
 
     // Various namespace imports.
     "github.com/PaloAltoNetworks/pango/objs"
+    "github.com/PaloAltoNetworks/pango/poli"
     "github.com/PaloAltoNetworks/pango/pnrm"
     "github.com/PaloAltoNetworks/pango/licen"
     "github.com/PaloAltoNetworks/pango/userid"
@@ -28,6 +29,7 @@ type Panorama struct {
     UserId *userid.UserId
     Panorama *pnrm.Pnrm
     Objects *objs.PanoObjs
+    Policies *poli.PanoPoli
 }
 
 // Initialize does some initial setup of the Panorama connection, retrieves
@@ -118,6 +120,9 @@ func (c *Panorama) initNamespaces() {
 
     c.Objects = &objs.PanoObjs{}
     c.Objects.Initialize(c)
+
+    c.Policies = &poli.PanoPoli{}
+    c.Policies.Initialize(c)
 }
 
 /** Internal structs / functions **/

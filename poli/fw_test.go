@@ -7,9 +7,9 @@ import (
 )
 
 
-func TestInitialize(t *testing.T) {
+func TestFwInitialize(t *testing.T) {
     mc := &testdata.MockClient{}
-    p := &Poli{}
+    p := &FwPoli{}
     p.Initialize(mc)
 
     if p.Nat == nil || p.Security == nil {

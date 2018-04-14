@@ -5,27 +5,25 @@ import (
     "reflect"
 
     "github.com/PaloAltoNetworks/pango/testdata"
-    "github.com/PaloAltoNetworks/pango/util"
 )
 
 
-func TestNormalization(t *testing.T) {
+func TestFwNormalization(t *testing.T) {
     testCases := []struct{
         desc string
         vsys string
-        base string
         doDefaults bool
         conf Entry
     }{
-        {"basic rule", "", "", true, Entry{
+        {"basic rule", "", true, Entry{
             Name: "rule1",
         }},
-        {"prerulebase rule", "vsys2", util.PreRulebase, true, Entry{
+        {"prerulebase rule", "vsys2", true, Entry{
             Name: "rule2",
             LogEnd: true,
             Disabled: true,
         }},
-        {"postrulebase rule with target", "vsys3", util.PostRulebase, true, Entry{
+        {"postrulebase rule with target", "vsys3", true, Entry{
             Name: "rule3",
             Targets: []string{"fw1", "fw2"},
             NegateTarget: true,
@@ -33,7 +31,7 @@ func TestNormalization(t *testing.T) {
     }
 
     mc := &testdata.MockClient{}
-    ns := &Security{}
+    ns := &FwSecurity{}
     ns.Initialize(mc)
 
     for _, tc := range testCases {
@@ -43,12 +41,12 @@ func TestNormalization(t *testing.T) {
             if tc.doDefaults {
                 tc.conf.Defaults()
             }
-            err := ns.Set(tc.vsys, tc.base, tc.conf)
+            err := ns.Set(tc.vsys, tc.conf)
             if err != nil {
                 t.Errorf("Error in set: %s", err)
             } else {
                 mc.AddResp(mc.Elm)
-                r, err := ns.Get(tc.vsys, tc.base, tc.conf.Name)
+                r, err := ns.Get(tc.vsys, tc.conf.Name)
                 if err != nil {
                     t.Errorf("Error in get: %s", err)
                 } else if !reflect.DeepEqual(tc.conf, r) {

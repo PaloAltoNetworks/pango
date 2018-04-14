@@ -142,7 +142,6 @@ func (c *PanoAddr) xpath(dg string, vals []string) []string {
         dg = "shared"
     }
 
-    // Shared xpath.
     if dg == "shared" {
         return []string {
             "config",
@@ -152,7 +151,6 @@ func (c *PanoAddr) xpath(dg string, vals []string) []string {
         }
     }
 
-    // Vsys xpath.
     return []string {
         "config",
         "devices",

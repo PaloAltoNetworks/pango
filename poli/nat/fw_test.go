@@ -5,18 +5,16 @@ import (
     "reflect"
 
     "github.com/PaloAltoNetworks/pango/testdata"
-    "github.com/PaloAltoNetworks/pango/util"
 )
 
 
-func TestNormalization(t *testing.T) {
+func TestFwNormalization(t *testing.T) {
     testCases := []struct{
         desc string
         vsys string
-        base string
         conf Entry
     }{
-        {"dst only", "", util.Rulebase, Entry{
+        {"dst only", "", Entry{
             Name: "nat policy",
             Description: "my nat policy",
             Type: "ipv4",
@@ -31,7 +29,7 @@ func TestNormalization(t *testing.T) {
             DatPort: 1234,
             Tags: []string{"tag1", "tag2"},
         }},
-        {"dynamic ip and port with translated address", "", util.Rulebase, Entry{
+        {"dynamic ip and port with translated address", "", Entry{
             Name: "nat policy",
             Description: "my nat policy",
             Type: "ipv4",
@@ -45,7 +43,7 @@ func TestNormalization(t *testing.T) {
             SatAddressType: TranslatedAddress,
             SatTranslatedAddresses: []string{"10.3.1.1", "10.3.2.1"},
         }},
-        {"dynamic ip with interface address fallback", "vsys2", util.PreRulebase, Entry{
+        {"dynamic ip with interface address fallback", "vsys2", Entry{
             Name: "nat policy",
             Description: "my nat policy",
             Type: "ipv4",
@@ -62,7 +60,7 @@ func TestNormalization(t *testing.T) {
             SatFallbackIpType: Ip,
             SatFallbackIpAddress: "10.10.10.10",
         }},
-        {"static ip with target", "vsys3", util.PostRulebase, Entry{
+        {"static ip with target", "vsys3", Entry{
             Name: "nat policy",
             Description: "my nat policy",
             Type: "ipv4",
@@ -81,19 +79,19 @@ func TestNormalization(t *testing.T) {
     }
 
     mc := &testdata.MockClient{}
-    ns := &Nat{}
+    ns := &FwNat{}
     ns.Initialize(mc)
 
     for _, tc := range testCases {
         t.Run(tc.desc, func(t *testing.T) {
             mc.Reset()
             mc.AddResp("")
-            err := ns.Set(tc.vsys, tc.base, tc.conf)
+            err := ns.Set(tc.vsys, tc.conf)
             if err != nil {
                 t.Errorf("Error in set: %s", err)
             } else {
                 mc.AddResp(mc.Elm)
-                r, err := ns.Get(tc.vsys, tc.base, tc.conf.Name)
+                r, err := ns.Get(tc.vsys, tc.conf.Name)
                 if err != nil {
                     t.Errorf("Error in get: %s", err)
                 } else if !reflect.DeepEqual(tc.conf, r) {

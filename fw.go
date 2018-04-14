@@ -30,7 +30,7 @@ type Firewall struct {
     // Namespaces
     Network *netw.Netw
     Device *dev.Dev
-    Policies *poli.Poli
+    Policies *poli.FwPoli
     Objects *objs.FwObjs
     Licensing *licen.Licen
     UserId *userid.UserId
@@ -117,7 +117,7 @@ func (c *Firewall) initNamespaces() {
     c.Device = &dev.Dev{}
     c.Device.Initialize(c)
 
-    c.Policies = &poli.Poli{}
+    c.Policies = &poli.FwPoli{}
     c.Policies.Initialize(c)
 
     c.Objects = &objs.FwObjs{}
