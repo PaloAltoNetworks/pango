@@ -49,6 +49,7 @@ type XapiClient interface {
     ImportVirtualRouters(string, []string) error
     UnimportVirtualRouters(string, []string) error
     WaitForJob(uint, interface{}) error
+    Commit(string, bool, bool, bool, bool) (uint, error)
 }
 
 // BulkElement is a generic bulk container for bulk operations.

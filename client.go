@@ -445,6 +445,49 @@ func (c *Client) UnlockCommits(vsys, admin string) error {
     return err
 }
 
+// Commit performs a standard commit on this PAN-OS device.
+//
+// Param desc is the optional commit description message you want associated
+// with the commit.
+//
+// Params dan and pao are advanced options for doing partial commits.  Setting
+// param dan to false excludes the Device and Network configuration, while
+// setting param pao to false excludes the Policy and Object configuration.
+//
+// Param force is if you want to force a commit even if no changes are
+// required.
+//
+// Param sync should be true if you want this function to block until the
+// commit job completes.
+//
+// Commits result in a job being submitted to the backend.  The job ID and
+// if an error was encountered or not are returned from this function.  If
+// the job ID returned is 0, then no commit was needed.
+func (c *Client) Commit(desc string, dan, pao, force, sync bool) (uint, error) {
+    c.LogAction("(commit) %q", desc)
+
+    req := baseCommit{Description: desc}
+    if !dan || !pao {
+        req.Partial = &baseCommitPartial{}
+        if !dan {
+            req.Partial.Dan = "excluded"
+        }
+        if !pao {
+            req.Partial.Pao = "excluded"
+        }
+    }
+    if force {
+        req.Force = ""
+    }
+
+    job, _, err := c.CommitConfig(req, "", nil)
+    if err != nil || !sync || job == 0 {
+        return job, err
+    }
+
+    return job, c.WaitForJob(job, nil)
+}
+
 // WaitForJob polls the device, waiting for the specified job to finish.
 //
 // If you want to unmarshal the response into a struct, then pass in a
@@ -1235,4 +1278,16 @@ type configLocks struct {
 
 type commitLocks struct {
     Locks []util.Lock `xml:"result>commit-locks>entry"`
+}
+
+type baseCommit struct {
+    XMLName xml.Name `xml:"commit"`
+    Description string `xml:"description,omitempty"`
+    Partial *baseCommitPartial `xml:"partial"`
+    Force interface{} `xml:"force"`
+}
+
+type baseCommitPartial struct {
+    Dan string `xml:"device-and-network,omitempty"`
+    Pao string `xml:"policy-and-objects,omitempty"`
 }

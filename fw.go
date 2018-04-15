@@ -1,8 +1,6 @@
 package pango
 
 import (
-    "encoding/xml"
-
     // Various namespace imports.
     "github.com/PaloAltoNetworks/pango/netw"
     "github.com/PaloAltoNetworks/pango/dev"
@@ -66,48 +64,6 @@ func (c *Firewall) Initialize() error {
     return nil
 }
 
-// Commit performs a Firewall commit.
-//
-// Param desc is the optional commit description message you want associated
-// with the commit.
-//
-// Params dan and pao are advanced options for doing partial commits.  Setting
-// param dan to false excludes the Device and Network configuration, while
-// setting param pao to false excludes the Policy and Object configuration.
-//
-// Param force is if you want to force a commit even if no changes are
-// required.
-//
-// Param sync should be true if you want this function to block until the
-// commit job completes.
-//
-// Commits result in a job being submitted to the backend.  The job ID and
-// if an error was encountered or not are returned from this function.
-func (c *Firewall) Commit(desc string, dan, pao, force, sync bool) (uint, error) {
-    c.LogAction("(commit) %q", desc)
-
-    req := fwCommit{Description: desc}
-    if !dan || !pao {
-        req.Partial = &fwCommitPartial{}
-        if !dan {
-            req.Partial.Dan = "excluded"
-        }
-        if !pao {
-            req.Partial.Pao = "excluded"
-        }
-    }
-    if force {
-        req.Force = ""
-    }
-
-    job, _, err := c.CommitConfig(req, "", nil)
-    if err != nil || !sync || job == 0 {
-        return job, err
-    }
-
-    return job, c.WaitForJob(job, nil)
-}
-
 /** Private functions **/
 
 func (c *Firewall) initNamespaces() {
@@ -128,18 +84,4 @@ func (c *Firewall) initNamespaces() {
 
     c.UserId = &userid.UserId{}
     c.UserId.Initialize(c)
-}
-
-/** Internal structs / functions **/
-
-type fwCommit struct {
-    XMLName xml.Name `xml:"commit"`
-    Description string `xml:"description,omitempty"`
-    Partial *fwCommitPartial `xml:"partial"`
-    Force interface{} `xml:"force"`
-}
-
-type fwCommitPartial struct {
-    Dan string `xml:"device-and-network,omitempty"`
-    Pao string `xml:"policy-and-objects,omitempty"`
 }
