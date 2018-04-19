@@ -13,16 +13,43 @@ func TestMemToStrNil(t *testing.T) {
     }
 }
 
-func TestMemToStr(t *testing.T) {
-    v := []string{"one", "two"}
-    m := &Member{v}
-    r := MemToStr(m)
-    if len(v) != len(r) {
+func TestEntToStrNil(t *testing.T) {
+    r := EntToStr(nil)
+    if r != nil {
         t.Fail()
     }
-    for i := range v {
-        if v[i] != r[i] {
-            t.Fail()
+}
+
+func TestStrToMem(t *testing.T) {
+    v := []string{"one", "two"}
+    r := StrToMem(v)
+    if r == nil {
+        t.Fail()
+    } else if len(v) != len(r.Members) {
+        t.Fail()
+    } else {
+        for i := range v {
+            if v[i] != r.Members[i].Value {
+                t.Fail()
+                break
+            }
+        }
+    }
+}
+
+func TestStrToEnt(t *testing.T) {
+    v := []string{"one", "two"}
+    r := StrToEnt(v)
+    if r == nil {
+        t.Fail()
+    } else if len(v) != len(r.Entries) {
+        t.Fail()
+    } else {
+        for i := range v {
+            if v[i] != r.Entries[i].Value {
+                t.Fail()
+                break
+            }
         }
     }
 }
@@ -37,7 +64,13 @@ func BenchmarkStrToMem(b *testing.B) {
 }
 
 func BenchmarkMemToStr(b *testing.B) {
-    m := &Member{[]string{"one", "two", "three", "four", "five"}}
+    m := &MemberType{[]Member{
+        {Value: "one"},
+        {Value: "two"},
+        {Value: "three"},
+        {Value: "four"},
+        {Value: "five"},
+    }}
     b.ResetTimer()
 
     for i := 0; i < b.N; i++ {
@@ -55,12 +88,12 @@ func BenchmarkStrToEnt(b *testing.B) {
 }
 
 func BenchmarkEntToStr(b *testing.B) {
-    v := &Entry{[]innerEntry{
-        innerEntry{"one"},
-        innerEntry{"two"},
-        innerEntry{"three"},
-        innerEntry{"four"},
-        innerEntry{"five"},
+    v := &EntryType{[]Entry{
+        {Value: "one"},
+        {Value: "two"},
+        {Value: "three"},
+        {Value: "four"},
+        {Value: "five"},
     }}
     b.ResetTimer()
 
@@ -83,6 +116,15 @@ func BenchmarkAsXpath(b *testing.B) {
 
     for i := 0; i < b.N; i++ {
         _ = AsXpath(p)
+    }
+}
+
+func BenchmarkAsEntryXpathMultiple(b *testing.B) {
+    v := []string{"one", "two", "three"}
+    b.ResetTimer()
+
+    for i := 0; i < b.N; i++ {
+        _ = AsEntryXpath(v)
     }
 }
 
