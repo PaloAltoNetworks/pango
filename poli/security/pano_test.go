@@ -27,7 +27,10 @@ func TestPanoNormalization(t *testing.T) {
         }},
         {"postrulebase rule with target", "vsys3", util.PostRulebase, true, Entry{
             Name: "rule3",
-            Targets: []string{"fw1", "fw2"},
+            Targets: map[string] []string{
+                "fw1": nil,
+                "fw2": {"vsys2", "vsys3"},
+            },
             NegateTarget: true,
         }},
     }

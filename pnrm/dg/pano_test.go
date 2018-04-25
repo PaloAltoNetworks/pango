@@ -20,12 +20,17 @@ func TestNormalization(t *testing.T) {
         {"test two", Entry{
             Name: "two",
             Description: "with devices",
-            Devices: []string{"001234", "998765"},
+            Devices: map[string] []string{
+                "001234": nil,
+                "998765": {"vsys3", "vsys5"},
+            },
         }},
         {"test three", Entry{
             Name: "three",
             Description: "with one device",
-            Devices: []string{"001234"},
+            Devices: map[string] []string{
+                "001234": nil,
+            },
         }},
     }
 

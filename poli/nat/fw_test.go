@@ -73,7 +73,10 @@ func TestFwNormalization(t *testing.T) {
             SatType: StaticIp,
             SatStaticTranslatedAddress: "10.5.5.5",
             SatStaticBiDirectional: true,
-            Targets: []string{"fw1", "fw2"},
+            Targets: map[string] []string{
+                "fw1": nil,
+                "fw2": {"vsys2", "vsys3"},
+            },
             NegateTarget: true,
         }},
     }
