@@ -9,10 +9,12 @@ import (
 
 func TestInitialize(t *testing.T) {
     mc := &testdata.MockClient{}
-    d := Dev{}
+    d := FwDev{}
     d.Initialize(mc)
 
     if d.GeneralSettings == nil {
+        t.Fail()
+    } else if d.Telemetry == nil {
         t.Fail()
     }
 }
