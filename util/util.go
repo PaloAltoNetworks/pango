@@ -43,11 +43,11 @@ type XapiClient interface {
     EntryListUsing(Retriever, []string) ([]string, error)
     MemberListUsing(Retriever, []string) ([]string, error)
     RequestPasswordHash(string) (string, error)
-    ImportInterfaces(string, []string) error
+    ImportInterfaces(string, string, []string) error
     UnimportInterfaces(string, []string) error
-    ImportVlans(string, []string) error
+    ImportVlans(string, string, []string) error
     UnimportVlans(string, []string) error
-    ImportVirtualRouters(string, []string) error
+    ImportVirtualRouters(string, string, []string) error
     UnimportVirtualRouters(string, []string) error
     WaitForJob(uint, interface{}) error
     Commit(string, bool, bool, bool, bool) (uint, error)
@@ -248,6 +248,10 @@ func AsXpath(i interface{}) string {
 
 // AsEntryXpath returns the given values as an entry xpath segment.
 func AsEntryXpath(vals []string) string {
+    if len(vals) == 0 || (len(vals) == 1 && vals[0] == "") {
+        return "entry"
+    }
+
     var buf bytes.Buffer
 
     buf.WriteString("entry[")
@@ -281,6 +285,17 @@ func AsMemberXpath(vals []string) string {
     buf.WriteString("]")
 
     return buf.String()
+}
+
+// TemplateXpath returns the template xpath prefix of the given template name.
+func TemplateXpathPrefix(v string) []string {
+    return []string{
+        "config",
+        "devices",
+        AsEntryXpath([]string{"localhost.localdomain"}),
+        "template",
+        AsEntryXpath([]string{v}),
+    }
 }
 
 // License defines a license entry.

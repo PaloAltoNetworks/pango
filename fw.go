@@ -26,7 +26,7 @@ type Firewall struct {
     Client
 
     // Namespaces
-    Network *netw.Netw
+    Network *netw.FwNetw
     Device *dev.FwDev
     Policies *poli.FwPoli
     Objects *objs.FwObjs
@@ -67,7 +67,7 @@ func (c *Firewall) Initialize() error {
 /** Private functions **/
 
 func (c *Firewall) initNamespaces() {
-    c.Network = &netw.Netw{}
+    c.Network = &netw.FwNetw{}
     c.Network.Initialize(c)
 
     c.Device = &dev.FwDev{}

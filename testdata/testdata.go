@@ -28,6 +28,7 @@ type MockClient struct {
     Unimports []string
     Path string
     Elm string
+    Template string
     Vsys string
     Extras interface{}
 }
@@ -121,12 +122,12 @@ func (c *MockClient) MemberListUsing(fn util.Retriever, path []string) ([]string
 }
 
 func (c *MockClient) RequestPasswordHash(a string) (string, error) { return c.PasswordHash, nil }
-func (c *MockClient) ImportInterfaces(vsys string, names []string) error { return c.mockImport(vsys, names) }
-func (c *MockClient) UnimportInterfaces(vsys string, names []string) error { return c.mockUnimport(vsys, names) }
-func (c *MockClient) ImportVlans(vsys string, names []string) error { return c.mockImport(vsys, names) }
-func (c *MockClient) UnimportVlans(vsys string, names []string) error { return c.mockUnimport(vsys, names) }
-func (c *MockClient) ImportVirtualRouters(vsys string, names []string) error { return c.mockImport(vsys, names) }
-func (c *MockClient) UnimportVirtualRouters(vsys string, names []string) error { return c.mockUnimport(vsys, names) }
+func (c *MockClient) ImportInterfaces(tmpl, vsys string, names []string) error { return c.mockImport(tmpl, vsys, names) }
+func (c *MockClient) UnimportInterfaces(tmpl string, names []string) error { return c.mockUnimport(tmpl, names) }
+func (c *MockClient) ImportVlans(tmpl, vsys string, names []string) error { return c.mockImport(tmpl, vsys, names) }
+func (c *MockClient) UnimportVlans(tmpl string, names []string) error { return c.mockUnimport(tmpl, names) }
+func (c *MockClient) ImportVirtualRouters(tmpl, vsys string, names []string) error { return c.mockImport(tmpl, vsys, names) }
+func (c *MockClient) UnimportVirtualRouters(tmpl string, names []string) error { return c.mockUnimport(tmpl, names) }
 
 func (c *MockClient) finalize(resp interface{}) ([]byte, error) {
     ans := c.Resp[c.Called % len(c.Resp)]
@@ -157,15 +158,16 @@ func (c *MockClient) SetElm(e interface{}) error {
     return nil
 }
 
-func (c *MockClient) mockImport(vsys string, names []string) error {
+func (c *MockClient) mockImport(tmpl, vsys string, names []string) error {
+    c.Template = tmpl
     c.Vsys = vsys
     c.Imports = names
 
     return nil
 }
 
-func (c *MockClient) mockUnimport(vsys string, names []string) error {
-    c.Vsys = vsys
+func (c *MockClient) mockUnimport(tmpl string, names []string) error {
+    c.Template = tmpl
     c.Unimports = names
 
     return c.UnimportError
@@ -188,6 +190,7 @@ func (c *MockClient) Reset() {
     c.Unimports = []string{}
     c.Path = ""
     c.Elm = ""
+    c.Template = ""
     c.Vsys = ""
     c.Extras = nil
 }

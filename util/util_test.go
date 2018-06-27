@@ -154,7 +154,7 @@ func TestAsEntryXpath(t *testing.T) {
     }{
         {[]string{"one"}, "entry[@name='one']"},
         {[]string{"one", "two"}, "entry[@name='one' or @name='two']"},
-        {nil, "entry[]"},
+        {nil, "entry"},
     }
 
     for _, tc := range testCases {

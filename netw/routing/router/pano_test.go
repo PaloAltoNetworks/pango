@@ -8,23 +8,20 @@ import (
 )
 
 
-func TestNormalization(t *testing.T) {
+func TestPanoNormalization(t *testing.T) {
     testCases := []struct{
         desc string
+        tmpl string
         vsys string
         doDefaults bool
         imports []string
         conf Entry
     }{
-        {"with defaults and import", "vsys2", true, []string{"one"}, Entry{
+        {"with defaults and import", "x", "vsys2", true, []string{"one"}, Entry{
             Name: "one",
             Interfaces: []string{"ethernet1/1", "ethernet1/2"},
         }},
-        {"no defaults or import", "", false, []string{}, Entry{
-            Name: "two",
-            Interfaces: []string{"ethernet1/3", "ethernet1/4"},
-        }},
-        {"with raw fields", "vsys3", true, []string{"three"}, Entry{
+        {"with raw fields", "y", "vsys3", true, []string{"three"}, Entry{
             Name: "three",
             raw: map[string] string{
                 "ecmp": "<ecmp>raw ecmp</ecmp>",
@@ -36,7 +33,7 @@ func TestNormalization(t *testing.T) {
     }
 
     mc := &testdata.MockClient{}
-    ns := &Router{}
+    ns := &PanoRouter{}
     ns.Initialize(mc)
 
     for _, tc := range testCases {
@@ -46,17 +43,20 @@ func TestNormalization(t *testing.T) {
             }
             mc.Reset()
             mc.AddResp("")
-            err := ns.Set(tc.vsys, tc.conf)
+            err := ns.Set(tc.tmpl, tc.vsys, tc.conf)
             if err != nil {
                 t.Errorf("Error in set: %s", err)
             } else {
                 mc.AddResp(mc.Elm)
-                r, err := ns.Get(tc.conf.Name)
+                r, err := ns.Get(tc.tmpl, tc.conf.Name)
                 if err != nil {
                     t.Errorf("Error in get: %s", err)
                 }
                 if !reflect.DeepEqual(tc.conf, r) {
                     t.Errorf("%#v != %#v", tc.conf, r)
+                }
+                if tc.tmpl != mc.Template {
+                    t.Errorf("template: %s != %s", tc.tmpl, mc.Template)
                 }
                 if tc.vsys != mc.Vsys {
                     t.Errorf("vsys: %s != %s", tc.vsys, mc.Vsys)

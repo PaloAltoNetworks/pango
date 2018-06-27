@@ -8,17 +8,15 @@ import (
 )
 
 
-func TestNormalization(t *testing.T) {
+func TestPanoNormalization(t *testing.T) {
     testCases := []struct{
         desc string
+        tmpl string
         vsys string
         imports []string
         conf Entry
     }{
-        {"empty vlan", "", []string{}, Entry{
-            Name: "one",
-        }},
-        {"full vlan spec", "vsys2", []string{"two"}, Entry{
+        {"full vlan spec", "x", "vsys2", []string{"two"}, Entry{
             Name: "two",
             VlanInterface: "ethernet1/3",
             Interfaces: []string{"ethernet1/1", "ethernet1/2"},
@@ -30,24 +28,27 @@ func TestNormalization(t *testing.T) {
     }
 
     mc := &testdata.MockClient{}
-    ns := &Vlan{}
+    ns := &PanoVlan{}
     ns.Initialize(mc)
 
     for _, tc := range testCases {
         t.Run(tc.desc, func(t *testing.T) {
             mc.Reset()
             mc.AddResp("")
-            err := ns.Set(tc.vsys, tc.conf)
+            err := ns.Set(tc.tmpl, tc.vsys, tc.conf)
             if err != nil {
                 t.Errorf("Error in set: %s", err)
             } else {
                 mc.AddResp(mc.Elm)
-                r, err := ns.Get(tc.conf.Name)
+                r, err := ns.Get(tc.tmpl, tc.conf.Name)
                 if err != nil {
                     t.Errorf("Error in get: %s", err)
                 }
                 if !reflect.DeepEqual(tc.conf, r) {
                     t.Errorf("%#v != %#v", tc.conf, r)
+                }
+                if tc.tmpl != mc.Template {
+                    t.Errorf("template: %s != %s", tc.tmpl, mc.Template)
                 }
                 if tc.vsys != mc.Vsys {
                     t.Errorf("vsys: %s != %s", tc.vsys, mc.Vsys)
