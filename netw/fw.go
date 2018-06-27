@@ -6,7 +6,7 @@ import (
     "github.com/PaloAltoNetworks/pango/netw/interface/loopback"
     "github.com/PaloAltoNetworks/pango/netw/interface/tunnel"
     vli "github.com/PaloAltoNetworks/pango/netw/interface/vlan"
-    "github.com/PaloAltoNetworks/pango/netw/mngtprof"
+    "github.com/PaloAltoNetworks/pango/netw/profile/mngtprof"
     "github.com/PaloAltoNetworks/pango/netw/vlan"
     "github.com/PaloAltoNetworks/pango/netw/zone"
     "github.com/PaloAltoNetworks/pango/netw/routing/router"
@@ -18,7 +18,7 @@ import (
 type FwNetw struct {
     EthernetInterface *eth.FwEth
     LoopbackInterface *loopback.FwLoopback
-    ManagementProfile *mngtprof.MngtProf
+    ManagementProfile *mngtprof.FwMngtProf
     TunnelInterface *tunnel.FwTunnel
     VirtualRouter *router.FwRouter
     Vlan *vlan.FwVlan
@@ -34,7 +34,7 @@ func (c *FwNetw) Initialize(i util.XapiClient) {
     c.LoopbackInterface = &loopback.FwLoopback{}
     c.LoopbackInterface.Initialize(i)
 
-    c.ManagementProfile = &mngtprof.MngtProf{}
+    c.ManagementProfile = &mngtprof.FwMngtProf{}
     c.ManagementProfile.Initialize(i)
 
     c.TunnelInterface = &tunnel.FwTunnel{}

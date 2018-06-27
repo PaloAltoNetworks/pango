@@ -8,12 +8,13 @@ import (
 )
 
 
-func TestNormalization(t *testing.T) {
+func TestPanoNormalization(t *testing.T) {
     testCases := []struct{
         desc string
+        tmpl string
         conf Entry
     }{
-        {"test1", Entry{
+        {"test1", "a", Entry{
             Name: "test1",
             Ping: true,
             Telnet: true,
@@ -21,7 +22,7 @@ func TestNormalization(t *testing.T) {
             Https: true,
             UseridSyslogListenerSsl: true,
         }},
-        {"test2", Entry{
+        {"test2", "b", Entry{
             Name: "test2",
             Http: true,
             HttpOcsp: true,
@@ -30,7 +31,7 @@ func TestNormalization(t *testing.T) {
             UseridService: true,
             UseridSyslogListenerUdp: true,
         }},
-        {"test3", Entry{
+        {"test3", "c", Entry{
             Name: "test3",
             Ping: true,
             PermittedIps: []string{"10.1.1.1", "10.2.2.2"},
@@ -38,18 +39,18 @@ func TestNormalization(t *testing.T) {
     }
 
     mc := &testdata.MockClient{}
-    ns := &MngtProf{}
+    ns := &PanoMngtProf{}
     ns.Initialize(mc)
 
     for _, tc := range testCases {
         t.Run(tc.desc, func(t *testing.T) {
             mc.AddResp("")
-            err := ns.Set(tc.conf)
+            err := ns.Set(tc.tmpl, tc.conf)
             if err != nil {
                 t.Errorf("Error in set: %s", err)
             } else {
                 mc.AddResp(mc.Elm)
-                r, err := ns.Get(tc.conf.Name)
+                r, err := ns.Get(tc.tmpl, tc.conf.Name)
                 if err != nil {
                     t.Errorf("Error in get: %s", err)
                 } else if !reflect.DeepEqual(tc.conf, r) {
