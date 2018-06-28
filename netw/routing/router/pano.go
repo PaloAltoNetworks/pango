@@ -55,8 +55,6 @@ func (c *PanoRouter) Set(tmpl, vsys string, e ...Entry) error {
         return nil
     } else if tmpl == "" {
         return fmt.Errorf("tmpl must be specified")
-    } else if vsys == "" {
-        return fmt.Errorf("vsys must be specified")
     }
 
     _, fn := c.versioning()
@@ -101,8 +99,6 @@ func (c *PanoRouter) Edit(tmpl, vsys string, e Entry) error {
 
     if tmpl == "" {
         return fmt.Errorf("tmpl must be specified")
-    } else if vsys == "" {
-        return fmt.Errorf("vsys must be specified")
     }
 
     _, fn := c.versioning()
