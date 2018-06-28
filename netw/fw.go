@@ -10,6 +10,7 @@ import (
     "github.com/PaloAltoNetworks/pango/netw/vlan"
     "github.com/PaloAltoNetworks/pango/netw/zone"
     "github.com/PaloAltoNetworks/pango/netw/routing/router"
+    "github.com/PaloAltoNetworks/pango/netw/routing/route/static/ipv4"
     "github.com/PaloAltoNetworks/pango/util"
 )
 
@@ -19,6 +20,7 @@ type FwNetw struct {
     EthernetInterface *eth.FwEth
     LoopbackInterface *loopback.FwLoopback
     ManagementProfile *mngtprof.FwMngtProf
+    StaticRoute *ipv4.FwIpv4
     TunnelInterface *tunnel.FwTunnel
     VirtualRouter *router.FwRouter
     Vlan *vlan.FwVlan
@@ -36,6 +38,9 @@ func (c *FwNetw) Initialize(i util.XapiClient) {
 
     c.ManagementProfile = &mngtprof.FwMngtProf{}
     c.ManagementProfile.Initialize(i)
+
+    c.StaticRoute = &ipv4.FwIpv4{}
+    c.StaticRoute.Initialize(i)
 
     c.TunnelInterface = &tunnel.FwTunnel{}
     c.TunnelInterface.Initialize(i)

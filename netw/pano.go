@@ -8,6 +8,7 @@ import (
     vli "github.com/PaloAltoNetworks/pango/netw/interface/vlan"
     "github.com/PaloAltoNetworks/pango/netw/profile/mngtprof"
     "github.com/PaloAltoNetworks/pango/netw/routing/router"
+    "github.com/PaloAltoNetworks/pango/netw/routing/route/static/ipv4"
     "github.com/PaloAltoNetworks/pango/netw/vlan"
     "github.com/PaloAltoNetworks/pango/util"
 )
@@ -19,6 +20,7 @@ type PanoNetw struct {
     TunnelInterface *tunnel.PanoTunnel
     LoopbackInterface *loopback.PanoLoopback
     ManagementProfile *mngtprof.PanoMngtProf
+    StaticRoute *ipv4.PanoIpv4
     VirtualRouter *router.PanoRouter
     Vlan *vlan.PanoVlan
     VlanInterface *vli.PanoVlan
@@ -37,6 +39,9 @@ func (c *PanoNetw) Initialize(i util.XapiClient) {
 
     c.ManagementProfile = &mngtprof.PanoMngtProf{}
     c.ManagementProfile.Initialize(i)
+
+    c.StaticRoute = &ipv4.PanoIpv4{}
+    c.StaticRoute.Initialize(i)
 
     c.VirtualRouter = &router.PanoRouter{}
     c.VirtualRouter.Initialize(i)
