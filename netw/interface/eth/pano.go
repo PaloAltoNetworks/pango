@@ -168,7 +168,7 @@ func (c *PanoEth) Delete(tmpl string, e ...interface{}) error {
     c.con.LogAction("(delete) ethernet interface(s): %v", names)
 
     // Unimport interfaces.
-    if err = c.con.UnimportInterfaces("", names); err != nil {
+    if err = c.con.UnimportInterfaces(tmpl, names); err != nil {
         return err
     }
 
