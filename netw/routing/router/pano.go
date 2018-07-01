@@ -82,12 +82,12 @@ func (c *PanoRouter) Set(tmpl, vsys string, e ...Entry) error {
     }
 
     // Remove the virtual routers from any vsys they're currently in.
-    if err = c.con.UnimportVirtualRouters(tmpl, names); err != nil {
+    if err = c.con.VsysUnimport(util.VirtualRouterImport, tmpl, names); err != nil {
         return err
     }
 
     // Perform vsys import next.
-    return c.con.ImportVirtualRouters(tmpl, vsys, names)
+    return c.con.VsysImport(util.VirtualRouterImport, tmpl, vsys, names)
 }
 
 // Edit performs EDIT to create / update a virtual router.
@@ -115,12 +115,12 @@ func (c *PanoRouter) Edit(tmpl, vsys string, e Entry) error {
     }
 
     // Remove the virtual routers from any vsys they're currently in.
-    if err = c.con.UnimportVirtualRouters(tmpl, []string{e.Name}); err != nil {
+    if err = c.con.VsysUnimport(util.VirtualRouterImport, tmpl, []string{e.Name}); err != nil {
         return err
     }
 
     // Perform vsys import next.
-    return c.con.ImportVirtualRouters(tmpl, vsys, []string{e.Name})
+    return c.con.VsysImport(util.VirtualRouterImport, tmpl, vsys, []string{e.Name})
 }
 
 // Delete removes the given virtual routers from the firewall.
@@ -149,7 +149,7 @@ func (c *PanoRouter) Delete(tmpl string, e ...interface{}) error {
     c.con.LogAction("(delete) virtual routers: %v", names)
 
     // Unimport virtual routers.
-    err = c.con.UnimportVirtualRouters(tmpl, names)
+    err = c.con.VsysUnimport(util.VirtualRouterImport, tmpl, names)
     if err != nil {
         return err
     }

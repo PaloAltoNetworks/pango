@@ -24,6 +24,14 @@ const (
     PostRulebase = "post-rulebase"
 )
 
+// Valid values to use for VsysImport() or VsysUnimport().
+const (
+    InterfaceImport = "interface"
+    VirtualRouterImport = "virtual-router"
+    VirtualWireImport = "virtual-wire"
+    VlanImport = "vlan"
+)
+
 // XapiClient is the interface that describes an pango.Client.
 type XapiClient interface {
     String() string
@@ -43,12 +51,8 @@ type XapiClient interface {
     EntryListUsing(Retriever, []string) ([]string, error)
     MemberListUsing(Retriever, []string) ([]string, error)
     RequestPasswordHash(string) (string, error)
-    ImportInterfaces(string, string, []string) error
-    UnimportInterfaces(string, []string) error
-    ImportVlans(string, string, []string) error
-    UnimportVlans(string, []string) error
-    ImportVirtualRouters(string, string, []string) error
-    UnimportVirtualRouters(string, []string) error
+    VsysImport(string, string, string, []string) error
+    VsysUnimport(string, string, []string) error
     WaitForJob(uint, interface{}) error
     Commit(string, bool, bool, bool, bool) (uint, error)
 }

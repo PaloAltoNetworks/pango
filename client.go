@@ -242,55 +242,6 @@ func (c *Client) RequestPasswordHash(val string) (string, error) {
     return ans.Hash, nil
 }
 
-// ImportVlans imports VLANs into the vsys specified.  VLANs must be
-// imported into a vsys before they can be used.
-//
-// This is invoked automatically when creating VLANs as long as the vsys given
-// is not an empty string.
-func (c *Client) ImportVlans(tmpl, vsys string, names []string) error {
-    return c.vsysImport("vlan", tmpl, vsys, names)
-}
-
-// UnimportVlans insures that no vsys has the VLAN imported.
-//
-// This is invoked automatically when deleting VLANs.
-func (c *Client) UnimportVlans(tmpl string, names []string) error {
-    return c.vsysUnimport("vlan", tmpl, names)
-}
-
-// ImportInterfaces imports interfaces into the vsys specified.  Interfaces
-// must be imported into a vsys before they can be used.
-//
-// This is invoked automatically when creating interfaces as long as the
-// vsys given is not an empty string.
-func (c *Client) ImportInterfaces(tmpl, vsys string, names []string) error {
-    return c.vsysImport("interface", tmpl, vsys, names)
-}
-
-// UnimportInterfaces insures that no vsys has the interfaces imported.
-//
-// This is invoked automatically when deleting interfaces.
-func (c *Client) UnimportInterfaces(tmpl string, names []string) error {
-    return c.vsysUnimport("interface", tmpl, names)
-}
-
-// ImportVirtualRouters imports virtual routers into the vsys specified.
-// Virtual routers that are imported into a vsys cannot be deleted.
-//
-// This is invoked automatically when creating virtual routers as long as the
-// vsys given is not an empty string.
-func (c *Client) ImportVirtualRouters(tmpl, vsys string, names []string) error {
-    return c.vsysImport("virtual-router", tmpl, vsys, names)
-}
-
-// UnimportVirtualRouters insures that no vsys has the virtual router imported.
-//
-// This is invoked automatically when deleting virtual routers as long as the
-// vsys given is not an empty string.
-func (c *Client) UnimportVirtualRouters(tmpl string, names []string) error {
-    return c.vsysUnimport("virtual-router", tmpl, names)
-}
-
 // ValidateConfig performs a commit config validation check.
 //
 // Setting sync to true means that this function will block until the job
@@ -1034,7 +985,8 @@ func (c *Client) logXpath(p string) {
     }
 }
 
-func (c *Client) vsysImport(loc, tmpl, vsys string, names []string) error {
+// VsysImport imports the given names into the specified template / vsys.
+func (c *Client) VsysImport(loc, tmpl, vsys string, names []string) error {
     path := c.xpathImport(tmpl, vsys)
     if len(names) == 0 || vsys == "" {
         return nil
@@ -1051,7 +1003,8 @@ func (c *Client) vsysImport(loc, tmpl, vsys string, names []string) error {
     return err
 }
 
-func (c *Client) vsysUnimport(loc, tmpl string, names []string) error {
+// VsysUnimport removes the given names from all (template, optional) vsys.
+func (c *Client) VsysUnimport(loc, tmpl string, names []string) error {
     if len(names) == 0 {
         return nil
     }
@@ -1067,6 +1020,26 @@ func (c *Client) vsysUnimport(loc, tmpl string, names []string) error {
         }
     }
     return err
+}
+
+// IsImported checks if the importable object is actually imported in the
+// specified location.
+func (c *Client) IsImported(loc, tmpl, vsys, name string) (bool, error) {
+    path := make([]string, 0, 14)
+    path = append(path, c.xpathImport(tmpl, vsys)...)
+    path = append(path, loc, util.AsMemberXpath([]string{name}))
+
+    _, err := c.Get(path, nil, nil)
+    if err == nil {
+        return true, nil
+    }
+
+    e2, ok := err.(PanosError)
+    if ok && e2.ObjectNotFound() {
+        return false, nil
+    }
+
+    return false, err
 }
 
 func (c *Client) xpathImport(tmpl, vsys string) ([]string) {

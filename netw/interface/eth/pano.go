@@ -92,12 +92,12 @@ func (c *PanoEth) Set(tmpl, vsys string, e ...Entry) error {
     }
 
     // Remove the interfaces from any vsys they're currently in.
-    if err = c.con.UnimportInterfaces(tmpl, n2); err != nil {
+    if err = c.con.VsysUnimport(util.InterfaceImport, tmpl, n2); err != nil {
         return err
     }
 
     // Perform vsys import next.
-    return c.con.ImportInterfaces(tmpl, vsys, n2)
+    return c.con.VsysImport(util.InterfaceImport, tmpl, vsys, n2)
 }
 
 // Edit performs EDIT to create / update the specified ethernet interface.
@@ -134,12 +134,12 @@ func (c *PanoEth) Edit(tmpl, vsys string, e Entry) error {
     }
 
     // Remove the interface from any vsys it's currently in.
-    if err = c.con.UnimportInterfaces(tmpl, []string{e.Name}); err != nil {
+    if err = c.con.VsysUnimport(util.InterfaceImport, tmpl, []string{e.Name}); err != nil {
         return err
     }
 
     // Import the interface.
-    return c.con.ImportInterfaces(tmpl, vsys, []string{e.Name})
+    return c.con.VsysImport(util.InterfaceImport, tmpl, vsys, []string{e.Name})
 }
 
 // Delete removes the given interface(s) from the firewall.
@@ -168,7 +168,7 @@ func (c *PanoEth) Delete(tmpl string, e ...interface{}) error {
     c.con.LogAction("(delete) ethernet interface(s): %v", names)
 
     // Unimport interfaces.
-    if err = c.con.UnimportInterfaces(tmpl, names); err != nil {
+    if err = c.con.VsysUnimport(util.InterfaceImport, tmpl, names); err != nil {
         return err
     }
 

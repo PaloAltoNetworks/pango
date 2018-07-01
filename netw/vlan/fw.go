@@ -80,12 +80,12 @@ func (c *FwVlan) Set(vsys string, e ...Entry) error {
     }
 
     // Remove the VLANs from any vsys they're currently in.
-    if err = c.con.UnimportVlans("", names); err != nil {
+    if err = c.con.VsysUnimport(util.VlanImport, "", names); err != nil {
         return err
     }
 
     // Perform vsys import next.
-    return c.con.ImportVlans("", vsys, names)
+    return c.con.VsysImport(util.VlanImport, "", vsys, names)
 }
 
 // Edit performs EDIT to create / update a VLAN.
@@ -108,12 +108,12 @@ func (c *FwVlan) Edit(vsys string, e Entry) error {
     }
 
     // Remove the VLANs from any vsys they're currently in.
-    if err = c.con.UnimportVlans("", []string{e.Name}); err != nil {
+    if err = c.con.VsysUnimport(util.VlanImport, "", []string{e.Name}); err != nil {
         return err
     }
 
     // Perform vsys import next.
-    return c.con.ImportVlans("", vsys, []string{e.Name})
+    return c.con.VsysImport(util.VlanImport, "", vsys, []string{e.Name})
 }
 
 // Delete removes the given VLAN(s) from the firewall.
@@ -140,7 +140,7 @@ func (c *FwVlan) Delete(e ...interface{}) error {
     c.con.LogAction("(delete) VLANs: %v", names)
 
     // Unimport VLANs.
-    if err = c.con.UnimportVlans("", names); err != nil {
+    if err = c.con.VsysUnimport(util.VlanImport, "", names); err != nil {
         return err
     }
 
