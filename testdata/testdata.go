@@ -122,12 +122,6 @@ func (c *MockClient) MemberListUsing(fn util.Retriever, path []string) ([]string
 }
 
 func (c *MockClient) RequestPasswordHash(a string) (string, error) { return c.PasswordHash, nil }
-func (c *MockClient) ImportInterfaces(tmpl, vsys string, names []string) error { return c.mockImport(tmpl, vsys, names) }
-func (c *MockClient) UnimportInterfaces(tmpl string, names []string) error { return c.mockUnimport(tmpl, names) }
-func (c *MockClient) ImportVlans(tmpl, vsys string, names []string) error { return c.mockImport(tmpl, vsys, names) }
-func (c *MockClient) UnimportVlans(tmpl string, names []string) error { return c.mockUnimport(tmpl, names) }
-func (c *MockClient) ImportVirtualRouters(tmpl, vsys string, names []string) error { return c.mockImport(tmpl, vsys, names) }
-func (c *MockClient) UnimportVirtualRouters(tmpl string, names []string) error { return c.mockUnimport(tmpl, names) }
 
 func (c *MockClient) finalize(resp interface{}) ([]byte, error) {
     ans := c.Resp[c.Called % len(c.Resp)]
@@ -158,7 +152,7 @@ func (c *MockClient) SetElm(e interface{}) error {
     return nil
 }
 
-func (c *MockClient) mockImport(tmpl, vsys string, names []string) error {
+func (c *MockClient) VsysImport(ns, tmpl, vsys string, names []string) error {
     c.Template = tmpl
     c.Vsys = vsys
     c.Imports = names
@@ -166,7 +160,7 @@ func (c *MockClient) mockImport(tmpl, vsys string, names []string) error {
     return nil
 }
 
-func (c *MockClient) mockUnimport(tmpl string, names []string) error {
+func (c *MockClient) VsysUnimport(ns, tmpl string, names []string) error {
     c.Template = tmpl
     c.Unimports = names
 
