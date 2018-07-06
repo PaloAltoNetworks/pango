@@ -6,6 +6,7 @@ import (
     "github.com/PaloAltoNetworks/pango/netw/interface/loopback"
     "github.com/PaloAltoNetworks/pango/netw/interface/tunnel"
     vli "github.com/PaloAltoNetworks/pango/netw/interface/vlan"
+    "github.com/PaloAltoNetworks/pango/netw/profile/ike"
     "github.com/PaloAltoNetworks/pango/netw/profile/ipsec"
     "github.com/PaloAltoNetworks/pango/netw/profile/mngtprof"
     "github.com/PaloAltoNetworks/pango/netw/routing/router"
@@ -19,6 +20,7 @@ import (
 // Netw is the client.Network namespace.
 type FwNetw struct {
     EthernetInterface *eth.FwEth
+    IkeCryptoProfile *ike.FwIke
     IpsecCryptoProfile *ipsec.FwIpsec
     LoopbackInterface *loopback.FwLoopback
     ManagementProfile *mngtprof.FwMngtProf
@@ -34,6 +36,9 @@ type FwNetw struct {
 func (c *FwNetw) Initialize(i util.XapiClient) {
     c.EthernetInterface = &eth.FwEth{}
     c.EthernetInterface.Initialize(i)
+
+    c.IkeCryptoProfile = &ike.FwIke{}
+    c.IkeCryptoProfile.Initialize(i)
 
     c.IpsecCryptoProfile = &ipsec.FwIpsec{}
     c.IpsecCryptoProfile.Initialize(i)
