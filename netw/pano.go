@@ -2,6 +2,7 @@ package netw
 
 
 import (
+    "github.com/PaloAltoNetworks/pango/netw/ikegw"
     "github.com/PaloAltoNetworks/pango/netw/interface/eth"
     "github.com/PaloAltoNetworks/pango/netw/interface/loopback"
     "github.com/PaloAltoNetworks/pango/netw/interface/tunnel"
@@ -20,6 +21,7 @@ import (
 type PanoNetw struct {
     EthernetInterface *eth.PanoEth
     IkeCryptoProfile *ike.PanoIke
+    IkeGateway *ikegw.PanoIkeGw
     IpsecCryptoProfile *ipsec.PanoIpsec
     LoopbackInterface *loopback.PanoLoopback
     ManagementProfile *mngtprof.PanoMngtProf
@@ -37,6 +39,9 @@ func (c *PanoNetw) Initialize(i util.XapiClient) {
 
     c.IkeCryptoProfile = &ike.PanoIke{}
     c.IkeCryptoProfile.Initialize(i)
+
+    c.IkeGateway = &ikegw.PanoIkeGw{}
+    c.IkeGateway.Initialize(i)
 
     c.IpsecCryptoProfile = &ipsec.PanoIpsec{}
     c.IpsecCryptoProfile.Initialize(i)
