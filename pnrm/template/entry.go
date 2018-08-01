@@ -1,4 +1,4 @@
-package tmpl
+package template
 
 import (
     "encoding/xml"

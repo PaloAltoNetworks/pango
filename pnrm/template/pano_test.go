@@ -1,4 +1,4 @@
-package tmpl
+package template
 
 import (
     "testing"
@@ -49,7 +49,7 @@ func TestNormalization(t *testing.T) {
     }
 
     mc := &testdata.MockClient{}
-    ns := &Tmpl{}
+    ns := &Template{}
     ns.Initialize(mc)
 
     for _, tc := range testCases {

@@ -8,14 +8,16 @@ import (
     "github.com/PaloAltoNetworks/pango/util"
 
     "github.com/PaloAltoNetworks/pango/pnrm/dg"
-    "github.com/PaloAltoNetworks/pango/pnrm/tmpl"
+    "github.com/PaloAltoNetworks/pango/pnrm/template"
+    //"github.com/PaloAltoNetworks/pango/pnrm/template/stack"
 )
 
 
 // Pnrm is the panorama.DeviceGroup namespace.
 type Pnrm struct {
     DeviceGroup *dg.Dg
-    Template *tmpl.Tmpl
+    Template *template.Template
+    //TemplateStack *stack.Stack
 }
 
 // Initialize is invoked on panorama.Initialize().
@@ -23,6 +25,9 @@ func (c *Pnrm) Initialize(i util.XapiClient) {
     c.DeviceGroup = &dg.Dg{}
     c.DeviceGroup.Initialize(i)
 
-    c.Template = &tmpl.Tmpl{}
+    c.Template = &template.Template{}
     c.Template.Initialize(i)
+
+    //c.TemplateStack = &stack.Stack{}
+    //c.TemplateStack.Initialize(i)
 }

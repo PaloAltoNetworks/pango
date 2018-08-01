@@ -1,4 +1,4 @@
-package tmpl
+package template
 
 import (
     "fmt"
@@ -8,13 +8,13 @@ import (
     "github.com/PaloAltoNetworks/pango/version"
 )
 
-// Tmpl is the client.Panorama.Template namespace.
-type Tmpl struct {
+// Template is the client.Panorama.Template namespace.
+type Template struct {
     con util.XapiClient
 }
 
 // Initialize is invoked by client.Initialize().
-func (c *Tmpl) Initialize(con util.XapiClient) {
+func (c *Template) Initialize(con util.XapiClient) {
     c.con = con
 }
 
@@ -27,7 +27,7 @@ leave the vsys list empty.
 
 The template can be either a string or an Entry object.
 */
-func (c *Tmpl) SetDeviceVsys(t interface{}, d string, vsys []string) error {
+func (c *Template) SetDeviceVsys(t interface{}, d string, vsys []string) error {
     var name string
 
     switch v := t.(type) {
@@ -58,7 +58,7 @@ leave the vsys list empty.
 
 The template can be either a string or an Entry object.
 */
-func (c *Tmpl) EditDeviceVsys(t interface{}, d string, vsys []string) error {
+func (c *Template) EditDeviceVsys(t interface{}, d string, vsys []string) error {
     var name string
 
     switch v := t.(type) {
@@ -89,7 +89,7 @@ leave the vsys list empty.
 
 The template can be either a string or an Entry object.
 */
-func (c *Tmpl) DeleteDeviceVsys(t interface{}, d string, vsys []string) error {
+func (c *Template) DeleteDeviceVsys(t interface{}, d string, vsys []string) error {
     var name string
 
     switch v := t.(type) {
@@ -115,33 +115,33 @@ func (c *Tmpl) DeleteDeviceVsys(t interface{}, d string, vsys []string) error {
 }
 
 // ShowList performs SHOW to retrieve a list of templates.
-func (c *Tmpl) ShowList() ([]string, error) {
+func (c *Template) ShowList() ([]string, error) {
     c.con.LogQuery("(show) list of templates")
     path := c.xpath(nil)
     return c.con.EntryListUsing(c.con.Show, path[:len(path) - 1])
 }
 
 // GetList performs GET to retrieve a list of templates.
-func (c *Tmpl) GetList() ([]string, error) {
+func (c *Template) GetList() ([]string, error) {
     c.con.LogQuery("(get) list of templates")
     path := c.xpath(nil)
     return c.con.EntryListUsing(c.con.Get, path[:len(path) - 1])
 }
 
 // Get performs GET to retrieve information for the given template.
-func (c *Tmpl) Get(name string) (Entry, error) {
+func (c *Template) Get(name string) (Entry, error) {
     c.con.LogQuery("(get) template %q", name)
     return c.details(c.con.Get, name)
 }
 
 // Show performs SHOW to retrieve information for the given template.
-func (c *Tmpl) Show(name string) (Entry, error) {
+func (c *Template) Show(name string) (Entry, error) {
     c.con.LogQuery("(show) template %q", name)
     return c.details(c.con.Show, name)
 }
 
 // Set performs SET to create / update one or more templates.
-func (c *Tmpl) Set(e ...Entry) error {
+func (c *Template) Set(e ...Entry) error {
     var err error
 
     if len(e) == 0 {
@@ -173,7 +173,7 @@ func (c *Tmpl) Set(e ...Entry) error {
 }
 
 // Edit performs EDIT to create / update a template.
-func (c *Tmpl) Edit(e Entry) error {
+func (c *Template) Edit(e Entry) error {
     var err error
 
     _, fn := c.versioning()
@@ -191,7 +191,7 @@ func (c *Tmpl) Edit(e Entry) error {
 // Delete removes the given templates from the firewall.
 //
 // Templates can be a string or an Entry object.
-func (c *Tmpl) Delete(e ...interface{}) error {
+func (c *Template) Delete(e ...interface{}) error {
     var err error
 
     if len(e) == 0 {
@@ -219,7 +219,7 @@ func (c *Tmpl) Delete(e ...interface{}) error {
 
 /** Internal functions for this namespace struct **/
 
-func (c *Tmpl) versioning() (normalizer, func(Entry) (interface{})) {
+func (c *Template) versioning() (normalizer, func(Entry) (interface{})) {
     v := c.con.Versioning()
 
     if v.Gte(version.Number{7, 0, 0, ""}) {
@@ -229,7 +229,7 @@ func (c *Tmpl) versioning() (normalizer, func(Entry) (interface{})) {
     }
 }
 
-func (c *Tmpl) details(fn util.Retriever, name string) (Entry, error) {
+func (c *Template) details(fn util.Retriever, name string) (Entry, error) {
     path := c.xpath([]string{name})
     obj, _ := c.versioning()
     if _, err := fn(path, nil, obj); err != nil {
@@ -240,7 +240,7 @@ func (c *Tmpl) details(fn util.Retriever, name string) (Entry, error) {
     return ans, nil
 }
 
-func (c *Tmpl) xpath(vals []string) []string {
+func (c *Template) xpath(vals []string) []string {
     return []string{
         "config",
         "devices",
