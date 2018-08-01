@@ -200,7 +200,7 @@ type typePredefined struct {
 type typeSpec struct {
     Description string `xml:"description,omitempty"`
     Source string `xml:"url"`
-    CertificateProfile string `xml:"certificate-profile"`
+    CertificateProfile string `xml:"certificate-profile,omitempty"`
     Auth *authType `xml:"auth"`
     Repeat rep_v2 `xml:"recurring"`
     Exceptions *util.MemberType `xml:"exception-list"`
