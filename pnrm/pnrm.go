@@ -9,6 +9,7 @@ import (
 
     "github.com/PaloAltoNetworks/pango/pnrm/dg"
     "github.com/PaloAltoNetworks/pango/pnrm/template"
+    "github.com/PaloAltoNetworks/pango/pnrm/template/variable"
     //"github.com/PaloAltoNetworks/pango/pnrm/template/stack"
 )
 
@@ -17,6 +18,7 @@ import (
 type Pnrm struct {
     DeviceGroup *dg.Dg
     Template *template.Template
+    TemplateVariable *variable.Variable
     //TemplateStack *stack.Stack
 }
 
@@ -27,6 +29,9 @@ func (c *Pnrm) Initialize(i util.XapiClient) {
 
     c.Template = &template.Template{}
     c.Template.Initialize(i)
+
+    c.TemplateVariable = &variable.Variable{}
+    c.TemplateVariable.Initialize(i)
 
     //c.TemplateStack = &stack.Stack{}
     //c.TemplateStack.Initialize(i)
