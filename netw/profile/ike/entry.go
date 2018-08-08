@@ -8,11 +8,6 @@ import (
 
 
 const (
-    ProtocolEsp = "esp"
-    ProtocolAh = "ah"
-)
-
-const (
     EncryptionDes = "des"
     Encryption3des = "3des"
     EncryptionAes128 = "aes128"
@@ -31,7 +26,7 @@ const (
 // management profile.
 type Entry struct {
     Name string
-    DhGroup string
+    DhGroup []string
     Authentication []string
     Encryption []string
     LifetimeType string
@@ -141,7 +136,7 @@ type container_v1 struct {
 func (o *container_v1) Normalize() Entry {
     ans := Entry{
         Name: o.Answer.Name,
-        DhGroup: o.Answer.DhGroup,
+        DhGroup: util.MemToStr(o.Answer.DhGroup),
         Authentication: util.MemToStr(o.Answer.Authentication),
         Encryption: util.MemToStr(o.Answer.Encryption),
     }
@@ -172,7 +167,7 @@ type container_v2 struct {
 func (o *container_v2) Normalize() Entry {
     ans := Entry{
         Name: o.Answer.Name,
-        DhGroup: o.Answer.DhGroup,
+        DhGroup: util.MemToStr(o.Answer.DhGroup),
         Authentication: util.MemToStr(o.Answer.Authentication),
         Encryption: util.MemToStr(o.Answer.Encryption),
         AuthenticationMultiple: o.Answer.AuthenticationMultiple,
@@ -200,7 +195,7 @@ func (o *container_v2) Normalize() Entry {
 type entry_v1 struct {
     XMLName xml.Name `xml:"entry"`
     Name string `xml:"name,attr"`
-    DhGroup string `xml:"dh-group,omitempty"`
+    DhGroup *util.MemberType `xml:"dh-group"`
     Authentication *util.MemberType `xml:"hash"`
     Encryption *util.MemberType `xml:"encryption"`
     Lifetime *lifetimeType `xml:"lifetime"`
@@ -216,7 +211,7 @@ type lifetimeType struct {
 func specify_v1(e Entry) interface{} {
     ans := entry_v1{
         Name: e.Name,
-        DhGroup: e.DhGroup,
+        DhGroup: util.StrToMem(e.DhGroup),
         Authentication: util.StrToMem(e.Authentication),
         Encryption: util.StrToMem(e.Encryption),
     }
@@ -238,7 +233,7 @@ func specify_v1(e Entry) interface{} {
 type entry_v2 struct {
     XMLName xml.Name `xml:"entry"`
     Name string `xml:"name,attr"`
-    DhGroup string `xml:"dh-group,omitempty"`
+    DhGroup *util.MemberType `xml:"dh-group"`
     Authentication *util.MemberType `xml:"hash"`
     Encryption *util.MemberType `xml:"encryption"`
     AuthenticationMultiple int `xml:"authentication-multiple,omitempty"`
@@ -248,7 +243,7 @@ type entry_v2 struct {
 func specify_v2(e Entry) interface{} {
     ans := entry_v2{
         Name: e.Name,
-        DhGroup: e.DhGroup,
+        DhGroup: util.StrToMem(e.DhGroup),
         Authentication: util.StrToMem(e.Authentication),
         Encryption: util.StrToMem(e.Encryption),
         AuthenticationMultiple: e.AuthenticationMultiple,
