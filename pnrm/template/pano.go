@@ -222,7 +222,9 @@ func (c *Template) Delete(e ...interface{}) error {
 func (c *Template) versioning() (normalizer, func(Entry) (interface{})) {
     v := c.con.Versioning()
 
-    if v.Gte(version.Number{7, 0, 0, ""}) {
+    if v.Gte(version.Number{8, 1, 0, ""}) {
+        return &container_v3{}, specify_v3
+    } else if v.Gte(version.Number{7, 0, 0, ""}) {
         return &container_v2{}, specify_v2
     } else {
         return &container_v1{}, specify_v1

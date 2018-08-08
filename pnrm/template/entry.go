@@ -20,6 +20,8 @@ type Entry struct {
     Mode string
     VpnDisableMode bool
     Devices map[string] []string
+
+    raw map[string] string
 }
 
 // Copy copies the information from source's Entry `s` to this object.  As the
@@ -72,6 +74,35 @@ func (o *container_v2) Normalize() Entry {
 
     if o.Answer.Settings != nil {
         ans.DefaultVsys = o.Answer.Settings.DefaultVsys
+    }
+
+    return ans
+}
+
+type container_v3 struct {
+    Answer entry_v3 `xml:"result>entry"`
+}
+
+func (o *container_v3) Normalize() Entry {
+    ans := Entry{
+        Name: o.Answer.Name,
+        Description: o.Answer.Description,
+        // TODO(gfreeman) - seems like devices are removed in 8.1..?
+        Devices: util.VsysEntToMap(o.Answer.Devices),
+    }
+
+    if o.Answer.Settings != nil {
+        ans.DefaultVsys = o.Answer.Settings.DefaultVsys
+    }
+
+    ans.raw = make(map[string] string)
+
+    if o.Answer.Variables != nil {
+        ans.raw["var"] = util.CleanRawXml(o.Answer.Variables.Text)
+    }
+
+    if len(ans.raw) == 0 {
+        ans.raw = nil
     }
 
     return ans
@@ -130,6 +161,33 @@ func specify_v2(e Entry) interface{} {
 
     if e.DefaultVsys != "" {
         ans.Settings = &settings_v2{e.DefaultVsys}
+    }
+
+    return ans
+}
+
+type entry_v3 struct {
+    XMLName xml.Name `xml:"entry"`
+    Name string `xml:"name,attr"`
+    Description string `xml:"description,omitempty"`
+    Devices *util.VsysEntryType `xml:"devices"`
+    Settings *settings_v2 `xml:"settings"`
+    Variables *util.RawXml `xml:"variable"`
+}
+
+func specify_v3(e Entry) interface{} {
+    ans := entry_v3{
+        Name: e.Name,
+        Description: e.Description,
+        Devices: util.MapToVsysEnt(e.Devices),
+    }
+
+    if e.DefaultVsys != "" {
+        ans.Settings = &settings_v2{e.DefaultVsys}
+    }
+
+    if text, present := e.raw["vars"]; present {
+        ans.Variables = &util.RawXml{text}
     }
 
     return ans
