@@ -7,6 +7,7 @@ import (
     "github.com/PaloAltoNetworks/pango/netw/interface/loopback"
     "github.com/PaloAltoNetworks/pango/netw/interface/tunnel"
     vli "github.com/PaloAltoNetworks/pango/netw/interface/vlan"
+    tpiv4 "github.com/PaloAltoNetworks/pango/netw/ipsectunnel/proxyid/ipv4"
     "github.com/PaloAltoNetworks/pango/netw/profile/ike"
     "github.com/PaloAltoNetworks/pango/netw/profile/ipsec"
     "github.com/PaloAltoNetworks/pango/netw/profile/mngtprof"
@@ -24,6 +25,7 @@ type FwNetw struct {
     IkeCryptoProfile *ike.FwIke
     IkeGateway *ikegw.FwIkeGw
     IpsecCryptoProfile *ipsec.FwIpsec
+    IpsecTunnelProxyId *tpiv4.FwIpv4
     LoopbackInterface *loopback.FwLoopback
     ManagementProfile *mngtprof.FwMngtProf
     StaticRoute *ipv4.FwIpv4
@@ -47,6 +49,9 @@ func (c *FwNetw) Initialize(i util.XapiClient) {
 
     c.IpsecCryptoProfile = &ipsec.FwIpsec{}
     c.IpsecCryptoProfile.Initialize(i)
+
+    c.IpsecTunnelProxyId = &tpiv4.FwIpv4{}
+    c.IpsecTunnelProxyId.Initialize(i)
 
     c.LoopbackInterface = &loopback.FwLoopback{}
     c.LoopbackInterface.Initialize(i)
