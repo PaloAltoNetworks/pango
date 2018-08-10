@@ -14,6 +14,14 @@ const (
 )
 
 const (
+    IdTypeIpAddress = "ipaddr"
+    IdTypeFqdn = "fqdn"
+    IdTypeUfqdn = "ufqdn"
+    IdTypeKeyId = "keyid"
+    IdTypeDn = "dn"
+)
+
+const (
     PeerTypeIp = "ip"
     PeerTypeDynamic = "dynamic"
     PeerTypeFqdn = "fqdn"
@@ -22,6 +30,11 @@ const (
 const (
     AuthPreSharedKey = "pre-shared-key"
     AuthCertificate = "certificate"
+)
+
+const (
+    PeerIdCheckExact = "exact"
+    PeerIdCheckWildcard = "wildcard"
 )
 
 // Entry is a normalized, version independent representation of an IKE gateway.
