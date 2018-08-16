@@ -174,6 +174,28 @@ func StrToEnt(e []string) *EntryType {
     return &EntryType{ans}
 }
 
+// EntToOneStr normalizes an EntryType pointer for a max_items=1 XML node
+// into a string.
+func EntToOneStr(e *EntryType) string {
+    if e == nil || len(e.Entries) == 0 {
+        return ""
+    }
+
+    return e.Entries[0].Value
+}
+
+// OneStrToEnt converts a string into an EntryType pointer for a max_items=1
+// XML node.
+func OneStrToEnt(e string) *EntryType {
+    if e == "" {
+        return nil
+    }
+
+    return &EntryType{[]Entry{
+        {Value: e},
+    }}
+}
+
 // VsysEntryType defines an entry config node with vsys entries underneath.
 type VsysEntryType struct {
     Entries []VsysEntry `xml:"entry"`
