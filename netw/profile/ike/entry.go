@@ -10,9 +10,9 @@ import (
 const (
     EncryptionDes = "des"
     Encryption3des = "3des"
-    EncryptionAes128 = "aes128"
-    EncryptionAes192 = "aes192"
-    EncryptionAes256 = "aes256"
+    EncryptionAes128 = "aes-128-cbc"
+    EncryptionAes192 = "aes-192-cbc"
+    EncryptionAes256 = "aes-256-cbc"
 )
 
 const (
