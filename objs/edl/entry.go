@@ -76,7 +76,9 @@ func (o *container_v1) Normalize() Entry {
         Source: o.Answer.Source,
     }
 
-    if o.Answer.Repeat.Hourly != nil {
+    if o.Answer.Repeat.FiveMinute != nil {
+        ans.Repeat = RepeatEveryFiveMinutes
+    } else if o.Answer.Repeat.Hourly != nil {
         ans.Repeat = RepeatHourly
         ans.RepeatAt = o.Answer.Repeat.Hourly.At
     } else if o.Answer.Repeat.Daily != nil {
@@ -152,6 +154,10 @@ func (o *container_v2) Normalize() Entry {
     return ans
 }
 
+// Ideally there would be one struct for PAN-OS 6.1 & 7.0 and another for
+// PAN-OS 7.1, but since the difference is minimal, I'm using the same struct.
+//
+// Probably revisit this at a later time..?
 type entry_v1 struct {
     XMLName xml.Name `xml:"entry"`
     Name string `xml:"name,attr"`
@@ -162,6 +168,7 @@ type entry_v1 struct {
 }
 
 type rep_v1 struct {
+    FiveMinute *string `xml:"five-minute"`
     Hourly *timeAt `xml:"hourly"`
     Daily *timeAt `xml:"daily"`
     Weekly *timeWeek `xml:"weekly"`
@@ -228,6 +235,9 @@ func specify_v1(e Entry) interface{} {
     }
 
     switch e.Repeat {
+    case RepeatEveryFiveMinutes:
+        sp := ""
+        ans.Repeat.FiveMinute = &sp
     case RepeatHourly:
         ans.Repeat.Hourly = &timeAt{e.RepeatAt}
     case RepeatDaily:
