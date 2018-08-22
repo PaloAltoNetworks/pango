@@ -35,6 +35,7 @@ func TestNormalization(t *testing.T) {
             Name: "three",
             Description: "with multi device",
             Templates: []string{"tem1", "tem2"},
+            DefaultVsys: "myvsys",
             Devices: map[string] []string{
                 "001234": nil,
                 "123": []string{"vsys1"},
