@@ -58,6 +58,16 @@ func (o *container_v1) Normalize() Entry {
         ans.VpnDisableMode = util.AsBool(o.Answer.Settings.VpnDisableMode)
     }
 
+    ans.raw = make(map[string] string)
+
+    if o.Answer.Config != nil {
+        ans.raw["conf"] = util.CleanRawXml(o.Answer.Config.Text)
+    }
+
+    if len(ans.raw) == 0 {
+        ans.raw = nil
+    }
+
     return ans
 }
 
@@ -74,6 +84,16 @@ func (o *container_v2) Normalize() Entry {
 
     if o.Answer.Settings != nil {
         ans.DefaultVsys = o.Answer.Settings.DefaultVsys
+    }
+
+    ans.raw = make(map[string] string)
+
+    if o.Answer.Config != nil {
+        ans.raw["conf"] = util.CleanRawXml(o.Answer.Config.Text)
+    }
+
+    if len(ans.raw) == 0 {
+        ans.raw = nil
     }
 
     return ans
@@ -98,7 +118,11 @@ func (o *container_v3) Normalize() Entry {
     ans.raw = make(map[string] string)
 
     if o.Answer.Variables != nil {
-        ans.raw["var"] = util.CleanRawXml(o.Answer.Variables.Text)
+        ans.raw["vars"] = util.CleanRawXml(o.Answer.Variables.Text)
+    }
+
+    if o.Answer.Config != nil {
+        ans.raw["conf"] = util.CleanRawXml(o.Answer.Config.Text)
     }
 
     if len(ans.raw) == 0 {
@@ -114,6 +138,7 @@ type entry_v1 struct {
     Description string `xml:"description,omitempty"`
     Devices *util.VsysEntryType `xml:"devices"`
     Settings *settings_v1 `xml:"settings"`
+    Config *util.RawXml `xml:"config"`
 }
 
 type settings_v1 struct {
@@ -137,6 +162,10 @@ func specify_v1(e Entry) interface{} {
         }
     }
 
+    if text, present := e.raw["conf"]; present {
+        ans.Config = &util.RawXml{text}
+    }
+
     return ans
 }
 
@@ -146,6 +175,7 @@ type entry_v2 struct {
     Description string `xml:"description,omitempty"`
     Devices *util.VsysEntryType `xml:"devices"`
     Settings *settings_v2 `xml:"settings"`
+    Config *util.RawXml `xml:"config"`
 }
 
 type settings_v2 struct {
@@ -163,6 +193,10 @@ func specify_v2(e Entry) interface{} {
         ans.Settings = &settings_v2{e.DefaultVsys}
     }
 
+    if text, present := e.raw["conf"]; present {
+        ans.Config = &util.RawXml{text}
+    }
+
     return ans
 }
 
@@ -172,6 +206,7 @@ type entry_v3 struct {
     Description string `xml:"description,omitempty"`
     Devices *util.VsysEntryType `xml:"devices"`
     Settings *settings_v2 `xml:"settings"`
+    Config *util.RawXml `xml:"config"`
     Variables *util.RawXml `xml:"variable"`
 }
 
@@ -184,6 +219,10 @@ func specify_v3(e Entry) interface{} {
 
     if e.DefaultVsys != "" {
         ans.Settings = &settings_v2{e.DefaultVsys}
+    }
+
+    if text, present := e.raw["conf"]; present {
+        ans.Config = &util.RawXml{text}
     }
 
     if text, present := e.raw["vars"]; present {

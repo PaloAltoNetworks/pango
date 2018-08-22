@@ -46,6 +46,15 @@ func TestNormalization(t *testing.T) {
                 "001234": nil,
             },
         }},
+        {"v3 raw test", version.Number{8, 1, 0, ""}, Entry{
+            Name: "v3 full",
+            Description: "v3 desc",
+            DefaultVsys: "vsys3",
+            raw: map[string] string{
+                "conf": "conf",
+                "vars": "vars",
+            },
+        }},
     }
 
     mc := &testdata.MockClient{}
@@ -55,6 +64,7 @@ func TestNormalization(t *testing.T) {
     for _, tc := range testCases {
         t.Run(tc.desc, func(t *testing.T) {
             mc.Reset()
+            mc.Version = tc.version
             mc.AddResp("")
             err := ns.Set(tc.conf)
             if err != nil {
