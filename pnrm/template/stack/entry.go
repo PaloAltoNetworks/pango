@@ -45,12 +45,9 @@ func (o *container_v1) Normalize() Entry {
     ans := Entry{
         Name: o.Answer.Name,
         Description: o.Answer.Description,
+        DefaultVsys: o.Answer.DefaultVsys,
         Templates: util.MemToStr(o.Answer.Templates),
         Devices: util.VsysEntToMap(o.Answer.Devices),
-    }
-
-    if o.Answer.Settings != nil {
-        ans.DefaultVsys = o.Answer.Settings.DefaultVsys
     }
 
     ans.raw = make(map[string] string)
@@ -74,15 +71,11 @@ type entry_v1 struct {
     XMLName xml.Name `xml:"entry"`
     Name string `xml:"name,attr"`
     Description string `xml:"description,omitempty"`
+    DefaultVsys string `xml:"settings>default-vsys,omitempty"`
     Templates *util.MemberType `xml:"templates"`
     Devices *util.VsysEntryType `xml:"devices"`
-    Settings *settings `xml:"settings"`
     Config *util.RawXml `xml:"config"`
     Variables *util.RawXml `xml:"variable"`
-}
-
-type settings struct {
-    DefaultVsys string `xml:"default-vsys"`
 }
 
 func specify_v1(e Entry) interface{} {
@@ -91,10 +84,7 @@ func specify_v1(e Entry) interface{} {
         Description: e.Description,
         Devices: util.MapToVsysEnt(e.Devices),
         Templates: util.StrToMem(e.Templates),
-    }
-
-    if e.DefaultVsys != "" {
-        ans.Settings = &settings{e.DefaultVsys}
+        DefaultVsys: e.DefaultVsys,
     }
 
     if text, present := e.raw["var"]; present {
