@@ -75,6 +75,8 @@ type Entry struct {
     TunnelMonitorProxyId string
     TunnelMonitorProfile string
     Disabled bool
+
+    raw map[string] string
 }
 
 // Copy copies the information from source Entry `s` to this object.  As the
@@ -194,10 +196,20 @@ func (o *container_v1) Normalize() Entry {
         CopyTos: util.AsBool(o.Answer.CopyTos),
     }
 
+    ans.raw = make(map[string] string)
+
     if o.Answer.Ak != nil {
         ans.Type = TypeAutoKey
         ans.AkIkeGateway = util.EntToOneStr(o.Answer.Ak.AkIkeGateway)
         ans.AkIpsecCryptoProfile = o.Answer.Ak.AkIpsecCryptoProfile
+
+        if o.Answer.Ak.ProxyIpv4 != nil {
+            ans.raw["pv4"] = util.CleanRawXml(o.Answer.Ak.ProxyIpv4.Text)
+        }
+
+        if o.Answer.Ak.ProxyIpv6 != nil {
+            ans.raw["pv6"] = util.CleanRawXml(o.Answer.Ak.ProxyIpv6.Text)
+        }
     } else if o.Answer.Mk != nil {
         ans.Type = TypeManualKey
         ans.MkLocalSpi = o.Answer.Mk.MkLocalSpi
@@ -272,6 +284,10 @@ func (o *container_v1) Normalize() Entry {
         ans.TunnelMonitorProfile = o.Answer.TunnelMonitor.TunnelMonitorProfile
     }
 
+    if len(ans.raw) == 0 {
+        ans.raw = nil
+    }
+
     return ans
 }
 
@@ -290,10 +306,20 @@ func (o *container_v2) Normalize() Entry {
         CopyFlowLabel: util.AsBool(o.Answer.CopyFlowLabel),
     }
 
+    ans.raw = make(map[string] string)
+
     if o.Answer.Ak != nil {
         ans.Type = TypeAutoKey
         ans.AkIkeGateway = util.EntToOneStr(o.Answer.Ak.AkIkeGateway)
         ans.AkIpsecCryptoProfile = o.Answer.Ak.AkIpsecCryptoProfile
+
+        if o.Answer.Ak.ProxyIpv4 != nil {
+            ans.raw["pv4"] = util.CleanRawXml(o.Answer.Ak.ProxyIpv4.Text)
+        }
+
+        if o.Answer.Ak.ProxyIpv6 != nil {
+            ans.raw["pv6"] = util.CleanRawXml(o.Answer.Ak.ProxyIpv6.Text)
+        }
     } else if o.Answer.Mk != nil {
         ans.Type = TypeManualKey
         ans.MkLocalSpi = o.Answer.Mk.MkLocalSpi
@@ -371,6 +397,10 @@ func (o *container_v2) Normalize() Entry {
         ans.TunnelMonitorProxyId = o.Answer.TunnelMonitor.TunnelMonitorProxyId
     }
 
+    if len(ans.raw) == 0 {
+        ans.raw = nil
+    }
+
     return ans
 }
 
@@ -389,10 +419,20 @@ func (o *container_v3) Normalize() Entry {
         CopyFlowLabel: util.AsBool(o.Answer.CopyFlowLabel),
     }
 
+    ans.raw = make(map[string] string)
+
     if o.Answer.Ak != nil {
         ans.Type = TypeAutoKey
         ans.AkIkeGateway = util.EntToOneStr(o.Answer.Ak.AkIkeGateway)
         ans.AkIpsecCryptoProfile = o.Answer.Ak.AkIpsecCryptoProfile
+
+        if o.Answer.Ak.ProxyIpv4 != nil {
+            ans.raw["pv4"] = util.CleanRawXml(o.Answer.Ak.ProxyIpv4.Text)
+        }
+
+        if o.Answer.Ak.ProxyIpv6 != nil {
+            ans.raw["pv6"] = util.CleanRawXml(o.Answer.Ak.ProxyIpv6.Text)
+        }
     } else if o.Answer.Mk != nil {
         ans.Type = TypeManualKey
         ans.MkLocalSpi = o.Answer.Mk.MkLocalSpi
@@ -479,6 +519,10 @@ func (o *container_v3) Normalize() Entry {
         ans.TunnelMonitorProxyId = o.Answer.TunnelMonitor.TunnelMonitorProxyId
     }
 
+    if len(ans.raw) == 0 {
+        ans.raw = nil
+    }
+
     return ans
 }
 
@@ -497,6 +541,8 @@ type entry_v1 struct {
 type ak struct {
     AkIkeGateway *util.EntryType `xml:"ike-gateway"`
     AkIpsecCryptoProfile string `xml:"ipsec-crypto-profile,omitempty"`
+    ProxyIpv4 *util.RawXml `xml:"proxy-id"`
+    ProxyIpv6 *util.RawXml `xml:"proxy-id-v6"`
 }
 
 type mk_v1 struct {
@@ -573,10 +619,10 @@ func specify_v1(e Entry) interface{} {
     ans := entry_v1{
         Name: e.Name,
         TunnelInterface: e.TunnelInterface,
-        //AntiReplay: util.YesNo(e.AntiReplay),
         CopyTos: util.YesNo(e.CopyTos),
     }
     if e.AntiReplay {
+        // NOTE(gfreeman) PAN-OS errors if you send this as false...???
         ans.AntiReplay = util.YesNo(e.AntiReplay)
     }
 
@@ -585,6 +631,14 @@ func specify_v1(e Entry) interface{} {
         ans.Ak = &ak{
             AkIkeGateway: util.OneStrToEnt(e.AkIkeGateway),
             AkIpsecCryptoProfile: e.AkIpsecCryptoProfile,
+        }
+
+        if text, present := e.raw["pv4"]; present {
+            ans.Ak.ProxyIpv4 = &util.RawXml{text}
+        }
+
+        if text, present := e.raw["pv6"]; present {
+            ans.Ak.ProxyIpv6 = &util.RawXml{text}
         }
     case TypeManualKey:
         ans.Mk = &mk_v1{
@@ -725,13 +779,13 @@ func specify_v2(e Entry) interface{} {
     ans := entry_v2{
         Name: e.Name,
         TunnelInterface: e.TunnelInterface,
-        //AntiReplay: util.YesNo(e.AntiReplay),
         CopyTos: util.YesNo(e.CopyTos),
         EnableIpv6: util.YesNo(e.EnableIpv6),
         Disabled: util.YesNo(e.Disabled),
         CopyFlowLabel: util.YesNo(e.CopyFlowLabel),
     }
     if e.AntiReplay {
+        // NOTE(gfreeman) PAN-OS errors if you send this as false...???
         ans.AntiReplay = util.YesNo(e.AntiReplay)
     }
 
@@ -740,6 +794,14 @@ func specify_v2(e Entry) interface{} {
         ans.Ak = &ak{
             AkIkeGateway: util.OneStrToEnt(e.AkIkeGateway),
             AkIpsecCryptoProfile: e.AkIpsecCryptoProfile,
+        }
+
+        if text, present := e.raw["pv4"]; present {
+            ans.Ak.ProxyIpv4 = &util.RawXml{text}
+        }
+
+        if text, present := e.raw["pv6"]; present {
+            ans.Ak.ProxyIpv6 = &util.RawXml{text}
         }
     case TypeManualKey:
         ans.Mk = &mk_v2{
@@ -866,13 +928,13 @@ func specify_v3(e Entry) interface{} {
     ans := entry_v3{
         Name: e.Name,
         TunnelInterface: e.TunnelInterface,
-        //AntiReplay: util.YesNo(e.AntiReplay),
         CopyTos: util.YesNo(e.CopyTos),
         EnableIpv6: util.YesNo(e.EnableIpv6),
         Disabled: util.YesNo(e.Disabled),
         CopyFlowLabel: util.YesNo(e.CopyFlowLabel),
     }
     if e.AntiReplay {
+        // NOTE(gfreeman) PAN-OS errors if you send this as false...???
         ans.AntiReplay = util.YesNo(e.AntiReplay)
     }
 
@@ -881,6 +943,14 @@ func specify_v3(e Entry) interface{} {
         ans.Ak = &ak{
             AkIkeGateway: util.OneStrToEnt(e.AkIkeGateway),
             AkIpsecCryptoProfile: e.AkIpsecCryptoProfile,
+        }
+
+        if text, present := e.raw["pv4"]; present {
+            ans.Ak.ProxyIpv4 = &util.RawXml{text}
+        }
+
+        if text, present := e.raw["pv6"]; present {
+            ans.Ak.ProxyIpv6 = &util.RawXml{text}
         }
     case TypeManualKey:
         ans.Mk = &mk_v2{
