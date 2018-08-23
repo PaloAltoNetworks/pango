@@ -138,12 +138,12 @@ func TestPanoNormalization(t *testing.T) {
             mc.Version = tc.version
             mc.Reset()
             mc.AddResp("")
-            err := ns.Set("some template", tc.vr, tc.conf)
+            err := ns.Set("some template", "", tc.vr, tc.conf)
             if err != nil {
                 t.Errorf("Error in set: %s", err)
             } else {
                 mc.AddResp(mc.Elm)
-                r, err := ns.Get("some template", tc.vr, tc.conf.Name)
+                r, err := ns.Get("some template", "", tc.vr, tc.conf.Name)
                 if err != nil {
                     t.Errorf("Error in get: %s", err)
                 }

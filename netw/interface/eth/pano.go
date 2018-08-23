@@ -20,29 +20,29 @@ func (c *PanoEth) Initialize(con util.XapiClient) {
 }
 
 // ShowList performs SHOW to retrieve a list of ethernet interfaces.
-func (c *PanoEth) ShowList(tmpl string) ([]string, error) {
+func (c *PanoEth) ShowList(tmpl, ts string) ([]string, error) {
     c.con.LogQuery("(show) list of ethernet interfaces")
-    path := c.xpath(tmpl, nil)
+    path := c.xpath(tmpl, ts, nil)
     return c.con.EntryListUsing(c.con.Show, path[:len(path) - 1])
 }
 
 // GetList performs GET to retrieve a list of ethernet interfaces.
-func (c *PanoEth) GetList(tmpl string) ([]string, error) {
+func (c *PanoEth) GetList(tmpl, ts string) ([]string, error) {
     c.con.LogQuery("(get) list of ethernet interfaces")
-    path := c.xpath(tmpl, nil)
+    path := c.xpath(tmpl, ts, nil)
     return c.con.EntryListUsing(c.con.Get, path[:len(path) - 1])
 }
 
 // Get performs GET to retrieve information for the given ethernet interface.
-func (c *PanoEth) Get(tmpl, name string) (Entry, error) {
+func (c *PanoEth) Get(tmpl, ts, name string) (Entry, error) {
     c.con.LogQuery("(get) ethernet interface %q", name)
-    return c.details(c.con.Get, tmpl, name)
+    return c.details(c.con.Get, tmpl, ts, name)
 }
 
 // Show performs SHOW to retrieve information for the given ethernet interface.
-func (c *PanoEth) Show(tmpl, name string) (Entry, error) {
+func (c *PanoEth) Show(tmpl, ts, name string) (Entry, error) {
     c.con.LogQuery("(show) ethernet interface %q", name)
-    return c.details(c.con.Show, tmpl, name)
+    return c.details(c.con.Show, tmpl, ts, name)
 }
 
 // Set performs SET to create / update one or more ethernet interfaces.
@@ -51,13 +51,13 @@ func (c *PanoEth) Show(tmpl, name string) (Entry, error) {
 // allowing the vsys to use them, as long as the interface does not have a
 // mode of "ha" or "aggregate-group".  Interfaces that have either of those
 // modes are omitted from this function's followup vsys import.
-func (c *PanoEth) Set(tmpl, vsys string, e ...Entry) error {
+func (c *PanoEth) Set(tmpl, ts, vsys string, e ...Entry) error {
     var err error
 
     if len(e) == 0 {
         return nil
-    } else if tmpl == "" {
-        return fmt.Errorf("tmpl must be specified")
+    } else if tmpl == "" && ts == "" {
+        return fmt.Errorf("tmpl or ts must be specified")
     } else if vsys == "" {
         return fmt.Errorf("vsys must be specified, not %q", vsys)
     }
@@ -78,7 +78,7 @@ func (c *PanoEth) Set(tmpl, vsys string, e ...Entry) error {
     c.con.LogAction("(set) ethernet interfaces: %v", n1)
 
     // Set xpath.
-    path := c.xpath(tmpl, n1)
+    path := c.xpath(tmpl, ts, n1)
     if len(e) == 1 {
         path = path[:len(path) - 1]
     } else {
@@ -92,12 +92,12 @@ func (c *PanoEth) Set(tmpl, vsys string, e ...Entry) error {
     }
 
     // Remove the interfaces from any vsys they're currently in.
-    if err = c.con.VsysUnimport(util.InterfaceImport, tmpl, n2); err != nil {
+    if err = c.con.VsysUnimport(util.InterfaceImport, tmpl, ts, n2); err != nil {
         return err
     }
 
     // Perform vsys import next.
-    return c.con.VsysImport(util.InterfaceImport, tmpl, vsys, n2)
+    return c.con.VsysImport(util.InterfaceImport, tmpl, ts, vsys, n2)
 }
 
 // Edit performs EDIT to create / update the specified ethernet interface.
@@ -106,11 +106,11 @@ func (c *PanoEth) Set(tmpl, vsys string, e ...Entry) error {
 // allowing the vsys to use it, as long as the interface does not have a
 // mode of "ha" or "aggregate-group".  Interfaces that have either of those
 // modes are omitted from this function's followup vsys import.
-func (c *PanoEth) Edit(tmpl, vsys string, e Entry) error {
+func (c *PanoEth) Edit(tmpl, ts, vsys string, e Entry) error {
     var err error
 
-    if tmpl == "" {
-        return fmt.Errorf("tmpl must be specified")
+    if tmpl == "" && ts == "" {
+        return fmt.Errorf("tmpl or ts must be specified")
     } else if vsys == "" {
         return fmt.Errorf("vsys must be specified")
     }
@@ -120,7 +120,7 @@ func (c *PanoEth) Edit(tmpl, vsys string, e Entry) error {
     c.con.LogAction("(edit) ethernet interface %q", e.Name)
 
     // Set xpath.
-    path := c.xpath(tmpl, []string{e.Name})
+    path := c.xpath(tmpl, ts, []string{e.Name})
 
     // Edit the interface.
     _, err = c.con.Edit(path, fn(e), nil, nil)
@@ -134,24 +134,24 @@ func (c *PanoEth) Edit(tmpl, vsys string, e Entry) error {
     }
 
     // Remove the interface from any vsys it's currently in.
-    if err = c.con.VsysUnimport(util.InterfaceImport, tmpl, []string{e.Name}); err != nil {
+    if err = c.con.VsysUnimport(util.InterfaceImport, tmpl, ts, []string{e.Name}); err != nil {
         return err
     }
 
     // Import the interface.
-    return c.con.VsysImport(util.InterfaceImport, tmpl, vsys, []string{e.Name})
+    return c.con.VsysImport(util.InterfaceImport, tmpl, ts, vsys, []string{e.Name})
 }
 
 // Delete removes the given interface(s) from the firewall.
 //
 // Interfaces can be a string or an Entry object.
-func (c *PanoEth) Delete(tmpl string, e ...interface{}) error {
+func (c *PanoEth) Delete(tmpl, ts string, e ...interface{}) error {
     var err error
 
     if len(e) == 0 {
         return nil
-    } else if tmpl == "" {
-        return fmt.Errorf("tmpl must be specified")
+    } else if tmpl == "" && ts == "" {
+        return fmt.Errorf("tmpl or ts must be specified")
     }
 
     names := make([]string, len(e))
@@ -168,12 +168,12 @@ func (c *PanoEth) Delete(tmpl string, e ...interface{}) error {
     c.con.LogAction("(delete) ethernet interface(s): %v", names)
 
     // Unimport interfaces.
-    if err = c.con.VsysUnimport(util.InterfaceImport, tmpl, names); err != nil {
+    if err = c.con.VsysUnimport(util.InterfaceImport, tmpl, ts, names); err != nil {
         return err
     }
 
     // Remove interfaces next.
-    path := c.xpath(tmpl, names)
+    path := c.xpath(tmpl, ts, names)
     _, err = c.con.Delete(path, nil, nil)
     return err
 }
@@ -190,8 +190,8 @@ func (c *PanoEth) versioning() (normalizer, func(Entry) (interface{})) {
     }
 }
 
-func (c *PanoEth) details(fn util.Retriever, tmpl, name string) (Entry, error) {
-    path := c.xpath(tmpl, []string{name})
+func (c *PanoEth) details(fn util.Retriever, tmpl, ts, name string) (Entry, error) {
+    path := c.xpath(tmpl, ts, []string{name})
     obj, _ := c.versioning()
     if _, err := fn(path, nil, obj); err != nil {
         return Entry{}, err
@@ -201,9 +201,9 @@ func (c *PanoEth) details(fn util.Retriever, tmpl, name string) (Entry, error) {
     return ans, nil
 }
 
-func (c *PanoEth) xpath(tmpl string, vals []string) []string {
+func (c *PanoEth) xpath(tmpl, ts string, vals []string) []string {
     ans := make([]string, 0, 12)
-    ans = append(ans, util.TemplateXpathPrefix(tmpl)...)
+    ans = append(ans, util.TemplateXpathPrefix(tmpl, ts)...)
     ans = append(ans,
         "config",
         "devices",

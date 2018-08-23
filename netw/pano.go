@@ -15,6 +15,7 @@ import (
     "github.com/PaloAltoNetworks/pango/netw/routing/router"
     "github.com/PaloAltoNetworks/pango/netw/routing/route/static/ipv4"
     "github.com/PaloAltoNetworks/pango/netw/vlan"
+    "github.com/PaloAltoNetworks/pango/netw/zone"
     "github.com/PaloAltoNetworks/pango/util"
 )
 
@@ -34,6 +35,7 @@ type PanoNetw struct {
     VirtualRouter *router.PanoRouter
     Vlan *vlan.PanoVlan
     VlanInterface *vli.PanoVlan
+    Zone *zone.PanoZone
 }
 
 // Initialize is invoked on client.Initialize().
@@ -76,4 +78,7 @@ func (c *PanoNetw) Initialize(i util.XapiClient) {
 
     c.VlanInterface = &vli.PanoVlan{}
     c.VlanInterface.Initialize(i)
+
+    c.Zone = &zone.PanoZone{}
+    c.Zone.Initialize(i)
 }

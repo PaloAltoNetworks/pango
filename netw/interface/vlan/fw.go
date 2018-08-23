@@ -82,12 +82,12 @@ func (c *FwVlan) Set(vsys string, e ...Entry) error {
     }
 
     // Remove the interfaces from any vsys they're currently in.
-    if err = c.con.VsysUnimport(util.InterfaceImport, "", names); err != nil {
+    if err = c.con.VsysUnimport(util.InterfaceImport, "", "", names); err != nil {
         return err
     }
 
     // Perform vsys import next.
-    return c.con.VsysImport(util.InterfaceImport, "", vsys, names)
+    return c.con.VsysImport(util.InterfaceImport, "", "", vsys, names)
 }
 
 // Edit performs EDIT to create / update the specified VLAN interface.
@@ -111,12 +111,12 @@ func (c *FwVlan) Edit(vsys string, e Entry) error {
     }
 
     // Remove the interface from any vsys it's currently in.
-    if err = c.con.VsysUnimport(util.InterfaceImport, "", []string{e.Name}); err != nil {
+    if err = c.con.VsysUnimport(util.InterfaceImport, "", "", []string{e.Name}); err != nil {
         return err
     }
 
     // Import the interface.
-    return c.con.VsysImport(util.InterfaceImport, "", vsys, []string{e.Name})
+    return c.con.VsysImport(util.InterfaceImport, "", "", vsys, []string{e.Name})
 }
 
 // Delete removes the given VLAN interface(s) from the firewall.
@@ -143,7 +143,7 @@ func (c *FwVlan) Delete(e ...interface{}) error {
     c.con.LogAction("(delete) VLAN interfaces: %v", names)
 
     // Unimport interfaces.
-    if err = c.con.VsysUnimport(util.InterfaceImport, "", names); err != nil {
+    if err = c.con.VsysUnimport(util.InterfaceImport, "", "", names); err != nil {
         return err
     }
 

@@ -80,12 +80,12 @@ func (c *FwRouter) Set(vsys string, e ...Entry) error {
     }
 
     // Remove the virtual routers from any vsys they're currently in.
-    if err = c.con.VsysUnimport(util.VirtualRouterImport, "", names); err != nil {
+    if err = c.con.VsysUnimport(util.VirtualRouterImport, "", "", names); err != nil {
         return err
     }
 
     // Perform vsys import next.
-    return c.con.VsysImport(util.VirtualRouterImport, "", vsys, names)
+    return c.con.VsysImport(util.VirtualRouterImport, "", "", vsys, names)
 }
 
 // Edit performs EDIT to create / update a virtual router.
@@ -109,12 +109,12 @@ func (c *FwRouter) Edit(vsys string, e Entry) error {
     }
 
     // Remove the virtual routers from any vsys they're currently in.
-    if err = c.con.VsysUnimport(util.VirtualRouterImport, "", []string{e.Name}); err != nil {
+    if err = c.con.VsysUnimport(util.VirtualRouterImport, "", "", []string{e.Name}); err != nil {
         return err
     }
 
     // Perform vsys import next.
-    return c.con.VsysImport(util.VirtualRouterImport, "", vsys, []string{e.Name})
+    return c.con.VsysImport(util.VirtualRouterImport, "", "", vsys, []string{e.Name})
 }
 
 // Delete removes the given virtual routers from the firewall.
@@ -141,7 +141,7 @@ func (c *FwRouter) Delete(e ...interface{}) error {
     c.con.LogAction("(delete) virtual routers: %v", names)
 
     // Unimport virtual routers.
-    err = c.con.VsysUnimport(util.VirtualRouterImport, "", names)
+    err = c.con.VsysUnimport(util.VirtualRouterImport, "", "", names)
     if err != nil {
         return err
     }
@@ -161,7 +161,7 @@ func (c *FwRouter) CleanupDefault(vsys string) error {
     c.con.LogAction("(action) cleaning up default route")
 
     // Unimport the default virtual router.
-    if err = c.con.VsysUnimport(util.VirtualRouterImport, vsys, []string{"default"}); err != nil {
+    if err = c.con.VsysUnimport(util.VirtualRouterImport, "", "", []string{"default"}); err != nil {
         return err
     }
 

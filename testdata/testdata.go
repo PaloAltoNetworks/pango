@@ -29,6 +29,7 @@ type MockClient struct {
     Path string
     Elm string
     Template string
+    TemplateStack string
     Vsys string
     Extras interface{}
 }
@@ -152,16 +153,18 @@ func (c *MockClient) SetElm(e interface{}) error {
     return nil
 }
 
-func (c *MockClient) VsysImport(ns, tmpl, vsys string, names []string) error {
+func (c *MockClient) VsysImport(ns, tmpl, ts, vsys string, names []string) error {
     c.Template = tmpl
+    c.TemplateStack = ts
     c.Vsys = vsys
     c.Imports = names
 
     return nil
 }
 
-func (c *MockClient) VsysUnimport(ns, tmpl string, names []string) error {
+func (c *MockClient) VsysUnimport(ns, tmpl, ts string, names []string) error {
     c.Template = tmpl
+    c.TemplateStack = ts
     c.Unimports = names
 
     return c.UnimportError
@@ -185,6 +188,7 @@ func (c *MockClient) Reset() {
     c.Path = ""
     c.Elm = ""
     c.Template = ""
+    c.TemplateStack = ""
     c.Vsys = ""
     c.Extras = nil
 }

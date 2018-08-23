@@ -18,39 +18,39 @@ func (c *Variable) Initialize(con util.XapiClient) {
 }
 
 // ShowList performs SHOW to retrieve a list of variables.
-func (c *Variable) ShowList(tmpl string) ([]string, error) {
+func (c *Variable) ShowList(tmpl, ts string) ([]string, error) {
     c.con.LogQuery("(show) list of template variables")
-    path := c.xpath(tmpl, nil)
+    path := c.xpath(tmpl, ts, nil)
     return c.con.EntryListUsing(c.con.Show, path[:len(path) - 1])
 }
 
 // GetList performs GET to retrieve a list of variables.
-func (c *Variable) GetList(tmpl string) ([]string, error) {
+func (c *Variable) GetList(tmpl, ts string) ([]string, error) {
     c.con.LogQuery("(get) list of template variables")
-    path := c.xpath(tmpl, nil)
+    path := c.xpath(tmpl, ts, nil)
     return c.con.EntryListUsing(c.con.Get, path[:len(path) - 1])
 }
 
 // Get performs GET to retrieve information for the given variable.
-func (c *Variable) Get(tmpl, name string) (Entry, error) {
+func (c *Variable) Get(tmpl, ts, name string) (Entry, error) {
     c.con.LogQuery("(get) template variable %q", name)
-    return c.details(c.con.Get, tmpl, name)
+    return c.details(c.con.Get, tmpl, ts, name)
 }
 
 // Show performs SHOW to retrieve information for the given variable.
-func (c *Variable) Show(tmpl, name string) (Entry, error) {
+func (c *Variable) Show(tmpl, ts, name string) (Entry, error) {
     c.con.LogQuery("(show) template variable %q", name)
-    return c.details(c.con.Show, tmpl, name)
+    return c.details(c.con.Show, tmpl, ts, name)
 }
 
 // Set performs SET to create / update one or more template variables.
-func (c *Variable) Set(tmpl string, e ...Entry) error {
+func (c *Variable) Set(tmpl, ts string, e ...Entry) error {
     var err error
 
     if len(e) == 0 {
         return nil
-    } else if tmpl == "" {
-        return fmt.Errorf("tmpl must be specified")
+    } else if tmpl == "" && ts == "" {
+        return fmt.Errorf("tmpl or ts must be specified")
     }
 
     _, fn := c.versioning()
@@ -65,7 +65,7 @@ func (c *Variable) Set(tmpl string, e ...Entry) error {
     c.con.LogAction("(set) template variables: %v", names)
 
     // Set xpath.
-    path := c.xpath(tmpl, names)
+    path := c.xpath(tmpl, ts, names)
     if len(e) == 1 {
         path = path[:len(path) - 1]
     } else {
@@ -78,11 +78,11 @@ func (c *Variable) Set(tmpl string, e ...Entry) error {
 }
 
 // Edit performs EDIT to create / update a template.
-func (c *Variable) Edit(tmpl string, e Entry) error {
+func (c *Variable) Edit(tmpl, ts string, e Entry) error {
     var err error
 
-    if tmpl == "" {
-        return fmt.Errorf("tmpl must be specified")
+    if tmpl == "" && ts == "" {
+        return fmt.Errorf("tmpl or ts must be specified")
     }
 
     _, fn := c.versioning()
@@ -90,7 +90,7 @@ func (c *Variable) Edit(tmpl string, e Entry) error {
     c.con.LogAction("(edit) template variable %q", e.Name)
 
     // Set xpath.
-    path := c.xpath(tmpl, []string{e.Name})
+    path := c.xpath(tmpl, ts, []string{e.Name})
 
     // Edit the template.
     _, err = c.con.Edit(path, fn(e), nil, nil)
@@ -100,13 +100,13 @@ func (c *Variable) Edit(tmpl string, e Entry) error {
 // Delete removes the given template variables from the firewall.
 //
 // Variables can be a string or an Entry object.
-func (c *Variable) Delete(tmpl string, e ...interface{}) error {
+func (c *Variable) Delete(tmpl, ts string, e ...interface{}) error {
     var err error
 
     if len(e) == 0 {
         return nil
-    } else if tmpl == "" {
-        return fmt.Errorf("tmpl must be specified")
+    } else if tmpl == "" && ts == "" {
+        return fmt.Errorf("tmpl or ts must be specified")
     }
 
     names := make([]string, len(e))
@@ -123,7 +123,7 @@ func (c *Variable) Delete(tmpl string, e ...interface{}) error {
     c.con.LogAction("(delete) template variables: %v", names)
 
     // Remove the template variables.
-    path := c.xpath(tmpl, names)
+    path := c.xpath(tmpl, ts, names)
     _, err = c.con.Delete(path, nil, nil)
     return err
 }
@@ -134,8 +134,8 @@ func (c *Variable) versioning() (normalizer, func(Entry) (interface{})) {
     return &container_v1{}, specify_v1
 }
 
-func (c *Variable) details(fn util.Retriever, tmpl, name string) (Entry, error) {
-    path := c.xpath(tmpl, []string{name})
+func (c *Variable) details(fn util.Retriever, tmpl, ts, name string) (Entry, error) {
+    path := c.xpath(tmpl, ts, []string{name})
     obj, _ := c.versioning()
     if _, err := fn(path, nil, obj); err != nil {
         return Entry{}, err
@@ -145,14 +145,13 @@ func (c *Variable) details(fn util.Retriever, tmpl, name string) (Entry, error) 
     return ans, nil
 }
 
-func (c *Variable) xpath(tmpl string, vals []string) []string {
-    return []string{
-        "config",
-        "devices",
-        util.AsEntryXpath([]string{"localhost.localdomain"}),
-        "template",
-        util.AsEntryXpath([]string{tmpl}),
+func (c *Variable) xpath(tmpl, ts string, vals []string) []string {
+    ans := make([]string, 0, 7)
+    ans = append(ans, util.TemplateXpathPrefix(tmpl, ts)...)
+    ans = append(ans,
         "variable",
         util.AsEntryXpath(vals),
-    }
+    )
+
+    return ans
 }

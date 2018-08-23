@@ -91,12 +91,12 @@ func TestPanoNormalization(t *testing.T) {
         t.Run(tc.desc, func(t *testing.T) {
             mc.Version = tc.version
             mc.AddResp("")
-            err := ns.Set("my test", tc.conf)
+            err := ns.Set("my test", "", tc.conf)
             if err != nil {
                 t.Errorf("Error in set: %s", err)
             } else {
                 mc.AddResp(mc.Elm)
-                r, err := ns.Get("my test", tc.conf.Name)
+                r, err := ns.Get("my test", "", tc.conf.Name)
                 if err != nil {
                     t.Errorf("Error in get: %s", err)
                 } else if !reflect.DeepEqual(tc.conf, r) {

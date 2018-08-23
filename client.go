@@ -986,8 +986,8 @@ func (c *Client) logXpath(p string) {
 }
 
 // VsysImport imports the given names into the specified template / vsys.
-func (c *Client) VsysImport(loc, tmpl, vsys string, names []string) error {
-    path := c.xpathImport(tmpl, vsys)
+func (c *Client) VsysImport(loc, tmpl, ts, vsys string, names []string) error {
+    path := c.xpathImport(tmpl, ts, vsys)
     if len(names) == 0 || vsys == "" {
         return nil
     } else if len(names) == 1 {
@@ -1004,12 +1004,13 @@ func (c *Client) VsysImport(loc, tmpl, vsys string, names []string) error {
 }
 
 // VsysUnimport removes the given names from all (template, optional) vsys.
-func (c *Client) VsysUnimport(loc, tmpl string, names []string) error {
+func (c *Client) VsysUnimport(loc, tmpl, ts string, names []string) error {
     if len(names) == 0 {
         return nil
     }
 
-    path := c.xpathImport(tmpl, "")
+    path := make([]string, 0, 14)
+    path = append(path, c.xpathImport(tmpl, ts, "")...)
     path = append(path, loc, util.AsMemberXpath(names))
 
     _, err := c.Delete(path, nil, nil)
@@ -1024,9 +1025,9 @@ func (c *Client) VsysUnimport(loc, tmpl string, names []string) error {
 
 // IsImported checks if the importable object is actually imported in the
 // specified location.
-func (c *Client) IsImported(loc, tmpl, vsys, name string) (bool, error) {
+func (c *Client) IsImported(loc, tmpl, ts, vsys, name string) (bool, error) {
     path := make([]string, 0, 14)
-    path = append(path, c.xpathImport(tmpl, vsys)...)
+    path = append(path, c.xpathImport(tmpl, ts, vsys)...)
     path = append(path, loc, util.AsMemberXpath([]string{name}))
 
     _, err := c.Get(path, nil, nil)
@@ -1042,10 +1043,10 @@ func (c *Client) IsImported(loc, tmpl, vsys, name string) (bool, error) {
     return false, err
 }
 
-func (c *Client) xpathImport(tmpl, vsys string) ([]string) {
+func (c *Client) xpathImport(tmpl, ts, vsys string) ([]string) {
     ans := make([]string, 0, 12)
-    if tmpl != "" {
-        ans = append(ans, util.TemplateXpathPrefix(tmpl)...)
+    if tmpl != "" || ts != "" {
+        ans = append(ans, util.TemplateXpathPrefix(tmpl, ts)...)
     }
     ans = append(ans,
         "config",

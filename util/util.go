@@ -51,8 +51,8 @@ type XapiClient interface {
     EntryListUsing(Retriever, []string) ([]string, error)
     MemberListUsing(Retriever, []string) ([]string, error)
     RequestPasswordHash(string) (string, error)
-    VsysImport(string, string, string, []string) error
-    VsysUnimport(string, string, []string) error
+    VsysImport(string, string, string, string, []string) error
+    VsysUnimport(string, string, string, []string) error
     WaitForJob(uint, interface{}) error
     Commit(string, bool, bool, bool, bool) (uint, error)
 }
@@ -314,13 +314,23 @@ func AsMemberXpath(vals []string) string {
 }
 
 // TemplateXpath returns the template xpath prefix of the given template name.
-func TemplateXpathPrefix(v string) []string {
+func TemplateXpathPrefix(tmpl, ts string) []string {
+    if tmpl != "" {
+        return []string{
+            "config",
+            "devices",
+            AsEntryXpath([]string{"localhost.localdomain"}),
+            "template",
+            AsEntryXpath([]string{tmpl}),
+        }
+    }
+
     return []string{
         "config",
         "devices",
         AsEntryXpath([]string{"localhost.localdomain"}),
-        "template",
-        AsEntryXpath([]string{v}),
+        "template-stack",
+        AsEntryXpath([]string{tmpl}),
     }
 }
 

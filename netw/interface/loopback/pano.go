@@ -20,42 +20,42 @@ func (c *PanoLoopback) Initialize(con util.XapiClient) {
 }
 
 // ShowList performs SHOW to retrieve a list of loopback interfaces.
-func (c *PanoLoopback) ShowList(tmpl string) ([]string, error) {
+func (c *PanoLoopback) ShowList(tmpl, ts string) ([]string, error) {
     c.con.LogQuery("(show) list of loopback interfaces")
-    path := c.xpath(tmpl, nil)
+    path := c.xpath(tmpl, ts, nil)
     return c.con.EntryListUsing(c.con.Show, path[:len(path) - 1])
 }
 
 // GetList performs GET to retrieve a list of loopback interfaces.
-func (c *PanoLoopback) GetList(tmpl string) ([]string, error) {
+func (c *PanoLoopback) GetList(tmpl, ts string) ([]string, error) {
     c.con.LogQuery("(get) list of loopback interfaces")
-    path := c.xpath(tmpl, nil)
+    path := c.xpath(tmpl, ts, nil)
     return c.con.EntryListUsing(c.con.Get, path[:len(path) - 1])
 }
 
 // Get performs GET to retrieve information for the given loopback interface.
-func (c *PanoLoopback) Get(tmpl, name string) (Entry, error) {
+func (c *PanoLoopback) Get(tmpl, ts, name string) (Entry, error) {
     c.con.LogQuery("(get) loopback interface %q", name)
-    return c.details(c.con.Get, tmpl, name)
+    return c.details(c.con.Get, tmpl, ts, name)
 }
 
 // Show performs SHOW to retrieve information for the given loopback interface.
-func (c *PanoLoopback) Show(tmpl, name string) (Entry, error) {
+func (c *PanoLoopback) Show(tmpl, ts, name string) (Entry, error) {
     c.con.LogQuery("(show) loopback interface %q", name)
-    return c.details(c.con.Show, tmpl, name)
+    return c.details(c.con.Show, tmpl, ts, name)
 }
 
 // Set performs SET to create / update one or more loopback interfaces.
 //
 // Specifying a non-empty vsys will import the interfaces into that vsys,
 // allowing the vsys to use them.
-func (c *PanoLoopback) Set(tmpl, vsys string, e ...Entry) error {
+func (c *PanoLoopback) Set(tmpl, ts, vsys string, e ...Entry) error {
     var err error
 
     if len(e) == 0 {
         return nil
-    } else if tmpl == "" {
-        return fmt.Errorf("tmpl must be specified")
+    } else if tmpl == "" && ts == "" {
+        return fmt.Errorf("tmpl or ts must be specified")
     } else if vsys == "" {
         return fmt.Errorf("vsys must be specified")
     }
@@ -72,7 +72,7 @@ func (c *PanoLoopback) Set(tmpl, vsys string, e ...Entry) error {
     c.con.LogAction("(set) loopback interfaces: %v", names)
 
     // Set xpath.
-    path := c.xpath(tmpl, names)
+    path := c.xpath(tmpl, ts, names)
     if len(e) == 1 {
         path = path[:len(path) - 1]
     } else {
@@ -86,23 +86,23 @@ func (c *PanoLoopback) Set(tmpl, vsys string, e ...Entry) error {
     }
 
     // Remove the interfaces from any vsys they're currently in.
-    if err = c.con.VsysUnimport(util.InterfaceImport, tmpl, names); err != nil {
+    if err = c.con.VsysUnimport(util.InterfaceImport, tmpl, ts, names); err != nil {
         return err
     }
 
     // Perform vsys import next.
-    return c.con.VsysImport(util.InterfaceImport, tmpl, vsys, names)
+    return c.con.VsysImport(util.InterfaceImport, tmpl, ts, vsys, names)
 }
 
 // Edit performs EDIT to create / update the specified loopback interface.
 //
 // Specifying a non-empty vsys will import the interface into that vsys,
 // allowing the vsys to use it.
-func (c *PanoLoopback) Edit(tmpl, vsys string, e Entry) error {
+func (c *PanoLoopback) Edit(tmpl, ts, vsys string, e Entry) error {
     var err error
 
-    if tmpl == "" {
-        return fmt.Errorf("tmpl must be specified")
+    if tmpl == "" && ts == "" {
+        return fmt.Errorf("tmpl or ts must be specified")
     } else if vsys == "" {
         return fmt.Errorf("vsys must be specified")
     }
@@ -112,7 +112,7 @@ func (c *PanoLoopback) Edit(tmpl, vsys string, e Entry) error {
     c.con.LogAction("(edit) loopback interface %q", e.Name)
 
     // Set xpath.
-    path := c.xpath(tmpl, []string{e.Name})
+    path := c.xpath(tmpl, ts, []string{e.Name})
 
     // Edit the interface.
     _, err = c.con.Edit(path, fn(e), nil, nil)
@@ -121,24 +121,24 @@ func (c *PanoLoopback) Edit(tmpl, vsys string, e Entry) error {
     }
 
     // Remove the interface from any vsys it's currently in.
-    if err = c.con.VsysUnimport(util.InterfaceImport, tmpl, []string{e.Name}); err != nil {
+    if err = c.con.VsysUnimport(util.InterfaceImport, tmpl, ts, []string{e.Name}); err != nil {
         return err
     }
 
     // Import the interface.
-    return c.con.VsysImport(util.InterfaceImport, tmpl, vsys, []string{e.Name})
+    return c.con.VsysImport(util.InterfaceImport, tmpl, ts, vsys, []string{e.Name})
 }
 
 // Delete removes the given loopback interface(s) from the firewall.
 //
 // Interfaces can be a string or an Entry object.
-func (c *PanoLoopback) Delete(tmpl string, e ...interface{}) error {
+func (c *PanoLoopback) Delete(tmpl, ts string, e ...interface{}) error {
     var err error
 
     if len(e) == 0 {
         return nil
-    } else if tmpl == "" {
-        return fmt.Errorf("tmpl must be specified")
+    } else if tmpl == "" && ts == "" {
+        return fmt.Errorf("tmpl or ts must be specified")
     }
 
     names := make([]string, len(e))
@@ -155,12 +155,12 @@ func (c *PanoLoopback) Delete(tmpl string, e ...interface{}) error {
     c.con.LogAction("(delete) loopback interfaces: %v", names)
 
     // Unimport interfaces.
-    if err = c.con.VsysUnimport(util.InterfaceImport, tmpl, names); err != nil {
+    if err = c.con.VsysUnimport(util.InterfaceImport, tmpl, ts, names); err != nil {
         return err
     }
 
     // Remove interfaces next.
-    path := c.xpath(tmpl, names)
+    path := c.xpath(tmpl, ts, names)
     _, err = c.con.Delete(path, nil, nil)
     return err
 }
@@ -177,8 +177,8 @@ func (c *PanoLoopback) versioning() (normalizer, func(Entry) (interface{})) {
     }
 }
 
-func (c *PanoLoopback) details(fn util.Retriever, tmpl, name string) (Entry, error) {
-    path := c.xpath(tmpl, []string{name})
+func (c *PanoLoopback) details(fn util.Retriever, tmpl, ts, name string) (Entry, error) {
+    path := c.xpath(tmpl, ts, []string{name})
     obj, _ := c.versioning()
     if _, err := fn(path, nil, obj); err != nil {
         return Entry{}, err
@@ -188,9 +188,9 @@ func (c *PanoLoopback) details(fn util.Retriever, tmpl, name string) (Entry, err
     return ans, nil
 }
 
-func (c *PanoLoopback) xpath(tmpl string, vals []string) []string {
+func (c *PanoLoopback) xpath(tmpl, ts string, vals []string) []string {
     ans := make([]string, 0, 13)
-    ans = append(ans, util.TemplateXpathPrefix(tmpl)...)
+    ans = append(ans, util.TemplateXpathPrefix(tmpl, ts)...)
     ans = append(ans,
         "config",
         "devices",

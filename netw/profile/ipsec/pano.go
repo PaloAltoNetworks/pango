@@ -20,41 +20,41 @@ func (c *PanoIpsec) Initialize(con util.XapiClient) {
 }
 
 // GetList performs GET to retrieve a list of IPSec crypto profiles.
-func (c *PanoIpsec) GetList(tmpl string) ([]string, error) {
+func (c *PanoIpsec) GetList(tmpl, ts string) ([]string, error) {
     c.con.LogQuery("(get) list of ipsec crypto profiles")
-    path := c.xpath(tmpl, nil)
+    path := c.xpath(tmpl, ts, nil)
     return c.con.EntryListUsing(c.con.Get, path[:len(path) - 1])
 }
 
 // ShowList performs SHOW to retrieve a list of IPSec crypto profiles.
-func (c *PanoIpsec) ShowList(tmpl string) ([]string, error) {
+func (c *PanoIpsec) ShowList(tmpl, ts string) ([]string, error) {
     c.con.LogQuery("(show) list of ipsec crypto profiles")
-    path := c.xpath(tmpl, nil)
+    path := c.xpath(tmpl, ts, nil)
     return c.con.EntryListUsing(c.con.Show, path[:len(path) - 1])
 }
 
 // Get performs GET to retrieve information for the given IPSec crypto
 // profile.
-func (c *PanoIpsec) Get(tmpl, name string) (Entry, error) {
+func (c *PanoIpsec) Get(tmpl, ts, name string) (Entry, error) {
     c.con.LogQuery("(get) ipsec crypto profile %q", name)
-    return c.details(c.con.Get, tmpl, name)
+    return c.details(c.con.Get, tmpl, ts, name)
 }
 
 // Get performs SHOW to retrieve information for the given IPSec crypto
 // profile.
-func (c *PanoIpsec) Show(tmpl, name string) (Entry, error) {
+func (c *PanoIpsec) Show(tmpl, ts, name string) (Entry, error) {
     c.con.LogQuery("(show) ipsec crypto profile %q", name)
-    return c.details(c.con.Show, tmpl, name)
+    return c.details(c.con.Show, tmpl, ts, name)
 }
 
 // Set performs SET to create / update one or more IPSec crypto profiles.
-func (c *PanoIpsec) Set(tmpl string, e ...Entry) error {
+func (c *PanoIpsec) Set(tmpl, ts string, e ...Entry) error {
     var err error
 
     if len(e) == 0 {
         return nil
-    } else if tmpl == "" {
-        return fmt.Errorf("tmpl must be specified")
+    } else if tmpl == "" && ts == "" {
+        return fmt.Errorf("tmpl or ts must be specified")
     }
 
     _, fn, vint := c.versioning()
@@ -73,7 +73,7 @@ func (c *PanoIpsec) Set(tmpl string, e ...Entry) error {
     c.con.LogAction("(set) ipsec crypto profiles: %v", names)
 
     // Set xpath.
-    path := c.xpath(tmpl, names)
+    path := c.xpath(tmpl, ts, names)
     if len(se) == 1 {
         path = path[:len(path) - 1]
     } else {
@@ -86,11 +86,11 @@ func (c *PanoIpsec) Set(tmpl string, e ...Entry) error {
 }
 
 // Edit performs EDIT to create / update an IPSec crypto profile.
-func (c *PanoIpsec) Edit(tmpl string, e Entry) error {
+func (c *PanoIpsec) Edit(tmpl, ts string, e Entry) error {
     var err error
 
-    if tmpl == "" {
-        return fmt.Errorf("tmpl must be specified")
+    if tmpl == "" && ts == "" {
+        return fmt.Errorf("tmpl or ts must be specified")
     }
 
     _, fn, vint := c.versioning()
@@ -102,7 +102,7 @@ func (c *PanoIpsec) Edit(tmpl string, e Entry) error {
     se.SpecifyEncryption(vint)
 
     // Set xpath.
-    path := c.xpath(tmpl, []string{se.Name})
+    path := c.xpath(tmpl, ts, []string{se.Name})
 
     // Edit the profile.
     _, err = c.con.Edit(path, fn(se), nil, nil)
@@ -112,13 +112,13 @@ func (c *PanoIpsec) Edit(tmpl string, e Entry) error {
 // Delete removes the given IPSec crypto profile(s) from the firewall.
 //
 // Profiles can be either a string or an Entry object.
-func (c *PanoIpsec) Delete(tmpl string, e ...interface{}) error {
+func (c *PanoIpsec) Delete(tmpl, ts string, e ...interface{}) error {
     var err error
 
     if len(e) == 0 {
         return nil
-    } else if tmpl == "" {
-        return fmt.Errorf("tmpl must be specified")
+    } else if tmpl == "" && ts == "" {
+        return fmt.Errorf("tmpl or ts must be specified")
     }
 
 
@@ -135,7 +135,7 @@ func (c *PanoIpsec) Delete(tmpl string, e ...interface{}) error {
     }
     c.con.LogAction("(delete) ipsec crypto profiles: %v", names)
 
-    path := c.xpath(tmpl, names)
+    path := c.xpath(tmpl, ts, names)
     _, err = c.con.Delete(path, nil, nil)
     return err
 }
@@ -156,8 +156,8 @@ func (c *PanoIpsec) versioning() (normalizer, func(Entry) (interface{}), int) {
     return &container_v1{}, specify_v1, vint
 }
 
-func (c *PanoIpsec) details(fn util.Retriever, tmpl, name string) (Entry, error) {
-    path := c.xpath(tmpl, []string{name})
+func (c *PanoIpsec) details(fn util.Retriever, tmpl, ts, name string) (Entry, error) {
+    path := c.xpath(tmpl, ts, []string{name})
     obj, _, _ := c.versioning()
     _, err := fn(path, nil, obj)
     if err != nil {
@@ -169,9 +169,9 @@ func (c *PanoIpsec) details(fn util.Retriever, tmpl, name string) (Entry, error)
     return ans, nil
 }
 
-func (c *PanoIpsec) xpath(tmpl string, vals []string) []string {
+func (c *PanoIpsec) xpath(tmpl, ts string, vals []string) []string {
     ans := make([]string, 0, 13)
-    ans = append(ans, util.TemplateXpathPrefix(tmpl)...)
+    ans = append(ans, util.TemplateXpathPrefix(tmpl, ts)...)
     ans = append(ans,
         "config",
         "devices",

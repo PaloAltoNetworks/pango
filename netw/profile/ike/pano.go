@@ -20,41 +20,41 @@ func (c *PanoIke) Initialize(con util.XapiClient) {
 }
 
 // GetList performs GET to retrieve a list of IKE crypto profiles.
-func (c *PanoIke) GetList(tmpl string) ([]string, error) {
+func (c *PanoIke) GetList(tmpl, ts string) ([]string, error) {
     c.con.LogQuery("(get) list of ike crypto profiles")
-    path := c.xpath(tmpl, nil)
+    path := c.xpath(tmpl, ts, nil)
     return c.con.EntryListUsing(c.con.Get, path[:len(path) - 1])
 }
 
 // ShowList performs SHOW to retrieve a list of IKE crypto profiles.
-func (c *PanoIke) ShowList(tmpl string) ([]string, error) {
+func (c *PanoIke) ShowList(tmpl, ts string) ([]string, error) {
     c.con.LogQuery("(show) list of ike crypto profiles")
-    path := c.xpath(tmpl, nil)
+    path := c.xpath(tmpl, ts, nil)
     return c.con.EntryListUsing(c.con.Show, path[:len(path) - 1])
 }
 
 // Get performs GET to retrieve information for the given IKE crypto
 // profile.
-func (c *PanoIke) Get(tmpl, name string) (Entry, error) {
+func (c *PanoIke) Get(tmpl, ts, name string) (Entry, error) {
     c.con.LogQuery("(get) ike crypto profile %q", name)
-    return c.details(c.con.Get, tmpl, name)
+    return c.details(c.con.Get, tmpl, ts, name)
 }
 
 // Get performs SHOW to retrieve information for the given IKE crypto
 // profile.
-func (c *PanoIke) Show(tmpl, name string) (Entry, error) {
+func (c *PanoIke) Show(tmpl, ts, name string) (Entry, error) {
     c.con.LogQuery("(show) ike crypto profile %q", name)
-    return c.details(c.con.Show, tmpl, name)
+    return c.details(c.con.Show, tmpl, ts, name)
 }
 
 // Set performs SET to create / update one or more IKE crypto profiles.
-func (c *PanoIke) Set(tmpl string, e ...Entry) error {
+func (c *PanoIke) Set(tmpl, ts string, e ...Entry) error {
     var err error
 
     if len(e) == 0 {
         return nil
-    } else if tmpl == "" {
-        return fmt.Errorf("tmpl must be specified")
+    } else if tmpl == "" && ts == "" {
+        return fmt.Errorf("tmpl or ts must be specified")
     }
 
     _, fn, vint := c.versioning()
@@ -73,7 +73,7 @@ func (c *PanoIke) Set(tmpl string, e ...Entry) error {
     c.con.LogAction("(set) ike crypto profiles: %v", names)
 
     // Set xpath.
-    path := c.xpath(tmpl, names)
+    path := c.xpath(tmpl, ts, names)
     if len(se) == 1 {
         path = path[:len(path) - 1]
     } else {
@@ -86,11 +86,11 @@ func (c *PanoIke) Set(tmpl string, e ...Entry) error {
 }
 
 // Edit performs EDIT to create / update an IKE crypto profile.
-func (c *PanoIke) Edit(tmpl string, e Entry) error {
+func (c *PanoIke) Edit(tmpl, ts string, e Entry) error {
     var err error
 
-    if tmpl == "" {
-        return fmt.Errorf("tmpl must be specified")
+    if tmpl == "" && ts == "" {
+        return fmt.Errorf("tmpl or ts must be specified")
     }
 
     _, fn, vint := c.versioning()
@@ -102,7 +102,7 @@ func (c *PanoIke) Edit(tmpl string, e Entry) error {
     se.SpecifyEncryption(vint)
 
     // Set xpath.
-    path := c.xpath(tmpl, []string{se.Name})
+    path := c.xpath(tmpl, ts, []string{se.Name})
 
     // Edit the profile.
     _, err = c.con.Edit(path, fn(se), nil, nil)
@@ -112,13 +112,13 @@ func (c *PanoIke) Edit(tmpl string, e Entry) error {
 // Delete removes the given IKE crypto profile(s) from the firewall.
 //
 // Profiles can be either a string or an Entry object.
-func (c *PanoIke) Delete(tmpl string, e ...interface{}) error {
+func (c *PanoIke) Delete(tmpl, ts string, e ...interface{}) error {
     var err error
 
     if len(e) == 0 {
         return nil
-    } else if tmpl == "" {
-        return fmt.Errorf("tmpl must be specified")
+    } else if tmpl == "" && ts == "" {
+        return fmt.Errorf("tmpl or ts must be specified")
     }
 
 
@@ -135,7 +135,7 @@ func (c *PanoIke) Delete(tmpl string, e ...interface{}) error {
     }
     c.con.LogAction("(delete) ike crypto profiles: %v", names)
 
-    path := c.xpath(tmpl, names)
+    path := c.xpath(tmpl, ts, names)
     _, err = c.con.Delete(path, nil, nil)
     return err
 }
@@ -152,8 +152,8 @@ func (c *PanoIke) versioning() (normalizer, func(Entry) (interface{}), int) {
     }
 }
 
-func (c *PanoIke) details(fn util.Retriever, tmpl, name string) (Entry, error) {
-    path := c.xpath(tmpl, []string{name})
+func (c *PanoIke) details(fn util.Retriever, tmpl, ts, name string) (Entry, error) {
+    path := c.xpath(tmpl, ts, []string{name})
     obj, _, _ := c.versioning()
     _, err := fn(path, nil, obj)
     if err != nil {
@@ -165,9 +165,9 @@ func (c *PanoIke) details(fn util.Retriever, tmpl, name string) (Entry, error) {
     return ans, nil
 }
 
-func (c *PanoIke) xpath(tmpl string, vals []string) []string {
+func (c *PanoIke) xpath(tmpl, ts string, vals []string) []string {
     ans := make([]string, 0, 13)
-    ans = append(ans, util.TemplateXpathPrefix(tmpl)...)
+    ans = append(ans, util.TemplateXpathPrefix(tmpl, ts)...)
     ans = append(ans,
         "config",
         "devices",

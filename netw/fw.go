@@ -35,7 +35,7 @@ type FwNetw struct {
     VirtualRouter *router.FwRouter
     Vlan *vlan.FwVlan
     VlanInterface *vli.FwVlan
-    Zone *zone.Zone
+    Zone *zone.FwZone
 }
 
 // Initialize is invoked on client.Initialize().
@@ -79,6 +79,6 @@ func (c *FwNetw) Initialize(i util.XapiClient) {
     c.VlanInterface = &vli.FwVlan{}
     c.VlanInterface.Initialize(i)
 
-    c.Zone = &zone.Zone{}
+    c.Zone = &zone.FwZone{}
     c.Zone.Initialize(i)
 }

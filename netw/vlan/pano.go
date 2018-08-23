@@ -19,42 +19,42 @@ func (c *PanoVlan) Initialize(con util.XapiClient) {
 }
 
 // ShowList performs SHOW to retrieve a list of VLANs.
-func (c *PanoVlan) ShowList(tmpl string) ([]string, error) {
+func (c *PanoVlan) ShowList(tmpl, ts string) ([]string, error) {
     c.con.LogQuery("(show) list of VLANs")
-    path := c.xpath(tmpl, nil)
+    path := c.xpath(tmpl, ts, nil)
     return c.con.EntryListUsing(c.con.Show, path[:len(path) - 1])
 }
 
 // GetList performs GET to retrieve a list of VLANs.
-func (c *PanoVlan) GetList(tmpl string) ([]string, error) {
+func (c *PanoVlan) GetList(tmpl, ts string) ([]string, error) {
     c.con.LogQuery("(get) list of VLANs")
-    path := c.xpath(tmpl, nil)
+    path := c.xpath(tmpl, ts, nil)
     return c.con.EntryListUsing(c.con.Get, path[:len(path) - 1])
 }
 
 // Get performs GET to retrieve information for the given VLAN.
-func (c *PanoVlan) Get(tmpl, name string) (Entry, error) {
+func (c *PanoVlan) Get(tmpl, ts, name string) (Entry, error) {
     c.con.LogQuery("(get) VLAN %q", name)
-    return c.details(c.con.Get, tmpl, name)
+    return c.details(c.con.Get, tmpl, ts, name)
 }
 
 // Show performs SHOW to retrieve information for the given VLAN.
-func (c *PanoVlan) Show(tmpl, name string) (Entry, error) {
+func (c *PanoVlan) Show(tmpl, ts, name string) (Entry, error) {
     c.con.LogQuery("(show) VLAN %q", name)
-    return c.details(c.con.Show, tmpl, name)
+    return c.details(c.con.Show, tmpl, ts, name)
 }
 
 // Set performs SET to create / update one or more VLANs.
 //
 // Specify a non-empty vsys to import the VLAN(s) into the given vsys
 // after creating, allowing the vsys to use them.
-func (c *PanoVlan) Set(tmpl, vsys string, e ...Entry) error {
+func (c *PanoVlan) Set(tmpl, ts, vsys string, e ...Entry) error {
     var err error
 
     if len(e) == 0 {
         return nil
-    } else if tmpl == "" {
-        return fmt.Errorf("tmpl must be specified")
+    } else if tmpl == "" && ts == "" {
+        return fmt.Errorf("tmpl or ts must be specified")
     }
 
     _, fn := c.versioning()
@@ -69,7 +69,7 @@ func (c *PanoVlan) Set(tmpl, vsys string, e ...Entry) error {
     c.con.LogAction("(set) VLANs: %v", names)
 
     // Set xpath.
-    path := c.xpath(tmpl, names)
+    path := c.xpath(tmpl, ts, names)
     if len(e) == 1 {
         path = path[:len(path) - 1]
     } else {
@@ -82,23 +82,23 @@ func (c *PanoVlan) Set(tmpl, vsys string, e ...Entry) error {
     }
 
     // Remove the VLANs from any vsys they're currently in.
-    if err = c.con.VsysUnimport(util.VlanImport, tmpl, names); err != nil {
+    if err = c.con.VsysUnimport(util.VlanImport, tmpl, ts, names); err != nil {
         return err
     }
 
     // Perform vsys import next.
-    return c.con.VsysImport(util.VlanImport, tmpl, vsys, names)
+    return c.con.VsysImport(util.VlanImport, tmpl, ts, vsys, names)
 }
 
 // Edit performs EDIT to create / update a VLAN.
 //
 // Specify a non-empty vsys to import the VLAN into the given vsys
 // after creating, allowing the vsys to use it.
-func (c *PanoVlan) Edit(tmpl, vsys string, e Entry) error {
+func (c *PanoVlan) Edit(tmpl, ts, vsys string, e Entry) error {
     var err error
 
-    if tmpl == "" {
-        return fmt.Errorf("tmpl must be specified")
+    if tmpl == "" && ts == "" {
+        return fmt.Errorf("tmpl or ts must be specified")
     }
 
     _, fn := c.versioning()
@@ -106,7 +106,7 @@ func (c *PanoVlan) Edit(tmpl, vsys string, e Entry) error {
     c.con.LogAction("(edit) VLAN %q", e.Name)
 
     // Set xpath.
-    path := c.xpath(tmpl, []string{e.Name})
+    path := c.xpath(tmpl, ts, []string{e.Name})
 
     // Edit the VLAN.
     if _, err = c.con.Edit(path, fn(e), nil, nil); err != nil {
@@ -114,24 +114,24 @@ func (c *PanoVlan) Edit(tmpl, vsys string, e Entry) error {
     }
 
     // Remove the VLANs from any vsys they're currently in.
-    if err = c.con.VsysUnimport(util.VlanImport, tmpl, []string{e.Name}); err != nil {
+    if err = c.con.VsysUnimport(util.VlanImport, tmpl, ts, []string{e.Name}); err != nil {
         return err
     }
 
     // Perform vsys import next.
-    return c.con.VsysImport(util.VlanImport, tmpl, vsys, []string{e.Name})
+    return c.con.VsysImport(util.VlanImport, tmpl, ts, vsys, []string{e.Name})
 }
 
 // Delete removes the given VLAN(s) from the firewall.
 //
 // VLANs can be a string or an Entry object.
-func (c *PanoVlan) Delete(tmpl string, e ...interface{}) error {
+func (c *PanoVlan) Delete(tmpl, ts string, e ...interface{}) error {
     var err error
 
     if len(e) == 0 {
         return nil
-    } else if tmpl == "" {
-        return fmt.Errorf("tmpl must be specified")
+    } else if tmpl == "" && ts == "" {
+        return fmt.Errorf("tmpl or ts must be specified")
     }
 
     names := make([]string, len(e))
@@ -148,12 +148,12 @@ func (c *PanoVlan) Delete(tmpl string, e ...interface{}) error {
     c.con.LogAction("(delete) VLANs: %v", names)
 
     // Unimport VLANs.
-    if err = c.con.VsysUnimport(util.VlanImport, tmpl, names); err != nil {
+    if err = c.con.VsysUnimport(util.VlanImport, tmpl, ts, names); err != nil {
         return err
     }
 
     // Remove VLANs next.
-    path := c.xpath(tmpl, names)
+    path := c.xpath(tmpl, ts, names)
     _, err = c.con.Delete(path, nil, nil)
     return err
 }
@@ -164,8 +164,8 @@ func (c *PanoVlan) versioning() (normalizer, func(Entry) (interface{})) {
     return &container_v1{}, specify_v1
 }
 
-func (c *PanoVlan) details(fn util.Retriever, tmpl, name string) (Entry, error) {
-    path := c.xpath(tmpl, []string{name})
+func (c *PanoVlan) details(fn util.Retriever, tmpl, ts, name string) (Entry, error) {
+    path := c.xpath(tmpl, ts, []string{name})
     obj, _ := c.versioning()
     if _, err := fn(path, nil, obj); err != nil {
         return Entry{}, err
@@ -175,9 +175,9 @@ func (c *PanoVlan) details(fn util.Retriever, tmpl, name string) (Entry, error) 
     return ans, nil
 }
 
-func (c *PanoVlan) xpath(tmpl string, vals []string) []string {
+func (c *PanoVlan) xpath(tmpl, ts string, vals []string) []string {
     ans := make([]string, 0, 11)
-    ans = append(ans, util.TemplateXpathPrefix(tmpl)...)
+    ans = append(ans, util.TemplateXpathPrefix(tmpl, ts)...)
     ans = append(ans,
         "config",
         "devices",

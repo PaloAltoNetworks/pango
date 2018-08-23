@@ -18,39 +18,39 @@ func (c *PanoIpv4) Initialize(con util.XapiClient) {
 }
 
 // GetList performs GET to retrieve a list of IPSec tunnel proxy IDs.
-func (c *PanoIpv4) GetList(tmpl, tun string) ([]string, error) {
+func (c *PanoIpv4) GetList(tmpl, ts, tun string) ([]string, error) {
     c.con.LogQuery("(get) list of ipsec tunnel proxy ids")
-    path := c.xpath(tmpl, tun, nil)
+    path := c.xpath(tmpl, ts, tun, nil)
     return c.con.EntryListUsing(c.con.Get, path[:len(path) - 1])
 }
 
 // ShowList performs SHOW to retrieve a list of IPSec tunnel proxy IDs.
-func (c *PanoIpv4) ShowList(tmpl, tun string) ([]string, error) {
+func (c *PanoIpv4) ShowList(tmpl, ts, tun string) ([]string, error) {
     c.con.LogQuery("(show) list of ipsec tunnel proxy ids")
-    path := c.xpath(tmpl, tun, nil)
+    path := c.xpath(tmpl, ts, tun, nil)
     return c.con.EntryListUsing(c.con.Show, path[:len(path) - 1])
 }
 
 // Get performs GET to retrieve information for the given IPSec tunnel proxy ID.
-func (c *PanoIpv4) Get(tmpl, tun, name string) (Entry, error) {
+func (c *PanoIpv4) Get(tmpl, ts, tun, name string) (Entry, error) {
     c.con.LogQuery("(get) ipsec tunnel proxy id %q", name)
-    return c.details(c.con.Get, tmpl, tun, name)
+    return c.details(c.con.Get, tmpl, ts, tun, name)
 }
 
 // Get performs SHOW to retrieve information for the given IPSec tunnel proxy ID.
-func (c *PanoIpv4) Show(tmpl, tun, name string) (Entry, error) {
+func (c *PanoIpv4) Show(tmpl, ts, tun, name string) (Entry, error) {
     c.con.LogQuery("(show) ipsec tunnel proxy id %q", name)
-    return c.details(c.con.Show, tmpl, tun, name)
+    return c.details(c.con.Show, tmpl, ts, tun, name)
 }
 
 // Set performs SET to create / update one or more IPSec tunnel proxy IDs.
-func (c *PanoIpv4) Set(tmpl, tun string, e ...Entry) error {
+func (c *PanoIpv4) Set(tmpl, ts, tun string, e ...Entry) error {
     var err error
 
     if len(e) == 0 {
         return nil
-    } else if tmpl == "" {
-        return fmt.Errorf("tmpl must be specified")
+    } else if tmpl == "" && ts == "" {
+        return fmt.Errorf("tmpl or ts must be specified")
     } else if tun == "" {
         return fmt.Errorf("tun must be specified")
     }
@@ -67,7 +67,7 @@ func (c *PanoIpv4) Set(tmpl, tun string, e ...Entry) error {
     c.con.LogAction("(set) ipsec tunnel proxy ids: %v", names)
 
     // Set xpath.
-    path := c.xpath(tmpl, tun, names)
+    path := c.xpath(tmpl, ts, tun, names)
     if len(e) == 1 {
         path = path[:len(path) - 1]
     } else {
@@ -80,11 +80,11 @@ func (c *PanoIpv4) Set(tmpl, tun string, e ...Entry) error {
 }
 
 // Edit performs EDIT to create / update an IPSec tunnel proxy ID.
-func (c *PanoIpv4) Edit(tmpl, tun string, e Entry) error {
+func (c *PanoIpv4) Edit(tmpl, ts, tun string, e Entry) error {
     var err error
 
-    if tmpl == "" {
-        return fmt.Errorf("tmpl must be specified")
+    if tmpl == "" && ts == "" {
+        return fmt.Errorf("tmpl or ts must be specified")
     } else if tun == "" {
         return fmt.Errorf("tun must be specified")
     }
@@ -94,7 +94,7 @@ func (c *PanoIpv4) Edit(tmpl, tun string, e Entry) error {
     c.con.LogAction("(edit) ipsec tunnel proxy id %q", e.Name)
 
     // Set xpath.
-    path := c.xpath(tmpl, tun, []string{e.Name})
+    path := c.xpath(tmpl, ts, tun, []string{e.Name})
 
     // Create the objects.
     _, err = c.con.Edit(path, fn(e), nil, nil)
@@ -104,13 +104,13 @@ func (c *PanoIpv4) Edit(tmpl, tun string, e Entry) error {
 // Delete removes the given IPSec tunnel proxy IDs from the firewall.
 //
 // Items can be either a string or an Entry object.
-func (c *PanoIpv4) Delete(tmpl, tun string, e ...interface{}) error {
+func (c *PanoIpv4) Delete(tmpl, ts, tun string, e ...interface{}) error {
     var err error
 
     if len(e) == 0 {
         return nil
-    } else if tmpl == "" {
-        return fmt.Errorf("tmpl must be specified")
+    } else if tmpl == "" && ts == "" {
+        return fmt.Errorf("tmpl or ts must be specified")
     } else if tun == "" {
         return fmt.Errorf("tun must be specified")
     }
@@ -128,7 +128,7 @@ func (c *PanoIpv4) Delete(tmpl, tun string, e ...interface{}) error {
     }
     c.con.LogAction("(delete) ipsec tunnel proxy ids: %v", names)
 
-    path := c.xpath(tmpl, tun, names)
+    path := c.xpath(tmpl, ts, tun, names)
     _, err = c.con.Delete(path, nil, nil)
     return err
 }
@@ -139,8 +139,8 @@ func (c *PanoIpv4) versioning() (normalizer, func(Entry) (interface{})) {
     return &container_v1{}, specify_v1
 }
 
-func (c *PanoIpv4) details(fn util.Retriever, tmpl, tun, name string) (Entry, error) {
-    path := c.xpath(tmpl, tun, []string{name})
+func (c *PanoIpv4) details(fn util.Retriever, tmpl, ts, tun, name string) (Entry, error) {
+    path := c.xpath(tmpl, ts, tun, []string{name})
     obj, _ := c.versioning()
     _, err := fn(path, nil, obj)
     if err != nil {
@@ -151,9 +151,9 @@ func (c *PanoIpv4) details(fn util.Retriever, tmpl, tun, name string) (Entry, er
     return ans, nil
 }
 
-func (c *PanoIpv4) xpath(tmpl, tun string, vals []string) []string {
+func (c *PanoIpv4) xpath(tmpl, ts, tun string, vals []string) []string {
     ans := make([]string, 0, 15)
-    ans = append(ans, util.TemplateXpathPrefix(tmpl)...)
+    ans = append(ans, util.TemplateXpathPrefix(tmpl, ts)...)
     ans = append(ans,
         "config",
         "devices",

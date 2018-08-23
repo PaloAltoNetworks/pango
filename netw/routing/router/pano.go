@@ -19,42 +19,42 @@ func (c *PanoRouter) Initialize(con util.XapiClient) {
 }
 
 // ShowList performs SHOW to retrieve a list of virtual routers.
-func (c *PanoRouter) ShowList(tmpl string) ([]string, error) {
+func (c *PanoRouter) ShowList(tmpl, ts string) ([]string, error) {
     c.con.LogQuery("(show) list of virtual routeres")
-    path := c.xpath(tmpl, nil)
+    path := c.xpath(tmpl, ts, nil)
     return c.con.EntryListUsing(c.con.Show, path[:len(path) - 1])
 }
 
 // GetList performs GET to retrieve a list of virtual routers.
-func (c *PanoRouter) GetList(tmpl string) ([]string, error) {
+func (c *PanoRouter) GetList(tmpl, ts string) ([]string, error) {
     c.con.LogQuery("(get) list of virtual routers")
-    path := c.xpath(tmpl, nil)
+    path := c.xpath(tmpl, ts, nil)
     return c.con.EntryListUsing(c.con.Get, path[:len(path) - 1])
 }
 
 // Get performs GET to retrieve information for the given virtual router.
-func (c *PanoRouter) Get(tmpl, name string) (Entry, error) {
+func (c *PanoRouter) Get(tmpl, ts, name string) (Entry, error) {
     c.con.LogQuery("(get) virtual router %q", name)
-    return c.details(c.con.Get, tmpl, name)
+    return c.details(c.con.Get, tmpl, ts, name)
 }
 
 // Show performs SHOW to retrieve information for the given virtual router.
-func (c *PanoRouter) Show(tmpl, name string) (Entry, error) {
+func (c *PanoRouter) Show(tmpl, ts, name string) (Entry, error) {
     c.con.LogQuery("(show) virtual router %q", name)
-    return c.details(c.con.Show, tmpl, name)
+    return c.details(c.con.Show, tmpl, ts, name)
 }
 
 // Set performs SET to create / update one or more virtual routers.
 //
 // Specify a non-empty vsys to import the virtual routers into the given vsys
 // after creating, allowing the vsys to use them.
-func (c *PanoRouter) Set(tmpl, vsys string, e ...Entry) error {
+func (c *PanoRouter) Set(tmpl, ts, vsys string, e ...Entry) error {
     var err error
 
     if len(e) == 0 {
         return nil
-    } else if tmpl == "" {
-        return fmt.Errorf("tmpl must be specified")
+    } else if tmpl == "" && ts == "" {
+        return fmt.Errorf("tmpl or ts must be specified")
     }
 
     _, fn := c.versioning()
@@ -69,7 +69,7 @@ func (c *PanoRouter) Set(tmpl, vsys string, e ...Entry) error {
     c.con.LogAction("(set) virtual routers: %v", names)
 
     // Set xpath.
-    path := c.xpath(tmpl, names)
+    path := c.xpath(tmpl, ts, names)
     if len(e) == 1 {
         path = path[:len(path) - 1]
     } else {
@@ -82,23 +82,23 @@ func (c *PanoRouter) Set(tmpl, vsys string, e ...Entry) error {
     }
 
     // Remove the virtual routers from any vsys they're currently in.
-    if err = c.con.VsysUnimport(util.VirtualRouterImport, tmpl, names); err != nil {
+    if err = c.con.VsysUnimport(util.VirtualRouterImport, tmpl, ts, names); err != nil {
         return err
     }
 
     // Perform vsys import next.
-    return c.con.VsysImport(util.VirtualRouterImport, tmpl, vsys, names)
+    return c.con.VsysImport(util.VirtualRouterImport, tmpl, ts, vsys, names)
 }
 
 // Edit performs EDIT to create / update a virtual router.
 //
 // Specify a non-empty vsys to import the virtual router into the given vsys
 // after creating, allowing the vsys to use them.
-func (c *PanoRouter) Edit(tmpl, vsys string, e Entry) error {
+func (c *PanoRouter) Edit(tmpl, ts, vsys string, e Entry) error {
     var err error
 
-    if tmpl == "" {
-        return fmt.Errorf("tmpl must be specified")
+    if tmpl == "" && ts == "" {
+        return fmt.Errorf("tmpl or ts must be specified")
     }
 
     _, fn := c.versioning()
@@ -106,7 +106,7 @@ func (c *PanoRouter) Edit(tmpl, vsys string, e Entry) error {
     c.con.LogAction("(edit) virtual router %q", e.Name)
 
     // Set xpath.
-    path := c.xpath(tmpl, []string{e.Name})
+    path := c.xpath(tmpl, ts, []string{e.Name})
 
     // Edit the virtual router.
     _, err = c.con.Edit(path, fn(e), nil, nil)
@@ -115,24 +115,24 @@ func (c *PanoRouter) Edit(tmpl, vsys string, e Entry) error {
     }
 
     // Remove the virtual routers from any vsys they're currently in.
-    if err = c.con.VsysUnimport(util.VirtualRouterImport, tmpl, []string{e.Name}); err != nil {
+    if err = c.con.VsysUnimport(util.VirtualRouterImport, tmpl, ts, []string{e.Name}); err != nil {
         return err
     }
 
     // Perform vsys import next.
-    return c.con.VsysImport(util.VirtualRouterImport, tmpl, vsys, []string{e.Name})
+    return c.con.VsysImport(util.VirtualRouterImport, tmpl, ts, vsys, []string{e.Name})
 }
 
 // Delete removes the given virtual routers from the firewall.
 //
 // Virtual routers can be a string or an Entry object.
-func (c *PanoRouter) Delete(tmpl string, e ...interface{}) error {
+func (c *PanoRouter) Delete(tmpl, ts string, e ...interface{}) error {
     var err error
 
     if len(e) == 0 {
         return nil
-    } else if tmpl == "" {
-        return fmt.Errorf("tmpl must be specified")
+    } else if tmpl == "" && ts == "" {
+        return fmt.Errorf("tmpl or ts must be specified")
     }
 
     names := make([]string, len(e))
@@ -149,13 +149,13 @@ func (c *PanoRouter) Delete(tmpl string, e ...interface{}) error {
     c.con.LogAction("(delete) virtual routers: %v", names)
 
     // Unimport virtual routers.
-    err = c.con.VsysUnimport(util.VirtualRouterImport, tmpl, names)
+    err = c.con.VsysUnimport(util.VirtualRouterImport, tmpl, ts, names)
     if err != nil {
         return err
     }
 
     // Remove virtual routers next.
-    path := c.xpath(tmpl, names)
+    path := c.xpath(tmpl, ts, names)
     _, err = c.con.Delete(path, nil, nil)
     return err
 }
@@ -166,8 +166,8 @@ func (c *PanoRouter) versioning() (normalizer, func(Entry) (interface{})) {
     return &container_v1{}, specify_v1
 }
 
-func (c *PanoRouter) details(fn util.Retriever, tmpl, name string) (Entry, error) {
-    path := c.xpath(tmpl, []string{name})
+func (c *PanoRouter) details(fn util.Retriever, tmpl, ts, name string) (Entry, error) {
+    path := c.xpath(tmpl, ts, []string{name})
     obj, _ := c.versioning()
     if _, err := fn(path, nil, obj); err != nil {
         return Entry{}, err
@@ -177,9 +177,9 @@ func (c *PanoRouter) details(fn util.Retriever, tmpl, name string) (Entry, error
     return ans, nil
 }
 
-func (c *PanoRouter) xpath(tmpl string, vals []string) []string {
+func (c *PanoRouter) xpath(tmpl, ts string, vals []string) []string {
     ans := make([]string, 0, 11)
-    ans = append(ans, util.TemplateXpathPrefix(tmpl)...)
+    ans = append(ans, util.TemplateXpathPrefix(tmpl, ts)...)
     ans = append(ans,
         "config",
         "devices",
