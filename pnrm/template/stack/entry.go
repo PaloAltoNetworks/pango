@@ -17,7 +17,7 @@ type Entry struct {
     Description string
     DefaultVsys string
     Templates []string
-    Devices map[string] []string
+    Devices []string
 
     raw map[string] string
 }
@@ -47,7 +47,7 @@ func (o *container_v1) Normalize() Entry {
         Description: o.Answer.Description,
         DefaultVsys: o.Answer.DefaultVsys,
         Templates: util.MemToStr(o.Answer.Templates),
-        Devices: util.VsysEntToMap(o.Answer.Devices),
+        Devices: util.EntToStr(o.Answer.Devices),
     }
 
     ans.raw = make(map[string] string)
@@ -73,7 +73,7 @@ type entry_v1 struct {
     Description string `xml:"description,omitempty"`
     DefaultVsys string `xml:"settings>default-vsys,omitempty"`
     Templates *util.MemberType `xml:"templates"`
-    Devices *util.VsysEntryType `xml:"devices"`
+    Devices *util.EntryType `xml:"devices"`
     Config *util.RawXml `xml:"config"`
     Variables *util.RawXml `xml:"variable"`
 }
@@ -82,7 +82,7 @@ func specify_v1(e Entry) interface{} {
     ans := entry_v1{
         Name: e.Name,
         Description: e.Description,
-        Devices: util.MapToVsysEnt(e.Devices),
+        Devices: util.StrToEnt(e.Devices),
         Templates: util.StrToMem(e.Templates),
         DefaultVsys: e.DefaultVsys,
     }

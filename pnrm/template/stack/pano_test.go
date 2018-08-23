@@ -18,28 +18,19 @@ func TestNormalization(t *testing.T) {
         {"v1 test one", version.Number{6, 1, 0, ""}, Entry{
             Name: "one",
             Description: "with one device",
-            Devices: map[string] []string{
-                "001234": nil,
-            },
+            Devices: []string{"001234"},
         }},
         {"v1 test two", version.Number{6, 1, 0, ""}, Entry{
             Name: "two",
             Description: "with multi device",
             Templates: []string{"tem1", "tem2"},
-            Devices: map[string] []string{
-                "001234": nil,
-                "123": []string{"vsys1"},
-            },
+            Devices: []string{"001234", "123"},
         }},
         {"v1 test three", version.Number{6, 1, 0, ""}, Entry{
             Name: "three",
             Description: "with multi device",
             Templates: []string{"tem1", "tem2"},
             DefaultVsys: "myvsys",
-            Devices: map[string] []string{
-                "001234": nil,
-                "123": []string{"vsys1"},
-            },
             raw: map[string] string{
                 "var": "this is the var data",
                 "conf": "this is conf data",
