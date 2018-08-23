@@ -20,39 +20,39 @@ func (c *PanoIkeGw) Initialize(con util.XapiClient) {
 }
 
 // GetList performs GET to retrieve a list of IKE gateways.
-func (c *PanoIkeGw) GetList(tmpl, st string) ([]string, error) {
+func (c *PanoIkeGw) GetList(tmpl, ts string) ([]string, error) {
     c.con.LogQuery("(get) list of ike gateways")
-    path := c.xpath(tmpl, st, nil)
+    path := c.xpath(tmpl, ts, nil)
     return c.con.EntryListUsing(c.con.Get, path[:len(path) - 1])
 }
 
 // ShowList performs SHOW to retrieve a list of IKE gateways.
-func (c *PanoIkeGw) ShowList(tmpl, st string) ([]string, error) {
+func (c *PanoIkeGw) ShowList(tmpl, ts string) ([]string, error) {
     c.con.LogQuery("(show) list of ike gateways")
-    path := c.xpath(tmpl, st, nil)
+    path := c.xpath(tmpl, ts, nil)
     return c.con.EntryListUsing(c.con.Show, path[:len(path) - 1])
 }
 
 // Get performs GET to retrieve information for the given IKE gateway.
-func (c *PanoIkeGw) Get(tmpl, st, name string) (Entry, error) {
+func (c *PanoIkeGw) Get(tmpl, ts, name string) (Entry, error) {
     c.con.LogQuery("(get) ike gateway %q", name)
-    return c.details(c.con.Get, tmpl, st, name)
+    return c.details(c.con.Get, tmpl, ts, name)
 }
 
 // Get performs SHOW to retrieve information for the given IKE gateway.
-func (c *PanoIkeGw) Show(tmpl, st, name string) (Entry, error) {
+func (c *PanoIkeGw) Show(tmpl, ts, name string) (Entry, error) {
     c.con.LogQuery("(show) ike gateway %q", name)
-    return c.details(c.con.Show, tmpl, st, name)
+    return c.details(c.con.Show, tmpl, ts, name)
 }
 
 // Set performs SET to create / update one or more IKE gateways.
-func (c *PanoIkeGw) Set(tmpl, st string, e ...Entry) error {
+func (c *PanoIkeGw) Set(tmpl, ts string, e ...Entry) error {
     var err error
 
     if len(e) == 0 {
         return nil
-    } else if tmpl == "" && st == "" {
-        return fmt.Errorf("tmpl or st must be specified")
+    } else if tmpl == "" && ts == "" {
+        return fmt.Errorf("tmpl or ts must be specified")
     }
 
     _, fn := c.versioning()
@@ -67,7 +67,7 @@ func (c *PanoIkeGw) Set(tmpl, st string, e ...Entry) error {
     c.con.LogAction("(set) ike gateway: %v", names)
 
     // Set xpath.
-    path := c.xpath(tmpl, st, names)
+    path := c.xpath(tmpl, ts, names)
     if len(e) == 1 {
         path = path[:len(path) - 1]
     } else {
@@ -80,11 +80,11 @@ func (c *PanoIkeGw) Set(tmpl, st string, e ...Entry) error {
 }
 
 // Edit performs EDIT to create / update an IKE gateway.
-func (c *PanoIkeGw) Edit(tmpl, st string, e Entry) error {
+func (c *PanoIkeGw) Edit(tmpl, ts string, e Entry) error {
     var err error
 
-    if tmpl == "" && st == "" {
-        return fmt.Errorf("tmpl or st must be specified")
+    if tmpl == "" && ts == "" {
+        return fmt.Errorf("tmpl or ts must be specified")
     }
 
     _, fn := c.versioning()
@@ -92,7 +92,7 @@ func (c *PanoIkeGw) Edit(tmpl, st string, e Entry) error {
     c.con.LogAction("(edit) ike gateway %q", e.Name)
 
     // Set xpath.
-    path := c.xpath(tmpl, st, []string{e.Name})
+    path := c.xpath(tmpl, ts, []string{e.Name})
 
     // Edit.
     _, err = c.con.Edit(path, fn(e), nil, nil)
@@ -102,13 +102,13 @@ func (c *PanoIkeGw) Edit(tmpl, st string, e Entry) error {
 // Delete removes the given IKE gateways from the firewall.
 //
 // IKE gateways can be either a string or an Entry object.
-func (c *PanoIkeGw) Delete(tmpl, st string, e ...interface{}) error {
+func (c *PanoIkeGw) Delete(tmpl, ts string, e ...interface{}) error {
     var err error
 
     if len(e) == 0 {
         return nil
-    } else if tmpl == "" && st == "" {
-        return fmt.Errorf("tmpl or st must be specified")
+    } else if tmpl == "" && ts == "" {
+        return fmt.Errorf("tmpl or ts must be specified")
     }
 
     names := make([]string, len(e))
@@ -124,7 +124,7 @@ func (c *PanoIkeGw) Delete(tmpl, st string, e ...interface{}) error {
     }
     c.con.LogAction("(delete) ike gateways: %v", names)
 
-    path := c.xpath(tmpl, st, names)
+    path := c.xpath(tmpl, ts, names)
     _, err = c.con.Delete(path, nil, nil)
     return err
 }
@@ -143,8 +143,8 @@ func (c *PanoIkeGw) versioning() (normalizer, func(Entry) (interface{})) {
     }
 }
 
-func (c *PanoIkeGw) details(fn util.Retriever, tmpl, st, name string) (Entry, error) {
-    path := c.xpath(tmpl, st, []string{name})
+func (c *PanoIkeGw) details(fn util.Retriever, tmpl, ts, name string) (Entry, error) {
+    path := c.xpath(tmpl, ts, []string{name})
     obj, _ := c.versioning()
     _, err := fn(path, nil, obj)
     if err != nil {
@@ -155,9 +155,9 @@ func (c *PanoIkeGw) details(fn util.Retriever, tmpl, st, name string) (Entry, er
     return ans, nil
 }
 
-func (c *PanoIkeGw) xpath(tmpl, st string, vals []string) []string {
+func (c *PanoIkeGw) xpath(tmpl, ts string, vals []string) []string {
     ans := make([]string, 0, 12)
-    ans = append(ans, util.TemplateXpathPrefix(tmpl, st)...)
+    ans = append(ans, util.TemplateXpathPrefix(tmpl, ts)...)
     ans = append(ans,
         "config",
         "devices",
