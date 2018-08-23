@@ -10,7 +10,6 @@ import (
     "github.com/PaloAltoNetworks/pango/pnrm/dg"
     "github.com/PaloAltoNetworks/pango/pnrm/template"
     "github.com/PaloAltoNetworks/pango/pnrm/template/stack"
-    sv "github.com/PaloAltoNetworks/pango/pnrm/template/stack/variable"
     "github.com/PaloAltoNetworks/pango/pnrm/template/variable"
 )
 
@@ -20,9 +19,7 @@ type Pnrm struct {
     DeviceGroup *dg.Dg
     Template *template.Template
     TemplateStack *stack.Stack
-    TemplateStackVariable *sv.Variable
     TemplateVariable *variable.Variable
-    //TemplateStack *stack.Stack
 }
 
 // Initialize is invoked on panorama.Initialize().
@@ -35,9 +32,6 @@ func (c *Pnrm) Initialize(i util.XapiClient) {
 
     c.TemplateStack = &stack.Stack{}
     c.TemplateStack.Initialize(i)
-
-    c.TemplateStackVariable = &sv.Variable{}
-    c.TemplateStackVariable.Initialize(i)
 
     c.TemplateVariable = &variable.Variable{}
     c.TemplateVariable.Initialize(i)
