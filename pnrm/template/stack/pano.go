@@ -18,15 +18,11 @@ func (c *Stack) Initialize(con util.XapiClient) {
 }
 
 /*
-SetDeviceVsys performs a SET to add specific vsys from a device to
-template stack st.
-
-If you want all vsys to be included, or the device is a virtual firewall, then
-leave the vsys list empty.
+SetDevice performs a SET to add specific device to template stack st.
 
 The template stack can be either a string or an Entry object.
 */
-func (c *Stack) SetDeviceVsys(st interface{}, d string, vsys []string) error {
+func (c *Stack) SetDevice(st interface{}, d string) error {
     var name string
 
     switch v := st.(type) {
@@ -35,29 +31,24 @@ func (c *Stack) SetDeviceVsys(st interface{}, d string, vsys []string) error {
     case Entry:
         name = v.Name
     default:
-        return fmt.Errorf("Unknown type sent to set device vsys: %s", v)
+        return fmt.Errorf("Unknown type sent to set device: %s", v)
     }
 
-    c.con.LogAction("(set) device vsys in template stack: %s", name)
+    c.con.LogAction("(set) device in template stack: %s", name)
 
-    m := util.MapToVsysEnt(map[string] []string{d: vsys})
     path := c.xpath([]string{name})
     path = append(path, "devices")
 
-    _, err := c.con.Set(path, m.Entries[0], nil, nil)
+    _, err := c.con.Set(path, util.Entry{Value: d}, nil, nil)
     return err
 }
 
 /*
-EditDeviceVsys performs an EDIT to add specific vsys from a device to
-template stack st.
-
-If you want all vsys to be included, or the device is a virtual firewall, then
-leave the vsys list empty.
+EditDevice performs an EDIT to add specific device to template stack st.
 
 The template stack can be either a string or an Entry object.
 */
-func (c *Stack) EditDeviceVsys(st interface{}, d string, vsys []string) error {
+func (c *Stack) EditDevice(st interface{}, d string) error {
     var name string
 
     switch v := st.(type) {
@@ -66,29 +57,24 @@ func (c *Stack) EditDeviceVsys(st interface{}, d string, vsys []string) error {
     case Entry:
         name = v.Name
     default:
-        return fmt.Errorf("Unknown type sent to edit device vsys: %s", v)
+        return fmt.Errorf("Unknown type sent to edit device: %s", v)
     }
 
-    c.con.LogAction("(edit) device vsys in template stack: %s", name)
+    c.con.LogAction("(edit) device in template stack: %s", name)
 
-    m := util.MapToVsysEnt(map[string] []string{d: vsys})
     path := c.xpath([]string{name})
     path = append(path, "devices", util.AsEntryXpath([]string{d}))
 
-    _, err := c.con.Edit(path, m.Entries[0], nil, nil)
+    _, err := c.con.Edit(path, util.Entry{Value: d}, nil, nil)
     return err
 }
 
 /*
-DeleteDeviceVsys performs a DELETE to remove specific vsys from device d from
-template stack st.
-
-If you want all vsys to be removed, or the device is a virtual firewall, then
-leave the vsys list empty.
+DeleteDevice performs a DELETE to remove specific device d from template stack st.
 
 The template stack can be either a string or an Entry object.
 */
-func (c *Stack) DeleteDeviceVsys(st interface{}, d string, vsys []string) error {
+func (c *Stack) DeleteDevice(st interface{}, d string) error {
     var name string
 
     switch v := st.(type) {
@@ -97,17 +83,13 @@ func (c *Stack) DeleteDeviceVsys(st interface{}, d string, vsys []string) error 
     case Entry:
         name = v.Name
     default:
-        return fmt.Errorf("Unknown type sent to delete device vsys: %s", v)
+        return fmt.Errorf("Unknown type sent to delete device: %s", v)
     }
 
-    c.con.LogAction("(delete) device vsys from template stack: %s", name)
+    c.con.LogAction("(delete) device from template stack: %s", name)
 
-    path := make([]string, 0, 9)
-    path = append(path, c.xpath([]string{name})...)
+    path := c.xpath([]string{name})
     path = append(path, "devices", util.AsEntryXpath([]string{d}))
-    if len(vsys) > 0 {
-        path = append(path, "vsys", util.AsEntryXpath(vsys))
-    }
 
     _, err := c.con.Delete(path, nil, nil)
     return err
