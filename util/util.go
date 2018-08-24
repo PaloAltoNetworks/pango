@@ -330,7 +330,7 @@ func TemplateXpathPrefix(tmpl, ts string) []string {
         "devices",
         AsEntryXpath([]string{"localhost.localdomain"}),
         "template-stack",
-        AsEntryXpath([]string{tmpl}),
+        AsEntryXpath([]string{ts}),
     }
 }
 
