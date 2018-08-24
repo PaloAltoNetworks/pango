@@ -160,6 +160,32 @@ func (c *PanoRouter) Delete(tmpl, ts string, e ...interface{}) error {
     return err
 }
 
+// CleanupDefault clears the `default` route configuration instead of deleting
+// it outright.  This involves unimporting the route "default" from the given
+// vsys, then performing an `EDIT` with an empty router.Entry object.
+func (c *PanoRouter) CleanupDefault(tmpl, ts string) error {
+    var err error
+
+    if tmpl == "" || ts == "" {
+        return fmt.Errorf("tmpl or ts must be specified")
+    }
+
+    c.con.LogAction("(action) cleaning up default route")
+
+    // Unimport the default virtual router.
+    if err = c.con.VsysUnimport(util.VirtualRouterImport, tmpl, ts, []string{"default"}); err != nil {
+        return err
+    }
+
+    // Cleanup the interfaces the virtual router refers to.
+    info := Entry{Name: "default"}
+    if err = c.Edit(tmpl, ts, "", info); err != nil {
+        return err
+    }
+
+    return nil
+}
+
 /** Internal functions for this namespace struct **/
 
 func (c *PanoRouter) versioning() (normalizer, func(Entry) (interface{})) {

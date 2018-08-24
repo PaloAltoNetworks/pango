@@ -155,7 +155,7 @@ func (c *FwRouter) Delete(e ...interface{}) error {
 // CleanupDefault clears the `default` route configuration instead of deleting
 // it outright.  This involves unimporting the route "default" from the given
 // vsys, then performing an `EDIT` with an empty router.Entry object.
-func (c *FwRouter) CleanupDefault(vsys string) error {
+func (c *FwRouter) CleanupDefault() error {
     var err error
 
     c.con.LogAction("(action) cleaning up default route")
