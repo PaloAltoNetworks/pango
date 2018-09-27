@@ -9,6 +9,7 @@ import (
     vli "github.com/PaloAltoNetworks/pango/netw/interface/vlan"
     "github.com/PaloAltoNetworks/pango/netw/ipsectunnel"
     tpiv4 "github.com/PaloAltoNetworks/pango/netw/ipsectunnel/proxyid/ipv4"
+    "github.com/PaloAltoNetworks/pango/netw/profile/bfd"
     "github.com/PaloAltoNetworks/pango/netw/profile/ike"
     "github.com/PaloAltoNetworks/pango/netw/profile/ipsec"
     "github.com/PaloAltoNetworks/pango/netw/profile/mngtprof"
@@ -22,6 +23,7 @@ import (
 
 // PanoNetw is the client.Network namespace.
 type PanoNetw struct {
+    BfdProfile *bfd.PanoBfd
     EthernetInterface *eth.PanoEth
     IkeCryptoProfile *ike.PanoIke
     IkeGateway *ikegw.PanoIkeGw
@@ -40,6 +42,9 @@ type PanoNetw struct {
 
 // Initialize is invoked on client.Initialize().
 func (c *PanoNetw) Initialize(i util.XapiClient) {
+    c.BfdProfile = &bfd.PanoBfd{}
+    c.BfdProfile.Initialize(i)
+
     c.EthernetInterface = &eth.PanoEth{}
     c.EthernetInterface.Initialize(i)
 
