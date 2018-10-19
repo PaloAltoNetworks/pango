@@ -13,6 +13,7 @@ import (
     "github.com/PaloAltoNetworks/pango/netw/profile/ike"
     "github.com/PaloAltoNetworks/pango/netw/profile/ipsec"
     "github.com/PaloAltoNetworks/pango/netw/profile/mngtprof"
+    redist4 "github.com/PaloAltoNetworks/pango/netw/routing/profile/redist/ipv4"
     "github.com/PaloAltoNetworks/pango/netw/routing/router"
     "github.com/PaloAltoNetworks/pango/netw/routing/route/static/ipv4"
     "github.com/PaloAltoNetworks/pango/netw/vlan"
@@ -32,6 +33,7 @@ type PanoNetw struct {
     IpsecTunnelProxyId *tpiv4.PanoIpv4
     LoopbackInterface *loopback.PanoLoopback
     ManagementProfile *mngtprof.PanoMngtProf
+    RedistributionProfile *redist4.PanoIpv4
     StaticRoute *ipv4.PanoIpv4
     TunnelInterface *tunnel.PanoTunnel
     VirtualRouter *router.PanoRouter
@@ -68,6 +70,9 @@ func (c *PanoNetw) Initialize(i util.XapiClient) {
 
     c.ManagementProfile = &mngtprof.PanoMngtProf{}
     c.ManagementProfile.Initialize(i)
+
+    c.RedistributionProfile = &redist4.PanoIpv4{}
+    c.RedistributionProfile.Initialize(i)
 
     c.StaticRoute = &ipv4.PanoIpv4{}
     c.StaticRoute.Initialize(i)
