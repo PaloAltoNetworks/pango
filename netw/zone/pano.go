@@ -25,6 +25,10 @@ The zone can be either a string or an Entry object.
 func (c *PanoZone) SetInterface(tmpl, ts, vsys string, zone interface{}, mode, iface string) error {
     var name string
 
+    if tmpl == "" && ts == "" {
+        return fmt.Errorf("tmpl or ts must be specified")
+    }
+
     switch v := zone.(type) {
     case string:
         name = v
@@ -50,6 +54,10 @@ The zone can be either a string or an Entry object.
 */
 func (c *PanoZone) DeleteInterface(tmpl, ts, vsys string, zone interface{}, mode, iface string) error {
     var name string
+
+    if tmpl == "" && ts == "" {
+        return fmt.Errorf("tmpl or ts must be specified")
+    }
 
     switch v := zone.(type) {
     case string:
