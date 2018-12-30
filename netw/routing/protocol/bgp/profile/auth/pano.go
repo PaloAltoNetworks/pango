@@ -8,7 +8,7 @@ import (
 )
 
 
-// PanoAuth is the client.Network.RedistributionProfile namespace.
+// PanoAuth is the client.Network.BgpAuthProfile namespace.
 type PanoAuth struct {
     con util.XapiClient
 }

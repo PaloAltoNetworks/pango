@@ -8,7 +8,7 @@ import (
 )
 
 
-// FwAuth is the client.Network.RedistributionProfile namespace.
+// FwAuth is the client.Network.BgpAuthProfile namespace.
 type FwAuth struct {
     con util.XapiClient
 }
