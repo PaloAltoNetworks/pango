@@ -16,6 +16,7 @@ import (
     redist4 "github.com/PaloAltoNetworks/pango/netw/routing/profile/redist/ipv4"
     "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp"
     "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/profile/auth"
+    "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/profile/dampening"
     "github.com/PaloAltoNetworks/pango/netw/routing/router"
     "github.com/PaloAltoNetworks/pango/netw/routing/route/static/ipv4"
     "github.com/PaloAltoNetworks/pango/netw/vlan"
@@ -28,6 +29,7 @@ import (
 type PanoNetw struct {
     BfdProfile *bfd.PanoBfd
     BgpAuthProfile *auth.PanoAuth
+    BgpDampeningProfile *dampening.PanoDampening
     BgpConfig *bgp.PanoBgp
     EthernetInterface *eth.PanoEth
     IkeCryptoProfile *ike.PanoIke
@@ -53,6 +55,9 @@ func (c *PanoNetw) Initialize(i util.XapiClient) {
 
     c.BgpAuthProfile = &auth.PanoAuth{}
     c.BgpAuthProfile.Initialize(i)
+
+    c.BgpDampeningProfile = &dampening.PanoDampening{}
+    c.BgpDampeningProfile.Initialize(i)
 
     c.BgpConfig = &bgp.PanoBgp{}
     c.BgpConfig.Initialize(i)
