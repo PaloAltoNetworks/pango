@@ -5,7 +5,7 @@ import (
 )
 
 
-// Entry is a normalized, version independent representation of a redist profile.
+// Entry is a normalized, version independent representation of an auth profile.
 type Entry struct {
     Name string
     Secret string
