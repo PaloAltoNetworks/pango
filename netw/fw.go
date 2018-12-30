@@ -15,6 +15,7 @@ import (
     "github.com/PaloAltoNetworks/pango/netw/profile/mngtprof"
     redist4 "github.com/PaloAltoNetworks/pango/netw/routing/profile/redist/ipv4"
     "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp"
+    "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/profile/auth"
     "github.com/PaloAltoNetworks/pango/netw/routing/router"
     "github.com/PaloAltoNetworks/pango/netw/routing/route/static/ipv4"
     "github.com/PaloAltoNetworks/pango/netw/vlan"
@@ -26,6 +27,7 @@ import (
 // Netw is the client.Network namespace.
 type FwNetw struct {
     BfdProfile *bfd.FwBfd
+    BgpAuthProfile *auth.FwAuth
     BgpConfig *bgp.FwBgp
     EthernetInterface *eth.FwEth
     IkeCryptoProfile *ike.FwIke
@@ -48,6 +50,9 @@ type FwNetw struct {
 func (c *FwNetw) Initialize(i util.XapiClient) {
     c.BfdProfile = &bfd.FwBfd{}
     c.BfdProfile.Initialize(i)
+
+    c.BgpAuthProfile = &auth.FwAuth{}
+    c.BgpAuthProfile.Initialize(i)
 
     c.BgpConfig = &bgp.FwBgp{}
     c.BgpConfig.Initialize(i)
