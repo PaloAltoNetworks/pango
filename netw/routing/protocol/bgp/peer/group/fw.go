@@ -58,7 +58,7 @@ func (c *FwGroup) Set(vr string, e ...Entry) error {
     names := make([]string, len(e))
 
     // Build up the struct.
-    d := util.BulkElement{XMLName: xml.Name{Local: "peer-profile"}}
+    d := util.BulkElement{XMLName: xml.Name{Local: "peer-group"}}
     for i := range e {
         d.Data = append(d.Data, fn(e[i]))
         names[i] = e[i].Name
