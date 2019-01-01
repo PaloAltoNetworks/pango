@@ -40,6 +40,30 @@ type Entry struct {
 // Copy copies the information from source Entry `s` to this object.  As the
 // Name field relates to the XPATH of this object, this field is not copied.
 func (o *Entry) Copy(s Entry) {
+    o.Enable = s.Enable
+    o.PeerAs = s.PeerAs
+    o.LocalAddressInterface = s.LocalAddressInterface
+    o.LocalAddressIp = s.LocalAddressIp
+    o.PeerAddressIp = s.PeerAddressIp
+    o.ReflectorClient = s.ReflectorClient
+    o.PeeringType = s.PeeringType
+    o.MaxPrefixes = s.MaxPrefixes
+    o.AuthProfile = s.AuthProfile
+    o.KeepAliveInterval = s.KeepAliveInterval
+    o.MultiHop = s.MultiHop
+    o.OpenDelayTime = s.OpenDelayTime
+    o.HoldTime = s.HoldTime
+    o.IdleHoldTime = s.IdleHoldTime
+    o.AllowIncomingConnections = s.AllowIncomingConnections
+    o.IncomingConnectionsRemotePort = s.IncomingConnectionsRemotePort
+    o.AllowOutgoingConnections = s.AllowOutgoingConnections
+    o.OutgoingConnectionsLocalPort = s.OutgoingConnectionsLocalPort
+    o.BfdProfile = s.BfdProfile
+    o.EnableMpBgp = s.EnableMpBgp
+    o.AddressFamilyType = s.AddressFamilyType
+    o.SubsequentAddressFamily = s.SubsequentAddressFamily
+    o.EnableSenderSideLoopDetection = s.EnableSenderSideLoopDetection
+    o.MinRouteAdvertisementInterval = s.MinRouteAdvertisementInterval
 }
 
 /** Structs / functions for this namespace. **/
