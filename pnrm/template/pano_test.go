@@ -18,6 +18,9 @@ func TestNormalization(t *testing.T) {
         {"v1 test one", version.Number{6, 1, 0, ""}, Entry{
             Name: "one",
             Description: "my description",
+            raw: map[string] string{
+                "conf": "conf",
+            },
         }},
         {"v1 test two", version.Number{6, 1, 0, ""}, Entry{
             Name: "two",
@@ -27,6 +30,9 @@ func TestNormalization(t *testing.T) {
                 "001234": nil,
                 "998765": {"vsys3", "vsys5"},
             },
+            raw: map[string] string{
+                "conf": "conf",
+            },
         }},
         {"v1 test three", version.Number{6, 1, 0, ""}, Entry{
             Name: "three",
@@ -34,6 +40,9 @@ func TestNormalization(t *testing.T) {
             Mode: "normal",
             Devices: map[string] []string{
                 "001234": nil,
+            },
+            raw: map[string] string{
+                "conf": "conf",
             },
         }},
         {"v1 test four", version.Number{6, 1, 0, ""}, Entry{
@@ -44,6 +53,9 @@ func TestNormalization(t *testing.T) {
             VpnDisableMode: true,
             Devices: map[string] []string{
                 "001234": nil,
+            },
+            raw: map[string] string{
+                "conf": "conf",
             },
         }},
         {"v3 raw test", version.Number{8, 1, 0, ""}, Entry{
