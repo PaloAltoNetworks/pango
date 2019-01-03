@@ -16,6 +16,7 @@ import (
     redist4 "github.com/PaloAltoNetworks/pango/netw/routing/profile/redist/ipv4"
     "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp"
     "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/conadv"
+    "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/conadv/filter/advertise"
     "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/conadv/filter/nonexist"
     "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/exp"
     "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/imp"
@@ -35,6 +36,7 @@ import (
 type FwNetw struct {
     BfdProfile *bfd.FwBfd
     BgpAuthProfile *auth.FwAuth
+    BgpConAdvAdvertiseFilter *advertise.FwAdvertise
     BgpConAdvNonExistFilter *nonexist.FwNonExist
     BgpConditionalAdv *conadv.FwConAdv
     BgpConfig *bgp.FwBgp
@@ -67,6 +69,9 @@ func (c *FwNetw) Initialize(i util.XapiClient) {
 
     c.BgpAuthProfile = &auth.FwAuth{}
     c.BgpAuthProfile.Initialize(i)
+
+    c.BgpConAdvAdvertiseFilter = &advertise.FwAdvertise{}
+    c.BgpConAdvAdvertiseFilter.Initialize(i)
 
     c.BgpConAdvNonExistFilter = &nonexist.FwNonExist{}
     c.BgpConAdvNonExistFilter.Initialize(i)
