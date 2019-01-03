@@ -15,6 +15,7 @@ import (
     "github.com/PaloAltoNetworks/pango/netw/profile/mngtprof"
     redist4 "github.com/PaloAltoNetworks/pango/netw/routing/profile/redist/ipv4"
     "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp"
+    "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/exp"
     "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/imp"
     "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/peer/group"
     "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/peer/group/peer"
@@ -34,6 +35,7 @@ type FwNetw struct {
     BgpAuthProfile *auth.FwAuth
     BgpDampeningProfile *dampening.FwDampening
     BgpConfig *bgp.FwBgp
+    BgpExport *exp.FwExp
     BgpImport *imp.FwImp
     BgpPeerGroup *group.FwGroup
     BgpPeerGroupPeer *peer.FwPeer
@@ -67,6 +69,9 @@ func (c *FwNetw) Initialize(i util.XapiClient) {
 
     c.BgpConfig = &bgp.FwBgp{}
     c.BgpConfig.Initialize(i)
+
+    c.BgpExport = &exp.FwExp{}
+    c.BgpExport.Initialize(i)
 
     c.BgpImport = &imp.FwImp{}
     c.BgpImport.Initialize(i)
