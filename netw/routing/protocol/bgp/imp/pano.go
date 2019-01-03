@@ -136,6 +136,42 @@ func (c *PanoImp) Delete(tmpl, ts, vr string, e ...interface{}) error {
     return err
 }
 
+// MoveGroup moves a logical group of BGP import rules somewhere in relation
+// to another rule.
+func (c *PanoImp) MoveGroup(tmpl, ts, vr string, mvt int, rule string, e ...Entry) error {
+    var err error
+
+    c.con.LogAction("(move) %s group", singular)
+
+    if tmpl == "" && ts == "" {
+        return fmt.Errorf("tmpl or ts must be specified")
+    } else if len(e) < 1 {
+        return fmt.Errorf("Requires at least one rule")
+    }
+
+    path := c.xpath(tmpl, ts, vr, []string{e[0].Name})
+    list, err := c.GetList(tmpl, ts, vr)
+    if err != nil {
+        return err
+    }
+
+    // Set the first entity's position.
+    if err = c.con.PositionFirstEntity(mvt, rule, e[0].Name, path, list); err != nil {
+        return err
+    }
+
+    // Move all the rest under it.
+    li := len(path) - 1
+    for i := 1; i < len(e); i++ {
+        path[li] = util.AsEntryXpath([]string{e[i].Name})
+        if _, err = c.con.Move(path, "after", e[i - 1].Name, nil, nil); err != nil {
+            return err
+        }
+    }
+
+    return nil
+}
+
 /** Internal functions for this namespace struct **/
 
 func (c *PanoImp) versioning() (normalizer, func(Entry) (interface{})) {
