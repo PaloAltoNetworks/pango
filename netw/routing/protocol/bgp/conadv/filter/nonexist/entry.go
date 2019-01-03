@@ -8,7 +8,7 @@ import (
 
 
 // Entry is a normalized, version independent representation of a BGP
-// export rule.
+// conditional advertisement non-exist filter.
 type Entry struct {
     Name string
     Enable bool
