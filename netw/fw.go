@@ -15,6 +15,7 @@ import (
     "github.com/PaloAltoNetworks/pango/netw/profile/mngtprof"
     redist4 "github.com/PaloAltoNetworks/pango/netw/routing/profile/redist/ipv4"
     "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp"
+    "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/conadv"
     "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/exp"
     "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/imp"
     "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/peer/group"
@@ -33,8 +34,9 @@ import (
 type FwNetw struct {
     BfdProfile *bfd.FwBfd
     BgpAuthProfile *auth.FwAuth
-    BgpDampeningProfile *dampening.FwDampening
+    BgpConditionalAdv *conadv.FwConAdv
     BgpConfig *bgp.FwBgp
+    BgpDampeningProfile *dampening.FwDampening
     BgpExport *exp.FwExp
     BgpImport *imp.FwImp
     BgpPeerGroup *group.FwGroup
@@ -64,11 +66,14 @@ func (c *FwNetw) Initialize(i util.XapiClient) {
     c.BgpAuthProfile = &auth.FwAuth{}
     c.BgpAuthProfile.Initialize(i)
 
-    c.BgpDampeningProfile = &dampening.FwDampening{}
-    c.BgpDampeningProfile.Initialize(i)
+    c.BgpConditionalAdv = &conadv.FwConAdv{}
+    c.BgpConditionalAdv.Initialize(i)
 
     c.BgpConfig = &bgp.FwBgp{}
     c.BgpConfig.Initialize(i)
+
+    c.BgpDampeningProfile = &dampening.FwDampening{}
+    c.BgpDampeningProfile.Initialize(i)
 
     c.BgpExport = &exp.FwExp{}
     c.BgpExport.Initialize(i)
