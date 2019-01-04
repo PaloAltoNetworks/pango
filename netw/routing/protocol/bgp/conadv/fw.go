@@ -8,7 +8,7 @@ import (
 )
 
 
-// FwConadv is the client.Network.BgpConditionalAdv namespace.
+// FwConAdv is the client.Network.BgpConditionalAdv namespace.
 type FwConAdv struct {
     con util.XapiClient
 }
