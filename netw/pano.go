@@ -16,7 +16,7 @@ import (
     redist4 "github.com/PaloAltoNetworks/pango/netw/routing/profile/redist/ipv4"
     "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp"
     "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/aggregate"
-    "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/aggregate/suppress"
+    "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/aggregate/filter/suppress"
     "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/conadv"
     "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/conadv/filter/advertise"
     "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/conadv/filter/nonexist"
