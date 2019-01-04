@@ -16,6 +16,7 @@ import (
     redist4 "github.com/PaloAltoNetworks/pango/netw/routing/profile/redist/ipv4"
     "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp"
     "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/aggregate"
+    agaf "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/aggregate/filter/advertise"
     "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/aggregate/filter/suppress"
     "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/conadv"
     "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/conadv/filter/advertise"
@@ -38,6 +39,7 @@ import (
 type FwNetw struct {
     BfdProfile *bfd.FwBfd
     BgpAggregate *aggregate.FwAggregate
+    BgpAggAdvertiseFilter *agaf.FwAdvertise
     BgpAggSuppressFilter *suppress.FwSuppress
     BgpAuthProfile *auth.FwAuth
     BgpConAdvAdvertiseFilter *advertise.FwAdvertise
@@ -73,6 +75,9 @@ func (c *FwNetw) Initialize(i util.XapiClient) {
 
     c.BgpAggregate = &aggregate.FwAggregate{}
     c.BgpAggregate.Initialize(i)
+
+    c.BgpAggAdvertiseFilter = &agaf.FwAdvertise{}
+    c.BgpAggAdvertiseFilter.Initialize(i)
 
     c.BgpAggSuppressFilter = &suppress.FwSuppress{}
     c.BgpAggSuppressFilter.Initialize(i)

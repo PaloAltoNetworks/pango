@@ -16,6 +16,7 @@ import (
     redist4 "github.com/PaloAltoNetworks/pango/netw/routing/profile/redist/ipv4"
     "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp"
     "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/aggregate"
+    agaf "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/aggregate/filter/advertise"
     "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/aggregate/filter/suppress"
     "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/conadv"
     "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/conadv/filter/advertise"
@@ -38,6 +39,7 @@ import (
 type PanoNetw struct {
     BfdProfile *bfd.PanoBfd
     BgpAggregate *aggregate.PanoAggregate
+    BgpAggAdvertiseFilter *agaf.PanoAdvertise
     BgpAggSuppressFilter *suppress.PanoSuppress
     BgpAuthProfile *auth.PanoAuth
     BgpConAdvAdvertiseFilter *advertise.PanoAdvertise
@@ -73,6 +75,9 @@ func (c *PanoNetw) Initialize(i util.XapiClient) {
 
     c.BgpAggregate = &aggregate.PanoAggregate{}
     c.BgpAggregate.Initialize(i)
+
+    c.BgpAggAdvertiseFilter = &agaf.PanoAdvertise{}
+    c.BgpAggAdvertiseFilter.Initialize(i)
 
     c.BgpAggSuppressFilter = &suppress.PanoSuppress{}
     c.BgpAggSuppressFilter.Initialize(i)
