@@ -15,6 +15,7 @@ import (
     "github.com/PaloAltoNetworks/pango/netw/profile/mngtprof"
     redist4 "github.com/PaloAltoNetworks/pango/netw/routing/profile/redist/ipv4"
     "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp"
+    "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/aggregate"
     "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/conadv"
     "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/conadv/filter/advertise"
     "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/conadv/filter/nonexist"
@@ -35,6 +36,7 @@ import (
 // PanoNetw is the client.Network namespace.
 type PanoNetw struct {
     BfdProfile *bfd.PanoBfd
+    BgpAggregate *aggregate.PanoAggregate
     BgpAuthProfile *auth.PanoAuth
     BgpConAdvAdvertiseFilter *advertise.PanoAdvertise
     BgpConAdvNonExistFilter *nonexist.PanoNonExist
@@ -66,6 +68,9 @@ type PanoNetw struct {
 func (c *PanoNetw) Initialize(i util.XapiClient) {
     c.BfdProfile = &bfd.PanoBfd{}
     c.BfdProfile.Initialize(i)
+
+    c.BgpAggregate = &aggregate.PanoAggregate{}
+    c.BgpAggregate.Initialize(i)
 
     c.BgpAuthProfile = &auth.PanoAuth{}
     c.BgpAuthProfile.Initialize(i)
