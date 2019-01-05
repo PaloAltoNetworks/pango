@@ -3,6 +3,7 @@ package imp
 import (
     "fmt"
     "encoding/xml"
+    "strings"
 
     "github.com/PaloAltoNetworks/pango/util"
     "github.com/PaloAltoNetworks/pango/version"
@@ -53,6 +54,15 @@ func (c *FwImp) Set(vr string, e ...Entry) error {
         return nil
     } else if vr == "" {
         return fmt.Errorf("vr must be specified")
+    } else {
+        // Make sure rule names are unique.
+        m := make(map[string] int)
+        for i := range e {
+            m[e[i].Name] = m[e[i].Name] + 1
+            if m[e[i].Name] > 1 {
+                return fmt.Errorf("%s is defined multiple times: %s", singular, e[i].Name)
+            }
+        }
     }
 
     _, fn := c.versioning()
@@ -76,6 +86,22 @@ func (c *FwImp) Set(vr string, e ...Entry) error {
 
     // Create the objects.
     _, err = c.con.Set(path, d.Config(), nil, nil)
+
+    // On error: find the rule that's causing the error if multiple rules
+    // were given.
+    if err != nil && strings.Contains(err.Error(), "rules is invalid") {
+        for i := 0; i < len(e); i++ {
+            if e2 := c.Set(vr, e[i]); e2 != nil {
+                return fmt.Errorf("Error with rule %d: %s", i + 1, e2)
+            } else {
+                _ = c.Delete(vr, e[i])
+            }
+        }
+
+        // Couldn't find it, just return the original error.
+        return err
+    }
+
     return err
 }
 
