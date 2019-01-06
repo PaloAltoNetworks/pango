@@ -3,6 +3,7 @@ package nat
 import (
     "fmt"
     "encoding/xml"
+    "strings"
 
     "github.com/PaloAltoNetworks/pango/util"
     "github.com/PaloAltoNetworks/pango/version"
@@ -50,6 +51,15 @@ func (c *FwNat) Set(vsys string, e ...Entry) error {
 
     if len(e) == 0 {
         return nil
+    } else {
+        // Make sure rule names are unique.
+        m := make(map[string] int)
+        for i := range e {
+            m[e[i].Name] = m[e[i].Name] + 1
+            if m[e[i].Name] > 1 {
+                return fmt.Errorf("NAT rule is defined multiple times: %s", e[i].Name)
+            }
+        }
     }
 
     _, fn := c.versioning()
@@ -73,6 +83,22 @@ func (c *FwNat) Set(vsys string, e ...Entry) error {
 
     // Create the NAT policies.
     _, err = c.con.Set(path, d.Config(), nil, nil)
+
+    // On error: find the rule that's causing the error if multiple rules
+    // were given.
+    if err != nil && strings.Contains(err.Error(), "rules is invalid") {
+        for i := 0; i < len(e); i++ {
+            if e2 := c.Set(vsys, e[i]); e2 != nil {
+                return fmt.Errorf("Error with rule %d: %s", i + 1, e2)
+            } else {
+                _ = c.Delete(vsys, e[i])
+            }
+        }
+
+        // Couldn't find it, just return the original error.
+        return err
+    }
+
     return err
 }
 
@@ -118,6 +144,40 @@ func (c *FwNat) Delete(vsys string, e ...interface{}) error {
     path := c.xpath(vsys, names)
     _, err = c.con.Delete(path, nil, nil)
     return err
+}
+
+// MoveGroup moves a logical group of NAT rules somewhere in relation
+// to another rule.
+func (c *FwNat) MoveGroup(vsys string, mvt int, rule string, e ...Entry) error {
+    var err error
+
+    c.con.LogAction("(move) nat rule group")
+
+    if len(e) < 1 {
+        return fmt.Errorf("Requires at least one rule")
+    }
+
+    path := c.xpath(vsys, []string{e[0].Name})
+    list, err := c.GetList(vsys)
+    if err != nil {
+        return err
+    }
+
+    // Set the first entity's position.
+    if err = c.con.PositionFirstEntity(mvt, rule, e[0].Name, path, list); err != nil {
+        return err
+    }
+
+    // Move all the rest under it.
+    li := len(path) - 1
+    for i := 1; i < len(e); i++ {
+        path[li] = util.AsEntryXpath([]string{e[i].Name})
+        if _, err = c.con.Move(path, "after", e[i - 1].Name, nil, nil); err != nil {
+            return err
+        }
+    }
+
+    return nil
 }
 
 /** Internal functions for the Zone struct **/
