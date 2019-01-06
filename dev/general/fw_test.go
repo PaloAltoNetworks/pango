@@ -51,10 +51,6 @@ func TestNormalization(t *testing.T) {
                 "mtu": "mtu",
                 "pi": "permitted ip",
                 "route": "route",
-                "sppassword": "secure proxy password",
-                "spport": "secure proxy port",
-                "sps": "secure proxy server",
-                "spu": "secure proxy user",
                 "service": "service list",
                 "ss": "snmp setting",
                 "sd": "speed duplex",
@@ -73,6 +69,10 @@ func TestNormalization(t *testing.T) {
             LoginBanner: "This is a secure system",
             PanoramaPrimary: "192.168.55.2",
             PanoramaSecondary: "192.168.55.3",
+            ProxyServer: "proxy-server.com",
+            ProxyPort: 666,
+            ProxyUser: "jack",
+            ProxyPassword: "burton",
             DnsPrimary: "10.2.1.5",
             NtpPrimaryAddress: "10.2.5.7",
             NtpPrimaryAuthType: SymmetricKeyAuth,
@@ -85,7 +85,7 @@ func TestNormalization(t *testing.T) {
     }
 
     mc := &testdata.MockClient{}
-    ns := &General{}
+    ns := &FwGeneral{}
     ns.Initialize(mc)
 
     for _, tc := range testCases {
