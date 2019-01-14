@@ -26,12 +26,6 @@ const (
     AddressFamilyTypeIpv6 = "ipv6"
 )
 
-// Valid values for SubsequentAddressFamily.
-const (
-    SubsequentAddressFamilyUnicast = "unicast"
-    SubsequentAddressFamilyMulticast = "multicast"
-)
-
 // Valid non-int value for MaxPrefixes.
 const MaxPrefixesUnlimited = "unlimited"
 

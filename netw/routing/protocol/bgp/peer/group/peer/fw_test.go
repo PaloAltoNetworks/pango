@@ -81,7 +81,7 @@ func TestFwNormalization(t *testing.T) {
             BfdProfile: BfdProfileNone,
             EnableMpBgp: true,
             AddressFamilyType: AddressFamilyTypeIpv4,
-            SubsequentAddressFamily: SubsequentAddressFamilyUnicast,
+            SubsequentAddressFamilyUnicast: true,
             EnableSenderSideLoopDetection: true,
         }},
         {"v4", version.Number{8, 1, 0, ""}, Entry{
@@ -107,7 +107,7 @@ func TestFwNormalization(t *testing.T) {
             BfdProfile: "my bfd profile",
             EnableMpBgp: false,
             AddressFamilyType: AddressFamilyTypeIpv6,
-            SubsequentAddressFamily: SubsequentAddressFamilyMulticast,
+            SubsequentAddressFamilyMulticast: true,
             EnableSenderSideLoopDetection: false,
             MinRouteAdvertisementInterval: 77,
         }},

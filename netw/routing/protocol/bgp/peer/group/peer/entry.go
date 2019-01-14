@@ -32,7 +32,8 @@ type Entry struct {
     BfdProfile string // 7.1+
     EnableMpBgp bool // 8.0+
     AddressFamilyType string // 8.0+
-    SubsequentAddressFamily string // 8.0+
+    SubsequentAddressFamilyUnicast bool // 8.0+
+    SubsequentAddressFamilyMulticast bool // 8.0+
     EnableSenderSideLoopDetection bool // 8.0+
     MinRouteAdvertisementInterval int // 8.1+
 }
@@ -61,7 +62,8 @@ func (o *Entry) Copy(s Entry) {
     o.BfdProfile = s.BfdProfile
     o.EnableMpBgp = s.EnableMpBgp
     o.AddressFamilyType = s.AddressFamilyType
-    o.SubsequentAddressFamily = s.SubsequentAddressFamily
+    o.SubsequentAddressFamilyUnicast = s.SubsequentAddressFamilyUnicast
+    o.SubsequentAddressFamilyMulticast = s.SubsequentAddressFamilyMulticast
     o.EnableSenderSideLoopDetection = s.EnableSenderSideLoopDetection
     o.MinRouteAdvertisementInterval = s.MinRouteAdvertisementInterval
 }
@@ -165,7 +167,6 @@ func (o *container_v3) Normalize() Entry {
         PeerAs: o.Answer.PeerAs,
         EnableMpBgp: util.AsBool(o.Answer.EnableMpBgp),
         AddressFamilyType: o.Answer.AddressFamilyType,
-        SubsequentAddressFamily: o.Answer.SubsequentAddressFamily,
         EnableSenderSideLoopDetection: util.AsBool(o.Answer.EnableSenderSideLoopDetection),
         LocalAddressInterface: o.Answer.LocalAddressInterface,
         LocalAddressIp: o.Answer.LocalAddressIp,
@@ -173,6 +174,11 @@ func (o *container_v3) Normalize() Entry {
         ReflectorClient: o.Answer.ReflectorClient,
         PeeringType: o.Answer.PeeringType,
         MaxPrefixes: o.Answer.MaxPrefixes,
+    }
+
+    if o.Answer.Safi != nil {
+        ans.SubsequentAddressFamilyUnicast = util.AsBool(o.Answer.Safi.SubsequentAddressFamilyUnicast)
+        ans.SubsequentAddressFamilyMulticast = util.AsBool(o.Answer.Safi.SubsequentAddressFamilyMulticast)
     }
 
     if o.Answer.Bfd != nil {
@@ -212,7 +218,6 @@ func (o *container_v4) Normalize() Entry {
         PeerAs: o.Answer.PeerAs,
         EnableMpBgp: util.AsBool(o.Answer.EnableMpBgp),
         AddressFamilyType: o.Answer.AddressFamilyType,
-        SubsequentAddressFamily: o.Answer.SubsequentAddressFamily,
         EnableSenderSideLoopDetection: util.AsBool(o.Answer.EnableSenderSideLoopDetection),
         LocalAddressInterface: o.Answer.LocalAddressInterface,
         LocalAddressIp: o.Answer.LocalAddressIp,
@@ -220,6 +225,11 @@ func (o *container_v4) Normalize() Entry {
         ReflectorClient: o.Answer.ReflectorClient,
         PeeringType: o.Answer.PeeringType,
         MaxPrefixes: o.Answer.MaxPrefixes,
+    }
+
+    if o.Answer.Safi != nil {
+        ans.SubsequentAddressFamilyUnicast = util.AsBool(o.Answer.Safi.SubsequentAddressFamilyUnicast)
+        ans.SubsequentAddressFamilyMulticast = util.AsBool(o.Answer.Safi.SubsequentAddressFamilyMulticast)
     }
 
     if o.Answer.Bfd != nil {
@@ -404,7 +414,7 @@ type entry_v3 struct {
     PeerAs string `xml:"peer-as"`
     EnableMpBgp string `xml:"enable-mp-bgp"`
     AddressFamilyType string `xml:"address-family-identifier,omitempty"`
-    SubsequentAddressFamily string `xml:"subsequent-address-family-identifier,omitempty"`
+    Safi *safi `xml:"subsequent-address-family-identifier"`
     EnableSenderSideLoopDetection string `xml:"enable-sender-side-loop-detection"`
     LocalAddressInterface string `xml:"local-address>interface"`
     LocalAddressIp string `xml:"local-address>ip,omitempty"`
@@ -416,12 +426,16 @@ type entry_v3 struct {
     Options *opts_v1 `xml:"connection-options"`
 }
 
+type safi struct {
+    SubsequentAddressFamilyUnicast string `xml:"unicast"`
+    SubsequentAddressFamilyMulticast string `xml:"multicast"`
+}
+
 func specify_v3(e Entry) interface{} {
     ans := entry_v3{
         Name: e.Name,
         EnableMpBgp: util.YesNo(e.EnableMpBgp),
         AddressFamilyType: e.AddressFamilyType,
-        SubsequentAddressFamily: e.SubsequentAddressFamily,
         EnableSenderSideLoopDetection: util.YesNo(e.EnableSenderSideLoopDetection),
         Enable: util.YesNo(e.Enable),
         PeerAs: e.PeerAs,
@@ -431,6 +445,13 @@ func specify_v3(e Entry) interface{} {
         ReflectorClient: e.ReflectorClient,
         PeeringType: e.PeeringType,
         MaxPrefixes: e.MaxPrefixes,
+    }
+
+    if e.SubsequentAddressFamilyUnicast || e.SubsequentAddressFamilyMulticast {
+        ans.Safi = &safi{
+            SubsequentAddressFamilyUnicast: util.YesNo(e.SubsequentAddressFamilyUnicast),
+            SubsequentAddressFamilyMulticast: util.YesNo(e.SubsequentAddressFamilyMulticast),
+        }
     }
 
     if e.BfdProfile != "" {
@@ -477,7 +498,7 @@ type entry_v4 struct {
     PeerAs string `xml:"peer-as"`
     EnableMpBgp string `xml:"enable-mp-bgp"`
     AddressFamilyType string `xml:"address-family-identifier,omitempty"`
-    SubsequentAddressFamily string `xml:"subsequent-address-family-identifier,omitempty"`
+    Safi *safi `xml:"subsequent-address-family-identifier"`
     EnableSenderSideLoopDetection string `xml:"enable-sender-side-loop-detection"`
     LocalAddressInterface string `xml:"local-address>interface"`
     LocalAddressIp string `xml:"local-address>ip,omitempty"`
@@ -506,7 +527,6 @@ func specify_v4(e Entry) interface{} {
         Name: e.Name,
         EnableMpBgp: util.YesNo(e.EnableMpBgp),
         AddressFamilyType: e.AddressFamilyType,
-        SubsequentAddressFamily: e.SubsequentAddressFamily,
         EnableSenderSideLoopDetection: util.YesNo(e.EnableSenderSideLoopDetection),
         Enable: util.YesNo(e.Enable),
         PeerAs: e.PeerAs,
@@ -516,6 +536,13 @@ func specify_v4(e Entry) interface{} {
         ReflectorClient: e.ReflectorClient,
         PeeringType: e.PeeringType,
         MaxPrefixes: e.MaxPrefixes,
+    }
+
+    if e.SubsequentAddressFamilyUnicast || e.SubsequentAddressFamilyMulticast {
+        ans.Safi = &safi{
+            SubsequentAddressFamilyUnicast: util.YesNo(e.SubsequentAddressFamilyUnicast),
+            SubsequentAddressFamilyMulticast: util.YesNo(e.SubsequentAddressFamilyMulticast),
+        }
     }
 
     if e.BfdProfile != "" {
