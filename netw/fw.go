@@ -23,8 +23,8 @@ import (
     "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/conadv/filter/nonexist"
     "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/exp"
     "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/imp"
+    "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/peer"
     "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/peer/group"
-    "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/peer/group/peer"
     "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/profile/auth"
     "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/profile/dampening"
     bgpredist "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/redist"
@@ -50,8 +50,8 @@ type FwNetw struct {
     BgpDampeningProfile *dampening.FwDampening
     BgpExport *exp.FwExp
     BgpImport *imp.FwImp
+    BgpPeer *peer.FwPeer
     BgpPeerGroup *group.FwGroup
-    BgpPeerGroupPeer *peer.FwPeer
     BgpRedistRule *bgpredist.FwRedist
     EthernetInterface *eth.FwEth
     IkeCryptoProfile *ike.FwIke
@@ -108,11 +108,11 @@ func (c *FwNetw) Initialize(i util.XapiClient) {
     c.BgpImport = &imp.FwImp{}
     c.BgpImport.Initialize(i)
 
+    c.BgpPeer = &peer.FwPeer{}
+    c.BgpPeer.Initialize(i)
+
     c.BgpPeerGroup = &group.FwGroup{}
     c.BgpPeerGroup.Initialize(i)
-
-    c.BgpPeerGroupPeer = &peer.FwPeer{}
-    c.BgpPeerGroupPeer.Initialize(i)
 
     c.BgpRedistRule = &bgpredist.FwRedist{}
     c.BgpRedistRule.Initialize(i)

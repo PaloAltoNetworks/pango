@@ -9,7 +9,7 @@ import (
 )
 
 
-// PanoPeer is the client.Network.BgpPeerGroupPeer namespace.
+// PanoPeer is the client.Network.BgpPeer namespace.
 type PanoPeer struct {
     con util.XapiClient
 }

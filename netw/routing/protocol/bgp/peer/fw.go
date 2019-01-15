@@ -9,7 +9,7 @@ import (
 )
 
 
-// FwPeer is the client.Network.BgpPeerGroupPeer namespace.
+// FwPeer is the client.Network.BgpPeer namespace.
 type FwPeer struct {
     con util.XapiClient
 }
