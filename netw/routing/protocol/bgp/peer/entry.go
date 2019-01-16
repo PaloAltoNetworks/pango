@@ -263,7 +263,7 @@ type entry_v1 struct {
     XMLName xml.Name `xml:"entry"`
     Name string `xml:"name,attr"`
     Enable string `xml:"enable"`
-    PeerAs string `xml:"peer-as"`
+    PeerAs string `xml:"peer-as,omitempty"`
     LocalAddressInterface string `xml:"local-address>interface"`
     LocalAddressIp string `xml:"local-address>ip,omitempty"`
     PeerAddressIp string `xml:"peer-address>ip"`
@@ -342,7 +342,7 @@ type entry_v2 struct {
     XMLName xml.Name `xml:"entry"`
     Name string `xml:"name,attr"`
     Enable string `xml:"enable"`
-    PeerAs string `xml:"peer-as"`
+    PeerAs string `xml:"peer-as,omitempty"`
     LocalAddressInterface string `xml:"local-address>interface"`
     LocalAddressIp string `xml:"local-address>ip,omitempty"`
     PeerAddressIp string `xml:"peer-address>ip"`
@@ -411,7 +411,7 @@ type entry_v3 struct {
     XMLName xml.Name `xml:"entry"`
     Name string `xml:"name,attr"`
     Enable string `xml:"enable"`
-    PeerAs string `xml:"peer-as"`
+    PeerAs string `xml:"peer-as,omitempty"`
     EnableMpBgp string `xml:"enable-mp-bgp"`
     AddressFamilyType string `xml:"address-family-identifier,omitempty"`
     Safi *safi `xml:"subsequent-address-family-identifier"`
@@ -495,7 +495,7 @@ type entry_v4 struct {
     XMLName xml.Name `xml:"entry"`
     Name string `xml:"name,attr"`
     Enable string `xml:"enable"`
-    PeerAs string `xml:"peer-as"`
+    PeerAs string `xml:"peer-as,omitempty"`
     EnableMpBgp string `xml:"enable-mp-bgp"`
     AddressFamilyType string `xml:"address-family-identifier,omitempty"`
     Safi *safi `xml:"subsequent-address-family-identifier"`
