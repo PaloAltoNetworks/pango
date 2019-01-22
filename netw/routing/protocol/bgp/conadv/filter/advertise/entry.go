@@ -16,7 +16,7 @@ type Entry struct {
     CommunityRegex string
     ExtendedCommunityRegex string
     Med string
-    RouteTable string
+    RouteTable string // 8.0+
     AddressPrefix []string
     NextHop []string
     FromPeer []string
@@ -29,7 +29,7 @@ func (o *Entry) Copy(s Entry) {
     o.AsPathRegex = s.AsPathRegex
     o.CommunityRegex = s.CommunityRegex
     o.ExtendedCommunityRegex = s.ExtendedCommunityRegex
-    s.Med = o.Med
+    o.Med = s.Med
     o.RouteTable = s.RouteTable
     o.AddressPrefix = s.AddressPrefix
     o.NextHop = s.NextHop
