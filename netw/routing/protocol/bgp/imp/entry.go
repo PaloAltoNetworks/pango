@@ -17,7 +17,7 @@ type Entry struct {
     MatchCommunityRegex string
     MatchExtendedCommunityRegex string
     MatchMed string
-    MatchRouteTable string
+    MatchRouteTable string // 8.0+
     MatchAddressPrefix map[string] bool
     MatchNextHop []string
     MatchFromPeer []string
