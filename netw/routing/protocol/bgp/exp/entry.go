@@ -28,6 +28,7 @@ type Entry struct {
     Origin string
     AsPathLimit int
     AsPathType string
+    AsPathValue string
     CommunityType string
     CommunityValue string
     ExtendedCommunityType string
@@ -54,6 +55,7 @@ func (o *Entry) Copy(s Entry) {
     o.Origin = s.Origin
     o.AsPathLimit = s.AsPathLimit
     o.AsPathType = s.AsPathType
+    o.AsPathValue = s.AsPathValue
     o.CommunityType = s.CommunityType
     o.CommunityValue = s.CommunityValue
     o.ExtendedCommunityType = s.ExtendedCommunityType
@@ -121,6 +123,12 @@ func (o *container_v1) Normalize() Entry {
                         ans.AsPathType = AsPathTypeNone
                     } else if o.Answer.Action.Allow.Update.AsPath.Remove != nil {
                         ans.AsPathType = AsPathTypeRemove
+                    } else if o.Answer.Action.Allow.Update.AsPath.Prepend != "" {
+                        ans.AsPathType = AsPathTypePrepend
+                        ans.AsPathValue = o.Answer.Action.Allow.Update.AsPath.Prepend
+                    } else if o.Answer.Action.Allow.Update.AsPath.RemoveAndPrepend != "" {
+                        ans.AsPathType = AsPathTypeRemoveAndPrepend
+                        ans.AsPathValue = o.Answer.Action.Allow.Update.AsPath.RemoveAndPrepend
                     }
                 }
 
@@ -220,6 +228,12 @@ func (o *container_v2) Normalize() Entry {
                         ans.AsPathType = AsPathTypeNone
                     } else if o.Answer.Action.Allow.Update.AsPath.Remove != nil {
                         ans.AsPathType = AsPathTypeRemove
+                    } else if o.Answer.Action.Allow.Update.AsPath.Prepend != "" {
+                        ans.AsPathType = AsPathTypePrepend
+                        ans.AsPathValue = o.Answer.Action.Allow.Update.AsPath.Prepend
+                    } else if o.Answer.Action.Allow.Update.AsPath.RemoveAndPrepend != "" {
+                        ans.AsPathType = AsPathTypeRemoveAndPrepend
+                        ans.AsPathValue = o.Answer.Action.Allow.Update.AsPath.RemoveAndPrepend
                     }
                 }
 
@@ -318,6 +332,8 @@ type update struct {
 type asPath struct {
     None *string `xml:"none"`
     Remove *string `xml:"remove"`
+    Prepend string `xml:"prepend,omitempty"`
+    RemoveAndPrepend string `xml:"remove-and-prepend,omitempty"`
 }
 
 type allowCom struct {
@@ -401,6 +417,14 @@ func specify_v1(e Entry) interface{} {
             case AsPathTypeRemove:
                 u.AsPath = &asPath{
                     Remove: &s,
+                }
+            case AsPathTypePrepend:
+                u.AsPath = &asPath{
+                    Prepend: e.AsPathValue,
+                }
+            case AsPathTypeRemoveAndPrepend:
+                u.AsPath = &asPath{
+                    RemoveAndPrepend: e.AsPathValue,
                 }
             }
 
@@ -551,6 +575,14 @@ func specify_v2(e Entry) interface{} {
             case AsPathTypeRemove:
                 u.AsPath = &asPath{
                     Remove: &s,
+                }
+            case AsPathTypePrepend:
+                u.AsPath = &asPath{
+                    Prepend: e.AsPathValue,
+                }
+            case AsPathTypeRemoveAndPrepend:
+                u.AsPath = &asPath{
+                    RemoveAndPrepend: e.AsPathValue,
                 }
             }
 

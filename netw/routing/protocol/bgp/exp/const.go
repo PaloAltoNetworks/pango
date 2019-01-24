@@ -43,6 +43,8 @@ const (
 const (
     AsPathTypeNone = "none"
     AsPathTypeRemove = "remove"
+    AsPathTypePrepend = "prepend"
+    AsPathTypeRemoveAndPrepend = "remove-and-prepend"
 )
 
 const (

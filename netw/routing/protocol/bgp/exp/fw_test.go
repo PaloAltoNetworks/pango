@@ -148,6 +148,20 @@ func TestFwNormalization(t *testing.T) {
             ExtendedCommunityType: CommunityTypeRemoveRegex,
             ExtendedCommunityValue: "remove regex",
         }},
+        {"v1 as path type prepend", version.Number{7, 0, 0, ""}, Entry{
+            Name: "foo",
+            Enable: false,
+            Action: ActionAllow,
+            AsPathType: AsPathTypePrepend,
+            AsPathValue: "2",
+        }},
+        {"v1 as path type remove-and-prepend", version.Number{7, 0, 0, ""}, Entry{
+            Name: "foo",
+            Enable: false,
+            Action: ActionAllow,
+            AsPathType: AsPathTypeRemoveAndPrepend,
+            AsPathValue: "2",
+        }},
         {"v2 minimal with deny", version.Number{8, 0, 0, ""}, Entry{
             Name: "minimal",
             Enable: false,
@@ -283,6 +297,20 @@ func TestFwNormalization(t *testing.T) {
             CommunityValue: "overwrite value",
             ExtendedCommunityType: CommunityTypeRemoveRegex,
             ExtendedCommunityValue: "remove regex",
+        }},
+        {"v2 as path type prepend", version.Number{8, 0, 0, ""}, Entry{
+            Name: "foo",
+            Enable: false,
+            Action: ActionAllow,
+            AsPathType: AsPathTypePrepend,
+            AsPathValue: "2",
+        }},
+        {"v2 as path type remove-and-prepend", version.Number{8, 0, 0, ""}, Entry{
+            Name: "foo",
+            Enable: false,
+            Action: ActionAllow,
+            AsPathType: AsPathTypeRemoveAndPrepend,
+            AsPathValue: "2",
         }},
     }
 
