@@ -82,9 +82,14 @@ func (o *container_v1) Normalize() Entry {
         if o.Answer.Options.AsPath != nil {
             if o.Answer.Options.AsPath.None != nil {
                 ans.AsPathType = AsPathTypeNone
+            } else if o.Answer.Options.AsPath.Remove != nil {
+                ans.AsPathType = AsPathTypeRemove
             } else if o.Answer.Options.AsPath.Prepend != "" {
                 ans.AsPathType = AsPathTypePrepend
                 ans.AsPathValue = o.Answer.Options.AsPath.Prepend
+            } else if o.Answer.Options.AsPath.RemoveAndPrepend != "" {
+                ans.AsPathType = AsPathTypeRemoveAndPrepend
+                ans.AsPathValue = o.Answer.Options.AsPath.RemoveAndPrepend
             }
         }
 
@@ -163,8 +168,8 @@ type options struct {
 
 type asPath struct {
     None *string `xml:"none"`
-    Prepend string `xml:"prepend,omitempty"`
     Remove *string `xml:"remove"`
+    Prepend string `xml:"prepend,omitempty"`
     RemoveAndPrepend string `xml:"remove-and-prepend,omitempty"`
 }
 
@@ -201,9 +206,17 @@ func specify_v1(e Entry) interface{} {
             ans.Options.AsPath = &asPath{
                 None: &s,
             }
+        case AsPathTypeRemove:
+            ans.Options.AsPath = &asPath{
+                Remove: &s,
+            }
         case AsPathTypePrepend:
             ans.Options.AsPath = &asPath{
                 Prepend: e.AsPathValue,
+            }
+        case AsPathTypeRemoveAndPrepend:
+            ans.Options.AsPath = &asPath{
+                RemoveAndPrepend: e.AsPathValue,
             }
         }
 

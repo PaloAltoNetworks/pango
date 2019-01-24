@@ -26,13 +26,13 @@ const (
     AppendNoPeer = "nopeer"
 )
 
-// Valid values for AsPathType.
+// Valid values for AsPathType.  As of PAN-OS 8.1, "prepend" and
+// "remove-and-prepend" are disabled.
 const (
     AsPathTypeNone = "none"
+    AsPathTypeRemove = "remove"
     AsPathTypePrepend = "prepend"
-    // Both of these are disabled as of PAN-OS 8.1, so commenting out.
-    //AsPathTypeRemove = "remove"
-    //AsPathTypeRemoveAndPrepend = "remove-and-prepend"
+    AsPathTypeRemoveAndPrepend = "remove-and-prepend"
 )
 
 const (
