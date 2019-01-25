@@ -7,13 +7,13 @@ import (
 )
 
 
-// Entry is a normalized, version independent representation of a dampening
-// profile.
+// Entry is a normalized, version independent representation of a
+// BGP redistribution rule.
 type Entry struct {
     Name string
     Enable bool
     AddressFamily string
-    RouteTable string
+    RouteTable string // 8.0+
     Metric int
     SetOrigin string
     SetMed string
@@ -27,6 +27,15 @@ type Entry struct {
 // Name field relates to the XPATH of this object, this field is not copied.
 func (o *Entry) Copy(s Entry) {
     o.Enable = s.Enable
+    o.AddressFamily = s.AddressFamily
+    o.RouteTable = s.RouteTable
+    o.Metric = s.Metric
+    o.SetOrigin = s.SetOrigin
+    o.SetMed = s.SetMed
+    o.SetLocalPreference = s.SetLocalPreference
+    o.SetAsPathLimit = s.SetAsPathLimit
+    o.SetCommunity = s.SetCommunity
+    o.SetExtendedCommunity = s.SetExtendedCommunity
 }
 
 /** Structs / functions for this namespace. **/
