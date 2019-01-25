@@ -12,7 +12,6 @@ import (
 type Entry struct {
     Name string
     Enable bool
-    UsedBy []string
     AsPathRegex string
     CommunityRegex string
     ExtendedCommunityRegex string
@@ -27,7 +26,6 @@ type Entry struct {
 // Name field relates to the XPATH of this object, this field is not copied.
 func (o *Entry) Copy(s Entry) {
     o.Enable = s.Enable
-    o.UsedBy = s.UsedBy
     o.AsPathRegex = s.AsPathRegex
     o.CommunityRegex = s.CommunityRegex
     o.ExtendedCommunityRegex = s.ExtendedCommunityRegex
