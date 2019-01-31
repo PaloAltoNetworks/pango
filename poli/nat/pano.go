@@ -21,27 +21,27 @@ func (c *PanoNat) Initialize(con util.XapiClient) {
 
 // GetList performs GET to retrieve a list of NAT policies.
 func (c *PanoNat) GetList(dg, base string) ([]string, error) {
-    c.con.LogQuery("(get) list of NAT policies")
+    c.con.LogQuery("(get) list of %s", plural)
     path := c.xpath(dg, base, nil)
     return c.con.EntryListUsing(c.con.Get, path[:len(path) - 1])
 }
 
 // ShowList performs SHOW to retrieve a list of NAT policies.
 func (c *PanoNat) ShowList(dg, base string) ([]string, error) {
-    c.con.LogQuery("(show) list of NAT policies")
+    c.con.LogQuery("(show) list of %s", plural)
     path := c.xpath(dg, base, nil)
     return c.con.EntryListUsing(c.con.Show, path[:len(path) - 1])
 }
 
 // Get performs GET to retrieve information for the given NAT policy.
 func (c *PanoNat) Get(dg, base, name string) (Entry, error) {
-    c.con.LogQuery("(get) NAT policy %q", name)
+    c.con.LogQuery("(get) %s %q", singular, name)
     return c.details(c.con.Get, dg, base, name)
 }
 
 // Get performs SHOW to retrieve information for the given NAT policy.
 func (c *PanoNat) Show(dg, base, name string) (Entry, error) {
-    c.con.LogQuery("(show) NAT policy %q", name)
+    c.con.LogQuery("(show) %s %q", singular, name)
     return c.details(c.con.Show, dg, base, name)
 }
 
@@ -71,7 +71,7 @@ func (c *PanoNat) Set(dg, base string, e ...Entry) error {
         d.Data = append(d.Data, fn(e[i]))
         names[i] = e[i].Name
     }
-    c.con.LogAction("(set) NAT policies: %v", names)
+    c.con.LogAction("(set) %s: %v", plural, names)
 
     // Set xpath.
     path := c.xpath(dg, base, names)
@@ -108,7 +108,7 @@ func (c *PanoNat) Edit(dg, base string, e Entry) error {
 
     _, fn := c.versioning()
 
-    c.con.LogAction("(edit) NAT policy %q", e.Name)
+    c.con.LogAction("(edit) %s %q", singular, e.Name)
 
     // Set xpath.
     path := c.xpath(dg, base, []string{e.Name})
@@ -139,7 +139,7 @@ func (c *PanoNat) Delete(dg, base string, e ...interface{}) error {
             return fmt.Errorf("Unsupported type to delete: %s", v)
         }
     }
-    c.con.LogAction("(delete) NAT policies: %v", names)
+    c.con.LogAction("(delete) %s: %v", plural, names)
 
     path := c.xpath(dg, base, names)
     _, err = c.con.Delete(path, nil, nil)
@@ -151,7 +151,7 @@ func (c *PanoNat) Delete(dg, base string, e ...interface{}) error {
 func (c *PanoNat) MoveGroup(dg, base string, mvt int, rule string, e ...Entry) error {
     var err error
 
-    c.con.LogAction("(move) nat rule group")
+    c.con.LogAction("(move) %s group", singular)
 
     if len(e) < 1 {
         return fmt.Errorf("Requires at least one rule")

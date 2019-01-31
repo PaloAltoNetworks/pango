@@ -21,27 +21,27 @@ func (c *FwNat) Initialize(con util.XapiClient) {
 
 // GetList performs GET to retrieve a list of NAT policies.
 func (c *FwNat) GetList(vsys string) ([]string, error) {
-    c.con.LogQuery("(get) list of NAT policies")
+    c.con.LogQuery("(get) list of %s", plural)
     path := c.xpath(vsys, nil)
     return c.con.EntryListUsing(c.con.Get, path[:len(path) - 1])
 }
 
 // ShowList performs SHOW to retrieve a list of NAT policies.
 func (c *FwNat) ShowList(vsys string) ([]string, error) {
-    c.con.LogQuery("(show) list of NAT policies")
+    c.con.LogQuery("(show) list of %s", plural)
     path := c.xpath(vsys, nil)
     return c.con.EntryListUsing(c.con.Show, path[:len(path) - 1])
 }
 
 // Get performs GET to retrieve information for the given NAT policy.
 func (c *FwNat) Get(vsys, name string) (Entry, error) {
-    c.con.LogQuery("(get) NAT policy %q", name)
+    c.con.LogQuery("(get) %s %q", singular, name)
     return c.details(c.con.Get, vsys, name)
 }
 
 // Get performs SHOW to retrieve information for the given NAT policy.
 func (c *FwNat) Show(vsys, name string) (Entry, error) {
-    c.con.LogQuery("(show) NAT policy %q", name)
+    c.con.LogQuery("(show) %s %q", singular, name)
     return c.details(c.con.Show, vsys, name)
 }
 
@@ -71,7 +71,7 @@ func (c *FwNat) Set(vsys string, e ...Entry) error {
         d.Data = append(d.Data, fn(e[i]))
         names[i] = e[i].Name
     }
-    c.con.LogAction("(set) NAT policies: %v", names)
+    c.con.LogAction("(set) %s: %v", plural, names)
 
     // Set xpath.
     path := c.xpath(vsys, names)
@@ -108,7 +108,7 @@ func (c *FwNat) Edit(vsys string, e Entry) error {
 
     _, fn := c.versioning()
 
-    c.con.LogAction("(edit) NAT policy %q", e.Name)
+    c.con.LogAction("(edit) %s %q", singular, e.Name)
 
     // Set xpath.
     path := c.xpath(vsys, []string{e.Name})
@@ -139,7 +139,7 @@ func (c *FwNat) Delete(vsys string, e ...interface{}) error {
             return fmt.Errorf("Unsupported type to delete: %s", v)
         }
     }
-    c.con.LogAction("(delete) NAT policies: %v", names)
+    c.con.LogAction("(delete) %s: %v", plural, names)
 
     path := c.xpath(vsys, names)
     _, err = c.con.Delete(path, nil, nil)
@@ -151,7 +151,7 @@ func (c *FwNat) Delete(vsys string, e ...interface{}) error {
 func (c *FwNat) MoveGroup(vsys string, mvt int, rule string, e ...Entry) error {
     var err error
 
-    c.con.LogAction("(move) nat rule group")
+    c.con.LogAction("(move) %s group", singular)
 
     if len(e) < 1 {
         return fmt.Errorf("Requires at least one rule")
