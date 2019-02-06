@@ -1,0 +1,12 @@
+language: go
+
+go_import_path: github.com/PaloAltoNetworks/pango
+
+go:
+  - "1.10"
+  - "1.11"
+  - "tip"
+
+matrix:
+  allow_failures:
+  - go: tip
