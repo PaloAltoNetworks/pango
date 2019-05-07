@@ -28,7 +28,7 @@ const (
 
 const (
 	LocalTypeIp         = "ip"
-	LocalTypeFloatingIp = "floating"
+	LocalTypeFloatingIp = "floating-ip"
 )
 
 const (
