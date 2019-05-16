@@ -7,7 +7,9 @@ import (
     "github.com/PaloAltoNetworks/pango/netw/interface/eth"
 )
 
-func Example() {
+// ExampleCreateInterface demonstrates how to use pango to create an interface
+// if the interface is not already configured.
+func Example_createInterface() {
     var err error
 
     // Connect to the firewall.
@@ -16,6 +18,8 @@ func Example() {
         Username: "admin",
         Password: "admin",
     }}
+
+    // Connect to the firewall and verify authentication params.
     if err = fw.Initialize(); err != nil {
         log.Fatalf("Failed to connect to %s: %s", fw.Hostname, err)
     }
@@ -40,7 +44,7 @@ func Example() {
         }
     }
 
-    // Interface is not there, configure it.
+    // Since the interface is not present, configure it.
     if err = fw.Network.EthernetInterface.Set("vsys1", e); err != nil {
         log.Fatalf("Failed to create %q: %s", e.Name, err)
     }
