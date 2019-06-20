@@ -4,6 +4,7 @@ package netw
 import (
     "github.com/PaloAltoNetworks/pango/netw/ikegw"
     "github.com/PaloAltoNetworks/pango/netw/interface/eth"
+    "github.com/PaloAltoNetworks/pango/netw/interface/eth/subinterface/layer3"
     "github.com/PaloAltoNetworks/pango/netw/interface/loopback"
     "github.com/PaloAltoNetworks/pango/netw/interface/tunnel"
     vli "github.com/PaloAltoNetworks/pango/netw/interface/vlan"
@@ -59,6 +60,7 @@ type FwNetw struct {
     IpsecCryptoProfile *ipsec.FwIpsec
     IpsecTunnel *ipsectunnel.FwIpsecTunnel
     IpsecTunnelProxyId *tpiv4.FwIpv4
+    Layer3Subinterface *layer3.FwLayer3
     LoopbackInterface *loopback.FwLoopback
     ManagementProfile *mngtprof.FwMngtProf
     RedistributionProfile *redist4.FwIpv4
@@ -134,6 +136,9 @@ func (c *FwNetw) Initialize(i util.XapiClient) {
 
     c.IpsecTunnelProxyId = &tpiv4.FwIpv4{}
     c.IpsecTunnelProxyId.Initialize(i)
+
+    c.Layer3Subinterface = &layer3.FwLayer3{}
+    c.Layer3Subinterface.Initialize(i)
 
     c.LoopbackInterface = &loopback.FwLoopback{}
     c.LoopbackInterface.Initialize(i)
