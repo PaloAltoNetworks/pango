@@ -12,7 +12,7 @@ import (
 type Entry struct {
     Name string
     Tag int
-    StaticIps []string
+    StaticIps []string // ordered
     Ipv6Enabled bool
     Ipv6InterfaceId string
     ManagementProfile string
