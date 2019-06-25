@@ -8,6 +8,8 @@ import (
     "github.com/PaloAltoNetworks/pango/objs/addrgrp"
     "github.com/PaloAltoNetworks/pango/objs/edl"
     "github.com/PaloAltoNetworks/pango/objs/profile/logfwd"
+    "github.com/PaloAltoNetworks/pango/objs/profile/logfwd/matchlist"
+    "github.com/PaloAltoNetworks/pango/objs/profile/logfwd/matchlist/action"
     "github.com/PaloAltoNetworks/pango/objs/srvc"
     "github.com/PaloAltoNetworks/pango/objs/srvcgrp"
     "github.com/PaloAltoNetworks/pango/objs/tags"
@@ -20,6 +22,8 @@ type FwObjs struct {
     AddressGroup *addrgrp.FwAddrGrp
     Edl *edl.FwEdl
     LogForwardingProfile *logfwd.FwLogFwd
+    LogForwardingProfileMatchList *matchlist.FwMatchList
+    LogForwardingProfileMatchListAction *action.FwAction
     Services *srvc.FwSrvc
     ServiceGroup *srvcgrp.FwSrvcGrp
     Tags *tags.FwTags
@@ -38,6 +42,12 @@ func (c *FwObjs) Initialize(i util.XapiClient) {
 
     c.LogForwardingProfile = &logfwd.FwLogFwd{}
     c.LogForwardingProfile.Initialize(i)
+
+    c.LogForwardingProfileMatchList = &matchlist.FwMatchList{}
+    c.LogForwardingProfileMatchList.Initialize(i)
+
+    c.LogForwardingProfileMatchListAction = &action.FwAction{}
+    c.LogForwardingProfileMatchListAction.Initialize(i)
 
     c.Services = &srvc.FwSrvc{}
     c.Services.Initialize(i)

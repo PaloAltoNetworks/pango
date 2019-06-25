@@ -8,6 +8,8 @@ import (
     "github.com/PaloAltoNetworks/pango/objs/addrgrp"
     "github.com/PaloAltoNetworks/pango/objs/edl"
     "github.com/PaloAltoNetworks/pango/objs/profile/logfwd"
+    "github.com/PaloAltoNetworks/pango/objs/profile/logfwd/matchlist"
+    "github.com/PaloAltoNetworks/pango/objs/profile/logfwd/matchlist/action"
     "github.com/PaloAltoNetworks/pango/objs/srvc"
     "github.com/PaloAltoNetworks/pango/objs/srvcgrp"
     "github.com/PaloAltoNetworks/pango/objs/tags"
@@ -20,6 +22,8 @@ type PanoObjs struct {
     AddressGroup *addrgrp.PanoAddrGrp
     Edl *edl.PanoEdl
     LogForwardingProfile *logfwd.PanoLogFwd
+    LogForwardingProfileMatchList *matchlist.PanoMatchList
+    LogForwardingProfileMatchListAction *action.PanoAction
     Services *srvc.PanoSrvc
     ServiceGroup *srvcgrp.PanoSrvcGrp
     Tags *tags.PanoTags
@@ -38,6 +42,12 @@ func (c *PanoObjs) Initialize(i util.XapiClient) {
 
     c.LogForwardingProfile = &logfwd.PanoLogFwd{}
     c.LogForwardingProfile.Initialize(i)
+
+    c.LogForwardingProfileMatchList = &matchlist.PanoMatchList{}
+    c.LogForwardingProfileMatchList.Initialize(i)
+
+    c.LogForwardingProfileMatchListAction = &action.PanoAction{}
+    c.LogForwardingProfileMatchListAction.Initialize(i)
 
     c.Services = &srvc.PanoSrvc{}
     c.Services.Initialize(i)
