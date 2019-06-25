@@ -6,6 +6,7 @@ import (
     "github.com/PaloAltoNetworks/pango/util"
 
     // Various namespace imports.
+    "github.com/PaloAltoNetworks/pango/dev"
     "github.com/PaloAltoNetworks/pango/objs"
     "github.com/PaloAltoNetworks/pango/poli"
     "github.com/PaloAltoNetworks/pango/netw"
@@ -26,6 +27,7 @@ type Panorama struct {
     Client
 
     // Namespaces
+    Device *dev.PanoDev
     Licensing *licen.Licen
     UserId *userid.UserId
     Panorama *pnrm.Pnrm
@@ -111,6 +113,9 @@ func (c *Panorama) CommitAll(dg, desc string, serials []string, tmpl, sync bool)
 /** Private functions **/
 
 func (c *Panorama) initNamespaces() {
+    c.Device = &dev.PanoDev{}
+    c.Device.Initialize(c)
+
     c.Licensing = &licen.Licen{}
     c.Licensing.Initialize(c)
 
