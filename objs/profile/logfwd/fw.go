@@ -151,7 +151,7 @@ func (c *FwLogFwd) xpath(vsys string, vals []string) []string {
         vsys = "shared"
     }
 
-    ans := make([]string, 0, 7)
+    ans := make([]string, 0, 8)
     ans = append(ans, util.VsysXpathPrefix(vsys)...)
     ans = append(ans,
         "log-settings",
