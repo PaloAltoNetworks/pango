@@ -19,33 +19,33 @@ func (c *PanoMatchList) Initialize(con util.XapiClient) {
 }
 
 // ShowList performs SHOW to retrieve a list of values.
-func (c *PanoMatchList) ShowList(tmpl, ts, vsys, dg, logfwd string) ([]string, error) {
+func (c *PanoMatchList) ShowList(dg, logfwd string) ([]string, error) {
     c.con.LogQuery("(show) list of %s", plural)
-    path := c.xpath(tmpl, ts, vsys, dg, logfwd, nil)
+    path := c.xpath(dg, logfwd, nil)
     return c.con.EntryListUsing(c.con.Show, path[:len(path) - 1])
 }
 
 // GetList performs GET to retrieve a list of values.
-func (c *PanoMatchList) GetList(tmpl, ts, vsys, dg, logfwd string) ([]string, error) {
+func (c *PanoMatchList) GetList(dg, logfwd string) ([]string, error) {
     c.con.LogQuery("(get) list of %s", plural)
-    path := c.xpath(tmpl, ts, vsys, dg, logfwd, nil)
+    path := c.xpath(dg, logfwd, nil)
     return c.con.EntryListUsing(c.con.Get, path[:len(path) - 1])
 }
 
 // Get performs GET to retrieve information for the given uid.
-func (c *PanoMatchList) Get(tmpl, ts, vsys, dg, logfwd, name string) (Entry, error) {
+func (c *PanoMatchList) Get(dg, logfwd, name string) (Entry, error) {
     c.con.LogQuery("(get) %s %q", singular, name)
-    return c.details(c.con.Get, tmpl, ts, vsys, dg, logfwd, name)
+    return c.details(c.con.Get, dg, logfwd, name)
 }
 
 // Show performs SHOW to retrieve information for the given uid.
-func (c *PanoMatchList) Show(tmpl, ts, vsys, dg, logfwd, name string) (Entry, error) {
+func (c *PanoMatchList) Show(dg, logfwd, name string) (Entry, error) {
     c.con.LogQuery("(show) %s %q", singular, name)
-    return c.details(c.con.Show, tmpl, ts, vsys, dg, logfwd, name)
+    return c.details(c.con.Show, dg, logfwd, name)
 }
 
 // Set performs SET to create / update one or more objects.
-func (c *PanoMatchList) Set(tmpl, ts, vsys, dg, logfwd string, e ...Entry) error {
+func (c *PanoMatchList) Set(dg, logfwd string, e ...Entry) error {
     var err error
 
     if len(e) == 0 {
@@ -66,7 +66,7 @@ func (c *PanoMatchList) Set(tmpl, ts, vsys, dg, logfwd string, e ...Entry) error
     c.con.LogAction("(set) %s: %v", plural, names)
 
     // Set xpath.
-    path := c.xpath(tmpl, ts, vsys, dg, logfwd, names)
+    path := c.xpath(dg, logfwd, names)
     d.XMLName = xml.Name{Local: path[len(path) - 2]}
     if len(e) == 1 {
         path = path[:len(path) - 1]
@@ -80,7 +80,7 @@ func (c *PanoMatchList) Set(tmpl, ts, vsys, dg, logfwd string, e ...Entry) error
 }
 
 // Edit performs EDIT to create / update one object.
-func (c *PanoMatchList) Edit(tmpl, ts, vsys, dg, logfwd string, e Entry) error {
+func (c *PanoMatchList) Edit(dg, logfwd string, e Entry) error {
     var err error
 
     if logfwd == "" {
@@ -92,7 +92,7 @@ func (c *PanoMatchList) Edit(tmpl, ts, vsys, dg, logfwd string, e Entry) error {
     c.con.LogAction("(edit) %s %q", singular, e.Name)
 
     // Set xpath.
-    path := c.xpath(tmpl, ts, vsys, dg, logfwd, []string{e.Name})
+    path := c.xpath(dg, logfwd, []string{e.Name})
 
     // Edit the object.
     _, err = c.con.Edit(path, fn(e), nil, nil)
@@ -102,7 +102,7 @@ func (c *PanoMatchList) Edit(tmpl, ts, vsys, dg, logfwd string, e Entry) error {
 // Delete removes the given objects.
 //
 // Objects can be a string or an Entry object.
-func (c *PanoMatchList) Delete(tmpl, ts, vsys, dg, logfwd string, e ...interface{}) error {
+func (c *PanoMatchList) Delete(dg, logfwd string, e ...interface{}) error {
     var err error
 
     if len(e) == 0 {
@@ -125,7 +125,7 @@ func (c *PanoMatchList) Delete(tmpl, ts, vsys, dg, logfwd string, e ...interface
     c.con.LogAction("(delete) %s: %v", plural, names)
 
     // Remove the objects.
-    path := c.xpath(tmpl, ts, vsys, dg, logfwd, names)
+    path := c.xpath(dg, logfwd, names)
     _, err = c.con.Delete(path, nil, nil)
     return err
 }
@@ -136,8 +136,8 @@ func (c *PanoMatchList) versioning() (normalizer, func(Entry) (interface{})) {
     return &container_v1{}, specify_v1
 }
 
-func (c *PanoMatchList) details(fn util.Retriever, tmpl, ts, vsys, dg, logfwd, name string) (Entry, error) {
-    path := c.xpath(tmpl, ts, vsys, dg, logfwd, []string{name})
+func (c *PanoMatchList) details(fn util.Retriever, dg, logfwd, name string) (Entry, error) {
+    path := c.xpath(dg, logfwd, []string{name})
     obj, _ := c.versioning()
     if _, err := fn(path, nil, obj); err != nil {
         return Entry{}, err
@@ -147,32 +147,13 @@ func (c *PanoMatchList) details(fn util.Retriever, tmpl, ts, vsys, dg, logfwd, n
     return ans, nil
 }
 
-func (c *PanoMatchList) xpath(tmpl, ts, vsys, dg, logfwd string, vals []string) []string {
-    if tmpl != "" || ts != "" {
-        if vsys == "" {
-            vsys = "shared"
-        }
-
-        ans := make([]string, 0, 15)
-        ans = append(ans, util.TemplateXpathPrefix(tmpl, ts)...)
-        ans = append(ans, util.VsysXpathPrefix(vsys)...)
-        ans = append(ans,
-            "log-settings",
-            "profiles",
-            util.AsEntryXpath([]string{logfwd}),
-            "match-list",
-            util.AsEntryXpath(vals),
-        )
-
-        return ans
-    }
-
+func (c *PanoMatchList) xpath(dg, logfwd string, vals []string) []string {
     if dg == "" {
         dg = "shared"
     }
 
     ans := make([]string, 0, 10)
-    ans = append(ans, util.DeviceGroupXpathPrefix(vsys)...)
+    ans = append(ans, util.DeviceGroupXpathPrefix(dg)...)
     ans = append(ans,
         "log-settings",
         "profiles",

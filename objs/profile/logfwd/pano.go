@@ -20,33 +20,33 @@ func (c *PanoLogFwd) Initialize(con util.XapiClient) {
 }
 
 // ShowList performs SHOW to retrieve a list of values.
-func (c *PanoLogFwd) ShowList(tmpl, ts, vsys, dg string) ([]string, error) {
+func (c *PanoLogFwd) ShowList(dg string) ([]string, error) {
     c.con.LogQuery("(show) list of %s", plural)
-    path := c.xpath(tmpl, ts, vsys, dg, nil)
+    path := c.xpath(dg, nil)
     return c.con.EntryListUsing(c.con.Show, path[:len(path) - 1])
 }
 
 // GetList performs GET to retrieve a list of values.
-func (c *PanoLogFwd) GetList(tmpl, ts, vsys, dg string) ([]string, error) {
+func (c *PanoLogFwd) GetList(dg string) ([]string, error) {
     c.con.LogQuery("(get) list of %s", plural)
-    path := c.xpath(tmpl, ts, vsys, dg, nil)
+    path := c.xpath(dg, nil)
     return c.con.EntryListUsing(c.con.Get, path[:len(path) - 1])
 }
 
 // Get performs GET to retrieve information for the given uid.
-func (c *PanoLogFwd) Get(tmpl, ts, vsys, dg, name string) (Entry, error) {
+func (c *PanoLogFwd) Get(dg, name string) (Entry, error) {
     c.con.LogQuery("(get) %s %q", singular, name)
-    return c.details(c.con.Get, tmpl, ts, vsys, dg, name)
+    return c.details(c.con.Get, dg, name)
 }
 
 // Show performs SHOW to retrieve information for the given uid.
-func (c *PanoLogFwd) Show(tmpl, ts, vsys, dg, name string) (Entry, error) {
+func (c *PanoLogFwd) Show(dg, name string) (Entry, error) {
     c.con.LogQuery("(show) %s %q", singular, name)
-    return c.details(c.con.Show, tmpl, ts, vsys, dg, name)
+    return c.details(c.con.Show, dg, name)
 }
 
 // Set performs SET to create / update one or more objects.
-func (c *PanoLogFwd) Set(tmpl, ts, vsys, dg string, e ...Entry) error {
+func (c *PanoLogFwd) Set(dg string, e ...Entry) error {
     var err error
 
     if len(e) == 0 {
@@ -65,7 +65,7 @@ func (c *PanoLogFwd) Set(tmpl, ts, vsys, dg string, e ...Entry) error {
     c.con.LogAction("(set) %s: %v", plural, names)
 
     // Set xpath.
-    path := c.xpath(tmpl, ts, vsys, dg, names)
+    path := c.xpath(dg, names)
     d.XMLName = xml.Name{Local: path[len(path) - 2]}
     if len(e) == 1 {
         path = path[:len(path) - 1]
@@ -79,7 +79,7 @@ func (c *PanoLogFwd) Set(tmpl, ts, vsys, dg string, e ...Entry) error {
 }
 
 // Edit performs EDIT to create / update one object.
-func (c *PanoLogFwd) Edit(tmpl, ts, vsys, dg string, e Entry) error {
+func (c *PanoLogFwd) Edit(dg string, e Entry) error {
     var err error
 
     _, fn := c.versioning()
@@ -87,7 +87,7 @@ func (c *PanoLogFwd) Edit(tmpl, ts, vsys, dg string, e Entry) error {
     c.con.LogAction("(edit) %s %q", singular, e.Name)
 
     // Set xpath.
-    path := c.xpath(tmpl, ts, vsys, dg, []string{e.Name})
+    path := c.xpath(dg, []string{e.Name})
 
     // Edit the object.
     _, err = c.con.Edit(path, fn(e), nil, nil)
@@ -97,7 +97,7 @@ func (c *PanoLogFwd) Edit(tmpl, ts, vsys, dg string, e Entry) error {
 // Delete removes the given objects.
 //
 // Objects can be a string or an Entry object.
-func (c *PanoLogFwd) Delete(tmpl, ts, vsys, dg string, e ...interface{}) error {
+func (c *PanoLogFwd) Delete(dg string, e ...interface{}) error {
     var err error
 
     if len(e) == 0 {
@@ -118,7 +118,7 @@ func (c *PanoLogFwd) Delete(tmpl, ts, vsys, dg string, e ...interface{}) error {
     c.con.LogAction("(delete) %s: %v", plural, names)
 
     // Remove the objects.
-    path := c.xpath(tmpl, ts, vsys, dg, names)
+    path := c.xpath(dg, names)
     _, err = c.con.Delete(path, nil, nil)
     return err
 }
@@ -135,8 +135,8 @@ func (c *PanoLogFwd) versioning() (normalizer, func(Entry) (interface{})) {
     }
 }
 
-func (c *PanoLogFwd) details(fn util.Retriever, tmpl, ts, vsys, dg, name string) (Entry, error) {
-    path := c.xpath(tmpl, ts, vsys, dg, []string{name})
+func (c *PanoLogFwd) details(fn util.Retriever, dg, name string) (Entry, error) {
+    path := c.xpath(dg, []string{name})
     obj, _ := c.versioning()
     if _, err := fn(path, nil, obj); err != nil {
         return Entry{}, err
@@ -146,30 +146,13 @@ func (c *PanoLogFwd) details(fn util.Retriever, tmpl, ts, vsys, dg, name string)
     return ans, nil
 }
 
-func (c *PanoLogFwd) xpath(tmpl, ts, vsys, dg string, vals []string) []string {
-    if tmpl != "" || ts != "" {
-        if vsys == "" {
-            vsys = "shared"
-        }
-
-        ans := make([]string, 0, 13)
-        ans = append(ans, util.TemplateXpathPrefix(tmpl, ts)...)
-        ans = append(ans, util.VsysXpathPrefix(vsys)...)
-        ans = append(ans,
-            "log-settings",
-            "profiles",
-            util.AsEntryXpath(vals),
-        )
-
-        return ans
-    }
-
+func (c *PanoLogFwd) xpath(dg string, vals []string) []string {
     if dg == "" {
         dg = "shared"
     }
 
     ans := make([]string, 0, 8)
-    ans = append(ans, util.DeviceGroupXpathPrefix(vsys)...)
+    ans = append(ans, util.DeviceGroupXpathPrefix(dg)...)
     ans = append(ans,
         "log-settings",
         "profiles",

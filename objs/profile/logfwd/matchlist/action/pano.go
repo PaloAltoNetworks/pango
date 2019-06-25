@@ -20,39 +20,41 @@ func (c *PanoAction) Initialize(con util.XapiClient) {
 }
 
 // ShowList performs SHOW to retrieve a list of values.
-func (c *PanoAction) ShowList(tmpl, ts, vsys, dg, logfwd, matchlist string) ([]string, error) {
+func (c *PanoAction) ShowList(dg, logfwd, matchlist string) ([]string, error) {
     c.con.LogQuery("(show) list of %s", plural)
-    path := c.xpath(tmpl, ts, vsys, dg, logfwd, matchlist, nil)
+    path := c.xpath(dg, logfwd, matchlist, nil)
     return c.con.EntryListUsing(c.con.Show, path[:len(path) - 1])
 }
 
 // GetList performs GET to retrieve a list of values.
-func (c *PanoAction) GetList(tmpl, ts, vsys, dg, logfwd, matchlist string) ([]string, error) {
+func (c *PanoAction) GetList(dg, logfwd, matchlist string) ([]string, error) {
     c.con.LogQuery("(get) list of %s", plural)
-    path := c.xpath(tmpl, ts, vsys, dg, logfwd, matchlist, nil)
+    path := c.xpath(dg, logfwd, matchlist, nil)
     return c.con.EntryListUsing(c.con.Get, path[:len(path) - 1])
 }
 
 // Get performs GET to retrieve information for the given uid.
-func (c *PanoAction) Get(tmpl, ts, vsys, dg, logfwd, matchlist, name string) (Entry, error) {
+func (c *PanoAction) Get(dg, logfwd, matchlist, name string) (Entry, error) {
     c.con.LogQuery("(get) %s %q", singular, name)
-    return c.details(c.con.Get, tmpl, ts, vsys, dg, logfwd, matchlist, name)
+    return c.details(c.con.Get, dg, logfwd, matchlist, name)
 }
 
 // Show performs SHOW to retrieve information for the given uid.
-func (c *PanoAction) Show(tmpl, ts, vsys, dg, logfwd, matchlist, name string) (Entry, error) {
+func (c *PanoAction) Show(dg, logfwd, matchlist, name string) (Entry, error) {
     c.con.LogQuery("(show) %s %q", singular, name)
-    return c.details(c.con.Show, tmpl, ts, vsys, dg, logfwd, matchlist, name)
+    return c.details(c.con.Show, dg, logfwd, matchlist, name)
 }
 
 // Set performs SET to create / update one or more objects.
-func (c *PanoAction) Set(tmpl, ts, vsys, dg, logfwd, matchlist string, e ...Entry) error {
+func (c *PanoAction) Set(dg, logfwd, matchlist string, e ...Entry) error {
     var err error
 
     if len(e) == 0 {
         return nil
     } else if logfwd == "" {
         return fmt.Errorf("logfwd must be specified")
+    } else if matchlist == "" {
+        return fmt.Errorf("matchlist must be specified")
     }
 
     _, fn := c.versioning()
@@ -67,7 +69,7 @@ func (c *PanoAction) Set(tmpl, ts, vsys, dg, logfwd, matchlist string, e ...Entr
     c.con.LogAction("(set) %s: %v", plural, names)
 
     // Set xpath.
-    path := c.xpath(tmpl, ts, vsys, dg, logfwd, matchlist, names)
+    path := c.xpath(dg, logfwd, matchlist, names)
     d.XMLName = xml.Name{Local: path[len(path) - 2]}
     if len(e) == 1 {
         path = path[:len(path) - 1]
@@ -81,11 +83,13 @@ func (c *PanoAction) Set(tmpl, ts, vsys, dg, logfwd, matchlist string, e ...Entr
 }
 
 // Edit performs EDIT to create / update one object.
-func (c *PanoAction) Edit(tmpl, ts, vsys, dg, logfwd, matchlist string, e Entry) error {
+func (c *PanoAction) Edit(dg, logfwd, matchlist string, e Entry) error {
     var err error
 
     if logfwd == "" {
         return fmt.Errorf("logfwd must be specified")
+    } else if matchlist == "" {
+        return fmt.Errorf("matchlist must be specified")
     }
 
     _, fn := c.versioning()
@@ -93,7 +97,7 @@ func (c *PanoAction) Edit(tmpl, ts, vsys, dg, logfwd, matchlist string, e Entry)
     c.con.LogAction("(edit) %s %q", singular, e.Name)
 
     // Set xpath.
-    path := c.xpath(tmpl, ts, vsys, dg, logfwd, matchlist, []string{e.Name})
+    path := c.xpath(dg, logfwd, matchlist, []string{e.Name})
 
     // Edit the object.
     _, err = c.con.Edit(path, fn(e), nil, nil)
@@ -103,13 +107,15 @@ func (c *PanoAction) Edit(tmpl, ts, vsys, dg, logfwd, matchlist string, e Entry)
 // Delete removes the given objects.
 //
 // Objects can be a string or an Entry object.
-func (c *PanoAction) Delete(tmpl, ts, vsys, dg, logfwd, matchlist string, e ...interface{}) error {
+func (c *PanoAction) Delete(dg, logfwd, matchlist string, e ...interface{}) error {
     var err error
 
     if len(e) == 0 {
         return nil
     } else if logfwd == "" {
         return fmt.Errorf("logfwd must be specified")
+    } else if matchlist == "" {
+        return fmt.Errorf("matchlist must be specified")
     }
 
     names := make([]string, len(e))
@@ -126,7 +132,7 @@ func (c *PanoAction) Delete(tmpl, ts, vsys, dg, logfwd, matchlist string, e ...i
     c.con.LogAction("(delete) %s: %v", plural, names)
 
     // Remove the objects.
-    path := c.xpath(tmpl, ts, vsys, dg, logfwd, matchlist, names)
+    path := c.xpath(dg, logfwd, matchlist, names)
     _, err = c.con.Delete(path, nil, nil)
     return err
 }
@@ -145,8 +151,8 @@ func (c *PanoAction) versioning() (normalizer, func(Entry) (interface{})) {
     }
 }
 
-func (c *PanoAction) details(fn util.Retriever, tmpl, ts, vsys, dg, logfwd, matchlist, name string) (Entry, error) {
-    path := c.xpath(tmpl, ts, vsys, dg, logfwd, matchlist, []string{name})
+func (c *PanoAction) details(fn util.Retriever, dg, logfwd, matchlist, name string) (Entry, error) {
+    path := c.xpath(dg, logfwd, matchlist, []string{name})
     obj, _ := c.versioning()
     if _, err := fn(path, nil, obj); err != nil {
         return Entry{}, err
@@ -156,34 +162,13 @@ func (c *PanoAction) details(fn util.Retriever, tmpl, ts, vsys, dg, logfwd, matc
     return ans, nil
 }
 
-func (c *PanoAction) xpath(tmpl, ts, vsys, dg, logfwd, matchlist string, vals []string) []string {
-    if tmpl != "" || ts != "" {
-        if vsys == "" {
-            vsys = "shared"
-        }
-
-        ans := make([]string, 0, 17)
-        ans = append(ans, util.TemplateXpathPrefix(tmpl, ts)...)
-        ans = append(ans, util.VsysXpathPrefix(vsys)...)
-        ans = append(ans,
-            "log-settings",
-            "profiles",
-            util.AsEntryXpath([]string{logfwd}),
-            "match-list",
-            util.AsEntryXpath([]string{matchlist}),
-            "actions",
-            util.AsEntryXpath(vals),
-        )
-
-        return ans
-    }
-
+func (c *PanoAction) xpath(dg, logfwd, matchlist string, vals []string) []string {
     if dg == "" {
         dg = "shared"
     }
 
     ans := make([]string, 0, 12)
-    ans = append(ans, util.DeviceGroupXpathPrefix(vsys)...)
+    ans = append(ans, util.DeviceGroupXpathPrefix(dg)...)
     ans = append(ans,
         "log-settings",
         "profiles",
