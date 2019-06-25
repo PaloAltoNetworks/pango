@@ -8,7 +8,7 @@ import (
 )
 
 
-// PanoMatchList is the client.Network.LogForwardingProfile namespace.
+// PanoMatchList is the client.Network.LogForwardingProfileMatchList namespace.
 type PanoMatchList struct {
     con util.XapiClient
 }

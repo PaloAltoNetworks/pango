@@ -9,7 +9,7 @@ import (
 )
 
 
-// FwAction is the client.Network.LogForwardingProfile namespace.
+// FwAction is the client.Network.LogForwardingProfileMatchListAction namespace.
 type FwAction struct {
     con util.XapiClient
 }
