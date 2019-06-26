@@ -8,6 +8,8 @@ import (
     "github.com/PaloAltoNetworks/pango/dev/profile/snmp"
     "github.com/PaloAltoNetworks/pango/dev/profile/snmp/v2c"
     "github.com/PaloAltoNetworks/pango/dev/profile/snmp/v3"
+    "github.com/PaloAltoNetworks/pango/dev/profile/syslog"
+    syslogsrv "github.com/PaloAltoNetworks/pango/dev/profile/syslog/server"
 )
 
 
@@ -18,6 +20,8 @@ type PanoDev struct {
     SnmpServerProfile *snmp.PanoSnmp
     SnmpV2cServer *v2c.PanoV2c
     SnmpV3Server *v3.PanoV3
+    SyslogServer *syslogsrv.PanoServer
+    SyslogServerProfile *syslog.PanoSyslog
 }
 
 // Initialize is invoked on client.Initialize().
@@ -36,4 +40,10 @@ func (c *PanoDev) Initialize(i util.XapiClient) {
 
     c.SnmpV3Server = &v3.PanoV3{}
     c.SnmpV3Server.Initialize(i)
+
+    c.SyslogServer = &syslogsrv.PanoServer{}
+    c.SyslogServer.Initialize(i)
+
+    c.SyslogServerProfile = &syslog.PanoSyslog{}
+    c.SyslogServerProfile.Initialize(i)
 }

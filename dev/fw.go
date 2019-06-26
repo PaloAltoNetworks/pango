@@ -3,12 +3,14 @@ package dev
 import (
     "github.com/PaloAltoNetworks/pango/util"
 
+    "github.com/PaloAltoNetworks/pango/dev/general"
     "github.com/PaloAltoNetworks/pango/dev/profile/email"
     emailsrv "github.com/PaloAltoNetworks/pango/dev/profile/email/server"
-    "github.com/PaloAltoNetworks/pango/dev/general"
     "github.com/PaloAltoNetworks/pango/dev/profile/snmp"
     "github.com/PaloAltoNetworks/pango/dev/profile/snmp/v2c"
     "github.com/PaloAltoNetworks/pango/dev/profile/snmp/v3"
+    "github.com/PaloAltoNetworks/pango/dev/profile/syslog"
+    syslogsrv "github.com/PaloAltoNetworks/pango/dev/profile/syslog/server"
     "github.com/PaloAltoNetworks/pango/dev/telemetry"
 )
 
@@ -21,6 +23,8 @@ type FwDev struct {
     SnmpServerProfile *snmp.FwSnmp
     SnmpV2cServer *v2c.FwV2c
     SnmpV3Server *v3.FwV3
+    SyslogServer *syslogsrv.FwServer
+    SyslogServerProfile *syslog.FwSyslog
     Telemetry *telemetry.FwTelemetry
 }
 
@@ -43,6 +47,12 @@ func (c *FwDev) Initialize(i util.XapiClient) {
 
     c.SnmpV3Server = &v3.FwV3{}
     c.SnmpV3Server.Initialize(i)
+
+    c.SyslogServer = &syslogsrv.FwServer{}
+    c.SyslogServer.Initialize(i)
+
+    c.SyslogServerProfile = &syslog.FwSyslog{}
+    c.SyslogServerProfile.Initialize(i)
 
     c.Telemetry = &telemetry.FwTelemetry{}
     c.Telemetry.Initialize(i)
