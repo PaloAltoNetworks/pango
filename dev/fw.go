@@ -3,6 +3,8 @@ package dev
 import (
     "github.com/PaloAltoNetworks/pango/util"
 
+    "github.com/PaloAltoNetworks/pango/dev/profile/email"
+    emailsrv "github.com/PaloAltoNetworks/pango/dev/profile/email/server"
     "github.com/PaloAltoNetworks/pango/dev/general"
     "github.com/PaloAltoNetworks/pango/dev/profile/snmp"
     "github.com/PaloAltoNetworks/pango/dev/profile/snmp/v2c"
@@ -13,6 +15,8 @@ import (
 
 // FwDev is the client.Device namespace.
 type FwDev struct {
+    EmailServer *emailsrv.FwServer
+    EmailServerProfile *email.FwEmail
     GeneralSettings *general.FwGeneral
     SnmpServerProfile *snmp.FwSnmp
     SnmpV2cServer *v2c.FwV2c
@@ -22,6 +26,12 @@ type FwDev struct {
 
 // Initialize is invoked on client.Initialize().
 func (c *FwDev) Initialize(i util.XapiClient) {
+    c.EmailServer = &emailsrv.FwServer{}
+    c.EmailServer.Initialize(i)
+
+    c.EmailServerProfile = &email.FwEmail{}
+    c.EmailServerProfile.Initialize(i)
+
     c.GeneralSettings = &general.FwGeneral{}
     c.GeneralSettings.Initialize(i)
 
