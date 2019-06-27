@@ -6,6 +6,10 @@ import (
     "github.com/PaloAltoNetworks/pango/dev/general"
     "github.com/PaloAltoNetworks/pango/dev/profile/email"
     emailsrv "github.com/PaloAltoNetworks/pango/dev/profile/email/server"
+    "github.com/PaloAltoNetworks/pango/dev/profile/http"
+    "github.com/PaloAltoNetworks/pango/dev/profile/http/header"
+    "github.com/PaloAltoNetworks/pango/dev/profile/http/param"
+    httpsrv "github.com/PaloAltoNetworks/pango/dev/profile/http/server"
     "github.com/PaloAltoNetworks/pango/dev/profile/snmp"
     "github.com/PaloAltoNetworks/pango/dev/profile/snmp/v2c"
     "github.com/PaloAltoNetworks/pango/dev/profile/snmp/v3"
@@ -20,6 +24,10 @@ type FwDev struct {
     EmailServer *emailsrv.FwServer
     EmailServerProfile *email.FwEmail
     GeneralSettings *general.FwGeneral
+    HttpHeader *header.FwHeader
+    HttpParam *param.FwParam
+    HttpServer *httpsrv.FwServer
+    HttpServerProfile *http.FwHttp
     SnmpServerProfile *snmp.FwSnmp
     SnmpV2cServer *v2c.FwV2c
     SnmpV3Server *v3.FwV3
@@ -38,6 +46,18 @@ func (c *FwDev) Initialize(i util.XapiClient) {
 
     c.GeneralSettings = &general.FwGeneral{}
     c.GeneralSettings.Initialize(i)
+
+    c.HttpHeader = &header.FwHeader{}
+    c.HttpHeader.Initialize(i)
+
+    c.HttpParam = &param.FwParam{}
+    c.HttpParam.Initialize(i)
+
+    c.HttpServer = &httpsrv.FwServer{}
+    c.HttpServer.Initialize(i)
+
+    c.HttpServerProfile = &http.FwHttp{}
+    c.HttpServerProfile.Initialize(i)
 
     c.SnmpServerProfile = &snmp.FwSnmp{}
     c.SnmpServerProfile.Initialize(i)

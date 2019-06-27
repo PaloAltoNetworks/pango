@@ -5,6 +5,10 @@ import (
 
     "github.com/PaloAltoNetworks/pango/dev/profile/email"
     emailsrv "github.com/PaloAltoNetworks/pango/dev/profile/email/server"
+    "github.com/PaloAltoNetworks/pango/dev/profile/http"
+    "github.com/PaloAltoNetworks/pango/dev/profile/http/header"
+    "github.com/PaloAltoNetworks/pango/dev/profile/http/param"
+    httpsrv "github.com/PaloAltoNetworks/pango/dev/profile/http/server"
     "github.com/PaloAltoNetworks/pango/dev/profile/snmp"
     "github.com/PaloAltoNetworks/pango/dev/profile/snmp/v2c"
     "github.com/PaloAltoNetworks/pango/dev/profile/snmp/v3"
@@ -17,6 +21,10 @@ import (
 type PanoDev struct {
     EmailServer *emailsrv.PanoServer
     EmailServerProfile *email.PanoEmail
+    HttpHeader *header.PanoHeader
+    HttpParam *param.PanoParam
+    HttpServer *httpsrv.PanoServer
+    HttpServerProfile *http.PanoHttp
     SnmpServerProfile *snmp.PanoSnmp
     SnmpV2cServer *v2c.PanoV2c
     SnmpV3Server *v3.PanoV3
@@ -31,6 +39,18 @@ func (c *PanoDev) Initialize(i util.XapiClient) {
 
     c.EmailServerProfile = &email.PanoEmail{}
     c.EmailServerProfile.Initialize(i)
+
+    c.HttpHeader = &header.PanoHeader{}
+    c.HttpHeader.Initialize(i)
+
+    c.HttpParam = &param.PanoParam{}
+    c.HttpParam.Initialize(i)
+
+    c.HttpServer = &httpsrv.PanoServer{}
+    c.HttpServer.Initialize(i)
+
+    c.HttpServerProfile = &http.PanoHttp{}
+    c.HttpServerProfile.Initialize(i)
 
     c.SnmpServerProfile = &snmp.PanoSnmp{}
     c.SnmpServerProfile.Initialize(i)
