@@ -6,6 +6,7 @@ import (
 
     "github.com/PaloAltoNetworks/pango/objs/addr"
     "github.com/PaloAltoNetworks/pango/objs/addrgrp"
+    "github.com/PaloAltoNetworks/pango/objs/app"
     "github.com/PaloAltoNetworks/pango/objs/edl"
     "github.com/PaloAltoNetworks/pango/objs/profile/logfwd"
     "github.com/PaloAltoNetworks/pango/objs/profile/logfwd/matchlist"
@@ -20,6 +21,7 @@ import (
 type PanoObjs struct {
     Address *addr.PanoAddr
     AddressGroup *addrgrp.PanoAddrGrp
+    Application *app.PanoApp
     Edl *edl.PanoEdl
     LogForwardingProfile *logfwd.PanoLogFwd
     LogForwardingProfileMatchList *matchlist.PanoMatchList
@@ -36,6 +38,9 @@ func (c *PanoObjs) Initialize(i util.XapiClient) {
 
     c.AddressGroup = &addrgrp.PanoAddrGrp{}
     c.AddressGroup.Initialize(i)
+
+    c.Application = &app.PanoApp{}
+    c.Application.Initialize(i)
 
     c.Edl = &edl.PanoEdl{}
     c.Edl.Initialize(i)

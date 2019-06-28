@@ -6,6 +6,7 @@ import (
 
     "github.com/PaloAltoNetworks/pango/objs/addr"
     "github.com/PaloAltoNetworks/pango/objs/addrgrp"
+    "github.com/PaloAltoNetworks/pango/objs/app"
     "github.com/PaloAltoNetworks/pango/objs/edl"
     "github.com/PaloAltoNetworks/pango/objs/profile/logfwd"
     "github.com/PaloAltoNetworks/pango/objs/profile/logfwd/matchlist"
@@ -20,6 +21,7 @@ import (
 type FwObjs struct {
     Address *addr.FwAddr
     AddressGroup *addrgrp.FwAddrGrp
+    Application *app.FwApp
     Edl *edl.FwEdl
     LogForwardingProfile *logfwd.FwLogFwd
     LogForwardingProfileMatchList *matchlist.FwMatchList
@@ -36,6 +38,9 @@ func (c *FwObjs) Initialize(i util.XapiClient) {
 
     c.AddressGroup = &addrgrp.FwAddrGrp{}
     c.AddressGroup.Initialize(i)
+
+    c.Application = &app.FwApp{}
+    c.Application.Initialize(i)
 
     c.Edl = &edl.FwEdl{}
     c.Edl.Initialize(i)
