@@ -9,7 +9,7 @@ import (
 )
 
 
-// PanoLogFwd is the client.Network.LogForwardingProfile namespace.
+// PanoLogFwd is the client.Objects.LogForwardingProfile namespace.
 type PanoLogFwd struct {
     con util.XapiClient
 }

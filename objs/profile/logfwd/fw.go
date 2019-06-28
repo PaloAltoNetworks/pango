@@ -9,7 +9,7 @@ import (
 )
 
 
-// FwLogFwd is the client.Network.LogForwardingProfile namespace.
+// FwLogFwd is the client.Objects.LogForwardingProfile namespace.
 type FwLogFwd struct {
     con util.XapiClient
 }

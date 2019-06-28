@@ -9,7 +9,7 @@ import (
 )
 
 
-// PanoAction is the client.Network.LogForwardingProfileMatchListAction namespace.
+// PanoAction is the client.Objects.LogForwardingProfileMatchListAction namespace.
 type PanoAction struct {
     con util.XapiClient
 }

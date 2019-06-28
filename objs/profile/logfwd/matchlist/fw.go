@@ -8,7 +8,7 @@ import (
 )
 
 
-// FwMatchList is the client.Network.LogForwardingProfileMatchList namespace.
+// FwMatchList is the client.Objects.LogForwardingProfileMatchList namespace.
 type FwMatchList struct {
     con util.XapiClient
 }
