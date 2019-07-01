@@ -7,6 +7,9 @@ import (
     "github.com/PaloAltoNetworks/pango/objs/addr"
     "github.com/PaloAltoNetworks/pango/objs/addrgrp"
     "github.com/PaloAltoNetworks/pango/objs/app"
+    "github.com/PaloAltoNetworks/pango/objs/app/signature"
+    "github.com/PaloAltoNetworks/pango/objs/app/signature/andcond"
+    "github.com/PaloAltoNetworks/pango/objs/app/signature/orcond"
     "github.com/PaloAltoNetworks/pango/objs/edl"
     "github.com/PaloAltoNetworks/pango/objs/profile/logfwd"
     "github.com/PaloAltoNetworks/pango/objs/profile/logfwd/matchlist"
@@ -22,6 +25,9 @@ type PanoObjs struct {
     Address *addr.PanoAddr
     AddressGroup *addrgrp.PanoAddrGrp
     Application *app.PanoApp
+    AppSignature *signature.PanoSignature
+    AppSigAndCond *andcond.PanoAndCond
+    AppSigOrCond *orcond.PanoOrCond
     Edl *edl.PanoEdl
     LogForwardingProfile *logfwd.PanoLogFwd
     LogForwardingProfileMatchList *matchlist.PanoMatchList
@@ -41,6 +47,15 @@ func (c *PanoObjs) Initialize(i util.XapiClient) {
 
     c.Application = &app.PanoApp{}
     c.Application.Initialize(i)
+
+    c.AppSignature = &signature.PanoSignature{}
+    c.AppSignature.Initialize(i)
+
+    c.AppSigAndCond = &andcond.PanoAndCond{}
+    c.AppSigAndCond.Initialize(i)
+
+    c.AppSigOrCond = &orcond.PanoOrCond{}
+    c.AppSigOrCond.Initialize(i)
 
     c.Edl = &edl.PanoEdl{}
     c.Edl.Initialize(i)
