@@ -7,6 +7,7 @@ import (
     "github.com/PaloAltoNetworks/pango/objs/addr"
     "github.com/PaloAltoNetworks/pango/objs/addrgrp"
     "github.com/PaloAltoNetworks/pango/objs/app"
+    appgrp "github.com/PaloAltoNetworks/pango/objs/app/group"
     "github.com/PaloAltoNetworks/pango/objs/app/signature"
     "github.com/PaloAltoNetworks/pango/objs/app/signature/andcond"
     "github.com/PaloAltoNetworks/pango/objs/app/signature/orcond"
@@ -25,6 +26,7 @@ type PanoObjs struct {
     Address *addr.PanoAddr
     AddressGroup *addrgrp.PanoAddrGrp
     Application *app.PanoApp
+    AppGroup *appgrp.PanoGroup
     AppSignature *signature.PanoSignature
     AppSigAndCond *andcond.PanoAndCond
     AppSigOrCond *orcond.PanoOrCond
@@ -47,6 +49,9 @@ func (c *PanoObjs) Initialize(i util.XapiClient) {
 
     c.Application = &app.PanoApp{}
     c.Application.Initialize(i)
+
+    c.AppGroup = &appgrp.PanoGroup{}
+    c.AppGroup.Initialize(i)
 
     c.AppSignature = &signature.PanoSignature{}
     c.AppSignature.Initialize(i)

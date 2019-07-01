@@ -7,6 +7,7 @@ import (
     "github.com/PaloAltoNetworks/pango/objs/addr"
     "github.com/PaloAltoNetworks/pango/objs/addrgrp"
     "github.com/PaloAltoNetworks/pango/objs/app"
+    appgrp "github.com/PaloAltoNetworks/pango/objs/app/group"
     "github.com/PaloAltoNetworks/pango/objs/app/signature"
     "github.com/PaloAltoNetworks/pango/objs/app/signature/andcond"
     "github.com/PaloAltoNetworks/pango/objs/app/signature/orcond"
@@ -25,6 +26,7 @@ type FwObjs struct {
     Address *addr.FwAddr
     AddressGroup *addrgrp.FwAddrGrp
     Application *app.FwApp
+    AppGroup *appgrp.FwGroup
     AppSignature *signature.FwSignature
     AppSigAndCond *andcond.FwAndCond
     AppSigAndCondOrCond *orcond.FwOrCond
@@ -47,6 +49,9 @@ func (c *FwObjs) Initialize(i util.XapiClient) {
 
     c.Application = &app.FwApp{}
     c.Application.Initialize(i)
+
+    c.AppGroup = &appgrp.FwGroup{}
+    c.AppGroup.Initialize(i)
 
     c.AppSignature = &signature.FwSignature{}
     c.AppSignature.Initialize(i)
