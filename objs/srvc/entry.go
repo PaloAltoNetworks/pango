@@ -17,7 +17,7 @@ type Entry struct {
     Protocol string
     SourcePort string
     DestinationPort string
-    Tags []string
+    Tags []string // ordered
 }
 
 // Copy copies the information from source Entry `s` to this object.  As the
