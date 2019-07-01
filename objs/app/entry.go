@@ -11,7 +11,7 @@ import (
 type Entry struct {
     Name string
     DefaultType string
-    DefaultPorts []string
+    DefaultPorts []string // ordered
     DefaultIpProtocol int
     DefaultIcmpType int
     DefaultIcmpCode int
@@ -27,13 +27,13 @@ type Entry struct {
     Risk int
     AbleToFileTransfer bool
     ExcessiveBandwidth bool
-    TunnelOtherApplications bool
+    TunnelsOtherApplications bool
     HasKnownVulnerability bool
     UsedByMalware bool
     EvasiveBehavior bool
     PervasiveUse bool
     ProneToMisuse bool
-    TunnelApplications bool
+    ContinueScanningForOtherApplications bool
     FileTypeIdent bool
     VirusIdent bool
     DataIdent bool
@@ -64,13 +64,13 @@ func (o *Entry) Copy(s Entry) {
     o.Risk = s.Risk
     o.AbleToFileTransfer = s.AbleToFileTransfer
     o.ExcessiveBandwidth = s.ExcessiveBandwidth
-    o.TunnelOtherApplications = s.TunnelOtherApplications
+    o.TunnelsOtherApplications = s.TunnelsOtherApplications
     o.HasKnownVulnerability = s.HasKnownVulnerability
     o.UsedByMalware = s.UsedByMalware
     o.EvasiveBehavior = s.EvasiveBehavior
     o.PervasiveUse = s.PervasiveUse
     o.ProneToMisuse = s.ProneToMisuse
-    o.TunnelApplications = s.TunnelApplications
+    o.ContinueScanningForOtherApplications = s.ContinueScanningForOtherApplications
     o.FileTypeIdent = s.FileTypeIdent
     o.VirusIdent = s.VirusIdent
     o.DataIdent = s.DataIdent
@@ -104,13 +104,13 @@ func (o *container_v1) Normalize() Entry {
         Risk: o.Answer.Risk,
         AbleToFileTransfer: util.AsBool(o.Answer.AbleToFileTransfer),
         ExcessiveBandwidth: util.AsBool(o.Answer.ExcessiveBandwidth),
-        TunnelOtherApplications: util.AsBool(o.Answer.TunnelOtherApplications),
+        TunnelsOtherApplications: util.AsBool(o.Answer.TunnelsOtherApplications),
         HasKnownVulnerability: util.AsBool(o.Answer.HasKnownVulnerability),
         UsedByMalware: util.AsBool(o.Answer.UsedByMalware),
         EvasiveBehavior: util.AsBool(o.Answer.EvasiveBehavior),
         PervasiveUse: util.AsBool(o.Answer.PervasiveUse),
         ProneToMisuse: util.AsBool(o.Answer.ProneToMisuse),
-        TunnelApplications: util.AsBool(o.Answer.TunnelApplications),
+        ContinueScanningForOtherApplications: util.AsBool(o.Answer.ContinueScanningForOtherApplications),
         FileTypeIdent: util.AsBool(o.Answer.FileTypeIdent),
         VirusIdent: util.AsBool(o.Answer.VirusIdent),
         DataIdent: util.AsBool(o.Answer.DataIdent),
@@ -168,13 +168,13 @@ func (o *container_v2) Normalize() Entry {
         Risk: o.Answer.Risk,
         AbleToFileTransfer: util.AsBool(o.Answer.AbleToFileTransfer),
         ExcessiveBandwidth: util.AsBool(o.Answer.ExcessiveBandwidth),
-        TunnelOtherApplications: util.AsBool(o.Answer.TunnelOtherApplications),
+        TunnelsOtherApplications: util.AsBool(o.Answer.TunnelsOtherApplications),
         HasKnownVulnerability: util.AsBool(o.Answer.HasKnownVulnerability),
         UsedByMalware: util.AsBool(o.Answer.UsedByMalware),
         EvasiveBehavior: util.AsBool(o.Answer.EvasiveBehavior),
         PervasiveUse: util.AsBool(o.Answer.PervasiveUse),
         ProneToMisuse: util.AsBool(o.Answer.ProneToMisuse),
-        TunnelApplications: util.AsBool(o.Answer.TunnelApplications),
+        ContinueScanningForOtherApplications: util.AsBool(o.Answer.ContinueScanningForOtherApplications),
         FileTypeIdent: util.AsBool(o.Answer.FileTypeIdent),
         VirusIdent: util.AsBool(o.Answer.VirusIdent),
         DataIdent: util.AsBool(o.Answer.DataIdent),
@@ -230,13 +230,13 @@ type entry_v1 struct {
     Risk int `xml:"risk"`
     AbleToFileTransfer string `xml:"able-to-transfer-file"`
     ExcessiveBandwidth string `xml:"consume-big-bandwidth"`
-    TunnelOtherApplications string `xml:"tunnel-other-application"`
+    TunnelsOtherApplications string `xml:"tunnel-other-application"`
     HasKnownVulnerability string `xml:"has-known-vulnerability"`
     UsedByMalware string `xml:"used-by-malware"`
     EvasiveBehavior string `xml:"evasive-behavior"`
     PervasiveUse string `xml:"pervasive-use"`
     ProneToMisuse string `xml:"prone-to-misuse"`
-    TunnelApplications string `xml:"tunnel-applications"`
+    ContinueScanningForOtherApplications string `xml:"tunnel-applications"`
     FileTypeIdent string `xml:"file-type-ident"`
     VirusIdent string `xml:"virus-ident"`
     DataIdent string `xml:"data-ident"`
@@ -272,13 +272,13 @@ func specify_v1(e Entry) interface{} {
         Risk: e.Risk,
         AbleToFileTransfer: util.YesNo(e.AbleToFileTransfer),
         ExcessiveBandwidth: util.YesNo(e.ExcessiveBandwidth),
-        TunnelOtherApplications: util.YesNo(e.TunnelOtherApplications),
+        TunnelsOtherApplications: util.YesNo(e.TunnelsOtherApplications),
         HasKnownVulnerability: util.YesNo(e.HasKnownVulnerability),
         UsedByMalware: util.YesNo(e.UsedByMalware),
         EvasiveBehavior: util.YesNo(e.EvasiveBehavior),
         PervasiveUse: util.YesNo(e.PervasiveUse),
         ProneToMisuse: util.YesNo(e.ProneToMisuse),
-        TunnelApplications: util.YesNo(e.TunnelApplications),
+        ContinueScanningForOtherApplications: util.YesNo(e.ContinueScanningForOtherApplications),
         FileTypeIdent: util.YesNo(e.FileTypeIdent),
         VirusIdent: util.YesNo(e.VirusIdent),
         DataIdent: util.YesNo(e.DataIdent),
@@ -334,13 +334,13 @@ type entry_v2 struct {
     Risk int `xml:"risk"`
     AbleToFileTransfer string `xml:"able-to-transfer-file"`
     ExcessiveBandwidth string `xml:"consume-big-bandwidth"`
-    TunnelOtherApplications string `xml:"tunnel-other-application"`
+    TunnelsOtherApplications string `xml:"tunnel-other-application"`
     HasKnownVulnerability string `xml:"has-known-vulnerability"`
     UsedByMalware string `xml:"used-by-malware"`
     EvasiveBehavior string `xml:"evasive-behavior"`
     PervasiveUse string `xml:"pervasive-use"`
     ProneToMisuse string `xml:"prone-to-misuse"`
-    TunnelApplications string `xml:"tunnel-applications"`
+    ContinueScanningForOtherApplications string `xml:"tunnel-applications"`
     FileTypeIdent string `xml:"file-type-ident"`
     VirusIdent string `xml:"virus-ident"`
     DataIdent string `xml:"data-ident"`
@@ -365,13 +365,13 @@ func specify_v2(e Entry) interface{} {
         Risk: e.Risk,
         AbleToFileTransfer: util.YesNo(e.AbleToFileTransfer),
         ExcessiveBandwidth: util.YesNo(e.ExcessiveBandwidth),
-        TunnelOtherApplications: util.YesNo(e.TunnelOtherApplications),
+        TunnelsOtherApplications: util.YesNo(e.TunnelsOtherApplications),
         HasKnownVulnerability: util.YesNo(e.HasKnownVulnerability),
         UsedByMalware: util.YesNo(e.UsedByMalware),
         EvasiveBehavior: util.YesNo(e.EvasiveBehavior),
         PervasiveUse: util.YesNo(e.PervasiveUse),
         ProneToMisuse: util.YesNo(e.ProneToMisuse),
-        TunnelApplications: util.YesNo(e.TunnelApplications),
+        ContinueScanningForOtherApplications: util.YesNo(e.ContinueScanningForOtherApplications),
         FileTypeIdent: util.YesNo(e.FileTypeIdent),
         VirusIdent: util.YesNo(e.VirusIdent),
         DataIdent: util.YesNo(e.DataIdent),
