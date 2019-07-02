@@ -32,6 +32,7 @@ import (
     bgpredist "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/redist"
     "github.com/PaloAltoNetworks/pango/netw/routing/router"
     "github.com/PaloAltoNetworks/pango/netw/routing/route/static/ipv4"
+    "github.com/PaloAltoNetworks/pango/netw/tunnel/gre"
     "github.com/PaloAltoNetworks/pango/netw/vlan"
     "github.com/PaloAltoNetworks/pango/netw/zone"
     "github.com/PaloAltoNetworks/pango/util"
@@ -56,6 +57,7 @@ type PanoNetw struct {
     BgpPeerGroup *group.PanoGroup
     BgpRedistRule *bgpredist.PanoRedist
     EthernetInterface *eth.PanoEth
+    GreTunnel *gre.PanoGre
     IkeCryptoProfile *ike.PanoIke
     IkeGateway *ikegw.PanoIkeGw
     IpsecCryptoProfile *ipsec.PanoIpsec
@@ -123,6 +125,9 @@ func (c *PanoNetw) Initialize(i util.XapiClient) {
 
     c.EthernetInterface = &eth.PanoEth{}
     c.EthernetInterface.Initialize(i)
+
+    c.GreTunnel = &gre.PanoGre{}
+    c.GreTunnel.Initialize(i)
 
     c.IkeCryptoProfile = &ike.PanoIke{}
     c.IkeCryptoProfile.Initialize(i)
