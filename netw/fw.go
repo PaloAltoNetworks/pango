@@ -15,6 +15,7 @@ import (
     "github.com/PaloAltoNetworks/pango/netw/profile/ike"
     "github.com/PaloAltoNetworks/pango/netw/profile/ipsec"
     "github.com/PaloAltoNetworks/pango/netw/profile/mngtprof"
+    "github.com/PaloAltoNetworks/pango/netw/profile/monitor"
     redist4 "github.com/PaloAltoNetworks/pango/netw/routing/profile/redist/ipv4"
     "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp"
     "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/aggregate"
@@ -67,6 +68,7 @@ type FwNetw struct {
     Layer3Subinterface *layer3.FwLayer3
     LoopbackInterface *loopback.FwLoopback
     ManagementProfile *mngtprof.FwMngtProf
+    MonitorProfile *monitor.FwMonitor
     RedistributionProfile *redist4.FwIpv4
     StaticRoute *ipv4.FwIpv4
     TunnelInterface *tunnel.FwTunnel
@@ -155,6 +157,9 @@ func (c *FwNetw) Initialize(i util.XapiClient) {
 
     c.ManagementProfile = &mngtprof.FwMngtProf{}
     c.ManagementProfile.Initialize(i)
+
+    c.MonitorProfile = &monitor.FwMonitor{}
+    c.MonitorProfile.Initialize(i)
 
     c.RedistributionProfile = &redist4.FwIpv4{}
     c.RedistributionProfile.Initialize(i)
