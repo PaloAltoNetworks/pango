@@ -122,6 +122,30 @@ func (c *Group) Delete(e ...interface{}) error {
     return err
 }
 
+// ShowPortMapping returns the service port mappings.
+func (c *Group) ShowPortMapping(group interface{}) ([]map[string] string, error) {
+    var name string
+
+    switch v := group.(type) {
+    case string:
+        name = v
+    case Entry:
+        name = v.Name
+    default:
+        return nil, fmt.Errorf("Unknown type sent to show port mapping: %s", v)
+    }
+    c.con.LogOp("(op) showing gke port mappings for %q", name)
+
+    req := pmReq_v1{Group: name}
+    ans := pmContainer_v1{}
+
+    if _, err := c.con.Op(req, "", nil, &ans); err != nil {
+        return nil, err
+    }
+
+    return ans.Normalize(), nil
+}
+
 /** Internal functions for this namespace struct **/
 
 func (c *Group) versioning() (normalizer, func(Entry) (interface{})) {
