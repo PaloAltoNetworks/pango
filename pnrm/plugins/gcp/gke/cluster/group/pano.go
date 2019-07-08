@@ -5,7 +5,6 @@ import (
     "encoding/xml"
 
     "github.com/PaloAltoNetworks/pango/util"
-    "github.com/PaloAltoNetworks/pango/version"
 )
 
 
@@ -126,13 +125,7 @@ func (c *Group) Delete(e ...interface{}) error {
 /** Internal functions for this namespace struct **/
 
 func (c *Group) versioning() (normalizer, func(Entry) (interface{})) {
-    v := c.con.Versioning()
-
-    if v.Gte(version.Number{7, 1, 0, ""}) {
-        return &container_v1{}, specify_v1
-    } else {
-        return &container_v1{}, specify_v1
-    }
+    return &container_v1{}, specify_v1
 }
 
 func (c *Group) details(fn util.Retriever, name string) (Entry, error) {
