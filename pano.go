@@ -57,6 +57,7 @@ func (c *Panorama) Initialize() error {
         } else if e = c.initSystemInfo(); e != nil {
             return e
         }
+        c.initPlugins()
     } else {
         c.Hostname = "localhost"
         c.ApiKey = "password"
@@ -133,6 +134,59 @@ func (c *Panorama) initNamespaces() {
 
     c.Network = &netw.PanoNetw{}
     c.Network.Initialize(c)
+}
+
+func (c *Panorama) initPlugins() {
+    c.LogOp("(op) getting plugin info")
+
+    type plugin_req struct {
+        XMLName xml.Name `xml:"show"`
+        Cmd string `xml:"plugins>packages"`
+    }
+
+    type relNote struct {
+        ReleaseNoteUrl string `xml:",cdata"`
+    }
+
+    type pkgInfo struct {
+        Name string `xml:"name"`
+        Version string `xml:"version"`
+        ReleaseDate string `xml:"release-date"`
+        RelNote relNote `xml:"release-note"`
+        PackageFile string `xml:"pkg-file"`
+        Size string `xml:"size"`
+        Platform string `xml:"platform"`
+        Installed string `xml:"installed"`
+        Downloaded string `xml:"downloaded"`
+    }
+
+    type pluginResp struct {
+        Answer []pkgInfo `xml:"result>plugins>entry"`
+    }
+
+    req := plugin_req{}
+    ans := pluginResp{}
+
+    _, err := c.Op(req, "", nil, &ans)
+    if err != nil {
+        c.LogAction("WARNING: Failed to get plugin info: %s", err)
+        return
+    }
+
+    c.Plugin = make([]map[string] string, len(ans.Answer))
+    for _, data := range ans.Answer {
+        c.Plugin = append(c.Plugin, map[string] string{
+            "name": data.Name,
+            "version": data.Version,
+            "release-date": data.ReleaseDate,
+            "release-note-url": data.RelNote.ReleaseNoteUrl,
+            "package-file": data.PackageFile,
+            "size": data.Size,
+            "platform": data.Platform,
+            "installed": data.Installed,
+            "downloaded": data.Downloaded,
+        })
+    }
 }
 
 /** Internal structs / functions **/

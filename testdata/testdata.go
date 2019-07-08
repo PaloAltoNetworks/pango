@@ -19,6 +19,7 @@ type MockClient struct {
     Resp []Response
     Called int
     Version version.Number
+    Plugin []map[string] string
     PasswordHash string
     UnimportError error
 
@@ -36,6 +37,7 @@ type MockClient struct {
 
 func (c *MockClient) String() string { return "mock" }
 func (c *MockClient) Versioning() version.Number { return c.Version }
+func (c *MockClient) Plugins() []map[string] string { return c.Plugin }
 func (c *MockClient) LogAction(f string, a...interface{}) {}
 func (c *MockClient) LogQuery(f string, a...interface{}) {}
 func (c *MockClient) LogOp(f string, a...interface{}) {}
