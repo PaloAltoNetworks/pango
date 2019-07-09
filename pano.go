@@ -152,7 +152,7 @@ func (c *Panorama) initPlugins() {
         Name string `xml:"name"`
         Version string `xml:"version"`
         ReleaseDate string `xml:"release-date"`
-        RelNote relNote `xml:"release-note"`
+        RelNote relNote `xml:"release-note-url"`
         PackageFile string `xml:"pkg-file"`
         Size string `xml:"size"`
         Platform string `xml:"platform"`
@@ -173,7 +173,7 @@ func (c *Panorama) initPlugins() {
         return
     }
 
-    c.Plugin = make([]map[string] string, len(ans.Answer))
+    c.Plugin = make([]map[string] string, 0, len(ans.Answer))
     for _, data := range ans.Answer {
         c.Plugin = append(c.Plugin, map[string] string{
             "name": data.Name,
