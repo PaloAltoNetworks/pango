@@ -35,12 +35,12 @@ func TestFwNormalization(t *testing.T) {
             mc.Version = tc.version
             mc.Reset()
             mc.AddResp("")
-            err = ns.Set(tc.vsys, EthernetInterface, "ethernet1/1", tc.conf)
+            err = ns.Set(tc.vsys, EthernetInterface, "ethernet1/1", VirtualWire, tc.conf)
             if err != nil {
                 t.Errorf("Error in set: %s", err)
             } else {
                 mc.AddResp(mc.Elm)
-                r, err := ns.Get(EthernetInterface, "ethernet1/1", tc.conf.Name)
+                r, err := ns.Get(EthernetInterface, "ethernet1/1", VirtualWire, tc.conf.Name)
                 if err != nil {
                     t.Errorf("Error in get: %s", err)
                 }

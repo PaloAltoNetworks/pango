@@ -1,5 +1,11 @@
 package layer2
 
+// Valid mType values.
+const (
+    VirtualWire = "virtual-wire"
+    Layer2 = "layer2"
+)
+
 // Valid iType values.
 const (
     EthernetInterface = "ethernet"

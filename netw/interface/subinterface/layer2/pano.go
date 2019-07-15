@@ -19,33 +19,33 @@ func (c *PanoLayer2) Initialize(con util.XapiClient) {
 }
 
 // ShowList performs SHOW to retrieve a list of values.
-func (c *PanoLayer2) ShowList(tmpl, ts, iType, eth string) ([]string, error) {
+func (c *PanoLayer2) ShowList(tmpl, ts, iType, eth, mType string) ([]string, error) {
     c.con.LogQuery("(show) list of %s", plural)
-    path := c.xpath(tmpl, ts, iType, eth, nil)
+    path := c.xpath(tmpl, ts, iType, eth, mType, nil)
     return c.con.EntryListUsing(c.con.Show, path[:len(path) - 1])
 }
 
 // GetList performs GET to retrieve a list of values.
-func (c *PanoLayer2) GetList(tmpl, ts, iType, eth string) ([]string, error) {
+func (c *PanoLayer2) GetList(tmpl, ts, iType, eth, mType string) ([]string, error) {
     c.con.LogQuery("(get) list of %s", plural)
-    path := c.xpath(tmpl, ts, iType, eth, nil)
+    path := c.xpath(tmpl, ts, iType, eth, mType, nil)
     return c.con.EntryListUsing(c.con.Get, path[:len(path) - 1])
 }
 
 // Get performs GET to retrieve information for the given uid.
-func (c *PanoLayer2) Get(tmpl, ts, iType, eth, name string) (Entry, error) {
+func (c *PanoLayer2) Get(tmpl, ts, iType, eth, mType, name string) (Entry, error) {
     c.con.LogQuery("(get) %s %q", singular, name)
-    return c.details(c.con.Get, tmpl, ts, iType, eth, name)
+    return c.details(c.con.Get, tmpl, ts, iType, eth, mType, name)
 }
 
 // Show performs SHOW to retrieve information for the given uid.
-func (c *PanoLayer2) Show(tmpl, ts, iType, eth, name string) (Entry, error) {
+func (c *PanoLayer2) Show(tmpl, ts, iType, eth, mType, name string) (Entry, error) {
     c.con.LogQuery("(show) %s %q", singular, name)
-    return c.details(c.con.Show, tmpl, ts, iType, eth, name)
+    return c.details(c.con.Show, tmpl, ts, iType, eth, mType, name)
 }
 
 // Set performs SET to create / update one or more objects.
-func (c *PanoLayer2) Set(vsys, tmpl, ts, iType, eth string, e ...Entry) error {
+func (c *PanoLayer2) Set(vsys, tmpl, ts, iType, eth, mType string, e ...Entry) error {
     var err error
 
     if len(e) == 0 {
@@ -54,6 +54,8 @@ func (c *PanoLayer2) Set(vsys, tmpl, ts, iType, eth string, e ...Entry) error {
         return fmt.Errorf("iType must be specified")
     } else if eth == "" {
         return fmt.Errorf("eth must be specified")
+    } else if mType == "" {
+        return fmt.Errorf("mType must be specified")
     } else if tmpl == "" && ts == "" {
         return fmt.Errorf("tmpl or ts must be specified")
     }
@@ -70,7 +72,7 @@ func (c *PanoLayer2) Set(vsys, tmpl, ts, iType, eth string, e ...Entry) error {
     c.con.LogAction("(set) %s: %v", plural, names)
 
     // Set xpath.
-    path := c.xpath(tmpl, ts, iType, eth, names)
+    path := c.xpath(tmpl, ts, iType, eth, mType, names)
     if len(e) == 1 {
         path = path[:len(path) - 1]
     } else {
@@ -93,13 +95,15 @@ func (c *PanoLayer2) Set(vsys, tmpl, ts, iType, eth string, e ...Entry) error {
 }
 
 // Edit performs EDIT to create / update one object.
-func (c *PanoLayer2) Edit(vsys, tmpl, ts, iType, eth string, e Entry) error {
+func (c *PanoLayer2) Edit(vsys, tmpl, ts, iType, eth, mType string, e Entry) error {
     var err error
 
     if iType == "" {
         return fmt.Errorf("iType must be specified")
     } else if eth == "" {
         return fmt.Errorf("eth must be specified")
+    } else if mType == "" {
+        return fmt.Errorf("mType must be specified")
     } else if tmpl == "" && ts == "" {
         return fmt.Errorf("tmpl or ts must be specified")
     }
@@ -109,7 +113,7 @@ func (c *PanoLayer2) Edit(vsys, tmpl, ts, iType, eth string, e Entry) error {
     c.con.LogAction("(edit) %s %q", singular, e.Name)
 
     // Set xpath.
-    path := c.xpath(tmpl, ts, iType, eth, []string{e.Name})
+    path := c.xpath(tmpl, ts, iType, eth, mType, []string{e.Name})
 
     // Edit the object.
     if _, err = c.con.Edit(path, fn(e), nil, nil); err != nil {
@@ -128,7 +132,7 @@ func (c *PanoLayer2) Edit(vsys, tmpl, ts, iType, eth string, e Entry) error {
 // Delete removes the given objects.
 //
 // Objects can be a string or an Entry object.
-func (c *PanoLayer2) Delete(tmpl, ts, iType, eth string, e ...interface{}) error {
+func (c *PanoLayer2) Delete(tmpl, ts, iType, eth, mType string, e ...interface{}) error {
     var err error
 
     if len(e) == 0 {
@@ -137,6 +141,8 @@ func (c *PanoLayer2) Delete(tmpl, ts, iType, eth string, e ...interface{}) error
         return fmt.Errorf("iType must be specified")
     } else if eth == "" {
         return fmt.Errorf("eth must be specified")
+    } else if mType == "" {
+        return fmt.Errorf("mType must be specified")
     } else if tmpl == "" && ts == "" {
         return fmt.Errorf("tmpl or ts must be specified")
     }
@@ -160,7 +166,7 @@ func (c *PanoLayer2) Delete(tmpl, ts, iType, eth string, e ...interface{}) error
     }
 
     // Remove the objects.
-    path := c.xpath(tmpl, ts, iType, eth, names)
+    path := c.xpath(tmpl, ts, iType, eth, mType, names)
     _, err = c.con.Delete(path, nil, nil)
     return err
 }
@@ -171,8 +177,8 @@ func (c *PanoLayer2) versioning() (normalizer, func(Entry) (interface{})) {
     return &container_v1{}, specify_v1
 }
 
-func (c *PanoLayer2) details(fn util.Retriever, tmpl, ts, iType, eth, name string) (Entry, error) {
-    path := c.xpath(tmpl, ts, iType, eth, []string{name})
+func (c *PanoLayer2) details(fn util.Retriever, tmpl, ts, iType, eth, mType, name string) (Entry, error) {
+    path := c.xpath(tmpl, ts, iType, eth, mType, []string{name})
     obj, _ := c.versioning()
     if _, err := fn(path, nil, obj); err != nil {
         return Entry{}, err
@@ -182,7 +188,7 @@ func (c *PanoLayer2) details(fn util.Retriever, tmpl, ts, iType, eth, name strin
     return ans, nil
 }
 
-func (c *PanoLayer2) xpath(tmpl, ts, iType, eth string, vals []string) []string {
+func (c *PanoLayer2) xpath(tmpl, ts, iType, eth, mType string, vals []string) []string {
     ans := make([]string, 15)
     ans = append(ans, util.TemplateXpathPrefix(tmpl, ts)...)
     ans = append(ans,
@@ -193,7 +199,7 @@ func (c *PanoLayer2) xpath(tmpl, ts, iType, eth string, vals []string) []string 
         "interface",
         iType,
         util.AsEntryXpath([]string{eth}),
-        "layer2",
+        mType,
         "units",
         util.AsEntryXpath(vals),
     )

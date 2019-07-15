@@ -19,33 +19,33 @@ func (c *FwLayer2) Initialize(con util.XapiClient) {
 }
 
 // ShowList performs SHOW to retrieve a list of values.
-func (c *FwLayer2) ShowList(iType, eth string) ([]string, error) {
+func (c *FwLayer2) ShowList(iType, eth, mType string) ([]string, error) {
     c.con.LogQuery("(show) list of %s", plural)
-    path := c.xpath(iType, eth, nil)
+    path := c.xpath(iType, eth, mType, nil)
     return c.con.EntryListUsing(c.con.Show, path[:len(path) - 1])
 }
 
 // GetList performs GET to retrieve a list of values.
-func (c *FwLayer2) GetList(iType, eth string) ([]string, error) {
+func (c *FwLayer2) GetList(iType, eth, mType string) ([]string, error) {
     c.con.LogQuery("(get) list of %s", plural)
-    path := c.xpath(iType, eth, nil)
+    path := c.xpath(iType, eth, mType, nil)
     return c.con.EntryListUsing(c.con.Get, path[:len(path) - 1])
 }
 
 // Get performs GET to retrieve information for the given uid.
-func (c *FwLayer2) Get(iType, eth, name string) (Entry, error) {
+func (c *FwLayer2) Get(iType, eth, mType, name string) (Entry, error) {
     c.con.LogQuery("(get) %s %q", singular, name)
-    return c.details(c.con.Get, iType, eth, name)
+    return c.details(c.con.Get, iType, eth, mType, name)
 }
 
 // Show performs SHOW to retrieve information for the given uid.
-func (c *FwLayer2) Show(iType, eth, name string) (Entry, error) {
+func (c *FwLayer2) Show(iType, eth, mType, name string) (Entry, error) {
     c.con.LogQuery("(show) %s %q", singular, name)
-    return c.details(c.con.Show, iType, eth, name)
+    return c.details(c.con.Show, iType, eth, mType, name)
 }
 
 // Set performs SET to create / update one or more objects.
-func (c *FwLayer2) Set(vsys, iType, eth string, e ...Entry) error {
+func (c *FwLayer2) Set(vsys, iType, eth, mType string, e ...Entry) error {
     var err error
 
     if len(e) == 0 {
@@ -54,6 +54,8 @@ func (c *FwLayer2) Set(vsys, iType, eth string, e ...Entry) error {
         return fmt.Errorf("iType must be specified")
     } else if eth == "" {
         return fmt.Errorf("eth must be specified")
+    } else if mType == "" {
+        return fmt.Errorf("mType must be specified")
     }
 
     _, fn := c.versioning()
@@ -68,7 +70,7 @@ func (c *FwLayer2) Set(vsys, iType, eth string, e ...Entry) error {
     c.con.LogAction("(set) %s: %v", plural, names)
 
     // Set xpath.
-    path := c.xpath(iType, eth, names)
+    path := c.xpath(iType, eth, mType, names)
     if len(e) == 1 {
         path = path[:len(path) - 1]
     } else {
@@ -91,13 +93,15 @@ func (c *FwLayer2) Set(vsys, iType, eth string, e ...Entry) error {
 }
 
 // Edit performs EDIT to create / update one object.
-func (c *FwLayer2) Edit(vsys, iType, eth string, e Entry) error {
+func (c *FwLayer2) Edit(vsys, iType, eth, mType string, e Entry) error {
     var err error
 
     if iType == "" {
         return fmt.Errorf("iType must be specified")
     } else if eth == "" {
         return fmt.Errorf("eth must be specified")
+    } else if mType == "" {
+        return fmt.Errorf("mType must be specified")
     }
 
     _, fn := c.versioning()
@@ -105,7 +109,7 @@ func (c *FwLayer2) Edit(vsys, iType, eth string, e Entry) error {
     c.con.LogAction("(edit) %s %q", singular, e.Name)
 
     // Set xpath.
-    path := c.xpath(iType, eth, []string{e.Name})
+    path := c.xpath(iType, eth, mType, []string{e.Name})
 
     // Edit the object.
     if _, err = c.con.Edit(path, fn(e), nil, nil); err != nil {
@@ -124,7 +128,7 @@ func (c *FwLayer2) Edit(vsys, iType, eth string, e Entry) error {
 // Delete removes the given objects.
 //
 // Objects can be a string or an Entry object.
-func (c *FwLayer2) Delete(iType, eth string, e ...interface{}) error {
+func (c *FwLayer2) Delete(iType, eth, mType string, e ...interface{}) error {
     var err error
 
     if len(e) == 0 {
@@ -133,6 +137,8 @@ func (c *FwLayer2) Delete(iType, eth string, e ...interface{}) error {
         return fmt.Errorf("iType must be specified")
     } else if eth == "" {
         return fmt.Errorf("eth must be specified")
+    } else if mType == "" {
+        return fmt.Errorf("mType must be specified")
     }
 
     names := make([]string, len(e))
@@ -154,7 +160,7 @@ func (c *FwLayer2) Delete(iType, eth string, e ...interface{}) error {
     }
 
     // Remove the objects.
-    path := c.xpath(iType, eth, names)
+    path := c.xpath(iType, eth, mType, names)
     _, err = c.con.Delete(path, nil, nil)
     return err
 }
@@ -165,8 +171,8 @@ func (c *FwLayer2) versioning() (normalizer, func(Entry) (interface{})) {
     return &container_v1{}, specify_v1
 }
 
-func (c *FwLayer2) details(fn util.Retriever, iType, eth, name string) (Entry, error) {
-    path := c.xpath(iType, eth, []string{name})
+func (c *FwLayer2) details(fn util.Retriever, iType, eth, mType, name string) (Entry, error) {
+    path := c.xpath(iType, eth, mType, []string{name})
     obj, _ := c.versioning()
     if _, err := fn(path, nil, obj); err != nil {
         return Entry{}, err
@@ -176,7 +182,7 @@ func (c *FwLayer2) details(fn util.Retriever, iType, eth, name string) (Entry, e
     return ans, nil
 }
 
-func (c *FwLayer2) xpath(iType, eth string, vals []string) []string {
+func (c *FwLayer2) xpath(iType, eth, mType string, vals []string) []string {
     return []string{
         "config",
         "devices",
@@ -185,7 +191,7 @@ func (c *FwLayer2) xpath(iType, eth string, vals []string) []string {
         "interface",
         iType,
         util.AsEntryXpath([]string{eth}),
-        "layer2",
+        mType,
         "units",
         util.AsEntryXpath(vals),
     }
