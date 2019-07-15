@@ -4,9 +4,9 @@ package netw
 import (
     "github.com/PaloAltoNetworks/pango/netw/ikegw"
     "github.com/PaloAltoNetworks/pango/netw/interface/eth"
-    "github.com/PaloAltoNetworks/pango/netw/interface/eth/subinterface/layer2"
-    "github.com/PaloAltoNetworks/pango/netw/interface/eth/subinterface/layer3"
     "github.com/PaloAltoNetworks/pango/netw/interface/loopback"
+    "github.com/PaloAltoNetworks/pango/netw/interface/subinterface/layer2"
+    "github.com/PaloAltoNetworks/pango/netw/interface/subinterface/layer3"
     "github.com/PaloAltoNetworks/pango/netw/interface/tunnel"
     vli "github.com/PaloAltoNetworks/pango/netw/interface/vlan"
     "github.com/PaloAltoNetworks/pango/netw/ipsectunnel"
