@@ -222,6 +222,11 @@ func TestFwNormalization(t *testing.T) {
             },
             Comment: "v4 layer2 with raw config",
         }},
+        {version.Number{9, 0, 0, ""}, "vsys7", "vsys7", []string{}, Entry{
+            Name: "ethernet1/7",
+            Mode: "aggregate-group",
+            AggregateGroup: "ae1",
+        }},
     }
 
     mc := &testdata.MockClient{}

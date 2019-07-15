@@ -140,8 +140,9 @@ func (o *container_v1) Normalize() Entry {
             ans.Mode = "ha"
         case o.Answer.DecryptMirrorMode != nil:
             ans.Mode = "decrypt-mirror"
-        case o.Answer.AggregateGroupMode != nil:
+        case o.Answer.AggregateGroup != "":
             ans.Mode = "aggregate-group"
+            ans.AggregateGroup = o.Answer.AggregateGroup
     }
 
     if len(ans.raw) == 0 {
@@ -159,7 +160,7 @@ type entry_v1 struct {
     TapMode *emptyMode `xml:"tap"`
     HaMode *emptyMode `xml:"ha"`
     DecryptMirrorMode *emptyMode `xml:"decrypt-mirror"`
-    AggregateGroupMode *emptyMode `xml:"aggregate-group"`
+    AggregateGroup string `xml:"aggregate-group,omitempty"`
     LinkSpeed string `xml:"link-speed,omitempty"`
     LinkDuplex string `xml:"link-duplex,omitempty"`
     LinkState string `xml:"link-state,omitempty"`
@@ -273,8 +274,9 @@ func (o *container_v2) Normalize() Entry {
             ans.Mode = "ha"
         case o.Answer.DecryptMirrorMode != nil:
             ans.Mode = "decrypt-mirror"
-        case o.Answer.AggregateGroupMode != nil:
+        case o.Answer.AggregateGroup != "":
             ans.Mode = "aggregate-group"
+            ans.AggregateGroup = o.Answer.AggregateGroup
     }
 
     if len(ans.raw) == 0 {
@@ -362,8 +364,9 @@ func (o *container_v3) Normalize() Entry {
             ans.Mode = "ha"
         case o.Answer.DecryptMirrorMode != nil:
             ans.Mode = "decrypt-mirror"
-        case o.Answer.AggregateGroupMode != nil:
+        case o.Answer.AggregateGroup != "":
             ans.Mode = "aggregate-group"
+            ans.AggregateGroup = o.Answer.AggregateGroup
     }
 
     if len(ans.raw) == 0 {
@@ -458,8 +461,9 @@ func (o *container_v4) Normalize() Entry {
             ans.Mode = "ha"
         case o.Answer.DecryptMirrorMode != nil:
             ans.Mode = "decrypt-mirror"
-        case o.Answer.AggregateGroupMode != nil:
+        case o.Answer.AggregateGroup != "":
             ans.Mode = "aggregate-group"
+            ans.AggregateGroup = o.Answer.AggregateGroup
     }
 
     if len(ans.raw) == 0 {
@@ -477,7 +481,7 @@ type entry_v2 struct {
     TapMode *emptyMode `xml:"tap"`
     HaMode *emptyMode `xml:"ha"`
     DecryptMirrorMode *emptyMode `xml:"decrypt-mirror"`
-    AggregateGroupMode *emptyMode `xml:"aggregate-group"`
+    AggregateGroup string `xml:"aggregate-group,omitempty"`
     LinkSpeed string `xml:"link-speed,omitempty"`
     LinkDuplex string `xml:"link-duplex,omitempty"`
     LinkState string `xml:"link-state,omitempty"`
@@ -510,7 +514,7 @@ type entry_v3 struct {
     TapMode *emptyMode `xml:"tap"`
     HaMode *emptyMode `xml:"ha"`
     DecryptMirrorMode *emptyMode `xml:"decrypt-mirror"`
-    AggregateGroupMode *emptyMode `xml:"aggregate-group"`
+    AggregateGroup string `xml:"aggregate-group,omitempty"`
     LinkSpeed string `xml:"link-speed,omitempty"`
     LinkDuplex string `xml:"link-duplex,omitempty"`
     LinkState string `xml:"link-state,omitempty"`
@@ -550,7 +554,7 @@ type entry_v4 struct {
     TapMode *emptyMode `xml:"tap"`
     HaMode *emptyMode `xml:"ha"`
     DecryptMirrorMode *emptyMode `xml:"decrypt-mirror"`
-    AggregateGroupMode *emptyMode `xml:"aggregate-group"`
+    AggregateGroup string `xml:"aggregate-group,omitempty"`
     LinkSpeed string `xml:"link-speed,omitempty"`
     LinkDuplex string `xml:"link-duplex,omitempty"`
     LinkState string `xml:"link-state,omitempty"`
@@ -663,7 +667,7 @@ func specify_v1(e Entry) interface{} {
     case "decrypt-mirror":
         ans.DecryptMirrorMode = &emptyMode{}
     case "aggregate-group":
-        ans.AggregateGroupMode = &emptyMode{}
+        ans.AggregateGroup = e.AggregateGroup
     }
 
     return ans
@@ -755,7 +759,7 @@ func specify_v2(e Entry) interface{} {
     case "decrypt-mirror":
         ans.DecryptMirrorMode = &emptyMode{}
     case "aggregate-group":
-        ans.AggregateGroupMode = &emptyMode{}
+        ans.AggregateGroup = e.AggregateGroup
     }
 
     return ans
@@ -858,7 +862,7 @@ func specify_v3(e Entry) interface{} {
     case "decrypt-mirror":
         ans.DecryptMirrorMode = &emptyMode{}
     case "aggregate-group":
-        ans.AggregateGroupMode = &emptyMode{}
+        ans.AggregateGroup = e.AggregateGroup
     }
 
     return ans
@@ -971,7 +975,7 @@ func specify_v4(e Entry) interface{} {
     case "decrypt-mirror":
         ans.DecryptMirrorMode = &emptyMode{}
     case "aggregate-group":
-        ans.AggregateGroupMode = &emptyMode{}
+        ans.AggregateGroup = e.AggregateGroup
     }
 
     return ans
