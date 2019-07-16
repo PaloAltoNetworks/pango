@@ -18,7 +18,7 @@ type Entry struct {
     Ipv4MssAdjust int
     Ipv6MssAdjust int
     EnableUntaggedSubinterface bool
-    StaticIps []string
+    StaticIps []string // ordered
     Ipv6Enabled bool
     Ipv6InterfaceId string
     ManagementProfile string
