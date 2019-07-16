@@ -42,7 +42,7 @@ func (c *MockClient) LogAction(f string, a...interface{}) {}
 func (c *MockClient) LogQuery(f string, a...interface{}) {}
 func (c *MockClient) LogOp(f string, a...interface{}) {}
 func (c *MockClient) LogUid(f string, a...interface{}) {}
-func (c *MockClient) Commit(d string, e, f, g, h bool) (uint, error) { return 0, nil }
+func (c *MockClient) Commit(d string, e []string, f, g, h, i bool) (uint, error) { return 0, nil }
 func (c *MockClient) PositionFirstEntity(d int, e, f string, g, h []string) error { return nil }
 
 func (c *MockClient) Op(req interface{}, vsys string, extras interface{}, ans interface{}) ([]byte, error) {
