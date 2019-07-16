@@ -211,6 +211,7 @@ func TestFwNormalization(t *testing.T) {
                 "ndp": "ndp proxy info",
                 "l3subinterface": "<units>raw l3 subinterfaces</units>",
                 "v6client": "ipv6 client info",
+                "ddns": "ddns config",
             },
             Comment: "v4 layer3 with raw config",
         }},

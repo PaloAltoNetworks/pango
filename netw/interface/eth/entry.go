@@ -442,6 +442,9 @@ func (o *container_v4) Normalize() Entry {
             if o.Answer.ModeL3.Ipv6Client != nil {
                 ans.raw["v6client"] = util.CleanRawXml(o.Answer.ModeL3.Ipv6Client.Text)
             }
+            if o.Answer.ModeL3.Ddns != nil {
+                ans.raw["ddns"] = util.CleanRawXml(o.Answer.ModeL3.Ddns.Text)
+            }
         case o.Answer.ModeL2 != nil:
             ans.Mode = "layer2"
             ans.LldpEnabled = util.AsBool(o.Answer.ModeL2.LldpEnabled)
@@ -579,6 +582,7 @@ type l3Mode_v4 struct {
     Ndp *util.RawXml `xml:"ndp-proxy"`
     Ipv6Client *util.RawXml `xml:"ipv6-client"`
     Subinterface *util.RawXml `xml:"units"`
+    Ddns *util.RawXml `xml:"ddns-config"`
 }
 
 type dhcpSettings_v2 struct {
@@ -949,6 +953,9 @@ func specify_v4(e Entry) interface{} {
         }
         if text := e.raw["v6client"]; text != "" {
             i.Ipv6Client = &util.RawXml{text}
+        }
+        if text := e.raw["ddns"]; text != "" {
+            i.Ddns = &util.RawXml{text}
         }
         ans.ModeL3 = i
     case "layer2":
