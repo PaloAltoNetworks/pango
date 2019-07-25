@@ -29,6 +29,10 @@ func getTests() []tc {
             Disabled: true,
             Action: ActionNoPbf,
             ActiveActiveDeviceBinding: "1",
+            Targets: map[string] []string{
+                "serial1": {"vsys1", "vsys2"},
+                "serial2": nil,
+            },
         }},
         {"v1 from interface discard with symmetric", version.Number{7, 1, 0, ""}, Entry{
             Name: "v1",
@@ -127,6 +131,10 @@ func getTests() []tc {
             Disabled: true,
             Action: ActionNoPbf,
             ActiveActiveDeviceBinding: "1",
+            Targets: map[string] []string{
+                "serial1": {"vsys1", "vsys2"},
+                "serial2": nil,
+            },
         }},
         {"v2 from interface discard with symmetric", version.Number{9, 0, 0, ""}, Entry{
             Name: "v2",
