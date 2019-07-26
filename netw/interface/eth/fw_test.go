@@ -63,6 +63,17 @@ func TestFwNormalization(t *testing.T) {
             },
             Comment: "v1 layer2 with raw config",
         }},
+        {version.Number{5, 0, 0, ""}, "vsys6", "vsys6", []string{"ethernet1/6"}, Entry{
+            Name: "ethernet1/6",
+            Mode: "virtual-wire",
+            raw: map[string] string{
+                "vwsub": "virtual wire subinterfaces",
+            },
+        }},
+        {version.Number{5, 0, 0, ""}, "vsys6", "vsys6", []string{"ethernet1/7"}, Entry{
+            Name: "ethernet1/7",
+            Mode: "tap",
+        }},
         {version.Number{8, 0, 0, ""}, "vsys2", "vsys2", []string{"ethernet1/1"}, Entry{
             Name: "ethernet1/1",
             Mode: "layer3",
@@ -112,6 +123,17 @@ func TestFwNormalization(t *testing.T) {
                 "l2subinterface": "<units>raw l2 subinterfaces</units>",
             },
             Comment: "v2 layer2 with raw config",
+        }},
+        {version.Number{8, 0, 0, ""}, "vsys6", "vsys6", []string{"ethernet1/6"}, Entry{
+            Name: "ethernet1/6",
+            Mode: "virtual-wire",
+            raw: map[string] string{
+                "vwsub": "virtual wire subinterfaces",
+            },
+        }},
+        {version.Number{8, 0, 0, ""}, "vsys6", "vsys6", []string{"ethernet1/7"}, Entry{
+            Name: "ethernet1/7",
+            Mode: "tap",
         }},
         {version.Number{8, 1, 0, ""}, "vsys2", "vsys2", []string{"ethernet1/1"}, Entry{
             Name: "ethernet1/1",
@@ -165,6 +187,17 @@ func TestFwNormalization(t *testing.T) {
                 "l2subinterface": "<units>raw l2 subinterfaces</units>",
             },
             Comment: "v3 layer2 with raw config",
+        }},
+        {version.Number{8, 1, 0, ""}, "vsys6", "vsys6", []string{"ethernet1/6"}, Entry{
+            Name: "ethernet1/6",
+            Mode: "virtual-wire",
+            raw: map[string] string{
+                "vwsub": "virtual wire subinterfaces",
+            },
+        }},
+        {version.Number{8, 1, 0, ""}, "vsys6", "vsys6", []string{"ethernet1/7"}, Entry{
+            Name: "ethernet1/7",
+            Mode: "tap",
         }},
         {version.Number{9, 0, 0, ""}, "vsys2", "vsys2", []string{"ethernet1/1"}, Entry{
             Name: "ethernet1/1",
@@ -227,6 +260,17 @@ func TestFwNormalization(t *testing.T) {
             Name: "ethernet1/7",
             Mode: "aggregate-group",
             AggregateGroup: "ae1",
+        }},
+        {version.Number{9, 0, 0, ""}, "vsys6", "vsys6", []string{"ethernet1/6"}, Entry{
+            Name: "ethernet1/6",
+            Mode: "virtual-wire",
+            raw: map[string] string{
+                "vwsub": "virtual wire subinterfaces",
+            },
+        }},
+        {version.Number{9, 0, 0, ""}, "vsys6", "vsys6", []string{"ethernet1/7"}, Entry{
+            Name: "ethernet1/7",
+            Mode: "tap",
         }},
     }
 
