@@ -20,7 +20,7 @@ func TestPanoNormalization(t *testing.T) {
             mc.Version = tc.version
             mc.Reset()
             mc.AddResp("")
-            err := ns.Set("my template", "", tc.conf)
+            err := ns.Set("my template", "", "vsys1", tc.conf)
             if err != nil {
                 t.Errorf("Error in set: %s", err)
             } else {
