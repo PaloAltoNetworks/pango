@@ -35,7 +35,7 @@ func TestPanoNormalization(t *testing.T) {
             mc.Version = tc.version
             mc.Reset()
             mc.AddResp("")
-            err = ns.Set(tc.vsys, "my template", "", AggregateInterface, "ethernet1/1", Layer2, tc.conf)
+            err = ns.Set("my template", "", AggregateInterface, "ethernet1/1", Layer2, tc.vsys, tc.conf)
             if err != nil {
                 t.Errorf("Error in set: %s", err)
             } else {
