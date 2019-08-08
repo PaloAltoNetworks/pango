@@ -16,13 +16,13 @@ func getTests() []tc {
             Name: "v1",
             Comment: "my comment",
             Scope: ScopeSession,
-            OrderedMatch: false,
+            OrderFree: false,
         }},
         {"v1 raw no order", version.Number{7, 1, 0, ""}, Entry{
             Name: "v1",
             Comment: "my comment",
             Scope: ScopeSession,
-            OrderedMatch: false,
+            OrderFree: false,
             raw: map[string] string{
                 "sigs": "and sig config",
             },
@@ -30,7 +30,7 @@ func getTests() []tc {
         {"v1 no raw ordered", version.Number{7, 1, 0, ""}, Entry{
             Name: "v1",
             Scope: ScopeTransaction,
-            OrderedMatch: true,
+            OrderFree: true,
         }},
     }
 }
