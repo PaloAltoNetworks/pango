@@ -19,6 +19,7 @@ func TestNew(t *testing.T) {
         {"1.b.3", true, 0, 0, 0, ""},
         {"1.2.c", true, 0, 0, 0, ""},
         {"1.2.3h4", true, 0, 0, 0, ""},
+        {"9.0.3.xfr", false, 9, 0, 3, ""},
     }
 
     for _, tc := range testCases {
