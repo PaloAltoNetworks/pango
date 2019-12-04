@@ -1,38 +1,55 @@
 package userid
 
 import (
-    "strings"
     "testing"
 
     "github.com/PaloAltoNetworks/pango/testdata"
-    "github.com/PaloAltoNetworks/pango/version"
 )
 
 
 func TestRun(t *testing.T) {
     testCases := []struct{
-        logins, logouts map[string] string
-        reg, unreg map[string] []string
-        vsys, desc string
+        desc string
+        vsys string
+        msg *Message
     }{
-        {map[string] string{"john": "1.2.3.4"}, nil, nil, nil, "", "login and empty vsys"},
-        {nil, map[string] string{"jack": "2.3.4.5"}, nil, nil, "vsys2", "logout and vsys2"},
-        {nil, nil, map[string] []string{"3.4.5.6": []string{"one", "two"}}, nil, "vsys3", "register and vsys3"},
-        {nil, nil, nil, map[string] []string{"4.5.6.7": []string{"three", "four"}}, "vsys4", "unregister and vsys4"},
+        {"login and empty vsys", "", &Message{
+            Logins: []Login{
+                {User: "john", Ip: "1.2.3.4"},
+            },
+        }},
+        {"logout and vsys2", "vsys2", &Message{
+            Logouts: []Logout{
+                {User: "jack", Ip: "2.3.4.5"},
+            },
+        }},
+        {"register and vsys3", "vsys3", &Message{
+            TagIps: []TagIp{
+                {Ip: "3.4.5.6", Tags: []string{"one", "two"}},
+            },
+        }},
+        {"unregister and vsys4", "vsys4", &Message{
+            UntagIps: []UntagIp{
+                {Ip: "4.5.6.7", Tags: []string{"three", "four"}},
+            },
+        }},
+        {"group and vsys1", "vsys1", &Message{
+            Groups: []Group{
+                {Name: "mygroup", Users: []string{"john", "doe"}},
+            },
+        }},
     }
-    mc := &testdata.MockClient{Resp: []testdata.Response{
-        testdata.Response{[]byte(""), nil},
-        testdata.Response{[]byte(""), nil},
-        testdata.Response{[]byte(""), nil},
-        testdata.Response{[]byte(""), nil},
-    }}
+
+    mc := &testdata.MockClient{}
+    mc.Resp = make([]testdata.Response, 0, len(testCases))
     u := &UserId{}
     u.Initialize(mc)
 
     for _, tc := range testCases {
         t.Run(tc.desc, func(t *testing.T) {
             i := mc.Called
-            err := u.Run(tc.logins, tc.logouts, tc.reg, tc.unreg, tc.vsys)
+            mc.Resp = append(mc.Resp, testdata.Response{[]byte(""), nil})
+            err := u.Run(tc.msg, tc.vsys)
             if err != nil || mc.Called == i {
                 t.Errorf("Failed basic checks")
             } else {
@@ -43,33 +60,6 @@ func TestRun(t *testing.T) {
                 } else if mc.Vsys != tc.vsys {
                         t.Errorf("Vsys is %s, not %s", mc.Vsys, tc.vsys)
                 }
-            }
-        })
-    }
-}
-
-func TestRegistered(t *testing.T) {
-    testCases := []struct{
-        n version.Number
-        r string
-    }{
-        {version.Number{6, 0, 0, ""}, "registered-address"},
-        {version.Number{7, 0, 0, ""}, "registered-ip"},
-    }
-    mc := &testdata.MockClient{Resp: []testdata.Response{
-        testdata.Response{[]byte(testdata.UserIdXml), nil},
-        testdata.Response{[]byte(testdata.UserIdXml), nil},
-    }}
-    u := &UserId{}
-    u.Initialize(mc)
-
-    for _, tc := range testCases {
-        t.Run(tc.r, func(t *testing.T) {
-            mc.Version = tc.n
-            i := mc.Called
-            _, err := u.Registered("", "", "vsys1")
-            if err != nil || mc.Called == i || mc.Vsys != "vsys1" || strings.Index(mc.Elm, tc.r) == -1 {
-                t.Fail()
             }
         })
     }
