@@ -59,6 +59,8 @@ These functions correspond with PANOS `Get`, `Show`, `Set`, `Edit`, and `Delete`
 
 Some `Entry` objects have a special function, `Defaults()`.  Invoking this function will initialize the object with some default values.  Each `Entry` that implements `Defaults()` calls out in its documentation what parameters are affected by this, and what the defaults are.
 
+Some `Entry` objects have functions `GetFullList` and `ShowFullList()`. These operate differently than `GetList` and `ShowList` in that instead of returning lists of object names, they return populated lists of entries by obtaining a section of the Firewall's XML in one request. This makes them much more efficient in bulk configuration retreival use-cases.
+
 For any version safe object, attempting to configure a parameter that your PANOS doesn't support will be safely ignored in the resultant XML sent to the firewall / Panorama.
 
 
