@@ -1,6 +1,6 @@
 package router
 
 const (
-    singular = "virtual router"
-    plural = "virtual routers"
+	singular = "virtual router"
+	plural   = "virtual routers"
 )

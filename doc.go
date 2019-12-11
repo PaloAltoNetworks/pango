@@ -7,12 +7,12 @@ To start, create a client connection with the desired parameters and then
 initialize the connection:
 
     package main
-    
+
     import (
         "log"
         "github.com/PaloAltoNetworks/pango"
     )
-    
+
     func main() {
         var err error
         c := pango.Firewall{Client: pango.Client{

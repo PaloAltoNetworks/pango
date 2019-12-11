@@ -1,38 +1,37 @@
 package orcond
 
 import (
-    "testing"
-    "reflect"
+	"reflect"
+	"testing"
 
-    "github.com/PaloAltoNetworks/pango/testdata"
+	"github.com/PaloAltoNetworks/pango/testdata"
 )
 
-
 func TestFwNormalization(t *testing.T) {
-    testCases := getTests()
+	testCases := getTests()
 
-    mc := &testdata.MockClient{}
-    ns := &FwOrCond{}
-    ns.Initialize(mc)
+	mc := &testdata.MockClient{}
+	ns := &FwOrCond{}
+	ns.Initialize(mc)
 
-    for _, tc := range testCases {
-        t.Run(tc.desc, func(t *testing.T) {
-            mc.Version = tc.version
-            mc.Reset()
-            mc.AddResp("")
-            err := ns.Set("vsys1", "my app", "sig", "And Condition 1", tc.conf)
-            if err != nil {
-                t.Errorf("Error in set: %s", err)
-            } else {
-                mc.AddResp(mc.Elm)
-                r, err := ns.Get("vsys1", "my app", "sig", "And Condition 1", tc.conf.Name)
-                if err != nil {
-                    t.Errorf("Error in get: %s", err)
-                }
-                if !reflect.DeepEqual(tc.conf, r) {
-                    t.Errorf("%#v != %#v", tc.conf, r)
-                }
-            }
-        })
-    }
+	for _, tc := range testCases {
+		t.Run(tc.desc, func(t *testing.T) {
+			mc.Version = tc.version
+			mc.Reset()
+			mc.AddResp("")
+			err := ns.Set("vsys1", "my app", "sig", "And Condition 1", tc.conf)
+			if err != nil {
+				t.Errorf("Error in set: %s", err)
+			} else {
+				mc.AddResp(mc.Elm)
+				r, err := ns.Get("vsys1", "my app", "sig", "And Condition 1", tc.conf.Name)
+				if err != nil {
+					t.Errorf("Error in get: %s", err)
+				}
+				if !reflect.DeepEqual(tc.conf, r) {
+					t.Errorf("%#v != %#v", tc.conf, r)
+				}
+			}
+		})
+	}
 }
