@@ -35,13 +35,33 @@ func (c *FwAddr) ShowList(vsys string) ([]string, error) {
 // Get performs GET to retrieve information for the given address object.
 func (c *FwAddr) Get(vsys, name string) (Entry, error) {
 	c.con.LogQuery("(get) address object %q", name)
-	return c.details(c.con.Get, vsys, name)
+	listing, err := c.details(c.con.Get, vsys, name)
+	if err == nil && len(listing) > 0 {
+		return listing[0], nil
+	}
+	return Entry{}, err
 }
 
-// Get performs SHOW to retrieve information for the given address object.
+// GetAll performs a GET to retrieve objects.
+func (c *FwAddr) GetAll(vsys string) ([]Entry, error) {
+	c.con.LogQuery("(get) all address objects")
+	return c.details(c.con.Get, vsys, "")
+}
+
+// Show performs SHOW to retrieve information for the given address object.
 func (c *FwAddr) Show(vsys, name string) (Entry, error) {
 	c.con.LogQuery("(show) address object %q", name)
-	return c.details(c.con.Show, vsys, name)
+	listing, err := c.details(c.con.Show, vsys, name)
+	if err == nil && len(listing) > 0 {
+		return listing[0], nil
+	}
+	return Entry{}, err
+}
+
+// ShowAll performs SHOW to retrieve all objects.
+func (c *FwAddr) ShowAll(vsys string) ([]Entry, error) {
+	c.con.LogQuery("(show) all address objects")
+	return c.details(c.con.Show, vsys, "")
 }
 
 // Set performs SET to create / update one or more address objects.
@@ -132,12 +152,12 @@ func (c *FwAddr) versioning() (normalizer, func(Entry) interface{}) {
 	}
 }
 
-func (c *FwAddr) details(fn util.Retriever, vsys, name string) (Entry, error) {
+func (c *FwAddr) details(fn util.Retriever, vsys, name string) ([]Entry, error) {
 	path := c.xpath(vsys, []string{name})
 	obj, _ := c.versioning()
 	_, err := fn(path, nil, obj)
 	if err != nil {
-		return Entry{}, err
+		return nil, err
 	}
 	ans := obj.Normalize()
 
