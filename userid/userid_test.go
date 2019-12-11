@@ -37,6 +37,22 @@ func TestRun(t *testing.T) {
 				{Name: "mygroup", Users: []string{"john", "doe"}},
 			},
 		}},
+		{"tag user and vsys2", "vsys2", &Message{
+			TagUsers: []TagUser{
+				{
+					User: "mydomain\\jack",
+					Tags: []UserTag{
+						{Tag: "one"},
+						{Tag: "two", Timeout: 60},
+					},
+				},
+			},
+		}},
+		{"untag user and vsys3", "vsys3", &Message{
+			UntagUsers: []UntagUser{
+				{User: "mydomain\\jack", Tags: []string{"one", "two"}},
+			},
+		}},
 	}
 
 	mc := &testdata.MockClient{}
