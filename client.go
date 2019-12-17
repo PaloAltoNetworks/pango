@@ -855,6 +855,17 @@ func (c *Client) Move(path interface{}, where, dst string, extras, ans interface
 	return c.typeConfig("move", data, extras, ans)
 }
 
+// Rename does a "rename" type command.
+func (c *Client) Rename(path interface{}, newname string, extras, ans interface{}) ([]byte, error) {
+	data := url.Values{}
+	xp := util.AsXpath(path)
+	c.logXpath(xp)
+	data.Set("xpath", xp)
+	data.Set("newname", newname)
+
+	return c.typeConfig("rename", data, extras, ans)
+}
+
 // Uid performs User-ID API calls.
 func (c *Client) Uid(cmd interface{}, vsys string, extras, ans interface{}) ([]byte, error) {
 	var err error
