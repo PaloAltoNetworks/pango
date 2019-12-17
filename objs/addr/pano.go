@@ -35,13 +35,33 @@ func (c *PanoAddr) ShowList(dg string) ([]string, error) {
 // Get performs GET to retrieve information for the given address object.
 func (c *PanoAddr) Get(dg, name string) (Entry, error) {
 	c.con.LogQuery("(get) address object %q", name)
-	return c.details(c.con.Get, dg, name)
+	listing, err := c.details(c.con.Get, dg, name)
+	if err == nil && len(listing) > 0 {
+		return listing[0], nil
+	}
+	return Entry{}, err
 }
 
-// Get performs SHOW to retrieve information for the given address object.
+// GetAll performs GET to retrieve all objects.
+func (c *PanoAddr) GetAll(dg string) ([]Entry, error) {
+	c.con.LogQuery("(get) all address objects")
+	return c.details(c.con.Get, dg, "")
+}
+
+// Show performs SHOW to retrieve information for the given address object.
 func (c *PanoAddr) Show(dg, name string) (Entry, error) {
 	c.con.LogQuery("(show) address object %q", name)
-	return c.details(c.con.Show, dg, name)
+	listing, err := c.details(c.con.Show, dg, name)
+	if err == nil && len(listing) > 0 {
+		return listing[0], nil
+	}
+	return Entry{}, err
+}
+
+// ShowAll performs SHOW to retrieve all objects.
+func (c *PanoAddr) ShowAll(dg string) ([]Entry, error) {
+	c.con.LogQuery("(show) all address objects")
+	return c.details(c.con.Show, dg, "")
 }
 
 // Set performs SET to create / update one or more address objects.
@@ -132,12 +152,12 @@ func (c *PanoAddr) versioning() (normalizer, func(Entry) interface{}) {
 	}
 }
 
-func (c *PanoAddr) details(fn util.Retriever, dg, name string) (Entry, error) {
+func (c *PanoAddr) details(fn util.Retriever, dg, name string) ([]Entry, error) {
 	path := c.xpath(dg, []string{name})
 	obj, _ := c.versioning()
 	_, err := fn(path, nil, obj)
 	if err != nil {
-		return Entry{}, err
+		return nil, err
 	}
 	ans := obj.Normalize()
 

@@ -28,57 +28,30 @@ func (o *Entry) Copy(s Entry) {
 /** Structs / functions for normalization. **/
 
 type normalizer interface {
-	Normalize() Entry
+	Normalize() []Entry
 }
 
 type container_v1 struct {
-	Answer entry_v1 `xml:"result>entry"`
+	Answer []entry_v1 `xml:"result>entry"`
 }
 
-func (o *container_v1) Normalize() Entry {
-	ans := Entry{
-		Name:        o.Answer.Name,
-		Description: o.Answer.Description,
-		Tags:        util.MemToStr(o.Answer.Tags),
-	}
-	switch {
-	case o.Answer.IpNetmask != nil:
-		ans.Type = IpNetmask
-		ans.Value = o.Answer.IpNetmask.Value
-	case o.Answer.IpRange != nil:
-		ans.Type = IpRange
-		ans.Value = o.Answer.IpRange.Value
-	case o.Answer.Fqdn != nil:
-		ans.Type = Fqdn
-		ans.Value = o.Answer.Fqdn.Value
+func (o *container_v1) Normalize() []Entry {
+	ans := make([]Entry, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].normalize())
 	}
 
 	return ans
 }
 
 type container_v2 struct {
-	Answer entry_v2 `xml:"result>entry"`
+	Answer []entry_v2 `xml:"result>entry"`
 }
 
-func (o *container_v2) Normalize() Entry {
-	ans := Entry{
-		Name:        o.Answer.Name,
-		Description: o.Answer.Description,
-		Tags:        util.MemToStr(o.Answer.Tags),
-	}
-	switch {
-	case o.Answer.IpNetmask != nil:
-		ans.Type = IpNetmask
-		ans.Value = o.Answer.IpNetmask.Value
-	case o.Answer.IpRange != nil:
-		ans.Type = IpRange
-		ans.Value = o.Answer.IpRange.Value
-	case o.Answer.Fqdn != nil:
-		ans.Type = Fqdn
-		ans.Value = o.Answer.Fqdn.Value
-	case o.Answer.IpWildcard != nil:
-		ans.Type = IpWildcard
-		ans.Value = o.Answer.IpWildcard.Value
+func (o *container_v2) Normalize() []Entry {
+	ans := make([]Entry, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].normalize())
 	}
 
 	return ans
@@ -117,6 +90,28 @@ func specify_v1(e Entry) interface{} {
 	return ans
 }
 
+func (e *entry_v1) normalize() Entry {
+	ans := Entry{
+		Name:        e.Name,
+		Description: e.Description,
+		Tags:        util.MemToStr(e.Tags),
+	}
+
+	switch {
+	case e.IpNetmask != nil:
+		ans.Type = IpNetmask
+		ans.Value = e.IpNetmask.Value
+	case e.IpRange != nil:
+		ans.Type = IpRange
+		ans.Value = e.IpRange.Value
+	case e.Fqdn != nil:
+		ans.Type = Fqdn
+		ans.Value = e.Fqdn.Value
+	}
+
+	return ans
+}
+
 type entry_v2 struct {
 	XMLName     xml.Name         `xml:"entry"`
 	Name        string           `xml:"name,attr"`
@@ -126,6 +121,31 @@ type entry_v2 struct {
 	IpWildcard  *valType         `xml:"ip-wildcard"`
 	Description string           `xml:"description"`
 	Tags        *util.MemberType `xml:"tag"`
+}
+
+func (e *entry_v2) normalize() Entry {
+	ans := Entry{
+		Name:        e.Name,
+		Description: e.Description,
+		Tags:        util.MemToStr(e.Tags),
+	}
+
+	switch {
+	case e.IpNetmask != nil:
+		ans.Type = IpNetmask
+		ans.Value = e.IpNetmask.Value
+	case e.IpRange != nil:
+		ans.Type = IpRange
+		ans.Value = e.IpRange.Value
+	case e.Fqdn != nil:
+		ans.Type = Fqdn
+		ans.Value = e.Fqdn.Value
+	case e.IpWildcard != nil:
+		ans.Type = IpWildcard
+		ans.Value = e.IpWildcard.Value
+	}
+
+	return ans
 }
 
 func specify_v2(e Entry) interface{} {
