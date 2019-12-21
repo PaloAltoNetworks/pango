@@ -35,13 +35,21 @@ func (c *PanoSrvc) ShowList(dg string) ([]string, error) {
 // Get performs GET to retrieve information for the given service object.
 func (c *PanoSrvc) Get(dg, name string) (Entry, error) {
 	c.con.LogQuery("(get) service object %q", name)
-	return c.details(c.con.Get, dg, name)
+	listing, err := c.details(c.con.Get, dg, name)
+	if err == nil && len(listing) > 0 {
+		return listing[0], nil
+	}
+	return Entry{}, err
 }
 
 // Get performs SHOW to retrieve information for the given service object.
 func (c *PanoSrvc) Show(dg, name string) (Entry, error) {
 	c.con.LogQuery("(show) service object %q", name)
-	return c.details(c.con.Show, dg, name)
+	listing, err := c.details(c.con.Get, dg, name)
+	if err == nil && len(listing) > 0 {
+		return listing[0], nil
+	}
+	return Entry{}, err
 }
 
 // Set performs SET to create / update one or more service objects.
@@ -132,12 +140,12 @@ func (c *PanoSrvc) versioning() (normalizer, func(Entry) interface{}) {
 	}
 }
 
-func (c *PanoSrvc) details(fn util.Retriever, dg, name string) (Entry, error) {
+func (c *PanoSrvc) details(fn util.Retriever, dg, name string) ([]Entry, error) {
 	path := c.xpath(dg, []string{name})
 	obj, _ := c.versioning()
 	_, err := fn(path, nil, obj)
 	if err != nil {
-		return Entry{}, err
+		return []Entry{}, err
 	}
 	ans := obj.Normalize()
 
