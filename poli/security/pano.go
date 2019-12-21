@@ -42,6 +42,12 @@ func (c *PanoSecurity) Get(dg, base, name string) (Entry, error) {
 	return Entry{}, err
 }
 
+// GetAll performs GET to retrieve all security policies.
+func (c *PanoSecurity) GetAll(dg, base string) ([]Entry, error) {
+	c.con.LogQuery("(get) all security policies")
+	return c.details(c.con.Get, dg, base, "")
+}
+
 // Get performs SHOW to retrieve information for the given security policy.
 func (c *PanoSecurity) Show(dg, base, name string) (Entry, error) {
 	c.con.LogQuery("(show) security policy %q", name)
@@ -50,6 +56,12 @@ func (c *PanoSecurity) Show(dg, base, name string) (Entry, error) {
 		return listing[0], nil
 	}
 	return Entry{}, err
+}
+
+// ShowAll performs SHOW to retrieve all security policies.
+func (c *PanoSecurity) ShowAll(dg, base string) ([]Entry, error) {
+	c.con.LogQuery("(show) all security policies")
+	return c.details(c.con.Show, dg, base, "")
 }
 
 // Set performs SET to create / update one or more security policies.

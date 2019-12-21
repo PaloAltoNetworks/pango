@@ -42,6 +42,12 @@ func (c *FwSecurity) Get(vsys, name string) (Entry, error) {
 	return Entry{}, err
 }
 
+// GetAll performs a GET to retrieve information for all security policies.
+func (c *FwSecurity) GetAll(vsys string) ([]Entry, error) {
+	c.con.LogQuery("(get) all security policies")
+	return c.details(c.con.Get, vsys, "")
+}
+
 // Get performs SHOW to retrieve information for the given security policy.
 func (c *FwSecurity) Show(vsys, name string) (Entry, error) {
 	c.con.LogQuery("(show) security policy %q", name)
@@ -50,6 +56,12 @@ func (c *FwSecurity) Show(vsys, name string) (Entry, error) {
 		return listing[0], nil
 	}
 	return Entry{}, err
+}
+
+// ShowAll performs a GET to retrieve information for all security policies.
+func (c *FwSecurity) ShowAll(vsys string) ([]Entry, error) {
+	c.con.LogQuery("(show) all security policies")
+	return c.details(c.con.Show, vsys, "")
 }
 
 // Set performs SET to create / update one or more security policies.
