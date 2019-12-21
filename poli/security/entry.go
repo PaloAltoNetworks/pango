@@ -154,55 +154,63 @@ func (o *Entry) Copy(s Entry) {
 /** Structs / functions for normalization. **/
 
 type normalizer interface {
-	Normalize() Entry
+	Normalize() []Entry
 }
 
 type container_v1 struct {
-	Answer entry_v1 `xml:"result>entry"`
+	Answer []entry_v1 `xml:"result>entry"`
 }
 
-func (o *container_v1) Normalize() Entry {
+func (o *container_v1) Normalize() []Entry {
+	arr := make([]Entry, 0, len(o.Answer))
+	for i := range o.Answer {
+		arr = append(arr, o.Answer[i].normalize())
+	}
+	return arr
+}
+
+func (o *entry_v1) normalize() Entry {
 	ans := Entry{
-		Name:                 o.Answer.Name,
-		Type:                 o.Answer.Type,
-		Description:          o.Answer.Description,
-		Tags:                 util.MemToStr(o.Answer.Tags),
-		SourceZones:          util.MemToStr(o.Answer.SourceZones),
-		DestinationZones:     util.MemToStr(o.Answer.DestinationZones),
-		SourceAddresses:      util.MemToStr(o.Answer.SourceAddresses),
-		NegateSource:         util.AsBool(o.Answer.NegateSource),
-		SourceUsers:          util.MemToStr(o.Answer.SourceUsers),
-		HipProfiles:          util.MemToStr(o.Answer.HipProfiles),
-		DestinationAddresses: util.MemToStr(o.Answer.DestinationAddresses),
-		NegateDestination:    util.AsBool(o.Answer.NegateDestination),
-		Applications:         util.MemToStr(o.Answer.Applications),
-		Services:             util.MemToStr(o.Answer.Services),
-		Categories:           util.MemToStr(o.Answer.Categories),
-		Action:               o.Answer.Action,
-		LogSetting:           o.Answer.LogSetting,
-		LogStart:             util.AsBool(o.Answer.LogStart),
-		LogEnd:               util.AsBool(o.Answer.LogEnd),
-		Disabled:             util.AsBool(o.Answer.Disabled),
-		Schedule:             o.Answer.Schedule,
-		IcmpUnreachable:      util.AsBool(o.Answer.IcmpUnreachable),
+		Name:                 o.Name,
+		Type:                 o.Type,
+		Description:          o.Description,
+		Tags:                 util.MemToStr(o.Tags),
+		SourceZones:          util.MemToStr(o.SourceZones),
+		DestinationZones:     util.MemToStr(o.DestinationZones),
+		SourceAddresses:      util.MemToStr(o.SourceAddresses),
+		NegateSource:         util.AsBool(o.NegateSource),
+		SourceUsers:          util.MemToStr(o.SourceUsers),
+		HipProfiles:          util.MemToStr(o.HipProfiles),
+		DestinationAddresses: util.MemToStr(o.DestinationAddresses),
+		NegateDestination:    util.AsBool(o.NegateDestination),
+		Applications:         util.MemToStr(o.Applications),
+		Services:             util.MemToStr(o.Services),
+		Categories:           util.MemToStr(o.Categories),
+		Action:               o.Action,
+		LogSetting:           o.LogSetting,
+		LogStart:             util.AsBool(o.LogStart),
+		LogEnd:               util.AsBool(o.LogEnd),
+		Disabled:             util.AsBool(o.Disabled),
+		Schedule:             o.Schedule,
+		IcmpUnreachable:      util.AsBool(o.IcmpUnreachable),
 	}
-	if o.Answer.Options != nil {
-		ans.DisableServerResponseInspection = util.AsBool(o.Answer.Options.DisableServerResponseInspection)
+	if o.Options != nil {
+		ans.DisableServerResponseInspection = util.AsBool(o.Options.DisableServerResponseInspection)
 	}
-	if o.Answer.TargetInfo != nil {
-		ans.NegateTarget = util.AsBool(o.Answer.TargetInfo.NegateTarget)
-		ans.Targets = util.VsysEntToMap(o.Answer.TargetInfo.Targets)
+	if o.TargetInfo != nil {
+		ans.NegateTarget = util.AsBool(o.TargetInfo.NegateTarget)
+		ans.Targets = util.VsysEntToMap(o.TargetInfo.Targets)
 	}
-	if o.Answer.ProfileSettings != nil {
-		ans.Group = util.MemToOneStr(o.Answer.ProfileSettings.Group)
-		if o.Answer.ProfileSettings.Profiles != nil {
-			ans.Virus = util.MemToOneStr(o.Answer.ProfileSettings.Profiles.Virus)
-			ans.Spyware = util.MemToOneStr(o.Answer.ProfileSettings.Profiles.Spyware)
-			ans.Vulnerability = util.MemToOneStr(o.Answer.ProfileSettings.Profiles.Vulnerability)
-			ans.UrlFiltering = util.MemToOneStr(o.Answer.ProfileSettings.Profiles.UrlFiltering)
-			ans.FileBlocking = util.MemToOneStr(o.Answer.ProfileSettings.Profiles.FileBlocking)
-			ans.WildFireAnalysis = util.MemToOneStr(o.Answer.ProfileSettings.Profiles.WildFireAnalysis)
-			ans.DataFiltering = util.MemToOneStr(o.Answer.ProfileSettings.Profiles.DataFiltering)
+	if o.ProfileSettings != nil {
+		ans.Group = util.MemToOneStr(o.ProfileSettings.Group)
+		if o.ProfileSettings.Profiles != nil {
+			ans.Virus = util.MemToOneStr(o.ProfileSettings.Profiles.Virus)
+			ans.Spyware = util.MemToOneStr(o.ProfileSettings.Profiles.Spyware)
+			ans.Vulnerability = util.MemToOneStr(o.ProfileSettings.Profiles.Vulnerability)
+			ans.UrlFiltering = util.MemToOneStr(o.ProfileSettings.Profiles.UrlFiltering)
+			ans.FileBlocking = util.MemToOneStr(o.ProfileSettings.Profiles.FileBlocking)
+			ans.WildFireAnalysis = util.MemToOneStr(o.ProfileSettings.Profiles.WildFireAnalysis)
+			ans.DataFiltering = util.MemToOneStr(o.ProfileSettings.Profiles.DataFiltering)
 		}
 	}
 
