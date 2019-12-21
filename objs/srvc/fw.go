@@ -42,6 +42,12 @@ func (c *FwSrvc) Get(vsys, name string) (Entry, error) {
 	return Entry{}, err
 }
 
+// GetAll performs a GET to retrieve services.
+func (c *FwSrvc) GetAll(vsys string) ([]Entry, error) {
+	c.con.LogQuery("(get) all services")
+	return c.details(c.con.Get, vsys, "")
+}
+
 // Get performs SHOW to retrieve information for the given service object.
 func (c *FwSrvc) Show(vsys, name string) (Entry, error) {
 	c.con.LogQuery("(show) service object %q", name)
@@ -50,6 +56,12 @@ func (c *FwSrvc) Show(vsys, name string) (Entry, error) {
 		return listing[0], nil
 	}
 	return Entry{}, err
+}
+
+// ShowAll performs a SHOW to retrieve services.
+func (c *FwSrvc) ShowAll(vsys string) ([]Entry, error) {
+	c.con.LogQuery("(show) all services")
+	return c.details(c.con.Show, vsys, "")
 }
 
 // Set performs SET to create / update one or more service objects.

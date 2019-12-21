@@ -42,6 +42,12 @@ func (c *PanoSrvc) Get(dg, name string) (Entry, error) {
 	return Entry{}, err
 }
 
+// GetAll performs GET to retrieve all services.
+func (c *PanoSrvc) GetAll(dg string) ([]Entry, error) {
+	c.con.LogQuery("(get) all services")
+	return c.details(c.con.Get, dg, "")
+}
+
 // Get performs SHOW to retrieve information for the given service object.
 func (c *PanoSrvc) Show(dg, name string) (Entry, error) {
 	c.con.LogQuery("(show) service object %q", name)
@@ -50,6 +56,12 @@ func (c *PanoSrvc) Show(dg, name string) (Entry, error) {
 		return listing[0], nil
 	}
 	return Entry{}, err
+}
+
+// ShowAll performs SHOW to retrieve all services.
+func (c *PanoSrvc) ShowAll(dg string) ([]Entry, error) {
+	c.con.LogQuery("(show) all services")
+	return c.details(c.con.Show, dg, "")
 }
 
 // Set performs SET to create / update one or more service objects.
