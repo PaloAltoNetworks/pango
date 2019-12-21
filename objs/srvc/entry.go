@@ -40,67 +40,85 @@ func (o *Entry) Copy(s Entry) {
 /** Structs / functions for normalization. **/
 
 type normalizer interface {
-	Normalize() Entry
+	Normalize() []Entry
 }
 
 type container_v1 struct {
-	Answer entry_v1 `xml:"result>entry"`
+	Answer []entry_v1 `xml:"result>entry"`
 }
 
-func (o *container_v1) Normalize() Entry {
+func (o *container_v1) Normalize() []Entry {
+	ans := make([]Entry, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].normalize())
+	}
+
+	return ans
+}
+
+func (o *entry_v1) normalize() Entry {
 	ans := Entry{
-		Name:        o.Answer.Name,
-		Description: o.Answer.Description,
-		Tags:        util.MemToStr(o.Answer.Tags),
+		Name:        o.Name,
+		Description: o.Description,
+		Tags:        util.MemToStr(o.Tags),
 	}
 	switch {
-	case o.Answer.TcpProto != nil:
+	case o.TcpProto != nil:
 		ans.Protocol = ProtocolTcp
-		ans.SourcePort = o.Answer.TcpProto.SourcePort
-		ans.DestinationPort = o.Answer.TcpProto.DestinationPort
-	case o.Answer.UdpProto != nil:
+		ans.SourcePort = o.TcpProto.SourcePort
+		ans.DestinationPort = o.TcpProto.DestinationPort
+	case o.UdpProto != nil:
 		ans.Protocol = ProtocolUdp
-		ans.SourcePort = o.Answer.UdpProto.SourcePort
-		ans.DestinationPort = o.Answer.UdpProto.DestinationPort
+		ans.SourcePort = o.UdpProto.SourcePort
+		ans.DestinationPort = o.UdpProto.DestinationPort
 	}
 
 	return ans
 }
 
 type container_v2 struct {
-	Answer entry_v2 `xml:"result>entry"`
+	Answer []entry_v2 `xml:"result>entry"`
 }
 
-func (o *container_v2) Normalize() Entry {
+func (o *container_v2) Normalize() []Entry {
+	ans := make([]Entry, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].normalize())
+	}
+
+	return ans
+}
+
+func (o *entry_v2) normalize() Entry {
 	ans := Entry{
-		Name:        o.Answer.Name,
-		Description: o.Answer.Description,
-		Tags:        util.MemToStr(o.Answer.Tags),
+		Name:        o.Name,
+		Description: o.Description,
+		Tags:        util.MemToStr(o.Tags),
 	}
 
 	switch {
-	case o.Answer.TcpProto != nil:
+	case o.TcpProto != nil:
 		ans.Protocol = ProtocolTcp
-		ans.SourcePort = o.Answer.TcpProto.SourcePort
-		ans.DestinationPort = o.Answer.TcpProto.DestinationPort
-		if o.Answer.TcpProto.Override != nil && o.Answer.TcpProto.Override.Yes != nil {
+		ans.SourcePort = o.TcpProto.SourcePort
+		ans.DestinationPort = o.TcpProto.DestinationPort
+		if o.TcpProto.Override != nil && o.TcpProto.Override.Yes != nil {
 			ans.OverrideSessionTimeout = true
-			ans.OverrideTimeout = o.Answer.TcpProto.Override.Yes.OverrideTimeout
-			ans.OverrideHalfClosedTimeout = o.Answer.TcpProto.Override.Yes.OverrideHalfClosedTimeout
-			ans.OverrideTimeWaitTimeout = o.Answer.TcpProto.Override.Yes.OverrideTimeWaitTimeout
+			ans.OverrideTimeout = o.TcpProto.Override.Yes.OverrideTimeout
+			ans.OverrideHalfClosedTimeout = o.TcpProto.Override.Yes.OverrideHalfClosedTimeout
+			ans.OverrideTimeWaitTimeout = o.TcpProto.Override.Yes.OverrideTimeWaitTimeout
 		}
-	case o.Answer.UdpProto != nil:
+	case o.UdpProto != nil:
 		ans.Protocol = ProtocolUdp
-		ans.SourcePort = o.Answer.UdpProto.SourcePort
-		ans.DestinationPort = o.Answer.UdpProto.DestinationPort
-		if o.Answer.UdpProto.Override != nil && o.Answer.UdpProto.Override.Yes != nil {
+		ans.SourcePort = o.UdpProto.SourcePort
+		ans.DestinationPort = o.UdpProto.DestinationPort
+		if o.UdpProto.Override != nil && o.UdpProto.Override.Yes != nil {
 			ans.OverrideSessionTimeout = true
-			ans.OverrideTimeout = o.Answer.UdpProto.Override.Yes.OverrideTimeout
+			ans.OverrideTimeout = o.UdpProto.Override.Yes.OverrideTimeout
 		}
-	case o.Answer.SctpProto != nil:
+	case o.SctpProto != nil:
 		ans.Protocol = ProtocolSctp
-		ans.SourcePort = o.Answer.SctpProto.SourcePort
-		ans.DestinationPort = o.Answer.SctpProto.DestinationPort
+		ans.SourcePort = o.SctpProto.SourcePort
+		ans.DestinationPort = o.SctpProto.DestinationPort
 	}
 
 	return ans

@@ -132,12 +132,12 @@ func (c *FwSrvc) versioning() (normalizer, func(Entry) interface{}) {
 	}
 }
 
-func (c *FwSrvc) details(fn util.Retriever, vsys, name string) (Entry, error) {
+func (c *FwSrvc) details(fn util.Retriever, vsys, name string) ([]Entry, error) {
 	path := c.xpath(vsys, []string{name})
 	obj, _ := c.versioning()
 	_, err := fn(path, nil, obj)
 	if err != nil {
-		return Entry{}, err
+		return []Entry{}, err
 	}
 	ans := obj.Normalize()
 
