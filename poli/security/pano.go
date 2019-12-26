@@ -35,13 +35,33 @@ func (c *PanoSecurity) ShowList(dg, base string) ([]string, error) {
 // Get performs GET to retrieve information for the given security policy.
 func (c *PanoSecurity) Get(dg, base, name string) (Entry, error) {
 	c.con.LogQuery("(get) security policy %q", name)
-	return c.details(c.con.Get, dg, base, name)
+	listing, err := c.details(c.con.Get, dg, base, name)
+	if err == nil && len(listing) > 0 {
+		return listing[0], nil
+	}
+	return Entry{}, err
+}
+
+// GetAll performs GET to retrieve all security policies.
+func (c *PanoSecurity) GetAll(dg, base string) ([]Entry, error) {
+	c.con.LogQuery("(get) all security policies")
+	return c.details(c.con.Get, dg, base, "")
 }
 
 // Get performs SHOW to retrieve information for the given security policy.
 func (c *PanoSecurity) Show(dg, base, name string) (Entry, error) {
 	c.con.LogQuery("(show) security policy %q", name)
-	return c.details(c.con.Show, dg, base, name)
+	listing, err := c.details(c.con.Show, dg, base, name)
+	if err == nil && len(listing) > 0 {
+		return listing[0], nil
+	}
+	return Entry{}, err
+}
+
+// ShowAll performs SHOW to retrieve all security policies.
+func (c *PanoSecurity) ShowAll(dg, base string) ([]Entry, error) {
+	c.con.LogQuery("(show) all security policies")
+	return c.details(c.con.Show, dg, base, "")
 }
 
 // Set performs SET to create / update one or more security policies.
@@ -328,11 +348,11 @@ func (c *PanoSecurity) versioning() (normalizer, func(Entry) interface{}) {
 	return &container_v1{}, specify_v1
 }
 
-func (c *PanoSecurity) details(fn util.Retriever, dg, base, name string) (Entry, error) {
+func (c *PanoSecurity) details(fn util.Retriever, dg, base, name string) ([]Entry, error) {
 	path := c.xpath(dg, base, []string{name})
 	obj, _ := c.versioning()
 	if _, err := fn(path, nil, obj); err != nil {
-		return Entry{}, err
+		return []Entry{}, err
 	}
 	ans := obj.Normalize()
 

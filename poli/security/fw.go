@@ -35,13 +35,33 @@ func (c *FwSecurity) ShowList(vsys string) ([]string, error) {
 // Get performs GET to retrieve information for the given security policy.
 func (c *FwSecurity) Get(vsys, name string) (Entry, error) {
 	c.con.LogQuery("(get) security policy %q", name)
-	return c.details(c.con.Get, vsys, name)
+	listing, err := c.details(c.con.Get, vsys, name)
+	if err == nil && len(listing) > 0 {
+		return listing[0], nil
+	}
+	return Entry{}, err
+}
+
+// GetAll performs a GET to retrieve information for all security policies.
+func (c *FwSecurity) GetAll(vsys string) ([]Entry, error) {
+	c.con.LogQuery("(get) all security policies")
+	return c.details(c.con.Get, vsys, "")
 }
 
 // Get performs SHOW to retrieve information for the given security policy.
 func (c *FwSecurity) Show(vsys, name string) (Entry, error) {
 	c.con.LogQuery("(show) security policy %q", name)
-	return c.details(c.con.Show, vsys, name)
+	listing, err := c.details(c.con.Show, vsys, name)
+	if err == nil && len(listing) > 0 {
+		return listing[0], nil
+	}
+	return Entry{}, err
+}
+
+// ShowAll performs a GET to retrieve information for all security policies.
+func (c *FwSecurity) ShowAll(vsys string) ([]Entry, error) {
+	c.con.LogQuery("(show) all security policies")
+	return c.details(c.con.Show, vsys, "")
 }
 
 // Set performs SET to create / update one or more security policies.
@@ -328,11 +348,11 @@ func (c *FwSecurity) versioning() (normalizer, func(Entry) interface{}) {
 	return &container_v1{}, specify_v1
 }
 
-func (c *FwSecurity) details(fn util.Retriever, vsys, name string) (Entry, error) {
+func (c *FwSecurity) details(fn util.Retriever, vsys, name string) ([]Entry, error) {
 	path := c.xpath(vsys, []string{name})
 	obj, _ := c.versioning()
 	if _, err := fn(path, nil, obj); err != nil {
-		return Entry{}, err
+		return []Entry{}, err
 	}
 	ans := obj.Normalize()
 
