@@ -157,7 +157,7 @@ func (c *FwSrvc) details(fn util.Retriever, vsys, name string) ([]Entry, error) 
 	obj, _ := c.versioning()
 	_, err := fn(path, nil, obj)
 	if err != nil {
-		return []Entry{}, err
+		return nil, err
 	}
 	ans := obj.Normalize()
 
