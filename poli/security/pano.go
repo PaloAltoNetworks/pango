@@ -352,7 +352,7 @@ func (c *PanoSecurity) details(fn util.Retriever, dg, base, name string) ([]Entr
 	path := c.xpath(dg, base, []string{name})
 	obj, _ := c.versioning()
 	if _, err := fn(path, nil, obj); err != nil {
-		return []Entry{}, err
+		return nil, err
 	}
 	ans := obj.Normalize()
 

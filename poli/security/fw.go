@@ -58,7 +58,7 @@ func (c *FwSecurity) Show(vsys, name string) (Entry, error) {
 	return Entry{}, err
 }
 
-// ShowAll performs a GET to retrieve information for all security policies.
+// ShowAll performs a SHOW to retrieve information for all security policies.
 func (c *FwSecurity) ShowAll(vsys string) ([]Entry, error) {
 	c.con.LogQuery("(show) all security policies")
 	return c.details(c.con.Show, vsys, "")
@@ -352,7 +352,7 @@ func (c *FwSecurity) details(fn util.Retriever, vsys, name string) ([]Entry, err
 	path := c.xpath(vsys, []string{name})
 	obj, _ := c.versioning()
 	if _, err := fn(path, nil, obj); err != nil {
-		return []Entry{}, err
+		return nil, err
 	}
 	ans := obj.Normalize()
 
