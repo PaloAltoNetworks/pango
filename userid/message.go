@@ -61,18 +61,24 @@ type Group struct {
 }
 
 // TagUser assigns tags to the specified user.
+//
+// Note: PAN-OS 9.1+.
 type TagUser struct {
 	User string
 	Tags []UserTag
 }
 
 // UserTag is a tag with an optional timeout.
+//
+// Note: PAN-OS 9.1+.
 type UserTag struct {
 	Tag     string
 	Timeout int
 }
 
 // UntagUser removes tags from the specified user.
+//
+// Note: PAN-OS 9.1+.
 type UntagUser struct {
 	User string
 	Tags []string
