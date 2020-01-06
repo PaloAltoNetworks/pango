@@ -15,11 +15,13 @@ This can contain multiple actions to be performed, such as
 logging in a user, tagging an IP, or setting group membership.
 */
 type Message struct {
-	Logins   []Login
-	Logouts  []Logout
-	TagIps   []TagIp
-	UntagIps []UntagIp
-	Groups   []Group
+	Logins     []Login
+	Logouts    []Logout
+	TagIps     []TagIp
+	UntagIps   []UntagIp
+	Groups     []Group
+	TagUsers   []TagUser
+	UntagUsers []UntagUser
 }
 
 // Login logs a user in.
@@ -58,6 +60,30 @@ type Group struct {
 	Users []string
 }
 
+// TagUser assigns tags to the specified user.
+//
+// Note: PAN-OS 9.1+.
+type TagUser struct {
+	User string
+	Tags []UserTag
+}
+
+// UserTag is a tag with an optional timeout.
+//
+// Note: PAN-OS 9.1+.
+type UserTag struct {
+	Tag     string
+	Timeout int
+}
+
+// UntagUser removes tags from the specified user.
+//
+// Note: PAN-OS 9.1+.
+type UntagUser struct {
+	User string
+	Tags []string
+}
+
 type uid struct {
 	XMLName xml.Name `xml:"uid-message"`
 	Version string   `xml:"version"`
@@ -66,11 +92,13 @@ type uid struct {
 }
 
 type payload struct {
-	Login   *loginLogoutSpec `xml:"login"`
-	Logout  *loginLogoutSpec `xml:"logout"`
-	TagIp   *tagUntagIpSpec  `xml:"register"`
-	UntagIp *tagUntagIpSpec  `xml:"unregister"`
-	Group   *groupSpec       `xml:"groups"`
+	Login     *loginLogoutSpec  `xml:"login"`
+	Logout    *loginLogoutSpec  `xml:"logout"`
+	TagIp     *tagUntagIpSpec   `xml:"register"`
+	UntagIp   *tagUntagIpSpec   `xml:"unregister"`
+	Group     *groupSpec        `xml:"groups"`
+	TagUser   *tagUntagUserSpec `xml:"register-user"`
+	UntagUser *tagUntagUserSpec `xml:"unregister-user"`
 }
 
 type loginLogoutSpec struct {
@@ -100,6 +128,24 @@ type groupSpec struct {
 type groupDef struct {
 	Name    string         `xml:"name,attr"`
 	Members util.EntryType `xml:"members"`
+}
+
+type tagUntagUserSpec struct {
+	Entries []userTagEntry `xml:"entry"`
+}
+
+type userTagEntry struct {
+	User string    `xml:"user,attr"`
+	Tags *userTags `xml:"tag"`
+}
+
+type userTags struct {
+	Tags []userTag `xml:"member"`
+}
+
+type userTag struct {
+	Tag     string `xml:",chardata"`
+	Timeout int    `xml:"timeout,attr,omitempty"`
 }
 
 func encode(m *Message) (*uid, string) {
@@ -184,6 +230,46 @@ func encode(m *Message) (*uid, string) {
 				Members: *members,
 			}
 			msg.Payload.Group.Entries = append(msg.Payload.Group.Entries, x)
+		}
+	}
+
+	// Tag users.
+	if len(m.TagUsers) > 0 {
+		buf.WriteString(fmt.Sprintf(" taguser:%d", len(m.TagUsers)))
+		msg.Payload.TagUser = &tagUntagUserSpec{}
+		msg.Payload.TagUser.Entries = make([]userTagEntry, 0, len(m.TagUsers))
+		for _, user := range m.TagUsers {
+			tags := make([]userTag, 0, len(user.Tags))
+			for _, val := range user.Tags {
+				tag := userTag{
+					Tag:     val.Tag,
+					Timeout: val.Timeout,
+				}
+				tags = append(tags, tag)
+			}
+			x := userTagEntry{
+				User: user.User,
+				Tags: &userTags{Tags: tags},
+			}
+			msg.Payload.TagUser.Entries = append(msg.Payload.TagUser.Entries, x)
+		}
+	}
+
+	// Untag users.
+	if len(m.UntagUsers) > 0 {
+		buf.WriteString(fmt.Sprintf(" untaguser:%d", len(m.UntagUsers)))
+		msg.Payload.UntagUser = &tagUntagUserSpec{}
+		msg.Payload.UntagUser.Entries = make([]userTagEntry, 0, len(m.UntagUsers))
+		for _, user := range m.UntagUsers {
+			x := userTagEntry{User: user.User}
+			if len(user.Tags) > 0 {
+				tags := make([]userTag, 0, len(user.Tags))
+				for _, val := range user.Tags {
+					tags = append(tags, userTag{Tag: val})
+				}
+				x.Tags = &userTags{tags}
+			}
+			msg.Payload.UntagUser.Entries = append(msg.Payload.UntagUser.Entries, x)
 		}
 	}
 
