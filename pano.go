@@ -154,7 +154,7 @@ func (c *Panorama) CreateVmAuthKey(hours int) (VmAuthKey, error) {
 	}
 	key.ParseExpires(clock)
 
-	return &key, nil
+	return key, nil
 }
 
 // GetVmAuthKeys gets the list of VM auth keys.
