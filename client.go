@@ -1307,6 +1307,28 @@ func (c *Client) PositionFirstEntity(mvt int, rel, ent string, path, elms []stri
 	return err
 }
 
+// Clock gets the time on the PAN-OS appliance.
+func (c *Client) Clock() (time.Time, error) {
+	type t_req struct {
+		XMLName xml.Name `xml:"show"`
+		Cmd     string   `xml:"clock"`
+	}
+
+	type t_resp struct {
+		Result string `xml:"result"`
+	}
+
+	req := t_req{}
+	ans := t_resp{}
+
+	c.LogOp("(op) getting system time")
+	if _, err := c.Op(req, "", nil, &ans); err != nil {
+		return time.Time{}, err
+	}
+
+	return time.Parse(time.UnixDate+"\n", ans.Result)
+}
+
 /** Non-struct private functions **/
 
 func mergeUrlValues(data *url.Values, extras interface{}) error {
