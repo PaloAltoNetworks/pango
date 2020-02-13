@@ -2,6 +2,9 @@ package pango
 
 import (
 	"encoding/xml"
+	"fmt"
+	"strings"
+	"time"
 
 	"github.com/PaloAltoNetworks/pango/util"
 
@@ -108,6 +111,107 @@ func (c *Panorama) CommitAll(dg, desc string, serials []string, tmpl, sync bool)
 	}
 
 	return job, c.WaitForJob(job, nil)
+}
+
+// CreateVmAuthKey creates a VM auth key to bootstrap a VM-Series firewall.
+//
+// VM auth keys are only valid for the number of hours specified.
+func (c *Panorama) CreateVmAuthKey(hours int) (VmAuthKey, error) {
+	clock, err := c.Clock()
+	if err != nil {
+		c.LogOp("(op) Failed to get/parse system time: %s", err)
+	}
+
+	type ak_req struct {
+		XMLName  xml.Name `xml:"request"`
+		Duration int      `xml:"bootstrap>vm-auth-key>generate>lifetime"`
+	}
+
+	type ak_resp struct {
+		Msg string `xml:"result"`
+	}
+
+	req := ak_req{Duration: hours}
+	ans := ak_resp{}
+
+	c.LogOp("(op) generating a vm auth code")
+	if b, err := c.Op(req, "", nil, &ans); err != nil {
+		return VmAuthKey{}, err
+	} else if ans.Msg == "" {
+		return VmAuthKey{}, fmt.Errorf("No msg: %s", b)
+	} else if !strings.HasPrefix(ans.Msg, "VM auth key ") {
+		return VmAuthKey{}, fmt.Errorf("Wrong resp prefix: %s", b)
+	}
+
+	tokens := strings.Fields(ans.Msg)
+	if len(tokens) != 9 {
+		return VmAuthKey{}, fmt.Errorf("Got %d of 9 fields from: %s", len(tokens), ans.Msg)
+	}
+
+	key := VmAuthKey{
+		AuthKey: tokens[3],
+		Expiry:  strings.Join(tokens[7:], " "),
+	}
+	key.ParseExpires(clock)
+
+	return &key, nil
+}
+
+// GetVmAuthKeys gets the list of VM auth keys.
+func (c *Panorama) GetVmAuthKeys() ([]VmAuthKey, error) {
+	clock, err := c.Clock()
+	if err != nil {
+		c.LogOp("(op) Failed to get/parse system time: %s", err)
+	}
+
+	type l_req struct {
+		XMLName xml.Name `xml:"request"`
+		Msg     string   `xml:"bootstrap>vm-auth-key>show"`
+	}
+
+	type l_resp struct {
+		List []VmAuthKey `xml:"result>bootstrap-vm-auth-keys>entry"`
+	}
+
+	req := l_req{}
+	ans := l_resp{}
+
+	c.LogOp("(op) listing vm auth codes")
+	if _, err := c.Op(req, "", nil, &ans); err != nil {
+		return nil, err
+	}
+
+	for i := range ans.List {
+		ans.List[i].ParseExpires(clock)
+	}
+
+	return ans.List, nil
+}
+
+/** Public structs **/
+
+// VmAuthKey is a VM auth key paired with when it expires.
+//
+// The Expiry field is the string returned from PAN-OS, while the Expires
+// field is an attempt at parsing the Expiry field.
+type VmAuthKey struct {
+	AuthKey string `xml:"vm-auth-key"`
+	Expiry  string `xml:"expiry-time"`
+	Expires time.Time
+}
+
+// ParseExpires sets Expires from the Expiry field.
+//
+// Since PAN-OS does not output timezone information with the expirations,
+// the current PAN-OS time is retrieved, which does contain timezone
+// information.  Then in the string parsing for Expires, the location
+// information of the system clock is applied.
+func (o *VmAuthKey) ParseExpires(clock time.Time) {
+	format := "2006/01/02 15:04:05"
+
+	if t, err := time.ParseInLocation(format, o.Expiry, clock.Location()); err == nil {
+		o.Expires = t
+	}
 }
 
 /** Private functions **/
