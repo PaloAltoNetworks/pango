@@ -38,6 +38,7 @@ const (
 	MidnightBlue
 	MediumBlue
 	CobaltBlue
+	VioletBlue
 	BlueViolet
 	MediumViolet
 	MediumRose
