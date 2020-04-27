@@ -405,53 +405,6 @@ func (c *Client) UnlockCommits(vsys, admin string) error {
 	return err
 }
 
-// Commit performs a standard commit on this PAN-OS device.
-//
-// Param desc is the optional commit description message you want associated
-// with the commit.
-//
-// Param admins is advanced options for doing partial commit admin-level changes,
-// include the administrator name in the request.
-//
-// Params dan and pao are advanced options for doing partial commits.  Setting
-// param dan to false excludes the Device and Network configuration, while
-// setting param pao to false excludes the Policy and Object configuration.
-//
-// Param force is if you want to force a commit even if no changes are
-// required.
-//
-// Param sync should be true if you want this function to block until the
-// commit job completes.
-//
-// Commits result in a job being submitted to the backend.  The job ID and
-// if an error was encountered or not are returned from this function.  If
-// the job ID returned is 0, then no commit was needed.
-func (c *Client) Commit(desc string, admins []string, dan, pao, force, sync bool) (uint, error) {
-	c.LogAction("(commit) %q", desc)
-
-	req := baseCommit{Description: desc}
-	if len(admins) > 0 || !dan || !pao {
-		req.Partial = &baseCommitPartial{}
-		if !dan {
-			req.Partial.Dan = "excluded"
-		}
-		if !pao {
-			req.Partial.Pao = "excluded"
-		}
-		req.Partial.Admin = util.StrToMem(admins)
-	}
-	if force {
-		req.Force = ""
-	}
-
-	job, _, err := c.CommitConfig(req, "", nil)
-	if err != nil || !sync || job == 0 {
-		return job, err
-	}
-
-	return job, c.WaitForJob(job, nil)
-}
-
 // WaitForJob polls the device, waiting for the specified job to finish.
 //
 // If you want to unmarshal the response into a struct, then pass in a
@@ -921,8 +874,7 @@ func (c *Client) Import(cat, content, filename, fp string, extras map[string]str
 	return c.CommunicateFile(content, filename, fp, data, ans)
 }
 
-// CommitConfig performs PAN-OS commits.  This is the underlying function
-// invoked by Firewall.Commit() and Panorama.Commit().
+// Commit performs PAN-OS commits.
 //
 // The cmd param can be either a properly formatted XML string or a struct
 // that can be marshalled into XML.
@@ -935,7 +887,7 @@ func (c *Client) Import(cat, content, filename, fp string, extras map[string]str
 // Commits result in a job being submitted to the backend.  The job ID, assuming
 // the commit action was successfully submitted, the response from the server,
 // and if an error was encountered or not are all returned from this function.
-func (c *Client) CommitConfig(cmd interface{}, action string, extras interface{}) (uint, []byte, error) {
+func (c *Client) Commit(cmd interface{}, action string, extras interface{}) (uint, []byte, error) {
 	var err error
 	data := url.Values{}
 	data.Set("type", "commit")
@@ -1507,17 +1459,4 @@ type configLocks struct {
 
 type commitLocks struct {
 	Locks []util.Lock `xml:"result>commit-locks>entry"`
-}
-
-type baseCommit struct {
-	XMLName     xml.Name           `xml:"commit"`
-	Description string             `xml:"description,omitempty"`
-	Partial     *baseCommitPartial `xml:"partial"`
-	Force       interface{}        `xml:"force"`
-}
-
-type baseCommitPartial struct {
-	Dan   string           `xml:"device-and-network,omitempty"`
-	Pao   string           `xml:"policy-and-objects,omitempty"`
-	Admin *util.MemberType `xml:"admin"`
 }
