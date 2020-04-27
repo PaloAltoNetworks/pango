@@ -31,6 +31,11 @@ const (
 	VlanImport          = "vlan"
 )
 
+// Elementer is an interface for commits.
+type Elementer interface {
+	Element() interface{}
+}
+
 // XapiClient is the interface that describes an pango.Client.
 type XapiClient interface {
 	String() string
