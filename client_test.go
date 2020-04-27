@@ -2,11 +2,13 @@ package pango
 
 import (
 	"bytes"
+	"encoding/xml"
 	"log"
 	"os"
 	"strings"
 	"testing"
 
+	"github.com/PaloAltoNetworks/pango/commit"
 	"github.com/PaloAltoNetworks/pango/testdata"
 )
 
@@ -174,5 +176,56 @@ func TestRetrieveApiKey(t *testing.T) {
 		t.Errorf("Failed to retrieve api key: %s", err)
 	} else if c.ApiKey != "secret" {
 		t.Fail()
+	}
+}
+
+func TestAsStringWithString(t *testing.T) {
+	expected := "foobar"
+	val, err := asString(expected, true)
+
+	if err != nil {
+		t.Errorf("Failed asString: %s", err)
+	} else if val != expected {
+		t.Errorf("Expected:%s got:%s", expected, val)
+	}
+}
+
+type StringerCheck struct{}
+
+func (o StringerCheck) String() string { return "hello" }
+
+func TestAsStringWithStringer(t *testing.T) {
+	x := StringerCheck{}
+	expected := x.String()
+
+	val, err := asString(x, true)
+	if err != nil {
+		t.Errorf("Failed asString: %s", err)
+	} else if val != expected {
+		t.Errorf("Expected:%s got:%s", expected, val)
+	}
+}
+
+func TestAsStringWithElementer(t *testing.T) {
+	x := commit.FirewallCommit{
+		Description: "hello",
+	}
+
+	expected, err := xml.Marshal(x.Element())
+	if err != nil {
+		t.Errorf("Failed to marshal firewall commit: %s", err)
+	}
+
+	val, err := asString(x, true)
+	if err != nil {
+		t.Errorf("Failed asString: %s", err)
+	} else if val != string(expected) {
+		t.Errorf("Expected:%s got:%s", expected, val)
+	}
+}
+
+func TestAsStringWithNil(t *testing.T) {
+	if _, err := asString(nil, true); err == nil {
+		t.Errorf("asString() returned no error on nil input")
 	}
 }
