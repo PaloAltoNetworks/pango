@@ -34,14 +34,16 @@ type MockClient struct {
 	Extras        interface{}
 }
 
-func (c *MockClient) String() string                                              { return "mock" }
-func (c *MockClient) Versioning() version.Number                                  { return c.Version }
-func (c *MockClient) Plugins() []map[string]string                                { return c.Plugin }
-func (c *MockClient) LogAction(f string, a ...interface{})                        {}
-func (c *MockClient) LogQuery(f string, a ...interface{})                         {}
-func (c *MockClient) LogOp(f string, a ...interface{})                            {}
-func (c *MockClient) LogUid(f string, a ...interface{})                           {}
-func (c *MockClient) Commit(d string, e []string, f, g, h, i bool) (uint, error)  { return 0, nil }
+func (c *MockClient) String() string                       { return "mock" }
+func (c *MockClient) Versioning() version.Number           { return c.Version }
+func (c *MockClient) Plugins() []map[string]string         { return c.Plugin }
+func (c *MockClient) LogAction(f string, a ...interface{}) {}
+func (c *MockClient) LogQuery(f string, a ...interface{})  {}
+func (c *MockClient) LogOp(f string, a ...interface{})     {}
+func (c *MockClient) LogUid(f string, a ...interface{})    {}
+func (c *MockClient) Commit(d interface{}, e string, f interface{}) (uint, []byte, error) {
+	return 0, nil, nil
+}
 func (c *MockClient) PositionFirstEntity(d int, e, f string, g, h []string) error { return nil }
 
 func (c *MockClient) Op(req interface{}, vsys string, extras interface{}, ans interface{}) ([]byte, error) {
