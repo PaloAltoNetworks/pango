@@ -53,7 +53,7 @@ type XapiClient interface {
 	VsysImport(string, string, string, string, []string) error
 	VsysUnimport(string, string, string, []string) error
 	WaitForJob(uint, interface{}) error
-	Commit(string, []string, bool, bool, bool, bool) (uint, error)
+	Commit(interface{}, string, interface{}) (uint, []byte, error)
 	PositionFirstEntity(int, string, string, []string, []string) error
 }
 
