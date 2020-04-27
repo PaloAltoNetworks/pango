@@ -19,7 +19,7 @@ type FirewallCommit struct {
 }
 
 // Element returns an interface to be marshalled to perform the specified commit.
-func (o *FirewallCommit) Element() interface{} {
+func (o FirewallCommit) Element() interface{} {
 	ans := fwCommit{
 		Description: o.Description,
 	}
