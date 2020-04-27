@@ -25,7 +25,7 @@ type PanoramaCommit struct {
 }
 
 // Element returns an interface to be marshalled to perform the specified commit.
-func (o *PanoramaCommit) Element() interface{} {
+func (o PanoramaCommit) Element() interface{} {
 	ans := panoCommit{
 		Description: o.Description,
 	}
@@ -113,7 +113,7 @@ type PanoramaCommitAll struct {
 }
 
 // Element returns an interface to be marshalled to perform the specified commit.
-func (o *PanoramaCommitAll) Element() interface{} {
+func (o PanoramaCommitAll) Element() interface{} {
 	var ans panoCommitAll
 
 	switch o.Type {
