@@ -1315,13 +1315,19 @@ func addToData(key string, i interface{}, attemptMarshal bool, data *url.Values)
 }
 
 func asString(i interface{}, attemptMarshal bool) (string, error) {
+	if a, ok := i.(fmt.Stringer); ok {
+		return a.String(), nil
+	}
+
+	if b, ok := i.(util.Elementer); ok {
+		i = b.Element()
+	}
+
 	switch val := i.(type) {
-	case string:
-		return val, nil
-	case fmt.Stringer:
-		return val.String(), nil
 	case nil:
 		return "", fmt.Errorf("nil encountered")
+	case string:
+		return val, nil
 	default:
 		if !attemptMarshal {
 			return "", fmt.Errorf("value must be string or fmt.Stringer")
