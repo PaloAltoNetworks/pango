@@ -994,6 +994,7 @@ func (c *Client) initCon() error {
 	// Setup the https client
 	if c.Transport == nil {
 		c.Transport = &http.Transport{
+			Proxy: http.ProxyFromEnvironment,
 			TLSClientConfig: &tls.Config{
 				InsecureSkipVerify: !c.VerifyCertificate,
 			},
