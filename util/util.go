@@ -451,3 +451,7 @@ const (
 	MoveTop
 	MoveBottom
 )
+
+type Actioner interface {
+	Action() string
+}
