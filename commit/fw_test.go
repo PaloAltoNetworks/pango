@@ -145,9 +145,9 @@ func TestFullPartial(t *testing.T) {
 }
 
 func TestFirewallAction(t *testing.T) {
-    c := FirewallCommit{}
+	c := FirewallCommit{}
 
-    if c.Action() != "" {
-        t.Errorf("Action is %q and not empty string", c.Action())
-    }
+	if c.Action() != "" {
+		t.Errorf("Action is %q and not empty string", c.Action())
+	}
 }
