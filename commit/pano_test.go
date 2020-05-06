@@ -86,6 +86,14 @@ func TestPanoFullCommit(t *testing.T) {
 	}
 }
 
+func TestPanoCommitAction(t *testing.T) {
+    c := PanoramaCommit{}
+
+    if c.Action() != "" {
+        t.Errorf("Action is %q instead of empty string", c.Action())
+    }
+}
+
 func TestPanoBlankCommitAll(t *testing.T) {
 	s := []string{
 		"<commit-all>",
@@ -251,4 +259,13 @@ func TestPanoCommitAllWildfireCluster(t *testing.T) {
 	if expected != string(b) {
 		t.Errorf("Expected(%s) got(%s)", expected, b)
 	}
+}
+
+func TestPanoCommitAllAction(t *testing.T) {
+    c := PanoramaCommitAll{}
+    expected := "all"
+
+    if c.Action() != expected {
+        t.Errorf("Commit all action should be %q, not %q", expected, c.Action())
+    }
 }

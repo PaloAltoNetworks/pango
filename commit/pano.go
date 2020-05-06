@@ -24,6 +24,9 @@ type PanoramaCommit struct {
 	Force                   bool
 }
 
+// Action returns a commit action of an empty string.
+func (o PanoramaCommit) Action() string { return "" }
+
 // Element returns an interface to be marshalled to perform the specified commit.
 func (o PanoramaCommit) Element() interface{} {
 	ans := panoCommit{
@@ -111,6 +114,9 @@ type PanoramaCommitAll struct {
 	ForceTemplateValues bool
 	Devices             []string
 }
+
+// Action returns a commit action of "all".
+func (o PanoramaCommitAll) Action() string { return "all" }
 
 // Element returns an interface to be marshalled to perform the specified commit.
 func (o PanoramaCommitAll) Element() interface{} {
