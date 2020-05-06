@@ -18,6 +18,9 @@ type FirewallCommit struct {
 	Force                   bool
 }
 
+// Action returns a commit action of an empty string.
+func (o FirewallCommit) Action() string { return "" }
+
 // Element returns an interface to be marshalled to perform the specified commit.
 func (o FirewallCommit) Element() interface{} {
 	ans := fwCommit{

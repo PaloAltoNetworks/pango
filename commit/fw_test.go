@@ -143,3 +143,11 @@ func TestFullPartial(t *testing.T) {
 		t.Errorf("Expected(%s) got(%s)", expected, b)
 	}
 }
+
+func TestFirewallAction(t *testing.T) {
+    c := FirewallCommit{}
+
+    if c.Action() != "" {
+        t.Errorf("Action is %q and not empty string", c.Action())
+    }
+}
