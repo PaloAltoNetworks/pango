@@ -876,10 +876,12 @@ func (c *Client) Import(cat, content, filename, fp string, extras map[string]str
 
 // Commit performs PAN-OS commits.
 //
-// The cmd param can be either a properly formatted XML string or a struct
-// that can be marshalled into XML.
+// The cmd param can be a properly formatted XML string, a struct that can
+// be marshalled into XML, or one of the commit types.
 //
-// The action param is the commit action to be taken, if any (e.g. - "all").
+// The action param is the commit action to be taken (e.g. - "all").  If the
+// cmd param is one of the commit types, and the action passed in to this function
+// is an empty string, then the action will be determined by the commit type.
 //
 // The extras param should be either nil or a url.Values{} to be mixed in with
 // the constructed request.
@@ -898,6 +900,8 @@ func (c *Client) Commit(cmd interface{}, action string, extras interface{}) (uin
 
 	if action != "" {
 		data.Set("action", action)
+	} else if ca, ok := cmd.(util.Actioner); ok && ca.Action() != "" {
+		data.Set("action", ca.Action())
 	}
 
 	if c.Target != "" {
