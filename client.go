@@ -73,10 +73,10 @@ type Client struct {
 	Transport         *http.Transport `json:"-"`
 
 	// Variables determined at runtime.
-	Version    version.Number      `json:"-"`
-	SystemInfo map[string]string   `json:"-"`
-	Plugin     []map[string]string `json:"-"`
-	MultiConfigure *MultiConfigure
+	Version        version.Number      `json:"-"`
+	SystemInfo     map[string]string   `json:"-"`
+	Plugin         []map[string]string `json:"-"`
+	MultiConfigure *MultiConfigure     `json:"-"`
 
 	// Logging level.
 	Logging               uint32   `json:"-"`
