@@ -65,6 +65,21 @@ func (c *Firewall) Initialize() error {
 	return nil
 }
 
+// InitializeUsing does Initialize(), but takes in a filename that contains
+// fallback authentication credentials if they aren't specified.
+//
+// The order of preference for auth / connection settings is:
+//
+// * explicitly set
+// * environment variable (set chkenv to true to enable this)
+// * json file
+func (c *Firewall) InitializeUsing(filename string, chkenv bool) error {
+	c.CheckEnvironment = chkenv
+	c.credsFile = filename
+
+	return c.Initialize()
+}
+
 // GetDhcpInfo returns the DHCP client information about the given interface.
 func (c *Firewall) GetDhcpInfo(i string) (map[string]string, error) {
 	c.LogOp("(op) show dhcp client state %q", i)
