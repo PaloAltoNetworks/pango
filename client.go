@@ -3,6 +3,7 @@ package pango
 import (
 	"bytes"
 	"crypto/tls"
+	"encoding/json"
 	"encoding/xml"
 	"fmt"
 	"io"
@@ -11,6 +12,8 @@ import (
 	"mime/multipart"
 	"net/http"
 	"net/url"
+	"os"
+	"strconv"
 	"strings"
 	"time"
 
@@ -51,36 +54,43 @@ const (
 // invoke Initialize() to prepare it for use.
 type Client struct {
 	// Connection properties.
-	Hostname string
-	Username string
-	Password string
-	ApiKey   string
-	Protocol string
-	Port     uint
-	Timeout  int
-	Target   string
+	Hostname string `json:"hostname"`
+	Username string `json:"username"`
+	Password string `json:"password"`
+	ApiKey   string `json:"api_key"`
+	Protocol string `json:"protocol"`
+	Port     uint   `json:"port"`
+	Timeout  int    `json:"timeout"`
+	Target   string `json:"target"`
+
+	// Set to true if you want to check environment variables
+	// for auth and connection properties.
+	CheckEnvironment bool `json:"-"`
 
 	// HTTP transport options.  Note that the VerifyCertificate setting is
 	// only used if you do not specify a HTTP transport yourself.
-	VerifyCertificate bool
-	Transport         *http.Transport
+	VerifyCertificate bool            `json:"verify_certificate"`
+	Transport         *http.Transport `json:"-"`
 
 	// Variables determined at runtime.
-	Version    version.Number
-	SystemInfo map[string]string
-	Plugin     []map[string]string
+	Version    version.Number      `json:"-"`
+	SystemInfo map[string]string   `json:"-"`
+	Plugin     []map[string]string `json:"-"`
 
 	// Logging level.
-	Logging uint32
+	Logging               uint32   `json:"-"`
+	LoggingFromInitialize []string `json:"logging"`
 
 	// Internal variables.
-	con     *http.Client
-	api_url string
+	credsFile string
+	con       *http.Client
+	api_url   string
 
 	// Variables for testing, response bytes and response index.
-	rp []url.Values
-	rb [][]byte
-	ri int
+	rp              []url.Values
+	rb              [][]byte
+	ri              int
+	authFileContent []byte
 }
 
 // String is the string representation of a client connection.  Both the
@@ -144,6 +154,21 @@ func (c *Client) Initialize() error {
 	}
 
 	return nil
+}
+
+// InitializeUsing does Initialize(), but takes in a filename that contains
+// fallback authentication credentials if they aren't specified.
+//
+// The order of preference for auth / connection settings is:
+//
+// * explicitly set
+// * environment variable (set chkenv to true to enable this)
+// * json file
+func (c *Client) InitializeUsing(filename string, chkenv bool) error {
+	c.CheckEnvironment = chkenv
+	c.credsFile = filename
+
+	return c.Initialize()
 }
 
 // RetrieveApiKey retrieves the API key, which will require that both the
@@ -471,8 +496,8 @@ func (c *Client) WaitForJob(id uint, resp interface{}) error {
 
 	// Check the results for a failed commit.
 	if ans.Result == "FAIL" {
-		if len(ans.Details) > 0 {
-			return fmt.Errorf(ans.Details[0])
+		if len(ans.Details.Lines) > 0 {
+			return fmt.Errorf(ans.Details.String())
 		} else {
 			return fmt.Errorf("Job %d has failed to complete successfully", id)
 		}
@@ -922,32 +947,175 @@ func (c *Client) Commit(cmd interface{}, action string, extras interface{}) (uin
 func (c *Client) initCon() error {
 	var tout time.Duration
 
-	// Sets the logging level.
-	if c.Logging == 0 {
-		c.Logging = LogAction | LogUid
+	// Load up the JSON config file.
+	json_client := &Client{}
+	if c.credsFile != "" {
+		var (
+			b   []byte
+			err error
+		)
+		if len(c.rb) == 0 {
+			b, err = ioutil.ReadFile(c.credsFile)
+		} else {
+			b, err = c.authFileContent, nil
+		}
+
+		if err != nil {
+			return err
+		}
+
+		if err = json.Unmarshal(b, &json_client); err != nil {
+			return err
+		}
 	}
 
-	// Set the timeout
-	if c.Timeout == 0 {
-		c.Timeout = 10
-	} else if c.Timeout > 60 {
-		return fmt.Errorf("Timeout for %q is %d, expecting a number between [0, 60]", c.Hostname, c.Timeout)
+	// Hostname.
+	if c.Hostname == "" {
+		if val := os.Getenv("PANOS_HOSTNAME"); c.CheckEnvironment && val != "" {
+			c.Hostname = val
+		} else {
+			c.Hostname = json_client.Hostname
+		}
 	}
-	tout = time.Duration(time.Duration(c.Timeout) * time.Second)
 
-	// Set the protocol
+	// Username.
+	if c.Username == "" {
+		if val := os.Getenv("PANOS_USERNAME"); c.CheckEnvironment && val != "" {
+			c.Username = val
+		} else {
+			c.Username = json_client.Username
+		}
+	}
+
+	// Password.
+	if c.Password == "" {
+		if val := os.Getenv("PANOS_PASSWORD"); c.CheckEnvironment && val != "" {
+			c.Password = val
+		} else {
+			c.Password = json_client.Password
+		}
+	}
+
+	// API key.
+	if c.ApiKey == "" {
+		if val := os.Getenv("PANOS_API_KEY"); c.CheckEnvironment && val != "" {
+			c.ApiKey = val
+		} else {
+			c.ApiKey = json_client.ApiKey
+		}
+	}
+
+	// Protocol.
 	if c.Protocol == "" {
-		c.Protocol = "https"
-	} else if c.Protocol != "http" && c.Protocol != "https" {
+		if val := os.Getenv("PANOS_PROTOCOL"); c.CheckEnvironment && val != "" {
+			c.Protocol = val
+		} else if json_client.Protocol != "" {
+			c.Protocol = json_client.Protocol
+		} else {
+			c.Protocol = "https"
+		}
+	}
+	if c.Protocol != "http" && c.Protocol != "https" {
 		return fmt.Errorf("Invalid protocol %q.  Must be \"http\" or \"https\"", c.Protocol)
 	}
 
-	// Check port number
+	// Port.
+	if c.Port == 0 {
+		if val := os.Getenv("PANOS_PORT"); c.CheckEnvironment && val != "" {
+			if cp, err := strconv.Atoi(val); err != nil {
+				return fmt.Errorf("Failed to parse the env port number: %s", err)
+			} else {
+				c.Port = uint(cp)
+			}
+		} else if json_client.Port != 0 {
+			c.Port = json_client.Port
+		}
+	}
 	if c.Port > 65535 {
 		return fmt.Errorf("Port %d is out of bounds", c.Port)
 	}
 
-	// Setup the https client
+	// Timeout.
+	if c.Timeout == 0 {
+		if val := os.Getenv("PANOS_TIMEOUT"); c.CheckEnvironment && val != "" {
+			if ival, err := strconv.Atoi(val); err != nil {
+				return fmt.Errorf("Failed to parse timeout env var as int: %s", err)
+			} else {
+				c.Timeout = ival
+			}
+		} else if json_client.Timeout != 0 {
+			c.Timeout = json_client.Timeout
+		} else {
+			c.Timeout = 10
+		}
+	}
+	if c.Timeout <= 0 || c.Timeout > 60 {
+		return fmt.Errorf("Timeout for %q is %d, expecting a number between [0, 60]", c.Hostname, c.Timeout)
+	}
+	tout = time.Duration(time.Duration(c.Timeout) * time.Second)
+
+	// Target.
+	if c.Target == "" {
+		if val := os.Getenv("PANOS_TARGET"); c.CheckEnvironment && val != "" {
+			c.Target = val
+		} else {
+			c.Target = json_client.Target
+		}
+	}
+
+	// Verify cert.
+	if !c.VerifyCertificate {
+		if val := os.Getenv("PANOS_VERIFY_CERTIFICATE"); c.CheckEnvironment && val != "" {
+			if vcb, err := strconv.ParseBool(val); err != nil {
+				return err
+			} else if vcb {
+				c.VerifyCertificate = vcb
+			}
+		}
+		if !c.VerifyCertificate && json_client.VerifyCertificate {
+			c.VerifyCertificate = json_client.VerifyCertificate
+		}
+	}
+
+	// Logging.
+	if c.Logging == 0 {
+		var ll []string
+		if val := os.Getenv("PANOS_LOGGING"); c.CheckEnvironment && val != "" {
+			ll = strings.Split(val, ",")
+		} else {
+			ll = json_client.LoggingFromInitialize
+		}
+		if len(ll) > 0 {
+			var lv uint32
+			for _, x := range ll {
+				switch x {
+				case "quiet":
+					lv |= LogQuiet
+				case "action":
+					lv |= LogAction
+				case "query":
+					lv |= LogQuery
+				case "op":
+					lv |= LogOp
+				case "uid":
+					lv |= LogUid
+				case "xpath":
+					lv |= LogXpath
+				case "send":
+					lv |= LogSend
+				case "receive":
+					lv |= LogReceive
+				default:
+					return fmt.Errorf("Unknown logging requested: %s", x)
+				}
+			}
+			c.Logging = lv
+		} else {
+			c.Logging = LogAction | LogUid
+		}
+	}
+
+	// Setup the https client.
 	if c.Transport == nil {
 		c.Transport = &http.Transport{
 			Proxy: http.ProxyFromEnvironment,
@@ -959,6 +1127,13 @@ func (c *Client) initCon() error {
 	c.con = &http.Client{
 		Transport: c.Transport,
 		Timeout:   tout,
+	}
+
+	// Sanity check.
+	if c.Hostname == "" {
+		return fmt.Errorf("No hostname specified")
+	} else if c.ApiKey == "" && (c.Username == "" && c.Password == "") {
+		return fmt.Errorf("No username/password or API key given")
 	}
 
 	// Configure the api url
