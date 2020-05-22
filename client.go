@@ -76,7 +76,7 @@ type Client struct {
 	Version    version.Number      `json:"-"`
 	SystemInfo map[string]string   `json:"-"`
 	Plugin     []map[string]string `json:"-"`
-    MultiConfigure *MultiConfigure `json:"-"`
+	MultiConfigure *MultiConfigure
 
 	// Logging level.
 	Logging               uint32   `json:"-"`
@@ -841,12 +841,12 @@ func (c *Client) Rename(path interface{}, newname string, extras, ans interface{
 // unmarshaling the response into the the multi config response struct.  If the
 // multi config itself failed, then the reason can be found in its results.
 func (c *Client) MultiConfig(element MultiConfigure, extras interface{}) ([]byte, MultiConfigureResponse, error) {
-    data := url.Values{}
+	data := url.Values{}
 
-    resp := MultiConfigureResponse{}
-    text, _ := c.typeConfig("multi-config", data, element, extras, nil)
-    err := xml.Unmarshal(text, &resp)
-    return text, resp, err
+	resp := MultiConfigureResponse{}
+	text, _ := c.typeConfig("multi-config", data, element, extras, nil)
+	err := xml.Unmarshal(text, &resp)
+	return text, resp, err
 }
 
 // Uid performs User-ID API calls.
@@ -1208,29 +1208,28 @@ func (c *Client) initSystemInfo() error {
 func (c *Client) typeConfig(action string, data url.Values, element, extras, ans interface{}) ([]byte, error) {
 	var err error
 
-    if c.MultiConfigure != nil && (
-        action == "set" ||
-        action == "edit" ||
-        action == "delete") {
-        r := MultiConfigureRequest{
-            Command: action,
-            Xpath: data.Get("xpath"),
-        }
-        if element != nil {
-            r.Data = element
-        }
-        c.MultiConfigure.Reqs = append(c.MultiConfigure.Reqs, r)
-        return nil, nil
-    }
+	if c.MultiConfigure != nil && (action == "set" ||
+		action == "edit" ||
+		action == "delete") {
+		r := MultiConfigureRequest{
+			Command: action,
+			Xpath:   data.Get("xpath"),
+		}
+		if element != nil {
+			r.Data = element
+		}
+		c.MultiConfigure.Reqs = append(c.MultiConfigure.Reqs, r)
+		return nil, nil
+	}
 
 	data.Set("type", "config")
 	data.Set("action", action)
 
-    if element != nil {
-        if err = addToData("element", element, true, &data); err != nil {
-            return nil, err
-        }
-    }
+	if element != nil {
+		if err = addToData("element", element, true, &data); err != nil {
+			return nil, err
+		}
+	}
 
 	if c.Target != "" {
 		data.Set("target", c.Target)
@@ -1492,22 +1491,22 @@ func (c *Client) Clock() (time.Time, error) {
 //
 // Capacity is the initial capacity of the requests to be sent.
 func (c *Client) PrepareMultiConfigure(capacity int) {
-    c.MultiConfigure = &MultiConfigure{
-        Reqs: make([]MultiConfigureRequest, 0, capacity),
-    }
+	c.MultiConfigure = &MultiConfigure{
+		Reqs: make([]MultiConfigureRequest, 0, capacity),
+	}
 }
 
 // SendMultiConfigure will send the accumulated multi configure request.
 func (c *Client) SendMultiConfigure() (MultiConfigureResponse, error) {
-    if c.MultiConfigure == nil {
-        return MultiConfigureResponse{}, nil
-    }
+	if c.MultiConfigure == nil {
+		return MultiConfigureResponse{}, nil
+	}
 
-    mc := c.MultiConfigure
-    c.MultiConfigure = nil
+	mc := c.MultiConfigure
+	c.MultiConfigure = nil
 
-    _, ans, err := c.MultiConfig(*mc, nil)
-    return ans, err
+	_, ans, err := c.MultiConfig(*mc, nil)
+	return ans, err
 }
 
 /** Non-struct private functions **/
