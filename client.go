@@ -76,6 +76,7 @@ type Client struct {
 	Version    version.Number      `json:"-"`
 	SystemInfo map[string]string   `json:"-"`
 	Plugin     []map[string]string `json:"-"`
+    MultiConfigure *MultiConfigure `json:"-"`
 
 	// Logging level.
 	Logging               uint32   `json:"-"`
@@ -710,7 +711,7 @@ func (c *Client) Show(path, extras, ans interface{}) ([]byte, error) {
 	c.logXpath(xp)
 	data.Set("xpath", xp)
 
-	return c.typeConfig("show", data, extras, ans)
+	return c.typeConfig("show", data, nil, extras, ans)
 }
 
 // Get runs a "get" type command.
@@ -731,7 +732,7 @@ func (c *Client) Get(path, extras, ans interface{}) ([]byte, error) {
 	c.logXpath(xp)
 	data.Set("xpath", xp)
 
-	return c.typeConfig("get", data, extras, ans)
+	return c.typeConfig("get", data, nil, extras, ans)
 }
 
 // Delete runs a "delete" type command, removing the supplied xpath and
@@ -753,7 +754,7 @@ func (c *Client) Delete(path, extras, ans interface{}) ([]byte, error) {
 	c.logXpath(xp)
 	data.Set("xpath", xp)
 
-	return c.typeConfig("delete", data, extras, ans)
+	return c.typeConfig("delete", data, nil, extras, ans)
 }
 
 // Set runs a "set" type command, creating the element at the given xpath.
@@ -772,17 +773,12 @@ func (c *Client) Delete(path, extras, ans interface{}) ([]byte, error) {
 // Any response received from the server is returned, along with any errors
 // encountered.
 func (c *Client) Set(path, element, extras, ans interface{}) ([]byte, error) {
-	var err error
 	data := url.Values{}
 	xp := util.AsXpath(path)
 	c.logXpath(xp)
 	data.Set("xpath", xp)
 
-	if err = addToData("element", element, true, &data); err != nil {
-		return nil, err
-	}
-
-	return c.typeConfig("set", data, extras, ans)
+	return c.typeConfig("set", data, element, extras, ans)
 }
 
 // Edit runs a "edit" type command, modifying what is at the given xpath
@@ -802,17 +798,12 @@ func (c *Client) Set(path, element, extras, ans interface{}) ([]byte, error) {
 // Any response received from the server is returned, along with any errors
 // encountered.
 func (c *Client) Edit(path, element, extras, ans interface{}) ([]byte, error) {
-	var err error
 	data := url.Values{}
 	xp := util.AsXpath(path)
 	c.logXpath(xp)
 	data.Set("xpath", xp)
 
-	if err = addToData("element", element, true, &data); err != nil {
-		return nil, err
-	}
-
-	return c.typeConfig("edit", data, extras, ans)
+	return c.typeConfig("edit", data, element, extras, ans)
 }
 
 // Move does a "move" type command.
@@ -830,7 +821,7 @@ func (c *Client) Move(path interface{}, where, dst string, extras, ans interface
 		data.Set("dst", dst)
 	}
 
-	return c.typeConfig("move", data, extras, ans)
+	return c.typeConfig("move", data, nil, extras, ans)
 }
 
 // Rename does a "rename" type command.
@@ -841,7 +832,21 @@ func (c *Client) Rename(path interface{}, newname string, extras, ans interface{
 	data.Set("xpath", xp)
 	data.Set("newname", newname)
 
-	return c.typeConfig("rename", data, extras, ans)
+	return c.typeConfig("rename", data, nil, extras, ans)
+}
+
+// MultiConfig does a "multi-config" type command.
+//
+// Note that the error returned from this function is only if there was an error
+// unmarshaling the response into the the multi config response struct.  If the
+// multi config itself failed, then the reason can be found in its results.
+func (c *Client) MultiConfig(element MultiConfigure, extras interface{}) ([]byte, MultiConfigureResponse, error) {
+    data := url.Values{}
+
+    resp := MultiConfigureResponse{}
+    text, _ := c.typeConfig("multi-config", data, element, extras, nil)
+    err := xml.Unmarshal(text, &resp)
+    return text, resp, err
 }
 
 // Uid performs User-ID API calls.
@@ -1200,11 +1205,33 @@ func (c *Client) initSystemInfo() error {
 	return nil
 }
 
-func (c *Client) typeConfig(action string, data url.Values, extras, ans interface{}) ([]byte, error) {
+func (c *Client) typeConfig(action string, data url.Values, element, extras, ans interface{}) ([]byte, error) {
 	var err error
+
+    if c.MultiConfigure != nil && (
+        action == "set" ||
+        action == "edit" ||
+        action == "delete") {
+        r := MultiConfigureRequest{
+            Command: action,
+            Xpath: data.Get("xpath"),
+        }
+        if element != nil {
+            r.Data = element
+        }
+        c.MultiConfigure.Reqs = append(c.MultiConfigure.Reqs, r)
+        return nil, nil
+    }
 
 	data.Set("type", "config")
 	data.Set("action", action)
+
+    if element != nil {
+        if err = addToData("element", element, true, &data); err != nil {
+            return nil, err
+        }
+    }
+
 	if c.Target != "" {
 		data.Set("target", c.Target)
 	}
@@ -1459,6 +1486,28 @@ func (c *Client) Clock() (time.Time, error) {
 	}
 
 	return time.Parse(time.UnixDate+"\n", ans.Result)
+}
+
+// PrepareMultiConfigure will start a multi config command.
+//
+// Capacity is the initial capacity of the requests to be sent.
+func (c *Client) PrepareMultiConfigure(capacity int) {
+    c.MultiConfigure = &MultiConfigure{
+        Reqs: make([]MultiConfigureRequest, 0, capacity),
+    }
+}
+
+// SendMultiConfigure will send the accumulated multi configure request.
+func (c *Client) SendMultiConfigure() (MultiConfigureResponse, error) {
+    if c.MultiConfigure == nil {
+        return MultiConfigureResponse{}, nil
+    }
+
+    mc := c.MultiConfigure
+    c.MultiConfigure = nil
+
+    _, ans, err := c.MultiConfig(*mc, nil)
+    return ans, err
 }
 
 /** Non-struct private functions **/
