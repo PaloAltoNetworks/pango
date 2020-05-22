@@ -67,6 +67,21 @@ func (c *Panorama) Initialize() error {
 	return nil
 }
 
+// InitializeUsing does Initialize(), but takes in a filename that contains
+// fallback authentication credentials if they aren't specified.
+//
+// The order of preference for auth / connection settings is:
+//
+// * explicitly set
+// * environment variable (set chkenv to true to enable this)
+// * json file
+func (c *Panorama) InitializeUsing(filename string, chkenv bool) error {
+	c.CheckEnvironment = chkenv
+	c.credsFile = filename
+
+	return c.Initialize()
+}
+
 // CreateVmAuthKey creates a VM auth key to bootstrap a VM-Series firewall.
 //
 // VM auth keys are only valid for the number of hours specified.
