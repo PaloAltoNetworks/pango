@@ -34,3 +34,20 @@ func Connect(c Client) (interface{}, error) {
 		return fw, nil
 	}
 }
+
+/*
+ConnectUsing does Connect(), but takes in a filename that contains
+fallback authentication credentials if they aren't specified.
+
+The order of preference for auth / connection settings is:
+
+* explicitly set
+* environment variable (set chkenv to true to enable this)
+* json file
+*/
+func ConnectUsing(c Client, filename string, chkenv bool) (interface{}, error) {
+	c.CheckEnvironment = chkenv
+	c.credsFile = filename
+
+	return Connect(c)
+}
