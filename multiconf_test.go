@@ -81,7 +81,14 @@ func TestOkMultiConfig(t *testing.T) {
 		} else if len(fw.rp) == 0 {
 			t.Errorf("No url values sent..?")
 		} else {
-			t.Errorf("%#v", fw.rp[0])
+			vals := fw.rp[0]
+			if vals.Get("action") != "multi-config" {
+				t.Errorf("Action is %q, not 'multi-config'", vals.Get("action"))
+			} else if vals.Get("type") != "config" {
+				t.Errorf("Type is %q, not 'config'", vals.Get("type"))
+			} else if vals.Get("element") == "" {
+				t.Errorf("Element is unset it seems")
+			}
 		}
 	}
 }
