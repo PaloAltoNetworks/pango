@@ -1212,7 +1212,7 @@ func (c *Client) typeConfig(action string, data url.Values, element, extras, ans
 		action == "edit" ||
 		action == "delete") {
 		r := MultiConfigureRequest{
-			Command: action,
+			XMLName: xml.Name{Local: action},
 			Xpath:   data.Get("xpath"),
 		}
 		if element != nil {
