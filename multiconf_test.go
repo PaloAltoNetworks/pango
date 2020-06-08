@@ -2,6 +2,8 @@ package pango
 
 import (
 	"encoding/xml"
+	"fmt"
+	"strings"
 	"testing"
 
 	"github.com/PaloAltoNetworks/pango/objs/addr"
@@ -88,6 +90,13 @@ func TestOkMultiConfig(t *testing.T) {
 				t.Errorf("Type is %q, not 'config'", vals.Get("type"))
 			} else if vals.Get("element") == "" {
 				t.Errorf("Element is unset it seems")
+			} else {
+				body := vals.Get("element")
+				if !strings.Contains(body, "<set ") {
+					t.Errorf("Body seems wrong:\n%s", body)
+				} else if !strings.Contains(body, fmt.Sprintf("<entry name=%q>", o.Name)) {
+					t.Errorf("Body seems wrong:\n%s", body)
+				}
 			}
 		}
 	}
@@ -103,12 +112,12 @@ func TestUnmarshalOkMultiConfigureResponse(t *testing.T) {
 		t.Errorf("response is %t, not ok", r.Ok())
 	} else if len(r.Results) != 6 {
 		t.Errorf("results are len %d, not 6", len(r.Results))
-	} else if r.Results[0].Id != 1109 {
-		t.Errorf("r0 id is %d, not 1109", r.Results[0].Id)
+	} else if r.Results[0].Id != "1109" {
+		t.Errorf("r0 id is %s, not 1109", r.Results[0].Id)
 	} else if r.Results[1].Code != 7 {
 		t.Errorf("r1 code is %d, not 7", r.Results[1].Code)
-	} else if r.Results[1].Id != 0 {
-		t.Errorf("r1 id is %d, not 0", r.Results[1].Id)
+	} else if r.Results[1].Id != "" {
+		t.Errorf("r1 id is %s, not ''", r.Results[1].Id)
 	} else if !r.Results[1].Ok() {
 		t.Errorf("r1 is %t, not ok", r.Results[1].Ok())
 	} else if r.Error() != "" {
@@ -150,80 +159,3 @@ func TestUnmarshalInvalidMultiConfigureResponse(t *testing.T) {
 		t.Errorf("response has message %q, not 'test-new unexpected here'", r.Results[2].Message())
 	}
 }
-
-/*
-$ cat invalid-req.xml
-<multi-configure-request>
- <request cmd="edit" obj="/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/address/entry[@name='test-shared-new']" id="1109">
-    <entry name="test-shared-new">
-      <ip-netmask>51.5.5.5</ip-netmask>
-    </entry>
-  </request>
-  <request cmd="delete" obj="/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/address/entry[@name='test2']"/>
-  <request cmd="edit" obj="/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/address/entry[@name='test-new']" id="1110">
-    <entry name="test-new">
-    </entry>
-  </request>
-  <request cmd="set" obj="/config/devices/entry[@name='localhost.localdomain']/network/interface/ethernet/entry[@name='ethernet1/9']">
-      <comment>mshen test comment</comment>
-    <tap/>
-  </request>
-  <request cmd="set" obj="/config/devices/entry[@name='localhost.localdomain']/network/interface/ethernet/entry[@name='ethernet1/8']">
-    <virtual-wire/>
-  </request>
-  <request cmd="edit" obj="/config/devices/entry[@name='localhost.localdomain']/network/interface/ethernet/entry[@name='ethernet1/1']">
-    <entry name="ethernet1/1">
-      <tap/>
-      <comment>mshen test comment</comment>
-    </entry>
-  </request>
-</multi-configure-request>
-
-$curl -k -X POST -u admin:Paloalto1 'https://10.5.104.123/api/' -d 'type=config' -d 'action=multi-config' --data-urlencode element@invalid-req.xml
-<response status="error" code="13">
-    <response status="success" code="20" id="1109"><msg>command succeeded</msg></response>
-    <response status="success" code="7"><msg>Object doesn't exist</msg></response>
-    <response status="error" code="12" id="1110"><msg><line><![CDATA[ test-new unexpected here]]></line></msg></response>
-</response>
-
-
-good-req
-<multi-configure-request>
-  <request cmd="edit" obj="/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/address/entry[@name='test-shared-new']" id="1109">
-    <entry name="test-shared-new">
-      <ip-netmask>51.5.5.55</ip-netmask>
-    </entry>
-  </request>
-  <request cmd="delete" obj="/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/address/entry[@name='test2']"/>
-  <request cmd="edit" obj="/config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']/address/entry[@name='test-new']" id="1110">
-    <entry name="test-new">
-     <fqdn>Iamgood.com</fqdn>
-    </entry>
-  </request>
-  <request cmd="set" obj="/config/devices/entry[@name='localhost.localdomain']/network/interface/ethernet/entry[@name='ethernet1/9']">
-      <comment>mshen test comment</comment>
-    <tap/>
-  </request>
-  <request cmd="set" obj="/config/devices/entry[@name='localhost.localdomain']/network/interface/ethernet/entry[@name='ethernet1/8']">
-    <virtual-wire/>
-  </request>
-  <request cmd="edit" obj="/config/devices/entry[@name='localhost.localdomain']/network/interface/ethernet/entry[@name='ethernet1/1']">
-    <entry name="ethernet1/1">
-      <tap/>
-      <comment>mshen test comment</comment>
-    </entry>
-  </request>
-<multi-configure-request>
-after running this: response:
-
-<response status="success" code="20">
-    <response status="success" code="20" id="1109"><msg>command succeeded</msg></response>
-    <response status="success" code="7"><msg>Object doesn't exist</msg></response>
-    <response status="success" code="20" id="1110"><msg>command succeeded</msg></response>
-    <response status="success" code="20"><msg>command succeeded</msg></response>
-    <response status="success" code="20"><msg>command succeeded</msg></response>
-    <response status="success" code="20"><msg>command succeeded</msg></response>
-</response>
-
-and UI shows the change with config logs
-*/
