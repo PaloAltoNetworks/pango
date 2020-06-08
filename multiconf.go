@@ -2,26 +2,29 @@ package pango
 
 import (
 	"encoding/xml"
+	"fmt"
 	"strings"
 
 	"github.com/PaloAltoNetworks/pango/util"
 )
 
 type MultiConfigure struct {
-	XMLName xml.Name                `xml:"multi-configure-request"`
-	Reqs    []MultiConfigureRequest `xml:"request"`
+	XMLName xml.Name `xml:"multi-configure-request"`
+	Reqs    []MultiConfigureRequest
 }
 
 func (m *MultiConfigure) IncrementalIds() {
 	for i := range m.Reqs {
-		m.Reqs[i].Id = i + 1
+		if m.Reqs[i].Id == "" {
+			m.Reqs[i].Id = fmt.Sprintf("%d", i+1)
+		}
 	}
 }
 
 type MultiConfigureRequest struct {
-	Id      int    `xml:"id,attr,omitempty"`
-	Command string `xml:"cmd,attr"`
-	Xpath   string `xml:"obj,attr"`
+	XMLName xml.Name
+	Id      string `xml:"id,attr,omitempty"`
+	Xpath   string `xml:"xpath,attr"`
 	Data    interface{}
 }
 
@@ -49,7 +52,7 @@ type MultiConfigResponseElement struct {
 	XMLName xml.Name `xml:"response"`
 	Status  string   `xml:"status,attr"`
 	Code    int      `xml:"code,attr"`
-	Id      int      `xml:"id,attr,omitempty"`
+	Id      string   `xml:"id,attr,omitempty"`
 	Msg     McreMsg  `xml:"msg"`
 }
 
