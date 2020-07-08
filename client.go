@@ -837,14 +837,20 @@ func (c *Client) Rename(path interface{}, newname string, extras, ans interface{
 
 // MultiConfig does a "multi-config" type command.
 //
+// Param strict should be true if you want strict transactional support.
+//
 // Note that the error returned from this function is only if there was an error
 // unmarshaling the response into the the multi config response struct.  If the
 // multi config itself failed, then the reason can be found in its results.
-func (c *Client) MultiConfig(element MultiConfigure, extras interface{}) ([]byte, MultiConfigureResponse, error) {
+func (c *Client) MultiConfig(element MultiConfigure, strict bool, extras interface{}) ([]byte, MultiConfigureResponse, error) {
 	data := url.Values{}
+    if strict {
+        data.Set("strict-transactional", "yes")
+    }
+
+	text, _ := c.typeConfig("multi-config", data, element, extras, nil)
 
 	resp := MultiConfigureResponse{}
-	text, _ := c.typeConfig("multi-config", data, element, extras, nil)
 	err := xml.Unmarshal(text, &resp)
 	return text, resp, err
 }
@@ -1497,7 +1503,13 @@ func (c *Client) PrepareMultiConfigure(capacity int) {
 }
 
 // SendMultiConfigure will send the accumulated multi configure request.
-func (c *Client) SendMultiConfigure() (MultiConfigureResponse, error) {
+//
+// Param strict should be true if you want strict transactional support.
+//
+// Note that the error returned from this function is only if there was an error
+// unmarshaling the response into the the multi config response struct.  If the
+// multi config itself failed, then the reason can be found in its results.
+func (c *Client) SendMultiConfigure(strict bool) (MultiConfigureResponse, error) {
 	if c.MultiConfigure == nil {
 		return MultiConfigureResponse{}, nil
 	}
@@ -1505,7 +1517,7 @@ func (c *Client) SendMultiConfigure() (MultiConfigureResponse, error) {
 	mc := c.MultiConfigure
 	c.MultiConfigure = nil
 
-	_, ans, err := c.MultiConfig(*mc, nil)
+	_, ans, err := c.MultiConfig(*mc, strict, nil)
 	return ans, err
 }
 
