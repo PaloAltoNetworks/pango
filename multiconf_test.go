@@ -75,7 +75,7 @@ func TestOkMultiConfig(t *testing.T) {
 	} else if len(fw.MultiConfigure.Reqs) != 1 {
 		t.Errorf("Didn't save request into multi-configure: %#v", fw.MultiConfigure)
 	} else {
-		resp, err := fw.SendMultiConfigure()
+		resp, err := fw.SendMultiConfigure(false)
 		if err != nil {
 			t.Errorf("Failed send multiconfigure: %s", err)
 		} else if !resp.Ok() {
