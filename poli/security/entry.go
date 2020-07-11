@@ -155,10 +155,20 @@ func (o *Entry) Copy(s Entry) {
 
 type normalizer interface {
 	Normalize() []Entry
+	Names() []string
 }
 
 type container_v1 struct {
-	Answer []entry_v1 `xml:"result>entry"`
+	Answer []entry_v1 `xml:"entry"`
+}
+
+func (o *container_v1) Names() []string {
+	ans := make([]string, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].Name)
+	}
+
+	return ans
 }
 
 func (o *container_v1) Normalize() []Entry {
