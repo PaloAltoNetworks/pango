@@ -1,10 +1,9 @@
 package util
 
 import (
-    "encoding/xml"
-    "strings"
+	"encoding/xml"
+	"strings"
 )
-
 
 // JobResponse parses a XML response that includes a job ID.
 type JobResponse struct {
