@@ -4,7 +4,6 @@ import (
 	"github.com/PaloAltoNetworks/pango/version"
 )
 
-
 // XapiClient is the interface that describes an pango.Client.
 type XapiClient interface {
 	String() string
