@@ -3,6 +3,7 @@ package netw
 import (
 	"github.com/PaloAltoNetworks/pango/netw/ikegw"
 	aggeth "github.com/PaloAltoNetworks/pango/netw/interface/aggregate"
+	"github.com/PaloAltoNetworks/pango/netw/interface/arp"
 	"github.com/PaloAltoNetworks/pango/netw/interface/eth"
 	"github.com/PaloAltoNetworks/pango/netw/interface/loopback"
 	"github.com/PaloAltoNetworks/pango/netw/interface/subinterface/layer2"
@@ -42,6 +43,7 @@ import (
 // Netw is the client.Network namespace.
 type FwNetw struct {
 	AggregateInterface       *aggeth.FwAggregate
+	Arp                      *arp.FwArp
 	BfdProfile               *bfd.FwBfd
 	BgpAggregate             *aggregate.FwAggregate
 	BgpAggAdvertiseFilter    *agaf.FwAdvertise
@@ -82,6 +84,9 @@ type FwNetw struct {
 func (c *FwNetw) Initialize(i util.XapiClient) {
 	c.AggregateInterface = &aggeth.FwAggregate{}
 	c.AggregateInterface.Initialize(i)
+
+	c.Arp = &arp.FwArp{}
+	c.Arp.Initialize(i)
 
 	c.BfdProfile = &bfd.FwBfd{}
 	c.BfdProfile.Initialize(i)
