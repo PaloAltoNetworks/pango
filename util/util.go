@@ -190,33 +190,33 @@ func VsysXpathPrefix(vsys string) []string {
 // StripPanosPackaging removes the response / result and an optional third
 // containing XML tag from the given byte slice.
 func StripPanosPackaging(input []byte, tag string) []byte {
-    var index int
-    gt := []byte(">")
-    lt := []byte("<")
+	var index int
+	gt := []byte(">")
+	lt := []byte("<")
 
-    // Remove response.
-    index = bytes.Index(input, gt)
-    ans := input[index + 1:]
-    index = bytes.LastIndex(ans, lt)
-    ans = ans[:index]
+	// Remove response.
+	index = bytes.Index(input, gt)
+	ans := input[index+1:]
+	index = bytes.LastIndex(ans, lt)
+	ans = ans[:index]
 
-    // Remove result.
-    index = bytes.Index(ans, gt)
-    ans = ans[index + 1:]
-    index = bytes.LastIndex(ans, lt)
-    ans = ans[:index]
+	// Remove result.
+	index = bytes.Index(ans, gt)
+	ans = ans[index+1:]
+	index = bytes.LastIndex(ans, lt)
+	ans = ans[:index]
 
-    ans = bytes.TrimSpace(ans)
+	ans = bytes.TrimSpace(ans)
 
-    if tag != "" && (bytes.HasPrefix(ans, []byte("<" + tag + " ")) || bytes.HasPrefix(ans, []byte("<" + tag + ">"))) {
-        index = bytes.Index(ans, gt)
-        ans = ans[index + 1:]
-        index = bytes.LastIndex(ans, lt)
-        ans = ans[:index]
-        ans = bytes.TrimSpace(ans)
-    }
+	if tag != "" && (bytes.HasPrefix(ans, []byte("<"+tag+" ")) || bytes.HasPrefix(ans, []byte("<"+tag+">"))) {
+		index = bytes.Index(ans, gt)
+		ans = ans[index+1:]
+		index = bytes.LastIndex(ans, lt)
+		ans = ans[:index]
+		ans = bytes.TrimSpace(ans)
+	}
 
-    return ans
+	return ans
 }
 
 // CdataText is for getting CDATA contents of XML docs.
@@ -235,4 +235,24 @@ type RawXml struct {
 func CleanRawXml(v string) string {
 	re := regexp.MustCompile(` admin="\S+" dirtyId="\d+" time="\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2}"`)
 	return re.ReplaceAllString(v, "")
+}
+
+// ValidMovement returns if the movement constant is valid or not.
+func ValidMovement(v int) bool {
+	switch v {
+	case MoveSkip, MoveBefore, MoveDirectlyBefore, MoveAfter, MoveDirectlyAfter, MoveTop, MoveBottom:
+		return true
+	}
+
+	return false
+}
+
+// RelativeMovement returns if the movement constant is a relative movement.
+func RelativeMovement(v int) bool {
+	switch v {
+	case MoveBefore, MoveDirectlyBefore, MoveAfter, MoveDirectlyAfter:
+		return true
+	}
+
+	return false
 }
