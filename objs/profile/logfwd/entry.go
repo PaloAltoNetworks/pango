@@ -27,22 +27,40 @@ func (o *Entry) Copy(s Entry) {
 /** Structs / functions for this namespace. **/
 
 type normalizer interface {
-	Normalize() Entry
+	Normalize() []Entry
+	Names() []string
 }
 
 type container_v1 struct {
-	Answer entry_v1 `xml:"result>entry"`
+	Answer []entry_v1 `xml:"entry"`
 }
 
-func (o *container_v1) Normalize() Entry {
-	ans := Entry{
-		Name:        o.Answer.Name,
-		Description: o.Answer.Description,
+func (o *container_v1) Names() []string {
+	ans := make([]string, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].Name)
 	}
 
-	if o.Answer.MatchList != nil {
+	return ans
+}
+
+func (o *container_v1) Normalize() []Entry {
+	arr := make([]Entry, 0, len(o.Answer))
+	for i := range o.Answer {
+		arr = append(arr, o.Answer[i].normalize())
+	}
+	return arr
+}
+
+func (o *entry_v1) normalize() Entry {
+	ans := Entry{
+		Name:        o.Name,
+		Description: o.Description,
+	}
+
+	if o.MatchList != nil {
 		ans.raw = map[string]string{
-			"ml": util.CleanRawXml(o.Answer.MatchList.Text),
+			"ml": util.CleanRawXml(o.MatchList.Text),
 		}
 	}
 
@@ -50,19 +68,36 @@ func (o *container_v1) Normalize() Entry {
 }
 
 type container_v2 struct {
-	Answer entry_v2 `xml:"result>entry"`
+	Answer []entry_v2 `xml:"entry"`
 }
 
-func (o *container_v2) Normalize() Entry {
-	ans := Entry{
-		Name:            o.Answer.Name,
-		Description:     o.Answer.Description,
-		EnhancedLogging: util.AsBool(o.Answer.EnhancedLogging),
+func (o *container_v2) Names() []string {
+	ans := make([]string, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].Name)
 	}
 
-	if o.Answer.MatchList != nil {
+	return ans
+}
+
+func (o *container_v2) Normalize() []Entry {
+	arr := make([]Entry, 0, len(o.Answer))
+	for i := range o.Answer {
+		arr = append(arr, o.Answer[i].normalize())
+	}
+	return arr
+}
+
+func (o *entry_v2) normalize() Entry {
+	ans := Entry{
+		Name:            o.Name,
+		Description:     o.Description,
+		EnhancedLogging: util.AsBool(o.EnhancedLogging),
+	}
+
+	if o.MatchList != nil {
 		ans.raw = map[string]string{
-			"ml": util.CleanRawXml(o.Answer.MatchList.Text),
+			"ml": util.CleanRawXml(o.MatchList.Text),
 		}
 	}
 
