@@ -1,9 +1,8 @@
 package util
 
 import (
-    "encoding/xml"
+	"encoding/xml"
 )
-
 
 // License defines a license entry.
 type License struct {
@@ -16,4 +15,3 @@ type License struct {
 	Expired     string   `xml:"expired"`
 	AuthCode    string   `xml:"authcode"`
 }
-
