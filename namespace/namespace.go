@@ -238,6 +238,9 @@ func (n *Namespace) retrieve(cmd string, path []string, singular bool, singleDes
 		data, err = n.con.Show(path, nil, nil)
 	}
 	if err != nil {
+		if plural && (err.Error() == "No such node" || err.Error() == "Object not found") {
+			return nil
+		}
 		return err
 	}
 
