@@ -1,6 +1,5 @@
 package util
 
-
 // Rulebase constants for various policies.
 const (
 	Rulebase     = "rulebase"
@@ -30,6 +29,6 @@ const (
 
 // Valid values to use for any function expecting a pango query type `qt`.
 const (
-    Get = "get"
-    Show = "show"
+	Get  = "get"
+	Show = "show"
 )
