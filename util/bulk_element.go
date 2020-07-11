@@ -1,9 +1,8 @@
 package util
 
 import (
-    "encoding/xml"
+	"encoding/xml"
 )
-
 
 // BulkElement is a generic bulk container for bulk operations.
 type BulkElement struct {
