@@ -1,9 +1,8 @@
 package util
 
 import (
-    "encoding/xml"
+	"encoding/xml"
 )
-
 
 // MemberType defines a member config node used for sending and receiving XML
 // from PAN-OS.
