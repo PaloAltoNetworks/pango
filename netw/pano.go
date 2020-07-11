@@ -3,6 +3,7 @@ package netw
 import (
 	"github.com/PaloAltoNetworks/pango/netw/ikegw"
 	aggeth "github.com/PaloAltoNetworks/pango/netw/interface/aggregate"
+	"github.com/PaloAltoNetworks/pango/netw/interface/arp"
 	"github.com/PaloAltoNetworks/pango/netw/interface/eth"
 	"github.com/PaloAltoNetworks/pango/netw/interface/loopback"
 	"github.com/PaloAltoNetworks/pango/netw/interface/subinterface/layer2"
@@ -42,6 +43,7 @@ import (
 // PanoNetw is the client.Network namespace.
 type PanoNetw struct {
 	AggregateInterface       *aggeth.PanoAggregate
+	Arp                      *arp.PanoArp
 	BfdProfile               *bfd.PanoBfd
 	BgpAggregate             *aggregate.PanoAggregate
 	BgpAggAdvertiseFilter    *agaf.PanoAdvertise
@@ -82,6 +84,9 @@ type PanoNetw struct {
 func (c *PanoNetw) Initialize(i util.XapiClient) {
 	c.AggregateInterface = &aggeth.PanoAggregate{}
 	c.AggregateInterface.Initialize(i)
+
+	c.Arp = &arp.PanoArp{}
+	c.Arp.Initialize(i)
 
 	c.BfdProfile = &bfd.PanoBfd{}
 	c.BfdProfile.Initialize(i)
