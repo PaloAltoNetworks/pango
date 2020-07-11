@@ -47,10 +47,8 @@ Initializing the connection creates the API key (if it was not already specified
 
 Generally speaking, there are the following functions inside each namespace:
 
-  * `GetList()`
-  * `ShowList()`
-  * `Get()`
-  * `Show()`
+  * `Get()` / `GetList()` / `GetAll()`
+  * `Show()` / `ShowList()` / `ShowAll()`
   * `Set()`
   * `Edit()`
   * `Delete()`
