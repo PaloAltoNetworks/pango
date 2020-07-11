@@ -1,9 +1,8 @@
 package util
 
 import (
-    "encoding/xml"
+	"encoding/xml"
 )
-
 
 // Lock represents either a config lock or a commit lock.
 type Lock struct {
