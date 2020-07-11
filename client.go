@@ -844,9 +844,9 @@ func (c *Client) Rename(path interface{}, newname string, extras, ans interface{
 // multi config itself failed, then the reason can be found in its results.
 func (c *Client) MultiConfig(element MultiConfigure, strict bool, extras interface{}) ([]byte, MultiConfigureResponse, error) {
 	data := url.Values{}
-    if strict {
-        data.Set("strict-transactional", "yes")
-    }
+	if strict {
+		data.Set("strict-transactional", "yes")
+	}
 
 	text, _ := c.typeConfig("multi-config", data, element, extras, nil)
 
