@@ -126,7 +126,7 @@ func (c *PanoArp) versioning() (normalizer, func(Entry) interface{}) {
 }
 
 func (c *PanoArp) xpath(tmpl, ts, iType, iName, subName string, vals []string) []string {
-	ans := make([]string, 0, 16)
+	ans := make([]string, 0, 17)
 
 	ans = append(ans, util.TemplateXpathPrefix(tmpl, ts)...)
 	ans = append(ans,
@@ -146,7 +146,7 @@ func (c *PanoArp) xpath(tmpl, ts, iType, iName, subName string, vals []string) [
 		ans = append(ans, "units", util.AsEntryXpath([]string{subName}))
 	}
 
-	ans = append(ans, "arp")
+	ans = append(ans, "arp", util.AsEntryXpath(vals))
 
 	return ans
 }

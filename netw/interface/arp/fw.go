@@ -126,7 +126,7 @@ func (c *FwArp) versioning() (normalizer, func(Entry) interface{}) {
 }
 
 func (c *FwArp) xpath(iType, iName, subName string, vals []string) []string {
-	ans := make([]string, 0, 11)
+	ans := make([]string, 0, 12)
 
 	ans = append(ans,
 		"config",
@@ -145,7 +145,7 @@ func (c *FwArp) xpath(iType, iName, subName string, vals []string) []string {
 		ans = append(ans, "units", util.AsEntryXpath([]string{subName}))
 	}
 
-	ans = append(ans, "arp")
+	ans = append(ans, "arp", util.AsEntryXpath(vals))
 
 	return ans
 }
