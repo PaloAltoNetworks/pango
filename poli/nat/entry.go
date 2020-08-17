@@ -162,77 +162,96 @@ func (o *Entry) Copy(s Entry) {
 /** Structs / functions for normalization. **/
 
 type normalizer interface {
-	Normalize() Entry
+	Normalize() []Entry
+    Names() []string
 }
 
 type container_v1 struct {
-	Answer entry_v1 `xml:"result>entry"`
+	Answer []entry_v1 `xml:"entry"`
 }
 
-func (o *container_v1) Normalize() Entry {
+func (o *container_v1) Names() []string {
+    ans := make([]string, 0, len(o.Answer))
+    for i := range o.Answer {
+        ans = append(ans, o.Answer[i].Name)
+    }
+
+    return ans
+}
+
+func (o *container_v1) Normalize() []Entry {
+    ans := make([]Entry, 0, len(o.Answer))
+    for i := range o.Answer {
+        ans = append(ans, o.Answer[i].normalize())
+    }
+
+    return ans
+}
+
+func (o *entry_v1) normalize() Entry {
 	ans := Entry{
-		Name:                 o.Answer.Name,
-		Description:          o.Answer.Description,
-		Type:                 o.Answer.Type,
-		SourceZones:          util.MemToStr(o.Answer.SourceZones),
-		DestinationZone:      o.Answer.DestinationZone,
-		ToInterface:          o.Answer.ToInterface,
-		Service:              o.Answer.Service,
-		SourceAddresses:      util.MemToStr(o.Answer.SourceAddresses),
-		DestinationAddresses: util.MemToStr(o.Answer.DestinationAddresses),
-		Disabled:             util.AsBool(o.Answer.Disabled),
-		Tags:                 util.MemToStr(o.Answer.Tags),
+		Name:                 o.Name,
+		Description:          o.Description,
+		Type:                 o.Type,
+		SourceZones:          util.MemToStr(o.SourceZones),
+		DestinationZone:      o.DestinationZone,
+		ToInterface:          o.ToInterface,
+		Service:              o.Service,
+		SourceAddresses:      util.MemToStr(o.SourceAddresses),
+		DestinationAddresses: util.MemToStr(o.DestinationAddresses),
+		Disabled:             util.AsBool(o.Disabled),
+		Tags:                 util.MemToStr(o.Tags),
 	}
 
-	if o.Answer.Sat == nil {
+	if o.Sat == nil {
 		ans.SatType = None
 	} else {
 		switch {
-		case o.Answer.Sat.Diap != nil:
+		case o.Sat.Diap != nil:
 			ans.SatType = DynamicIpAndPort
-			if o.Answer.Sat.Diap.InterfaceAddress != nil {
+			if o.Sat.Diap.InterfaceAddress != nil {
 				ans.SatAddressType = InterfaceAddress
-				ans.SatInterface = o.Answer.Sat.Diap.InterfaceAddress.Interface
-				ans.SatIpAddress = o.Answer.Sat.Diap.InterfaceAddress.Ip
+				ans.SatInterface = o.Sat.Diap.InterfaceAddress.Interface
+				ans.SatIpAddress = o.Sat.Diap.InterfaceAddress.Ip
 			} else {
 				ans.SatAddressType = TranslatedAddress
-				ans.SatTranslatedAddresses = util.MemToStr(o.Answer.Sat.Diap.TranslatedAddress)
+				ans.SatTranslatedAddresses = util.MemToStr(o.Sat.Diap.TranslatedAddress)
 			}
-		case o.Answer.Sat.Di != nil:
+		case o.Sat.Di != nil:
 			ans.SatType = DynamicIp
-			ans.SatTranslatedAddresses = util.MemToStr(o.Answer.Sat.Di.TranslatedAddress)
-			if o.Answer.Sat.Di.Fallback == nil {
+			ans.SatTranslatedAddresses = util.MemToStr(o.Sat.Di.TranslatedAddress)
+			if o.Sat.Di.Fallback == nil {
 				ans.SatFallbackType = None
-			} else if o.Answer.Sat.Di.Fallback.TranslatedAddress != nil {
+			} else if o.Sat.Di.Fallback.TranslatedAddress != nil {
 				ans.SatFallbackType = TranslatedAddress
-				ans.SatFallbackTranslatedAddresses = util.MemToStr(o.Answer.Sat.Di.Fallback.TranslatedAddress)
-			} else if o.Answer.Sat.Di.Fallback.InterfaceAddress != nil {
+				ans.SatFallbackTranslatedAddresses = util.MemToStr(o.Sat.Di.Fallback.TranslatedAddress)
+			} else if o.Sat.Di.Fallback.InterfaceAddress != nil {
 				ans.SatFallbackType = InterfaceAddress
-				ans.SatFallbackInterface = o.Answer.Sat.Di.Fallback.InterfaceAddress.Interface
-				if o.Answer.Sat.Di.Fallback.InterfaceAddress.Ip != "" {
+				ans.SatFallbackInterface = o.Sat.Di.Fallback.InterfaceAddress.Interface
+				if o.Sat.Di.Fallback.InterfaceAddress.Ip != "" {
 					ans.SatFallbackIpType = Ip
-					ans.SatFallbackIpAddress = o.Answer.Sat.Di.Fallback.InterfaceAddress.Ip
-				} else if o.Answer.Sat.Di.Fallback.InterfaceAddress.FloatingIp != "" {
+					ans.SatFallbackIpAddress = o.Sat.Di.Fallback.InterfaceAddress.Ip
+				} else if o.Sat.Di.Fallback.InterfaceAddress.FloatingIp != "" {
 					ans.SatFallbackIpType = FloatingIp
-					ans.SatFallbackIpAddress = o.Answer.Sat.Di.Fallback.InterfaceAddress.FloatingIp
+					ans.SatFallbackIpAddress = o.Sat.Di.Fallback.InterfaceAddress.FloatingIp
 				}
 			}
-		case o.Answer.Sat.Static != nil:
+		case o.Sat.Static != nil:
 			ans.SatType = StaticIp
-			ans.SatStaticTranslatedAddress = o.Answer.Sat.Static.Address
-			ans.SatStaticBiDirectional = util.AsBool(o.Answer.Sat.Static.BiDirectional)
+			ans.SatStaticTranslatedAddress = o.Sat.Static.Address
+			ans.SatStaticBiDirectional = util.AsBool(o.Sat.Static.BiDirectional)
 		}
 	}
 
-	if o.Answer.Dat != nil {
+	if o.Dat != nil {
 		ans.DatType = DatTypeStatic
-		ans.DatAddress = o.Answer.Dat.Address
-		ans.DatPort = o.Answer.Dat.Port
+		ans.DatAddress = o.Dat.Address
+		ans.DatPort = o.Dat.Port
 	}
 
-	if o.Answer.Target != nil {
-		ans.Targets = util.VsysEntToMap(o.Answer.Target.Targets)
-		ans.NegateTarget = util.AsBool(o.Answer.Target.NegateTarget)
+	if o.Target != nil {
+		ans.Targets = util.VsysEntToMap(o.Target.Targets)
+		ans.NegateTarget = util.AsBool(o.Target.NegateTarget)
 	}
 
 	return ans
@@ -387,80 +406,98 @@ func specify_v1(e Entry) interface{} {
 }
 
 type container_v2 struct {
-	Answer entry_v2 `xml:"result>entry"`
+	Answer []entry_v2 `xml:"entry"`
 }
 
-func (o *container_v2) Normalize() Entry {
+func (o *container_v2) Names() []string {
+    ans := make([]string, 0, len(o.Answer))
+    for i := range o.Answer {
+        ans = append(ans, o.Answer[i].Name)
+    }
+
+    return ans
+}
+
+func (o *container_v2) Normalize() []Entry {
+    ans := make([]Entry, 0, len(o.Answer))
+    for i := range o.Answer {
+        ans = append(ans, o.Answer[i].normalize())
+    }
+
+    return ans
+}
+
+func (o *entry_v2) normalize() Entry {
 	ans := Entry{
-		Name:                 o.Answer.Name,
-		Description:          o.Answer.Description,
-		Type:                 o.Answer.Type,
-		SourceZones:          util.MemToStr(o.Answer.SourceZones),
-		DestinationZone:      o.Answer.DestinationZone,
-		ToInterface:          o.Answer.ToInterface,
-		Service:              o.Answer.Service,
-		SourceAddresses:      util.MemToStr(o.Answer.SourceAddresses),
-		DestinationAddresses: util.MemToStr(o.Answer.DestinationAddresses),
-		Disabled:             util.AsBool(o.Answer.Disabled),
-		Tags:                 util.MemToStr(o.Answer.Tags),
+		Name:                 o.Name,
+		Description:          o.Description,
+		Type:                 o.Type,
+		SourceZones:          util.MemToStr(o.SourceZones),
+		DestinationZone:      o.DestinationZone,
+		ToInterface:          o.ToInterface,
+		Service:              o.Service,
+		SourceAddresses:      util.MemToStr(o.SourceAddresses),
+		DestinationAddresses: util.MemToStr(o.DestinationAddresses),
+		Disabled:             util.AsBool(o.Disabled),
+		Tags:                 util.MemToStr(o.Tags),
 	}
 
-	if o.Answer.Sat == nil {
+	if o.Sat == nil {
 		ans.SatType = None
 	} else {
 		switch {
-		case o.Answer.Sat.Diap != nil:
+		case o.Sat.Diap != nil:
 			ans.SatType = DynamicIpAndPort
-			if o.Answer.Sat.Diap.InterfaceAddress != nil {
+			if o.Sat.Diap.InterfaceAddress != nil {
 				ans.SatAddressType = InterfaceAddress
-				ans.SatInterface = o.Answer.Sat.Diap.InterfaceAddress.Interface
-				ans.SatIpAddress = o.Answer.Sat.Diap.InterfaceAddress.Ip
+				ans.SatInterface = o.Sat.Diap.InterfaceAddress.Interface
+				ans.SatIpAddress = o.Sat.Diap.InterfaceAddress.Ip
 			} else {
 				ans.SatAddressType = TranslatedAddress
-				ans.SatTranslatedAddresses = util.MemToStr(o.Answer.Sat.Diap.TranslatedAddress)
+				ans.SatTranslatedAddresses = util.MemToStr(o.Sat.Diap.TranslatedAddress)
 			}
-		case o.Answer.Sat.Di != nil:
+		case o.Sat.Di != nil:
 			ans.SatType = DynamicIp
-			ans.SatTranslatedAddresses = util.MemToStr(o.Answer.Sat.Di.TranslatedAddress)
-			if o.Answer.Sat.Di.Fallback == nil {
+			ans.SatTranslatedAddresses = util.MemToStr(o.Sat.Di.TranslatedAddress)
+			if o.Sat.Di.Fallback == nil {
 				ans.SatFallbackType = None
-			} else if o.Answer.Sat.Di.Fallback.TranslatedAddress != nil {
+			} else if o.Sat.Di.Fallback.TranslatedAddress != nil {
 				ans.SatFallbackType = TranslatedAddress
-				ans.SatFallbackTranslatedAddresses = util.MemToStr(o.Answer.Sat.Di.Fallback.TranslatedAddress)
-			} else if o.Answer.Sat.Di.Fallback.InterfaceAddress != nil {
+				ans.SatFallbackTranslatedAddresses = util.MemToStr(o.Sat.Di.Fallback.TranslatedAddress)
+			} else if o.Sat.Di.Fallback.InterfaceAddress != nil {
 				ans.SatFallbackType = InterfaceAddress
-				ans.SatFallbackInterface = o.Answer.Sat.Di.Fallback.InterfaceAddress.Interface
-				if o.Answer.Sat.Di.Fallback.InterfaceAddress.Ip != "" {
+				ans.SatFallbackInterface = o.Sat.Di.Fallback.InterfaceAddress.Interface
+				if o.Sat.Di.Fallback.InterfaceAddress.Ip != "" {
 					ans.SatFallbackIpType = Ip
-					ans.SatFallbackIpAddress = o.Answer.Sat.Di.Fallback.InterfaceAddress.Ip
-				} else if o.Answer.Sat.Di.Fallback.InterfaceAddress.FloatingIp != "" {
+					ans.SatFallbackIpAddress = o.Sat.Di.Fallback.InterfaceAddress.Ip
+				} else if o.Sat.Di.Fallback.InterfaceAddress.FloatingIp != "" {
 					ans.SatFallbackIpType = FloatingIp
-					ans.SatFallbackIpAddress = o.Answer.Sat.Di.Fallback.InterfaceAddress.FloatingIp
+					ans.SatFallbackIpAddress = o.Sat.Di.Fallback.InterfaceAddress.FloatingIp
 				}
 			}
-		case o.Answer.Sat.Static != nil:
+		case o.Sat.Static != nil:
 			ans.SatType = StaticIp
-			ans.SatStaticTranslatedAddress = o.Answer.Sat.Static.Address
-			ans.SatStaticBiDirectional = util.AsBool(o.Answer.Sat.Static.BiDirectional)
+			ans.SatStaticTranslatedAddress = o.Sat.Static.Address
+			ans.SatStaticBiDirectional = util.AsBool(o.Sat.Static.BiDirectional)
 		}
 	}
 
-	if o.Answer.Dat != nil {
+	if o.Dat != nil {
 		ans.DatType = DatTypeStatic
-		ans.DatAddress = o.Answer.Dat.Address
-		ans.DatPort = o.Answer.Dat.Port
+		ans.DatAddress = o.Dat.Address
+		ans.DatPort = o.Dat.Port
 	}
 
-	if o.Answer.DatDynamic != nil {
+	if o.DatDynamic != nil {
 		ans.DatType = DatTypeDynamic
-		ans.DatAddress = o.Answer.DatDynamic.Address
-		ans.DatPort = o.Answer.DatDynamic.Port
-		ans.DatDynamicDistribution = o.Answer.DatDynamic.Distribution
+		ans.DatAddress = o.DatDynamic.Address
+		ans.DatPort = o.DatDynamic.Port
+		ans.DatDynamicDistribution = o.DatDynamic.Distribution
 	}
 
-	if o.Answer.Target != nil {
-		ans.Targets = util.VsysEntToMap(o.Answer.Target.Targets)
-		ans.NegateTarget = util.AsBool(o.Answer.Target.NegateTarget)
+	if o.Target != nil {
+		ans.Targets = util.VsysEntToMap(o.Target.Targets)
+		ans.NegateTarget = util.AsBool(o.Target.NegateTarget)
 	}
 
 	return ans
