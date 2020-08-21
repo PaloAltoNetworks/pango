@@ -92,48 +92,68 @@ func (o *Entry) Copy(s Entry) {
 /** Structs / functions for this namespace. **/
 
 type normalizer interface {
-	Normalize() Entry
+	Normalize() []Entry
+	Names() []string
 }
 
 type container_v1 struct {
-	Answer entry_v1 `xml:"result>entry"`
+	Answer []entry_v1 `xml:"entry"`
 }
 
-func (o *container_v1) Normalize() Entry {
-	ans := Entry{
-		Name:       o.Answer.Name,
-		Interfaces: util.MemToStr(o.Answer.Interfaces),
+func (o *container_v1) Names() []string {
+	ans := make([]string, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].Name)
 	}
 
-	if o.Answer.Dist != nil {
-		ans.StaticDist = o.Answer.Dist.StaticDist
-		ans.StaticIpv6Dist = o.Answer.Dist.StaticIpv6Dist
-		ans.OspfIntDist = o.Answer.Dist.OspfIntDist
-		ans.OspfExtDist = o.Answer.Dist.OspfExtDist
-		ans.Ospfv3IntDist = o.Answer.Dist.Ospfv3IntDist
-		ans.Ospfv3ExtDist = o.Answer.Dist.Ospfv3ExtDist
-		ans.IbgpDist = o.Answer.Dist.IbgpDist
-		ans.EbgpDist = o.Answer.Dist.EbgpDist
-		ans.RipDist = o.Answer.Dist.RipDist
+	return ans
+}
+
+func (o *container_v1) Normalize() []Entry {
+	ans := make([]Entry, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].normalize())
+	}
+
+	return ans
+}
+
+func (o *entry_v1) normalize() Entry {
+	ans := Entry{
+		Name:       o.Name,
+		Interfaces: util.MemToStr(o.Interfaces),
+	}
+
+	if o.Dist != nil {
+		ans.StaticDist = o.Dist.StaticDist
+		ans.StaticIpv6Dist = o.Dist.StaticIpv6Dist
+		ans.OspfIntDist = o.Dist.OspfIntDist
+		ans.OspfExtDist = o.Dist.OspfExtDist
+		ans.Ospfv3IntDist = o.Dist.Ospfv3IntDist
+		ans.Ospfv3ExtDist = o.Dist.Ospfv3ExtDist
+		ans.IbgpDist = o.Dist.IbgpDist
+		ans.EbgpDist = o.Dist.EbgpDist
+		ans.RipDist = o.Dist.RipDist
 	}
 
 	ans.raw = make(map[string]string)
-	if o.Answer.Ecmp != nil {
-		ans.raw["ecmp"] = util.CleanRawXml(o.Answer.Ecmp.Text)
+	if o.Ecmp != nil {
+		ans.raw["ecmp"] = util.CleanRawXml(o.Ecmp.Text)
 	}
-	if o.Answer.Multicast != nil {
-		ans.raw["multicast"] = util.CleanRawXml(o.Answer.Multicast.Text)
+	if o.Multicast != nil {
+		ans.raw["multicast"] = util.CleanRawXml(o.Multicast.Text)
 	}
-	if o.Answer.Protocol != nil {
-		ans.raw["protocol"] = util.CleanRawXml(o.Answer.Protocol.Text)
+	if o.Protocol != nil {
+		ans.raw["protocol"] = util.CleanRawXml(o.Protocol.Text)
 	}
-	if o.Answer.Routing != nil {
-		ans.raw["routing"] = util.CleanRawXml(o.Answer.Routing.Text)
+	if o.Routing != nil {
+		ans.raw["routing"] = util.CleanRawXml(o.Routing.Text)
 	}
 
 	if len(ans.raw) == 0 {
 		ans.raw = nil
 	}
+
 	return ans
 }
 

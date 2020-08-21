@@ -8,28 +8,7 @@ import (
 )
 
 func TestPanoNormalization(t *testing.T) {
-	testCases := []struct {
-		desc       string
-		tmpl       string
-		vsys       string
-		doDefaults bool
-		imports    []string
-		conf       Entry
-	}{
-		{"with defaults and import", "x", "vsys2", true, []string{"one"}, Entry{
-			Name:       "one",
-			Interfaces: []string{"ethernet1/1", "ethernet1/2"},
-		}},
-		{"with raw fields", "y", "vsys3", true, []string{"three"}, Entry{
-			Name: "three",
-			raw: map[string]string{
-				"ecmp":      "<ecmp>raw ecmp</ecmp>",
-				"multicast": "<multicast><raw>multicast</raw></multicast>",
-				"protocol":  "<protocol><some><proto>field</proto></some></protocol>",
-				"routing":   "<routing-table><route1>something</route1><route2>b</route2></routing-table>",
-			},
-		}},
-	}
+	testCases := getTests()
 
 	mc := &testdata.MockClient{}
 	ns := &PanoRouter{}
@@ -37,6 +16,9 @@ func TestPanoNormalization(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.desc, func(t *testing.T) {
+			if tc.tmpl == "" {
+				t.Skip()
+			}
 			if tc.doDefaults {
 				tc.conf.Defaults()
 			}

@@ -1,20 +1,22 @@
 package router
 
 import (
-	"encoding/xml"
 	"fmt"
 
+	"github.com/PaloAltoNetworks/pango/namespace"
 	"github.com/PaloAltoNetworks/pango/util"
 )
 
 // FwRouter is the client.Network.VirtualRouter namespace.
 type FwRouter struct {
 	con util.XapiClient
+	ns  *namespace.Namespace
 }
 
 // Initialize is invoked by client.Initialize().
 func (c *FwRouter) Initialize(con util.XapiClient) {
 	c.con = con
+	c.ns = namespace.New(singular, plural, con)
 }
 
 /*
@@ -71,28 +73,54 @@ func (c *FwRouter) DeleteInterface(vr interface{}, iface string) error {
 
 // ShowList performs SHOW to retrieve a list of virtual routers.
 func (c *FwRouter) ShowList() ([]string, error) {
-	c.con.LogQuery("(show) list of virtual routeres")
-	path := c.xpath(nil)
-	return c.con.EntryListUsing(c.con.Show, path[:len(path)-1])
+	result, _ := c.versioning()
+	return c.ns.Listing(util.Show, c.xpath(nil), result)
 }
 
 // GetList performs GET to retrieve a list of virtual routers.
 func (c *FwRouter) GetList() ([]string, error) {
-	c.con.LogQuery("(get) list of virtual routers")
-	path := c.xpath(nil)
-	return c.con.EntryListUsing(c.con.Get, path[:len(path)-1])
+	result, _ := c.versioning()
+	return c.ns.Listing(util.Get, c.xpath(nil), result)
 }
 
 // Get performs GET to retrieve information for the given virtual router.
 func (c *FwRouter) Get(name string) (Entry, error) {
-	c.con.LogQuery("(get) virtual router %q", name)
-	return c.details(c.con.Get, name)
+	result, _ := c.versioning()
+	if err := c.ns.Object(util.Get, c.xpath([]string{name}), name, result); err != nil {
+		return Entry{}, err
+	}
+
+	return result.Normalize()[0], nil
+}
+
+// GetAll performs GET to retrieve information for all objects.
+func (c *FwRouter) GetAll() ([]Entry, error) {
+	result, _ := c.versioning()
+	if err := c.ns.Objects(util.Get, c.xpath(nil), result); err != nil {
+		return nil, err
+	}
+
+	return result.Normalize(), nil
 }
 
 // Show performs SHOW to retrieve information for the given virtual router.
 func (c *FwRouter) Show(name string) (Entry, error) {
-	c.con.LogQuery("(show) virtual router %q", name)
-	return c.details(c.con.Show, name)
+	result, _ := c.versioning()
+	if err := c.ns.Object(util.Show, c.xpath([]string{name}), name, result); err != nil {
+		return Entry{}, err
+	}
+
+	return result.Normalize()[0], nil
+}
+
+// ShowAll performs SHOW to retrieve information for all objects.
+func (c *FwRouter) ShowAll() ([]Entry, error) {
+	result, _ := c.versioning()
+	if err := c.ns.Objects(util.Show, c.xpath(nil), result); err != nil {
+		return nil, err
+	}
+
+	return result.Normalize(), nil
 }
 
 // Set performs SET to create / update one or more virtual routers.
@@ -107,26 +135,16 @@ func (c *FwRouter) Set(vsys string, e ...Entry) error {
 	}
 
 	_, fn := c.versioning()
-	names := make([]string, len(e))
+	data := make([]interface{}, 0, len(e))
+	names := make([]string, 0, len(e))
 
-	// Build up the struct with the given router configs.
-	d := util.BulkElement{XMLName: xml.Name{Local: "virtual-router"}}
 	for i := range e {
-		d.Data = append(d.Data, fn(e[i]))
-		names[i] = e[i].Name
+		data = append(data, fn(e[i]))
+		names = append(names, e[i].Name)
 	}
-	c.con.LogAction("(set) virtual routers: %v", names)
-
-	// Set xpath.
 	path := c.xpath(names)
-	if len(e) == 1 {
-		path = path[:len(path)-1]
-	} else {
-		path = path[:len(path)-2]
-	}
 
-	// Create the virtual routers.
-	if _, err = c.con.Set(path, d.Config(), nil, nil); err != nil {
+	if err = c.ns.Set(names, path, data); err != nil {
 		return err
 	}
 
@@ -147,15 +165,10 @@ func (c *FwRouter) Edit(vsys string, e Entry) error {
 	var err error
 
 	_, fn := c.versioning()
-
-	c.con.LogAction("(edit) virtual router %q", e.Name)
-
-	// Set xpath.
 	path := c.xpath([]string{e.Name})
+	data := fn(e)
 
-	// Edit the virtual router.
-	_, err = c.con.Edit(path, fn(e), nil, nil)
-	if err != nil {
+	if err = c.ns.Edit(e.Name, path, data); err != nil {
 		return err
 	}
 
@@ -172,35 +185,25 @@ func (c *FwRouter) Edit(vsys string, e Entry) error {
 //
 // Virtual routers can be a string or an Entry object.
 func (c *FwRouter) Delete(e ...interface{}) error {
-	var err error
-
-	if len(e) == 0 {
-		return nil
-	}
-
-	names := make([]string, len(e))
+	names := make([]string, 0, len(e))
 	for i := range e {
 		switch v := e[i].(type) {
 		case string:
-			names[i] = v
+			names = append(names, v)
 		case Entry:
-			names[i] = v.Name
+			names = append(names, v.Name)
 		default:
-			return fmt.Errorf("Unknown type sent to delete: %s", v)
+			return fmt.Errorf("Unknown type to delete: %s", v)
 		}
 	}
-	c.con.LogAction("(delete) virtual routers: %v", names)
+	path := c.xpath(names)
 
 	// Unimport virtual routers.
-	err = c.con.VsysUnimport(util.VirtualRouterImport, "", "", names)
-	if err != nil {
+	if err := c.con.VsysUnimport(util.VirtualRouterImport, "", "", names); err != nil {
 		return err
 	}
 
-	// Remove virtual routers next.
-	path := c.xpath(names)
-	_, err = c.con.Delete(path, nil, nil)
-	return err
+	return c.ns.Delete(names, path)
 }
 
 // CleanupDefault clears the `default` route configuration instead of deleting
@@ -218,28 +221,13 @@ func (c *FwRouter) CleanupDefault() error {
 
 	// Cleanup the interfaces the virtual router refers to.
 	info := Entry{Name: "default"}
-	if err = c.Edit("", info); err != nil {
-		return err
-	}
-
-	return nil
+	return c.Edit("", info)
 }
 
 /** Internal functions for this namespace struct **/
 
 func (c *FwRouter) versioning() (normalizer, func(Entry) interface{}) {
 	return &container_v1{}, specify_v1
-}
-
-func (c *FwRouter) details(fn util.Retriever, name string) (Entry, error) {
-	path := c.xpath([]string{name})
-	obj, _ := c.versioning()
-	if _, err := fn(path, nil, obj); err != nil {
-		return Entry{}, err
-	}
-	ans := obj.Normalize()
-
-	return ans, nil
 }
 
 func (c *FwRouter) xpath(vals []string) []string {
