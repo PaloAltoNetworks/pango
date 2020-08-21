@@ -8,7 +8,7 @@ import (
 )
 
 func TestFwNormalization(t *testing.T) {
-    testCases := getTests()
+	testCases := getTests()
 
 	mc := &testdata.MockClient{}
 	ns := &FwNat{}

@@ -12,65 +12,65 @@ import (
 // PanoNat is the client.Policies.Nat namespace.
 type PanoNat struct {
 	con util.XapiClient
-    ns *namespace.Namespace
+	ns  *namespace.Namespace
 }
 
 // Initialize is invoed by client.Initialize().
 func (c *PanoNat) Initialize(con util.XapiClient) {
 	c.con = con
-    c.ns = namespace.New(singular, plural, con)
+	c.ns = namespace.New(singular, plural, con)
 }
 
 // GetList performs GET to retrieve a list of NAT policies.
 func (c *PanoNat) GetList(dg, base string) ([]string, error) {
-    result, _ := c.versioning()
-    return c.ns.Listing(util.Get, c.xpath(dg, base, nil), result)
+	result, _ := c.versioning()
+	return c.ns.Listing(util.Get, c.xpath(dg, base, nil), result)
 }
 
 // ShowList performs SHOW to retrieve a list of NAT policies.
 func (c *PanoNat) ShowList(dg, base string) ([]string, error) {
-    result, _ := c.versioning()
-    return c.ns.Listing(util.Show, c.xpath(dg, base, nil), result)
+	result, _ := c.versioning()
+	return c.ns.Listing(util.Show, c.xpath(dg, base, nil), result)
 }
 
 // Get performs GET to retrieve information for the given NAT policy.
 func (c *PanoNat) Get(dg, base, name string) (Entry, error) {
-    result, _ := c.versioning()
-    if err := c.ns.Object(util.Get, c.xpath(dg, base, []string{name}), name, result); err != nil {
-        return Entry{}, err
-    }
+	result, _ := c.versioning()
+	if err := c.ns.Object(util.Get, c.xpath(dg, base, []string{name}), name, result); err != nil {
+		return Entry{}, err
+	}
 
-    return result.Normalize()[0], nil
+	return result.Normalize()[0], nil
 }
 
 // GetAll performs a GET to retrieve all objects.
 func (c *PanoNat) GetAll(dg, base string) ([]Entry, error) {
-    result, _ := c.versioning()
-    if err := c.ns.Objects(util.Get, c.xpath(dg, base, nil), result); err != nil {
-        return nil, err
-    }
+	result, _ := c.versioning()
+	if err := c.ns.Objects(util.Get, c.xpath(dg, base, nil), result); err != nil {
+		return nil, err
+	}
 
-    return result.Normalize(), nil
+	return result.Normalize(), nil
 }
 
 // Show performs SHOW to retrieve information for the given NAT policy.
 func (c *PanoNat) Show(dg, base, name string) (Entry, error) {
-    result, _ := c.versioning()
-    if err := c.ns.Object(util.Show, c.xpath(dg, base, []string{name}), name, result); err != nil {
-        return Entry{}, err
-    }
+	result, _ := c.versioning()
+	if err := c.ns.Object(util.Show, c.xpath(dg, base, []string{name}), name, result); err != nil {
+		return Entry{}, err
+	}
 
-    return result.Normalize()[0], nil
+	return result.Normalize()[0], nil
 }
 
 // ShowAll performs a SHOW to retrieve all objects.
 func (c *PanoNat) ShowAll(dg, base string) ([]Entry, error) {
-    result, _ := c.versioning()
-    if err := c.ns.Objects(util.Show, c.xpath(dg, base, nil), result); err != nil {
-        return nil, err
-    }
+	result, _ := c.versioning()
+	if err := c.ns.Objects(util.Show, c.xpath(dg, base, nil), result); err != nil {
+		return nil, err
+	}
 
-    return result.Normalize(), nil
+	return result.Normalize(), nil
 }
 
 // Set performs SET to create / update one or more NAT policies.
@@ -78,16 +78,16 @@ func (c *PanoNat) Set(dg, base string, e ...Entry) error {
 	var err error
 
 	_, fn := c.versioning()
-    data := make([]interface{}, 0, len(e))
+	data := make([]interface{}, 0, len(e))
 	names := make([]string, 0, len(e))
 
-    for i := range e {
-        data = append(data, fn(e[i]))
-        names = append(names, e[i].Name)
-    }
+	for i := range e {
+		data = append(data, fn(e[i]))
+		names = append(names, e[i].Name)
+	}
 	path := c.xpath(dg, base, names)
 
-    err = c.ns.Set(names, path, data)
+	err = c.ns.Set(names, path, data)
 
 	// On error: find the rule that's causing the error if multiple rules
 	// were given.
@@ -111,9 +111,9 @@ func (c *PanoNat) Set(dg, base string, e ...Entry) error {
 func (c *PanoNat) Edit(dg, base string, e Entry) error {
 	_, fn := c.versioning()
 	path := c.xpath(dg, base, []string{e.Name})
-    data := fn(e)
+	data := fn(e)
 
-    return c.ns.Edit(e.Name, path, data)
+	return c.ns.Edit(e.Name, path, data)
 }
 
 // Delete removes the given NAT policies.
@@ -133,7 +133,7 @@ func (c *PanoNat) Delete(dg, base string, e ...interface{}) error {
 	}
 
 	path := c.xpath(dg, base, names)
-    return c.ns.Delete(names, path)
+	return c.ns.Delete(names, path)
 }
 
 // MoveGroup moves a logical group of rules somewhere in relation
@@ -147,20 +147,20 @@ func (c *PanoNat) Delete(dg, base string, e ...interface{}) error {
 // anywhere, but all other rules will still be moved to be grouped with the
 // first one.
 func (c *PanoNat) MoveGroup(dg, base string, movement int, rule string, e ...Entry) error {
-    pather := func(v string) []string {
-        return c.xpath(dg, base, []string{v})
-    }
+	pather := func(v string) []string {
+		return c.xpath(dg, base, []string{v})
+	}
 
-    lister := func() ([]string, error) {
-        return c.GetList(dg, base)
-    }
+	lister := func() ([]string, error) {
+		return c.GetList(dg, base)
+	}
 
-    names := make([]string, 0, len(e))
-    for i := range e {
-        names = append(names, e[i].Name)
-    }
+	names := make([]string, 0, len(e))
+	for i := range e {
+		names = append(names, e[i].Name)
+	}
 
-    return c.ns.MoveGroup(pather, lister, movement, rule, names)
+	return c.ns.MoveGroup(pather, lister, movement, rule, names)
 }
 
 /** Internal functions **/

@@ -4,15 +4,14 @@ import (
 	"github.com/PaloAltoNetworks/pango/version"
 )
 
-
 type tc struct {
-    version version.Number
-    desc string
-    conf Entry
+	version version.Number
+	desc    string
+	conf    Entry
 }
 
 func getTests() []tc {
-    return []tc{
+	return []tc{
 		{version.Number{5, 0, 0, ""}, "dst only", Entry{
 			Name:                 "nat policy",
 			Description:          "my nat policy",

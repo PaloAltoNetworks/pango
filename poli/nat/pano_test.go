@@ -9,7 +9,7 @@ import (
 )
 
 func TestPanoNormalization(t *testing.T) {
-    testCases := getTests()
+	testCases := getTests()
 
 	mc := &testdata.MockClient{}
 	ns := &PanoNat{}
@@ -25,7 +25,7 @@ func TestPanoNormalization(t *testing.T) {
 				t.Errorf("Error in set: %s", err)
 			} else {
 				mc.AddResp(mc.Elm)
-				r, err := ns.Get("my group", util.PostRulebase,  tc.conf.Name)
+				r, err := ns.Get("my group", util.PostRulebase, tc.conf.Name)
 				if err != nil {
 					t.Errorf("Error in get: %s", err)
 				} else if !reflect.DeepEqual(tc.conf, r) {
