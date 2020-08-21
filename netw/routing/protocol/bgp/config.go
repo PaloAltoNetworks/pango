@@ -359,7 +359,7 @@ type entry_v1 struct {
 type rOptions struct {
 	AsFormat               string           `xml:"as-format,omitempty"`
 	Med                    *med             `xml:"med"`
-	DefaultLocalPreference string           `xml:"default-local-preference"`
+	DefaultLocalPreference string           `xml:"default-local-preference,omitempty"`
 	ReflectorClusterId     string           `xml:"reflector-cluster-id,omitempty"`
 	ConfederationMemberAs  string           `xml:"confederation-member-as,omitempty"`
 	GracefulRestart        *gracefulRestart `xml:"graceful-restart"`
