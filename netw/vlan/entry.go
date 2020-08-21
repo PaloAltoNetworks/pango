@@ -31,27 +31,46 @@ func (o *Entry) Copy(s Entry, copyMacs bool) {
 /** Structs / functions for this namespace. **/
 
 type normalizer interface {
-	Normalize() Entry
+	Normalize() []Entry
+	Names() []string
 }
 
 type container_v1 struct {
-	Answer entry_v1 `xml:"result>entry"`
+	Answer []entry_v1 `xml:"entry"`
 }
 
-func (o *container_v1) Normalize() Entry {
+func (o *container_v1) Names() []string {
+	ans := make([]string, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].Name)
+	}
+
+	return ans
+}
+
+func (o *container_v1) Normalize() []Entry {
+	ans := make([]Entry, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].normalize())
+	}
+
+	return ans
+}
+
+func (o *entry_v1) normalize() Entry {
 	ans := Entry{
-		Name:       o.Answer.Name,
-		Interfaces: util.MemToStr(o.Answer.Interfaces),
+		Name:       o.Name,
+		Interfaces: util.MemToStr(o.Interfaces),
 	}
 
-	if o.Answer.Vi != nil {
-		ans.VlanInterface = o.Answer.Vi.VlanInterface
+	if o.Vi != nil {
+		ans.VlanInterface = o.Vi.VlanInterface
 	}
 
-	if len(o.Answer.Mac.Entry) > 0 {
-		ans.StaticMacs = make(map[string]string, len(o.Answer.Mac.Entry))
-		for i := range o.Answer.Mac.Entry {
-			ans.StaticMacs[o.Answer.Mac.Entry[i].Mac] = o.Answer.Mac.Entry[i].Interface
+	if len(o.Mac.Entry) > 0 {
+		ans.StaticMacs = make(map[string]string, len(o.Mac.Entry))
+		for i := range o.Mac.Entry {
+			ans.StaticMacs[o.Mac.Entry[i].Mac] = o.Mac.Entry[i].Interface
 		}
 	}
 

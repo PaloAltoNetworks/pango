@@ -8,23 +8,7 @@ import (
 )
 
 func TestPanoNormalization(t *testing.T) {
-	testCases := []struct {
-		desc    string
-		tmpl    string
-		vsys    string
-		imports []string
-		conf    Entry
-	}{
-		{"full vlan spec", "x", "vsys2", []string{"two"}, Entry{
-			Name:          "two",
-			VlanInterface: "ethernet1/3",
-			Interfaces:    []string{"ethernet1/1", "ethernet1/2"},
-			StaticMacs: map[string]string{
-				"00:30:48:52:ab:cd": "ethernet1/1",
-				"00:30:48:52:11:22": "ethernet1/2",
-			},
-		}},
-	}
+	testCases := getTests()
 
 	mc := &testdata.MockClient{}
 	ns := &PanoVlan{}
@@ -32,6 +16,9 @@ func TestPanoNormalization(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.desc, func(t *testing.T) {
+			if tc.tmpl == "" {
+				t.Skip()
+			}
 			mc.Reset()
 			mc.AddResp("")
 			err := ns.Set(tc.tmpl, "", tc.vsys, tc.conf)
