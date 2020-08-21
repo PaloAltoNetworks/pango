@@ -4,19 +4,6 @@ import (
 	"encoding/xml"
 )
 
-const (
-	NextHopDiscard   = "discard"
-	NextHopIpAddress = "ip-address"
-	NextHopNextVr    = "next-vr"
-)
-
-const (
-	RouteTableNoInstall = "no install"
-	RouteTableUnicast   = "unicast"
-	RouteTableMulticast = "multicast"
-	RouteTableBoth      = "both"
-)
-
 // Entry is a normalized, version independent representation of an IPv4
 // static route.
 type Entry struct {
@@ -45,35 +32,54 @@ func (o *Entry) Copy(s Entry) {
 /** Structs / functions for this namespace. **/
 
 type normalizer interface {
-	Normalize() Entry
+	Normalize() []Entry
+	Names() []string
 }
 
 type container_v1 struct {
-	Answer entry_v1 `xml:"result>entry"`
+	Answer []entry_v1 `xml:"entry"`
 }
 
-func (o *container_v1) Normalize() Entry {
+func (o *container_v1) Normalize() []Entry {
+	ans := make([]Entry, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].normalize())
+	}
+
+	return ans
+}
+
+func (o *container_v1) Names() []string {
+	ans := make([]string, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].Name)
+	}
+
+	return ans
+}
+
+func (o *entry_v1) normalize() Entry {
 	ans := Entry{
-		Name:          o.Answer.Name,
-		Destination:   o.Answer.Destination,
-		Interface:     o.Answer.Interface,
-		AdminDistance: o.Answer.AdminDistance,
-		Metric:        o.Answer.Metric,
+		Name:          o.Name,
+		Destination:   o.Destination,
+		Interface:     o.Interface,
+		AdminDistance: o.AdminDistance,
+		Metric:        o.Metric,
 	}
 
-	if o.Answer.NextHop == nil {
+	if o.NextHop == nil {
 		ans.Type = ""
-	} else if o.Answer.NextHop.Discard != nil {
+	} else if o.NextHop.Discard != nil {
 		ans.Type = NextHopDiscard
-	} else if o.Answer.NextHop.IpAddress != nil {
+	} else if o.NextHop.IpAddress != nil {
 		ans.Type = NextHopIpAddress
-		ans.NextHop = *o.Answer.NextHop.IpAddress
-	} else if o.Answer.NextHop.NextVr != nil {
+		ans.NextHop = *o.NextHop.IpAddress
+	} else if o.NextHop.NextVr != nil {
 		ans.Type = NextHopNextVr
-		ans.NextHop = *o.Answer.NextHop.NextVr
+		ans.NextHop = *o.NextHop.NextVr
 	}
 
-	if o.Answer.Option != nil && o.Answer.Option.NoInstall != nil {
+	if o.Option != nil && o.Option.NoInstall != nil {
 		ans.RouteTable = RouteTableNoInstall
 	}
 
@@ -132,36 +138,54 @@ func specify_v1(e Entry) interface{} {
 
 // PAN-OS 7.1, adds BfdProfile
 type container_v2 struct {
-	Answer entry_v2 `xml:"result>entry"`
+	Answer []entry_v2 `xml:"entry"`
 }
 
-func (o *container_v2) Normalize() Entry {
+func (o *container_v2) Normalize() []Entry {
+	ans := make([]Entry, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].normalize())
+	}
+
+	return ans
+}
+
+func (o *container_v2) Names() []string {
+	ans := make([]string, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].Name)
+	}
+
+	return ans
+}
+
+func (o *entry_v2) normalize() Entry {
 	ans := Entry{
-		Name:          o.Answer.Name,
-		Destination:   o.Answer.Destination,
-		Interface:     o.Answer.Interface,
-		AdminDistance: o.Answer.AdminDistance,
-		Metric:        o.Answer.Metric,
+		Name:          o.Name,
+		Destination:   o.Destination,
+		Interface:     o.Interface,
+		AdminDistance: o.AdminDistance,
+		Metric:        o.Metric,
 	}
 
-	if o.Answer.NextHop == nil {
+	if o.NextHop == nil {
 		ans.Type = ""
-	} else if o.Answer.NextHop.Discard != nil {
+	} else if o.NextHop.Discard != nil {
 		ans.Type = NextHopDiscard
-	} else if o.Answer.NextHop.IpAddress != nil {
+	} else if o.NextHop.IpAddress != nil {
 		ans.Type = NextHopIpAddress
-		ans.NextHop = *o.Answer.NextHop.IpAddress
-	} else if o.Answer.NextHop.NextVr != nil {
+		ans.NextHop = *o.NextHop.IpAddress
+	} else if o.NextHop.NextVr != nil {
 		ans.Type = NextHopNextVr
-		ans.NextHop = *o.Answer.NextHop.NextVr
+		ans.NextHop = *o.NextHop.NextVr
 	}
 
-	if o.Answer.Option != nil && o.Answer.Option.NoInstall != nil {
+	if o.Option != nil && o.Option.NoInstall != nil {
 		ans.RouteTable = RouteTableNoInstall
 	}
 
-	if o.Answer.Bfd != nil {
-		ans.BfdProfile = o.Answer.Bfd.Profile
+	if o.Bfd != nil {
+		ans.BfdProfile = o.Bfd.Profile
 	}
 
 	return ans
@@ -218,44 +242,62 @@ func specify_v2(e Entry) interface{} {
 
 // PAN-OS 8.0, new routing table options
 type container_v3 struct {
-	Answer entry_v3 `xml:"result>entry"`
+	Answer []entry_v3 `xml:"entry"`
 }
 
-func (o *container_v3) Normalize() Entry {
+func (o *container_v3) Normalize() []Entry {
+	ans := make([]Entry, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].normalize())
+	}
+
+	return ans
+}
+
+func (o *container_v3) Names() []string {
+	ans := make([]string, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].Name)
+	}
+
+	return ans
+}
+
+func (o *entry_v3) normalize() Entry {
 	ans := Entry{
-		Name:          o.Answer.Name,
-		Destination:   o.Answer.Destination,
-		Interface:     o.Answer.Interface,
-		AdminDistance: o.Answer.AdminDistance,
-		Metric:        o.Answer.Metric,
+		Name:          o.Name,
+		Destination:   o.Destination,
+		Interface:     o.Interface,
+		AdminDistance: o.AdminDistance,
+		Metric:        o.Metric,
 	}
 
-	if o.Answer.NextHop == nil {
+	if o.NextHop == nil {
 		ans.Type = ""
-	} else if o.Answer.NextHop.Discard != nil {
+	} else if o.NextHop.Discard != nil {
 		ans.Type = NextHopDiscard
-	} else if o.Answer.NextHop.IpAddress != nil {
+	} else if o.NextHop.IpAddress != nil {
 		ans.Type = NextHopIpAddress
-		ans.NextHop = *o.Answer.NextHop.IpAddress
-	} else if o.Answer.NextHop.NextVr != nil {
+		ans.NextHop = *o.NextHop.IpAddress
+	} else if o.NextHop.NextVr != nil {
 		ans.Type = NextHopNextVr
-		ans.NextHop = *o.Answer.NextHop.NextVr
+		ans.NextHop = *o.NextHop.NextVr
 	}
 
-	if o.Answer.Option != nil {
-		if o.Answer.Option.Unicast != nil {
+	if o.Option != nil {
+		if o.Option.Unicast != nil {
 			ans.RouteTable = RouteTableUnicast
-		} else if o.Answer.Option.Multicast != nil {
+		} else if o.Option.Multicast != nil {
 			ans.RouteTable = RouteTableMulticast
-		} else if o.Answer.Option.Both != nil {
+		} else if o.Option.Both != nil {
 			ans.RouteTable = RouteTableBoth
-		} else if o.Answer.Option.NoInstall != nil {
+		} else if o.Option.NoInstall != nil {
 			ans.RouteTable = RouteTableNoInstall
 		}
 	}
 
-	if o.Answer.Bfd != nil {
-		ans.BfdProfile = o.Answer.Bfd.Profile
+	if o.Bfd != nil {
+		ans.BfdProfile = o.Bfd.Profile
 	}
 
 	return ans
