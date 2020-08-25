@@ -12,65 +12,65 @@ import (
 // PanoEth is the client.Network.EthernetInterface namespace.
 type PanoEth struct {
 	con util.XapiClient
-    ns *namespace.Namespace
+	ns  *namespace.Namespace
 }
 
 // Initialize is invoked by client.Initialize().
 func (c *PanoEth) Initialize(con util.XapiClient) {
 	c.con = con
-    c.ns = namespace.New(singular, plural, con)
+	c.ns = namespace.New(singular, plural, con)
 }
 
 // ShowList performs SHOW to retrieve a list of ethernet interfaces.
 func (c *PanoEth) ShowList(tmpl, ts string) ([]string, error) {
-    result, _ := c.versioning()
-    return c.ns.Listing(util.Show, c.xpath(tmpl, ts, nil), result)
+	result, _ := c.versioning()
+	return c.ns.Listing(util.Show, c.xpath(tmpl, ts, nil), result)
 }
 
 // GetList performs GET to retrieve a list of ethernet interfaces.
 func (c *PanoEth) GetList(tmpl, ts string) ([]string, error) {
-    result, _ := c.versioning()
-    return c.ns.Listing(util.Get, c.xpath(tmpl, ts, nil), result)
+	result, _ := c.versioning()
+	return c.ns.Listing(util.Get, c.xpath(tmpl, ts, nil), result)
 }
 
 // Get performs GET to retrieve information for the given ethernet interface.
 func (c *PanoEth) Get(tmpl, ts, name string) (Entry, error) {
-    result, _ := c.versioning()
-    if err := c.ns.Object(util.Get, c.xpath(tmpl, ts, []string{name}), name, result); err != nil {
-        return Entry{}, err
-    }
+	result, _ := c.versioning()
+	if err := c.ns.Object(util.Get, c.xpath(tmpl, ts, []string{name}), name, result); err != nil {
+		return Entry{}, err
+	}
 
-    return result.Normalize()[0], nil
+	return result.Normalize()[0], nil
 }
 
 // GetAll performs GET to retrieve information for all objects.
 func (c *PanoEth) GetAll(tmpl, ts string) ([]Entry, error) {
-    result, _ := c.versioning()
-    if err := c.ns.Objects(util.Get, c.xpath(tmpl, ts, nil), result); err != nil {
-        return nil, err
-    }
+	result, _ := c.versioning()
+	if err := c.ns.Objects(util.Get, c.xpath(tmpl, ts, nil), result); err != nil {
+		return nil, err
+	}
 
-    return result.Normalize(), nil
+	return result.Normalize(), nil
 }
 
 // Show performs SHOW to retrieve information for the given ethernet interface.
 func (c *PanoEth) Show(tmpl, ts, name string) (Entry, error) {
-    result, _ := c.versioning()
-    if err := c.ns.Object(util.Show, c.xpath(tmpl, ts, []string{name}), name, result); err != nil {
-        return Entry{}, err
-    }
+	result, _ := c.versioning()
+	if err := c.ns.Object(util.Show, c.xpath(tmpl, ts, []string{name}), name, result); err != nil {
+		return Entry{}, err
+	}
 
-    return result.Normalize()[0], nil
+	return result.Normalize()[0], nil
 }
 
 // ShowAll performs SHOW to retrieve information for all objects.
 func (c *PanoEth) ShowAll(tmpl, ts string) ([]Entry, error) {
-    result, _ := c.versioning()
-    if err := c.ns.Objects(util.Show, c.xpath(tmpl, ts, nil), result); err != nil {
-        return nil, err
-    }
+	result, _ := c.versioning()
+	if err := c.ns.Objects(util.Show, c.xpath(tmpl, ts, nil), result); err != nil {
+		return nil, err
+	}
 
-    return result.Normalize(), nil
+	return result.Normalize(), nil
 }
 
 // Set performs SET to create / update one or more ethernet interfaces.

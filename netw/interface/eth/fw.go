@@ -12,65 +12,65 @@ import (
 // FwEth is the client.Network.EthernetInterface namespace.
 type FwEth struct {
 	con util.XapiClient
-    ns *namespace.Namespace
+	ns  *namespace.Namespace
 }
 
 // Initialize is invoked by client.Initialize().
 func (c *FwEth) Initialize(con util.XapiClient) {
 	c.con = con
-    c.ns = namespace.New(singular, plural, con)
+	c.ns = namespace.New(singular, plural, con)
 }
 
 // ShowList performs SHOW to retrieve a list of ethernet interfaces.
 func (c *FwEth) ShowList() ([]string, error) {
-    result, _ := c.versioning()
-    return c.ns.Listing(util.Show, c.xpath(nil), result)
+	result, _ := c.versioning()
+	return c.ns.Listing(util.Show, c.xpath(nil), result)
 }
 
 // GetList performs GET to retrieve a list of ethernet interfaces.
 func (c *FwEth) GetList() ([]string, error) {
-    result, _ := c.versioning()
-    return c.ns.Listing(util.Get, c.xpath(nil), result)
+	result, _ := c.versioning()
+	return c.ns.Listing(util.Get, c.xpath(nil), result)
 }
 
 // Get performs GET to retrieve information for the given ethernet interface.
 func (c *FwEth) Get(name string) (Entry, error) {
-    result, _ := c.versioning()
-    if err := c.ns.Object(util.Get, c.xpath([]string{name}), name, result); err != nil {
-        return Entry{}, err
-    }
+	result, _ := c.versioning()
+	if err := c.ns.Object(util.Get, c.xpath([]string{name}), name, result); err != nil {
+		return Entry{}, err
+	}
 
-    return result.Normalize()[0], nil
+	return result.Normalize()[0], nil
 }
 
 // GetAll perofrms GET to retrieve information for all objects.
 func (c *FwEth) GetAll() ([]Entry, error) {
-    result, _ := c.versioning()
-    if err := c.ns.Objects(util.Get, c.xpath(nil), result); err != nil {
-        return nil, err
-    }
+	result, _ := c.versioning()
+	if err := c.ns.Objects(util.Get, c.xpath(nil), result); err != nil {
+		return nil, err
+	}
 
-    return result.Normalize(), nil
+	return result.Normalize(), nil
 }
 
 // Show performs SHOW to retrieve information for the given ethernet interface.
 func (c *FwEth) Show(name string) (Entry, error) {
-    result, _ := c.versioning()
-    if err := c.ns.Object(util.Show, c.xpath([]string{name}), name, result); err != nil {
-        return Entry{}, err
-    }
+	result, _ := c.versioning()
+	if err := c.ns.Object(util.Show, c.xpath([]string{name}), name, result); err != nil {
+		return Entry{}, err
+	}
 
-    return result.Normalize()[0], nil
+	return result.Normalize()[0], nil
 }
 
 // ShowAll perofrms SHOW to retrieve information for all objects.
 func (c *FwEth) ShowAll() ([]Entry, error) {
-    result, _ := c.versioning()
-    if err := c.ns.Objects(util.Show, c.xpath(nil), result); err != nil {
-        return nil, err
-    }
+	result, _ := c.versioning()
+	if err := c.ns.Objects(util.Show, c.xpath(nil), result); err != nil {
+		return nil, err
+	}
 
-    return result.Normalize(), nil
+	return result.Normalize(), nil
 }
 
 // Set performs SET to create / update one or more ethernet interfaces.

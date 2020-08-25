@@ -74,7 +74,7 @@ func (o *Entry) Copy(s Entry) {
 
 type normalizer interface {
 	Normalize() []Entry
-    Names() []string
+	Names() []string
 }
 
 type container_v1 struct {
@@ -82,21 +82,21 @@ type container_v1 struct {
 }
 
 func (o *container_v1) Normalize() []Entry {
-    ans := make([]Entry, 0, len(o.Answer))
-    for i := range o.Answer {
-        ans = append(ans, o.Answer[i].normalize())
-    }
+	ans := make([]Entry, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].normalize())
+	}
 
-    return ans
+	return ans
 }
 
 func (o *container_v1) Names() []string {
-    ans := make([]string, 0, len(o.Answer))
-    for i := range o.Answer {
-        ans = append(ans, o.Answer[i].Name)
-    }
+	ans := make([]string, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].Name)
+	}
 
-    return ans
+	return ans
 }
 
 func (o *entry_v1) normalize() Entry {
@@ -236,21 +236,21 @@ type container_v2 struct {
 }
 
 func (o *container_v2) Normalize() []Entry {
-    ans := make([]Entry, 0, len(o.Answer))
-    for i := range o.Answer {
-        ans = append(ans, o.Answer[i].normalize())
-    }
+	ans := make([]Entry, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].normalize())
+	}
 
-    return ans
+	return ans
 }
 
 func (o *container_v2) Names() []string {
-    ans := make([]string, 0, len(o.Answer))
-    for i := range o.Answer {
-        ans = append(ans, o.Answer[i].Name)
-    }
+	ans := make([]string, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].Name)
+	}
 
-    return ans
+	return ans
 }
 
 func (o *entry_v2) normalize() Entry {
@@ -346,21 +346,21 @@ type container_v3 struct {
 }
 
 func (o *container_v3) Normalize() []Entry {
-    ans := make([]Entry, 0, len(o.Answer))
-    for i := range o.Answer {
-        ans = append(ans, o.Answer[i].normalize())
-    }
+	ans := make([]Entry, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].normalize())
+	}
 
-    return ans
+	return ans
 }
 
 func (o *container_v3) Names() []string {
-    ans := make([]string, 0, len(o.Answer))
-    for i := range o.Answer {
-        ans = append(ans, o.Answer[i].Name)
-    }
+	ans := make([]string, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].Name)
+	}
 
-    return ans
+	return ans
 }
 
 func (o *entry_v3) normalize() Entry {
@@ -462,21 +462,21 @@ type container_v4 struct {
 }
 
 func (o *container_v4) Normalize() []Entry {
-    ans := make([]Entry, 0, len(o.Answer))
-    for i := range o.Answer {
-        ans = append(ans, o.Answer[i].normalize())
-    }
+	ans := make([]Entry, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].normalize())
+	}
 
-    return ans
+	return ans
 }
 
 func (o *container_v4) Names() []string {
-    ans := make([]string, 0, len(o.Answer))
-    for i := range o.Answer {
-        ans = append(ans, o.Answer[i].Name)
-    }
+	ans := make([]string, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].Name)
+	}
 
-    return ans
+	return ans
 }
 
 func (o *entry_v4) normalize() Entry {

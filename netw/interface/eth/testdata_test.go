@@ -13,7 +13,7 @@ type testCase struct {
 }
 
 func getTests() []testCase {
-    return []testCase{
+	return []testCase{
 		{version.Number{5, 0, 0, ""}, "vsys2", "vsys2", []string{"ethernet1/1"}, Entry{
 			Name:              "ethernet1/1",
 			Mode:              "layer3",
@@ -269,5 +269,5 @@ func getTests() []testCase {
 			Name: "ethernet1/7",
 			Mode: "tap",
 		}},
-    }
+	}
 }
