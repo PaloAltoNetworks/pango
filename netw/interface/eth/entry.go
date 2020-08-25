@@ -73,87 +73,107 @@ func (o *Entry) Copy(s Entry) {
 /** Structs / functions for this namespace. **/
 
 type normalizer interface {
-	Normalize() Entry
+	Normalize() []Entry
+    Names() []string
 }
 
 type container_v1 struct {
-	Answer entry_v1 `xml:"result>entry"`
+	Answer []entry_v1 `xml:"entry"`
 }
 
-func (o *container_v1) Normalize() Entry {
+func (o *container_v1) Normalize() []Entry {
+    ans := make([]Entry, 0, len(o.Answer))
+    for i := range o.Answer {
+        ans = append(ans, o.Answer[i].normalize())
+    }
+
+    return ans
+}
+
+func (o *container_v1) Names() []string {
+    ans := make([]string, 0, len(o.Answer))
+    for i := range o.Answer {
+        ans = append(ans, o.Answer[i].Name)
+    }
+
+    return ans
+}
+
+func (o *entry_v1) normalize() Entry {
 	ans := Entry{
-		Name:       o.Answer.Name,
-		LinkSpeed:  o.Answer.LinkSpeed,
-		LinkDuplex: o.Answer.LinkDuplex,
-		LinkState:  o.Answer.LinkState,
-		Comment:    o.Answer.Comment,
+		Name:       o.Name,
+		LinkSpeed:  o.LinkSpeed,
+		LinkDuplex: o.LinkDuplex,
+		LinkState:  o.LinkState,
+		Comment:    o.Comment,
 	}
 	ans.raw = make(map[string]string)
 	switch {
-	case o.Answer.ModeL3 != nil:
+	case o.ModeL3 != nil:
 		ans.Mode = "layer3"
-		ans.ManagementProfile = o.Answer.ModeL3.ManagementProfile
-		ans.Mtu = o.Answer.ModeL3.Mtu
-		ans.NetflowProfile = o.Answer.ModeL3.NetflowProfile
-		ans.AdjustTcpMss = util.AsBool(o.Answer.ModeL3.AdjustTcpMss)
-		ans.StaticIps = util.EntToStr(o.Answer.ModeL3.StaticIps)
-		if o.Answer.ModeL3.Dhcp != nil {
-			ans.EnableDhcp = util.AsBool(o.Answer.ModeL3.Dhcp.Enable)
-			ans.CreateDhcpDefaultRoute = util.AsBool(o.Answer.ModeL3.Dhcp.CreateDefaultRoute)
-			ans.DhcpDefaultRouteMetric = o.Answer.ModeL3.Dhcp.Metric
+		ans.ManagementProfile = o.ModeL3.ManagementProfile
+		ans.Mtu = o.ModeL3.Mtu
+		ans.NetflowProfile = o.ModeL3.NetflowProfile
+		ans.AdjustTcpMss = util.AsBool(o.ModeL3.AdjustTcpMss)
+		ans.StaticIps = util.EntToStr(o.ModeL3.StaticIps)
+		if o.ModeL3.Dhcp != nil {
+			ans.EnableDhcp = util.AsBool(o.ModeL3.Dhcp.Enable)
+			ans.CreateDhcpDefaultRoute = util.AsBool(o.ModeL3.Dhcp.CreateDefaultRoute)
+			ans.DhcpDefaultRouteMetric = o.ModeL3.Dhcp.Metric
 		}
 
-		if o.Answer.ModeL3.Ipv6 != nil {
-			ans.Ipv6Enabled = util.AsBool(o.Answer.ModeL3.Ipv6.Enabled)
-			ans.Ipv6InterfaceId = o.Answer.ModeL3.Ipv6.Ipv6InterfaceId
-			if o.Answer.ModeL3.Ipv6.Address != nil {
-				ans.raw["v6adr"] = util.CleanRawXml(o.Answer.ModeL3.Ipv6.Address.Text)
+		if o.ModeL3.Ipv6 != nil {
+			ans.Ipv6Enabled = util.AsBool(o.ModeL3.Ipv6.Enabled)
+			ans.Ipv6InterfaceId = o.ModeL3.Ipv6.Ipv6InterfaceId
+			if o.ModeL3.Ipv6.Address != nil {
+				ans.raw["v6adr"] = util.CleanRawXml(o.ModeL3.Ipv6.Address.Text)
 			}
-			if o.Answer.ModeL3.Ipv6.Neighbor != nil {
-				ans.raw["v6nd"] = util.CleanRawXml(o.Answer.ModeL3.Ipv6.Neighbor.Text)
+			if o.ModeL3.Ipv6.Neighbor != nil {
+				ans.raw["v6nd"] = util.CleanRawXml(o.ModeL3.Ipv6.Neighbor.Text)
 			}
 		}
 
-		if o.Answer.ModeL3.Arp != nil {
-			ans.raw["arp"] = util.CleanRawXml(o.Answer.ModeL3.Arp.Text)
+		if o.ModeL3.Arp != nil {
+			ans.raw["arp"] = util.CleanRawXml(o.ModeL3.Arp.Text)
 		}
-		if o.Answer.ModeL3.Subinterface != nil {
-			ans.raw["l3subinterface"] = util.CleanRawXml(o.Answer.ModeL3.Subinterface.Text)
+		if o.ModeL3.Subinterface != nil {
+			ans.raw["l3subinterface"] = util.CleanRawXml(o.ModeL3.Subinterface.Text)
 		}
-	case o.Answer.ModeL2 != nil:
+	case o.ModeL2 != nil:
 		ans.Mode = "layer2"
-		ans.NetflowProfile = o.Answer.ModeL2.NetflowProfile
-		if o.Answer.ModeL2.Lldp != nil {
-			ans.LldpEnabled = util.AsBool(o.Answer.ModeL2.Lldp.LldpEnabled)
-			ans.LldpProfile = o.Answer.ModeL2.Lldp.LldpProfile
+		ans.NetflowProfile = o.ModeL2.NetflowProfile
+		if o.ModeL2.Lldp != nil {
+			ans.LldpEnabled = util.AsBool(o.ModeL2.Lldp.LldpEnabled)
+			ans.LldpProfile = o.ModeL2.Lldp.LldpProfile
 		}
-		if o.Answer.ModeL2.Subinterface != nil {
-			ans.raw["l2subinterface"] = util.CleanRawXml(o.Answer.ModeL2.Subinterface.Text)
+		if o.ModeL2.Subinterface != nil {
+			ans.raw["l2subinterface"] = util.CleanRawXml(o.ModeL2.Subinterface.Text)
 		}
-	case o.Answer.ModeVwire != nil:
+	case o.ModeVwire != nil:
 		ans.Mode = "virtual-wire"
-		ans.NetflowProfile = o.Answer.ModeVwire.NetflowProfile
-		if o.Answer.ModeVwire.Lldp != nil {
-			ans.LldpEnabled = util.AsBool(o.Answer.ModeVwire.Lldp.LldpEnabled)
-			ans.LldpProfile = o.Answer.ModeVwire.Lldp.LldpProfile
+		ans.NetflowProfile = o.ModeVwire.NetflowProfile
+		if o.ModeVwire.Lldp != nil {
+			ans.LldpEnabled = util.AsBool(o.ModeVwire.Lldp.LldpEnabled)
+			ans.LldpProfile = o.ModeVwire.Lldp.LldpProfile
 		}
-		if o.Answer.ModeVwire.Subinterface != nil {
-			ans.raw["vwsub"] = util.CleanRawXml(o.Answer.ModeVwire.Subinterface.Text)
+		if o.ModeVwire.Subinterface != nil {
+			ans.raw["vwsub"] = util.CleanRawXml(o.ModeVwire.Subinterface.Text)
 		}
-	case o.Answer.TapMode != nil:
+	case o.TapMode != nil:
 		ans.Mode = "tap"
-	case o.Answer.HaMode != nil:
+	case o.HaMode != nil:
 		ans.Mode = "ha"
-	case o.Answer.DecryptMirrorMode != nil:
+	case o.DecryptMirrorMode != nil:
 		ans.Mode = "decrypt-mirror"
-	case o.Answer.AggregateGroup != "":
+	case o.AggregateGroup != "":
 		ans.Mode = "aggregate-group"
-		ans.AggregateGroup = o.Answer.AggregateGroup
+		ans.AggregateGroup = o.AggregateGroup
 	}
 
 	if len(ans.raw) == 0 {
 		ans.raw = nil
 	}
+
 	return ans
 }
 
@@ -212,297 +232,354 @@ type dhcpSettings_v1 struct {
 }
 
 type container_v2 struct {
-	Answer entry_v2 `xml:"result>entry"`
+	Answer []entry_v2 `xml:"entry"`
 }
 
-func (o *container_v2) Normalize() Entry {
+func (o *container_v2) Normalize() []Entry {
+    ans := make([]Entry, 0, len(o.Answer))
+    for i := range o.Answer {
+        ans = append(ans, o.Answer[i].normalize())
+    }
+
+    return ans
+}
+
+func (o *container_v2) Names() []string {
+    ans := make([]string, 0, len(o.Answer))
+    for i := range o.Answer {
+        ans = append(ans, o.Answer[i].Name)
+    }
+
+    return ans
+}
+
+func (o *entry_v2) normalize() Entry {
 	ans := Entry{
-		Name:       o.Answer.Name,
-		LinkSpeed:  o.Answer.LinkSpeed,
-		LinkDuplex: o.Answer.LinkDuplex,
-		LinkState:  o.Answer.LinkState,
-		Comment:    o.Answer.Comment,
+		Name:       o.Name,
+		LinkSpeed:  o.LinkSpeed,
+		LinkDuplex: o.LinkDuplex,
+		LinkState:  o.LinkState,
+		Comment:    o.Comment,
 	}
 	ans.raw = make(map[string]string)
 	switch {
-	case o.Answer.ModeL3 != nil:
+	case o.ModeL3 != nil:
 		ans.Mode = "layer3"
-		ans.ManagementProfile = o.Answer.ModeL3.ManagementProfile
-		ans.Mtu = o.Answer.ModeL3.Mtu
-		ans.NetflowProfile = o.Answer.ModeL3.NetflowProfile
-		ans.AdjustTcpMss = util.AsBool(o.Answer.ModeL3.AdjustTcpMss)
-		ans.Ipv4MssAdjust = o.Answer.ModeL3.Ipv4MssAdjust
-		ans.Ipv6MssAdjust = o.Answer.ModeL3.Ipv6MssAdjust
-		ans.StaticIps = util.EntToStr(o.Answer.ModeL3.StaticIps)
-		ans.EnableUntaggedSubinterface = util.AsBool(o.Answer.ModeL3.EnableUntaggedSubinterface)
+		ans.ManagementProfile = o.ModeL3.ManagementProfile
+		ans.Mtu = o.ModeL3.Mtu
+		ans.NetflowProfile = o.ModeL3.NetflowProfile
+		ans.AdjustTcpMss = util.AsBool(o.ModeL3.AdjustTcpMss)
+		ans.Ipv4MssAdjust = o.ModeL3.Ipv4MssAdjust
+		ans.Ipv6MssAdjust = o.ModeL3.Ipv6MssAdjust
+		ans.StaticIps = util.EntToStr(o.ModeL3.StaticIps)
+		ans.EnableUntaggedSubinterface = util.AsBool(o.ModeL3.EnableUntaggedSubinterface)
 
-		if o.Answer.ModeL3.Dhcp != nil {
-			ans.EnableDhcp = util.AsBool(o.Answer.ModeL3.Dhcp.Enable)
-			ans.CreateDhcpDefaultRoute = util.AsBool(o.Answer.ModeL3.Dhcp.CreateDefaultRoute)
-			ans.DhcpDefaultRouteMetric = o.Answer.ModeL3.Dhcp.Metric
+		if o.ModeL3.Dhcp != nil {
+			ans.EnableDhcp = util.AsBool(o.ModeL3.Dhcp.Enable)
+			ans.CreateDhcpDefaultRoute = util.AsBool(o.ModeL3.Dhcp.CreateDefaultRoute)
+			ans.DhcpDefaultRouteMetric = o.ModeL3.Dhcp.Metric
 		}
 
-		if o.Answer.ModeL3.Ipv6 != nil {
-			ans.Ipv6Enabled = util.AsBool(o.Answer.ModeL3.Ipv6.Enabled)
-			ans.Ipv6InterfaceId = o.Answer.ModeL3.Ipv6.Ipv6InterfaceId
-			if o.Answer.ModeL3.Ipv6.Address != nil {
-				ans.raw["v6adr"] = util.CleanRawXml(o.Answer.ModeL3.Ipv6.Address.Text)
+		if o.ModeL3.Ipv6 != nil {
+			ans.Ipv6Enabled = util.AsBool(o.ModeL3.Ipv6.Enabled)
+			ans.Ipv6InterfaceId = o.ModeL3.Ipv6.Ipv6InterfaceId
+			if o.ModeL3.Ipv6.Address != nil {
+				ans.raw["v6adr"] = util.CleanRawXml(o.ModeL3.Ipv6.Address.Text)
 			}
-			if o.Answer.ModeL3.Ipv6.Neighbor != nil {
-				ans.raw["v6nd"] = util.CleanRawXml(o.Answer.ModeL3.Ipv6.Neighbor.Text)
+			if o.ModeL3.Ipv6.Neighbor != nil {
+				ans.raw["v6nd"] = util.CleanRawXml(o.ModeL3.Ipv6.Neighbor.Text)
 			}
 		}
 
-		if o.Answer.ModeL3.Arp != nil {
-			ans.raw["arp"] = util.CleanRawXml(o.Answer.ModeL3.Arp.Text)
+		if o.ModeL3.Arp != nil {
+			ans.raw["arp"] = util.CleanRawXml(o.ModeL3.Arp.Text)
 		}
-		if o.Answer.ModeL3.Subinterface != nil {
-			ans.raw["l3subinterface"] = util.CleanRawXml(o.Answer.ModeL3.Subinterface.Text)
+		if o.ModeL3.Subinterface != nil {
+			ans.raw["l3subinterface"] = util.CleanRawXml(o.ModeL3.Subinterface.Text)
 		}
-		if o.Answer.ModeL3.Pppoe != nil {
-			ans.raw["pppoe"] = util.CleanRawXml(o.Answer.ModeL3.Pppoe.Text)
+		if o.ModeL3.Pppoe != nil {
+			ans.raw["pppoe"] = util.CleanRawXml(o.ModeL3.Pppoe.Text)
 		}
-		if o.Answer.ModeL3.Ndp != nil {
-			ans.raw["ndp"] = util.CleanRawXml(o.Answer.ModeL3.Ndp.Text)
+		if o.ModeL3.Ndp != nil {
+			ans.raw["ndp"] = util.CleanRawXml(o.ModeL3.Ndp.Text)
 		}
-	case o.Answer.ModeL2 != nil:
+	case o.ModeL2 != nil:
 		ans.Mode = "layer2"
-		ans.NetflowProfile = o.Answer.ModeL2.NetflowProfile
-		if o.Answer.ModeL2.Lldp != nil {
-			ans.LldpEnabled = util.AsBool(o.Answer.ModeL2.Lldp.LldpEnabled)
-			ans.LldpProfile = o.Answer.ModeL2.Lldp.LldpProfile
+		ans.NetflowProfile = o.ModeL2.NetflowProfile
+		if o.ModeL2.Lldp != nil {
+			ans.LldpEnabled = util.AsBool(o.ModeL2.Lldp.LldpEnabled)
+			ans.LldpProfile = o.ModeL2.Lldp.LldpProfile
 		}
-		if o.Answer.ModeL2.Subinterface != nil {
-			ans.raw["l2subinterface"] = util.CleanRawXml(o.Answer.ModeL2.Subinterface.Text)
+		if o.ModeL2.Subinterface != nil {
+			ans.raw["l2subinterface"] = util.CleanRawXml(o.ModeL2.Subinterface.Text)
 		}
-	case o.Answer.ModeVwire != nil:
+	case o.ModeVwire != nil:
 		ans.Mode = "virtual-wire"
-		ans.NetflowProfile = o.Answer.ModeVwire.NetflowProfile
-		if o.Answer.ModeVwire.Lldp != nil {
-			ans.LldpEnabled = util.AsBool(o.Answer.ModeVwire.Lldp.LldpEnabled)
-			ans.LldpProfile = o.Answer.ModeVwire.Lldp.LldpProfile
+		ans.NetflowProfile = o.ModeVwire.NetflowProfile
+		if o.ModeVwire.Lldp != nil {
+			ans.LldpEnabled = util.AsBool(o.ModeVwire.Lldp.LldpEnabled)
+			ans.LldpProfile = o.ModeVwire.Lldp.LldpProfile
 		}
-		if o.Answer.ModeVwire.Subinterface != nil {
-			ans.raw["vwsub"] = util.CleanRawXml(o.Answer.ModeVwire.Subinterface.Text)
+		if o.ModeVwire.Subinterface != nil {
+			ans.raw["vwsub"] = util.CleanRawXml(o.ModeVwire.Subinterface.Text)
 		}
-	case o.Answer.TapMode != nil:
+	case o.TapMode != nil:
 		ans.Mode = "tap"
-	case o.Answer.HaMode != nil:
+	case o.HaMode != nil:
 		ans.Mode = "ha"
-	case o.Answer.DecryptMirrorMode != nil:
+	case o.DecryptMirrorMode != nil:
 		ans.Mode = "decrypt-mirror"
-	case o.Answer.AggregateGroup != "":
+	case o.AggregateGroup != "":
 		ans.Mode = "aggregate-group"
-		ans.AggregateGroup = o.Answer.AggregateGroup
+		ans.AggregateGroup = o.AggregateGroup
 	}
 
 	if len(ans.raw) == 0 {
 		ans.raw = nil
 	}
+
 	return ans
 }
 
 type container_v3 struct {
-	Answer entry_v3 `xml:"result>entry"`
+	Answer []entry_v3 `xml:"entry"`
 }
 
-func (o *container_v3) Normalize() Entry {
+func (o *container_v3) Normalize() []Entry {
+    ans := make([]Entry, 0, len(o.Answer))
+    for i := range o.Answer {
+        ans = append(ans, o.Answer[i].normalize())
+    }
+
+    return ans
+}
+
+func (o *container_v3) Names() []string {
+    ans := make([]string, 0, len(o.Answer))
+    for i := range o.Answer {
+        ans = append(ans, o.Answer[i].Name)
+    }
+
+    return ans
+}
+
+func (o *entry_v3) normalize() Entry {
 	ans := Entry{
-		Name:       o.Answer.Name,
-		LinkSpeed:  o.Answer.LinkSpeed,
-		LinkDuplex: o.Answer.LinkDuplex,
-		LinkState:  o.Answer.LinkState,
-		Comment:    o.Answer.Comment,
+		Name:       o.Name,
+		LinkSpeed:  o.LinkSpeed,
+		LinkDuplex: o.LinkDuplex,
+		LinkState:  o.LinkState,
+		Comment:    o.Comment,
 	}
 	ans.raw = make(map[string]string)
 	switch {
-	case o.Answer.ModeL3 != nil:
+	case o.ModeL3 != nil:
 		ans.Mode = "layer3"
-		ans.ManagementProfile = o.Answer.ModeL3.ManagementProfile
-		ans.Mtu = o.Answer.ModeL3.Mtu
-		ans.NetflowProfile = o.Answer.ModeL3.NetflowProfile
-		ans.AdjustTcpMss = util.AsBool(o.Answer.ModeL3.AdjustTcpMss)
-		ans.Ipv4MssAdjust = o.Answer.ModeL3.Ipv4MssAdjust
-		ans.Ipv6MssAdjust = o.Answer.ModeL3.Ipv6MssAdjust
-		ans.StaticIps = util.EntToStr(o.Answer.ModeL3.StaticIps)
-		ans.EnableUntaggedSubinterface = util.AsBool(o.Answer.ModeL3.EnableUntaggedSubinterface)
-		ans.DecryptForward = util.AsBool(o.Answer.ModeL3.DecryptForward)
+		ans.ManagementProfile = o.ModeL3.ManagementProfile
+		ans.Mtu = o.ModeL3.Mtu
+		ans.NetflowProfile = o.ModeL3.NetflowProfile
+		ans.AdjustTcpMss = util.AsBool(o.ModeL3.AdjustTcpMss)
+		ans.Ipv4MssAdjust = o.ModeL3.Ipv4MssAdjust
+		ans.Ipv6MssAdjust = o.ModeL3.Ipv6MssAdjust
+		ans.StaticIps = util.EntToStr(o.ModeL3.StaticIps)
+		ans.EnableUntaggedSubinterface = util.AsBool(o.ModeL3.EnableUntaggedSubinterface)
+		ans.DecryptForward = util.AsBool(o.ModeL3.DecryptForward)
 
-		if o.Answer.ModeL3.Dhcp != nil {
-			ans.EnableDhcp = util.AsBool(o.Answer.ModeL3.Dhcp.Enable)
-			ans.CreateDhcpDefaultRoute = util.AsBool(o.Answer.ModeL3.Dhcp.CreateDefaultRoute)
-			ans.DhcpDefaultRouteMetric = o.Answer.ModeL3.Dhcp.Metric
+		if o.ModeL3.Dhcp != nil {
+			ans.EnableDhcp = util.AsBool(o.ModeL3.Dhcp.Enable)
+			ans.CreateDhcpDefaultRoute = util.AsBool(o.ModeL3.Dhcp.CreateDefaultRoute)
+			ans.DhcpDefaultRouteMetric = o.ModeL3.Dhcp.Metric
 		}
 
-		if o.Answer.ModeL3.Policing != nil {
-			ans.RxPolicingRate = o.Answer.ModeL3.Policing.RxPolicingRate
-			ans.TxPolicingRate = o.Answer.ModeL3.Policing.TxPolicingRate
+		if o.ModeL3.Policing != nil {
+			ans.RxPolicingRate = o.ModeL3.Policing.RxPolicingRate
+			ans.TxPolicingRate = o.ModeL3.Policing.TxPolicingRate
 		}
 
-		if o.Answer.ModeL3.Ipv6 != nil {
-			ans.Ipv6Enabled = util.AsBool(o.Answer.ModeL3.Ipv6.Enabled)
-			ans.Ipv6InterfaceId = o.Answer.ModeL3.Ipv6.Ipv6InterfaceId
-			if o.Answer.ModeL3.Ipv6.Address != nil {
-				ans.raw["v6adr"] = util.CleanRawXml(o.Answer.ModeL3.Ipv6.Address.Text)
+		if o.ModeL3.Ipv6 != nil {
+			ans.Ipv6Enabled = util.AsBool(o.ModeL3.Ipv6.Enabled)
+			ans.Ipv6InterfaceId = o.ModeL3.Ipv6.Ipv6InterfaceId
+			if o.ModeL3.Ipv6.Address != nil {
+				ans.raw["v6adr"] = util.CleanRawXml(o.ModeL3.Ipv6.Address.Text)
 			}
-			if o.Answer.ModeL3.Ipv6.Neighbor != nil {
-				ans.raw["v6nd"] = util.CleanRawXml(o.Answer.ModeL3.Ipv6.Neighbor.Text)
+			if o.ModeL3.Ipv6.Neighbor != nil {
+				ans.raw["v6nd"] = util.CleanRawXml(o.ModeL3.Ipv6.Neighbor.Text)
 			}
 		}
 
-		if o.Answer.ModeL3.Arp != nil {
-			ans.raw["arp"] = util.CleanRawXml(o.Answer.ModeL3.Arp.Text)
+		if o.ModeL3.Arp != nil {
+			ans.raw["arp"] = util.CleanRawXml(o.ModeL3.Arp.Text)
 		}
-		if o.Answer.ModeL3.Subinterface != nil {
-			ans.raw["l3subinterface"] = util.CleanRawXml(o.Answer.ModeL3.Subinterface.Text)
+		if o.ModeL3.Subinterface != nil {
+			ans.raw["l3subinterface"] = util.CleanRawXml(o.ModeL3.Subinterface.Text)
 		}
-		if o.Answer.ModeL3.Pppoe != nil {
-			ans.raw["pppoe"] = util.CleanRawXml(o.Answer.ModeL3.Pppoe.Text)
+		if o.ModeL3.Pppoe != nil {
+			ans.raw["pppoe"] = util.CleanRawXml(o.ModeL3.Pppoe.Text)
 		}
-		if o.Answer.ModeL3.Ndp != nil {
-			ans.raw["ndp"] = util.CleanRawXml(o.Answer.ModeL3.Ndp.Text)
+		if o.ModeL3.Ndp != nil {
+			ans.raw["ndp"] = util.CleanRawXml(o.ModeL3.Ndp.Text)
 		}
-	case o.Answer.ModeL2 != nil:
+	case o.ModeL2 != nil:
 		ans.Mode = "layer2"
-		ans.NetflowProfile = o.Answer.ModeL2.NetflowProfile
-		if o.Answer.ModeL2.Lldp != nil {
-			ans.LldpEnabled = util.AsBool(o.Answer.ModeL2.Lldp.LldpEnabled)
-			ans.LldpProfile = o.Answer.ModeL2.Lldp.LldpProfile
+		ans.NetflowProfile = o.ModeL2.NetflowProfile
+		if o.ModeL2.Lldp != nil {
+			ans.LldpEnabled = util.AsBool(o.ModeL2.Lldp.LldpEnabled)
+			ans.LldpProfile = o.ModeL2.Lldp.LldpProfile
 		}
-		if o.Answer.ModeL2.Subinterface != nil {
-			ans.raw["l2subinterface"] = util.CleanRawXml(o.Answer.ModeL2.Subinterface.Text)
+		if o.ModeL2.Subinterface != nil {
+			ans.raw["l2subinterface"] = util.CleanRawXml(o.ModeL2.Subinterface.Text)
 		}
-	case o.Answer.ModeVwire != nil:
+	case o.ModeVwire != nil:
 		ans.Mode = "virtual-wire"
-		ans.NetflowProfile = o.Answer.ModeVwire.NetflowProfile
-		if o.Answer.ModeVwire.Lldp != nil {
-			ans.LldpEnabled = util.AsBool(o.Answer.ModeVwire.Lldp.LldpEnabled)
-			ans.LldpProfile = o.Answer.ModeVwire.Lldp.LldpProfile
+		ans.NetflowProfile = o.ModeVwire.NetflowProfile
+		if o.ModeVwire.Lldp != nil {
+			ans.LldpEnabled = util.AsBool(o.ModeVwire.Lldp.LldpEnabled)
+			ans.LldpProfile = o.ModeVwire.Lldp.LldpProfile
 		}
-		if o.Answer.ModeVwire.Subinterface != nil {
-			ans.raw["vwsub"] = util.CleanRawXml(o.Answer.ModeVwire.Subinterface.Text)
+		if o.ModeVwire.Subinterface != nil {
+			ans.raw["vwsub"] = util.CleanRawXml(o.ModeVwire.Subinterface.Text)
 		}
-	case o.Answer.TapMode != nil:
+	case o.TapMode != nil:
 		ans.Mode = "tap"
-	case o.Answer.HaMode != nil:
+	case o.HaMode != nil:
 		ans.Mode = "ha"
-	case o.Answer.DecryptMirrorMode != nil:
+	case o.DecryptMirrorMode != nil:
 		ans.Mode = "decrypt-mirror"
-	case o.Answer.AggregateGroup != "":
+	case o.AggregateGroup != "":
 		ans.Mode = "aggregate-group"
-		ans.AggregateGroup = o.Answer.AggregateGroup
+		ans.AggregateGroup = o.AggregateGroup
 	}
 
 	if len(ans.raw) == 0 {
 		ans.raw = nil
 	}
+
 	return ans
 }
 
 type container_v4 struct {
-	Answer entry_v4 `xml:"result>entry"`
+	Answer []entry_v4 `xml:"entry"`
 }
 
-func (o *container_v4) Normalize() Entry {
+func (o *container_v4) Normalize() []Entry {
+    ans := make([]Entry, 0, len(o.Answer))
+    for i := range o.Answer {
+        ans = append(ans, o.Answer[i].normalize())
+    }
+
+    return ans
+}
+
+func (o *container_v4) Names() []string {
+    ans := make([]string, 0, len(o.Answer))
+    for i := range o.Answer {
+        ans = append(ans, o.Answer[i].Name)
+    }
+
+    return ans
+}
+
+func (o *entry_v4) normalize() Entry {
 	ans := Entry{
-		Name:       o.Answer.Name,
-		LinkSpeed:  o.Answer.LinkSpeed,
-		LinkDuplex: o.Answer.LinkDuplex,
-		LinkState:  o.Answer.LinkState,
-		Comment:    o.Answer.Comment,
+		Name:       o.Name,
+		LinkSpeed:  o.LinkSpeed,
+		LinkDuplex: o.LinkDuplex,
+		LinkState:  o.LinkState,
+		Comment:    o.Comment,
 	}
 	ans.raw = make(map[string]string)
 	switch {
-	case o.Answer.ModeL3 != nil:
+	case o.ModeL3 != nil:
 		ans.Mode = "layer3"
-		ans.ManagementProfile = o.Answer.ModeL3.ManagementProfile
-		ans.Mtu = o.Answer.ModeL3.Mtu
-		ans.NetflowProfile = o.Answer.ModeL3.NetflowProfile
-		ans.AdjustTcpMss = util.AsBool(o.Answer.ModeL3.AdjustTcpMss)
-		ans.Ipv4MssAdjust = o.Answer.ModeL3.Ipv4MssAdjust
-		ans.Ipv6MssAdjust = o.Answer.ModeL3.Ipv6MssAdjust
-		ans.StaticIps = util.EntToStr(o.Answer.ModeL3.StaticIps)
-		ans.EnableUntaggedSubinterface = util.AsBool(o.Answer.ModeL3.EnableUntaggedSubinterface)
-		ans.DecryptForward = util.AsBool(o.Answer.ModeL3.DecryptForward)
+		ans.ManagementProfile = o.ModeL3.ManagementProfile
+		ans.Mtu = o.ModeL3.Mtu
+		ans.NetflowProfile = o.ModeL3.NetflowProfile
+		ans.AdjustTcpMss = util.AsBool(o.ModeL3.AdjustTcpMss)
+		ans.Ipv4MssAdjust = o.ModeL3.Ipv4MssAdjust
+		ans.Ipv6MssAdjust = o.ModeL3.Ipv6MssAdjust
+		ans.StaticIps = util.EntToStr(o.ModeL3.StaticIps)
+		ans.EnableUntaggedSubinterface = util.AsBool(o.ModeL3.EnableUntaggedSubinterface)
+		ans.DecryptForward = util.AsBool(o.ModeL3.DecryptForward)
 
-		if o.Answer.ModeL3.Dhcp != nil {
-			ans.EnableDhcp = util.AsBool(o.Answer.ModeL3.Dhcp.Enable)
-			ans.CreateDhcpDefaultRoute = util.AsBool(o.Answer.ModeL3.Dhcp.CreateDefaultRoute)
-			ans.DhcpDefaultRouteMetric = o.Answer.ModeL3.Dhcp.Metric
-			if o.Answer.ModeL3.Dhcp.Hostname != nil {
-				ans.DhcpSendHostnameEnable = util.AsBool(o.Answer.ModeL3.Dhcp.Hostname.DhcpSendHostnameEnable)
-				ans.DhcpSendHostnameValue = o.Answer.ModeL3.Dhcp.Hostname.DhcpSendHostnameValue
+		if o.ModeL3.Dhcp != nil {
+			ans.EnableDhcp = util.AsBool(o.ModeL3.Dhcp.Enable)
+			ans.CreateDhcpDefaultRoute = util.AsBool(o.ModeL3.Dhcp.CreateDefaultRoute)
+			ans.DhcpDefaultRouteMetric = o.ModeL3.Dhcp.Metric
+			if o.ModeL3.Dhcp.Hostname != nil {
+				ans.DhcpSendHostnameEnable = util.AsBool(o.ModeL3.Dhcp.Hostname.DhcpSendHostnameEnable)
+				ans.DhcpSendHostnameValue = o.ModeL3.Dhcp.Hostname.DhcpSendHostnameValue
 			}
 		}
 
-		if o.Answer.ModeL3.Policing != nil {
-			ans.RxPolicingRate = o.Answer.ModeL3.Policing.RxPolicingRate
-			ans.TxPolicingRate = o.Answer.ModeL3.Policing.TxPolicingRate
+		if o.ModeL3.Policing != nil {
+			ans.RxPolicingRate = o.ModeL3.Policing.RxPolicingRate
+			ans.TxPolicingRate = o.ModeL3.Policing.TxPolicingRate
 		}
 
-		if o.Answer.ModeL3.Ipv6 != nil {
-			ans.Ipv6Enabled = util.AsBool(o.Answer.ModeL3.Ipv6.Enabled)
-			ans.Ipv6InterfaceId = o.Answer.ModeL3.Ipv6.Ipv6InterfaceId
-			if o.Answer.ModeL3.Ipv6.Address != nil {
-				ans.raw["v6adr"] = util.CleanRawXml(o.Answer.ModeL3.Ipv6.Address.Text)
+		if o.ModeL3.Ipv6 != nil {
+			ans.Ipv6Enabled = util.AsBool(o.ModeL3.Ipv6.Enabled)
+			ans.Ipv6InterfaceId = o.ModeL3.Ipv6.Ipv6InterfaceId
+			if o.ModeL3.Ipv6.Address != nil {
+				ans.raw["v6adr"] = util.CleanRawXml(o.ModeL3.Ipv6.Address.Text)
 			}
-			if o.Answer.ModeL3.Ipv6.Neighbor != nil {
-				ans.raw["v6nd"] = util.CleanRawXml(o.Answer.ModeL3.Ipv6.Neighbor.Text)
+			if o.ModeL3.Ipv6.Neighbor != nil {
+				ans.raw["v6nd"] = util.CleanRawXml(o.ModeL3.Ipv6.Neighbor.Text)
 			}
 		}
 
-		if o.Answer.ModeL3.Arp != nil {
-			ans.raw["arp"] = util.CleanRawXml(o.Answer.ModeL3.Arp.Text)
+		if o.ModeL3.Arp != nil {
+			ans.raw["arp"] = util.CleanRawXml(o.ModeL3.Arp.Text)
 		}
-		if o.Answer.ModeL3.Subinterface != nil {
-			ans.raw["l3subinterface"] = util.CleanRawXml(o.Answer.ModeL3.Subinterface.Text)
+		if o.ModeL3.Subinterface != nil {
+			ans.raw["l3subinterface"] = util.CleanRawXml(o.ModeL3.Subinterface.Text)
 		}
-		if o.Answer.ModeL3.Pppoe != nil {
-			ans.raw["pppoe"] = util.CleanRawXml(o.Answer.ModeL3.Pppoe.Text)
+		if o.ModeL3.Pppoe != nil {
+			ans.raw["pppoe"] = util.CleanRawXml(o.ModeL3.Pppoe.Text)
 		}
-		if o.Answer.ModeL3.Ndp != nil {
-			ans.raw["ndp"] = util.CleanRawXml(o.Answer.ModeL3.Ndp.Text)
+		if o.ModeL3.Ndp != nil {
+			ans.raw["ndp"] = util.CleanRawXml(o.ModeL3.Ndp.Text)
 		}
-		if o.Answer.ModeL3.Ipv6Client != nil {
-			ans.raw["v6client"] = util.CleanRawXml(o.Answer.ModeL3.Ipv6Client.Text)
+		if o.ModeL3.Ipv6Client != nil {
+			ans.raw["v6client"] = util.CleanRawXml(o.ModeL3.Ipv6Client.Text)
 		}
-		if o.Answer.ModeL3.Ddns != nil {
-			ans.raw["ddns"] = util.CleanRawXml(o.Answer.ModeL3.Ddns.Text)
+		if o.ModeL3.Ddns != nil {
+			ans.raw["ddns"] = util.CleanRawXml(o.ModeL3.Ddns.Text)
 		}
-	case o.Answer.ModeL2 != nil:
+	case o.ModeL2 != nil:
 		ans.Mode = "layer2"
-		ans.NetflowProfile = o.Answer.ModeL2.NetflowProfile
-		if o.Answer.ModeL2.Lldp != nil {
-			ans.LldpEnabled = util.AsBool(o.Answer.ModeL2.Lldp.LldpEnabled)
-			ans.LldpProfile = o.Answer.ModeL2.Lldp.LldpProfile
+		ans.NetflowProfile = o.ModeL2.NetflowProfile
+		if o.ModeL2.Lldp != nil {
+			ans.LldpEnabled = util.AsBool(o.ModeL2.Lldp.LldpEnabled)
+			ans.LldpProfile = o.ModeL2.Lldp.LldpProfile
 		}
-		if o.Answer.ModeL2.Subinterface != nil {
-			ans.raw["l2subinterface"] = util.CleanRawXml(o.Answer.ModeL2.Subinterface.Text)
+		if o.ModeL2.Subinterface != nil {
+			ans.raw["l2subinterface"] = util.CleanRawXml(o.ModeL2.Subinterface.Text)
 		}
-	case o.Answer.ModeVwire != nil:
+	case o.ModeVwire != nil:
 		ans.Mode = "virtual-wire"
-		ans.NetflowProfile = o.Answer.ModeVwire.NetflowProfile
-		if o.Answer.ModeVwire.Lldp != nil {
-			ans.LldpEnabled = util.AsBool(o.Answer.ModeVwire.Lldp.LldpEnabled)
-			ans.LldpProfile = o.Answer.ModeVwire.Lldp.LldpProfile
+		ans.NetflowProfile = o.ModeVwire.NetflowProfile
+		if o.ModeVwire.Lldp != nil {
+			ans.LldpEnabled = util.AsBool(o.ModeVwire.Lldp.LldpEnabled)
+			ans.LldpProfile = o.ModeVwire.Lldp.LldpProfile
 		}
-		if o.Answer.ModeVwire.Subinterface != nil {
-			ans.raw["vwsub"] = util.CleanRawXml(o.Answer.ModeVwire.Subinterface.Text)
+		if o.ModeVwire.Subinterface != nil {
+			ans.raw["vwsub"] = util.CleanRawXml(o.ModeVwire.Subinterface.Text)
 		}
-	case o.Answer.TapMode != nil:
+	case o.TapMode != nil:
 		ans.Mode = "tap"
-	case o.Answer.HaMode != nil:
+	case o.HaMode != nil:
 		ans.Mode = "ha"
-	case o.Answer.DecryptMirrorMode != nil:
+	case o.DecryptMirrorMode != nil:
 		ans.Mode = "decrypt-mirror"
-	case o.Answer.AggregateGroup != "":
+	case o.AggregateGroup != "":
 		ans.Mode = "aggregate-group"
-		ans.AggregateGroup = o.Answer.AggregateGroup
+		ans.AggregateGroup = o.AggregateGroup
 	}
 
 	if len(ans.raw) == 0 {
 		ans.raw = nil
 	}
+
 	return ans
 }
 

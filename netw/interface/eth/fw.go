@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 	"fmt"
 
+	"github.com/PaloAltoNetworks/pango/namespace"
 	"github.com/PaloAltoNetworks/pango/util"
 	"github.com/PaloAltoNetworks/pango/version"
 )
@@ -11,37 +12,65 @@ import (
 // FwEth is the client.Network.EthernetInterface namespace.
 type FwEth struct {
 	con util.XapiClient
+    ns *namespace.Namespace
 }
 
 // Initialize is invoked by client.Initialize().
 func (c *FwEth) Initialize(con util.XapiClient) {
 	c.con = con
+    c.ns = namespace.New(singular, plural, con)
 }
 
 // ShowList performs SHOW to retrieve a list of ethernet interfaces.
 func (c *FwEth) ShowList() ([]string, error) {
-	c.con.LogQuery("(show) list of ethernet interfaces")
-	path := c.xpath(nil)
-	return c.con.EntryListUsing(c.con.Show, path[:len(path)-1])
+    result, _ := c.versioning()
+    return c.ns.Listing(util.Show, c.xpath(nil), result)
 }
 
 // GetList performs GET to retrieve a list of ethernet interfaces.
 func (c *FwEth) GetList() ([]string, error) {
-	c.con.LogQuery("(get) list of ethernet interfaces")
-	path := c.xpath(nil)
-	return c.con.EntryListUsing(c.con.Get, path[:len(path)-1])
+    result, _ := c.versioning()
+    return c.ns.Listing(util.Get, c.xpath(nil), result)
 }
 
 // Get performs GET to retrieve information for the given ethernet interface.
 func (c *FwEth) Get(name string) (Entry, error) {
-	c.con.LogQuery("(get) ethernet interface %q", name)
-	return c.details(c.con.Get, name)
+    result, _ := c.versioning()
+    if err := c.ns.Object(util.Get, c.xpath([]string{name}), name, result); err != nil {
+        return Entry{}, err
+    }
+
+    return result.Normalize()[0], nil
+}
+
+// GetAll perofrms GET to retrieve information for all objects.
+func (c *FwEth) GetAll() ([]Entry, error) {
+    result, _ := c.versioning()
+    if err := c.ns.Objects(util.Get, c.xpath(nil), result); err != nil {
+        return nil, err
+    }
+
+    return result.Normalize(), nil
 }
 
 // Show performs SHOW to retrieve information for the given ethernet interface.
 func (c *FwEth) Show(name string) (Entry, error) {
-	c.con.LogQuery("(show) ethernet interface %q", name)
-	return c.details(c.con.Show, name)
+    result, _ := c.versioning()
+    if err := c.ns.Object(util.Show, c.xpath([]string{name}), name, result); err != nil {
+        return Entry{}, err
+    }
+
+    return result.Normalize()[0], nil
+}
+
+// ShowAll perofrms SHOW to retrieve information for all objects.
+func (c *FwEth) ShowAll() ([]Entry, error) {
+    result, _ := c.versioning()
+    if err := c.ns.Objects(util.Show, c.xpath(nil), result); err != nil {
+        return nil, err
+    }
+
+    return result.Normalize(), nil
 }
 
 // Set performs SET to create / update one or more ethernet interfaces.
@@ -70,7 +99,7 @@ func (c *FwEth) Set(vsys string, e ...Entry) error {
 			n2 = append(n2, e[i].Name)
 		}
 	}
-	c.con.LogAction("(set) ethernet interfaces: %v", n1)
+	c.con.LogAction("(set) %s: %v", plural, n1)
 
 	// Set xpath.
 	path := c.xpath(n1)
@@ -87,7 +116,7 @@ func (c *FwEth) Set(vsys string, e ...Entry) error {
 	}
 
 	// Remove the interfaces from any vsys they're currently in.
-	if err = c.con.VsysUnimport(util.InterfaceImport, "", "", n2); err != nil {
+	if err = c.con.VsysUnimport(util.InterfaceImport, "", "", n1); err != nil {
 		return err
 	}
 
@@ -106,7 +135,7 @@ func (c *FwEth) Edit(vsys string, e Entry) error {
 
 	_, fn := c.versioning()
 
-	c.con.LogAction("(edit) ethernet interface %q", e.Name)
+	c.con.LogAction("(edit) %s: %q", singular, e.Name)
 
 	// Set xpath.
 	path := c.xpath([]string{e.Name})
@@ -117,14 +146,14 @@ func (c *FwEth) Edit(vsys string, e Entry) error {
 		return err
 	}
 
-	// Check if we should skip the import step.
-	if e.Mode == "ha" || e.Mode == "aggregate-group" {
-		return nil
-	}
-
 	// Remove the interface from any vsys it's currently in.
 	if err = c.con.VsysUnimport(util.InterfaceImport, "", "", []string{e.Name}); err != nil {
 		return err
+	}
+
+	// Check if we should skip the import step.
+	if e.Mode == "ha" || e.Mode == "aggregate-group" {
+		return nil
 	}
 
 	// Import the interface.
@@ -152,7 +181,7 @@ func (c *FwEth) Delete(e ...interface{}) error {
 			return fmt.Errorf("Unknown type sent to delete: %s", v)
 		}
 	}
-	c.con.LogAction("(delete) ethernet interface(s): %v", names)
+	c.con.LogAction("(delete) %s: %v", plural, names)
 
 	// Unimport interfaces.
 	if err = c.con.VsysUnimport(util.InterfaceImport, "", "", names); err != nil {
@@ -179,17 +208,6 @@ func (c *FwEth) versioning() (normalizer, func(Entry) interface{}) {
 	} else {
 		return &container_v1{}, specify_v1
 	}
-}
-
-func (c *FwEth) details(fn util.Retriever, name string) (Entry, error) {
-	path := c.xpath([]string{name})
-	obj, _ := c.versioning()
-	if _, err := fn(path, nil, obj); err != nil {
-		return Entry{}, err
-	}
-	ans := obj.Normalize()
-
-	return ans, nil
 }
 
 func (c *FwEth) xpath(vals []string) []string {
