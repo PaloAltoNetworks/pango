@@ -1194,7 +1194,7 @@ func (c *Client) initSystemInfo() error {
 
 	_, err = c.Op(req, "", nil, &ans)
 	if err != nil {
-		return fmt.Errorf("Error getting system info: %s", err)
+		return err
 	}
 
 	c.SystemInfo = make(map[string]string, len(ans.System.Tag))
