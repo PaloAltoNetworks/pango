@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 	"fmt"
 
+	"github.com/PaloAltoNetworks/pango/namespace"
 	"github.com/PaloAltoNetworks/pango/util"
 	"github.com/PaloAltoNetworks/pango/version"
 )
@@ -11,37 +12,65 @@ import (
 // PanoLoopback is the client.Network.LoopbackInterface namespace.
 type PanoLoopback struct {
 	con util.XapiClient
+	ns  *namespace.Namespace
 }
 
 // Initialize is invoked by client.Initialize().
 func (c *PanoLoopback) Initialize(con util.XapiClient) {
 	c.con = con
+	c.ns = namespace.New(singular, plural, con)
 }
 
 // ShowList performs SHOW to retrieve a list of loopback interfaces.
 func (c *PanoLoopback) ShowList(tmpl, ts string) ([]string, error) {
-	c.con.LogQuery("(show) list of loopback interfaces")
-	path := c.xpath(tmpl, ts, nil)
-	return c.con.EntryListUsing(c.con.Show, path[:len(path)-1])
+	result, _ := c.versioning()
+	return c.ns.Listing(util.Show, c.xpath(tmpl, ts, nil), result)
 }
 
 // GetList performs GET to retrieve a list of loopback interfaces.
 func (c *PanoLoopback) GetList(tmpl, ts string) ([]string, error) {
-	c.con.LogQuery("(get) list of loopback interfaces")
-	path := c.xpath(tmpl, ts, nil)
-	return c.con.EntryListUsing(c.con.Get, path[:len(path)-1])
+	result, _ := c.versioning()
+	return c.ns.Listing(util.Get, c.xpath(tmpl, ts, nil), result)
 }
 
 // Get performs GET to retrieve information for the given loopback interface.
 func (c *PanoLoopback) Get(tmpl, ts, name string) (Entry, error) {
-	c.con.LogQuery("(get) loopback interface %q", name)
-	return c.details(c.con.Get, tmpl, ts, name)
+	result, _ := c.versioning()
+	if err := c.ns.Object(util.Get, c.xpath(tmpl, ts, []string{name}), name, result); err != nil {
+		return Entry{}, err
+	}
+
+	return result.Normalize()[0], nil
+}
+
+// GetAll performs GET to retrieve information for all objects.
+func (c *PanoLoopback) GetAll(tmpl, ts string) ([]Entry, error) {
+	result, _ := c.versioning()
+	if err := c.ns.Objects(util.Get, c.xpath(tmpl, ts, nil), result); err != nil {
+		return nil, err
+	}
+
+	return result.Normalize(), nil
 }
 
 // Show performs SHOW to retrieve information for the given loopback interface.
 func (c *PanoLoopback) Show(tmpl, ts, name string) (Entry, error) {
-	c.con.LogQuery("(show) loopback interface %q", name)
-	return c.details(c.con.Show, tmpl, ts, name)
+	result, _ := c.versioning()
+	if err := c.ns.Object(util.Show, c.xpath(tmpl, ts, []string{name}), name, result); err != nil {
+		return Entry{}, err
+	}
+
+	return result.Normalize()[0], nil
+}
+
+// ShowAll performs SHOW to retrieve information for all objects.
+func (c *PanoLoopback) ShowAll(tmpl, ts string) ([]Entry, error) {
+	result, _ := c.versioning()
+	if err := c.ns.Objects(util.Show, c.xpath(tmpl, ts, nil), result); err != nil {
+		return nil, err
+	}
+
+	return result.Normalize(), nil
 }
 
 // Set performs SET to create / update one or more loopback interfaces.
@@ -140,13 +169,13 @@ func (c *PanoLoopback) Delete(tmpl, ts string, e ...interface{}) error {
 		return fmt.Errorf("tmpl or ts must be specified")
 	}
 
-	names := make([]string, len(e))
+	names := make([]string, 0, len(e))
 	for i := range e {
 		switch v := e[i].(type) {
 		case string:
-			names[i] = v
+			names = append(names, v)
 		case Entry:
-			names[i] = v.Name
+			names = append(names, v.Name)
 		default:
 			return fmt.Errorf("Unknown type sent to delete: %s", v)
 		}
@@ -174,17 +203,6 @@ func (c *PanoLoopback) versioning() (normalizer, func(Entry) interface{}) {
 	} else {
 		return &container_v1{}, specify_v1
 	}
-}
-
-func (c *PanoLoopback) details(fn util.Retriever, tmpl, ts, name string) (Entry, error) {
-	path := c.xpath(tmpl, ts, []string{name})
-	obj, _ := c.versioning()
-	if _, err := fn(path, nil, obj); err != nil {
-		return Entry{}, err
-	}
-	ans := obj.Normalize()
-
-	return ans, nil
 }
 
 func (c *PanoLoopback) xpath(tmpl, ts string, vals []string) []string {
