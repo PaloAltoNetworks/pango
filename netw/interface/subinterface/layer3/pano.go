@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 	"fmt"
 
+	"github.com/PaloAltoNetworks/pango/namespace"
 	"github.com/PaloAltoNetworks/pango/util"
 	"github.com/PaloAltoNetworks/pango/version"
 )
@@ -11,37 +12,65 @@ import (
 // PanoLayer3 is the client.Network.Layer3Subinterface namespace.
 type PanoLayer3 struct {
 	con util.XapiClient
+	ns  *namespace.Namespace
 }
 
 // Initialize is invoked by client.Initialize().
 func (c *PanoLayer3) Initialize(con util.XapiClient) {
 	c.con = con
+	c.ns = namespace.New(singular, plural, con)
 }
 
 // ShowList performs SHOW to retrieve a list of values.
 func (c *PanoLayer3) ShowList(tmpl, ts, iType, eth string) ([]string, error) {
-	c.con.LogQuery("(show) list of %s", plural)
-	path := c.xpath(tmpl, ts, iType, eth, nil)
-	return c.con.EntryListUsing(c.con.Show, path[:len(path)-1])
+	result, _ := c.versioning()
+	return c.ns.Listing(util.Show, c.xpath(tmpl, ts, iType, eth, nil), result)
 }
 
 // GetList performs GET to retrieve a list of values.
 func (c *PanoLayer3) GetList(tmpl, ts, iType, eth string) ([]string, error) {
-	c.con.LogQuery("(get) list of %s", plural)
-	path := c.xpath(tmpl, ts, iType, eth, nil)
-	return c.con.EntryListUsing(c.con.Get, path[:len(path)-1])
+	result, _ := c.versioning()
+	return c.ns.Listing(util.Get, c.xpath(tmpl, ts, iType, eth, nil), result)
 }
 
 // Get performs GET to retrieve information for the given uid.
 func (c *PanoLayer3) Get(tmpl, ts, iType, eth, name string) (Entry, error) {
-	c.con.LogQuery("(get) %s %q", singular, name)
-	return c.details(c.con.Get, tmpl, ts, iType, eth, name)
+	result, _ := c.versioning()
+	if err := c.ns.Object(util.Get, c.xpath(tmpl, ts, iType, eth, []string{name}), name, result); err != nil {
+		return Entry{}, err
+	}
+
+	return result.Normalize()[0], nil
+}
+
+// GetAll performs GET to retrieve information on all objects.
+func (c *PanoLayer3) GetAll(tmpl, ts, iType, eth string) ([]Entry, error) {
+	result, _ := c.versioning()
+	if err := c.ns.Objects(util.Get, c.xpath(tmpl, ts, iType, eth, nil), result); err != nil {
+		return nil, err
+	}
+
+	return result.Normalize(), nil
 }
 
 // Show performs SHOW to retrieve information for the given uid.
 func (c *PanoLayer3) Show(tmpl, ts, iType, eth, name string) (Entry, error) {
-	c.con.LogQuery("(show) %s %q", singular, name)
-	return c.details(c.con.Show, tmpl, ts, iType, eth, name)
+	result, _ := c.versioning()
+	if err := c.ns.Object(util.Show, c.xpath(tmpl, ts, iType, eth, []string{name}), name, result); err != nil {
+		return Entry{}, err
+	}
+
+	return result.Normalize()[0], nil
+}
+
+// ShowAll performs SHOW to retrieve information on all objects.
+func (c *PanoLayer3) ShowAll(tmpl, ts, iType, eth string) ([]Entry, error) {
+	result, _ := c.versioning()
+	if err := c.ns.Objects(util.Show, c.xpath(tmpl, ts, iType, eth, nil), result); err != nil {
+		return nil, err
+	}
+
+	return result.Normalize(), nil
 }
 
 // Set performs SET to create / update one or more objects.
@@ -177,17 +206,6 @@ func (c *PanoLayer3) versioning() (normalizer, func(Entry) interface{}) {
 	} else {
 		return &container_v1{}, specify_v1
 	}
-}
-
-func (c *PanoLayer3) details(fn util.Retriever, tmpl, ts, iType, eth, name string) (Entry, error) {
-	path := c.xpath(tmpl, ts, iType, eth, []string{name})
-	obj, _ := c.versioning()
-	if _, err := fn(path, nil, obj); err != nil {
-		return Entry{}, err
-	}
-	ans := obj.Normalize()
-
-	return ans, nil
 }
 
 func (c *PanoLayer3) xpath(tmpl, ts, iType, eth string, vals []string) []string {

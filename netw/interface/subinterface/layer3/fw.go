@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 	"fmt"
 
+	"github.com/PaloAltoNetworks/pango/namespace"
 	"github.com/PaloAltoNetworks/pango/util"
 	"github.com/PaloAltoNetworks/pango/version"
 )
@@ -11,37 +12,65 @@ import (
 // FwLayer3 is the client.Network.Layer3Subinterface namespace.
 type FwLayer3 struct {
 	con util.XapiClient
+	ns  *namespace.Namespace
 }
 
 // Initialize is invoked by client.Initialize().
 func (c *FwLayer3) Initialize(con util.XapiClient) {
 	c.con = con
+	c.ns = namespace.New(singular, plural, con)
 }
 
 // ShowList performs SHOW to retrieve a list of values.
 func (c *FwLayer3) ShowList(iType, eth string) ([]string, error) {
-	c.con.LogQuery("(show) list of %s", plural)
-	path := c.xpath(iType, eth, nil)
-	return c.con.EntryListUsing(c.con.Show, path[:len(path)-1])
+	result, _ := c.versioning()
+	return c.ns.Listing(util.Show, c.xpath(iType, eth, nil), result)
 }
 
 // GetList performs GET to retrieve a list of values.
 func (c *FwLayer3) GetList(iType, eth string) ([]string, error) {
-	c.con.LogQuery("(get) list of %s", plural)
-	path := c.xpath(iType, eth, nil)
-	return c.con.EntryListUsing(c.con.Get, path[:len(path)-1])
+	result, _ := c.versioning()
+	return c.ns.Listing(util.Get, c.xpath(iType, eth, nil), result)
 }
 
 // Get performs GET to retrieve information for the given uid.
 func (c *FwLayer3) Get(iType, eth, name string) (Entry, error) {
-	c.con.LogQuery("(get) %s %q", singular, name)
-	return c.details(c.con.Get, iType, eth, name)
+	result, _ := c.versioning()
+	if err := c.ns.Object(util.Get, c.xpath(iType, eth, []string{name}), name, result); err != nil {
+		return Entry{}, err
+	}
+
+	return result.Normalize()[0], nil
+}
+
+// GetAll performs GET to retrieve information on all objects.
+func (c *FwLayer3) GetAll(iType, eth string) ([]Entry, error) {
+	result, _ := c.versioning()
+	if err := c.ns.Objects(util.Get, c.xpath(iType, eth, nil), result); err != nil {
+		return nil, err
+	}
+
+	return result.Normalize(), nil
 }
 
 // Show performs SHOW to retrieve information for the given uid.
 func (c *FwLayer3) Show(iType, eth, name string) (Entry, error) {
-	c.con.LogQuery("(show) %s %q", singular, name)
-	return c.details(c.con.Show, iType, eth, name)
+	result, _ := c.versioning()
+	if err := c.ns.Object(util.Show, c.xpath(iType, eth, []string{name}), name, result); err != nil {
+		return Entry{}, err
+	}
+
+	return result.Normalize()[0], nil
+}
+
+// ShowAll performs SHOW to retrieve information on all objects.
+func (c *FwLayer3) ShowAll(iType, eth string) ([]Entry, error) {
+	result, _ := c.versioning()
+	if err := c.ns.Objects(util.Show, c.xpath(iType, eth, nil), result); err != nil {
+		return nil, err
+	}
+
+	return result.Normalize(), nil
 }
 
 // Set performs SET to create / update one or more objects.
@@ -171,17 +200,6 @@ func (c *FwLayer3) versioning() (normalizer, func(Entry) interface{}) {
 	} else {
 		return &container_v1{}, specify_v1
 	}
-}
-
-func (c *FwLayer3) details(fn util.Retriever, iType, eth, name string) (Entry, error) {
-	path := c.xpath(iType, eth, []string{name})
-	obj, _ := c.versioning()
-	if _, err := fn(path, nil, obj); err != nil {
-		return Entry{}, err
-	}
-	ans := obj.Normalize()
-
-	return ans, nil
 }
 
 func (c *FwLayer3) xpath(iType, eth string, vals []string) []string {
