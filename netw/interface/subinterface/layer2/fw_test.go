@@ -5,24 +5,10 @@ import (
 	"testing"
 
 	"github.com/PaloAltoNetworks/pango/testdata"
-	"github.com/PaloAltoNetworks/pango/version"
 )
 
 func TestFwNormalization(t *testing.T) {
-	testCases := []struct {
-		version    version.Number
-		vsys       string
-		importVsys string
-		imports    []string
-		conf       Entry
-	}{
-		{version.Number{7, 1, 0, ""}, "vsys1", "vsys1", []string{"ethernet1/1.2"}, Entry{
-			Name:           "ethernet1/1.2",
-			Tag:            2,
-			NetflowProfile: "netflow profile",
-			Comment:        "v1 basic",
-		}},
-	}
+	testCases := getTests()
 
 	mc := &testdata.MockClient{}
 	ns := &FwLayer2{}

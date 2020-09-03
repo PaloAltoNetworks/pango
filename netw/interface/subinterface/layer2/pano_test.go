@@ -5,24 +5,10 @@ import (
 	"testing"
 
 	"github.com/PaloAltoNetworks/pango/testdata"
-	"github.com/PaloAltoNetworks/pango/version"
 )
 
 func TestPanoNormalization(t *testing.T) {
-	testCases := []struct {
-		version    version.Number
-		vsys       string
-		importVsys string
-		imports    []string
-		conf       Entry
-	}{
-		{version.Number{7, 1, 0, ""}, "vsys1", "vsys1", []string{"ethernet1/1.2"}, Entry{
-			Name:           "ethernet1/1.2",
-			Tag:            2,
-			NetflowProfile: "netflow profile",
-			Comment:        "v1 basic",
-		}},
-	}
+	testCases := getTests()
 
 	mc := &testdata.MockClient{}
 	ns := &PanoLayer2{}
@@ -34,12 +20,12 @@ func TestPanoNormalization(t *testing.T) {
 			mc.Version = tc.version
 			mc.Reset()
 			mc.AddResp("")
-			err = ns.Set("my template", "", AggregateInterface, "ethernet1/1", Layer2, tc.vsys, tc.conf)
+			err = ns.Set(tc.tmpl, "", AggregateInterface, "ethernet1/1", Layer2, tc.vsys, tc.conf)
 			if err != nil {
 				t.Errorf("Error in set: %s", err)
 			} else {
 				mc.AddResp(mc.Elm)
-				r, err := ns.Get("my template", "", AggregateInterface, "ethernet1/1", Layer2, tc.conf.Name)
+				r, err := ns.Get(tc.tmpl, "", AggregateInterface, "ethernet1/1", Layer2, tc.conf.Name)
 				if err != nil {
 					t.Errorf("Error in get: %s", err)
 				}
