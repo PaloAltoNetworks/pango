@@ -32,26 +32,45 @@ func (o *Entry) Copy(s Entry) {
 /** Structs / functions for this namespace. **/
 
 type normalizer interface {
-	Normalize() Entry
+	Normalize() []Entry
+	Names() []string
 }
 
 type container_v1 struct {
-	Answer entry_v1 `xml:"result>entry"`
+	Answer []entry_v1 `xml:"entry"`
 }
 
-func (o *container_v1) Normalize() Entry {
+func (o *container_v1) Normalize() []Entry {
+	ans := make([]Entry, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].normalize())
+	}
+
+	return ans
+}
+
+func (o *container_v1) Names() []string {
+	ans := make([]string, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].Name)
+	}
+
+	return ans
+}
+
+func (o *entry_v1) normalize() Entry {
 	ans := Entry{
-		Name:              o.Answer.Name,
-		Comment:           o.Answer.Comment,
-		NetflowProfile:    o.Answer.NetflowProfile,
-		StaticIps:         util.EntToStr(o.Answer.StaticIps),
-		Mtu:               int(o.Answer.Mtu),
-		ManagementProfile: o.Answer.ManagementProfile,
+		Name:              o.Name,
+		Comment:           o.Comment,
+		NetflowProfile:    o.NetflowProfile,
+		StaticIps:         util.EntToStr(o.StaticIps),
+		Mtu:               int(o.Mtu),
+		ManagementProfile: o.ManagementProfile,
 	}
 
 	ans.raw = make(map[string]string)
-	if o.Answer.Ipv6 != nil {
-		ans.raw["ipv6"] = util.CleanRawXml(o.Answer.Ipv6.Text)
+	if o.Ipv6 != nil {
+		ans.raw["ipv6"] = util.CleanRawXml(o.Ipv6.Text)
 	}
 	if len(ans.raw) == 0 {
 		ans.raw = nil
