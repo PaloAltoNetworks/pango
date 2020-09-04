@@ -8,29 +8,7 @@ import (
 )
 
 func TestFwNormalization(t *testing.T) {
-	testCases := []struct {
-		desc       string
-		vsys       string
-		doDefaults bool
-		conf       Entry
-	}{
-		{"basic rule", "", true, Entry{
-			Name: "rule1",
-		}},
-		{"prerulebase rule", "vsys2", true, Entry{
-			Name:     "rule2",
-			LogEnd:   true,
-			Disabled: true,
-		}},
-		{"postrulebase rule with target", "vsys3", true, Entry{
-			Name: "rule3",
-			Targets: map[string][]string{
-				"fw1": nil,
-				"fw2": {"vsys2", "vsys3"},
-			},
-			NegateTarget: true,
-		}},
-	}
+	testCases := getTests()
 
 	mc := &testdata.MockClient{}
 	ns := &FwSecurity{}
@@ -38,6 +16,7 @@ func TestFwNormalization(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.desc, func(t *testing.T) {
+			mc.Version = tc.version
 			mc.Reset()
 			mc.AddResp("")
 			if tc.doDefaults {
