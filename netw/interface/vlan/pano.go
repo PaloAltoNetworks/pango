@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 	"fmt"
 
+	"github.com/PaloAltoNetworks/pango/namespace"
 	"github.com/PaloAltoNetworks/pango/util"
 	"github.com/PaloAltoNetworks/pango/version"
 )
@@ -11,37 +12,65 @@ import (
 // PanoVlan is the client.Network.VlanInterface namespace.
 type PanoVlan struct {
 	con util.XapiClient
+	ns  *namespace.Namespace
 }
 
 // Initialize is invoked by client.Initialize().
 func (c *PanoVlan) Initialize(con util.XapiClient) {
 	c.con = con
+	c.ns = namespace.New(singular, plural, con)
 }
 
 // ShowList performs SHOW to retrieve a list of VLAN interfaces.
 func (c *PanoVlan) ShowList(tmpl, ts string) ([]string, error) {
-	c.con.LogQuery("(show) list of VLAN interfaces")
-	path := c.xpath(tmpl, ts, nil)
-	return c.con.EntryListUsing(c.con.Show, path[:len(path)-1])
+	result, _ := c.versioning()
+	return c.ns.Listing(util.Show, c.xpath(tmpl, ts, nil), result)
 }
 
 // GetList performs GET to retrieve a list of VLAN interfaces.
 func (c *PanoVlan) GetList(tmpl, ts string) ([]string, error) {
-	c.con.LogQuery("(get) list of VLAN interfaces")
-	path := c.xpath(tmpl, ts, nil)
-	return c.con.EntryListUsing(c.con.Get, path[:len(path)-1])
+	result, _ := c.versioning()
+	return c.ns.Listing(util.Get, c.xpath(tmpl, ts, nil), result)
 }
 
 // Get performs GET to retrieve information for the given VLAN interface.
 func (c *PanoVlan) Get(tmpl, ts, name string) (Entry, error) {
-	c.con.LogQuery("(get) VLAN interface %q", name)
-	return c.details(c.con.Get, tmpl, ts, name)
+	result, _ := c.versioning()
+	if err := c.ns.Object(util.Get, c.xpath(tmpl, ts, []string{name}), name, result); err != nil {
+		return Entry{}, err
+	}
+
+	return result.Normalize()[0], nil
+}
+
+// GetAll performs GET to retrieve information for all objects.
+func (c *PanoVlan) GetAll(tmpl, ts string) ([]Entry, error) {
+	result, _ := c.versioning()
+	if err := c.ns.Objects(util.Get, c.xpath(tmpl, ts, nil), result); err != nil {
+		return nil, err
+	}
+
+	return result.Normalize(), nil
 }
 
 // Show performs SHOW to retrieve information for the given VLAN interface.
 func (c *PanoVlan) Show(tmpl, ts, name string) (Entry, error) {
-	c.con.LogQuery("(show) VLAN interface %q", name)
-	return c.details(c.con.Show, tmpl, ts, name)
+	result, _ := c.versioning()
+	if err := c.ns.Object(util.Show, c.xpath(tmpl, ts, []string{name}), name, result); err != nil {
+		return Entry{}, err
+	}
+
+	return result.Normalize()[0], nil
+}
+
+// ShowAll performs SHOW to retrieve information for all objects.
+func (c *PanoVlan) ShowAll(tmpl, ts string) ([]Entry, error) {
+	result, _ := c.versioning()
+	if err := c.ns.Objects(util.Show, c.xpath(tmpl, ts, nil), result); err != nil {
+		return nil, err
+	}
+
+	return result.Normalize(), nil
 }
 
 // Set performs SET to create / update one or more VLAN interfaces.
@@ -68,7 +97,7 @@ func (c *PanoVlan) Set(tmpl, ts, vsys string, e ...Entry) error {
 		d.Data = append(d.Data, fn(e[i]))
 		names[i] = e[i].Name
 	}
-	c.con.LogAction("(set) VLAN interfaces: %v", names)
+	c.con.LogAction("(set) %s: %v", plural, names)
 
 	// Set xpath.
 	path := c.xpath(tmpl, ts, names)
@@ -108,7 +137,7 @@ func (c *PanoVlan) Edit(tmpl, ts, vsys string, e Entry) error {
 
 	_, fn := c.versioning()
 
-	c.con.LogAction("(edit) VLAN interface %q", e.Name)
+	c.con.LogAction("(edit) %s: %q", singular, e.Name)
 
 	// Set xpath.
 	path := c.xpath(tmpl, ts, []string{e.Name})
@@ -151,7 +180,7 @@ func (c *PanoVlan) Delete(tmpl, ts string, e ...interface{}) error {
 			return fmt.Errorf("Unknown type sent to delete: %s", v)
 		}
 	}
-	c.con.LogAction("(delete) VLAN interfaces: %v", names)
+	c.con.LogAction("(delete) %s: %v", plural, names)
 
 	// Unimport interfaces.
 	if err = c.con.VsysUnimport(util.InterfaceImport, tmpl, ts, names); err != nil {
@@ -174,17 +203,6 @@ func (c *PanoVlan) versioning() (normalizer, func(Entry) interface{}) {
 	} else {
 		return &container_v1{}, specify_v1
 	}
-}
-
-func (c *PanoVlan) details(fn util.Retriever, tmpl, ts, name string) (Entry, error) {
-	path := c.xpath(tmpl, ts, []string{name})
-	obj, _ := c.versioning()
-	if _, err := fn(path, nil, obj); err != nil {
-		return Entry{}, err
-	}
-	ans := obj.Normalize()
-
-	return ans, nil
 }
 
 func (c *PanoVlan) xpath(tmpl, ts string, vals []string) []string {

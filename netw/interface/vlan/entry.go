@@ -44,38 +44,57 @@ func (o *Entry) Copy(s Entry) {
 /** Structs / functions for this namespace. **/
 
 type normalizer interface {
-	Normalize() Entry
+	Normalize() []Entry
+	Names() []string
 }
 
 type container_v1 struct {
-	Answer entry_v1 `xml:"result>entry"`
+	Answer []entry_v1 `xml:"entry"`
 }
 
-func (o *container_v1) Normalize() Entry {
-	ans := Entry{
-		Name:              o.Answer.Name,
-		Comment:           o.Answer.Comment,
-		NetflowProfile:    o.Answer.NetflowProfile,
-		StaticIps:         util.EntToStr(o.Answer.StaticIps),
-		Mtu:               int(o.Answer.Mtu),
-		ManagementProfile: o.Answer.ManagementProfile,
-		AdjustTcpMss:      util.AsBool(o.Answer.AdjustTcpMss),
+func (o *container_v1) Normalize() []Entry {
+	ans := make([]Entry, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].normalize())
 	}
-	if o.Answer.Dhcp != nil {
-		ans.EnableDhcp = util.AsBool(o.Answer.Dhcp.Enable)
-		ans.CreateDhcpDefaultRoute = util.AsBool(o.Answer.Dhcp.CreateDefaultRoute)
-		ans.DhcpDefaultRouteMetric = int(o.Answer.Dhcp.Metric)
+
+	return ans
+}
+
+func (o *container_v1) Names() []string {
+	ans := make([]string, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].Name)
+	}
+
+	return ans
+}
+
+func (o *entry_v1) normalize() Entry {
+	ans := Entry{
+		Name:              o.Name,
+		Comment:           o.Comment,
+		NetflowProfile:    o.NetflowProfile,
+		StaticIps:         util.EntToStr(o.StaticIps),
+		Mtu:               int(o.Mtu),
+		ManagementProfile: o.ManagementProfile,
+		AdjustTcpMss:      util.AsBool(o.AdjustTcpMss),
+	}
+	if o.Dhcp != nil {
+		ans.EnableDhcp = util.AsBool(o.Dhcp.Enable)
+		ans.CreateDhcpDefaultRoute = util.AsBool(o.Dhcp.CreateDefaultRoute)
+		ans.DhcpDefaultRouteMetric = int(o.Dhcp.Metric)
 	}
 
 	ans.raw = make(map[string]string)
-	if o.Answer.Ipv6 != nil {
-		ans.raw["ipv6"] = util.CleanRawXml(o.Answer.Ipv6.Text)
+	if o.Ipv6 != nil {
+		ans.raw["ipv6"] = util.CleanRawXml(o.Ipv6.Text)
 	}
-	if o.Answer.Arp != nil {
-		ans.raw["arp"] = util.CleanRawXml(o.Answer.Arp.Text)
+	if o.Arp != nil {
+		ans.raw["arp"] = util.CleanRawXml(o.Arp.Text)
 	}
-	if o.Answer.NdpProxy != nil {
-		ans.raw["ndp"] = util.CleanRawXml(o.Answer.NdpProxy.Text)
+	if o.NdpProxy != nil {
+		ans.raw["ndp"] = util.CleanRawXml(o.NdpProxy.Text)
 	}
 	if len(ans.raw) == 0 {
 		ans.raw = nil
@@ -107,36 +126,54 @@ type dhcpSettings struct {
 }
 
 type container_v2 struct {
-	Answer entry_v2 `xml:"result>entry"`
+	Answer []entry_v2 `xml:"entry"`
 }
 
-func (o *container_v2) Normalize() Entry {
-	ans := Entry{
-		Name:              o.Answer.Name,
-		Comment:           o.Answer.Comment,
-		NetflowProfile:    o.Answer.NetflowProfile,
-		StaticIps:         util.EntToStr(o.Answer.StaticIps),
-		Mtu:               int(o.Answer.Mtu),
-		ManagementProfile: o.Answer.ManagementProfile,
-		AdjustTcpMss:      util.AsBool(o.Answer.AdjustTcpMss),
-		Ipv4MssAdjust:     int(o.Answer.Ipv4MssAdjust),
-		Ipv6MssAdjust:     int(o.Answer.Ipv6MssAdjust),
+func (o *container_v2) Normalize() []Entry {
+	ans := make([]Entry, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].normalize())
 	}
-	if o.Answer.Dhcp != nil {
-		ans.EnableDhcp = util.AsBool(o.Answer.Dhcp.Enable)
-		ans.CreateDhcpDefaultRoute = util.AsBool(o.Answer.Dhcp.CreateDefaultRoute)
-		ans.DhcpDefaultRouteMetric = int(o.Answer.Dhcp.Metric)
+
+	return ans
+}
+
+func (o *container_v2) Names() []string {
+	ans := make([]string, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].Name)
+	}
+
+	return ans
+}
+
+func (o *entry_v2) normalize() Entry {
+	ans := Entry{
+		Name:              o.Name,
+		Comment:           o.Comment,
+		NetflowProfile:    o.NetflowProfile,
+		StaticIps:         util.EntToStr(o.StaticIps),
+		Mtu:               int(o.Mtu),
+		ManagementProfile: o.ManagementProfile,
+		AdjustTcpMss:      util.AsBool(o.AdjustTcpMss),
+		Ipv4MssAdjust:     int(o.Ipv4MssAdjust),
+		Ipv6MssAdjust:     int(o.Ipv6MssAdjust),
+	}
+	if o.Dhcp != nil {
+		ans.EnableDhcp = util.AsBool(o.Dhcp.Enable)
+		ans.CreateDhcpDefaultRoute = util.AsBool(o.Dhcp.CreateDefaultRoute)
+		ans.DhcpDefaultRouteMetric = int(o.Dhcp.Metric)
 	}
 
 	ans.raw = make(map[string]string)
-	if o.Answer.Ipv6 != nil {
-		ans.raw["ipv6"] = util.CleanRawXml(o.Answer.Ipv6.Text)
+	if o.Ipv6 != nil {
+		ans.raw["ipv6"] = util.CleanRawXml(o.Ipv6.Text)
 	}
-	if o.Answer.Arp != nil {
-		ans.raw["arp"] = util.CleanRawXml(o.Answer.Arp.Text)
+	if o.Arp != nil {
+		ans.raw["arp"] = util.CleanRawXml(o.Arp.Text)
 	}
-	if o.Answer.NdpProxy != nil {
-		ans.raw["ndp"] = util.CleanRawXml(o.Answer.NdpProxy.Text)
+	if o.NdpProxy != nil {
+		ans.raw["ndp"] = util.CleanRawXml(o.NdpProxy.Text)
 	}
 	if len(ans.raw) == 0 {
 		ans.raw = nil

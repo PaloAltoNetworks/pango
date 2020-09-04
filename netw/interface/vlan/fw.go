@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 	"fmt"
 
+	"github.com/PaloAltoNetworks/pango/namespace"
 	"github.com/PaloAltoNetworks/pango/util"
 	"github.com/PaloAltoNetworks/pango/version"
 )
@@ -11,37 +12,65 @@ import (
 // FwVlan is the client.Network.VlanInterface namespace.
 type FwVlan struct {
 	con util.XapiClient
+	ns  *namespace.Namespace
 }
 
 // Initialize is invoked by client.Initialize().
 func (c *FwVlan) Initialize(con util.XapiClient) {
 	c.con = con
+	c.ns = namespace.New(singular, plural, con)
 }
 
 // ShowList performs SHOW to retrieve a list of VLAN interfaces.
 func (c *FwVlan) ShowList() ([]string, error) {
-	c.con.LogQuery("(show) list of VLAN interfaces")
-	path := c.xpath(nil)
-	return c.con.EntryListUsing(c.con.Show, path[:len(path)-1])
+	result, _ := c.versioning()
+	return c.ns.Listing(util.Show, c.xpath(nil), result)
 }
 
 // GetList performs GET to retrieve a list of VLAN interfaces.
 func (c *FwVlan) GetList() ([]string, error) {
-	c.con.LogQuery("(get) list of VLAN interfaces")
-	path := c.xpath(nil)
-	return c.con.EntryListUsing(c.con.Get, path[:len(path)-1])
+	result, _ := c.versioning()
+	return c.ns.Listing(util.Get, c.xpath(nil), result)
 }
 
 // Get performs GET to retrieve information for the given VLAN interface.
 func (c *FwVlan) Get(name string) (Entry, error) {
-	c.con.LogQuery("(get) VLAN interface %q", name)
-	return c.details(c.con.Get, name)
+	result, _ := c.versioning()
+	if err := c.ns.Object(util.Get, c.xpath([]string{name}), name, result); err != nil {
+		return Entry{}, err
+	}
+
+	return result.Normalize()[0], nil
+}
+
+// GetAll performs GET to retrieve information for all objects.
+func (c *FwVlan) GetAll() ([]Entry, error) {
+	result, _ := c.versioning()
+	if err := c.ns.Objects(util.Get, c.xpath(nil), result); err != nil {
+		return nil, err
+	}
+
+	return result.Normalize(), nil
 }
 
 // Show performs SHOW to retrieve information for the given VLAN interface.
 func (c *FwVlan) Show(name string) (Entry, error) {
-	c.con.LogQuery("(show) VLAN interface %q", name)
-	return c.details(c.con.Show, name)
+	result, _ := c.versioning()
+	if err := c.ns.Object(util.Show, c.xpath([]string{name}), name, result); err != nil {
+		return Entry{}, err
+	}
+
+	return result.Normalize()[0], nil
+}
+
+// ShowAll performs SHOW to retrieve information for all objects.
+func (c *FwVlan) ShowAll() ([]Entry, error) {
+	result, _ := c.versioning()
+	if err := c.ns.Objects(util.Show, c.xpath(nil), result); err != nil {
+		return nil, err
+	}
+
+	return result.Normalize(), nil
 }
 
 // Set performs SET to create / update one or more VLAN interfaces.
@@ -64,7 +93,7 @@ func (c *FwVlan) Set(vsys string, e ...Entry) error {
 		d.Data = append(d.Data, fn(e[i]))
 		names[i] = e[i].Name
 	}
-	c.con.LogAction("(set) VLAN interfaces: %v", names)
+	c.con.LogAction("(set) %s: %v", plural, names)
 
 	// Set xpath.
 	path := c.xpath(names)
@@ -98,7 +127,7 @@ func (c *FwVlan) Edit(vsys string, e Entry) error {
 
 	_, fn := c.versioning()
 
-	c.con.LogAction("(edit) VLAN interface %q", e.Name)
+	c.con.LogAction("(edit) %s: %q", singular, e.Name)
 
 	// Set xpath.
 	path := c.xpath([]string{e.Name})
@@ -139,7 +168,7 @@ func (c *FwVlan) Delete(e ...interface{}) error {
 			return fmt.Errorf("Unknown type sent to delete: %s", v)
 		}
 	}
-	c.con.LogAction("(delete) VLAN interfaces: %v", names)
+	c.con.LogAction("(delete) %s: %v", plural, names)
 
 	// Unimport interfaces.
 	if err = c.con.VsysUnimport(util.InterfaceImport, "", "", names); err != nil {
@@ -162,17 +191,6 @@ func (c *FwVlan) versioning() (normalizer, func(Entry) interface{}) {
 	} else {
 		return &container_v1{}, specify_v1
 	}
-}
-
-func (c *FwVlan) details(fn util.Retriever, name string) (Entry, error) {
-	path := c.xpath([]string{name})
-	obj, _ := c.versioning()
-	if _, err := fn(path, nil, obj); err != nil {
-		return Entry{}, err
-	}
-	ans := obj.Normalize()
-
-	return ans, nil
 }
 
 func (c *FwVlan) xpath(vals []string) []string {
