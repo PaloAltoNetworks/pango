@@ -79,146 +79,183 @@ func (o *Entry) Copy(s Entry) {
 /** Structs / functions for this namespace. **/
 
 type normalizer interface {
-	Normalize() Entry
+	Normalize() []Entry
+	Names() []string
 }
 
 type container_v1 struct {
-	Answer entry_v1 `xml:"result>entry"`
+	Answer []entry_v1 `xml:"entry"`
 }
 
-func (o *container_v1) Normalize() Entry {
+func (o *container_v1) Normalize() []Entry {
+	ans := make([]Entry, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].normalize())
+	}
+
+	return ans
+}
+
+func (o *container_v1) Names() []string {
+	ans := make([]string, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].Name)
+	}
+
+	return ans
+}
+
+func (o *entry_v1) normalize() Entry {
 	ans := Entry{
-		Name:                      o.Answer.Name,
-		SourceAddresses:           util.MemToStr(o.Answer.SourceAddresses),
-		SourceUsers:               util.MemToStr(o.Answer.SourceUsers),
-		NegateSource:              util.AsBool(o.Answer.NegateSource),
-		DestinationAddresses:      util.MemToStr(o.Answer.DestinationAddresses),
-		NegateDestination:         util.AsBool(o.Answer.NegateDestination),
-		Applications:              util.MemToStr(o.Answer.Applications),
-		Services:                  util.MemToStr(o.Answer.Services),
-		Schedule:                  o.Answer.Schedule,
-		Tags:                      util.MemToStr(o.Answer.Tags),
-		Disabled:                  util.AsBool(o.Answer.Disabled),
-		Description:               o.Answer.Description,
-		ActiveActiveDeviceBinding: o.Answer.ActiveActiveDeviceBinding,
+		Name:                      o.Name,
+		SourceAddresses:           util.MemToStr(o.SourceAddresses),
+		SourceUsers:               util.MemToStr(o.SourceUsers),
+		NegateSource:              util.AsBool(o.NegateSource),
+		DestinationAddresses:      util.MemToStr(o.DestinationAddresses),
+		NegateDestination:         util.AsBool(o.NegateDestination),
+		Applications:              util.MemToStr(o.Applications),
+		Services:                  util.MemToStr(o.Services),
+		Schedule:                  o.Schedule,
+		Tags:                      util.MemToStr(o.Tags),
+		Disabled:                  util.AsBool(o.Disabled),
+		Description:               o.Description,
+		ActiveActiveDeviceBinding: o.ActiveActiveDeviceBinding,
 	}
 
-	if o.Answer.TargetInfo != nil {
-		ans.NegateTarget = util.AsBool(o.Answer.TargetInfo.NegateTarget)
-		ans.Targets = util.VsysEntToMap(o.Answer.TargetInfo.Targets)
+	if o.TargetInfo != nil {
+		ans.NegateTarget = util.AsBool(o.TargetInfo.NegateTarget)
+		ans.Targets = util.VsysEntToMap(o.TargetInfo.Targets)
 	}
 
 	switch {
-	case o.Answer.FromZones != nil:
+	case o.FromZones != nil:
 		ans.FromType = FromTypeZone
-		ans.FromValues = util.MemToStr(o.Answer.FromZones)
-	case o.Answer.FromInterfaces != nil:
+		ans.FromValues = util.MemToStr(o.FromZones)
+	case o.FromInterfaces != nil:
 		ans.FromType = FromTypeInterface
-		ans.FromValues = util.MemToStr(o.Answer.FromInterfaces)
+		ans.FromValues = util.MemToStr(o.FromInterfaces)
 	}
 
 	switch {
-	case o.Answer.Action.Forward != nil:
+	case o.Action.Forward != nil:
 		ans.Action = ActionForward
-		ans.ForwardEgressInterface = o.Answer.Action.Forward.ForwardEgressInterface
+		ans.ForwardEgressInterface = o.Action.Forward.ForwardEgressInterface
 
-		if o.Answer.Action.Forward.NextHop != nil {
-			if o.Answer.Action.Forward.NextHop.IpAddress != "" {
+		if o.Action.Forward.NextHop != nil {
+			if o.Action.Forward.NextHop.IpAddress != "" {
 				ans.ForwardNextHopType = ForwardNextHopTypeIpAddress
-				ans.ForwardNextHopValue = o.Answer.Action.Forward.NextHop.IpAddress
+				ans.ForwardNextHopValue = o.Action.Forward.NextHop.IpAddress
 			}
 		}
 
-		if o.Answer.Action.Forward.Monitor != nil {
-			ans.ForwardMonitorProfile = o.Answer.Action.Forward.Monitor.ForwardMonitorProfile
-			ans.ForwardMonitorIpAddress = o.Answer.Action.Forward.Monitor.ForwardMonitorIpAddress
-			ans.ForwardMonitorDisableIfUnreachable = util.AsBool(o.Answer.Action.Forward.Monitor.ForwardMonitorDisableIfUnreachable)
+		if o.Action.Forward.Monitor != nil {
+			ans.ForwardMonitorProfile = o.Action.Forward.Monitor.ForwardMonitorProfile
+			ans.ForwardMonitorIpAddress = o.Action.Forward.Monitor.ForwardMonitorIpAddress
+			ans.ForwardMonitorDisableIfUnreachable = util.AsBool(o.Action.Forward.Monitor.ForwardMonitorDisableIfUnreachable)
 		}
-	case o.Answer.Action.ForwardVsys != nil:
+	case o.Action.ForwardVsys != nil:
 		ans.Action = ActionVsysForward
-		ans.ForwardVsys = *o.Answer.Action.ForwardVsys
-	case o.Answer.Action.Discard != nil:
+		ans.ForwardVsys = *o.Action.ForwardVsys
+	case o.Action.Discard != nil:
 		ans.Action = ActionDiscard
-	case o.Answer.Action.NoPbf != nil:
+	case o.Action.NoPbf != nil:
 		ans.Action = ActionNoPbf
 	}
 
-	if o.Answer.Symmetric != nil {
-		ans.EnableEnforceSymmetricReturn = util.AsBool(o.Answer.Symmetric.EnableEnforceSymmetricReturn)
-		ans.SymmetricReturnAddresses = util.EntToStr(o.Answer.Symmetric.SymmetricReturnAddresses)
+	if o.Symmetric != nil {
+		ans.EnableEnforceSymmetricReturn = util.AsBool(o.Symmetric.EnableEnforceSymmetricReturn)
+		ans.SymmetricReturnAddresses = util.EntToStr(o.Symmetric.SymmetricReturnAddresses)
 	}
 
 	return ans
 }
 
 type container_v2 struct {
-	Answer entry_v2 `xml:"result>entry"`
+	Answer []entry_v2 `xml:"entry"`
 }
 
-func (o *container_v2) Normalize() Entry {
+func (o *container_v2) Normalize() []Entry {
+	ans := make([]Entry, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].normalize())
+	}
+
+	return ans
+}
+
+func (o *container_v2) Names() []string {
+	ans := make([]string, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].Name)
+	}
+
+	return ans
+}
+
+func (o *entry_v2) normalize() Entry {
 	ans := Entry{
-		Name:                      o.Answer.Name,
-		SourceAddresses:           util.MemToStr(o.Answer.SourceAddresses),
-		SourceUsers:               util.MemToStr(o.Answer.SourceUsers),
-		NegateSource:              util.AsBool(o.Answer.NegateSource),
-		DestinationAddresses:      util.MemToStr(o.Answer.DestinationAddresses),
-		NegateDestination:         util.AsBool(o.Answer.NegateDestination),
-		Applications:              util.MemToStr(o.Answer.Applications),
-		Services:                  util.MemToStr(o.Answer.Services),
-		Schedule:                  o.Answer.Schedule,
-		Tags:                      util.MemToStr(o.Answer.Tags),
-		Disabled:                  util.AsBool(o.Answer.Disabled),
-		Description:               o.Answer.Description,
-		ActiveActiveDeviceBinding: o.Answer.ActiveActiveDeviceBinding,
-		Uuid:                      o.Answer.Uuid,
+		Name:                      o.Name,
+		SourceAddresses:           util.MemToStr(o.SourceAddresses),
+		SourceUsers:               util.MemToStr(o.SourceUsers),
+		NegateSource:              util.AsBool(o.NegateSource),
+		DestinationAddresses:      util.MemToStr(o.DestinationAddresses),
+		NegateDestination:         util.AsBool(o.NegateDestination),
+		Applications:              util.MemToStr(o.Applications),
+		Services:                  util.MemToStr(o.Services),
+		Schedule:                  o.Schedule,
+		Tags:                      util.MemToStr(o.Tags),
+		Disabled:                  util.AsBool(o.Disabled),
+		Description:               o.Description,
+		ActiveActiveDeviceBinding: o.ActiveActiveDeviceBinding,
+		Uuid:                      o.Uuid,
 	}
 
-	if o.Answer.TargetInfo != nil {
-		ans.NegateTarget = util.AsBool(o.Answer.TargetInfo.NegateTarget)
-		ans.Targets = util.VsysEntToMap(o.Answer.TargetInfo.Targets)
+	if o.TargetInfo != nil {
+		ans.NegateTarget = util.AsBool(o.TargetInfo.NegateTarget)
+		ans.Targets = util.VsysEntToMap(o.TargetInfo.Targets)
 	}
 
 	switch {
-	case o.Answer.FromZones != nil:
+	case o.FromZones != nil:
 		ans.FromType = FromTypeZone
-		ans.FromValues = util.MemToStr(o.Answer.FromZones)
-	case o.Answer.FromInterfaces != nil:
+		ans.FromValues = util.MemToStr(o.FromZones)
+	case o.FromInterfaces != nil:
 		ans.FromType = FromTypeInterface
-		ans.FromValues = util.MemToStr(o.Answer.FromInterfaces)
+		ans.FromValues = util.MemToStr(o.FromInterfaces)
 	}
 
 	switch {
-	case o.Answer.Action.Forward != nil:
+	case o.Action.Forward != nil:
 		ans.Action = ActionForward
-		ans.ForwardEgressInterface = o.Answer.Action.Forward.ForwardEgressInterface
+		ans.ForwardEgressInterface = o.Action.Forward.ForwardEgressInterface
 
-		if o.Answer.Action.Forward.NextHop != nil {
-			if o.Answer.Action.Forward.NextHop.IpAddress != "" {
+		if o.Action.Forward.NextHop != nil {
+			if o.Action.Forward.NextHop.IpAddress != "" {
 				ans.ForwardNextHopType = ForwardNextHopTypeIpAddress
-				ans.ForwardNextHopValue = o.Answer.Action.Forward.NextHop.IpAddress
-			} else if o.Answer.Action.Forward.NextHop.Fqdn != "" {
+				ans.ForwardNextHopValue = o.Action.Forward.NextHop.IpAddress
+			} else if o.Action.Forward.NextHop.Fqdn != "" {
 				ans.ForwardNextHopType = ForwardNextHopTypeFqdn
-				ans.ForwardNextHopValue = o.Answer.Action.Forward.NextHop.Fqdn
+				ans.ForwardNextHopValue = o.Action.Forward.NextHop.Fqdn
 			}
 		}
 
-		if o.Answer.Action.Forward.Monitor != nil {
-			ans.ForwardMonitorProfile = o.Answer.Action.Forward.Monitor.ForwardMonitorProfile
-			ans.ForwardMonitorIpAddress = o.Answer.Action.Forward.Monitor.ForwardMonitorIpAddress
-			ans.ForwardMonitorDisableIfUnreachable = util.AsBool(o.Answer.Action.Forward.Monitor.ForwardMonitorDisableIfUnreachable)
+		if o.Action.Forward.Monitor != nil {
+			ans.ForwardMonitorProfile = o.Action.Forward.Monitor.ForwardMonitorProfile
+			ans.ForwardMonitorIpAddress = o.Action.Forward.Monitor.ForwardMonitorIpAddress
+			ans.ForwardMonitorDisableIfUnreachable = util.AsBool(o.Action.Forward.Monitor.ForwardMonitorDisableIfUnreachable)
 		}
-	case o.Answer.Action.ForwardVsys != nil:
+	case o.Action.ForwardVsys != nil:
 		ans.Action = ActionVsysForward
-		ans.ForwardVsys = *o.Answer.Action.ForwardVsys
-	case o.Answer.Action.Discard != nil:
+		ans.ForwardVsys = *o.Action.ForwardVsys
+	case o.Action.Discard != nil:
 		ans.Action = ActionDiscard
-	case o.Answer.Action.NoPbf != nil:
+	case o.Action.NoPbf != nil:
 		ans.Action = ActionNoPbf
 	}
 
-	if o.Answer.Symmetric != nil {
-		ans.EnableEnforceSymmetricReturn = util.AsBool(o.Answer.Symmetric.EnableEnforceSymmetricReturn)
-		ans.SymmetricReturnAddresses = util.EntToStr(o.Answer.Symmetric.SymmetricReturnAddresses)
+	if o.Symmetric != nil {
+		ans.EnableEnforceSymmetricReturn = util.AsBool(o.Symmetric.EnableEnforceSymmetricReturn)
+		ans.SymmetricReturnAddresses = util.EntToStr(o.Symmetric.SymmetricReturnAddresses)
 	}
 
 	return ans
