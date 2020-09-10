@@ -19,10 +19,57 @@ func getTests() []testCase {
 			Name:       "two",
 			Interfaces: []string{"ethernet1/3", "ethernet1/4"},
 		}},
-		{"with raw fields", "y", "vsys3", true, []string{"three"}, Entry{
-			Name: "three",
+		{"with raw fields", "y", "vsys3", true, []string{"foo"}, Entry{
+			Name: "foo",
 			raw: map[string]string{
-				"ecmp":      "<ecmp>raw ecmp</ecmp>",
+				"multicast": "<multicast><raw>multicast</raw></multicast>",
+				"protocol":  "<protocol><some><proto>field</proto></some></protocol>",
+				"routing":   "<routing-table><route1>something</route1><route2>b</route2></routing-table>",
+			},
+		}},
+		{"ecmp ip modulo", "x", "vsys1", false, []string{"ecmp1"}, Entry{
+			Name:                  "ecmp1",
+			EnableEcmp:            true,
+			EcmpMaxPath:           7,
+			EcmpLoadBalanceMethod: EcmpLoadBalanceMethodIpModulo,
+			raw: map[string]string{
+				"multicast": "<multicast><raw>multicast</raw></multicast>",
+			},
+		}},
+		{"ecmp ip hash", "x", "vsys1", false, []string{"ecmp2"}, Entry{
+			Name:                  "ecmp2",
+			EcmpSymmetricReturn:   true,
+			EcmpMaxPath:           8,
+			EcmpLoadBalanceMethod: EcmpLoadBalanceMethodIpHash,
+			EcmpHashSourceOnly:    true,
+			EcmpHashUsePort:       true,
+			EcmpHashSeed:          3,
+			raw: map[string]string{
+				"protocol": "<protocol><some><proto>field</proto></some></protocol>",
+			},
+		}},
+		{"ecmp wrr", "x", "vsys1", false, []string{"ecmp3"}, Entry{
+			Name:                  "ecmp3",
+			EcmpStrictSourcePath:  true,
+			EcmpMaxPath:           9,
+			EcmpLoadBalanceMethod: EcmpLoadBalanceMethodWeightedRoundRobin,
+			EcmpWeightedRoundRobinInterfaces: map[string]int{
+				"ethernet1/1": 1,
+				"ethernet1/2": 3,
+				"ethernet1/5": 8,
+			},
+			raw: map[string]string{
+				"routing": "<routing-table><route1>something</route1><route2>b</route2></routing-table>",
+			},
+		}},
+		{"ecmp brr", "x", "vsys1", false, []string{"ecmp4"}, Entry{
+			Name:                  "ecmp4",
+			EnableEcmp:            true,
+			EcmpSymmetricReturn:   true,
+			EcmpStrictSourcePath:  true,
+			EcmpMaxPath:           7,
+			EcmpLoadBalanceMethod: EcmpLoadBalanceMethodBalancedRoundRobin,
+			raw: map[string]string{
 				"multicast": "<multicast><raw>multicast</raw></multicast>",
 				"protocol":  "<protocol><some><proto>field</proto></some></protocol>",
 				"routing":   "<routing-table><route1>something</route1><route2>b</route2></routing-table>",

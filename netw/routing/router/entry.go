@@ -9,17 +9,26 @@ import (
 // Entry is a normalized, version independent representation of a virtual
 // router.
 type Entry struct {
-	Name           string
-	Interfaces     []string
-	StaticDist     int
-	StaticIpv6Dist int
-	OspfIntDist    int
-	OspfExtDist    int
-	Ospfv3IntDist  int
-	Ospfv3ExtDist  int
-	IbgpDist       int
-	EbgpDist       int
-	RipDist        int
+	Name                             string
+	Interfaces                       []string
+	StaticDist                       int
+	StaticIpv6Dist                   int
+	OspfIntDist                      int
+	OspfExtDist                      int
+	Ospfv3IntDist                    int
+	Ospfv3ExtDist                    int
+	IbgpDist                         int
+	EbgpDist                         int
+	RipDist                          int
+	EnableEcmp                       bool
+	EcmpSymmetricReturn              bool
+	EcmpStrictSourcePath             bool
+	EcmpMaxPath                      int
+	EcmpLoadBalanceMethod            string
+	EcmpHashSourceOnly               bool
+	EcmpHashUsePort                  bool
+	EcmpHashSeed                     int
+	EcmpWeightedRoundRobinInterfaces map[string]int
 
 	raw map[string]string
 }
@@ -87,6 +96,15 @@ func (o *Entry) Copy(s Entry) {
 	o.IbgpDist = s.IbgpDist
 	o.EbgpDist = s.EbgpDist
 	o.RipDist = s.RipDist
+	o.EnableEcmp = s.EnableEcmp
+	o.EcmpSymmetricReturn = s.EcmpSymmetricReturn
+	o.EcmpStrictSourcePath = s.EcmpStrictSourcePath
+	o.EcmpMaxPath = s.EcmpMaxPath
+	o.EcmpLoadBalanceMethod = s.EcmpLoadBalanceMethod
+	o.EcmpHashSourceOnly = s.EcmpHashSourceOnly
+	o.EcmpHashUsePort = s.EcmpHashUsePort
+	o.EcmpHashSeed = s.EcmpHashSeed
+	o.EcmpWeightedRoundRobinInterfaces = s.EcmpWeightedRoundRobinInterfaces
 }
 
 /** Structs / functions for this namespace. **/
@@ -136,10 +154,35 @@ func (o *entry_v1) normalize() Entry {
 		ans.RipDist = o.Dist.RipDist
 	}
 
-	ans.raw = make(map[string]string)
 	if o.Ecmp != nil {
-		ans.raw["ecmp"] = util.CleanRawXml(o.Ecmp.Text)
+		ans.EnableEcmp = util.AsBool(o.Ecmp.EnableEcmp)
+		ans.EcmpSymmetricReturn = util.AsBool(o.Ecmp.EcmpSymmetricReturn)
+		ans.EcmpStrictSourcePath = util.AsBool(o.Ecmp.EcmpStrictSourcePath)
+		ans.EcmpMaxPath = o.Ecmp.EcmpMaxPath
+
+		if o.Ecmp.Algorithm != nil {
+			if o.Ecmp.Algorithm.IpModulo != nil {
+				ans.EcmpLoadBalanceMethod = EcmpLoadBalanceMethodIpModulo
+			} else if o.Ecmp.Algorithm.IpHash != nil {
+				ans.EcmpLoadBalanceMethod = EcmpLoadBalanceMethodIpHash
+				ans.EcmpHashSourceOnly = util.AsBool(o.Ecmp.Algorithm.IpHash.EcmpHashSourceOnly)
+				ans.EcmpHashUsePort = util.AsBool(o.Ecmp.Algorithm.IpHash.EcmpHashUsePort)
+				ans.EcmpHashSeed = o.Ecmp.Algorithm.IpHash.EcmpHashSeed
+			} else if o.Ecmp.Algorithm.Wrr != nil {
+				ans.EcmpLoadBalanceMethod = EcmpLoadBalanceMethodWeightedRoundRobin
+				if o.Ecmp.Algorithm.Wrr.Interfaces != nil {
+					ans.EcmpWeightedRoundRobinInterfaces = make(map[string]int)
+					for _, v := range o.Ecmp.Algorithm.Wrr.Interfaces.Entries {
+						ans.EcmpWeightedRoundRobinInterfaces[v.Interface] = v.Weight
+					}
+				}
+			} else if o.Ecmp.Algorithm.Brr != nil {
+				ans.EcmpLoadBalanceMethod = EcmpLoadBalanceMethodBalancedRoundRobin
+			}
+		}
 	}
+
+	ans.raw = make(map[string]string)
 	if o.Multicast != nil {
 		ans.raw["multicast"] = util.CleanRawXml(o.Multicast.Text)
 	}
@@ -162,7 +205,7 @@ type entry_v1 struct {
 	Name       string           `xml:"name,attr"`
 	Interfaces *util.MemberType `xml:"interface"`
 	Dist       *dist            `xml:"admin-dists"`
-	Ecmp       *util.RawXml     `xml:"ecmp"`
+	Ecmp       *ecmp            `xml:"ecmp"`
 	Multicast  *util.RawXml     `xml:"multicast"`
 	Protocol   *util.RawXml     `xml:"protocol"`
 	Routing    *util.RawXml     `xml:"routing-table"`
@@ -178,6 +221,41 @@ type dist struct {
 	IbgpDist       int `xml:"ibgp,omitempty"`
 	EbgpDist       int `xml:"ebgp,omitempty"`
 	RipDist        int `xml:"rip,omitempty"`
+}
+
+type ecmp struct {
+	EnableEcmp           string     `xml:"enable"`
+	EcmpSymmetricReturn  string     `xml:"symmetric-return"`
+	EcmpStrictSourcePath string     `xml:"strict-source-path"`
+	EcmpMaxPath          int        `xml:"max-path,omitempty"`
+	Algorithm            *algorithm `xml:"algorithm"`
+}
+
+type algorithm struct {
+	IpModulo *string `xml:"ip-modulo"`
+	IpHash   *ipHash `xml:"ip-hash"`
+	Wrr      *wrr    `xml:"weighted-round-robin"`
+	Brr      *string `xml:"balanced-round-robin"`
+}
+
+type ipHash struct {
+	EcmpHashSourceOnly string `xml:"src-only"`
+	EcmpHashUsePort    string `xml:"use-port"`
+	EcmpHashSeed       int    `xml:"hash-seed,omitempty"`
+}
+
+type wrr struct {
+	Interfaces *wrrInterfaces `xml:"interface"`
+}
+
+type wrrInterfaces struct {
+	Entries []wrrInterface `xml:"entry"`
+}
+
+type wrrInterface struct {
+	XMLName   xml.Name `xml:"entry"`
+	Interface string   `xml:"name,attr"`
+	Weight    int      `xml:"weight,omitempty"`
 }
 
 func specify_v1(e Entry) interface{} {
@@ -200,9 +278,54 @@ func specify_v1(e Entry) interface{} {
 		}
 	}
 
-	if text, present := e.raw["ecmp"]; present {
-		ans.Ecmp = &util.RawXml{text}
+	if e.EnableEcmp || e.EcmpSymmetricReturn || e.EcmpStrictSourcePath || e.EcmpMaxPath != 0 || e.EcmpLoadBalanceMethod != "" {
+		s := ""
+		ans.Ecmp = &ecmp{
+			EnableEcmp:           util.YesNo(e.EnableEcmp),
+			EcmpSymmetricReturn:  util.YesNo(e.EcmpSymmetricReturn),
+			EcmpStrictSourcePath: util.YesNo(e.EcmpStrictSourcePath),
+			EcmpMaxPath:          e.EcmpMaxPath,
+		}
+
+		switch e.EcmpLoadBalanceMethod {
+		case EcmpLoadBalanceMethodIpModulo:
+			ans.Ecmp.Algorithm = &algorithm{
+				IpModulo: &s,
+			}
+		case EcmpLoadBalanceMethodIpHash:
+			ans.Ecmp.Algorithm = &algorithm{
+				IpHash: &ipHash{
+					EcmpHashSourceOnly: util.YesNo(e.EcmpHashSourceOnly),
+					EcmpHashUsePort:    util.YesNo(e.EcmpHashUsePort),
+					EcmpHashSeed:       e.EcmpHashSeed,
+				},
+			}
+		case EcmpLoadBalanceMethodWeightedRoundRobin:
+			var wrrValue *wrr
+			if len(e.EcmpWeightedRoundRobinInterfaces) > 0 {
+				listing := make([]wrrInterface, 0, len(e.EcmpWeightedRoundRobinInterfaces))
+				for name, weight := range e.EcmpWeightedRoundRobinInterfaces {
+					listing = append(listing, wrrInterface{
+						Interface: name,
+						Weight:    weight,
+					})
+				}
+				wrrValue = &wrr{
+					Interfaces: &wrrInterfaces{
+						Entries: listing,
+					},
+				}
+			}
+			ans.Ecmp.Algorithm = &algorithm{
+				Wrr: wrrValue,
+			}
+		case EcmpLoadBalanceMethodBalancedRoundRobin:
+			ans.Ecmp.Algorithm = &algorithm{
+				Brr: &s,
+			}
+		}
 	}
+
 	if text, present := e.raw["multicast"]; present {
 		ans.Multicast = &util.RawXml{text}
 	}
