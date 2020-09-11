@@ -33,41 +33,60 @@ func (o *Entry) Copy(s Entry) {
 /** Structs / functions for this namespace. **/
 
 type normalizer interface {
-	Normalize() Entry
+	Normalize() []Entry
+	Names() []string
 }
 
 type container_v1 struct {
-	Answer entry_v1 `xml:"result>entry"`
+	Answer []entry_v1 `xml:"entry"`
 }
 
-func (o *container_v1) Normalize() Entry {
+func (o *container_v1) Normalize() []Entry {
+	ans := make([]Entry, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].normalize())
+	}
+
+	return ans
+}
+
+func (o *container_v1) Names() []string {
+	ans := make([]string, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].Name)
+	}
+
+	return ans
+}
+
+func (o *entry_v1) normalize() Entry {
 	ans := Entry{
-		Name:         o.Answer.Name,
-		ZoneProfile:  o.Answer.Profile,
-		LogSetting:   o.Answer.LogSetting,
-		EnableUserId: util.AsBool(o.Answer.EnableUserId),
+		Name:         o.Name,
+		ZoneProfile:  o.Profile,
+		LogSetting:   o.LogSetting,
+		EnableUserId: util.AsBool(o.EnableUserId),
 	}
-	if o.Answer.L3 != nil {
+	if o.L3 != nil {
 		ans.Mode = ModeL3
-		ans.Interfaces = o.Answer.L3.Interfaces
-	} else if o.Answer.L2 != nil {
+		ans.Interfaces = o.L3.Interfaces
+	} else if o.L2 != nil {
 		ans.Mode = ModeL2
-		ans.Interfaces = o.Answer.L2.Interfaces
-	} else if o.Answer.VWire != nil {
+		ans.Interfaces = o.L2.Interfaces
+	} else if o.VWire != nil {
 		ans.Mode = ModeVirtualWire
-		ans.Interfaces = o.Answer.VWire.Interfaces
-	} else if o.Answer.Tap != nil {
+		ans.Interfaces = o.VWire.Interfaces
+	} else if o.Tap != nil {
 		ans.Mode = ModeTap
-		ans.Interfaces = o.Answer.Tap.Interfaces
-	} else if o.Answer.External != nil {
+		ans.Interfaces = o.Tap.Interfaces
+	} else if o.External != nil {
 		ans.Mode = ModeExternal
-		ans.Interfaces = o.Answer.External.Interfaces
+		ans.Interfaces = o.External.Interfaces
 	}
-	if o.Answer.IncludeAcls != nil {
-		ans.IncludeAcls = o.Answer.IncludeAcls.Acls
+	if o.IncludeAcls != nil {
+		ans.IncludeAcls = o.IncludeAcls.Acls
 	}
-	if o.Answer.ExcludeAcls != nil {
-		ans.ExcludeAcls = o.Answer.ExcludeAcls.Acls
+	if o.ExcludeAcls != nil {
+		ans.ExcludeAcls = o.ExcludeAcls.Acls
 	}
 
 	return ans
