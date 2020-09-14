@@ -1,6 +1,8 @@
 package util
 
 import (
+	"time"
+
 	"github.com/PaloAltoNetworks/pango/version"
 )
 
@@ -25,7 +27,7 @@ type XapiClient interface {
 	RequestPasswordHash(string) (string, error)
 	VsysImport(string, string, string, string, []string) error
 	VsysUnimport(string, string, string, []string) error
-	WaitForJob(uint, interface{}) error
+	WaitForJob(uint, time.Duration, interface{}) error
 	Commit(interface{}, string, interface{}) (uint, []byte, error)
 	PositionFirstEntity(int, string, string, []string, []string) error
 }

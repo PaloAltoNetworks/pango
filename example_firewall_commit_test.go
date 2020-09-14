@@ -4,6 +4,7 @@ import (
 	"flag"
 	"log"
 	"strings"
+	"time"
 
 	"github.com/PaloAltoNetworks/pango"
 	"github.com/PaloAltoNetworks/pango/commit"
@@ -15,6 +16,7 @@ func Example_firewallCommit() {
 		configFile, hostname, username, password, apiKey, admins string
 		edan, eso, epao, force                                   bool
 		jobId                                                    uint
+		sleep                                                    int64
 	)
 
 	log.SetFlags(log.Ldate | log.Ltime | log.Lmicroseconds)
@@ -29,6 +31,7 @@ func Example_firewallCommit() {
 	flag.BoolVar(&eso, "exclude-shared-objects", false, "Exclude shared objects")
 	flag.BoolVar(&epao, "exclude-policy-and-objects", false, "Exclude policy and objects")
 	flag.BoolVar(&force, "force", false, "Force a commit even if one isn't needed")
+	flag.Int64Var(&sleep, "sleep", 0, "Seconds to sleep between checks for commit completion")
 	flag.Parse()
 
 	// Connect to the firewall.
@@ -56,13 +59,15 @@ func Example_firewallCommit() {
 		cmd.Admins = strings.Split(admins, ",")
 	}
 
+	sd := time.Duration(sleep) * time.Second
+
 	// Perform the commit
 	jobId, _, err = fw.Commit(cmd, "", nil)
 	if err != nil {
 		log.Fatalf("Error in commit: %s", err)
 	} else if jobId == 0 {
 		log.Printf("No commit needed")
-	} else if err = fw.WaitForJob(jobId, nil); err != nil {
+	} else if err = fw.WaitForJob(jobId, sd, nil); err != nil {
 		log.Printf("Error in commit: %s", err)
 	} else {
 		log.Printf("Committed config successfully")

@@ -287,8 +287,12 @@ func (c *Client) RequestPasswordHash(val string) (string, error) {
 // Setting sync to true means that this function will block until the job
 // finishes.
 //
+//
+// The sleep param is an optional sleep duration to wait between polling for
+// job completion.  This param is only used if sync is set to true.
+//
 // This function returns the job ID and if any errors were encountered.
-func (c *Client) ValidateConfig(sync bool) (uint, error) {
+func (c *Client) ValidateConfig(sync bool, sleep time.Duration) (uint, error) {
 	var err error
 
 	c.LogOp("(op) validating config")
@@ -307,7 +311,7 @@ func (c *Client) ValidateConfig(sync bool) (uint, error) {
 		return id, nil
 	}
 
-	return id, c.WaitForJob(id, nil)
+	return id, c.WaitForJob(id, sleep, nil)
 }
 
 // RevertToRunningConfig discards any changes made and reverts to the last
@@ -433,6 +437,9 @@ func (c *Client) UnlockCommits(vsys, admin string) error {
 
 // WaitForJob polls the device, waiting for the specified job to finish.
 //
+// The sleep param is an optional sleep duration to wait between polling for
+// job completion.
+//
 // If you want to unmarshal the response into a struct, then pass in a
 // pointer to the struct for the "resp" param.  If you just want to know if
 // the job completed with a status other than "FAIL", you only need to check
@@ -440,7 +447,7 @@ func (c *Client) UnlockCommits(vsys, admin string) error {
 //
 // In the case that there are multiple errors returned from the job, the first
 // error is returned as the error string, and no unmarshaling is attempted.
-func (c *Client) WaitForJob(id uint, resp interface{}) error {
+func (c *Client) WaitForJob(id uint, sleep time.Duration, resp interface{}) error {
 	var err error
 	var prev uint
 	var data []byte
@@ -492,6 +499,10 @@ func (c *Client) WaitForJob(id uint, resp interface{}) error {
 				c.LogOp("(op) Waiting for %d device commits ...", len(ans.Devices))
 				dp = true
 			}
+		}
+
+		if sleep > 0 {
+			time.Sleep(sleep)
 		}
 	}
 
