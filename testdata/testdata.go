@@ -3,6 +3,7 @@ package testdata
 import (
 	"encoding/xml"
 	"fmt"
+	"time"
 
 	"github.com/PaloAltoNetworks/pango/util"
 	"github.com/PaloAltoNetworks/pango/version"
@@ -176,7 +177,7 @@ func (c *MockClient) VsysUnimport(ns, tmpl, ts string, names []string) error {
 	return c.UnimportError
 }
 
-func (c *MockClient) WaitForJob(a uint, resp interface{}) error {
+func (c *MockClient) WaitForJob(a uint, d time.Duration, resp interface{}) error {
 	_, err := c.finalize(resp)
 	return err
 }
