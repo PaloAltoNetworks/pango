@@ -3,6 +3,8 @@ package pango
 import (
 	"encoding/xml"
 
+	"github.com/PaloAltoNetworks/pango/version"
+
 	// Various namespace imports.
 	"github.com/PaloAltoNetworks/pango/dev"
 	"github.com/PaloAltoNetworks/pango/licen"
@@ -55,6 +57,9 @@ func (c *Firewall) Initialize() error {
 			return e
 		} else if e = c.initSystemInfo(); e != nil {
 			return e
+		}
+		if c.Version.Gte(version.Number{9, 0, 0, ""}) {
+			c.initPlugins()
 		}
 	} else {
 		c.Hostname = "localhost"

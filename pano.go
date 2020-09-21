@@ -6,6 +6,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/PaloAltoNetworks/pango/util"
+
 	// Various namespace imports.
 	"github.com/PaloAltoNetworks/pango/dev"
 	"github.com/PaloAltoNetworks/pango/licen"
@@ -183,6 +185,58 @@ func (o *VmAuthKey) ParseExpires(clock time.Time) {
 	}
 }
 
+// DeviceGroupHeirarchy returns a map where the
+func (c *Panorama) DeviceGroupHierarchy() (map[string]string, error) {
+	type dghReq struct {
+		XMLName xml.Name `xml:"show"`
+		Cmd     string   `xml:"dg-hierarchy"`
+	}
+
+	req := dghReq{}
+	ans := dghResp{}
+
+	c.LogOp("(op) retrieving device grop hierarchy")
+	if _, err := c.Op(req, "", nil, &ans); err != nil {
+		return nil, err
+	}
+
+	return ans.results(), nil
+}
+
+// AssignDeviceGroupParent sets a device group's parent to `parent`.
+//
+// An empty string for the parent will move the the device group to the
+// top level (shared).
+//
+// This operation results in a job being submitted to the backend, which this
+// function will block until the move is completed.
+func (c *Panorama) AssignDeviceGroupParent(child, parent string) error {
+	type dgpInfo struct {
+		Child  string `xml:"name,attr"`
+		Parent string `xml:"new-parent-dg,omitempty"`
+	}
+
+	type dgpReq struct {
+		XMLName xml.Name `xml:"request"`
+		Info    dgpInfo  `xml:"move-dg>entry"`
+	}
+
+	req := dgpReq{
+		Info: dgpInfo{
+			Child:  child,
+			Parent: parent,
+		},
+	}
+	ans := util.JobResponse{}
+
+	c.LogOp("(op) assigning device group %q new parent: %s", child, parent)
+	if _, err := c.Op(req, "", nil, &ans); err != nil {
+		return err
+	}
+
+	return c.WaitForJob(ans.Id, 0, nil)
+}
+
 /** Private functions **/
 
 func (c *Panorama) initNamespaces() {
@@ -208,55 +262,35 @@ func (c *Panorama) initNamespaces() {
 	c.Network.Initialize(c)
 }
 
-func (c *Panorama) initPlugins() {
-	c.LogOp("(op) getting plugin info")
+type dghResp struct {
+	Result *dgHierarchy `xml:"result>dg-hierarchy"`
+}
 
-	type plugin_req struct {
-		XMLName xml.Name `xml:"show"`
-		Cmd     string   `xml:"plugins>packages"`
+func (o *dghResp) results() map[string]string {
+	ans := make(map[string]string)
+
+	if o.Result != nil {
+		for _, v := range o.Result.Info {
+			ans[v.Name] = ""
+			v.results(ans)
+		}
 	}
 
-	type relNote struct {
-		ReleaseNoteUrl string `xml:",cdata"`
-	}
+	return ans
+}
 
-	type pkgInfo struct {
-		Name        string  `xml:"name"`
-		Version     string  `xml:"version"`
-		ReleaseDate string  `xml:"release-date"`
-		RelNote     relNote `xml:"release-note-url"`
-		PackageFile string  `xml:"pkg-file"`
-		Size        string  `xml:"size"`
-		Platform    string  `xml:"platform"`
-		Installed   string  `xml:"installed"`
-		Downloaded  string  `xml:"downloaded"`
-	}
+type dgHierarchy struct {
+	Info []dghInfo `xml:"dg"`
+}
 
-	type pluginResp struct {
-		Answer []pkgInfo `xml:"result>plugins>entry"`
-	}
+type dghInfo struct {
+	Name     string    `xml:"name,attr"`
+	Children []dghInfo `xml:"dg"`
+}
 
-	req := plugin_req{}
-	ans := pluginResp{}
-
-	_, err := c.Op(req, "", nil, &ans)
-	if err != nil {
-		c.LogAction("WARNING: Failed to get plugin info: %s", err)
-		return
-	}
-
-	c.Plugin = make([]map[string]string, 0, len(ans.Answer))
-	for _, data := range ans.Answer {
-		c.Plugin = append(c.Plugin, map[string]string{
-			"name":             data.Name,
-			"version":          data.Version,
-			"release-date":     data.ReleaseDate,
-			"release-note-url": data.RelNote.ReleaseNoteUrl,
-			"package-file":     data.PackageFile,
-			"size":             data.Size,
-			"platform":         data.Platform,
-			"installed":        data.Installed,
-			"downloaded":       data.Downloaded,
-		})
+func (o *dghInfo) results(ans map[string]string) {
+	for _, v := range o.Children {
+		ans[v.Name] = o.Name
+		v.results(ans)
 	}
 }
