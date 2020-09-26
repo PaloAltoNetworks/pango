@@ -437,8 +437,8 @@ func (c *Client) UnlockCommits(vsys, admin string) error {
 
 // WaitForJob polls the device, waiting for the specified job to finish.
 //
-// The sleep param is an optional sleep duration to wait between polling for
-// job completion.
+// The sleep param is the length of time to wait between polling for job
+// completion.
 //
 // If you want to unmarshal the response into a struct, then pass in a
 // pointer to the struct for the "resp" param.  If you just want to know if
