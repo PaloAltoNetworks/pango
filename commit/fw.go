@@ -8,6 +8,8 @@ import (
 
 // FirewallCommit is a normalized object for defining firewall commits.
 //
+// This is a commit type, designed to be passed in to Client.Commit().
+//
 // Admins is the list of admins whose changes should be committed.
 type FirewallCommit struct {
 	Description             string
