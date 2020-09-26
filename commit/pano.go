@@ -8,6 +8,8 @@ import (
 
 // PanoramaCommit is a normalized Panorama commit.
 //
+// This is a commit type, designed to be passed in to Client.Commit().
+//
 // Admins is the list of admins whose changes should be committed.
 type PanoramaCommit struct {
 	Description             string
@@ -96,6 +98,8 @@ type panoPartialCommit struct {
 
 /*
 PanoramaCommitAll is a normalized Panorama commit-all.
+
+This is a commit type, designed to be passed in to Client.Commit().
 
 Depending on the type of commit specified, only certain parameters of this
 object are used.
