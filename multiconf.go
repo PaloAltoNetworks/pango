@@ -40,6 +40,10 @@ func (m *MultiConfigureResponse) Ok() bool {
 }
 
 func (m *MultiConfigureResponse) Error() string {
+	if len(m.Results) == 0 {
+		return ""
+	}
+
 	r := m.Results[len(m.Results)-1]
 	if r.Ok() {
 		return ""
