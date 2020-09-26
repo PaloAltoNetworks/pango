@@ -48,6 +48,14 @@ func TestPrepareMultiConfigure(t *testing.T) {
 	}
 }
 
+func TestEmptyErrorMultiConfigureResponse(t *testing.T) {
+	m := MultiConfigureResponse{}
+	ans := m.Error()
+	if ans != "" {
+		t.Errorf("Empty multi configure response is %q not empty string", ans)
+	}
+}
+
 func TestOkMultiConfig(t *testing.T) {
 	var err error
 	fw := &Firewall{Client: Client{
