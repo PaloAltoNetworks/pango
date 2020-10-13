@@ -58,11 +58,6 @@ func (c *Panorama) Set(tmpl, ts, vsys string, e ...Entry) error {
 }
 
 // Edit performs EDIT to configure the specified object.
-//
-// Specifying a non-empty vsys will import the interface into that vsys,
-// allowing the vsys to use it, as long as the interface does not have a
-// mode of "ha" or "aggregate-group".  Interfaces that have either of those
-// modes are omitted from this function's followup vsys import.
 func (c *Panorama) Edit(tmpl, ts, vsys string, e Entry) error {
 	return c.ns.Edit(tmpl, ts, vsys, c.pather(tmpl, ts), e)
 }
