@@ -166,7 +166,7 @@ func (c *Firewall) DeleteAll(vsys string) error {
 	return c.Delete(vsys, li...)
 }
 
-// MoveGroup moves a logical group of security policies somewhere in relation
+// MoveGroup moves a logical group of security rules somewhere in relation
 // to another security policy.
 //
 // The `movement` param should be one of the Move constants in the util
