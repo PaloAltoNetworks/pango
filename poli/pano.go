@@ -12,7 +12,7 @@ import (
 type PanoPoli struct {
 	Nat                   *nat.PanoNat
 	PolicyBasedForwarding *pbf.Panorama
-	Security              *security.PanoSecurity
+	Security              *security.Panorama
 }
 
 // Initialize is invoked on client.Initialize().
@@ -21,7 +21,5 @@ func (c *PanoPoli) Initialize(i util.XapiClient) {
 	c.Nat.Initialize(i)
 
 	c.PolicyBasedForwarding = pbf.PanoramaNamespace(i)
-
-	c.Security = &security.PanoSecurity{}
-	c.Security.Initialize(i)
+	c.Security = security.PanoramaNamespace(i)
 }

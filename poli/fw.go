@@ -12,7 +12,7 @@ import (
 type FwPoli struct {
 	Nat                   *nat.FwNat
 	PolicyBasedForwarding *pbf.Firewall
-	Security              *security.FwSecurity
+	Security              *security.Firewall
 }
 
 // Initialize is invoked on client.Initialize().
@@ -21,7 +21,5 @@ func (c *FwPoli) Initialize(i util.XapiClient) {
 	c.Nat.Initialize(i)
 
 	c.PolicyBasedForwarding = pbf.FirewallNamespace(i)
-
-	c.Security = &security.FwSecurity{}
-	c.Security.Initialize(i)
+	c.Security = security.FirewallNamespace(i)
 }
