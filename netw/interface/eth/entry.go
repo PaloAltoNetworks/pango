@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 
 	"github.com/PaloAltoNetworks/pango/util"
+	"github.com/PaloAltoNetworks/pango/version"
 )
 
 // Entry is a normalized, version independent representation of an ethernet
@@ -71,6 +72,16 @@ func (o *Entry) Copy(s Entry) {
 }
 
 /** Structs / functions for this namespace. **/
+
+func (o Entry) Specify(v version.Number) (string, string, interface{}) {
+	var iName string
+	if o.Mode != "ha" && o.Mode != "aggregate-group" {
+		iName = o.Name
+	}
+	_, fn := versioning(v)
+
+	return o.Name, iName, fn(o)
+}
 
 type normalizer interface {
 	Normalize() []Entry
