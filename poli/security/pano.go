@@ -166,7 +166,7 @@ func (c *Panorama) DeleteAll(dg, base string) error {
 	return c.Delete(dg, base, li...)
 }
 
-// MoveGroup moves a logical group of policy based forwarding rules
+// MoveGroup moves a logical group of security rules
 // somewhere in relation to another rule.
 //
 // The `movement` param should be one of the Move constants in the util
