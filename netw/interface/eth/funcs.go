@@ -70,28 +70,28 @@ func toNames(e []interface{}) ([]string, error) {
 }
 
 // FirewallNamespace returns an initialized namespace.
-func FirewallNamespace(con util.XapiClient) *Firewall {
+func FirewallNamespace(client util.XapiClient) *Firewall {
 	return &Firewall{
 		ns: &namespace.Importable{
 			ImportPath: util.InterfaceImport,
 			Common: namespace.Common{
 				Singular: singular,
 				Plural:   plural,
-				Client:   con,
+				Client:   client,
 			},
 		},
 	}
 }
 
 // PanoramaNaemspace returns an initialized namespace.
-func PanoramaNamespace(con util.XapiClient) *Panorama {
+func PanoramaNamespace(client util.XapiClient) *Panorama {
 	return &Panorama{
 		ns: &namespace.Importable{
 			ImportPath: util.InterfaceImport,
 			Common: namespace.Common{
 				Singular: singular,
 				Plural:   plural,
-				Client:   con,
+				Client:   client,
 			},
 		},
 	}
