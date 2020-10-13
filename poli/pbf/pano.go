@@ -6,92 +6,56 @@ import (
 
 	"github.com/PaloAltoNetworks/pango/namespace"
 	"github.com/PaloAltoNetworks/pango/util"
-	"github.com/PaloAltoNetworks/pango/version"
 )
 
-// PanoPbf is the client.Policies.PolicyBasedForwarding namespace.
-type PanoPbf struct {
-	con util.XapiClient
-	ns  *namespace.Namespace
+// Panorama is the client.Policies.PolicyBasedForwarding namespace.
+type Panorama struct {
+	ns *namespace.Standard
 }
 
-// Initialize is invoked by client.Initialize().
-func (c *PanoPbf) Initialize(con util.XapiClient) {
-	c.con = con
-	c.ns = namespace.New(singular, plural, con)
+// GetList performs GET to retrieve a list of all objects.
+func (c *Panorama) GetList(dg, base string) ([]string, error) {
+	ans := c.container()
+	return c.ns.Listing(util.Get, c.pather(dg, base), ans)
 }
 
-// ShowList performs SHOW to retrieve a list of values.
-func (c *PanoPbf) ShowList(dg, base string) ([]string, error) {
-	result, _ := c.versioning()
-	return c.ns.Listing(util.Show, c.xpath(dg, base, nil), result)
+// ShowList performs SHOW to retrieve a list of all objects.
+func (c *Panorama) ShowList(dg, base string) ([]string, error) {
+	ans := c.container()
+	return c.ns.Listing(util.Show, c.pather(dg, base), ans)
 }
 
-// GetList performs GET to retrieve a list of values.
-func (c *PanoPbf) GetList(dg, base string) ([]string, error) {
-	result, _ := c.versioning()
-	return c.ns.Listing(util.Get, c.xpath(dg, base, nil), result)
+// Get performs GET to retrieve information for the given object.
+func (c *Panorama) Get(dg, base, name string) (Entry, error) {
+	ans := c.container()
+	err := c.ns.Object(util.Get, c.pather(dg, base), name, ans)
+	return first(ans, err)
 }
 
-// Get performs GET to retrieve information for the given uid.
-func (c *PanoPbf) Get(dg, base, name string) (Entry, error) {
-	result, _ := c.versioning()
-	if err := c.ns.Object(util.Get, c.xpath(dg, base, []string{name}), name, result); err != nil {
-		return Entry{}, err
-	}
-
-	return result.Normalize()[0], nil
+// Show performs SHOW to retrieve information for the given object.
+func (c *Panorama) Show(dg, base, name string) (Entry, error) {
+	ans := c.container()
+	err := c.ns.Object(util.Show, c.pather(dg, base), name, ans)
+	return first(ans, err)
 }
 
 // GetAll performs GET to retrieve information for all objects.
-func (c *PanoPbf) GetAll(dg, base string) ([]Entry, error) {
-	result, _ := c.versioning()
-	if err := c.ns.Objects(util.Get, c.xpath(dg, base, nil), result); err != nil {
-		return nil, err
-	}
-
-	return result.Normalize(), nil
-}
-
-// Show performs SHOW to retrieve information for the given uid.
-func (c *PanoPbf) Show(dg, base, name string) (Entry, error) {
-	result, _ := c.versioning()
-	if err := c.ns.Object(util.Show, c.xpath(dg, base, []string{name}), name, result); err != nil {
-		return Entry{}, err
-	}
-
-	return result.Normalize()[0], nil
+func (c *Panorama) GetAll(dg, base string) ([]Entry, error) {
+	ans := c.container()
+	err := c.ns.Objects(util.Get, c.pather(dg, base), ans)
+	return all(ans, err)
 }
 
 // ShowAll performs SHOW to retrieve information for all objects.
-func (c *PanoPbf) ShowAll(dg, base string) ([]Entry, error) {
-	result, _ := c.versioning()
-	if err := c.ns.Objects(util.Show, c.xpath(dg, base, nil), result); err != nil {
-		return nil, err
-	}
-
-	return result.Normalize(), nil
+func (c *Panorama) ShowAll(dg, base string) ([]Entry, error) {
+	ans := c.container()
+	err := c.ns.Objects(util.Show, c.pather(dg, base), ans)
+	return all(ans, err)
 }
 
 // Set performs SET to create / update one or more objects.
-func (c *PanoPbf) Set(dg, base string, e ...Entry) error {
-	var err error
-
-	if len(e) == 0 {
-		return nil
-	}
-
-	_, fn := c.versioning()
-	data := make([]interface{}, 0, len(e))
-	names := make([]string, 0, len(e))
-
-	for i := range e {
-		data = append(data, fn(e[i]))
-		names = append(names, e[i].Name)
-	}
-	path := c.xpath(dg, base, names)
-
-	err = c.ns.Set(names, path, data)
+func (c *Panorama) Set(dg, base string, e ...Entry) error {
+	err := c.ns.Set(c.pather(dg, base), specifier(e...))
 
 	// On error: find the rule that's causing the error if multiple rules
 	// were given.
@@ -111,33 +75,17 @@ func (c *PanoPbf) Set(dg, base string, e ...Entry) error {
 	return err
 }
 
-// Edit performs EDIT to create / update one object.
-func (c *PanoPbf) Edit(dg, base string, e Entry) error {
-	_, fn := c.versioning()
-	path := c.xpath(dg, base, []string{e.Name})
-	data := fn(e)
-
-	return c.ns.Edit(e.Name, path, data)
+// Edit performs EDIT to configure the specified object.
+func (c *Panorama) Edit(dg, base string, e Entry) error {
+	return c.ns.Edit(c.pather(dg, base), e)
 }
 
 // Delete removes the given objects.
 //
 // Objects can be a string or an Entry object.
-func (c *PanoPbf) Delete(dg, base string, e ...interface{}) error {
-	names := make([]string, len(e))
-	for i := range e {
-		switch v := e[i].(type) {
-		case string:
-			names[i] = v
-		case Entry:
-			names[i] = v.Name
-		default:
-			return fmt.Errorf("Unknown type sent to delete: %s", v)
-		}
-	}
-	path := c.xpath(dg, base, names)
-
-	return c.ns.Delete(names, path)
+func (c *Panorama) Delete(dg, base string, e ...interface{}) error {
+	names, nErr := toNames(e)
+	return c.ns.Delete(c.pather(dg, base), names, nErr)
 }
 
 // MoveGroup moves a logical group of policy based forwarding rules
@@ -150,36 +98,31 @@ func (c *PanoPbf) Delete(dg, base string, e ...interface{}) error {
 // this is an empty string, then the first policy in the group isn't moved
 // anywhere, but all other policies will still be moved to be grouped with the
 // first one.
-func (c *PanoPbf) MoveGroup(dg, base string, movement int, rule string, e ...Entry) error {
-	pather := func(v string) []string {
-		return c.xpath(dg, base, []string{v})
-	}
-
+func (c *Panorama) MoveGroup(dg, base string, movement int, rule string, e ...Entry) error {
 	lister := func() ([]string, error) {
 		return c.GetList(dg, base)
 	}
 
-	names := make([]string, 0, len(e))
+	ei := make([]interface{}, 0, len(e))
 	for i := range e {
-		names = append(names, e[i].Name)
+		ei = append(ei, e[i])
 	}
+	names, _ := toNames(ei)
 
-	return c.ns.MoveGroup(pather, lister, movement, rule, names)
+	return c.ns.MoveGroup(c.pather(dg, base), lister, movement, rule, names)
 }
 
-/** Internal functions for this namespace struct **/
-
-func (c *PanoPbf) versioning() (normalizer, func(Entry) interface{}) {
-	v := c.con.Versioning()
-
-	if v.Gte(version.Number{9, 0, 0, ""}) {
-		return &container_v2{}, specify_v2
-	} else {
-		return &container_v1{}, specify_v1
+func (c *Panorama) pather(dg, base string) namespace.Pather {
+	return func(v []string) ([]string, error) {
+		return c.xpath(dg, base, v)
 	}
 }
 
-func (c *PanoPbf) xpath(dg, base string, vals []string) []string {
+func (c *Panorama) xpath(dg, base string, vals []string) ([]string, error) {
+	if base == "" {
+		return nil, fmt.Errorf("base must be specified")
+	}
+
 	ans := make([]string, 0, 9)
 	ans = append(ans, util.DeviceGroupXpathPrefix(dg)...)
 	ans = append(ans,
@@ -189,5 +132,9 @@ func (c *PanoPbf) xpath(dg, base string, vals []string) []string {
 		util.AsEntryXpath(vals),
 	)
 
-	return ans
+	return ans, nil
+}
+
+func (c *Panorama) container() normalizer {
+	return container(c.ns.Client.Versioning())
 }
