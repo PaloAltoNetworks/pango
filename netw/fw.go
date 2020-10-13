@@ -74,7 +74,7 @@ type FwNetw struct {
 	RedistributionProfile    *redist4.FwIpv4
 	StaticRoute              *ipv4.FwIpv4
 	TunnelInterface          *tunnel.FwTunnel
-	VirtualRouter            *router.FwRouter
+	VirtualRouter            *router.Firewall
 	Vlan                     *vlan.FwVlan
 	VlanInterface            *vli.FwVlan
 	Zone                     *zone.FwZone
@@ -177,8 +177,7 @@ func (c *FwNetw) Initialize(i util.XapiClient) {
 	c.TunnelInterface = &tunnel.FwTunnel{}
 	c.TunnelInterface.Initialize(i)
 
-	c.VirtualRouter = &router.FwRouter{}
-	c.VirtualRouter.Initialize(i)
+	c.VirtualRouter = router.FirewallNamespace(i)
 
 	c.Vlan = &vlan.FwVlan{}
 	c.Vlan.Initialize(i)
