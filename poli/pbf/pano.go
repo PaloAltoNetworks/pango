@@ -119,8 +119,8 @@ func (c *Panorama) pather(dg, base string) namespace.Pather {
 }
 
 func (c *Panorama) xpath(dg, base string, vals []string) ([]string, error) {
-	if base == "" {
-		return nil, fmt.Errorf("base must be specified")
+	if err := util.ValidateRulebase(base); err != nil {
+		return nil, err
 	}
 
 	ans := make([]string, 0, 9)
