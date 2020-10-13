@@ -11,7 +11,7 @@ import (
 // Poli is the client.Policies namespace.
 type FwPoli struct {
 	Nat                   *nat.FwNat
-	PolicyBasedForwarding *pbf.FwPbf
+	PolicyBasedForwarding *pbf.Firewall
 	Security              *security.FwSecurity
 }
 
@@ -20,8 +20,7 @@ func (c *FwPoli) Initialize(i util.XapiClient) {
 	c.Nat = &nat.FwNat{}
 	c.Nat.Initialize(i)
 
-	c.PolicyBasedForwarding = &pbf.FwPbf{}
-	c.PolicyBasedForwarding.Initialize(i)
+	c.PolicyBasedForwarding = pbf.FirewallNamespace(i)
 
 	c.Security = &security.FwSecurity{}
 	c.Security.Initialize(i)
