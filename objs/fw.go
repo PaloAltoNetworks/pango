@@ -21,7 +21,7 @@ import (
 
 // FwObjs is the client.Objects namespace.
 type FwObjs struct {
-	Address                             *addr.FwAddr
+	Address                             *addr.Firewall
 	AddressGroup                        *addrgrp.FwAddrGrp
 	Application                         *app.FwApp
 	AppGroup                            *appgrp.FwGroup
@@ -39,8 +39,7 @@ type FwObjs struct {
 
 // Initialize is invoked on client.Initialize().
 func (c *FwObjs) Initialize(i util.XapiClient) {
-	c.Address = &addr.FwAddr{}
-	c.Address.Initialize(i)
+	c.Address = addr.FirewallNamespace(i)
 
 	c.AddressGroup = &addrgrp.FwAddrGrp{}
 	c.AddressGroup.Initialize(i)

@@ -21,7 +21,7 @@ import (
 
 // PanoObjs is the client.Objects namespace.
 type PanoObjs struct {
-	Address                             *addr.PanoAddr
+	Address                             *addr.Panorama
 	AddressGroup                        *addrgrp.PanoAddrGrp
 	Application                         *app.PanoApp
 	AppGroup                            *appgrp.PanoGroup
@@ -39,8 +39,7 @@ type PanoObjs struct {
 
 // Initialize is invoked on client.Initialize().
 func (c *PanoObjs) Initialize(i util.XapiClient) {
-	c.Address = &addr.PanoAddr{}
-	c.Address.Initialize(i)
+	c.Address = addr.PanoramaNamespace(i)
 
 	c.AddressGroup = &addrgrp.PanoAddrGrp{}
 	c.AddressGroup.Initialize(i)
