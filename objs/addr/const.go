@@ -7,3 +7,8 @@ const (
 	Fqdn       = "fqdn"
 	IpWildcard = "ip-wildcard" // 9.0+
 )
+
+const (
+	singular = "address object"
+	plural   = "address objects"
+)
