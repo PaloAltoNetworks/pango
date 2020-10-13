@@ -256,3 +256,15 @@ func RelativeMovement(v int) bool {
 
 	return false
 }
+
+// ValidateRulebase returns a nil error if the rulebase is valid.
+func ValidateRulebase(base string) error {
+	switch base {
+	case "":
+		return fmt.Errorf("base must be specified")
+	case Rulebase, PreRulebase, PostRulebase:
+		return nil
+	}
+
+	return fmt.Errorf("invalid rulebase value: %s", base)
+}
