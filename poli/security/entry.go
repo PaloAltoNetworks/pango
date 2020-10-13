@@ -156,7 +156,6 @@ func (o *Entry) Copy(s Entry) {
 
 func (o Entry) Specify(v version.Number) (string, interface{}) {
 	_, fn := versioning(v)
-
 	return o.Name, fn(o)
 }
 
