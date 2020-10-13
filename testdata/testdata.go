@@ -189,6 +189,9 @@ func (c *MockClient) AddResp(val string) {
 }
 
 func (c *MockClient) Reset() {
+	c.Resp = nil
+	c.Called = 0
+
 	c.Function = ""
 	c.Imports = []string{}
 	c.Unimports = []string{}
