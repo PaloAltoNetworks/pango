@@ -59,7 +59,7 @@ type PanoNetw struct {
 	BgpPeer                  *peer.PanoPeer
 	BgpPeerGroup             *group.PanoGroup
 	BgpRedistRule            *bgpredist.PanoRedist
-	EthernetInterface        *eth.PanoEth
+	EthernetInterface        *eth.Panorama
 	GreTunnel                *gre.PanoGre
 	IkeCryptoProfile         *ike.PanoIke
 	IkeGateway               *ikegw.PanoIkeGw
@@ -133,8 +133,7 @@ func (c *PanoNetw) Initialize(i util.XapiClient) {
 	c.BgpRedistRule = &bgpredist.PanoRedist{}
 	c.BgpRedistRule.Initialize(i)
 
-	c.EthernetInterface = &eth.PanoEth{}
-	c.EthernetInterface.Initialize(i)
+	c.EthernetInterface = eth.PanoramaNamespace(i)
 
 	c.GreTunnel = &gre.PanoGre{}
 	c.GreTunnel.Initialize(i)
