@@ -153,9 +153,7 @@ func TemplateXpathPrefix(tmpl, ts string) []string {
 func DeviceGroupXpathPrefix(dg string) []string {
 	if dg == "" {
 		dg = "shared"
-	}
-
-	if dg == "shared" {
+	} else if dg == "shared" {
 		return []string{"config", "shared"}
 	}
 
@@ -172,9 +170,7 @@ func DeviceGroupXpathPrefix(dg string) []string {
 func VsysXpathPrefix(vsys string) []string {
 	if vsys == "" {
 		vsys = "vsys1"
-	}
-
-	if vsys == "shared" {
+	} else if vsys == "shared" {
 		return []string{"config", "shared"}
 	}
 
