@@ -73,6 +73,10 @@ func (n *Common) retrieve(cmd string, path []string, singular bool, singleDesc s
 		return fmt.Errorf("invalid cmd: %s", cmd)
 	}
 
+	if pErr != nil {
+		return pErr
+	}
+
 	// Do logging and determine the actual path to query.
 	if singular {
 		if singleDesc != "" {
@@ -96,10 +100,6 @@ func (n *Common) retrieve(cmd string, path []string, singular bool, singleDesc s
 			}
 			n.Client.LogQuery("(%s) list of %s", cmd, n.Plural)
 		}
-	}
-
-	if pErr != nil {
-		return pErr
 	}
 
 	// Perform the query.
