@@ -8,85 +8,54 @@ import (
 	"github.com/PaloAltoNetworks/pango/util"
 )
 
-// FwSecurity is the client.Policies.Security namespace.
-type FwSecurity struct {
-	con util.XapiClient
-	ns  *namespace.Namespace
+// Firewall is the client.Policies.PolicyBasedForwarding namespace.
+type Firewall struct {
+	ns *namespace.Standard
 }
 
-// Initialize is invoed by client.Initialize().
-func (c *FwSecurity) Initialize(con util.XapiClient) {
-	c.con = con
-	c.ns = namespace.New(singular, plural, con)
+// GetList performs GET to retrieve a list of all objects.
+func (c *Firewall) GetList(vsys string) ([]string, error) {
+	ans := c.container()
+	return c.ns.Listing(util.Get, c.pather(vsys), ans)
 }
 
-// GetList performs GET to retrieve a list object names.
-func (c *FwSecurity) GetList(vsys string) ([]string, error) {
-	result, _ := c.versioning()
-	return c.ns.Listing(util.Get, c.xpath(vsys, nil), result)
-}
-
-// ShowList performs SHOW to retrieve a list of object names.
-func (c *FwSecurity) ShowList(vsys string) ([]string, error) {
-	result, _ := c.versioning()
-	return c.ns.Listing(util.Show, c.xpath(vsys, nil), result)
+// ShowList performs SHOW to retrieve a list of all objects.
+func (c *Firewall) ShowList(vsys string) ([]string, error) {
+	ans := c.container()
+	return c.ns.Listing(util.Show, c.pather(vsys), ans)
 }
 
 // Get performs GET to retrieve information for the given object.
-func (c *FwSecurity) Get(vsys, name string) (Entry, error) {
-	result, _ := c.versioning()
-	if err := c.ns.Object(util.Get, c.xpath(vsys, []string{name}), name, result); err != nil {
-		return Entry{}, err
-	}
-
-	return result.Normalize()[0], nil
-}
-
-// GetAll performs a GET to retrieve information for all objects.
-func (c *FwSecurity) GetAll(vsys string) ([]Entry, error) {
-	result, _ := c.versioning()
-	if err := c.ns.Objects(util.Get, c.xpath(vsys, nil), result); err != nil {
-		return nil, err
-	}
-
-	return result.Normalize(), nil
+func (c *Firewall) Get(vsys, name string) (Entry, error) {
+	ans := c.container()
+	err := c.ns.Object(util.Get, c.pather(vsys), name, ans)
+	return first(ans, err)
 }
 
 // Show performs SHOW to retrieve information for the given object.
-func (c *FwSecurity) Show(vsys, name string) (Entry, error) {
-	result, _ := c.versioning()
-	if err := c.ns.Object(util.Show, c.xpath(vsys, []string{name}), name, result); err != nil {
-		return Entry{}, err
-	}
-
-	return result.Normalize()[0], nil
+func (c *Firewall) Show(vsys, name string) (Entry, error) {
+	ans := c.container()
+	err := c.ns.Object(util.Show, c.pather(vsys), name, ans)
+	return first(ans, err)
 }
 
-// ShowAll performs a SHOW to retrieve information for all objects.
-func (c *FwSecurity) ShowAll(vsys string) ([]Entry, error) {
-	result, _ := c.versioning()
-	if err := c.ns.Objects(util.Show, c.xpath(vsys, nil), result); err != nil {
-		return nil, err
-	}
-
-	return result.Normalize(), nil
+// GetAll performs GET to retrieve all objects configured.
+func (c *Firewall) GetAll(vsys string) ([]Entry, error) {
+	ans := c.container()
+	err := c.ns.Objects(util.Get, c.pather(vsys), ans)
+	return all(ans, err)
 }
 
-// Set performs SET to create / update one or more security policies.
-func (c *FwSecurity) Set(vsys string, e ...Entry) error {
-	var err error
+// ShowAll performs SHOW to retrieve information for all objects.
+func (c *Firewall) ShowAll(vsys string) ([]Entry, error) {
+	ans := c.container()
+	err := c.ns.Objects(util.Show, c.pather(vsys), ans)
+	return all(ans, err)
+}
 
-	_, fn := c.versioning()
-	data := make([]interface{}, 0, len(e))
-	names := make([]string, 0, len(e))
-
-	for i := range e {
-		data = append(data, fn(e[i]))
-		names = append(names, e[i].Name)
-	}
-	path := c.xpath(vsys, names)
-
-	err = c.ns.Set(names, path, data)
+// Set performs SET to configure the specified objects.
+func (c *Firewall) Set(vsys string, e ...Entry) error {
+	err := c.ns.Set(c.pather(vsys), specifier(e...))
 
 	// On error: find the rule that's causing the error if multiple rules
 	// were given.
@@ -114,8 +83,8 @@ func (c *FwSecurity) Set(vsys string, e ...Entry) error {
 // which will be interpreted as false, when in fact it is true.  We can
 // get around this by setting the value to a non-standard value, then back
 // again, in which case it will properly show up in the returned XML.
-func (c *FwSecurity) VerifiableSet(vsys string, e ...Entry) error {
-	c.con.LogAction("(set) performing verifiable set")
+func (c *Firewall) VerifiableSet(vsys string, e ...Entry) error {
+	c.ns.Client.LogAction("(set) performing verifiable set")
 	again := make([]Entry, 0, len(e))
 
 	for i := range e {
@@ -136,13 +105,9 @@ func (c *FwSecurity) VerifiableSet(vsys string, e ...Entry) error {
 	return c.Set(vsys, again...)
 }
 
-// Edit performs EDIT to create / update a security policy.
-func (c *FwSecurity) Edit(vsys string, e Entry) error {
-	_, fn := c.versioning()
-	path := c.xpath(vsys, []string{e.Name})
-	data := fn(e)
-
-	return c.ns.Edit(e.Name, path, data)
+// Edit performs EDIT to configure the specified object.
+func (c *Firewall) Edit(vsys string, e Entry) error {
+	return c.ns.Edit(c.pather(vsys), e)
 }
 
 // VerifiableEdit behaves like Edit(), except policies with LogEnd as true
@@ -153,10 +118,10 @@ func (c *FwSecurity) Edit(vsys string, e Entry) error {
 // which will be interpreted as false, when in fact it is true.  We can
 // get around this by setting the value to a non-standard value, then back
 // again, in which case it will properly show up in the returned XML.
-func (c *FwSecurity) VerifiableEdit(vsys string, e ...Entry) error {
+func (c *Firewall) VerifiableEdit(vsys string, e ...Entry) error {
 	var err error
 
-	c.con.LogAction("(edit) performing verifiable edit")
+	c.ns.Client.LogAction("(edit) performing verifiable edit")
 	again := make([]Entry, 0, len(e))
 
 	for i := range e {
@@ -179,29 +144,17 @@ func (c *FwSecurity) VerifiableEdit(vsys string, e ...Entry) error {
 	return c.Set(vsys, again...)
 }
 
-// Delete removes the given security policies.
+// Delete performs DELETE to remove the specified objects.
 //
-// Security rules can be either a string or an Entry object.
-func (c *FwSecurity) Delete(vsys string, e ...interface{}) error {
-	names := make([]string, 0, len(e))
-	for i := range e {
-		switch v := e[i].(type) {
-		case string:
-			names = append(names, v)
-		case Entry:
-			names = append(names, v.Name)
-		default:
-			return fmt.Errorf("Unsupported type to delete: %s", v)
-		}
-	}
-
-	path := c.xpath(vsys, names)
-	return c.ns.Delete(names, path)
+// Objects can be either a string or an Entry object.
+func (c *Firewall) Delete(vsys string, e ...interface{}) error {
+	names, nErr := toNames(e)
+	return c.ns.Delete(c.pather(vsys), names, nErr)
 }
 
 // DeleteAll removes all security policies from the specified vsys.
-func (c *FwSecurity) DeleteAll(vsys string) error {
-	c.con.LogAction("(delete) all security policies")
+func (c *Firewall) DeleteAll(vsys string) error {
+	c.ns.Client.LogAction("(delete) all security policies")
 	list, err := c.GetList(vsys)
 	if err != nil || len(list) == 0 {
 		return err
@@ -223,43 +176,31 @@ func (c *FwSecurity) DeleteAll(vsys string) error {
 // this is an empty string, then the first policy in the group isn't moved
 // anywhere, but all other policies will still be moved to be grouped with the
 // first one.
-func (c *FwSecurity) MoveGroup(vsys string, movement int, rule string, e ...Entry) error {
-	pather := func(v string) []string {
-		return c.xpath(vsys, []string{v})
-	}
-
+func (c *Firewall) MoveGroup(vsys string, movement int, rule string, e ...Entry) error {
 	lister := func() ([]string, error) {
 		return c.GetList(vsys)
 	}
 
-	names := make([]string, 0, len(e))
+	ei := make([]interface{}, 0, len(e))
 	for i := range e {
-		names = append(names, e[i].Name)
+		ei = append(ei, e[i])
 	}
+	names, _ := toNames(ei)
 
-	return c.ns.MoveGroup(pather, lister, movement, rule, names)
+	return c.ns.MoveGroup(c.pather(vsys), lister, movement, rule, names)
 }
 
-/** Internal functions for the FwSecurity struct **/
-
-func (c *FwSecurity) versioning() (normalizer, func(Entry) interface{}) {
-	return &container_v1{}, specify_v1
+func (c *Firewall) pather(vsys string) namespace.Pather {
+	return func(v []string) ([]string, error) {
+		return c.xpath(vsys, v)
+	}
 }
 
-func (c *FwSecurity) xpath(vsys string, vals []string) []string {
+func (c *Firewall) xpath(vsys string, vals []string) ([]string, error) {
 	if vsys == "" {
 		vsys = "vsys1"
-	}
-
-	if vsys == "shared" {
-		return []string{
-			"config",
-			"shared",
-			"rulebase",
-			"security",
-			"rules",
-			util.AsEntryXpath(vals),
-		}
+	} else if vsys == "shared" {
+		return nil, fmt.Errorf("vsys must be specified")
 	}
 
 	return []string{
@@ -272,5 +213,9 @@ func (c *FwSecurity) xpath(vsys string, vals []string) []string {
 		"security",
 		"rules",
 		util.AsEntryXpath(vals),
-	}
+	}, nil
+}
+
+func (c *Firewall) container() normalizer {
+	return container(c.ns.Client.Versioning())
 }

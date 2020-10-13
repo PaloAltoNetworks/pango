@@ -8,85 +8,54 @@ import (
 	"github.com/PaloAltoNetworks/pango/util"
 )
 
-// PanoSecurity is the client.Policies.Security namespace.
-type PanoSecurity struct {
-	con util.XapiClient
-	ns  *namespace.Namespace
+// Panorama is the client.Policies.Security namespace.
+type Panorama struct {
+	ns *namespace.Standard
 }
 
-// Initialize is invoed by client.Initialize().
-func (c *PanoSecurity) Initialize(con util.XapiClient) {
-	c.con = con
-	c.ns = namespace.New(singular, plural, con)
+// GetList performs GET to retrieve a list of all objects.
+func (c *Panorama) GetList(dg, base string) ([]string, error) {
+	ans := c.container()
+	return c.ns.Listing(util.Get, c.pather(dg, base), ans)
 }
 
-// GetList performs GET to retrieve a list of object names.
-func (c *PanoSecurity) GetList(dg, base string) ([]string, error) {
-	result, _ := c.versioning()
-	return c.ns.Listing(util.Get, c.xpath(dg, base, nil), result)
-}
-
-// ShowList performs SHOW to retrieve a list of object names.
-func (c *PanoSecurity) ShowList(dg, base string) ([]string, error) {
-	result, _ := c.versioning()
-	return c.ns.Listing(util.Show, c.xpath(dg, base, nil), result)
+// ShowList performs SHOW to retrieve a list of all objects.
+func (c *Panorama) ShowList(dg, base string) ([]string, error) {
+	ans := c.container()
+	return c.ns.Listing(util.Show, c.pather(dg, base), ans)
 }
 
 // Get performs GET to retrieve information for the given object.
-func (c *PanoSecurity) Get(dg, base, name string) (Entry, error) {
-	result, _ := c.versioning()
-	if err := c.ns.Object(util.Get, c.xpath(dg, base, []string{name}), name, result); err != nil {
-		return Entry{}, err
-	}
-
-	return result.Normalize()[0], nil
-}
-
-// GetAll performs GET to retrieve all objects.
-func (c *PanoSecurity) GetAll(dg, base string) ([]Entry, error) {
-	result, _ := c.versioning()
-	if err := c.ns.Objects(util.Get, c.xpath(dg, base, nil), result); err != nil {
-		return nil, err
-	}
-
-	return result.Normalize(), nil
+func (c *Panorama) Get(dg, base, name string) (Entry, error) {
+	ans := c.container()
+	err := c.ns.Object(util.Get, c.pather(dg, base), name, ans)
+	return first(ans, err)
 }
 
 // Show performs SHOW to retrieve information for the given object.
-func (c *PanoSecurity) Show(dg, base, name string) (Entry, error) {
-	result, _ := c.versioning()
-	if err := c.ns.Object(util.Show, c.xpath(dg, base, []string{name}), name, result); err != nil {
-		return Entry{}, err
-	}
-
-	return result.Normalize()[0], nil
+func (c *Panorama) Show(dg, base, name string) (Entry, error) {
+	ans := c.container()
+	err := c.ns.Object(util.Show, c.pather(dg, base), name, ans)
+	return first(ans, err)
 }
 
-// ShowAll performs SHOW to retrieve all objects.
-func (c *PanoSecurity) ShowAll(dg, base string) ([]Entry, error) {
-	result, _ := c.versioning()
-	if err := c.ns.Objects(util.Show, c.xpath(dg, base, nil), result); err != nil {
-		return nil, err
-	}
-
-	return result.Normalize(), nil
+// GetAll performs GET to retrieve information for all objects.
+func (c *Panorama) GetAll(dg, base string) ([]Entry, error) {
+	ans := c.container()
+	err := c.ns.Objects(util.Get, c.pather(dg, base), ans)
+	return all(ans, err)
 }
 
-// Set performs SET to create / update one or more security policies.
-func (c *PanoSecurity) Set(dg, base string, e ...Entry) error {
-	var err error
+// ShowAll performs SHOW to retrieve information for all objects.
+func (c *Panorama) ShowAll(dg, base string) ([]Entry, error) {
+	ans := c.container()
+	err := c.ns.Objects(util.Show, c.pather(dg, base), ans)
+	return all(ans, err)
+}
 
-	_, fn := c.versioning()
-	data := make([]interface{}, 0, len(e))
-	names := make([]string, len(e))
-
-	for i := range e {
-		data = append(data, fn(e[i]))
-		names = append(names, e[i].Name)
-	}
-	path := c.xpath(dg, base, names)
-
-	err = c.ns.Set(names, path, data)
+// Set performs SET to create / update one or more objects.
+func (c *Panorama) Set(dg, base string, e ...Entry) error {
+	err := c.ns.Set(c.pather(dg, base), specifier(e...))
 
 	// On error: find the rule that's causing the error if multiple rules
 	// were given.
@@ -114,8 +83,8 @@ func (c *PanoSecurity) Set(dg, base string, e ...Entry) error {
 // which will be interpreted as false, when in fact it is true.  We can
 // get around this by setting the value to a non-standard value, then back
 // again, in which case it will properly show up in the returned XML.
-func (c *PanoSecurity) VerifiableSet(dg, base string, e ...Entry) error {
-	c.con.LogAction("(set) performing verifiable set")
+func (c *Panorama) VerifiableSet(dg, base string, e ...Entry) error {
+	c.ns.Client.LogAction("(set) performing verifiable set")
 	again := make([]Entry, 0, len(e))
 
 	for i := range e {
@@ -136,13 +105,9 @@ func (c *PanoSecurity) VerifiableSet(dg, base string, e ...Entry) error {
 	return c.Set(dg, base, again...)
 }
 
-// Edit performs EDIT to create / update a security policy.
-func (c *PanoSecurity) Edit(dg, base string, e Entry) error {
-	_, fn := c.versioning()
-	path := c.xpath(dg, base, []string{e.Name})
-	data := fn(e)
-
-	return c.ns.Edit(e.Name, path, data)
+// Edit performs EDIT to configure the specified object.
+func (c *Panorama) Edit(dg, base string, e Entry) error {
+	return c.ns.Edit(c.pather(dg, base), e)
 }
 
 // VerifiableEdit behaves like Edit(), except policies with LogEnd as true
@@ -153,10 +118,10 @@ func (c *PanoSecurity) Edit(dg, base string, e Entry) error {
 // which will be interpreted as false, when in fact it is true.  We can
 // get around this by setting the value to a non-standard value, then back
 // again, in which case it will properly show up in the returned XML.
-func (c *PanoSecurity) VerifiableEdit(dg, base string, e ...Entry) error {
+func (c *Panorama) VerifiableEdit(dg, base string, e ...Entry) error {
 	var err error
 
-	c.con.LogAction("(edit) performing verifiable edit")
+	c.ns.Client.LogAction("(edit) performing verifiable edit")
 	again := make([]Entry, 0, len(e))
 
 	for i := range e {
@@ -179,29 +144,17 @@ func (c *PanoSecurity) VerifiableEdit(dg, base string, e ...Entry) error {
 	return c.Set(dg, base, again...)
 }
 
-// Delete removes the given security policies.
+// Delete removes the given objects.
 //
-// Security policies can be either a string or an Entry object.
-func (c *PanoSecurity) Delete(dg, base string, e ...interface{}) error {
-	names := make([]string, 0, len(e))
-	for i := range e {
-		switch v := e[i].(type) {
-		case string:
-			names = append(names, v)
-		case Entry:
-			names = append(names, v.Name)
-		default:
-			return fmt.Errorf("Unsupported type to delete: %s", v)
-		}
-	}
-
-	path := c.xpath(dg, base, names)
-	return c.ns.Delete(names, path)
+// Objects can be a string or an Entry object.
+func (c *Panorama) Delete(dg, base string, e ...interface{}) error {
+	names, nErr := toNames(e)
+	return c.ns.Delete(c.pather(dg, base), names, nErr)
 }
 
 // DeleteAll removes all security policies from the specified dg / rulebase.
-func (c *PanoSecurity) DeleteAll(dg, base string) error {
-	c.con.LogAction("(delete) all security policies")
+func (c *Panorama) DeleteAll(dg, base string) error {
+	c.ns.Client.LogAction("(delete) all security rules")
 	list, err := c.GetList(dg, base)
 	if err != nil || len(list) == 0 {
 		return err
@@ -213,8 +166,8 @@ func (c *PanoSecurity) DeleteAll(dg, base string) error {
 	return c.Delete(dg, base, li...)
 }
 
-// MoveGroup moves a logical group of security policies somewhere in relation
-// to another security policy.
+// MoveGroup moves a logical group of policy based forwarding rules
+// somewhere in relation to another rule.
 //
 // The `movement` param should be one of the Move constants in the util
 // package.
@@ -223,57 +176,48 @@ func (c *PanoSecurity) DeleteAll(dg, base string) error {
 // this is an empty string, then the first policy in the group isn't moved
 // anywhere, but all other policies will still be moved to be grouped with the
 // first one.
-func (c *PanoSecurity) MoveGroup(dg, base string, movement int, rule string, e ...Entry) error {
-	pather := func(v string) []string {
-		return c.xpath(dg, base, []string{v})
-	}
-
+func (c *Panorama) MoveGroup(dg, base string, movement int, rule string, e ...Entry) error {
 	lister := func() ([]string, error) {
 		return c.GetList(dg, base)
 	}
 
-	names := make([]string, 0, len(e))
+	ei := make([]interface{}, 0, len(e))
 	for i := range e {
-		names = append(names, e[i].Name)
+		ei = append(ei, e[i])
 	}
+	names, _ := toNames(ei)
 
-	return c.ns.MoveGroup(pather, lister, movement, rule, names)
+	return c.ns.MoveGroup(c.pather(dg, base), lister, movement, rule, names)
 }
 
-/** Internal functions for the PanoSecurity struct **/
-
-func (c *PanoSecurity) versioning() (normalizer, func(Entry) interface{}) {
-	return &container_v1{}, specify_v1
+func (c *Panorama) pather(dg, base string) namespace.Pather {
+	return func(v []string) ([]string, error) {
+		return c.xpath(dg, base, v)
+	}
 }
 
-func (c *PanoSecurity) xpath(dg, base string, vals []string) []string {
-	if dg == "" {
-		dg = "shared"
-	}
-	if base == "" {
-		base = util.PreRulebase
-	}
-
-	if dg == "shared" {
-		return []string{
-			"config",
-			"shared",
-			base,
-			"security",
-			"rules",
-			util.AsEntryXpath(vals),
-		}
+func (c *Panorama) xpath(dg, base string, vals []string) ([]string, error) {
+	/*
+	   if base == "" {
+	       base = util.PreRulebase
+	   }
+	*/
+	if err := util.ValidateRulebase(base); err != nil {
+		return nil, err
 	}
 
-	return []string{
-		"config",
-		"devices",
-		util.AsEntryXpath([]string{"localhost.localdomain"}),
-		"device-group",
-		util.AsEntryXpath([]string{dg}),
+	ans := make([]string, 0, 9)
+	ans = append(ans, util.DeviceGroupXpathPrefix(dg)...)
+	ans = append(ans,
 		base,
 		"security",
 		"rules",
 		util.AsEntryXpath(vals),
-	}
+	)
+
+	return ans, nil
+}
+
+func (c *Panorama) container() normalizer {
+	return container(c.ns.Client.Versioning())
 }

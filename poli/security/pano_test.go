@@ -11,13 +11,15 @@ func TestPanoNormalization(t *testing.T) {
 	testCases := getTests()
 
 	mc := &testdata.MockClient{}
-	ns := &PanoSecurity{}
-	ns.Initialize(mc)
+	ns := PanoramaNamespace(mc)
 
 	for _, tc := range testCases {
 		t.Run(tc.desc, func(t *testing.T) {
 			mc.Version = tc.version
 			mc.Reset()
+			if tc.base == "" {
+				t.Skip()
+			}
 			mc.AddResp("")
 			if tc.doDefaults {
 				tc.conf.Defaults()
