@@ -75,7 +75,7 @@ func (o *Entry) Copy(s Entry) {
 
 func (o Entry) Specify(v version.Number) (string, string, interface{}) {
 	var iName string
-	if o.Mode != "ha" && o.Mode != "aggregate-group" {
+	if o.Mode != ModeHa && o.Mode != ModeAggregateGroup {
 		iName = o.Name
 	}
 	_, fn := versioning(v)
@@ -121,7 +121,7 @@ func (o *entry_v1) normalize() Entry {
 	ans.raw = make(map[string]string)
 	switch {
 	case o.ModeL3 != nil:
-		ans.Mode = "layer3"
+		ans.Mode = ModeLayer3
 		ans.ManagementProfile = o.ModeL3.ManagementProfile
 		ans.Mtu = o.ModeL3.Mtu
 		ans.NetflowProfile = o.ModeL3.NetflowProfile
@@ -151,7 +151,7 @@ func (o *entry_v1) normalize() Entry {
 			ans.raw["l3subinterface"] = util.CleanRawXml(o.ModeL3.Subinterface.Text)
 		}
 	case o.ModeL2 != nil:
-		ans.Mode = "layer2"
+		ans.Mode = ModeLayer2
 		ans.NetflowProfile = o.ModeL2.NetflowProfile
 		if o.ModeL2.Lldp != nil {
 			ans.LldpEnabled = util.AsBool(o.ModeL2.Lldp.LldpEnabled)
@@ -161,7 +161,7 @@ func (o *entry_v1) normalize() Entry {
 			ans.raw["l2subinterface"] = util.CleanRawXml(o.ModeL2.Subinterface.Text)
 		}
 	case o.ModeVwire != nil:
-		ans.Mode = "virtual-wire"
+		ans.Mode = ModeVirtualWire
 		ans.NetflowProfile = o.ModeVwire.NetflowProfile
 		if o.ModeVwire.Lldp != nil {
 			ans.LldpEnabled = util.AsBool(o.ModeVwire.Lldp.LldpEnabled)
@@ -171,13 +171,13 @@ func (o *entry_v1) normalize() Entry {
 			ans.raw["vwsub"] = util.CleanRawXml(o.ModeVwire.Subinterface.Text)
 		}
 	case o.TapMode != nil:
-		ans.Mode = "tap"
+		ans.Mode = ModeTap
 	case o.HaMode != nil:
-		ans.Mode = "ha"
+		ans.Mode = ModeHa
 	case o.DecryptMirrorMode != nil:
-		ans.Mode = "decrypt-mirror"
+		ans.Mode = ModeDecryptMirror
 	case o.AggregateGroup != "":
-		ans.Mode = "aggregate-group"
+		ans.Mode = ModeAggregateGroup
 		ans.AggregateGroup = o.AggregateGroup
 	}
 
@@ -275,7 +275,7 @@ func (o *entry_v2) normalize() Entry {
 	ans.raw = make(map[string]string)
 	switch {
 	case o.ModeL3 != nil:
-		ans.Mode = "layer3"
+		ans.Mode = ModeLayer3
 		ans.ManagementProfile = o.ModeL3.ManagementProfile
 		ans.Mtu = o.ModeL3.Mtu
 		ans.NetflowProfile = o.ModeL3.NetflowProfile
@@ -315,7 +315,7 @@ func (o *entry_v2) normalize() Entry {
 			ans.raw["ndp"] = util.CleanRawXml(o.ModeL3.Ndp.Text)
 		}
 	case o.ModeL2 != nil:
-		ans.Mode = "layer2"
+		ans.Mode = ModeLayer2
 		ans.NetflowProfile = o.ModeL2.NetflowProfile
 		if o.ModeL2.Lldp != nil {
 			ans.LldpEnabled = util.AsBool(o.ModeL2.Lldp.LldpEnabled)
@@ -325,7 +325,7 @@ func (o *entry_v2) normalize() Entry {
 			ans.raw["l2subinterface"] = util.CleanRawXml(o.ModeL2.Subinterface.Text)
 		}
 	case o.ModeVwire != nil:
-		ans.Mode = "virtual-wire"
+		ans.Mode = ModeVirtualWire
 		ans.NetflowProfile = o.ModeVwire.NetflowProfile
 		if o.ModeVwire.Lldp != nil {
 			ans.LldpEnabled = util.AsBool(o.ModeVwire.Lldp.LldpEnabled)
@@ -335,13 +335,13 @@ func (o *entry_v2) normalize() Entry {
 			ans.raw["vwsub"] = util.CleanRawXml(o.ModeVwire.Subinterface.Text)
 		}
 	case o.TapMode != nil:
-		ans.Mode = "tap"
+		ans.Mode = ModeTap
 	case o.HaMode != nil:
-		ans.Mode = "ha"
+		ans.Mode = ModeHa
 	case o.DecryptMirrorMode != nil:
-		ans.Mode = "decrypt-mirror"
+		ans.Mode = ModeDecryptMirror
 	case o.AggregateGroup != "":
-		ans.Mode = "aggregate-group"
+		ans.Mode = ModeAggregateGroup
 		ans.AggregateGroup = o.AggregateGroup
 	}
 
@@ -385,7 +385,7 @@ func (o *entry_v3) normalize() Entry {
 	ans.raw = make(map[string]string)
 	switch {
 	case o.ModeL3 != nil:
-		ans.Mode = "layer3"
+		ans.Mode = ModeLayer3
 		ans.ManagementProfile = o.ModeL3.ManagementProfile
 		ans.Mtu = o.ModeL3.Mtu
 		ans.NetflowProfile = o.ModeL3.NetflowProfile
@@ -431,7 +431,7 @@ func (o *entry_v3) normalize() Entry {
 			ans.raw["ndp"] = util.CleanRawXml(o.ModeL3.Ndp.Text)
 		}
 	case o.ModeL2 != nil:
-		ans.Mode = "layer2"
+		ans.Mode = ModeLayer2
 		ans.NetflowProfile = o.ModeL2.NetflowProfile
 		if o.ModeL2.Lldp != nil {
 			ans.LldpEnabled = util.AsBool(o.ModeL2.Lldp.LldpEnabled)
@@ -441,7 +441,7 @@ func (o *entry_v3) normalize() Entry {
 			ans.raw["l2subinterface"] = util.CleanRawXml(o.ModeL2.Subinterface.Text)
 		}
 	case o.ModeVwire != nil:
-		ans.Mode = "virtual-wire"
+		ans.Mode = ModeVirtualWire
 		ans.NetflowProfile = o.ModeVwire.NetflowProfile
 		if o.ModeVwire.Lldp != nil {
 			ans.LldpEnabled = util.AsBool(o.ModeVwire.Lldp.LldpEnabled)
@@ -451,13 +451,13 @@ func (o *entry_v3) normalize() Entry {
 			ans.raw["vwsub"] = util.CleanRawXml(o.ModeVwire.Subinterface.Text)
 		}
 	case o.TapMode != nil:
-		ans.Mode = "tap"
+		ans.Mode = ModeTap
 	case o.HaMode != nil:
-		ans.Mode = "ha"
+		ans.Mode = ModeHa
 	case o.DecryptMirrorMode != nil:
-		ans.Mode = "decrypt-mirror"
+		ans.Mode = ModeDecryptMirror
 	case o.AggregateGroup != "":
-		ans.Mode = "aggregate-group"
+		ans.Mode = ModeAggregateGroup
 		ans.AggregateGroup = o.AggregateGroup
 	}
 
@@ -501,7 +501,7 @@ func (o *entry_v4) normalize() Entry {
 	ans.raw = make(map[string]string)
 	switch {
 	case o.ModeL3 != nil:
-		ans.Mode = "layer3"
+		ans.Mode = ModeLayer3
 		ans.ManagementProfile = o.ModeL3.ManagementProfile
 		ans.Mtu = o.ModeL3.Mtu
 		ans.NetflowProfile = o.ModeL3.NetflowProfile
@@ -557,7 +557,7 @@ func (o *entry_v4) normalize() Entry {
 			ans.raw["ddns"] = util.CleanRawXml(o.ModeL3.Ddns.Text)
 		}
 	case o.ModeL2 != nil:
-		ans.Mode = "layer2"
+		ans.Mode = ModeLayer2
 		ans.NetflowProfile = o.ModeL2.NetflowProfile
 		if o.ModeL2.Lldp != nil {
 			ans.LldpEnabled = util.AsBool(o.ModeL2.Lldp.LldpEnabled)
@@ -567,7 +567,7 @@ func (o *entry_v4) normalize() Entry {
 			ans.raw["l2subinterface"] = util.CleanRawXml(o.ModeL2.Subinterface.Text)
 		}
 	case o.ModeVwire != nil:
-		ans.Mode = "virtual-wire"
+		ans.Mode = ModeVirtualWire
 		ans.NetflowProfile = o.ModeVwire.NetflowProfile
 		if o.ModeVwire.Lldp != nil {
 			ans.LldpEnabled = util.AsBool(o.ModeVwire.Lldp.LldpEnabled)
@@ -577,13 +577,13 @@ func (o *entry_v4) normalize() Entry {
 			ans.raw["vwsub"] = util.CleanRawXml(o.ModeVwire.Subinterface.Text)
 		}
 	case o.TapMode != nil:
-		ans.Mode = "tap"
+		ans.Mode = ModeTap
 	case o.HaMode != nil:
-		ans.Mode = "ha"
+		ans.Mode = ModeHa
 	case o.DecryptMirrorMode != nil:
-		ans.Mode = "decrypt-mirror"
+		ans.Mode = ModeDecryptMirror
 	case o.AggregateGroup != "":
-		ans.Mode = "aggregate-group"
+		ans.Mode = ModeAggregateGroup
 		ans.AggregateGroup = o.AggregateGroup
 	}
 
@@ -726,7 +726,7 @@ func specify_v1(e Entry) interface{} {
 	}
 
 	switch e.Mode {
-	case "layer3":
+	case ModeLayer3:
 		i := &l3Mode_v1{
 			StaticIps:         util.StrToEnt(e.StaticIps),
 			ManagementProfile: e.ManagementProfile,
@@ -766,7 +766,7 @@ func specify_v1(e Entry) interface{} {
 			i.Subinterface = &util.RawXml{text}
 		}
 		ans.ModeL3 = i
-	case "layer2":
+	case ModeLayer2:
 		ans.ModeL2 = &otherMode{
 			NetflowProfile: e.NetflowProfile,
 		}
@@ -779,7 +779,7 @@ func specify_v1(e Entry) interface{} {
 		if text := e.raw["l2subinterface"]; text != "" {
 			ans.ModeL2.Subinterface = &util.RawXml{text}
 		}
-	case "virtual-wire":
+	case ModeVirtualWire:
 		ans.ModeVwire = &otherMode{
 			NetflowProfile: e.NetflowProfile,
 		}
@@ -792,13 +792,13 @@ func specify_v1(e Entry) interface{} {
 		if text := e.raw["vwsub"]; text != "" {
 			ans.ModeVwire.Subinterface = &util.RawXml{text}
 		}
-	case "tap":
+	case ModeTap:
 		ans.TapMode = &emptyMode{}
-	case "ha":
+	case ModeHa:
 		ans.HaMode = &emptyMode{}
-	case "decrypt-mirror":
+	case ModeDecryptMirror:
 		ans.DecryptMirrorMode = &emptyMode{}
-	case "aggregate-group":
+	case ModeAggregateGroup:
 		ans.AggregateGroup = e.AggregateGroup
 	}
 
@@ -815,7 +815,7 @@ func specify_v2(e Entry) interface{} {
 	}
 
 	switch e.Mode {
-	case "layer3":
+	case ModeLayer3:
 		i := &l3Mode_v2{
 			StaticIps:         util.StrToEnt(e.StaticIps),
 			ManagementProfile: e.ManagementProfile,
@@ -867,7 +867,7 @@ func specify_v2(e Entry) interface{} {
 			i.Ndp = &util.RawXml{text}
 		}
 		ans.ModeL3 = i
-	case "layer2":
+	case ModeLayer2:
 		ans.ModeL2 = &otherMode{
 			NetflowProfile: e.NetflowProfile,
 		}
@@ -880,7 +880,7 @@ func specify_v2(e Entry) interface{} {
 		if text := e.raw["l2subinterface"]; text != "" {
 			ans.ModeL2.Subinterface = &util.RawXml{text}
 		}
-	case "virtual-wire":
+	case ModeVirtualWire:
 		ans.ModeVwire = &otherMode{
 			NetflowProfile: e.NetflowProfile,
 		}
@@ -893,13 +893,13 @@ func specify_v2(e Entry) interface{} {
 		if text := e.raw["vwsub"]; text != "" {
 			ans.ModeVwire.Subinterface = &util.RawXml{text}
 		}
-	case "tap":
+	case ModeTap:
 		ans.TapMode = &emptyMode{}
-	case "ha":
+	case ModeHa:
 		ans.HaMode = &emptyMode{}
-	case "decrypt-mirror":
+	case ModeDecryptMirror:
 		ans.DecryptMirrorMode = &emptyMode{}
-	case "aggregate-group":
+	case ModeAggregateGroup:
 		ans.AggregateGroup = e.AggregateGroup
 	}
 
@@ -916,7 +916,7 @@ func specify_v3(e Entry) interface{} {
 	}
 
 	switch e.Mode {
-	case "layer3":
+	case ModeLayer3:
 		i := &l3Mode_v3{
 			StaticIps:         util.StrToEnt(e.StaticIps),
 			ManagementProfile: e.ManagementProfile,
@@ -979,7 +979,7 @@ func specify_v3(e Entry) interface{} {
 			i.Ndp = &util.RawXml{text}
 		}
 		ans.ModeL3 = i
-	case "layer2":
+	case ModeLayer2:
 		ans.ModeL2 = &otherMode{
 			NetflowProfile: e.NetflowProfile,
 		}
@@ -992,7 +992,7 @@ func specify_v3(e Entry) interface{} {
 		if text := e.raw["l2subinterface"]; text != "" {
 			ans.ModeL2.Subinterface = &util.RawXml{text}
 		}
-	case "virtual-wire":
+	case ModeVirtualWire:
 		ans.ModeVwire = &otherMode{
 			NetflowProfile: e.NetflowProfile,
 		}
@@ -1005,13 +1005,13 @@ func specify_v3(e Entry) interface{} {
 		if text := e.raw["vwsub"]; text != "" {
 			ans.ModeVwire.Subinterface = &util.RawXml{text}
 		}
-	case "tap":
+	case ModeTap:
 		ans.TapMode = &emptyMode{}
-	case "ha":
+	case ModeHa:
 		ans.HaMode = &emptyMode{}
-	case "decrypt-mirror":
+	case ModeDecryptMirror:
 		ans.DecryptMirrorMode = &emptyMode{}
-	case "aggregate-group":
+	case ModeAggregateGroup:
 		ans.AggregateGroup = e.AggregateGroup
 	}
 
@@ -1028,7 +1028,7 @@ func specify_v4(e Entry) interface{} {
 	}
 
 	switch e.Mode {
-	case "layer3":
+	case ModeLayer3:
 		i := &l3Mode_v4{
 			StaticIps:         util.StrToEnt(e.StaticIps),
 			ManagementProfile: e.ManagementProfile,
@@ -1104,7 +1104,7 @@ func specify_v4(e Entry) interface{} {
 			i.Ddns = &util.RawXml{text}
 		}
 		ans.ModeL3 = i
-	case "layer2":
+	case ModeLayer2:
 		ans.ModeL2 = &otherMode{
 			NetflowProfile: e.NetflowProfile,
 		}
@@ -1117,7 +1117,7 @@ func specify_v4(e Entry) interface{} {
 		if text := e.raw["l2subinterface"]; text != "" {
 			ans.ModeL2.Subinterface = &util.RawXml{text}
 		}
-	case "virtual-wire":
+	case ModeVirtualWire:
 		ans.ModeVwire = &otherMode{
 			NetflowProfile: e.NetflowProfile,
 		}
@@ -1130,13 +1130,13 @@ func specify_v4(e Entry) interface{} {
 		if text := e.raw["vwsub"]; text != "" {
 			ans.ModeVwire.Subinterface = &util.RawXml{text}
 		}
-	case "tap":
+	case ModeTap:
 		ans.TapMode = &emptyMode{}
-	case "ha":
+	case ModeHa:
 		ans.HaMode = &emptyMode{}
-	case "decrypt-mirror":
+	case ModeDecryptMirror:
 		ans.DecryptMirrorMode = &emptyMode{}
-	case "aggregate-group":
+	case ModeAggregateGroup:
 		ans.AggregateGroup = e.AggregateGroup
 	}
 
