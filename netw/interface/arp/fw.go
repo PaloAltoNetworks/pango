@@ -7,127 +7,93 @@ import (
 	"github.com/PaloAltoNetworks/pango/util"
 )
 
-// FwArp is the client.Policies.Arp namespace.
-type FwArp struct {
-	con util.XapiClient
-	ns  *namespace.Namespace
-}
-
-// Initialize is invoed by client.Initialize().
-func (c *FwArp) Initialize(con util.XapiClient) {
-	c.con = con
-	c.ns = namespace.New(singular, plural, con)
+// Firewall is the client.Network.Arp namespace.
+type Firewall struct {
+	ns *namespace.Standard
 }
 
 // GetList performs GET to retrieve a list object names.
-func (c *FwArp) GetList(iType, iName, subName string) ([]string, error) {
-	result, _ := c.versioning()
-	return c.ns.Listing(util.Get, c.xpath(iType, iName, subName, nil), result)
+func (c *Firewall) GetList(iType, iName, subName string) ([]string, error) {
+	ans := c.container()
+	return c.ns.Listing(util.Get, c.pather(iType, iName, subName), ans)
 }
 
 // ShowList performs SHOW to retrieve a list of object names.
-func (c *FwArp) ShowList(iType, iName, subName string) ([]string, error) {
-	result, _ := c.versioning()
-	return c.ns.Listing(util.Show, c.xpath(iType, iName, subName, nil), result)
+func (c *Firewall) ShowList(iType, iName, subName string) ([]string, error) {
+	ans := c.container()
+	return c.ns.Listing(util.Show, c.pather(iType, iName, subName), ans)
 }
 
 // Get performs GET to retrieve information for the given object.
-func (c *FwArp) Get(iType, iName, subName, ip string) (Entry, error) {
-	result, _ := c.versioning()
-	if err := c.ns.Object(util.Get, c.xpath(iType, iName, subName, []string{ip}), ip, result); err != nil {
-		return Entry{}, err
-	}
-
-	return result.Normalize()[0], nil
-}
-
-// GetAll performs a GET to retrieve information for all objects.
-func (c *FwArp) GetAll(iType, iName, subName string) ([]Entry, error) {
-	result, _ := c.versioning()
-	if err := c.ns.Objects(util.Get, c.xpath(iType, iName, subName, nil), result); err != nil {
-		return nil, err
-	}
-
-	return result.Normalize(), nil
+func (c *Firewall) Get(iType, iName, subName, ip string) (Entry, error) {
+	ans := c.container()
+	err := c.ns.Object(util.Get, c.pather(iType, iName, subName), ip, ans)
+	return first(ans, err)
 }
 
 // Show performs SHOW to retrieve information for the given object.
-func (c *FwArp) Show(iType, iName, subName, ip string) (Entry, error) {
-	result, _ := c.versioning()
-	if err := c.ns.Object(util.Show, c.xpath(iType, iName, subName, []string{ip}), ip, result); err != nil {
-		return Entry{}, err
-	}
+func (c *Firewall) Show(iType, iName, subName, ip string) (Entry, error) {
+	ans := c.container()
+	err := c.ns.Object(util.Get, c.pather(iType, iName, subName), ip, ans)
+	return first(ans, err)
+}
 
-	return result.Normalize()[0], nil
+// GetAll performs a GET to retrieve information for all objects.
+func (c *Firewall) GetAll(iType, iName, subName string) ([]Entry, error) {
+	ans := c.container()
+	err := c.ns.Objects(util.Get, c.pather(iType, iName, subName), ans)
+	return all(ans, err)
 }
 
 // ShowAll performs a SHOW to retrieve information for all objects.
-func (c *FwArp) ShowAll(iType, iName, subName string) ([]Entry, error) {
-	result, _ := c.versioning()
-	if err := c.ns.Objects(util.Show, c.xpath(iType, iName, subName, nil), result); err != nil {
-		return nil, err
-	}
-
-	return result.Normalize(), nil
+func (c *Firewall) ShowAll(iType, iName, subName string) ([]Entry, error) {
+	ans := c.container()
+	err := c.ns.Objects(util.Get, c.pather(iType, iName, subName), ans)
+	return all(ans, err)
 }
 
-// Set performs SET to create / update one or more objects.
-func (c *FwArp) Set(iType, iName, subName string, e ...Entry) error {
-	var err error
-
-	_, fn := c.versioning()
-	data := make([]interface{}, 0, len(e))
-	names := make([]string, 0, len(e))
-
-	for i := range e {
-		data = append(data, fn(e[i]))
-		names = append(names, e[i].Ip)
-	}
-	path := c.xpath(iType, iName, subName, names)
-
-	err = c.ns.Set(names, path, data)
-
-	return err
+// Set performs SET to configure the specified objects.
+func (c *Firewall) Set(iType, iName, subName string, e ...Entry) error {
+	return c.ns.Set(c.pather(iType, iName, subName), specifier(e...))
 }
 
-// Edit performs EDIT to create / update an object.
-func (c *FwArp) Edit(iType, iName, subName string, e Entry) error {
-	_, fn := c.versioning()
-	path := c.xpath(iType, iName, subName, []string{e.Ip})
-	data := fn(e)
-
-	return c.ns.Edit(e.Ip, path, data)
+// Edit performs EDIT to configure the specified object.
+func (c *Firewall) Edit(iType, iName, subName string, e Entry) error {
+	return c.ns.Edit(c.pather(iType, iName, subName), e)
 }
 
-// Delete removes the given objects.
+// Delete performs DELETE to remove the specified objects.
 //
 // Objects can be either a string or an Entry object.
-func (c *FwArp) Delete(iType, iName, subName string, e ...interface{}) error {
-	names := make([]string, 0, len(e))
-	for i := range e {
-		switch v := e[i].(type) {
-		case string:
-			names = append(names, v)
-		case Entry:
-			names = append(names, v.Ip)
-		default:
-			return fmt.Errorf("Unsupported type to delete: %s", v)
+func (c *Firewall) Delete(iType, iName, subName string, e ...interface{}) error {
+	names, nErr := toNames(e)
+	return c.ns.Delete(c.pather(iType, iName, subName), names, nErr)
+}
+
+func (c *Firewall) pather(iType, iName, subName string) namespace.Pather {
+	return func(v []string) ([]string, error) {
+		return c.xpath(iType, iName, subName, v)
+	}
+}
+
+func (c *Firewall) xpath(iType, iName, subName string, vals []string) ([]string, error) {
+	// Sanity checks.
+	switch iType {
+	case "":
+		return nil, fmt.Errorf("iType must be specified")
+	case TypeVlan:
+		if iName != "" {
+			return nil, fmt.Errorf("iName should be an empty string for %s types", iType)
 		}
+	case TypeEthernet, TypeAggregate:
+		if iName == "" {
+			return nil, fmt.Errorf("iName must be specified")
+		}
+	default:
+		return nil, fmt.Errorf("unknown iType value: %s", iType)
 	}
 
-	path := c.xpath(iType, iName, subName, names)
-	return c.ns.Delete(names, path)
-}
-
-/** Internal functions for the FwArp struct **/
-
-func (c *FwArp) versioning() (normalizer, func(Entry) interface{}) {
-	return &container_v1{}, specify_v1
-}
-
-func (c *FwArp) xpath(iType, iName, subName string, vals []string) []string {
 	ans := make([]string, 0, 12)
-
 	ans = append(ans,
 		"config",
 		"devices",
@@ -147,5 +113,9 @@ func (c *FwArp) xpath(iType, iName, subName string, vals []string) []string {
 
 	ans = append(ans, "arp", util.AsEntryXpath(vals))
 
-	return ans
+	return ans, nil
+}
+
+func (c *Firewall) container() normalizer {
+	return container(c.ns.Client.Versioning())
 }
