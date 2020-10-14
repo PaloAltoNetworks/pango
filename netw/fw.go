@@ -42,7 +42,7 @@ import (
 
 // Netw is the client.Network namespace.
 type FwNetw struct {
-	AggregateInterface       *aggeth.FwAggregate
+	AggregateInterface       *aggeth.Firewall
 	Arp                      *arp.FwArp
 	BfdProfile               *bfd.FwBfd
 	BgpAggregate             *aggregate.FwAggregate
@@ -82,8 +82,7 @@ type FwNetw struct {
 
 // Initialize is invoked on client.Initialize().
 func (c *FwNetw) Initialize(i util.XapiClient) {
-	c.AggregateInterface = &aggeth.FwAggregate{}
-	c.AggregateInterface.Initialize(i)
+	c.AggregateInterface = aggeth.FirewallNamespace(i)
 
 	c.Arp = &arp.FwArp{}
 	c.Arp.Initialize(i)

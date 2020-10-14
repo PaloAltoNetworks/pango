@@ -42,7 +42,7 @@ import (
 
 // PanoNetw is the client.Network namespace.
 type PanoNetw struct {
-	AggregateInterface       *aggeth.PanoAggregate
+	AggregateInterface       *aggeth.Panorama
 	Arp                      *arp.PanoArp
 	BfdProfile               *bfd.PanoBfd
 	BgpAggregate             *aggregate.PanoAggregate
@@ -82,8 +82,7 @@ type PanoNetw struct {
 
 // Initialize is invoked on client.Initialize().
 func (c *PanoNetw) Initialize(i util.XapiClient) {
-	c.AggregateInterface = &aggeth.PanoAggregate{}
-	c.AggregateInterface.Initialize(i)
+	c.AggregateInterface = aggeth.PanoramaNamespace(i)
 
 	c.Arp = &arp.PanoArp{}
 	c.Arp.Initialize(i)
