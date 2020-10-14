@@ -16,7 +16,7 @@ func getTests() []testCase {
 	return []testCase{
 		{version.Number{5, 0, 0, ""}, "vsys2", "vsys2", []string{"ethernet1/1"}, Entry{
 			Name:              "ethernet1/1",
-			Mode:              "layer3",
+			Mode:              ModeLayer3,
 			StaticIps:         []string{"10.1.1.1/24", "10.2.1.1/24"},
 			Ipv6Enabled:       true,
 			ManagementProfile: "enable ping",
@@ -30,7 +30,7 @@ func getTests() []testCase {
 		}},
 		{version.Number{5, 0, 0, ""}, "vsys3", "vsys3", []string{"ethernet1/2"}, Entry{
 			Name:                   "ethernet1/2",
-			Mode:                   "layer3",
+			Mode:                   ModeLayer3,
 			EnableDhcp:             true,
 			CreateDhcpDefaultRoute: true,
 			DhcpDefaultRouteMetric: 12,
@@ -38,12 +38,12 @@ func getTests() []testCase {
 		}},
 		{version.Number{5, 0, 0, ""}, "vsys4", "vsys4", []string{}, Entry{
 			Name:    "ethernet1/3",
-			Mode:    "ha",
+			Mode:    ModeHa,
 			Comment: "v1 ha no import",
 		}},
 		{version.Number{5, 0, 0, ""}, "vsys5", "vsys5", []string{"ethernet1/4"}, Entry{
 			Name: "ethernet1/4",
-			Mode: "layer3",
+			Mode: ModeLayer3,
 			raw: map[string]string{
 				"arp":            "<arp>raw arp</arp>",
 				"v6adr":          "<address>raw ipv6 addresses</address>",
@@ -54,7 +54,7 @@ func getTests() []testCase {
 		}},
 		{version.Number{5, 0, 0, ""}, "vsys6", "vsys6", []string{"ethernet1/5"}, Entry{
 			Name: "ethernet1/5",
-			Mode: "layer2",
+			Mode: ModeLayer2,
 			raw: map[string]string{
 				"l2subinterface": "<units>raw l2 subinterfaces</units>",
 			},
@@ -62,18 +62,23 @@ func getTests() []testCase {
 		}},
 		{version.Number{5, 0, 0, ""}, "vsys6", "vsys6", []string{"ethernet1/6"}, Entry{
 			Name: "ethernet1/6",
-			Mode: "virtual-wire",
+			Mode: ModeVirtualWire,
 			raw: map[string]string{
 				"vwsub": "virtual wire subinterfaces",
 			},
 		}},
 		{version.Number{5, 0, 0, ""}, "vsys6", "vsys6", []string{"ethernet1/7"}, Entry{
 			Name: "ethernet1/7",
-			Mode: "tap",
+			Mode: ModeTap,
+		}},
+		{version.Number{5, 0, 0, ""}, "vsys3", "vsys3", []string{"ethernet1/3"}, Entry{
+			Name:    "ethernet1/3",
+			Mode:    ModeDecryptMirror,
+			Comment: "v1 decrypt mirror",
 		}},
 		{version.Number{8, 0, 0, ""}, "vsys2", "vsys2", []string{"ethernet1/1"}, Entry{
 			Name:              "ethernet1/1",
-			Mode:              "layer3",
+			Mode:              ModeLayer3,
 			StaticIps:         []string{"10.1.1.1/24", "10.2.1.1/24"},
 			Ipv6Enabled:       true,
 			ManagementProfile: "enable ping",
@@ -89,7 +94,7 @@ func getTests() []testCase {
 		}},
 		{version.Number{8, 0, 0, ""}, "vsys3", "vsys3", []string{"ethernet1/2"}, Entry{
 			Name:                   "ethernet1/2",
-			Mode:                   "layer3",
+			Mode:                   ModeLayer3,
 			EnableDhcp:             true,
 			CreateDhcpDefaultRoute: true,
 			DhcpDefaultRouteMetric: 12,
@@ -97,12 +102,12 @@ func getTests() []testCase {
 		}},
 		{version.Number{8, 0, 0, ""}, "vsys4", "vsys4", []string{}, Entry{
 			Name:    "ethernet1/3",
-			Mode:    "ha",
+			Mode:    ModeHa,
 			Comment: "v2 ha no import",
 		}},
 		{version.Number{8, 0, 0, ""}, "vsys5", "vsys5", []string{"ethernet1/4"}, Entry{
 			Name: "ethernet1/4",
-			Mode: "layer3",
+			Mode: ModeLayer3,
 			raw: map[string]string{
 				"arp":            "<arp>raw arp</arp>",
 				"v6adr":          "<address>raw ipv6 addresses</address>",
@@ -115,7 +120,7 @@ func getTests() []testCase {
 		}},
 		{version.Number{8, 0, 0, ""}, "vsys6", "vsys6", []string{"ethernet1/5"}, Entry{
 			Name: "ethernet1/5",
-			Mode: "layer2",
+			Mode: ModeLayer2,
 			raw: map[string]string{
 				"l2subinterface": "<units>raw l2 subinterfaces</units>",
 			},
@@ -123,18 +128,23 @@ func getTests() []testCase {
 		}},
 		{version.Number{8, 0, 0, ""}, "vsys6", "vsys6", []string{"ethernet1/6"}, Entry{
 			Name: "ethernet1/6",
-			Mode: "virtual-wire",
+			Mode: ModeVirtualWire,
 			raw: map[string]string{
 				"vwsub": "virtual wire subinterfaces",
 			},
 		}},
 		{version.Number{8, 0, 0, ""}, "vsys6", "vsys6", []string{"ethernet1/7"}, Entry{
 			Name: "ethernet1/7",
-			Mode: "tap",
+			Mode: ModeTap,
+		}},
+		{version.Number{8, 0, 0, ""}, "vsys3", "vsys3", []string{"ethernet1/3"}, Entry{
+			Name:    "ethernet1/3",
+			Mode:    ModeDecryptMirror,
+			Comment: "v2 decrypt mirror",
 		}},
 		{version.Number{8, 1, 0, ""}, "vsys2", "vsys2", []string{"ethernet1/1"}, Entry{
 			Name:              "ethernet1/1",
-			Mode:              "layer3",
+			Mode:              ModeLayer3,
 			StaticIps:         []string{"10.1.1.1/24", "10.2.1.1/24"},
 			Ipv6Enabled:       true,
 			ManagementProfile: "enable ping",
@@ -153,7 +163,7 @@ func getTests() []testCase {
 		}},
 		{version.Number{8, 1, 0, ""}, "vsys3", "vsys3", []string{"ethernet1/2"}, Entry{
 			Name:                   "ethernet1/2",
-			Mode:                   "layer3",
+			Mode:                   ModeLayer3,
 			EnableDhcp:             true,
 			CreateDhcpDefaultRoute: true,
 			DhcpDefaultRouteMetric: 12,
@@ -161,12 +171,12 @@ func getTests() []testCase {
 		}},
 		{version.Number{8, 1, 0, ""}, "vsys4", "vsys4", []string{}, Entry{
 			Name:    "ethernet1/3",
-			Mode:    "ha",
+			Mode:    ModeHa,
 			Comment: "v3 ha no import",
 		}},
 		{version.Number{8, 1, 0, ""}, "vsys5", "vsys5", []string{"ethernet1/4"}, Entry{
 			Name: "ethernet1/4",
-			Mode: "layer3",
+			Mode: ModeLayer3,
 			raw: map[string]string{
 				"arp":            "<arp>raw arp</arp>",
 				"v6adr":          "<address>raw ipv6 addresses</address>",
@@ -179,7 +189,7 @@ func getTests() []testCase {
 		}},
 		{version.Number{8, 1, 0, ""}, "vsys6", "vsys6", []string{"ethernet1/5"}, Entry{
 			Name: "ethernet1/5",
-			Mode: "layer2",
+			Mode: ModeLayer2,
 			raw: map[string]string{
 				"l2subinterface": "<units>raw l2 subinterfaces</units>",
 			},
@@ -187,18 +197,23 @@ func getTests() []testCase {
 		}},
 		{version.Number{8, 1, 0, ""}, "vsys6", "vsys6", []string{"ethernet1/6"}, Entry{
 			Name: "ethernet1/6",
-			Mode: "virtual-wire",
+			Mode: ModeVirtualWire,
 			raw: map[string]string{
 				"vwsub": "virtual wire subinterfaces",
 			},
 		}},
+		{version.Number{8, 1, 0, ""}, "vsys3", "vsys3", []string{"ethernet1/3"}, Entry{
+			Name:    "ethernet1/3",
+			Mode:    ModeDecryptMirror,
+			Comment: "v3 decrypt mirror",
+		}},
 		{version.Number{8, 1, 0, ""}, "vsys6", "vsys6", []string{"ethernet1/7"}, Entry{
 			Name: "ethernet1/7",
-			Mode: "tap",
+			Mode: ModeTap,
 		}},
 		{version.Number{9, 0, 0, ""}, "vsys2", "vsys2", []string{"ethernet1/1"}, Entry{
 			Name:              "ethernet1/1",
-			Mode:              "layer3",
+			Mode:              ModeLayer3,
 			StaticIps:         []string{"10.1.1.1/24", "10.2.1.1/24"},
 			Ipv6Enabled:       true,
 			ManagementProfile: "enable ping",
@@ -217,7 +232,7 @@ func getTests() []testCase {
 		}},
 		{version.Number{9, 0, 0, ""}, "vsys3", "vsys3", []string{"ethernet1/2"}, Entry{
 			Name:                   "ethernet1/2",
-			Mode:                   "layer3",
+			Mode:                   ModeLayer3,
 			EnableDhcp:             true,
 			CreateDhcpDefaultRoute: true,
 			DhcpDefaultRouteMetric: 12,
@@ -227,12 +242,12 @@ func getTests() []testCase {
 		}},
 		{version.Number{9, 0, 0, ""}, "vsys4", "vsys4", []string{}, Entry{
 			Name:    "ethernet1/3",
-			Mode:    "ha",
+			Mode:    ModeHa,
 			Comment: "v4 ha no import",
 		}},
 		{version.Number{9, 0, 0, ""}, "vsys5", "vsys5", []string{"ethernet1/4"}, Entry{
 			Name: "ethernet1/4",
-			Mode: "layer3",
+			Mode: ModeLayer3,
 			raw: map[string]string{
 				"arp":            "<arp>raw arp</arp>",
 				"v6adr":          "<address>raw ipv6 addresses</address>",
@@ -247,7 +262,7 @@ func getTests() []testCase {
 		}},
 		{version.Number{9, 0, 0, ""}, "vsys6", "vsys6", []string{"ethernet1/5"}, Entry{
 			Name: "ethernet1/5",
-			Mode: "layer2",
+			Mode: ModeLayer2,
 			raw: map[string]string{
 				"l2subinterface": "<units>raw l2 subinterfaces</units>",
 			},
@@ -255,19 +270,24 @@ func getTests() []testCase {
 		}},
 		{version.Number{9, 0, 0, ""}, "vsys7", "vsys7", []string{}, Entry{
 			Name:           "ethernet1/7",
-			Mode:           "aggregate-group",
+			Mode:           ModeAggregateGroup,
 			AggregateGroup: "ae1",
 		}},
 		{version.Number{9, 0, 0, ""}, "vsys6", "vsys6", []string{"ethernet1/6"}, Entry{
 			Name: "ethernet1/6",
-			Mode: "virtual-wire",
+			Mode: ModeVirtualWire,
 			raw: map[string]string{
 				"vwsub": "virtual wire subinterfaces",
 			},
 		}},
 		{version.Number{9, 0, 0, ""}, "vsys6", "vsys6", []string{"ethernet1/7"}, Entry{
 			Name: "ethernet1/7",
-			Mode: "tap",
+			Mode: ModeTap,
+		}},
+		{version.Number{9, 0, 0, ""}, "vsys3", "vsys3", []string{"ethernet1/3"}, Entry{
+			Name:    "ethernet1/3",
+			Mode:    ModeDecryptMirror,
+			Comment: "v4 decrypt mirror",
 		}},
 	}
 }
