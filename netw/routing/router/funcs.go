@@ -8,6 +8,10 @@ import (
 	"github.com/PaloAltoNetworks/pango/version"
 )
 
+func versioning(v version.Number) (normalizer, func(Entry) interface{}) {
+	return &container_v1{}, specify_v1
+}
+
 func specifier(e ...Entry) []namespace.ImportSpecifier {
 	ans := make([]namespace.ImportSpecifier, 0, len(e))
 
@@ -18,10 +22,6 @@ func specifier(e ...Entry) []namespace.ImportSpecifier {
 	}
 
 	return ans
-}
-
-func versioning(v version.Number) (normalizer, func(Entry) interface{}) {
-	return &container_v1{}, specify_v1
 }
 
 func container(v version.Number) normalizer {
