@@ -5,150 +5,85 @@ import (
 
 	"github.com/PaloAltoNetworks/pango/namespace"
 	"github.com/PaloAltoNetworks/pango/util"
-	"github.com/PaloAltoNetworks/pango/version"
 )
 
-// PanoIpv4 is the client.Network.StaticRoute namespace.
-type PanoIpv4 struct {
-	con util.XapiClient
-	ns  *namespace.Namespace
+// Panorama is the client.Network.StaticRoute namespace.
+type Panorama struct {
+	ns *namespace.Standard
 }
 
-// Initialize is invoked by client.Initialize().
-func (c *PanoIpv4) Initialize(con util.XapiClient) {
-	c.con = con
-	c.ns = namespace.New(singular, plural, con)
+// GetList performs GET to retrieve a list of all objects.
+func (c *Panorama) GetList(tmpl, ts, vr string) ([]string, error) {
+	ans := c.container()
+	return c.ns.Listing(util.Get, c.pather(tmpl, ts, vr), ans)
 }
 
-// ShowList performs SHOW to retrieve a list of IPv4 routes.
-func (c *PanoIpv4) ShowList(tmpl, ts, vr string) ([]string, error) {
-	result, _ := c.versioning()
-	return c.ns.Listing(util.Show, c.xpath(tmpl, ts, vr, nil), result)
+// ShowList performs SHOW to retrieve a list of all objects.
+func (c *Panorama) ShowList(tmpl, ts, vr string) ([]string, error) {
+	ans := c.container()
+	return c.ns.Listing(util.Show, c.pather(tmpl, ts, vr), ans)
 }
 
-// GetList performs GET to retrieve a list of IPv4 routes.
-func (c *PanoIpv4) GetList(tmpl, ts, vr string) ([]string, error) {
-	result, _ := c.versioning()
-	return c.ns.Listing(util.Get, c.xpath(tmpl, ts, vr, nil), result)
+// Get performs GET to retrieve information for the given object.
+func (c *Panorama) Get(tmpl, ts, vr, name string) (Entry, error) {
+	ans := c.container()
+	err := c.ns.Object(util.Get, c.pather(tmpl, ts, vr), name, ans)
+	return first(ans, err)
 }
 
-// Get performs GET to retrieve information for the given IPv4 route.
-func (c *PanoIpv4) Get(tmpl, ts, vr, name string) (Entry, error) {
-	result, _ := c.versioning()
-	if err := c.ns.Object(util.Get, c.xpath(tmpl, ts, vr, []string{name}), name, result); err != nil {
-		return Entry{}, err
-	}
-
-	return result.Normalize()[0], nil
+// Show performs SHOW to retrieve information for the given object.
+func (c *Panorama) Show(tmpl, ts, vr, name string) (Entry, error) {
+	ans := c.container()
+	err := c.ns.Object(util.Show, c.pather(tmpl, ts, vr), name, ans)
+	return first(ans, err)
 }
 
-// GetAll performs GET to retrieve information for all objects.
-func (c *PanoIpv4) GetAll(tmpl, ts, vr string) ([]Entry, error) {
-	result, _ := c.versioning()
-	if err := c.ns.Objects(util.Get, c.xpath(tmpl, ts, vr, nil), result); err != nil {
-		return nil, err
-	}
-
-	return result.Normalize(), nil
-}
-
-// Show performs SHOW to retrieve information for the given IPv4 route.
-func (c *PanoIpv4) Show(tmpl, ts, vr, name string) (Entry, error) {
-	result, _ := c.versioning()
-	if err := c.ns.Object(util.Show, c.xpath(tmpl, ts, vr, []string{name}), name, result); err != nil {
-		return Entry{}, err
-	}
-
-	return result.Normalize()[0], nil
+// GetAll performs GET to retrieve all objects configured.
+func (c *Panorama) GetAll(tmpl, ts, vr string) ([]Entry, error) {
+	ans := c.container()
+	err := c.ns.Objects(util.Get, c.pather(tmpl, ts, vr), ans)
+	return all(ans, err)
 }
 
 // ShowAll performs SHOW to retrieve information for all objects.
-func (c *PanoIpv4) ShowAll(tmpl, ts, vr string) ([]Entry, error) {
-	result, _ := c.versioning()
-	if err := c.ns.Objects(util.Show, c.xpath(tmpl, ts, vr, nil), result); err != nil {
-		return nil, err
-	}
-
-	return result.Normalize(), nil
+func (c *Panorama) ShowAll(tmpl, ts, vr string) ([]Entry, error) {
+	ans := c.container()
+	err := c.ns.Objects(util.Show, c.pather(tmpl, ts, vr), ans)
+	return all(ans, err)
 }
 
-// Set performs SET to create / update one or more IPv4 routes.
-func (c *PanoIpv4) Set(tmpl, ts, vr string, e ...Entry) error {
-	if vr == "" {
-		return fmt.Errorf("vr must be specified")
-	} else if tmpl == "" && ts == "" {
-		return fmt.Errorf("tmpl or ts must be specified")
-	}
-
-	_, fn := c.versioning()
-	data := make([]interface{}, 0, len(e))
-	names := make([]string, 0, len(e))
-
-	for i := range e {
-		data = append(data, fn(e[i]))
-		names = append(names, e[i].Name)
-	}
-	path := c.xpath(tmpl, ts, vr, names)
-
-	return c.ns.Set(names, path, data)
+// Set performs SET to configure the specified objects.
+func (c *Panorama) Set(tmpl, ts, vr string, e ...Entry) error {
+	return c.ns.Set(c.pather(tmpl, ts, vr), specifier(e...))
 }
 
-// Edit performs EDIT to create / update an IPv4 route.
-func (c *PanoIpv4) Edit(tmpl, ts, vr string, e Entry) error {
-	if vr == "" {
-		return fmt.Errorf("vr must be specified")
-	} else if tmpl == "" && ts == "" {
-		return fmt.Errorf("tmpl or ts must be specified")
-	}
-
-	_, fn := c.versioning()
-	path := c.xpath(tmpl, ts, vr, []string{e.Name})
-	data := fn(e)
-
-	return c.ns.Edit(e.Name, path, data)
+// Edit performs EDIT to configure the specified object.
+func (c *Panorama) Edit(tmpl, ts, vr string, e Entry) error {
+	return c.ns.Edit(c.pather(tmpl, ts, vr), e)
 }
 
-// Delete removes the given IPv4 routes.
+// Delete performs DELETE to remove the specified objects.
 //
-// IPv4 routes can be a string or an Entry object.
-func (c *PanoIpv4) Delete(tmpl, ts, vr string, e ...interface{}) error {
+// Objects can be either a string or an Entry object.
+func (c *Panorama) Delete(tmpl, ts, vr string, e ...interface{}) error {
+	names, nErr := toNames(e)
+	return c.ns.Delete(c.pather(tmpl, ts, vr), names, nErr)
+}
+
+func (c *Panorama) pather(tmpl, ts, vr string) namespace.Pather {
+	return func(v []string) ([]string, error) {
+		return c.xpath(tmpl, ts, vr, v)
+	}
+}
+
+func (c *Panorama) xpath(tmpl, ts, vr string, vals []string) ([]string, error) {
+	if tmpl == "" && ts == "" {
+		return nil, fmt.Errorf("tmpl or ts must be specified")
+	}
 	if vr == "" {
-		return fmt.Errorf("vr must be specified")
-	} else if tmpl == "" && ts == "" {
-		return fmt.Errorf("tmpl or ts must be specified")
+		return nil, fmt.Errorf("vr must be specified")
 	}
 
-	names := make([]string, 0, len(e))
-	for i := range e {
-		switch v := e[i].(type) {
-		case string:
-			names = append(names, v)
-		case Entry:
-			names = append(names, v.Name)
-		default:
-			return fmt.Errorf("Unknown type sent to delete: %s", v)
-		}
-	}
-	path := c.xpath(tmpl, ts, vr, names)
-
-	return c.ns.Delete(names, path)
-}
-
-/** Internal functions for this namespace struct **/
-
-func (c *PanoIpv4) versioning() (normalizer, func(Entry) interface{}) {
-	v := c.con.Versioning()
-
-	if v.Gte(version.Number{8, 0, 0, ""}) {
-		return &container_v3{}, specify_v3
-	} else if v.Gte(version.Number{7, 1, 0, ""}) {
-		return &container_v2{}, specify_v2
-	} else {
-		return &container_v1{}, specify_v1
-	}
-}
-
-func (c *PanoIpv4) xpath(tmpl, ts, vr string, vals []string) []string {
 	ans := make([]string, 0, 15)
 	ans = append(ans, util.TemplateXpathPrefix(tmpl, ts)...)
 	ans = append(ans,
@@ -164,5 +99,9 @@ func (c *PanoIpv4) xpath(tmpl, ts, vr string, vals []string) []string {
 		util.AsEntryXpath(vals),
 	)
 
-	return ans
+	return ans, nil
+}
+
+func (c *Panorama) container() normalizer {
+	return container(c.ns.Client.Versioning())
 }

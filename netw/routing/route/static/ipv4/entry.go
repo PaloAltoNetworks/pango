@@ -2,6 +2,8 @@ package ipv4
 
 import (
 	"encoding/xml"
+
+	"github.com/PaloAltoNetworks/pango/version"
 )
 
 // Entry is a normalized, version independent representation of an IPv4
@@ -30,6 +32,11 @@ func (o *Entry) Copy(s Entry) {
 }
 
 /** Structs / functions for this namespace. **/
+
+func (o Entry) Specify(v version.Number) (string, interface{}) {
+	_, fn := versioning(v)
+	return o.Name, fn(o)
+}
 
 type normalizer interface {
 	Normalize() []Entry
