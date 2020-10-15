@@ -73,7 +73,7 @@ type PanoNetw struct {
 	MonitorProfile           *monitor.PanoMonitor
 	RedistributionProfile    *redist4.PanoIpv4
 	StaticRoute              *ipv4.PanoIpv4
-	TunnelInterface          *tunnel.PanoTunnel
+	TunnelInterface          *tunnel.Panorama
 	VirtualRouter            *router.Panorama
 	Vlan                     *vlan.PanoVlan
 	VlanInterface            *vli.PanoVlan
@@ -171,9 +171,7 @@ func (c *PanoNetw) Initialize(i util.XapiClient) {
 	c.StaticRoute = &ipv4.PanoIpv4{}
 	c.StaticRoute.Initialize(i)
 
-	c.TunnelInterface = &tunnel.PanoTunnel{}
-	c.TunnelInterface.Initialize(i)
-
+	c.TunnelInterface = tunnel.PanoramaNamespace(i)
 	c.VirtualRouter = router.PanoramaNamespace(i)
 
 	c.Vlan = &vlan.PanoVlan{}
