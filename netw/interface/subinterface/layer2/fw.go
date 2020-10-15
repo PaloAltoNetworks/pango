@@ -1,205 +1,100 @@
 package layer2
 
 import (
-	"encoding/xml"
 	"fmt"
 
 	"github.com/PaloAltoNetworks/pango/namespace"
 	"github.com/PaloAltoNetworks/pango/util"
 )
 
-// FwLayer2 is the client.Network.Layer2Subinterface namespace.
-type FwLayer2 struct {
-	con util.XapiClient
-	ns  *namespace.Namespace
+// Firewall is the client.Network.Layer2Subinterface namespace.
+type Firewall struct {
+	ns *namespace.Importable
 }
 
-// Initialize is invoked by client.Initialize().
-func (c *FwLayer2) Initialize(con util.XapiClient) {
-	c.con = con
-	c.ns = namespace.New(singular, plural, con)
+// GetList performs GET to retrieve a list of all objects.
+func (c *Firewall) GetList(iType, eth, mType string) ([]string, error) {
+	ans := c.container()
+	return c.ns.Listing(util.Get, c.pather(iType, eth, mType), ans)
 }
 
-// ShowList performs SHOW to retrieve a list of values.
-func (c *FwLayer2) ShowList(iType, eth, mType string) ([]string, error) {
-	result, _ := c.versioning()
-	return c.ns.Listing(util.Show, c.xpath(iType, eth, mType, nil), result)
+// ShowList performs a SHOW to retrieve a list of all objects.
+func (c *Firewall) ShowList(iType, eth, mType string) ([]string, error) {
+	ans := c.container()
+	return c.ns.Listing(util.Show, c.pather(iType, eth, mType), ans)
 }
 
-// GetList performs GET to retrieve a list of values.
-func (c *FwLayer2) GetList(iType, eth, mType string) ([]string, error) {
-	result, _ := c.versioning()
-	return c.ns.Listing(util.Get, c.xpath(iType, eth, mType, nil), result)
+// Get performs GET to retrieve configuration for the given object.
+func (c *Firewall) Get(iType, eth, mType, name string) (Entry, error) {
+	ans := c.container()
+	err := c.ns.Object(util.Get, c.pather(iType, eth, mType), name, ans)
+	return first(ans, err)
 }
 
-// Get performs GET to retrieve information for the given uid.
-func (c *FwLayer2) Get(iType, eth, mType, name string) (Entry, error) {
-	result, _ := c.versioning()
-	if err := c.ns.Object(util.Get, c.xpath(iType, eth, mType, []string{name}), name, result); err != nil {
-		return Entry{}, err
-	}
-
-	return result.Normalize()[0], nil
+// Show performs SHOW to retrieve configuration for the given object.
+func (c *Firewall) Show(iType, eth, mType, name string) (Entry, error) {
+	ans := c.container()
+	err := c.ns.Object(util.Show, c.pather(iType, eth, mType), name, ans)
+	return first(ans, err)
 }
 
-// GetAll performs GET to retrieve information for all objects.
-func (c *FwLayer2) GetAll(iType, eth, mType string) ([]Entry, error) {
-	result, _ := c.versioning()
-	if err := c.ns.Objects(util.Get, c.xpath(iType, eth, mType, nil), result); err != nil {
-		return nil, err
-	}
-
-	return result.Normalize(), nil
+// GetAll performs GET to retrieve all objects configured.
+func (c *Firewall) GetAll(iType, eth, mType string) ([]Entry, error) {
+	ans := c.container()
+	err := c.ns.Objects(util.Get, c.pather(iType, eth, mType), ans)
+	return all(ans, err)
 }
 
-// Show performs SHOW to retrieve information for the given uid.
-func (c *FwLayer2) Show(iType, eth, mType, name string) (Entry, error) {
-	result, _ := c.versioning()
-	if err := c.ns.Object(util.Show, c.xpath(iType, eth, mType, []string{name}), name, result); err != nil {
-		return Entry{}, err
-	}
-
-	return result.Normalize()[0], nil
+// ShowAll performs SHOW to retrieve all objects configured.
+func (c *Firewall) ShowAll(iType, eth, mType string) ([]Entry, error) {
+	ans := c.container()
+	err := c.ns.Objects(util.Show, c.pather(iType, eth, mType), ans)
+	return all(ans, err)
 }
 
-// ShowAll performs SHOW to retrieve information for all objects.
-func (c *FwLayer2) ShowAll(iType, eth, mType string) ([]Entry, error) {
-	result, _ := c.versioning()
-	if err := c.ns.Objects(util.Show, c.xpath(iType, eth, mType, nil), result); err != nil {
-		return nil, err
-	}
-
-	return result.Normalize(), nil
+// Set performs SET to configure the specified objects.
+func (c *Firewall) Set(iType, eth, mType, vsys string, e ...Entry) error {
+	return c.ns.Set("", "", vsys, c.pather(iType, eth, mType), specifier(e...))
 }
 
-// Set performs SET to create / update one or more objects.
-func (c *FwLayer2) Set(iType, eth, mType, vsys string, e ...Entry) error {
-	var err error
-
-	if len(e) == 0 {
-		return nil
-	} else if iType == "" {
-		return fmt.Errorf("iType must be specified")
-	} else if eth == "" {
-		return fmt.Errorf("eth must be specified")
-	} else if mType == "" {
-		return fmt.Errorf("mType must be specified")
-	}
-
-	_, fn := c.versioning()
-	names := make([]string, len(e))
-
-	// Build up the struct.
-	d := util.BulkElement{XMLName: xml.Name{Local: "units"}}
-	for i := range e {
-		d.Data = append(d.Data, fn(e[i]))
-		names[i] = e[i].Name
-	}
-	c.con.LogAction("(set) %s: %v", plural, names)
-
-	// Set xpath.
-	path := c.xpath(iType, eth, mType, names)
-	if len(e) == 1 {
-		path = path[:len(path)-1]
-	} else {
-		path = path[:len(path)-2]
-	}
-
-	// Create the objects.
-	_, err = c.con.Set(path, d.Config(), nil, nil)
-	if err != nil {
-		return err
-	}
-
-	// Remove from any vsys it's currently in.
-	if err = c.con.VsysUnimport(util.InterfaceImport, "", "", names); err != nil {
-		return err
-	}
-
-	// Perform vsys import.
-	return c.con.VsysImport(util.InterfaceImport, "", "", vsys, names)
+// Edit performs EDIT to configure the specified object.
+func (c *Firewall) Edit(iType, eth, mType, vsys string, e Entry) error {
+	return c.ns.Edit("", "", vsys, c.pather(iType, eth, mType), e)
 }
 
-// Edit performs EDIT to create / update one object.
-func (c *FwLayer2) Edit(iType, eth, mType, vsys string, e Entry) error {
-	var err error
-
-	if iType == "" {
-		return fmt.Errorf("iType must be specified")
-	} else if eth == "" {
-		return fmt.Errorf("eth must be specified")
-	} else if mType == "" {
-		return fmt.Errorf("mType must be specified")
-	}
-
-	_, fn := c.versioning()
-
-	c.con.LogAction("(edit) %s %q", singular, e.Name)
-
-	// Set xpath.
-	path := c.xpath(iType, eth, mType, []string{e.Name})
-
-	// Edit the object.
-	if _, err = c.con.Edit(path, fn(e), nil, nil); err != nil {
-		return err
-	}
-
-	// Remove from any vsys it's currently in.
-	if err = c.con.VsysUnimport(util.InterfaceImport, "", "", []string{e.Name}); err != nil {
-		return err
-	}
-
-	// Perform vsys import.
-	return c.con.VsysImport(util.InterfaceImport, "", "", vsys, []string{e.Name})
-}
-
-// Delete removes the given objects.
+// Delete performs DELETE to remove the specified objects.
 //
-// Objects can be a string or an Entry object.
-func (c *FwLayer2) Delete(iType, eth, mType string, e ...interface{}) error {
-	var err error
-
-	if len(e) == 0 {
-		return nil
-	} else if iType == "" {
-		return fmt.Errorf("iType must be specified")
-	} else if eth == "" {
-		return fmt.Errorf("eth must be specified")
-	} else if mType == "" {
-		return fmt.Errorf("mType must be specified")
-	}
-
-	names := make([]string, len(e))
-	for i := range e {
-		switch v := e[i].(type) {
-		case string:
-			names[i] = v
-		case Entry:
-			names[i] = v.Name
-		default:
-			return fmt.Errorf("Unknown type sent to delete: %s", v)
-		}
-	}
-	c.con.LogAction("(delete) %s: %v", plural, names)
-
-	// Unimport interfaces.
-	if err = c.con.VsysUnimport(util.InterfaceImport, "", "", names); err != nil {
-		return err
-	}
-
-	// Remove the objects.
-	path := c.xpath(iType, eth, mType, names)
-	_, err = c.con.Delete(path, nil, nil)
-	return err
+// Objects can be either a string or an Entry object.
+func (c *Firewall) Delete(iType, eth, mType string, e ...interface{}) error {
+	names, nErr := toNames(e)
+	return c.ns.Delete("", "", c.pather(iType, eth, mType), names, nErr)
 }
 
-/** Internal functions for this namespace struct **/
-
-func (c *FwLayer2) versioning() (normalizer, func(Entry) interface{}) {
-	return &container_v1{}, specify_v1
+func (c *Firewall) pather(iType, eth, mType string) namespace.Pather {
+	return func(v []string) ([]string, error) {
+		return c.xpath(iType, eth, mType, v)
+	}
 }
 
-func (c *FwLayer2) xpath(iType, eth, mType string, vals []string) []string {
+func (c *Firewall) xpath(iType, eth, mType string, vals []string) ([]string, error) {
+	switch iType {
+	case "":
+		return nil, fmt.Errorf("iType must be specified")
+	case EthernetInterface, AggregateInterface:
+	default:
+		return nil, fmt.Errorf("unknown iType value: %s", iType)
+	}
+	if eth == "" {
+		return nil, fmt.Errorf("eth must be specified")
+	}
+	switch mType {
+	case "":
+		return nil, fmt.Errorf("mType must be specified")
+	case VirtualWire, Layer2:
+	default:
+		return nil, fmt.Errorf("unknown mType value: %s", mType)
+	}
+
 	return []string{
 		"config",
 		"devices",
@@ -211,5 +106,9 @@ func (c *FwLayer2) xpath(iType, eth, mType string, vals []string) []string {
 		mType,
 		"units",
 		util.AsEntryXpath(vals),
-	}
+	}, nil
+}
+
+func (c *Firewall) container() normalizer {
+	return container(c.ns.Client.Versioning())
 }

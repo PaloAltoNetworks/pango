@@ -2,6 +2,8 @@ package layer2
 
 import (
 	"encoding/xml"
+
+	"github.com/PaloAltoNetworks/pango/version"
 )
 
 // Entry is a normalized, version independent representation of a layer2
@@ -22,6 +24,11 @@ func (o *Entry) Copy(s Entry) {
 }
 
 /** Structs / functions for this namespace. **/
+
+func (o Entry) Specify(v version.Number) (string, string, interface{}) {
+	_, fn := versioning(v)
+	return o.Name, o.Name, fn(o)
+}
 
 type normalizer interface {
 	Normalize() []Entry
