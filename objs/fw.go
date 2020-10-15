@@ -29,7 +29,7 @@ type FwObjs struct {
 	AppSigAndCond                       *andcond.FwAndCond
 	AppSigOrCond                        *orcond.FwOrCond
 	Edl                                 *edl.FwEdl
-	LogForwardingProfile                *logfwd.FwLogFwd
+	LogForwardingProfile                *logfwd.Firewall
 	LogForwardingProfileMatchList       *matchlist.FwMatchList
 	LogForwardingProfileMatchListAction *action.FwAction
 	Services                            *srvc.FwSrvc
@@ -62,8 +62,7 @@ func (c *FwObjs) Initialize(i util.XapiClient) {
 	c.Edl = &edl.FwEdl{}
 	c.Edl.Initialize(i)
 
-	c.LogForwardingProfile = &logfwd.FwLogFwd{}
-	c.LogForwardingProfile.Initialize(i)
+	c.LogForwardingProfile = logfwd.FirewallNamespace(i)
 
 	c.LogForwardingProfileMatchList = &matchlist.FwMatchList{}
 	c.LogForwardingProfileMatchList.Initialize(i)

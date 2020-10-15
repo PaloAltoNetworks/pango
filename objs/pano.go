@@ -29,7 +29,7 @@ type PanoObjs struct {
 	AppSigAndCond                       *andcond.PanoAndCond
 	AppSigOrCond                        *orcond.PanoOrCond
 	Edl                                 *edl.PanoEdl
-	LogForwardingProfile                *logfwd.PanoLogFwd
+	LogForwardingProfile                *logfwd.Panorama
 	LogForwardingProfileMatchList       *matchlist.PanoMatchList
 	LogForwardingProfileMatchListAction *action.PanoAction
 	Services                            *srvc.PanoSrvc
@@ -62,8 +62,7 @@ func (c *PanoObjs) Initialize(i util.XapiClient) {
 	c.Edl = &edl.PanoEdl{}
 	c.Edl.Initialize(i)
 
-	c.LogForwardingProfile = &logfwd.PanoLogFwd{}
-	c.LogForwardingProfile.Initialize(i)
+	c.LogForwardingProfile = logfwd.PanoramaNamespace(i)
 
 	c.LogForwardingProfileMatchList = &matchlist.PanoMatchList{}
 	c.LogForwardingProfileMatchList.Initialize(i)
