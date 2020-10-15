@@ -65,7 +65,7 @@ func toNames(e []interface{}) ([]string, error) {
 func FirewallNamespace(client util.XapiClient) *Firewall {
 	return &Firewall{
 		ns: &namespace.Importable{
-			ImportPath: util.InterfaceImport,
+			ImportPath: util.VirtualRouterImport,
 			Common: namespace.Common{
 				Singular: singular,
 				Plural:   plural,
@@ -79,7 +79,7 @@ func FirewallNamespace(client util.XapiClient) *Firewall {
 func PanoramaNamespace(client util.XapiClient) *Panorama {
 	return &Panorama{
 		ns: &namespace.Importable{
-			ImportPath: util.InterfaceImport,
+			ImportPath: util.VirtualRouterImport,
 			Common: namespace.Common{
 				Singular: singular,
 				Plural:   plural,
