@@ -77,7 +77,7 @@ type PanoNetw struct {
 	VirtualRouter            *router.Panorama
 	Vlan                     *vlan.PanoVlan
 	VlanInterface            *vli.Panorama
-	Zone                     *zone.PanoZone
+	Zone                     *zone.Panorama
 }
 
 // Initialize is invoked on client.Initialize().
@@ -174,7 +174,5 @@ func (c *PanoNetw) Initialize(i util.XapiClient) {
 	c.Vlan.Initialize(i)
 
 	c.VlanInterface = vli.PanoramaNamespace(i)
-
-	c.Zone = &zone.PanoZone{}
-	c.Zone.Initialize(i)
+	c.Zone = zone.PanoramaNamespace(i)
 }
