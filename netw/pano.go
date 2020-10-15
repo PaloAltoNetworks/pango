@@ -75,7 +75,7 @@ type PanoNetw struct {
 	StaticRoute              *ipv4.PanoIpv4
 	TunnelInterface          *tunnel.Panorama
 	VirtualRouter            *router.Panorama
-	Vlan                     *vlan.PanoVlan
+	Vlan                     *vlan.Panorama
 	VlanInterface            *vli.Panorama
 	Zone                     *zone.Panorama
 }
@@ -170,9 +170,7 @@ func (c *PanoNetw) Initialize(i util.XapiClient) {
 	c.TunnelInterface = tunnel.PanoramaNamespace(i)
 	c.VirtualRouter = router.PanoramaNamespace(i)
 
-	c.Vlan = &vlan.PanoVlan{}
-	c.Vlan.Initialize(i)
-
+	c.Vlan = vlan.PanoramaNamespace(i)
 	c.VlanInterface = vli.PanoramaNamespace(i)
 	c.Zone = zone.PanoramaNamespace(i)
 }
