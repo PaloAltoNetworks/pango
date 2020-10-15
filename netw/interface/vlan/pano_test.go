@@ -11,8 +11,7 @@ func TestPanoNormalization(t *testing.T) {
 	testCases := getTests()
 
 	mc := &testdata.MockClient{}
-	ns := &PanoVlan{}
-	ns.Initialize(mc)
+	ns := PanoramaNamespace(mc)
 
 	for _, tc := range testCases {
 		t.Run(tc.conf.Comment, func(t *testing.T) {
