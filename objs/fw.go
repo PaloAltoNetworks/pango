@@ -10,6 +10,7 @@ import (
 	"github.com/PaloAltoNetworks/pango/objs/app/signature"
 	"github.com/PaloAltoNetworks/pango/objs/app/signature/andcond"
 	"github.com/PaloAltoNetworks/pango/objs/app/signature/orcond"
+	"github.com/PaloAltoNetworks/pango/objs/dug"
 	"github.com/PaloAltoNetworks/pango/objs/edl"
 	"github.com/PaloAltoNetworks/pango/objs/profile/logfwd"
 	"github.com/PaloAltoNetworks/pango/objs/profile/logfwd/matchlist"
@@ -28,6 +29,7 @@ type FwObjs struct {
 	AppSignature                        *signature.FwSignature
 	AppSigAndCond                       *andcond.FwAndCond
 	AppSigOrCond                        *orcond.FwOrCond
+    DynamicUserGroup *dug.Firewall
 	Edl                                 *edl.FwEdl
 	LogForwardingProfile                *logfwd.Firewall
 	LogForwardingProfileMatchList       *matchlist.FwMatchList
@@ -58,6 +60,8 @@ func (c *FwObjs) Initialize(i util.XapiClient) {
 
 	c.AppSigOrCond = &orcond.FwOrCond{}
 	c.AppSigOrCond.Initialize(i)
+
+    c.DynamicUserGroup = dug.FirewallNamespace(i)
 
 	c.Edl = &edl.FwEdl{}
 	c.Edl.Initialize(i)
