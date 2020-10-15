@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 
 	"github.com/PaloAltoNetworks/pango/util"
+	"github.com/PaloAltoNetworks/pango/version"
 )
 
 // Entry is a normalized, version independent representation of a VLAN.
@@ -29,6 +30,11 @@ func (o *Entry) Copy(s Entry, copyMacs bool) {
 }
 
 /** Structs / functions for this namespace. **/
+
+func (o Entry) Specify(v version.Number) (string, string, interface{}) {
+	_, fn := versioning(v)
+	return o.Name, o.Name, fn(o)
+}
 
 type normalizer interface {
 	Normalize() []Entry

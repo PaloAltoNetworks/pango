@@ -8,16 +8,9 @@ import (
 	"github.com/PaloAltoNetworks/pango/util"
 )
 
-// PanoVlan is the client.Network.Vlan namespace.
-type PanoVlan struct {
-	con util.XapiClient
-	ns  *namespace.Namespace
-}
-
-// Initialize is invoked by client.Initialize().
-func (c *PanoVlan) Initialize(con util.XapiClient) {
-	c.con = con
-	c.ns = namespace.New(singular, plural, con)
+// Panorama is the client.Network.Vlan namespace.
+type Panorama struct {
+	ns *namespace.Importable
 }
 
 /*
@@ -28,44 +21,40 @@ The iface variable is the interface.
 The rmMacs and addMacs params are MAC addresses to remove/add that
 will reference the iface interface.
 */
-func (c *PanoVlan) SetInterface(tmpl, ts string, vlan interface{}, iface string, rmMacs, addMacs []string) error {
+func (c *Panorama) SetInterface(tmpl, ts string, vlan interface{}, iface string, rmMacs, addMacs []string) error {
 	var (
 		name string
 		err  error
 	)
 
-	if tmpl == "" && ts == "" {
-		return fmt.Errorf("tmpl or ts must be specified")
+	names, err := toNames([]interface{}{vlan})
+	if err != nil {
+		return err
 	}
+	name = names[0]
 
-	switch v := vlan.(type) {
-	case string:
-		name = v
-	case Entry:
-		name = v.Name
-	default:
-		return fmt.Errorf("Unknown type sent to %s set interface: %s", singular, v)
+	c.ns.Client.LogAction("(set) interface for %s %q: %s", singular, name, iface)
+
+	basePath, err := c.xpath(tmpl, ts, []string{name})
+	if err != nil {
+		return err
 	}
-
-	c.con.LogAction("(set) interface for %s %q: %s", singular, name, iface)
-
-	basePath := c.xpath(tmpl, ts, []string{name})
 	iPath := append(basePath, "interface")
 
-	if _, err = c.con.Set(iPath, util.Member{Value: iface}, nil, nil); err != nil {
+	if _, err = c.ns.Client.Set(iPath, util.Member{Value: iface}, nil, nil); err != nil {
 		return err
 	}
 
 	if len(rmMacs) > 0 {
-		c.con.LogAction("(delete) removing %q mac addresses: %#v", name, rmMacs)
+		c.ns.Client.LogAction("(delete) removing %q mac addresses: %#v", name, rmMacs)
 		rPath := append(basePath, "mac", util.AsEntryXpath(rmMacs))
-		if _, err = c.con.Delete(rPath, nil, nil); err != nil {
+		if _, err = c.ns.Client.Delete(rPath, nil, nil); err != nil {
 			return err
 		}
 	}
 
 	if len(addMacs) > 0 {
-		c.con.LogAction("(set) adding %q mac addresses: %#v", name, addMacs)
+		c.ns.Client.LogAction("(set) adding %q mac addresses: %#v", name, addMacs)
 		d := util.BulkElement{XMLName: xml.Name{Local: "mac"}}
 		for i := range addMacs {
 			d.Data = append(d.Data, macList{Mac: addMacs[i], Interface: iface})
@@ -75,7 +64,7 @@ func (c *PanoVlan) SetInterface(tmpl, ts string, vlan interface{}, iface string,
 		if len(addMacs) == 1 {
 			aPath = append(aPath, "mac")
 		}
-		if _, err = c.con.Set(aPath, d.Config(), nil, nil); err != nil {
+		if _, err = c.ns.Client.Set(aPath, d.Config(), nil, nil); err != nil {
 			return err
 		}
 	}
@@ -90,24 +79,17 @@ The VLAN can be either a string or an Entry object.
 
 All MAC addresses referencing this interface are deleted.
 */
-func (c *PanoVlan) DeleteInterface(tmpl, ts string, vlan interface{}, iface string) error {
+func (c *Panorama) DeleteInterface(tmpl, ts string, vlan interface{}, iface string) error {
 	var (
 		name string
 		err  error
 	)
 
-	if tmpl == "" && ts == "" {
-		return fmt.Errorf("tmpl or ts must be specified")
+	names, err := toNames([]interface{}{vlan})
+	if err != nil {
+		return err
 	}
-
-	switch v := vlan.(type) {
-	case string:
-		name = v
-	case Entry:
-		name = v.Name
-	default:
-		return fmt.Errorf("Unknown type sent to %s delete interface: %s", singular, v)
-	}
+	name = names[0]
 
 	o, err := c.Get(tmpl, ts, name)
 	if err != nil {
@@ -120,177 +102,95 @@ func (c *PanoVlan) DeleteInterface(tmpl, ts string, vlan interface{}, iface stri
 		}
 	}
 
-	c.con.LogAction("(delete) interface for %s %q: %s", singular, name, iface)
+	c.ns.Client.LogAction("(delete) interface for %s %q: %s", singular, name, iface)
 
-	basePath := c.xpath(tmpl, ts, []string{name})
+	basePath, err := c.xpath(tmpl, ts, []string{name})
+	if err != nil {
+		return err
+	}
 	mPath := append(basePath, "mac", util.AsEntryXpath(rmMacs))
 	iPath := append(basePath, "interface", util.AsMemberXpath([]string{iface}))
 
 	if len(rmMacs) > 0 {
-		c.con.LogAction("(delete) removing %q mac addresses: %#v", iface, rmMacs)
-		if _, err = c.con.Delete(mPath, nil, nil); err != nil {
+		c.ns.Client.LogAction("(delete) removing %q mac addresses: %#v", iface, rmMacs)
+		if _, err = c.ns.Client.Delete(mPath, nil, nil); err != nil {
 			return err
 		}
 	}
 
-	_, err = c.con.Delete(iPath, nil, nil)
+	_, err = c.ns.Client.Delete(iPath, nil, nil)
 	return err
 }
 
-// ShowList performs SHOW to retrieve a list of VLANs.
-func (c *PanoVlan) ShowList(tmpl, ts string) ([]string, error) {
-	result, _ := c.versioning()
-	return c.ns.Listing(util.Show, c.xpath(tmpl, ts, nil), result)
+// GetList performs GET to retrieve a list of all objects.
+func (c *Panorama) GetList(tmpl, ts string) ([]string, error) {
+	ans := c.container()
+	return c.ns.Listing(util.Get, c.pather(tmpl, ts), ans)
 }
 
-// GetList performs GET to retrieve a list of VLANs.
-func (c *PanoVlan) GetList(tmpl, ts string) ([]string, error) {
-	result, _ := c.versioning()
-	return c.ns.Listing(util.Get, c.xpath(tmpl, ts, nil), result)
+// ShowList performs a SHOW to retrieve a list of all objects.
+func (c *Panorama) ShowList(tmpl, ts string) ([]string, error) {
+	ans := c.container()
+	return c.ns.Listing(util.Show, c.pather(tmpl, ts), ans)
 }
 
-// Get performs GET to retrieve information for the given VLAN.
-func (c *PanoVlan) Get(tmpl, ts, name string) (Entry, error) {
-	result, _ := c.versioning()
-	if err := c.ns.Object(util.Get, c.xpath(tmpl, ts, []string{name}), name, result); err != nil {
-		return Entry{}, err
-	}
-
-	return result.Normalize()[0], nil
+// Get performs GET to retrieve configuration for the given object.
+func (c *Panorama) Get(tmpl, ts, name string) (Entry, error) {
+	ans := c.container()
+	err := c.ns.Object(util.Get, c.pather(tmpl, ts), name, ans)
+	return first(ans, err)
 }
 
-// GetAll performs GET to retrieve information for all objects.
-func (c *PanoVlan) GetAll(tmpl, ts string) ([]Entry, error) {
-	result, _ := c.versioning()
-	if err := c.ns.Objects(util.Get, c.xpath(tmpl, ts, nil), result); err != nil {
-		return nil, err
-	}
-
-	return result.Normalize(), nil
+// Show performs SHOW to retrieve configuration for the given object.
+func (c *Panorama) Show(tmpl, ts, name string) (Entry, error) {
+	ans := c.container()
+	err := c.ns.Object(util.Show, c.pather(tmpl, ts), name, ans)
+	return first(ans, err)
 }
 
-// Show performs SHOW to retrieve information for the given VLAN.
-func (c *PanoVlan) Show(tmpl, ts, name string) (Entry, error) {
-	result, _ := c.versioning()
-	if err := c.ns.Object(util.Show, c.xpath(tmpl, ts, []string{name}), name, result); err != nil {
-		return Entry{}, err
-	}
-
-	return result.Normalize()[0], nil
+// GetAll performs GET to retrieve all objects configured.
+func (c *Panorama) GetAll(tmpl, ts string) ([]Entry, error) {
+	ans := c.container()
+	err := c.ns.Objects(util.Get, c.pather(tmpl, ts), ans)
+	return all(ans, err)
 }
 
-// ShowAll performs GET to retrieve information for all objects.
-func (c *PanoVlan) ShowAll(tmpl, ts string) ([]Entry, error) {
-	result, _ := c.versioning()
-	if err := c.ns.Objects(util.Show, c.xpath(tmpl, ts, nil), result); err != nil {
-		return nil, err
-	}
-
-	return result.Normalize(), nil
+// ShowAll performs SHOW to retrieve all objects configured.
+func (c *Panorama) ShowAll(tmpl, ts string) ([]Entry, error) {
+	ans := c.container()
+	err := c.ns.Objects(util.Show, c.pather(tmpl, ts), ans)
+	return all(ans, err)
 }
 
-// Set performs SET to create / update one or more VLANs.
+// Set performs SET to configure the specified objects.
+func (c *Panorama) Set(tmpl, ts, vsys string, e ...Entry) error {
+	return c.ns.Set(tmpl, ts, vsys, c.pather(tmpl, ts), specifier(e...))
+}
+
+// Edit performs EDIT to configure the specified object.
+func (c *Panorama) Edit(tmpl, ts, vsys string, e Entry) error {
+	return c.ns.Edit(tmpl, ts, vsys, c.pather(tmpl, ts), e)
+}
+
+// Delete performs DELETE to remove the specified objects.
 //
-// Specify a non-empty vsys to import the VLAN(s) into the given vsys
-// after creating, allowing the vsys to use them.
-func (c *PanoVlan) Set(tmpl, ts, vsys string, e ...Entry) error {
-	var err error
-
-	if len(e) == 0 {
-		return nil
-	} else if tmpl == "" && ts == "" {
-		return fmt.Errorf("tmpl or ts must be specified")
-	}
-
-	_, fn := c.versioning()
-	data := make([]interface{}, 0, len(e))
-	names := make([]string, 0, len(e))
-
-	for i := range e {
-		data = append(data, fn(e[i]))
-		names = append(names, e[i].Name)
-	}
-	path := c.xpath(tmpl, ts, names)
-
-	if err = c.ns.Set(names, path, data); err != nil {
-		return err
-	}
-
-	// Remove the VLANs from any vsys they're currently in.
-	if err = c.con.VsysUnimport(util.VlanImport, tmpl, ts, names); err != nil {
-		return err
-	}
-
-	// Perform vsys import next.
-	return c.con.VsysImport(util.VlanImport, tmpl, ts, vsys, names)
+// Objects can be either a string or an Entry object.
+func (c *Panorama) Delete(tmpl, ts string, e ...interface{}) error {
+	names, nErr := toNames(e)
+	return c.ns.Delete(tmpl, ts, c.pather(tmpl, ts), names, nErr)
 }
 
-// Edit performs EDIT to create / update a VLAN.
-//
-// Specify a non-empty vsys to import the VLAN into the given vsys
-// after creating, allowing the vsys to use it.
-func (c *PanoVlan) Edit(tmpl, ts, vsys string, e Entry) error {
-	var err error
+func (c *Panorama) pather(tmpl, ts string) namespace.Pather {
+	return func(v []string) ([]string, error) {
+		return c.xpath(tmpl, ts, v)
+	}
+}
 
+func (c *Panorama) xpath(tmpl, ts string, vals []string) ([]string, error) {
 	if tmpl == "" && ts == "" {
-		return fmt.Errorf("tmpl or ts must be specified")
+		return nil, fmt.Errorf("tmpl or ts must be specified")
 	}
 
-	_, fn := c.versioning()
-	path := c.xpath(tmpl, ts, []string{e.Name})
-	data := fn(e)
-
-	if err = c.ns.Edit(e.Name, path, data); err != nil {
-		return err
-	}
-
-	// Remove the VLANs from any vsys they're currently in.
-	if err = c.con.VsysUnimport(util.VlanImport, tmpl, ts, []string{e.Name}); err != nil {
-		return err
-	}
-
-	// Perform vsys import next.
-	return c.con.VsysImport(util.VlanImport, tmpl, ts, vsys, []string{e.Name})
-}
-
-// Delete removes the given VLAN(s) from the firewall.
-//
-// VLANs can be a string or an Entry object.
-func (c *PanoVlan) Delete(tmpl, ts string, e ...interface{}) error {
-	if len(e) == 0 {
-		return nil
-	} else if tmpl == "" && ts == "" {
-		return fmt.Errorf("tmpl or ts must be specified")
-	}
-
-	names := make([]string, 0, len(e))
-	for i := range e {
-		switch v := e[i].(type) {
-		case string:
-			names = append(names, v)
-		case Entry:
-			names = append(names, v.Name)
-		default:
-			return fmt.Errorf("Unknown type sent to delete: %s", v)
-		}
-	}
-	path := c.xpath(tmpl, ts, names)
-
-	// Unimport VLANs.
-	if err := c.con.VsysUnimport(util.VlanImport, tmpl, ts, names); err != nil {
-		return err
-	}
-
-	return c.ns.Delete(names, path)
-}
-
-/** Internal functions for this namespace struct **/
-
-func (c *PanoVlan) versioning() (normalizer, func(Entry) interface{}) {
-	return &container_v1{}, specify_v1
-}
-
-func (c *PanoVlan) xpath(tmpl, ts string, vals []string) []string {
 	ans := make([]string, 0, 11)
 	ans = append(ans, util.TemplateXpathPrefix(tmpl, ts)...)
 	ans = append(ans,
@@ -302,5 +202,9 @@ func (c *PanoVlan) xpath(tmpl, ts string, vals []string) []string {
 		util.AsEntryXpath(vals),
 	)
 
-	return ans
+	return ans, nil
+}
+
+func (c *Panorama) container() normalizer {
+	return container(c.ns.Client.Versioning())
 }
