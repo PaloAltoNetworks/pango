@@ -151,9 +151,7 @@ func TemplateXpathPrefix(tmpl, ts string) []string {
 // DeviceGroupXpathPrefix returns a device group xpath prefix.
 // If the device group is empty, then the default is "shared".
 func DeviceGroupXpathPrefix(dg string) []string {
-	if dg == "" {
-		dg = "shared"
-	} else if dg == "shared" {
+	if dg == "" || dg == "shared" {
 		return []string{"config", "shared"}
 	}
 
