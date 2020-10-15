@@ -76,7 +76,7 @@ type FwNetw struct {
 	TunnelInterface          *tunnel.Firewall
 	VirtualRouter            *router.Firewall
 	Vlan                     *vlan.FwVlan
-	VlanInterface            *vli.FwVlan
+	VlanInterface            *vli.Firewall
 	Zone                     *zone.FwZone
 }
 
@@ -177,8 +177,7 @@ func (c *FwNetw) Initialize(i util.XapiClient) {
 	c.Vlan = &vlan.FwVlan{}
 	c.Vlan.Initialize(i)
 
-	c.VlanInterface = &vli.FwVlan{}
-	c.VlanInterface.Initialize(i)
+	c.VlanInterface = vli.FirewallNamespace(i)
 
 	c.Zone = &zone.FwZone{}
 	c.Zone.Initialize(i)
