@@ -68,7 +68,7 @@ type FwNetw struct {
 	IpsecTunnelProxyId       *tpiv4.FwIpv4
 	Layer2Subinterface       *layer2.FwLayer2
 	Layer3Subinterface       *layer3.FwLayer3
-	LoopbackInterface        *loopback.FwLoopback
+	LoopbackInterface        *loopback.Firewall
 	ManagementProfile        *mngtprof.FwMngtProf
 	MonitorProfile           *monitor.FwMonitor
 	RedistributionProfile    *redist4.FwIpv4
@@ -157,8 +157,7 @@ func (c *FwNetw) Initialize(i util.XapiClient) {
 	c.Layer3Subinterface = &layer3.FwLayer3{}
 	c.Layer3Subinterface.Initialize(i)
 
-	c.LoopbackInterface = &loopback.FwLoopback{}
-	c.LoopbackInterface.Initialize(i)
+	c.LoopbackInterface = loopback.FirewallNamespace(i)
 
 	c.ManagementProfile = &mngtprof.FwMngtProf{}
 	c.ManagementProfile.Initialize(i)

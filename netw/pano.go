@@ -68,7 +68,7 @@ type PanoNetw struct {
 	IpsecTunnelProxyId       *tpiv4.PanoIpv4
 	Layer2Subinterface       *layer2.PanoLayer2
 	Layer3Subinterface       *layer3.PanoLayer3
-	LoopbackInterface        *loopback.PanoLoopback
+	LoopbackInterface        *loopback.Panorama
 	ManagementProfile        *mngtprof.PanoMngtProf
 	MonitorProfile           *monitor.PanoMonitor
 	RedistributionProfile    *redist4.PanoIpv4
@@ -157,8 +157,7 @@ func (c *PanoNetw) Initialize(i util.XapiClient) {
 	c.Layer3Subinterface = &layer3.PanoLayer3{}
 	c.Layer3Subinterface.Initialize(i)
 
-	c.LoopbackInterface = &loopback.PanoLoopback{}
-	c.LoopbackInterface.Initialize(i)
+	c.LoopbackInterface = loopback.PanoramaNamespace(i)
 
 	c.ManagementProfile = &mngtprof.PanoMngtProf{}
 	c.ManagementProfile.Initialize(i)
