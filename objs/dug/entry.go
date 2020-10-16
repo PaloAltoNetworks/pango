@@ -12,7 +12,7 @@ import (
 type Entry struct {
 	Name        string
 	Description string
-    Filter string
+	Filter      string
 	Tags        []string // ordered
 }
 
@@ -20,7 +20,7 @@ type Entry struct {
 // Name field relates to the XPATH of this object, this field is not copied.
 func (o *Entry) Copy(s Entry) {
 	o.Description = s.Description
-    o.Filter = s.Filter
+	o.Filter = s.Filter
 	o.Tags = s.Tags
 }
 
@@ -62,7 +62,7 @@ type entry_v1 struct {
 	XMLName     xml.Name         `xml:"entry"`
 	Name        string           `xml:"name,attr"`
 	Description string           `xml:"description,omitempty"`
-    Filter string `xml:"filter"`
+	Filter      string           `xml:"filter"`
 	Tags        *util.MemberType `xml:"tag"`
 }
 
@@ -70,7 +70,7 @@ func specify_v1(e Entry) interface{} {
 	ans := entry_v1{
 		Name:        e.Name,
 		Description: e.Description,
-        Filter: e.Filter,
+		Filter:      e.Filter,
 		Tags:        util.StrToMem(e.Tags),
 	}
 
@@ -81,7 +81,7 @@ func (e *entry_v1) normalize() Entry {
 	ans := Entry{
 		Name:        e.Name,
 		Description: e.Description,
-        Filter: e.Filter,
+		Filter:      e.Filter,
 		Tags:        util.MemToStr(e.Tags),
 	}
 

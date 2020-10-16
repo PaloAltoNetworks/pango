@@ -17,13 +17,13 @@ func getTests() []testCase {
 		{"v1 single with no tags", "", "", version.Number{9, 1, 0, ""}, Entry{
 			Name:        "one",
 			Description: "my description",
-            Filter: "'single'",
+			Filter:      "'single'",
 		}},
 		{"v1 single with tags", "", "", version.Number{9, 1, 0, ""}, Entry{
 			Name:        "two",
 			Description: "my second description",
-            Filter: "'single' and 'foo'",
-            Tags: []string{"tag2", "tag1"},
+			Filter:      "'single' and 'foo'",
+			Tags:        []string{"tag2", "tag1"},
 		}},
 	}
 }

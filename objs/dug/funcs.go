@@ -9,7 +9,7 @@ import (
 )
 
 func versioning(v version.Number) (normalizer, func(Entry) interface{}) {
-    return &container_v1{}, specify_v1
+	return &container_v1{}, specify_v1
 }
 
 func specifier(e ...Entry) []namespace.Specifier {
