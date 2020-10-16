@@ -17,6 +17,7 @@ import (
 	"github.com/PaloAltoNetworks/pango/objs/profile/logfwd/matchlist/action"
 	"github.com/PaloAltoNetworks/pango/objs/profile/security/virus"
 	"github.com/PaloAltoNetworks/pango/objs/profile/security/vulnerability"
+	vulnrule "github.com/PaloAltoNetworks/pango/objs/profile/security/vulnerability/rule"
 	"github.com/PaloAltoNetworks/pango/objs/srvc"
 	"github.com/PaloAltoNetworks/pango/objs/srvcgrp"
 	"github.com/PaloAltoNetworks/pango/objs/tags"
@@ -41,6 +42,7 @@ type PanoObjs struct {
 	ServiceGroup                        *srvcgrp.PanoSrvcGrp
 	Tags                                *tags.PanoTags
 	VulnerabilityProfile                *vulnerability.Panorama
+	VulnerabilityProfileRule            *vulnrule.Panorama
 }
 
 // Initialize is invoked on client.Initialize().
@@ -90,4 +92,5 @@ func (c *PanoObjs) Initialize(i util.XapiClient) {
 	c.Tags.Initialize(i)
 
 	c.VulnerabilityProfile = vulnerability.PanoramaNamespace(i)
+	c.VulnerabilityProfileRule = vulnrule.PanoramaNamespace(i)
 }
