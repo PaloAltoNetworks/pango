@@ -1,7 +1,7 @@
 package virus
 
 /*
-Valid values for Decoder.Action.
+Valid values for Decoder.Action and ApplicationException.Action.
 
 Block:          PAN-OS 6.1 only.
 Drop:           PAN-OS 7.0+
@@ -21,6 +21,6 @@ const (
 )
 
 const (
-	singular = "antivirus profile"
-	plural   = "antivirus profiles"
+	singular = "antivirus security profile"
+	plural   = "antivirus security profiles"
 )
