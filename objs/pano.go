@@ -15,6 +15,7 @@ import (
 	"github.com/PaloAltoNetworks/pango/objs/profile/logfwd"
 	"github.com/PaloAltoNetworks/pango/objs/profile/logfwd/matchlist"
 	"github.com/PaloAltoNetworks/pango/objs/profile/logfwd/matchlist/action"
+	fprof "github.com/PaloAltoNetworks/pango/objs/profile/security/file"
 	"github.com/PaloAltoNetworks/pango/objs/profile/security/virus"
 	"github.com/PaloAltoNetworks/pango/objs/profile/security/vulnerability"
 	vulnexcep "github.com/PaloAltoNetworks/pango/objs/profile/security/vulnerability/exception"
@@ -36,6 +37,7 @@ type PanoObjs struct {
 	AppSigOrCond                        *orcond.PanoOrCond
 	DynamicUserGroup                    *dug.Panorama
 	Edl                                 *edl.PanoEdl
+	FileBlockingProfile                 *fprof.Panorama
 	LogForwardingProfile                *logfwd.Panorama
 	LogForwardingProfileMatchList       *matchlist.PanoMatchList
 	LogForwardingProfileMatchListAction *action.PanoAction
@@ -76,6 +78,7 @@ func (c *PanoObjs) Initialize(i util.XapiClient) {
 	c.Edl = &edl.PanoEdl{}
 	c.Edl.Initialize(i)
 
+	c.FileBlockingProfile = fprof.PanoramaNamespace(i)
 	c.LogForwardingProfile = logfwd.PanoramaNamespace(i)
 
 	c.LogForwardingProfileMatchList = &matchlist.PanoMatchList{}

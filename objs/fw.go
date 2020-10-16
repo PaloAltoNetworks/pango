@@ -15,6 +15,7 @@ import (
 	"github.com/PaloAltoNetworks/pango/objs/profile/logfwd"
 	"github.com/PaloAltoNetworks/pango/objs/profile/logfwd/matchlist"
 	"github.com/PaloAltoNetworks/pango/objs/profile/logfwd/matchlist/action"
+	fprof "github.com/PaloAltoNetworks/pango/objs/profile/security/file"
 	"github.com/PaloAltoNetworks/pango/objs/profile/security/virus"
 	"github.com/PaloAltoNetworks/pango/objs/profile/security/vulnerability"
 	vulnexcep "github.com/PaloAltoNetworks/pango/objs/profile/security/vulnerability/exception"
@@ -36,6 +37,7 @@ type FwObjs struct {
 	AppSigOrCond                        *orcond.FwOrCond
 	DynamicUserGroup                    *dug.Firewall
 	Edl                                 *edl.FwEdl
+	FileBlockingProfile                 *fprof.Firewall
 	LogForwardingProfile                *logfwd.Firewall
 	LogForwardingProfileMatchList       *matchlist.FwMatchList
 	LogForwardingProfileMatchListAction *action.FwAction
@@ -76,6 +78,7 @@ func (c *FwObjs) Initialize(i util.XapiClient) {
 	c.Edl = &edl.FwEdl{}
 	c.Edl.Initialize(i)
 
+	c.FileBlockingProfile = fprof.FirewallNamespace(i)
 	c.LogForwardingProfile = logfwd.FirewallNamespace(i)
 
 	c.LogForwardingProfileMatchList = &matchlist.FwMatchList{}
