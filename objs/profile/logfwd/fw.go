@@ -5,7 +5,7 @@ import (
 	"github.com/PaloAltoNetworks/pango/util"
 )
 
-// FwLogFwd is the client.Objects.LogForwardingProfile namespace.
+// Firewall is the client.Objects.LogForwardingProfile namespace.
 type Firewall struct {
 	ns *namespace.Standard
 }
