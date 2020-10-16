@@ -15,6 +15,7 @@ import (
 	"github.com/PaloAltoNetworks/pango/objs/profile/logfwd"
 	"github.com/PaloAltoNetworks/pango/objs/profile/logfwd/matchlist"
 	"github.com/PaloAltoNetworks/pango/objs/profile/logfwd/matchlist/action"
+	"github.com/PaloAltoNetworks/pango/objs/profile/security/virus"
 	"github.com/PaloAltoNetworks/pango/objs/srvc"
 	"github.com/PaloAltoNetworks/pango/objs/srvcgrp"
 	"github.com/PaloAltoNetworks/pango/objs/tags"
@@ -24,12 +25,13 @@ import (
 type PanoObjs struct {
 	Address                             *addr.Panorama
 	AddressGroup                        *addrgrp.PanoAddrGrp
+	AntivirusProfile                    *virus.Panorama
 	Application                         *app.PanoApp
 	AppGroup                            *appgrp.PanoGroup
 	AppSignature                        *signature.PanoSignature
 	AppSigAndCond                       *andcond.PanoAndCond
 	AppSigOrCond                        *orcond.PanoOrCond
-    DynamicUserGroup *dug.Panorama
+	DynamicUserGroup                    *dug.Panorama
 	Edl                                 *edl.PanoEdl
 	LogForwardingProfile                *logfwd.Panorama
 	LogForwardingProfileMatchList       *matchlist.PanoMatchList
@@ -46,6 +48,8 @@ func (c *PanoObjs) Initialize(i util.XapiClient) {
 	c.AddressGroup = &addrgrp.PanoAddrGrp{}
 	c.AddressGroup.Initialize(i)
 
+	c.AntivirusProfile = virus.PanoramaNamespace(i)
+
 	c.Application = &app.PanoApp{}
 	c.Application.Initialize(i)
 
@@ -61,7 +65,7 @@ func (c *PanoObjs) Initialize(i util.XapiClient) {
 	c.AppSigOrCond = &orcond.PanoOrCond{}
 	c.AppSigOrCond.Initialize(i)
 
-    c.DynamicUserGroup = dug.PanoramaNamespace(i)
+	c.DynamicUserGroup = dug.PanoramaNamespace(i)
 
 	c.Edl = &edl.PanoEdl{}
 	c.Edl.Initialize(i)

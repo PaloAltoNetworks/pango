@@ -15,6 +15,7 @@ import (
 	"github.com/PaloAltoNetworks/pango/objs/profile/logfwd"
 	"github.com/PaloAltoNetworks/pango/objs/profile/logfwd/matchlist"
 	"github.com/PaloAltoNetworks/pango/objs/profile/logfwd/matchlist/action"
+	"github.com/PaloAltoNetworks/pango/objs/profile/security/virus"
 	"github.com/PaloAltoNetworks/pango/objs/srvc"
 	"github.com/PaloAltoNetworks/pango/objs/srvcgrp"
 	"github.com/PaloAltoNetworks/pango/objs/tags"
@@ -24,12 +25,13 @@ import (
 type FwObjs struct {
 	Address                             *addr.Firewall
 	AddressGroup                        *addrgrp.FwAddrGrp
+	AntivirusProfile                    *virus.Firewall
 	Application                         *app.FwApp
 	AppGroup                            *appgrp.FwGroup
 	AppSignature                        *signature.FwSignature
 	AppSigAndCond                       *andcond.FwAndCond
 	AppSigOrCond                        *orcond.FwOrCond
-    DynamicUserGroup *dug.Firewall
+	DynamicUserGroup                    *dug.Firewall
 	Edl                                 *edl.FwEdl
 	LogForwardingProfile                *logfwd.Firewall
 	LogForwardingProfileMatchList       *matchlist.FwMatchList
@@ -46,6 +48,8 @@ func (c *FwObjs) Initialize(i util.XapiClient) {
 	c.AddressGroup = &addrgrp.FwAddrGrp{}
 	c.AddressGroup.Initialize(i)
 
+	c.AntivirusProfile = virus.FirewallNamespace(i)
+
 	c.Application = &app.FwApp{}
 	c.Application.Initialize(i)
 
@@ -61,7 +65,7 @@ func (c *FwObjs) Initialize(i util.XapiClient) {
 	c.AppSigOrCond = &orcond.FwOrCond{}
 	c.AppSigOrCond.Initialize(i)
 
-    c.DynamicUserGroup = dug.FirewallNamespace(i)
+	c.DynamicUserGroup = dug.FirewallNamespace(i)
 
 	c.Edl = &edl.FwEdl{}
 	c.Edl.Initialize(i)
