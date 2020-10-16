@@ -5,7 +5,7 @@ import (
 	"github.com/PaloAltoNetworks/pango/util"
 )
 
-// Panorama is the client.Objects.LogForwardingProfile namespace.
+// Panorama is the client.Objects.AntivirusProfile namespace.
 type Panorama struct {
 	ns *namespace.Standard
 }
