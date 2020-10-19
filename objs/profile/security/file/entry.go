@@ -7,7 +7,8 @@ import (
 	"github.com/PaloAltoNetworks/pango/version"
 )
 
-// Entry is a normalized, version independent representation of a log forwarding profile.
+// Entry is a normalized, version independent representation of a
+// file blocking security profile.
 //
 // PAN-OS 8.0+.
 type Entry struct {
@@ -28,6 +29,7 @@ type Rule struct {
 // Name field relates to the XPATH of this object, this field is not copied.
 func (o *Entry) Copy(s Entry) {
 	o.Description = s.Description
+	o.Rules = s.Rules
 }
 
 /** Structs / functions for this namespace. **/
