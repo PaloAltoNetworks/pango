@@ -20,6 +20,7 @@ import (
 	"github.com/PaloAltoNetworks/pango/objs/profile/security/vulnerability"
 	vulnexcep "github.com/PaloAltoNetworks/pango/objs/profile/security/vulnerability/exception"
 	vulnrule "github.com/PaloAltoNetworks/pango/objs/profile/security/vulnerability/rule"
+	wfasp "github.com/PaloAltoNetworks/pango/objs/profile/security/wildfire"
 	"github.com/PaloAltoNetworks/pango/objs/srvc"
 	"github.com/PaloAltoNetworks/pango/objs/srvcgrp"
 	"github.com/PaloAltoNetworks/pango/objs/tags"
@@ -47,6 +48,7 @@ type PanoObjs struct {
 	VulnerabilityProfile                *vulnerability.Panorama
 	VulnerabilityProfileException       *vulnexcep.Panorama
 	VulnerabilityProfileRule            *vulnrule.Panorama
+	WildfireAnalysisProfile             *wfasp.Panorama
 }
 
 // Initialize is invoked on client.Initialize().
@@ -99,4 +101,5 @@ func (c *PanoObjs) Initialize(i util.XapiClient) {
 	c.VulnerabilityProfile = vulnerability.PanoramaNamespace(i)
 	c.VulnerabilityProfileException = vulnexcep.PanoramaNamespace(i)
 	c.VulnerabilityProfileRule = vulnrule.PanoramaNamespace(i)
+	c.WildfireAnalysisProfile = wfasp.PanoramaNamespace(i)
 }
