@@ -10,6 +10,7 @@ import (
 	"github.com/PaloAltoNetworks/pango/objs/app/signature"
 	"github.com/PaloAltoNetworks/pango/objs/app/signature/andcond"
 	"github.com/PaloAltoNetworks/pango/objs/app/signature/orcond"
+	datapat "github.com/PaloAltoNetworks/pango/objs/custom/data"
 	"github.com/PaloAltoNetworks/pango/objs/dug"
 	"github.com/PaloAltoNetworks/pango/objs/edl"
 	"github.com/PaloAltoNetworks/pango/objs/profile/logfwd"
@@ -37,6 +38,7 @@ type PanoObjs struct {
 	AppSignature                        *signature.PanoSignature
 	AppSigAndCond                       *andcond.PanoAndCond
 	AppSigOrCond                        *orcond.PanoOrCond
+    DataPattern *datapat.Panorama
 	DosProtectionProfile                *dpsp.Panorama
 	DynamicUserGroup                    *dug.Panorama
 	Edl                                 *edl.PanoEdl
@@ -77,6 +79,7 @@ func (c *PanoObjs) Initialize(i util.XapiClient) {
 	c.AppSigOrCond = &orcond.PanoOrCond{}
 	c.AppSigOrCond.Initialize(i)
 
+    c.DataPattern = datapat.PanoramaNamespace(i)
 	c.DosProtectionProfile = dpsp.PanoramaNamespace(i)
 	c.DynamicUserGroup = dug.PanoramaNamespace(i)
 
