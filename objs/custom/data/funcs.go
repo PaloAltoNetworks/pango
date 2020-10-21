@@ -9,8 +9,8 @@ import (
 )
 
 func versioning(v version.Number) (normalizer, func(Entry) interface{}) {
-    // PAN-OS 9.0+ seems to have added new values for predefined names, but the
-    // structure of the XML hasn't changed, so no new version handling is needed.
+	// PAN-OS 9.0+ seems to have added new values for predefined names, but the
+	// structure of the XML hasn't changed, so no new version handling is needed.
 	return &container_v1{}, specify_v1
 }
 
