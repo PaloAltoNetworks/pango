@@ -12,9 +12,9 @@ func versioning(v version.Number) (normalizer, func(Entry) interface{}) {
 	if v.Gte(version.Number{10, 0, 0, ""}) {
 		return &container_v2{}, specify_v2
 	} else {
-        // Between PAN-OS 6.1 and PAN-OS 9.1, some defaults and acceptable
-        // values have changed, but not the schema itself.  Thus, we will
-        // use the same normalization code for all of these versions.
+		// Between PAN-OS 6.1 and PAN-OS 9.1, some defaults and acceptable
+		// values have changed, but not the schema itself.  Thus, we will
+		// use the same normalization code for all of these versions.
 		return &container_v1{}, specify_v1
 	}
 }
