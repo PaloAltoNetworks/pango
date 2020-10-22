@@ -1,0 +1,212 @@
+<?xml version="1.0"?>
+<sequence name="entry" tlo="yes">
+    <attr-req help-string="alphanumeric string [ 0-9a-zA-Z._-]" maxlen="31" name="name" subtype="object-name" type="string">
+        <validate uniquein="#myentry(vsys)/profiles/url-filtering/entry/@name"/>
+    </attr-req>
+    <element maxlen="255" minlen="0" name="description" optional="yes" type="string"/>
+    <element dynamic-prune-on="pan-url-filtering-licensed" err="Not available for PAN-DB" help-string="Dynamic URL filtering" name="dynamic-url" optional="yes" type="bool"/>
+    <element default="allow" dynamic-prune-on="pan-url-filtering-licensed" err="Not available for PAN-DB" help-string="action when URL filtering license expires" name="license-expired" type="enum">
+        <enum value="block"/>
+        <enum value="allow"/>
+    </element>
+    <element help-string="action for block list items" name="action" type="enum">
+        <enum value="block"/>
+        <enum value="continue"/>
+        <enum value="override"/>
+        <enum value="alert"/>
+    </element>
+    <array help-string="host or ip address to block (e.g. www.hotmail.com or www.cnn.com/news)" name="block-list" optional="yes">
+        <element maxlen="1024" name="member" type="string">
+            <validate err="Invalid URL pattern" validator="custom-url-pattern-validator"/>
+        </element>
+    </array>
+    <array help-string="host or ip address to pass (e.g. www.hotmail.com or www.cnn.com/news)" name="allow-list" optional="yes">
+        <element maxlen="1024" name="member" type="string">
+            <validate err="Invalid URL pattern" validator="custom-url-pattern-validator"/>
+        </element>
+    </array>
+    <array help-string="categories to allow" name="allow" optional="yes">
+        <element maxlen="127" name="member" type="string">
+            <validate>
+                <memberof condition="bc-url-filtering-licensed" memberof="##/predefined/bc-url-categories/entry/@name"/>
+                <memberof condition="pan-url-filtering-licensed" memberof="##/predefined/pan-url-categories/entry/@name"/>
+                <memberof memberof="#config/shared/profiles/custom-url-category/entry/@name" type="custom-url-category"/>
+                <memberof memberof="#config/shared/external-list/entry[type/url]/@name" type="external-list"/>
+                <memberof memberof="#myentry(vsys)/profiles/custom-url-category/entry/@name" type="custom-url-category"/>
+                <memberof memberof="#myentry(vsys)/external-list/entry[type/url]/@name" type="external-list"/>
+            </validate>
+            <validate uniquein="#myentry(url-filtering)/allow/member|#myentry(url-filtering)/alert/member|#myentry(url-filtering)/block/member|#myentry(url-filtering)/continue/member|#myentry(url-filtering)/override/member"/>
+        </element>
+    </array>
+    <array help-string="categories to alert on" name="alert" optional="yes">
+        <element maxlen="127" name="member" type="string">
+            <validate>
+                <memberof condition="bc-url-filtering-licensed" memberof="##/predefined/bc-url-categories/entry/@name"/>
+                <memberof condition="pan-url-filtering-licensed" memberof="##/predefined/pan-url-categories/entry/@name"/>
+                <memberof memberof="#config/shared/profiles/custom-url-category/entry/@name" type="custom-url-category"/>
+                <memberof memberof="#config/shared/external-list/entry[type/url]/@name" type="external-list"/>
+                <memberof memberof="#myentry(vsys)/profiles/custom-url-category/entry/@name" type="custom-url-category"/>
+                <memberof memberof="#myentry(vsys)/external-list/entry[type/url]/@name" type="external-list"/>
+            </validate>
+            <validate uniquein="#myentry(url-filtering)/allow/member|#myentry(url-filtering)/alert/member|#myentry(url-filtering)/block/member|#myentry(url-filtering)/continue/member|#myentry(url-filtering)/override/member"/>
+        </element>
+    </array>
+    <array help-string="categories to block" name="block" optional="yes">
+        <element maxlen="127" name="member" type="string">
+            <validate>
+                <memberof condition="bc-url-filtering-licensed" memberof="##/predefined/bc-url-categories/entry/@name"/>
+                <memberof condition="pan-url-filtering-licensed" memberof="##/predefined/pan-url-categories/entry/@name"/>
+                <memberof memberof="#config/shared/profiles/custom-url-category/entry/@name" type="custom-url-category"/>
+                <memberof memberof="#config/shared/external-list/entry[type/url]/@name" type="external-list"/>
+                <memberof memberof="#myentry(vsys)/profiles/custom-url-category/entry/@name" type="custom-url-category"/>
+                <memberof memberof="#myentry(vsys)/external-list/entry[type/url]/@name" type="external-list"/>
+            </validate>
+            <validate uniquein="#myentry(url-filtering)/allow/member|#myentry(url-filtering)/alert/member|#myentry(url-filtering)/block/member|#myentry(url-filtering)/continue/member|#myentry(url-filtering)/override/member"/>
+        </element>
+    </array>
+    <array help-string="categories to block/continue" name="continue" optional="yes">
+        <element maxlen="127" name="member" type="string">
+            <validate>
+                <memberof condition="bc-url-filtering-licensed" memberof="##/predefined/bc-url-categories/entry/@name"/>
+                <memberof condition="pan-url-filtering-licensed" memberof="##/predefined/pan-url-categories/entry/@name"/>
+                <memberof memberof="#config/shared/profiles/custom-url-category/entry/@name" type="custom-url-category"/>
+                <memberof memberof="#config/shared/external-list/entry[type/url]/@name" type="external-list"/>
+                <memberof memberof="#myentry(vsys)/profiles/custom-url-category/entry/@name" type="custom-url-category"/>
+                <memberof memberof="#myentry(vsys)/external-list/entry[type/url]/@name" type="external-list"/>
+            </validate>
+            <validate uniquein="#myentry(url-filtering)/allow/member|#myentry(url-filtering)/alert/member|#myentry(url-filtering)/block/member|#myentry(url-filtering)/continue/member|#myentry(url-filtering)/override/member"/>
+        </element>
+    </array>
+    <array help-string="categories to admin override" name="override" optional="yes">
+        <element maxlen="127" name="member" type="string">
+            <validate>
+                <memberof condition="bc-url-filtering-licensed" memberof="##/predefined/bc-url-categories/entry/@name"/>
+                <memberof condition="pan-url-filtering-licensed" memberof="##/predefined/pan-url-categories/entry/@name"/>
+                <memberof memberof="#config/shared/profiles/custom-url-category/entry/@name" type="custom-url-category"/>
+                <memberof memberof="#config/shared/external-list/entry[type/url]/@name" type="external-list"/>
+                <memberof memberof="#myentry(vsys)/profiles/custom-url-category/entry/@name" type="custom-url-category"/>
+                <memberof memberof="#myentry(vsys)/external-list/entry[type/url]/@name" type="external-list"/>
+            </validate>
+            <validate uniquein="#myentry(url-filtering)/allow/member|#myentry(url-filtering)/alert/member|#myentry(url-filtering)/block/member|#myentry(url-filtering)/continue/member|#myentry(url-filtering)/override/member"/>
+        </element>
+    </array>
+    <sequence help-string="credential enforcement settings" name="credential-enforcement" optional="yes">
+        <union default="disabled" help-string="credential enforcement mode" name="mode">
+            <sequence help-string="Disabled" name="disabled"/>
+            <sequence help-string="Use IP User Mapping" name="ip-user"/>
+            <sequence help-string="Use Domain Credential Filter" name="domain-credentials"/>
+            <element default="any" help-string="Use Group Mapping" maxlen="31" name="group-mapping" type="string">
+                <validate>
+                    <memberof memberof="#config/shared/group-mapping/entry/@name"/>
+                    <memberof memberof="#myentry(vsys)/group-mapping/entry/@name"/>
+                    <memberof memberof="string('any')"/>
+                </validate>
+            </element>
+        </union>
+        <element default="medium" help-string="Log severity when credential matched" name="log-severity" type="string">
+            <validate>
+                <memberof memberof="##/predefined/tdb/severity/entry/@name"/>
+            </validate>
+        </element>
+        <array help-string="categories to allow and bypass credential enforcement" name="allow" optional="yes">
+            <element maxlen="127" name="member" type="string">
+                <validate>
+                    <memberof condition="bc-url-filtering-licensed" memberof="##/predefined/bc-url-categories/entry/@name"/>
+                    <memberof condition="pan-url-filtering-licensed" memberof="##/predefined/pan-url-categories/entry/@name"/>
+                    <memberof memberof="#config/shared/profiles/custom-url-category/entry/@name" type="custom-url-category"/>
+                    <memberof memberof="#config/shared/external-list/entry[type/url]/@name" type="external-list"/>
+                    <memberof memberof="#myentry(vsys)/profiles/custom-url-category/entry/@name" type="custom-url-category"/>
+                    <memberof memberof="#myentry(vsys)/external-list/entry[type/url]/@name" type="external-list"/>
+                </validate>
+                <validate uniquein="#myentry(url-filtering)/credential-enforcement/allow/member|#myentry(url-filtering)/credential-enforcement/alert/member|#myentry(url-filtering)/credential-enforcement/block/member|#myentry(url-filtering)/credential-enforcement/continue/member"/>
+            </element>
+        </array>
+        <array help-string="categories to alert on credential match" name="alert" optional="yes">
+            <element maxlen="127" name="member" type="string">
+                <validate>
+                    <memberof condition="bc-url-filtering-licensed" memberof="##/predefined/bc-url-categories/entry/@name"/>
+                    <memberof condition="pan-url-filtering-licensed" memberof="##/predefined/pan-url-categories/entry/@name"/>
+                    <memberof memberof="#config/shared/profiles/custom-url-category/entry/@name" type="custom-url-category"/>
+                    <memberof memberof="#config/shared/external-list/entry[type/url]/@name" type="external-list"/>
+                    <memberof memberof="#myentry(vsys)/profiles/custom-url-category/entry/@name" type="custom-url-category"/>
+                    <memberof memberof="#myentry(vsys)/external-list/entry[type/url]/@name" type="external-list"/>
+                </validate>
+                <validate uniquein="#myentry(url-filtering)/credential-enforcement/allow/member|#myentry(url-filtering)/credential-enforcement/alert/member|#myentry(url-filtering)/credential-enforcement/block/member|#myentry(url-filtering)/credential-enforcement/continue/member"/>
+            </element>
+        </array>
+        <array help-string="categories to block on credential match" name="block" optional="yes">
+            <element maxlen="127" name="member" type="string">
+                <validate>
+                    <memberof condition="bc-url-filtering-licensed" memberof="##/predefined/bc-url-categories/entry/@name"/>
+                    <memberof condition="pan-url-filtering-licensed" memberof="##/predefined/pan-url-categories/entry/@name"/>
+                    <memberof memberof="#config/shared/profiles/custom-url-category/entry/@name" type="custom-url-category"/>
+                    <memberof memberof="#config/shared/external-list/entry[type/url]/@name" type="external-list"/>
+                    <memberof memberof="#myentry(vsys)/profiles/custom-url-category/entry/@name" type="custom-url-category"/>
+                    <memberof memberof="#myentry(vsys)/external-list/entry[type/url]/@name" type="external-list"/>
+                </validate>
+                <validate uniquein="#myentry(url-filtering)/credential-enforcement/allow/member|#myentry(url-filtering)/credential-enforcement/alert/member|#myentry(url-filtering)/credential-enforcement/block/member|#myentry(url-filtering)/credential-enforcement/continue/member"/>
+            </element>
+        </array>
+        <array help-string="categories to block/continue on credential match" name="continue" optional="yes">
+            <element maxlen="127" name="member" type="string">
+                <validate>
+                    <memberof condition="bc-url-filtering-licensed" memberof="##/predefined/bc-url-categories/entry/@name"/>
+                    <memberof condition="pan-url-filtering-licensed" memberof="##/predefined/pan-url-categories/entry/@name"/>
+                    <memberof memberof="#config/shared/profiles/custom-url-category/entry/@name" type="custom-url-category"/>
+                    <memberof memberof="#config/shared/external-list/entry[type/url]/@name" type="external-list"/>
+                    <memberof memberof="#myentry(vsys)/profiles/custom-url-category/entry/@name" type="custom-url-category"/>
+                    <memberof memberof="#myentry(vsys)/external-list/entry[type/url]/@name" type="external-list"/>
+                </validate>
+                <validate uniquein="#myentry(url-filtering)/credential-enforcement/allow/member|#myentry(url-filtering)/credential-enforcement/alert/member|#myentry(url-filtering)/credential-enforcement/block/member|#myentry(url-filtering)/credential-enforcement/continue/member"/>
+            </element>
+        </array>
+    </sequence>
+    <element default="yes" help-string="Track container page" name="enable-container-page" optional="yes" type="bool"/>
+    <element default="yes" help-string="Log container page only" name="log-container-page-only" optional="yes" type="bool"/>
+    <element default="no" help-string="Safe-Search will be enforced if it is set " name="safe-search-enforcement" optional="yes" type="bool"/>
+    <element default="no" help-string="Log HTTP Header X-Forwarded-For field" name="log-http-hdr-xff" optional="yes" type="bool"/>
+    <element default="no" help-string="Log HTTP Header User-Agent field" name="log-http-hdr-user-agent" optional="yes" type="bool"/>
+    <element default="no" help-string="Log HTTP Header Referer field" name="log-http-hdr-referer" optional="yes" type="bool"/>
+    <array add_to_xml_object_cache="yes" name="http-header-insertion" optional="yes">
+        <sequence name="entry">
+            <validate err="'any' is not allowed" expr="not(./@name='any')"/>
+            <attr-req help-string="alphanumeric string begin with non-digit: [ 0-9a-zA-Z._-]" maxlen="256" name="name" regex="^[a-zA-Z._-]{1}[ 0-9a-zA-Z._-]*$" subtype="object-name" type="string">
+                <validate>
+                    <uniquein uniquein="../entry/@name"/>
+                </validate>
+            </attr-req>
+            <array name="type">
+                <sequence max-count="1" name="entry">
+                    <attr-req complete-handler="http-header-insertion-type-completer" help-string="alphanumeric string begin with non-digit: [ 0-9a-zA-Z._-]" maxlen="128" name="name" regex="^[a-zA-Z._-]{1}[ 0-9a-zA-Z._-]*$" subtype="object-name" type="string">
+                        <validate>
+                            <memberof memberof="string('Custom')"/>
+                            <memberof memberof="##/predefined/header-injection/entry/type"/>
+                        </validate>
+                    </attr-req>
+                    <array name="headers" optional="yes">
+                        <sequence max-count="5" name="entry">
+                            <validate err="No. of servers configured exceeds maximum allowed(5)" expr="count(../entry/@name) &lt;= 5"/>
+                            <attr-req help-string="Header name" maxlen="100" name="name" type="string">
+                                <validate>
+                                    <uniquein uniquein="../entry/@name"/>
+                                </validate>
+                            </attr-req>
+                            <element complete-handler="http-header-insertion-hdr-name-completer" maxlen="100" minlen="1" name="header" type="string">
+                                <validate>
+                                    <uniquein uniquein="#headers/entry/header"/>
+                                </validate>
+                            </element>
+                            <element complete-handler="http-header-insertion-hdr-val-completer" maxlen="512" minlen="1" name="value" type="string"/>
+                            <element default="no" name="log" optional="yes" type="bool"/>
+                        </sequence>
+                    </array>
+                    <array name="domains" optional="yes">
+                        <element complete-handler="http-header-insertion-host-completer" max-count="50" maxlen="254" name="member" type="string">
+                            <validate err="Invalid URL pattern" validator="custom-url-pattern-validator"/>
+                        </element>
+                    </array>
+                </sequence>
+            </array>
+        </sequence>
+    </array>
+</sequence>
