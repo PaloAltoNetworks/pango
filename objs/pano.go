@@ -19,6 +19,7 @@ import (
 	dfsp "github.com/PaloAltoNetworks/pango/objs/profile/security/data"
 	dpsp "github.com/PaloAltoNetworks/pango/objs/profile/security/dos"
 	fprof "github.com/PaloAltoNetworks/pango/objs/profile/security/file"
+	ufsp "github.com/PaloAltoNetworks/pango/objs/profile/security/url"
 	"github.com/PaloAltoNetworks/pango/objs/profile/security/virus"
 	"github.com/PaloAltoNetworks/pango/objs/profile/security/vulnerability"
 	vulnexcep "github.com/PaloAltoNetworks/pango/objs/profile/security/vulnerability/exception"
@@ -51,6 +52,7 @@ type PanoObjs struct {
 	Services                            *srvc.PanoSrvc
 	ServiceGroup                        *srvcgrp.PanoSrvcGrp
 	Tags                                *tags.PanoTags
+	UrlFilteringProfile                 *ufsp.Panorama
 	VulnerabilityProfile                *vulnerability.Panorama
 	VulnerabilityProfileException       *vulnexcep.Panorama
 	VulnerabilityProfileRule            *vulnrule.Panorama
@@ -107,6 +109,7 @@ func (c *PanoObjs) Initialize(i util.XapiClient) {
 	c.Tags = &tags.PanoTags{}
 	c.Tags.Initialize(i)
 
+	c.UrlFilteringProfile = ufsp.PanoramaNamespace(i)
 	c.VulnerabilityProfile = vulnerability.PanoramaNamespace(i)
 	c.VulnerabilityProfileException = vulnexcep.PanoramaNamespace(i)
 	c.VulnerabilityProfileRule = vulnrule.PanoramaNamespace(i)
