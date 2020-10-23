@@ -52,7 +52,7 @@ type PanoNetw struct {
 	BgpConAdvAdvertiseFilter *advertise.PanoAdvertise
 	BgpConAdvNonExistFilter  *nonexist.PanoNonExist
 	BgpConditionalAdv        *conadv.PanoConAdv
-	BgpConfig                *bgp.PanoBgp
+	BgpConfig                *bgp.Panorama
 	BgpDampeningProfile      *dampening.PanoDampening
 	BgpExport                *exp.PanoExp
 	BgpImport                *imp.PanoImp
@@ -110,8 +110,7 @@ func (c *PanoNetw) Initialize(i util.XapiClient) {
 	c.BgpConditionalAdv = &conadv.PanoConAdv{}
 	c.BgpConditionalAdv.Initialize(i)
 
-	c.BgpConfig = &bgp.PanoBgp{}
-	c.BgpConfig.Initialize(i)
+	c.BgpConfig = bgp.PanoramaNamespace(i)
 
 	c.BgpDampeningProfile = &dampening.PanoDampening{}
 	c.BgpDampeningProfile.Initialize(i)
