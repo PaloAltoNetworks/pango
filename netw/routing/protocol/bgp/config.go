@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 
 	"github.com/PaloAltoNetworks/pango/util"
+	"github.com/PaloAltoNetworks/pango/version"
 )
 
 // Config is a normalized, version independent representation of a virtual
@@ -59,67 +60,86 @@ func (o *Config) Copy(s Config) {
 
 /** Structs / functions for this namespace. **/
 
+func (o Config) Specify(v version.Number) (string, interface{}) {
+	_, fn := versioning(v)
+	return "", fn(o)
+}
+
 type normalizer interface {
-	Normalize() Config
+	Normalize() []Config
+	Names() []string
 }
 
 type container_v1 struct {
-	Answer entry_v1 `xml:"result>bgp"`
+	Answer []entry_v1 `xml:"bgp"`
 }
 
-func (o *container_v1) Normalize() Config {
+func (o *container_v1) Normalize() []Config {
+	ans := make([]Config, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].normalize())
+	}
+
+	return ans
+}
+
+func (o *container_v1) Names() []string {
+	return nil
+}
+
+func (o *entry_v1) normalize() Config {
 	ans := Config{
-		Enable:                        util.AsBool(o.Answer.Enable),
-		RouterId:                      o.Answer.RouterId,
-		AsNumber:                      o.Answer.AsNumber,
-		RejectDefaultRoute:            util.AsBool(o.Answer.RejectDefaultRoute),
-		InstallRoute:                  util.AsBool(o.Answer.InstallRoute),
-		AllowRedistributeDefaultRoute: util.AsBool(o.Answer.AllowRedistributeDefaultRoute),
+		Enable:                        util.AsBool(o.Enable),
+		RouterId:                      o.RouterId,
+		AsNumber:                      o.AsNumber,
+		RejectDefaultRoute:            util.AsBool(o.RejectDefaultRoute),
+		InstallRoute:                  util.AsBool(o.InstallRoute),
+		AllowRedistributeDefaultRoute: util.AsBool(o.AllowRedistributeDefaultRoute),
 	}
 
 	raw := make(map[string]string)
 
-	if o.Answer.Options != nil {
-		ans.AsFormat = o.Answer.Options.AsFormat
-		ans.DefaultLocalPreference = o.Answer.Options.DefaultLocalPreference
-		ans.ReflectorClusterId = o.Answer.Options.ReflectorClusterId
-		ans.ConfederationMemberAs = o.Answer.Options.ConfederationMemberAs
+	if o.Options != nil {
+		ans.AsFormat = o.Options.AsFormat
+		ans.DefaultLocalPreference = o.Options.DefaultLocalPreference
+		ans.ReflectorClusterId = o.Options.ReflectorClusterId
+		ans.ConfederationMemberAs = o.Options.ConfederationMemberAs
 
-		if o.Answer.Options.Med != nil {
-			ans.AlwaysCompareMed = util.AsBool(o.Answer.Options.Med.AlwaysCompareMed)
-			ans.DeterministicMedComparison = util.AsBool(o.Answer.Options.Med.DeterministicMedComparison)
+		if o.Options.Med != nil {
+			ans.AlwaysCompareMed = util.AsBool(o.Options.Med.AlwaysCompareMed)
+			ans.DeterministicMedComparison = util.AsBool(o.Options.Med.DeterministicMedComparison)
 		}
 
-		if o.Answer.Options.GracefulRestart != nil {
-			ans.EnableGracefulRestart = util.AsBool(o.Answer.Options.GracefulRestart.EnableGracefulRestart)
-			ans.StaleRouteTime = o.Answer.Options.GracefulRestart.StaleRouteTime
-			ans.LocalRestartTime = o.Answer.Options.GracefulRestart.LocalRestartTime
-			ans.MaxPeerRestartTime = o.Answer.Options.GracefulRestart.MaxPeerRestartTime
+		if o.Options.GracefulRestart != nil {
+			ans.EnableGracefulRestart = util.AsBool(o.Options.GracefulRestart.EnableGracefulRestart)
+			ans.StaleRouteTime = o.Options.GracefulRestart.StaleRouteTime
+			ans.LocalRestartTime = o.Options.GracefulRestart.LocalRestartTime
+			ans.MaxPeerRestartTime = o.Options.GracefulRestart.MaxPeerRestartTime
 		}
 
-		if o.Answer.Options.Aggregate != nil {
-			ans.AggregateMed = util.AsBool(o.Answer.Options.Aggregate.AggregateMed)
+		if o.Options.Aggregate != nil {
+			ans.AggregateMed = util.AsBool(o.Options.Aggregate.AggregateMed)
 		}
 
-		if o.Answer.Options.OutboundRouteFilter != nil {
-			raw["orf"] = util.CleanRawXml(o.Answer.Options.OutboundRouteFilter.Text)
+		if o.Options.OutboundRouteFilter != nil {
+			raw["orf"] = util.CleanRawXml(o.Options.OutboundRouteFilter.Text)
 		}
 	}
 
-	if o.Answer.AuthProfile != nil {
-		raw["ap"] = util.CleanRawXml(o.Answer.AuthProfile.Text)
+	if o.AuthProfile != nil {
+		raw["ap"] = util.CleanRawXml(o.AuthProfile.Text)
 	}
-	if o.Answer.DampeningProfile != nil {
-		raw["dp"] = util.CleanRawXml(o.Answer.DampeningProfile.Text)
+	if o.DampeningProfile != nil {
+		raw["dp"] = util.CleanRawXml(o.DampeningProfile.Text)
 	}
-	if o.Answer.PeerGroup != nil {
-		raw["pg"] = util.CleanRawXml(o.Answer.PeerGroup.Text)
+	if o.PeerGroup != nil {
+		raw["pg"] = util.CleanRawXml(o.PeerGroup.Text)
 	}
-	if o.Answer.Policy != nil {
-		raw["poli"] = util.CleanRawXml(o.Answer.Policy.Text)
+	if o.Policy != nil {
+		raw["poli"] = util.CleanRawXml(o.Policy.Text)
 	}
-	if o.Answer.RedistRules != nil {
-		raw["rr"] = util.CleanRawXml(o.Answer.RedistRules.Text)
+	if o.RedistRules != nil {
+		raw["rr"] = util.CleanRawXml(o.RedistRules.Text)
 	}
 
 	if len(raw) != 0 {
@@ -130,63 +150,76 @@ func (o *container_v1) Normalize() Config {
 }
 
 type container_v2 struct {
-	Answer entry_v2 `xml:"result>bgp"`
+	Answer []entry_v2 `xml:"bgp"`
 }
 
-func (o *container_v2) Normalize() Config {
+func (o *container_v2) Normalize() []Config {
+	ans := make([]Config, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].normalize())
+	}
+
+	return ans
+}
+
+func (o *container_v2) Names() []string {
+	return nil
+}
+
+func (o *entry_v2) normalize() Config {
 	ans := Config{
-		Enable:                        util.AsBool(o.Answer.Enable),
-		RouterId:                      o.Answer.RouterId,
-		AsNumber:                      o.Answer.AsNumber,
-		RejectDefaultRoute:            util.AsBool(o.Answer.RejectDefaultRoute),
-		InstallRoute:                  util.AsBool(o.Answer.InstallRoute),
-		EcmpMultiAs:                   util.AsBool(o.Answer.EcmpMultiAs),
-		AllowRedistributeDefaultRoute: util.AsBool(o.Answer.AllowRedistributeDefaultRoute),
+		Enable:                        util.AsBool(o.Enable),
+		RouterId:                      o.RouterId,
+		AsNumber:                      o.AsNumber,
+		RejectDefaultRoute:            util.AsBool(o.RejectDefaultRoute),
+		InstallRoute:                  util.AsBool(o.InstallRoute),
+		EcmpMultiAs:                   util.AsBool(o.EcmpMultiAs),
+		AllowRedistributeDefaultRoute: util.AsBool(o.AllowRedistributeDefaultRoute),
 	}
 
 	raw := make(map[string]string)
 
-	if o.Answer.Options != nil {
-		ans.AsFormat = o.Answer.Options.AsFormat
-		ans.DefaultLocalPreference = o.Answer.Options.DefaultLocalPreference
-		ans.ReflectorClusterId = o.Answer.Options.ReflectorClusterId
-		ans.ConfederationMemberAs = o.Answer.Options.ConfederationMemberAs
+	if o.Options != nil {
+		ans.AsFormat = o.Options.AsFormat
+		ans.DefaultLocalPreference = o.Options.DefaultLocalPreference
+		ans.ReflectorClusterId = o.Options.ReflectorClusterId
+		ans.ConfederationMemberAs = o.Options.ConfederationMemberAs
 
-		if o.Answer.Options.Med != nil {
-			ans.AlwaysCompareMed = util.AsBool(o.Answer.Options.Med.AlwaysCompareMed)
-			ans.DeterministicMedComparison = util.AsBool(o.Answer.Options.Med.DeterministicMedComparison)
+		if o.Options.Med != nil {
+			ans.AlwaysCompareMed = util.AsBool(o.Options.Med.AlwaysCompareMed)
+			ans.DeterministicMedComparison = util.AsBool(o.Options.Med.DeterministicMedComparison)
 		}
 
-		if o.Answer.Options.GracefulRestart != nil {
-			ans.EnableGracefulRestart = util.AsBool(o.Answer.Options.GracefulRestart.EnableGracefulRestart)
-			ans.StaleRouteTime = o.Answer.Options.GracefulRestart.StaleRouteTime
-			ans.LocalRestartTime = o.Answer.Options.GracefulRestart.LocalRestartTime
-			ans.MaxPeerRestartTime = o.Answer.Options.GracefulRestart.MaxPeerRestartTime
+		if o.Options.GracefulRestart != nil {
+			ans.EnableGracefulRestart = util.AsBool(o.Options.GracefulRestart.EnableGracefulRestart)
+			ans.StaleRouteTime = o.Options.GracefulRestart.StaleRouteTime
+			ans.LocalRestartTime = o.Options.GracefulRestart.LocalRestartTime
+			ans.MaxPeerRestartTime = o.Options.GracefulRestart.MaxPeerRestartTime
 		}
 
-		if o.Answer.Options.Aggregate != nil {
-			ans.AggregateMed = util.AsBool(o.Answer.Options.Aggregate.AggregateMed)
+		if o.Options.Aggregate != nil {
+			ans.AggregateMed = util.AsBool(o.Options.Aggregate.AggregateMed)
 		}
 
-		if o.Answer.Options.OutboundRouteFilter != nil {
-			raw["orf"] = util.CleanRawXml(o.Answer.Options.OutboundRouteFilter.Text)
+		if o.Options.OutboundRouteFilter != nil {
+			raw["orf"] = util.CleanRawXml(o.Options.OutboundRouteFilter.Text)
 		}
 	}
 
-	if o.Answer.AuthProfile != nil {
-		raw["ap"] = util.CleanRawXml(o.Answer.AuthProfile.Text)
+	if o.AuthProfile != nil {
+		raw["ap"] = util.CleanRawXml(o.AuthProfile.Text)
 	}
-	if o.Answer.DampeningProfile != nil {
-		raw["dp"] = util.CleanRawXml(o.Answer.DampeningProfile.Text)
+	if o.DampeningProfile != nil {
+		raw["dp"] = util.CleanRawXml(o.DampeningProfile.Text)
 	}
-	if o.Answer.PeerGroup != nil {
-		raw["pg"] = util.CleanRawXml(o.Answer.PeerGroup.Text)
+	if o.PeerGroup != nil {
+		raw["pg"] = util.CleanRawXml(o.PeerGroup.Text)
 	}
-	if o.Answer.Policy != nil {
-		raw["poli"] = util.CleanRawXml(o.Answer.Policy.Text)
+	if o.Policy != nil {
+		raw["poli"] = util.CleanRawXml(o.Policy.Text)
 	}
-	if o.Answer.RedistRules != nil {
-		raw["rr"] = util.CleanRawXml(o.Answer.RedistRules.Text)
+	if o.RedistRules != nil {
+		raw["rr"] = util.CleanRawXml(o.RedistRules.Text)
 	}
 
 	if len(raw) != 0 {
@@ -197,67 +230,80 @@ func (o *container_v2) Normalize() Config {
 }
 
 type container_v3 struct {
-	Answer entry_v3 `xml:"result>bgp"`
+	Answer []entry_v3 `xml:"bgp"`
 }
 
-func (o *container_v3) Normalize() Config {
+func (o *container_v3) Normalize() []Config {
+	ans := make([]Config, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].normalize())
+	}
+
+	return ans
+}
+
+func (o *container_v3) Names() []string {
+	return nil
+}
+
+func (o *entry_v3) normalize() Config {
 	ans := Config{
-		Enable:                        util.AsBool(o.Answer.Enable),
-		RouterId:                      o.Answer.RouterId,
-		AsNumber:                      o.Answer.AsNumber,
-		RejectDefaultRoute:            util.AsBool(o.Answer.RejectDefaultRoute),
-		InstallRoute:                  util.AsBool(o.Answer.InstallRoute),
-		EcmpMultiAs:                   util.AsBool(o.Answer.EcmpMultiAs),
-		AllowRedistributeDefaultRoute: util.AsBool(o.Answer.AllowRedistributeDefaultRoute),
+		Enable:                        util.AsBool(o.Enable),
+		RouterId:                      o.RouterId,
+		AsNumber:                      o.AsNumber,
+		RejectDefaultRoute:            util.AsBool(o.RejectDefaultRoute),
+		InstallRoute:                  util.AsBool(o.InstallRoute),
+		EcmpMultiAs:                   util.AsBool(o.EcmpMultiAs),
+		AllowRedistributeDefaultRoute: util.AsBool(o.AllowRedistributeDefaultRoute),
 	}
 
 	raw := make(map[string]string)
 
-	if o.Answer.GlobalBfd != nil {
-		ans.BfdProfile = o.Answer.GlobalBfd.BfdProfile
+	if o.GlobalBfd != nil {
+		ans.BfdProfile = o.GlobalBfd.BfdProfile
 	}
 
-	if o.Answer.Options != nil {
-		ans.AsFormat = o.Answer.Options.AsFormat
-		ans.DefaultLocalPreference = o.Answer.Options.DefaultLocalPreference
-		ans.ReflectorClusterId = o.Answer.Options.ReflectorClusterId
-		ans.ConfederationMemberAs = o.Answer.Options.ConfederationMemberAs
+	if o.Options != nil {
+		ans.AsFormat = o.Options.AsFormat
+		ans.DefaultLocalPreference = o.Options.DefaultLocalPreference
+		ans.ReflectorClusterId = o.Options.ReflectorClusterId
+		ans.ConfederationMemberAs = o.Options.ConfederationMemberAs
 
-		if o.Answer.Options.Med != nil {
-			ans.AlwaysCompareMed = util.AsBool(o.Answer.Options.Med.AlwaysCompareMed)
-			ans.DeterministicMedComparison = util.AsBool(o.Answer.Options.Med.DeterministicMedComparison)
+		if o.Options.Med != nil {
+			ans.AlwaysCompareMed = util.AsBool(o.Options.Med.AlwaysCompareMed)
+			ans.DeterministicMedComparison = util.AsBool(o.Options.Med.DeterministicMedComparison)
 		}
 
-		if o.Answer.Options.GracefulRestart != nil {
-			ans.EnableGracefulRestart = util.AsBool(o.Answer.Options.GracefulRestart.EnableGracefulRestart)
-			ans.StaleRouteTime = o.Answer.Options.GracefulRestart.StaleRouteTime
-			ans.LocalRestartTime = o.Answer.Options.GracefulRestart.LocalRestartTime
-			ans.MaxPeerRestartTime = o.Answer.Options.GracefulRestart.MaxPeerRestartTime
+		if o.Options.GracefulRestart != nil {
+			ans.EnableGracefulRestart = util.AsBool(o.Options.GracefulRestart.EnableGracefulRestart)
+			ans.StaleRouteTime = o.Options.GracefulRestart.StaleRouteTime
+			ans.LocalRestartTime = o.Options.GracefulRestart.LocalRestartTime
+			ans.MaxPeerRestartTime = o.Options.GracefulRestart.MaxPeerRestartTime
 		}
 
-		if o.Answer.Options.Aggregate != nil {
-			ans.AggregateMed = util.AsBool(o.Answer.Options.Aggregate.AggregateMed)
+		if o.Options.Aggregate != nil {
+			ans.AggregateMed = util.AsBool(o.Options.Aggregate.AggregateMed)
 		}
 
-		if o.Answer.Options.OutboundRouteFilter != nil {
-			raw["orf"] = util.CleanRawXml(o.Answer.Options.OutboundRouteFilter.Text)
+		if o.Options.OutboundRouteFilter != nil {
+			raw["orf"] = util.CleanRawXml(o.Options.OutboundRouteFilter.Text)
 		}
 	}
 
-	if o.Answer.AuthProfile != nil {
-		raw["ap"] = util.CleanRawXml(o.Answer.AuthProfile.Text)
+	if o.AuthProfile != nil {
+		raw["ap"] = util.CleanRawXml(o.AuthProfile.Text)
 	}
-	if o.Answer.DampeningProfile != nil {
-		raw["dp"] = util.CleanRawXml(o.Answer.DampeningProfile.Text)
+	if o.DampeningProfile != nil {
+		raw["dp"] = util.CleanRawXml(o.DampeningProfile.Text)
 	}
-	if o.Answer.PeerGroup != nil {
-		raw["pg"] = util.CleanRawXml(o.Answer.PeerGroup.Text)
+	if o.PeerGroup != nil {
+		raw["pg"] = util.CleanRawXml(o.PeerGroup.Text)
 	}
-	if o.Answer.Policy != nil {
-		raw["poli"] = util.CleanRawXml(o.Answer.Policy.Text)
+	if o.Policy != nil {
+		raw["poli"] = util.CleanRawXml(o.Policy.Text)
 	}
-	if o.Answer.RedistRules != nil {
-		raw["rr"] = util.CleanRawXml(o.Answer.RedistRules.Text)
+	if o.RedistRules != nil {
+		raw["rr"] = util.CleanRawXml(o.RedistRules.Text)
 	}
 
 	if len(raw) != 0 {
@@ -268,68 +314,81 @@ func (o *container_v3) Normalize() Config {
 }
 
 type container_v4 struct {
-	Answer entry_v4 `xml:"result>bgp"`
+	Answer []entry_v4 `xml:"bgp"`
 }
 
-func (o *container_v4) Normalize() Config {
+func (o *container_v4) Normalize() []Config {
+	ans := make([]Config, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].normalize())
+	}
+
+	return ans
+}
+
+func (o *container_v4) Names() []string {
+	return nil
+}
+
+func (o *entry_v4) normalize() Config {
 	ans := Config{
-		Enable:                        util.AsBool(o.Answer.Enable),
-		RouterId:                      o.Answer.RouterId,
-		AsNumber:                      o.Answer.AsNumber,
-		RejectDefaultRoute:            util.AsBool(o.Answer.RejectDefaultRoute),
-		InstallRoute:                  util.AsBool(o.Answer.InstallRoute),
-		EcmpMultiAs:                   util.AsBool(o.Answer.EcmpMultiAs),
-		EnforceFirstAs:                util.AsBool(o.Answer.EnforceFirstAs),
-		AllowRedistributeDefaultRoute: util.AsBool(o.Answer.AllowRedistributeDefaultRoute),
+		Enable:                        util.AsBool(o.Enable),
+		RouterId:                      o.RouterId,
+		AsNumber:                      o.AsNumber,
+		RejectDefaultRoute:            util.AsBool(o.RejectDefaultRoute),
+		InstallRoute:                  util.AsBool(o.InstallRoute),
+		EcmpMultiAs:                   util.AsBool(o.EcmpMultiAs),
+		EnforceFirstAs:                util.AsBool(o.EnforceFirstAs),
+		AllowRedistributeDefaultRoute: util.AsBool(o.AllowRedistributeDefaultRoute),
 	}
 
 	raw := make(map[string]string)
 
-	if o.Answer.GlobalBfd != nil {
-		ans.BfdProfile = o.Answer.GlobalBfd.BfdProfile
+	if o.GlobalBfd != nil {
+		ans.BfdProfile = o.GlobalBfd.BfdProfile
 	}
 
-	if o.Answer.Options != nil {
-		ans.AsFormat = o.Answer.Options.AsFormat
-		ans.DefaultLocalPreference = o.Answer.Options.DefaultLocalPreference
-		ans.ReflectorClusterId = o.Answer.Options.ReflectorClusterId
-		ans.ConfederationMemberAs = o.Answer.Options.ConfederationMemberAs
+	if o.Options != nil {
+		ans.AsFormat = o.Options.AsFormat
+		ans.DefaultLocalPreference = o.Options.DefaultLocalPreference
+		ans.ReflectorClusterId = o.Options.ReflectorClusterId
+		ans.ConfederationMemberAs = o.Options.ConfederationMemberAs
 
-		if o.Answer.Options.Med != nil {
-			ans.AlwaysCompareMed = util.AsBool(o.Answer.Options.Med.AlwaysCompareMed)
-			ans.DeterministicMedComparison = util.AsBool(o.Answer.Options.Med.DeterministicMedComparison)
+		if o.Options.Med != nil {
+			ans.AlwaysCompareMed = util.AsBool(o.Options.Med.AlwaysCompareMed)
+			ans.DeterministicMedComparison = util.AsBool(o.Options.Med.DeterministicMedComparison)
 		}
 
-		if o.Answer.Options.GracefulRestart != nil {
-			ans.EnableGracefulRestart = util.AsBool(o.Answer.Options.GracefulRestart.EnableGracefulRestart)
-			ans.StaleRouteTime = o.Answer.Options.GracefulRestart.StaleRouteTime
-			ans.LocalRestartTime = o.Answer.Options.GracefulRestart.LocalRestartTime
-			ans.MaxPeerRestartTime = o.Answer.Options.GracefulRestart.MaxPeerRestartTime
+		if o.Options.GracefulRestart != nil {
+			ans.EnableGracefulRestart = util.AsBool(o.Options.GracefulRestart.EnableGracefulRestart)
+			ans.StaleRouteTime = o.Options.GracefulRestart.StaleRouteTime
+			ans.LocalRestartTime = o.Options.GracefulRestart.LocalRestartTime
+			ans.MaxPeerRestartTime = o.Options.GracefulRestart.MaxPeerRestartTime
 		}
 
-		if o.Answer.Options.Aggregate != nil {
-			ans.AggregateMed = util.AsBool(o.Answer.Options.Aggregate.AggregateMed)
+		if o.Options.Aggregate != nil {
+			ans.AggregateMed = util.AsBool(o.Options.Aggregate.AggregateMed)
 		}
 
-		if o.Answer.Options.OutboundRouteFilter != nil {
-			raw["orf"] = util.CleanRawXml(o.Answer.Options.OutboundRouteFilter.Text)
+		if o.Options.OutboundRouteFilter != nil {
+			raw["orf"] = util.CleanRawXml(o.Options.OutboundRouteFilter.Text)
 		}
 	}
 
-	if o.Answer.AuthProfile != nil {
-		raw["ap"] = util.CleanRawXml(o.Answer.AuthProfile.Text)
+	if o.AuthProfile != nil {
+		raw["ap"] = util.CleanRawXml(o.AuthProfile.Text)
 	}
-	if o.Answer.DampeningProfile != nil {
-		raw["dp"] = util.CleanRawXml(o.Answer.DampeningProfile.Text)
+	if o.DampeningProfile != nil {
+		raw["dp"] = util.CleanRawXml(o.DampeningProfile.Text)
 	}
-	if o.Answer.PeerGroup != nil {
-		raw["pg"] = util.CleanRawXml(o.Answer.PeerGroup.Text)
+	if o.PeerGroup != nil {
+		raw["pg"] = util.CleanRawXml(o.PeerGroup.Text)
 	}
-	if o.Answer.Policy != nil {
-		raw["poli"] = util.CleanRawXml(o.Answer.Policy.Text)
+	if o.Policy != nil {
+		raw["poli"] = util.CleanRawXml(o.Policy.Text)
 	}
-	if o.Answer.RedistRules != nil {
-		raw["rr"] = util.CleanRawXml(o.Answer.RedistRules.Text)
+	if o.RedistRules != nil {
+		raw["rr"] = util.CleanRawXml(o.RedistRules.Text)
 	}
 
 	if len(raw) != 0 {
