@@ -202,12 +202,16 @@ func StripPanosPackaging(input []byte, tag string) []byte {
 
 	ans = bytes.TrimSpace(ans)
 
-	if tag != "" && (bytes.HasPrefix(ans, []byte("<"+tag+" ")) || bytes.HasPrefix(ans, []byte("<"+tag+">"))) {
-		index = bytes.Index(ans, gt)
-		ans = ans[index+1:]
-		index = bytes.LastIndex(ans, lt)
-		ans = ans[:index]
-		ans = bytes.TrimSpace(ans)
+	if tag != "" {
+		if bytes.HasPrefix(ans, []byte("<"+tag+" ")) || bytes.HasPrefix(ans, []byte("<"+tag+">")) {
+			index = bytes.Index(ans, gt)
+			ans = ans[index+1:]
+			if len(ans) > 0 {
+				index = bytes.LastIndex(ans, lt)
+				ans = ans[:index]
+				ans = bytes.TrimSpace(ans)
+			}
+		}
 	}
 
 	return ans

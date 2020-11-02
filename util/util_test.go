@@ -1,6 +1,7 @@
 package util
 
 import (
+	"bytes"
 	"fmt"
 	"testing"
 )
@@ -188,5 +189,36 @@ func TestCleanRawXml(t *testing.T) {
 	v := `<foo admin="admin" dirtyId="2" time="1234/05/06 07:08:09">hi</foo>`
 	if CleanRawXml(v) != "<foo>hi</foo>" {
 		t.Fail()
+	}
+}
+
+func TestStripPanosPackagingNoTag(t *testing.T) {
+	expected := "<outer><inner/></outer>"
+	input := fmt.Sprintf("<response><result>%s</result></response>", expected)
+
+	ans := StripPanosPackaging([]byte(input), "")
+	if !bytes.Equal([]byte(expected), ans) {
+		t.Errorf("Expected %q, got %q", expected, ans)
+	}
+}
+
+func TestStripPanosPackagingWithTag(t *testing.T) {
+	expected := "<inner/>"
+	input := fmt.Sprintf("<response><result><outer>%s</outer></result></response>", expected)
+
+	ans := StripPanosPackaging([]byte(input), "outer")
+	if !bytes.Equal([]byte(expected), ans) {
+		t.Errorf("Expected %q, got %q", expected, ans)
+	}
+}
+
+func TestStripPanosPackagingNoResult(t *testing.T) {
+	input := `<response status="success" code="19"><result total-count="1" count="1">
+  <interface admin="admin" dirtyId="52" time="2020/10/28 11:55:24"/>
+</result></response>`
+
+	ans := StripPanosPackaging([]byte(input), "interface")
+	if len(ans) != 0 {
+		t.Errorf("Expected empty string, got %q", ans)
 	}
 }
