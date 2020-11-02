@@ -32,6 +32,12 @@ import (
 	"github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/profile/auth"
 	"github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/profile/dampening"
 	bgpredist "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/redist"
+	"github.com/PaloAltoNetworks/pango/netw/routing/protocol/ospf"
+	ospfarea "github.com/PaloAltoNetworks/pango/netw/routing/protocol/ospf/area"
+	ospfint "github.com/PaloAltoNetworks/pango/netw/routing/protocol/ospf/area/iface"
+	ospfvlink "github.com/PaloAltoNetworks/pango/netw/routing/protocol/ospf/area/vlink"
+	ospfexp "github.com/PaloAltoNetworks/pango/netw/routing/protocol/ospf/exp"
+	ospfauth "github.com/PaloAltoNetworks/pango/netw/routing/protocol/ospf/profile/auth"
 	"github.com/PaloAltoNetworks/pango/netw/routing/route/static/ipv4"
 	"github.com/PaloAltoNetworks/pango/netw/routing/router"
 	"github.com/PaloAltoNetworks/pango/netw/tunnel/gre"
@@ -71,6 +77,12 @@ type FwNetw struct {
 	LoopbackInterface        *loopback.Firewall
 	ManagementProfile        *mngtprof.FwMngtProf
 	MonitorProfile           *monitor.FwMonitor
+	OspfArea                 *ospfarea.Firewall
+	OspfAreaInterface        *ospfint.Firewall
+	OspfAreaVirtualLink      *ospfvlink.Firewall
+	OspfAuthProfile          *ospfauth.Firewall
+	OspfConfig               *ospf.Firewall
+	OspfExport               *ospfexp.Firewall
 	RedistributionProfile    *redist4.FwIpv4
 	StaticRoute              *ipv4.Firewall
 	TunnelInterface          *tunnel.Firewall
@@ -159,6 +171,18 @@ func (c *FwNetw) Initialize(i util.XapiClient) {
 
 	c.MonitorProfile = &monitor.FwMonitor{}
 	c.MonitorProfile.Initialize(i)
+
+	c.OspfArea = ospfarea.FirewallNamespace(i)
+
+	c.OspfAreaInterface = ospfint.FirewallNamespace(i)
+
+	c.OspfAreaVirtualLink = ospfvlink.FirewallNamespace(i)
+
+	c.OspfAuthProfile = ospfauth.FirewallNamespace(i)
+
+	c.OspfConfig = ospf.FirewallNamespace(i)
+
+	c.OspfExport = ospfexp.FirewallNamespace(i)
 
 	c.RedistributionProfile = &redist4.FwIpv4{}
 	c.RedistributionProfile.Initialize(i)
