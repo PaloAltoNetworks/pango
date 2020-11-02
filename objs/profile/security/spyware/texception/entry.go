@@ -8,7 +8,7 @@ import (
 )
 
 // Entry is a normalized, version independent representation of a
-// anti-spyware security profile.
+// anti-spyware security profile threat exception.
 //
 // PAN-OS 7.0+
 type Entry struct {
