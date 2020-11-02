@@ -20,6 +20,7 @@ import (
 	dpsp "github.com/PaloAltoNetworks/pango/objs/profile/security/dos"
 	fprof "github.com/PaloAltoNetworks/pango/objs/profile/security/file"
 	"github.com/PaloAltoNetworks/pango/objs/profile/security/spyware"
+	asr "github.com/PaloAltoNetworks/pango/objs/profile/security/spyware/rule"
 	aste "github.com/PaloAltoNetworks/pango/objs/profile/security/spyware/texception"
 	ufsp "github.com/PaloAltoNetworks/pango/objs/profile/security/url"
 	"github.com/PaloAltoNetworks/pango/objs/profile/security/virus"
@@ -37,6 +38,7 @@ type FwObjs struct {
 	Address                             *addr.Firewall
 	AddressGroup                        *addrgrp.FwAddrGrp
 	AntiSpywareProfile                  *spyware.Firewall
+	AntiSpywareRule                     *asr.Firewall
 	AntiSpywareThreatException          *aste.Firewall
 	AntivirusProfile                    *virus.Firewall
 	Application                         *app.FwApp
@@ -71,6 +73,7 @@ func (c *FwObjs) Initialize(i util.XapiClient) {
 	c.AddressGroup.Initialize(i)
 
 	c.AntiSpywareProfile = spyware.FirewallNamespace(i)
+	c.AntiSpywareRule = asr.FirewallNamespace(i)
 	c.AntiSpywareThreatException = aste.FirewallNamespace(i)
 	c.AntivirusProfile = virus.FirewallNamespace(i)
 
