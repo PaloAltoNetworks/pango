@@ -326,13 +326,28 @@ func (c *Client) RevertToRunningConfig() error {
 //
 // If vsys is an empty string, then the vsys will default to "shared".
 func (c *Client) ConfigLocks(vsys string) ([]util.Lock, error) {
+	var err error
+	var cmd string
+	ans := configLocks{}
+
 	if vsys == "" {
 		vsys = "shared"
 	}
 
+	if c.Version.Gte(version.Number{9, 1, 0, ""}) {
+		var tgt string
+		if vsys == "shared" {
+			tgt = "all"
+		} else {
+			tgt = vsys
+		}
+		cmd = fmt.Sprintf("<show><config-locks><vsys>%s</vsys></config-locks></show>", tgt)
+	} else {
+		cmd = "<show><config-locks /></show>"
+	}
+
 	c.LogOp("(op) getting config locks for scope %q", vsys)
-	ans := configLocks{}
-	_, err := c.Op("<show><config-locks /></show>", vsys, nil, &ans)
+	_, err = c.Op(cmd, vsys, nil, &ans)
 	if err != nil {
 		return nil, err
 	}
