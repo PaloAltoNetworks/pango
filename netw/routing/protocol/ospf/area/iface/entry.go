@@ -22,7 +22,8 @@ type Entry struct {
 	TransitDelay       int
 	GraceRestartDelay  int
 	AuthProfile        string
-	Neighbors          []string // p2mp link type only
+	Neighbors          []string // unordered; p2mp link type only
+	BfdProfile         string
 }
 
 func (o *Entry) Copy(s Entry) {
@@ -38,6 +39,7 @@ func (o *Entry) Copy(s Entry) {
 	o.AuthProfile = s.AuthProfile
 	o.GraceRestartDelay = s.GraceRestartDelay
 	o.Neighbors = s.Neighbors
+	o.BfdProfile = s.BfdProfile
 }
 
 /** Structs / functions for this namespace. **/
@@ -92,12 +94,16 @@ func (o *entry_v1) normalize() Entry {
 
 	if o.LinkType != nil {
 		if o.LinkType.Broadcast != nil {
-			ans.LinkType = ValueBroadcast
+			ans.LinkType = LinkTypeBroadcast
 		} else if o.LinkType.PointToPoint != nil {
-			ans.LinkType = ValuePointToPoint
+			ans.LinkType = LinkTypePointToPoint
 		} else if o.LinkType.PointToMultiPoint != nil {
-			ans.LinkType = ValuePointToMultiPoint
+			ans.LinkType = LinkTypePointToMultiPoint
 		}
+	}
+
+	if o.Bfd != nil {
+		ans.BfdProfile = o.Bfd.BfdProfile
 	}
 
 	return ans
@@ -118,12 +124,17 @@ type entry_v1 struct {
 	GraceRestartDelay  int             `xml:"gr-delay,omitempty"`
 	AuthProfile        string          `xml:"authentication,omitempty"`
 	Neighbors          *util.EntryType `xml:"neighbor"`
+	Bfd                *bfd            `xml:"bfd"`
 }
 
 type linktype struct {
 	Broadcast         *string `xml:"broadcast"`
 	PointToPoint      *string `xml:"p2p"`
 	PointToMultiPoint *string `xml:"p2mp"`
+}
+
+type bfd struct {
+	BfdProfile string `xml:"profile,omitempty"`
 }
 
 func specify_v1(e Entry) interface{} {
@@ -145,12 +156,16 @@ func specify_v1(e Entry) interface{} {
 	s := ""
 
 	switch e.LinkType {
-	case ValueBroadcast:
+	case LinkTypeBroadcast:
 		ans.LinkType = &linktype{Broadcast: &s}
-	case ValuePointToPoint:
+	case LinkTypePointToPoint:
 		ans.LinkType = &linktype{PointToPoint: &s}
-	case ValuePointToMultiPoint:
+	case LinkTypePointToMultiPoint:
 		ans.LinkType = &linktype{PointToMultiPoint: &s}
+	}
+
+	if e.BfdProfile != "" {
+		ans.Bfd = &bfd{BfdProfile: e.BfdProfile}
 	}
 
 	return ans

@@ -2,17 +2,17 @@ package area
 
 const (
 	// Type Values
-	ValueNormal = "normal"
-	ValueStub   = "stub"
-	ValueNssa   = "nssa"
+	TypeNormal = "normal"
+	TypeStub   = "stub"
+	TypeNssa   = "nssa"
 
 	// Range Action Values
-	ValueAdvertise = "advertise"
-	ValueSuppress  = "suppress"
+	ActionAdvertise = "advertise"
+	ActionSuppress  = "suppress"
 
 	// AdvertiseType Values
-	ValueExt1 = "ext-1"
-	ValueExt2 = "ext-2"
+	AdvertiseTypeExt1 = "ext-1"
+	AdvertiseTypeExt2 = "ext-2"
 )
 
 const (

@@ -2,8 +2,8 @@ package exp
 
 const (
 	// PathType Values
-	ValueExt1 = "ext-1"
-	ValueExt2 = "ext-2"
+	PathTypeExt1 = "ext-1"
+	PathTypeExt2 = "ext-2"
 )
 
 const (
