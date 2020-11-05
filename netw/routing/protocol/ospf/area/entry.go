@@ -76,49 +76,63 @@ func (o *entry_v1) normalize() Entry {
 		Name: o.Name,
 	}
 
-	if o.Type != nil {
-		switch {
-		case o.Type.Normal != nil:
-			ans.Type = ValueNormal
-		case o.Type.Stub != nil:
-			ans.Type = ValueStub
-			ans.AcceptSummary = util.AsBool(o.Type.Stub.AcceptSummary)
-			if o.Type.Stub.DefaultRoute != nil {
-				if o.Type.Stub.DefaultRoute.Disable != nil {
-					ans.DefaultRouteAdvertise = false
-				}
-				if o.Type.Stub.DefaultRoute.Advertise != nil {
-					ans.DefaultRouteAdvertise = true
-					ans.AdvertiseMetric = o.Type.Stub.DefaultRoute.Advertise.Metric
-				}
+	if o.Ranges != nil && len(o.Ranges.Entry) > 0 {
+		ans.Ranges = make([]Range, 0, len(o.Ranges.Entry))
+		for i := range o.Ranges.Entry {
+			entry := Range{
+				Network: o.Ranges.Entry[i].Name,
 			}
-		case o.Type.Nssa != nil:
-			ans.Type = ValueNssa
-			ans.AcceptSummary = util.AsBool(o.Type.Nssa.AcceptSummary)
-			if o.Type.Nssa.DefaultRoute != nil {
-				if o.Type.Nssa.DefaultRoute.Disable != nil {
-					ans.DefaultRouteAdvertise = false
-				}
-				if o.Type.Nssa.DefaultRoute.Advertise != nil {
-					ans.DefaultRouteAdvertise = true
-					ans.AdvertiseMetric = o.Type.Nssa.DefaultRoute.Advertise.Metric
-					ans.AdvertiseType = o.Type.Nssa.DefaultRoute.Advertise.Type
-				}
+			switch {
+			case o.Ranges.Entry[i].Advertise != nil:
+				entry.Action = ActionAdvertise
+			case o.Ranges.Entry[i].Suppress != nil:
+				entry.Action = ActionSuppress
 			}
-			if o.Type.Nssa.Ranges != nil && len(o.Type.Nssa.Ranges.Entry) > 0 {
-				ans.ExtRanges = make([]Range, 0, len(o.Type.Nssa.Ranges.Entry))
-				for i := range o.Type.Nssa.Ranges.Entry {
-					entry := Range{
-						Network: o.Type.Nssa.Ranges.Entry[i].Name,
-					}
-					switch {
-					case o.Type.Nssa.Ranges.Entry[i].Advertise != nil:
-						entry.Action = ValueAdvertise
-					case o.Type.Nssa.Ranges.Entry[i].Suppress != nil:
-						entry.Action = ValueSuppress
-					}
-					ans.ExtRanges = append(ans.ExtRanges, entry)
+			ans.Ranges = append(ans.Ranges, entry)
+		}
+	}
+
+	switch {
+	case o.Type.Normal != nil:
+		ans.Type = TypeNormal
+	case o.Type.Stub != nil:
+		ans.Type = TypeStub
+		ans.AcceptSummary = util.AsBool(o.Type.Stub.AcceptSummary)
+		if o.Type.Stub.DefaultRoute != nil {
+			if o.Type.Stub.DefaultRoute.Disable != nil {
+				ans.DefaultRouteAdvertise = false
+			}
+			if o.Type.Stub.DefaultRoute.Advertise != nil {
+				ans.DefaultRouteAdvertise = true
+				ans.AdvertiseMetric = o.Type.Stub.DefaultRoute.Advertise.Metric
+			}
+		}
+	case o.Type.Nssa != nil:
+		ans.Type = TypeNssa
+		ans.AcceptSummary = util.AsBool(o.Type.Nssa.AcceptSummary)
+		if o.Type.Nssa.DefaultRoute != nil {
+			if o.Type.Nssa.DefaultRoute.Disable != nil {
+				ans.DefaultRouteAdvertise = false
+			}
+			if o.Type.Nssa.DefaultRoute.Advertise != nil {
+				ans.DefaultRouteAdvertise = true
+				ans.AdvertiseMetric = o.Type.Nssa.DefaultRoute.Advertise.Metric
+				ans.AdvertiseType = o.Type.Nssa.DefaultRoute.Advertise.Type
+			}
+		}
+		if o.Type.Nssa.Ranges != nil && len(o.Type.Nssa.Ranges.Entry) > 0 {
+			ans.ExtRanges = make([]Range, 0, len(o.Type.Nssa.Ranges.Entry))
+			for i := range o.Type.Nssa.Ranges.Entry {
+				entry := Range{
+					Network: o.Type.Nssa.Ranges.Entry[i].Name,
 				}
+				switch {
+				case o.Type.Nssa.Ranges.Entry[i].Advertise != nil:
+					entry.Action = ActionAdvertise
+				case o.Type.Nssa.Ranges.Entry[i].Suppress != nil:
+					entry.Action = ActionSuppress
+				}
+				ans.ExtRanges = append(ans.ExtRanges, entry)
 			}
 		}
 	}
@@ -139,9 +153,10 @@ func (o *entry_v1) normalize() Entry {
 }
 
 type entry_v1 struct {
-	XMLName xml.Name  `xml:"entry"`
-	Name    string    `xml:"name,attr"`
-	Type    *areaType `xml:"type"`
+	XMLName xml.Name       `xml:"entry"`
+	Name    string         `xml:"name,attr"`
+	Type    areaType       `xml:"type"`
+	Ranges  *advrangeEntry `xml:"range"`
 
 	Interface   *util.RawXml `xml:"interface"`
 	VirtualLink *util.RawXml `xml:"virtual-link"`
@@ -191,11 +206,28 @@ func specify_v1(e Entry) interface{} {
 
 	s := ""
 
+	if len(e.Ranges) > 0 {
+		ans.Ranges = &advrangeEntry{}
+		ans.Ranges.Entry = make([]advrange, 0, len(e.Ranges))
+		for i := range e.Ranges {
+			entry := advrange{
+				Name: e.Ranges[i].Network,
+			}
+			switch e.Ranges[i].Action {
+			case ActionAdvertise:
+				entry.Advertise = &s
+			case ActionSuppress:
+				entry.Suppress = &s
+			}
+			ans.Ranges.Entry = append(ans.Ranges.Entry, entry)
+		}
+	}
+
 	switch e.Type {
-	case ValueNormal:
-		ans.Type = &areaType{Normal: &s}
-	case ValueStub:
-		ans.Type = &areaType{}
+	case TypeNormal:
+		ans.Type = areaType{Normal: &s}
+	case TypeStub:
+		ans.Type = areaType{}
 		ans.Type.Stub = &stub{
 			DefaultRoute:  &defroute{},
 			AcceptSummary: util.YesNo(e.AcceptSummary),
@@ -207,8 +239,8 @@ func specify_v1(e Entry) interface{} {
 		} else {
 			ans.Type.Stub.DefaultRoute.Disable = &s
 		}
-	case ValueNssa:
-		ans.Type = &areaType{}
+	case TypeNssa:
+		ans.Type = areaType{}
 		ans.Type.Nssa = &nssa{
 			DefaultRoute:  &defroute{},
 			AcceptSummary: util.YesNo(e.AcceptSummary),
@@ -229,9 +261,9 @@ func specify_v1(e Entry) interface{} {
 					Name: e.ExtRanges[i].Network,
 				}
 				switch e.ExtRanges[i].Action {
-				case ValueAdvertise:
+				case ActionAdvertise:
 					entry.Advertise = &s
-				case ValueSuppress:
+				case ActionSuppress:
 					entry.Suppress = &s
 				}
 				ans.Type.Nssa.Ranges.Entry = append(ans.Type.Nssa.Ranges.Entry, entry)

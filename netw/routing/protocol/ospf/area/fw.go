@@ -7,7 +7,7 @@ import (
 	"github.com/PaloAltoNetworks/pango/util"
 )
 
-// Firewall is the client.Network.OspfExport namespace.
+// Firewall is the client.Network.OspfArea namespace.
 type Firewall struct {
 	ns *namespace.Standard
 }

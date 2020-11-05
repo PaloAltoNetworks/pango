@@ -19,6 +19,7 @@ type Entry struct {
 	RetransmitInterval int
 	TransitDelay       int
 	AuthProfile        string
+	BfdProfile         string
 }
 
 func (o *Entry) Copy(s Entry) {
@@ -30,6 +31,7 @@ func (o *Entry) Copy(s Entry) {
 	o.RetransmitInterval = s.RetransmitInterval
 	o.TransitDelay = s.TransitDelay
 	o.AuthProfile = s.AuthProfile
+	o.BfdProfile = s.BfdProfile
 }
 
 /** Structs / functions for this namespace. **/
@@ -79,6 +81,10 @@ func (o *entry_v1) normalize() Entry {
 		AuthProfile:        o.AuthProfile,
 	}
 
+	if o.Bfd != nil {
+		ans.BfdProfile = o.Bfd.BfdProfile
+	}
+
 	return ans
 }
 
@@ -86,13 +92,18 @@ type entry_v1 struct {
 	XMLName            xml.Name `xml:"entry"`
 	Name               string   `xml:"name,attr"`
 	Enable             string   `xml:"enable"`
-	NeighborId         string   `xml:"neighbor-id,omitempty"`
-	TransitAreaId      string   `xml:"transit-area-id,omitempty"`
+	NeighborId         string   `xml:"neighbor-id"`
+	TransitAreaId      string   `xml:"transit-area-id"`
 	HelloInterval      int      `xml:"hello-interval,omitempty"`
 	DeadCounts         int      `xml:"dead-counts,omitempty"`
 	RetransmitInterval int      `xml:"retransmit-interval,omitempty"`
 	TransitDelay       int      `xml:"transit-delay,omitempty"`
 	AuthProfile        string   `xml:"authentication,omitempty"`
+	Bfd                *bfd     `xml:"bfd"`
+}
+
+type bfd struct {
+	BfdProfile string `xml:"profile,omitempty"`
 }
 
 func specify_v1(e Entry) interface{} {
@@ -106,6 +117,10 @@ func specify_v1(e Entry) interface{} {
 		RetransmitInterval: e.RetransmitInterval,
 		TransitDelay:       e.TransitDelay,
 		AuthProfile:        e.AuthProfile,
+	}
+
+	if e.BfdProfile != "" {
+		ans.Bfd = &bfd{BfdProfile: e.BfdProfile}
 	}
 
 	return ans

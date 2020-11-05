@@ -2,9 +2,9 @@ package iface
 
 const (
 	// LinkType Values
-	ValueBroadcast         = "broadcast"
-	ValuePointToPoint      = "p2p"
-	ValuePointToMultiPoint = "p2mp"
+	LinkTypeBroadcast         = "broadcast"
+	LinkTypePointToPoint      = "p2p"
+	LinkTypePointToMultiPoint = "p2mp"
 )
 
 const (

@@ -68,10 +68,10 @@ func (o *entry_v1) normalize() Entry {
 	}
 
 	if o.Password != "" {
-		ans.AuthType = ValuePassword
+		ans.AuthType = AuthTypePassword
 		ans.Password = o.Password
 	} else if len(o.Md5.Md5Keys) > 0 {
-		ans.AuthType = ValueMd5
+		ans.AuthType = AuthTypeMd5
 		ans.Md5Keys = make([]Md5Key, 0, len(o.Md5.Md5Keys))
 		for i := range o.Md5.Md5Keys {
 			key := Md5Key{
@@ -108,9 +108,10 @@ func specify_v1(e Entry) interface{} {
 		Name: e.Name,
 	}
 
-	if e.AuthType == ValuePassword {
+	switch e.AuthType {
+	case AuthTypePassword:
 		ans.Password = e.Password
-	} else if e.AuthType == ValueMd5 {
+	case AuthTypeMd5:
 		ans.Md5 = &md5{}
 		ans.Md5.Md5Keys = make([]md5Key, 0, len(e.Md5Keys))
 		for i := range e.Md5Keys {

@@ -2,8 +2,8 @@ package auth
 
 const (
 	// AuthType Values
-	ValuePassword = "password"
-	ValueMd5      = "md5"
+	AuthTypePassword = "password"
+	AuthTypeMd5      = "md5"
 )
 
 const (
