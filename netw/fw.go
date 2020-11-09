@@ -5,6 +5,7 @@ import (
 	aggeth "github.com/PaloAltoNetworks/pango/netw/interface/aggregate"
 	"github.com/PaloAltoNetworks/pango/netw/interface/arp"
 	"github.com/PaloAltoNetworks/pango/netw/interface/eth"
+	ipv6n "github.com/PaloAltoNetworks/pango/netw/interface/ipv6/neighbor"
 	"github.com/PaloAltoNetworks/pango/netw/interface/loopback"
 	"github.com/PaloAltoNetworks/pango/netw/interface/subinterface/layer2"
 	"github.com/PaloAltoNetworks/pango/netw/interface/subinterface/layer3"
@@ -72,6 +73,7 @@ type FwNetw struct {
 	IpsecCryptoProfile       *ipsec.FwIpsec
 	IpsecTunnel              *ipsectunnel.FwIpsecTunnel
 	IpsecTunnelProxyId       *tpiv4.FwIpv4
+	Ipv6NeighborDiscovery    *ipv6n.Firewall
 	Layer2Subinterface       *layer2.Firewall
 	Layer3Subinterface       *layer3.Firewall
 	LoopbackInterface        *loopback.Firewall
@@ -162,6 +164,7 @@ func (c *FwNetw) Initialize(i util.XapiClient) {
 	c.IpsecTunnelProxyId = &tpiv4.FwIpv4{}
 	c.IpsecTunnelProxyId.Initialize(i)
 
+	c.Ipv6NeighborDiscovery = ipv6n.FirewallNamespace(i)
 	c.Layer2Subinterface = layer2.FirewallNamespace(i)
 	c.Layer3Subinterface = layer3.FirewallNamespace(i)
 	c.LoopbackInterface = loopback.FirewallNamespace(i)
