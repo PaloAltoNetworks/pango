@@ -35,11 +35,25 @@ func getTests() []testCase {
 			Name:       "vlan.3",
 			EnableDhcp: true,
 			raw: map[string]string{
-				"arp":  "<arp>raw arp</arp>",
-				"ipv6": "<ipv6>raw ipv6 addresses</ipv6>",
-				"ndp":  "<ndp-proxy>raw ndp</ndp-proxy>",
+				"arp": "<arp>raw arp</arp>",
+				"ndp": "<ndp-proxy>raw ndp</ndp-proxy>",
 			},
 			Comment: "v1 raw no import",
+		}},
+		{version.Number{5, 0, 0, ""}, "", "", "", []string{"vlan.4"}, Entry{
+			Name:       "vlan.4",
+			EnableDhcp: true,
+			raw: map[string]string{
+				"v6a": "ipv6 addresses",
+				"v6n": "ipv6 neighbor discovery config",
+			},
+			Comment: "v1 ipv6 raw no import",
+		}},
+		{version.Number{5, 0, 0, ""}, "", "", "", []string{"vlan.5"}, Entry{
+			Name:            "vlan.5",
+			EnableIpv6:      true,
+			Ipv6InterfaceId: "myId",
+			Comment:         "v1 ipv6 only",
 		}},
 		{version.Number{8, 0, 0, ""}, "tmpl", "vsys2", "vsys2", []string{"vlan.4"}, Entry{
 			Name:              "vlan.4",
@@ -63,11 +77,25 @@ func getTests() []testCase {
 			Name:       "vlan.6",
 			EnableDhcp: true,
 			raw: map[string]string{
-				"arp":  "<arp>raw arp</arp>",
-				"ipv6": "<ipv6>raw ipv6 addresses</ipv6>",
-				"ndp":  "<ndp-proxy>raw ndp</ndp-proxy>",
+				"arp": "<arp>raw arp</arp>",
+				"ndp": "<ndp-proxy>raw ndp</ndp-proxy>",
 			},
 			Comment: "v2 raw no import",
+		}},
+		{version.Number{8, 0, 0, ""}, "", "", "", []string{"vlan.4"}, Entry{
+			Name:       "vlan.4",
+			EnableDhcp: true,
+			raw: map[string]string{
+				"v6a": "ipv6 addresses",
+				"v6n": "ipv6 neighbor discovery config",
+			},
+			Comment: "v2 ipv6 raw no import",
+		}},
+		{version.Number{8, 0, 0, ""}, "", "", "", []string{"vlan.5"}, Entry{
+			Name:            "vlan.5",
+			EnableIpv6:      true,
+			Ipv6InterfaceId: "myId",
+			Comment:         "v2 ipv6 only",
 		}},
 	}
 }
