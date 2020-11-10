@@ -5,6 +5,7 @@ import (
 	aggeth "github.com/PaloAltoNetworks/pango/netw/interface/aggregate"
 	"github.com/PaloAltoNetworks/pango/netw/interface/arp"
 	"github.com/PaloAltoNetworks/pango/netw/interface/eth"
+	ipv6a "github.com/PaloAltoNetworks/pango/netw/interface/ipv6/address"
 	ipv6n "github.com/PaloAltoNetworks/pango/netw/interface/ipv6/neighbor"
 	"github.com/PaloAltoNetworks/pango/netw/interface/loopback"
 	"github.com/PaloAltoNetworks/pango/netw/interface/subinterface/layer2"
@@ -67,6 +68,7 @@ type PanoNetw struct {
 	IpsecCryptoProfile       *ipsec.PanoIpsec
 	IpsecTunnel              *ipsectunnel.PanoIpsecTunnel
 	IpsecTunnelProxyId       *tpiv4.PanoIpv4
+	Ipv6Address              *ipv6a.Panorama
 	Ipv6NeighborDiscovery    *ipv6n.Panorama
 	Layer2Subinterface       *layer2.Panorama
 	Layer3Subinterface       *layer3.Panorama
@@ -152,6 +154,7 @@ func (c *PanoNetw) Initialize(i util.XapiClient) {
 	c.IpsecTunnelProxyId = &tpiv4.PanoIpv4{}
 	c.IpsecTunnelProxyId.Initialize(i)
 
+	c.Ipv6Address = ipv6a.PanoramaNamespace(i)
 	c.Ipv6NeighborDiscovery = ipv6n.PanoramaNamespace(i)
 	c.Layer2Subinterface = layer2.PanoramaNamespace(i)
 	c.Layer3Subinterface = layer3.PanoramaNamespace(i)
