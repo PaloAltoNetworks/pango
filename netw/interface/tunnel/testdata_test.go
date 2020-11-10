@@ -27,9 +27,16 @@ func getTests() []testCase {
 			Name:      "tunnel.2",
 			StaticIps: []string{"10.3.1.1/24"},
 			raw: map[string]string{
-				"ipv6": "<ipv6>raw ipv6 addresses</ipv6>",
+				"v6a": "ipv6 addresses",
 			},
 			Comment: "v1 raw no import",
+		}},
+		{version.Number{6, 1, 0, ""}, "two", "vsys3", "vsys3", []string{"tunnel.3"}, Entry{
+			Name:            "tunnel.3",
+			StaticIps:       []string{"10.3.1.1/24"},
+			EnableIpv6:      true,
+			Ipv6InterfaceId: "myId",
+			Comment:         "v1 no import with ipv6 config",
 		}},
 	}
 }
