@@ -19,6 +19,8 @@ type Entry struct {
 	AdjustTcpMss      bool
 	Ipv4MssAdjust     int
 	Ipv6MssAdjust     int
+	EnableIpv6        bool
+	Ipv6InterfaceId   string
 
 	raw map[string]string
 }
@@ -34,6 +36,8 @@ func (o *Entry) Copy(s Entry) {
 	o.AdjustTcpMss = s.AdjustTcpMss
 	o.Ipv4MssAdjust = s.Ipv4MssAdjust
 	o.Ipv6MssAdjust = s.Ipv6MssAdjust
+	o.EnableIpv6 = s.EnableIpv6
+	o.Ipv6InterfaceId = s.Ipv6InterfaceId
 }
 
 /** Structs / functions for this namespace. **/
@@ -81,12 +85,18 @@ func (o *entry_v1) normalize() Entry {
 		AdjustTcpMss:      util.AsBool(o.AdjustTcpMss),
 	}
 
-	ans.raw = make(map[string]string)
+	raw := make(map[string]string)
 	if o.Ipv6 != nil {
-		ans.raw["ipv6"] = util.CleanRawXml(o.Ipv6.Text)
+		ans.EnableIpv6 = util.AsBool(o.Ipv6.EnableIpv6)
+		ans.Ipv6InterfaceId = o.Ipv6.Ipv6InterfaceId
+
+		if o.Ipv6.Addresses != nil {
+			raw["v6a"] = util.CleanRawXml(o.Ipv6.Addresses.Text)
+		}
 	}
-	if len(ans.raw) == 0 {
-		ans.raw = nil
+
+	if len(raw) != 0 {
+		ans.raw = raw
 	}
 
 	return ans
@@ -101,8 +111,13 @@ type entry_v1 struct {
 	Mtu               int             `xml:"mtu,omitempty"`
 	ManagementProfile string          `xml:"interface-management-profile,omitempty"`
 	AdjustTcpMss      string          `xml:"adjust-tcp-mss"`
+	Ipv6              *ipv6           `xml:"ipv6"`
+}
 
-	Ipv6 *util.RawXml `xml:"ipv6"`
+type ipv6 struct {
+	EnableIpv6      string       `xml:"enabled"`
+	Ipv6InterfaceId string       `xml:"interface-id,omitempty"`
+	Addresses       *util.RawXml `xml:"address"`
 }
 
 type container_v2 struct {
@@ -140,12 +155,18 @@ func (o *entry_v2) normalize() Entry {
 		Ipv6MssAdjust:     int(o.Ipv6MssAdjust),
 	}
 
-	ans.raw = make(map[string]string)
+	raw := make(map[string]string)
 	if o.Ipv6 != nil {
-		ans.raw["ipv6"] = util.CleanRawXml(o.Ipv6.Text)
+		ans.EnableIpv6 = util.AsBool(o.Ipv6.EnableIpv6)
+		ans.Ipv6InterfaceId = o.Ipv6.Ipv6InterfaceId
+
+		if o.Ipv6.Addresses != nil {
+			raw["v6a"] = util.CleanRawXml(o.Ipv6.Addresses.Text)
+		}
 	}
-	if len(ans.raw) == 0 {
-		ans.raw = nil
+
+	if len(raw) != 0 {
+		ans.raw = raw
 	}
 
 	return ans
@@ -162,8 +183,7 @@ type entry_v2 struct {
 	AdjustTcpMss      string          `xml:"adjust-tcp-mss>enable"`
 	Ipv4MssAdjust     int             `xml:"adjust-tcp-mss>ipv4-mss-adjustment,omitempty"`
 	Ipv6MssAdjust     int             `xml:"adjust-tcp-mss>ipv6-mss-adjustment,omitempty"`
-
-	Ipv6 *util.RawXml `xml:"ipv6"`
+	Ipv6              *ipv6           `xml:"ipv6"`
 }
 
 func specify_v1(e Entry) interface{} {
@@ -177,8 +197,15 @@ func specify_v1(e Entry) interface{} {
 		AdjustTcpMss:      util.YesNo(e.AdjustTcpMss),
 	}
 
-	if text, ok := e.raw["ipv6"]; ok {
-		ans.Ipv6 = &util.RawXml{text}
+	if e.raw["v6a"] != "" || e.EnableIpv6 || e.Ipv6InterfaceId != "" {
+		ans.Ipv6 = &ipv6{
+			EnableIpv6:      util.YesNo(e.EnableIpv6),
+			Ipv6InterfaceId: e.Ipv6InterfaceId,
+		}
+
+		if text := e.raw["v6a"]; text != "" {
+			ans.Ipv6.Addresses = &util.RawXml{text}
+		}
 	}
 
 	return ans
@@ -197,8 +224,15 @@ func specify_v2(e Entry) interface{} {
 		Ipv6MssAdjust:     e.Ipv6MssAdjust,
 	}
 
-	if text, ok := e.raw["ipv6"]; ok {
-		ans.Ipv6 = &util.RawXml{text}
+	if e.raw["v6a"] != "" || e.EnableIpv6 || e.Ipv6InterfaceId != "" {
+		ans.Ipv6 = &ipv6{
+			EnableIpv6:      util.YesNo(e.EnableIpv6),
+			Ipv6InterfaceId: e.Ipv6InterfaceId,
+		}
+
+		if text := e.raw["v6a"]; text != "" {
+			ans.Ipv6.Addresses = &util.RawXml{text}
+		}
 	}
 
 	return ans
