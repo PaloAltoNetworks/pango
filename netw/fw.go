@@ -41,6 +41,7 @@ import (
 	ospfexp "github.com/PaloAltoNetworks/pango/netw/routing/protocol/ospf/exp"
 	ospfauth "github.com/PaloAltoNetworks/pango/netw/routing/protocol/ospf/profile/auth"
 	"github.com/PaloAltoNetworks/pango/netw/routing/route/static/ipv4"
+	ipv6sr "github.com/PaloAltoNetworks/pango/netw/routing/route/static/ipv6"
 	"github.com/PaloAltoNetworks/pango/netw/routing/router"
 	"github.com/PaloAltoNetworks/pango/netw/tunnel/gre"
 	"github.com/PaloAltoNetworks/pango/netw/vlan"
@@ -76,6 +77,7 @@ type FwNetw struct {
 	IpsecTunnelProxyId       *tpiv4.FwIpv4
 	Ipv6Address              *ipv6a.Firewall
 	Ipv6NeighborDiscovery    *ipv6n.Firewall
+	Ipv6StaticRoute          *ipv6sr.Firewall
 	Layer2Subinterface       *layer2.Firewall
 	Layer3Subinterface       *layer3.Firewall
 	LoopbackInterface        *loopback.Firewall
@@ -168,6 +170,7 @@ func (c *FwNetw) Initialize(i util.XapiClient) {
 
 	c.Ipv6Address = ipv6a.FirewallNamespace(i)
 	c.Ipv6NeighborDiscovery = ipv6n.FirewallNamespace(i)
+	c.Ipv6StaticRoute = ipv6sr.FirewallNamespace(i)
 	c.Layer2Subinterface = layer2.FirewallNamespace(i)
 	c.Layer3Subinterface = layer3.FirewallNamespace(i)
 	c.LoopbackInterface = loopback.FirewallNamespace(i)

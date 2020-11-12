@@ -35,6 +35,7 @@ import (
 	"github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/profile/dampening"
 	bgpredist "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/redist"
 	"github.com/PaloAltoNetworks/pango/netw/routing/route/static/ipv4"
+	ipv6sr "github.com/PaloAltoNetworks/pango/netw/routing/route/static/ipv6"
 	"github.com/PaloAltoNetworks/pango/netw/routing/router"
 	"github.com/PaloAltoNetworks/pango/netw/tunnel/gre"
 	"github.com/PaloAltoNetworks/pango/netw/vlan"
@@ -70,6 +71,7 @@ type PanoNetw struct {
 	IpsecTunnelProxyId       *tpiv4.PanoIpv4
 	Ipv6Address              *ipv6a.Panorama
 	Ipv6NeighborDiscovery    *ipv6n.Panorama
+	Ipv6StaticRoute          *ipv6sr.Panorama
 	Layer2Subinterface       *layer2.Panorama
 	Layer3Subinterface       *layer3.Panorama
 	LoopbackInterface        *loopback.Panorama
@@ -156,6 +158,7 @@ func (c *PanoNetw) Initialize(i util.XapiClient) {
 
 	c.Ipv6Address = ipv6a.PanoramaNamespace(i)
 	c.Ipv6NeighborDiscovery = ipv6n.PanoramaNamespace(i)
+	c.Ipv6StaticRoute = ipv6sr.PanoramaNamespace(i)
 	c.Layer2Subinterface = layer2.PanoramaNamespace(i)
 	c.Layer3Subinterface = layer3.PanoramaNamespace(i)
 	c.LoopbackInterface = loopback.PanoramaNamespace(i)
