@@ -68,6 +68,25 @@ func (c *Firewall) Delete(vsys string, e ...interface{}) error {
 	return c.ns.Delete(c.pather(vsys), names, nErr)
 }
 
+// SetWithoutSubconfig performs a DELETE to remove any subconfig
+// before performing a SET to create an object.
+func (c *Firewall) SetWithoutSubconfig(vsys string, e Entry) error {
+	c.ns.Client.LogAction("(delete) %s subconfig for %s", c.ns.Singular, e.Name)
+
+	path, err := c.xpath(vsys, []string{e.Name})
+	if err != nil {
+		return err
+	}
+
+	path = append(path, "description")
+	_, _ = c.ns.Client.Delete(path, nil, nil)
+
+	path[len(path)-1] = "match-list"
+	_, _ = c.ns.Client.Delete(path, nil, nil)
+
+	return c.Set(vsys, e)
+}
+
 func (c *Firewall) pather(vsys string) namespace.Pather {
 	return func(v []string) ([]string, error) {
 		return c.xpath(vsys, v)

@@ -68,6 +68,25 @@ func (c *Panorama) Delete(dg string, e ...interface{}) error {
 	return c.ns.Delete(c.pather(dg), names, nErr)
 }
 
+// SetWithoutSubconfig performs a DELETE to remove any subconfig
+// before performing a SET to create an object.
+func (c *Panorama) SetWithoutSubconfig(dg string, e Entry) error {
+	c.ns.Client.LogAction("(delete) %s subconfig for %s", c.ns.Singular, e.Name)
+
+	path, err := c.xpath(dg, []string{e.Name})
+	if err != nil {
+		return err
+	}
+
+	path = append(path, "description")
+	_, _ = c.ns.Client.Delete(path, nil, nil)
+
+	path[len(path)-1] = "match-list"
+	_, _ = c.ns.Client.Delete(path, nil, nil)
+
+	return c.Set(dg, e)
+}
+
 func (c *Panorama) pather(dg string) namespace.Pather {
 	return func(v []string) ([]string, error) {
 		return c.xpath(dg, v)
