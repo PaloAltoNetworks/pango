@@ -84,6 +84,40 @@ type UntagUser struct {
 	Tags []string
 }
 
+type uidResponse struct {
+	XMLName xml.Name `xml:"response"`
+	Payload *payload `xml:"msg>line>uid-response>payload"`
+}
+
+func (o uidResponse) GetError() error {
+	if o.Payload == nil {
+		return nil
+	}
+
+	msgs := make([]string, 0, 10)
+	if o.Payload.TagUser != nil {
+		for _, v := range o.Payload.TagUser.Entries {
+			if v.Message != "" {
+				msgs = append(msgs, fmt.Sprintf("taguser:%s:%q", v.User, v.Message))
+			}
+		}
+	}
+
+	if o.Payload.UntagUser != nil {
+		for _, v := range o.Payload.UntagUser.Entries {
+			if v.Message != "" {
+				msgs = append(msgs, fmt.Sprintf("untaguser:%s:%q", v.User, v.Message))
+			}
+		}
+	}
+
+	if len(msgs) > 0 {
+		return fmt.Errorf(strings.Join(msgs, " | "))
+	}
+
+	return nil
+}
+
 type uid struct {
 	XMLName xml.Name `xml:"uid-message"`
 	Version string   `xml:"version"`
@@ -135,8 +169,9 @@ type tagUntagUserSpec struct {
 }
 
 type userTagEntry struct {
-	User string    `xml:"user,attr"`
-	Tags *userTags `xml:"tag"`
+	User    string    `xml:"user,attr"`
+	Message string    `xml:"message,attr,omitempty"`
+	Tags    *userTags `xml:"tag"`
 }
 
 type userTags struct {

@@ -1,6 +1,9 @@
 package userid
 
 import (
+	"bytes"
+	"encoding/xml"
+
 	"github.com/PaloAltoNetworks/pango/util"
 )
 
@@ -36,6 +39,16 @@ func (c *UserId) Run(msg *Message, vsys string) error {
 
 	c.con.LogUid("(userid) running in %s -%s", vsys, desc)
 
-	_, err := c.con.Uid(req, vsys, nil, nil)
+	b, err := c.con.Uid(req, vsys, nil, nil)
+	if bytes.Contains(b, []byte("<uid-response>")) {
+		resp := uidResponse{}
+		if e2 := xml.Unmarshal(b, &resp); e2 == nil {
+			e3 := resp.GetError()
+			if e3 != nil {
+				return e3
+			}
+		}
+	}
+
 	return err
 }
