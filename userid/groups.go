@@ -1,6 +1,7 @@
 package userid
 
 import (
+	"bytes"
 	"encoding/xml"
 	"strings"
 
@@ -48,6 +49,22 @@ func (c *UserId) GetGroups(style, vsys string) ([]string, error) {
 }
 
 /*
+Examples of things returned from PAN-OS when getting group members:
+
+<response status="success"><result>User group 'static_group' does not exist or does not have members
+]]></result></response>
+
+<response status="success"><result><![CDATA[
+
+source type: xmlapi
+
+[1     ] sg21
+[2     ] sg22
+
+]]></result></response>
+*/
+
+/*
 GetGroupsMembers returns the list of users in the given group.
 
 The vsys will default to "vsys1" if left as an empty string.
@@ -61,8 +78,11 @@ func (c *UserId) GetGroupMembers(group, vsys string) ([]string, error) {
 
 	resp := groupResp{}
 
-	_, err := c.con.Op(req, vsys, nil, &resp)
+	b, err := c.con.Op(req, vsys, nil, &resp)
 	if err != nil {
+		if bytes.Contains(b, []byte("does not exist or does not have members")) {
+			return nil, nil
+		}
 		return nil, err
 	}
 
