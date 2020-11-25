@@ -10,33 +10,36 @@ import (
 // Entry is a normalized, version independent representation of an ethernet
 // interface.
 type Entry struct {
-	Name                       string
-	Mode                       string
-	StaticIps                  []string // ordered
-	EnableDhcp                 bool
-	CreateDhcpDefaultRoute     bool
-	DhcpDefaultRouteMetric     int
-	Ipv6Enabled                bool
-	Ipv6InterfaceId            string
-	ManagementProfile          string
-	Mtu                        int
-	AdjustTcpMss               bool
-	NetflowProfile             string
-	LldpEnabled                bool
-	LldpProfile                string
-	LinkSpeed                  string
-	LinkDuplex                 string
-	LinkState                  string
-	AggregateGroup             string
-	Comment                    string
-	Ipv4MssAdjust              int    // 7.1+
-	Ipv6MssAdjust              int    // 7.1+
-	EnableUntaggedSubinterface bool   // 7.1+
-	DecryptForward             bool   // 8.1+
-	RxPolicingRate             int    // 8.1+
-	TxPolicingRate             int    // 8.1+
-	DhcpSendHostnameEnable     bool   // 9.0+
-	DhcpSendHostnameValue      string // 9.0+
+	Name                        string
+	Mode                        string
+	StaticIps                   []string // ordered
+	EnableDhcp                  bool
+	CreateDhcpDefaultRoute      bool
+	DhcpDefaultRouteMetric      int
+	Ipv6Enabled                 bool
+	Ipv6InterfaceId             string
+	ManagementProfile           string
+	Mtu                         int
+	AdjustTcpMss                bool
+	NetflowProfile              string
+	LldpEnabled                 bool
+	LldpProfile                 string
+	LldpHaPassivePreNegotiation bool
+	LacpHaPassivePreNegotiation bool
+	LinkSpeed                   string
+	LinkDuplex                  string
+	LinkState                   string
+	AggregateGroup              string
+	Comment                     string
+	LacpPortPriority            int
+	Ipv4MssAdjust               int    // 7.1+
+	Ipv6MssAdjust               int    // 7.1+
+	EnableUntaggedSubinterface  bool   // 7.1+
+	DecryptForward              bool   // 8.1+
+	RxPolicingRate              int    // 8.1+
+	TxPolicingRate              int    // 8.1+
+	DhcpSendHostnameEnable      bool   // 9.0+
+	DhcpSendHostnameValue       string // 9.0+
 
 	raw map[string]string
 }
@@ -56,11 +59,14 @@ func (o *Entry) Copy(s Entry) {
 	o.NetflowProfile = s.NetflowProfile
 	o.LldpEnabled = s.LldpEnabled
 	o.LldpProfile = s.LldpProfile
+	o.LldpHaPassivePreNegotiation = s.LldpHaPassivePreNegotiation
+	o.LacpHaPassivePreNegotiation = s.LacpHaPassivePreNegotiation
 	o.LinkSpeed = s.LinkSpeed
 	o.LinkDuplex = s.LinkDuplex
 	o.LinkState = s.LinkState
 	o.AggregateGroup = s.AggregateGroup
 	o.Comment = s.Comment
+	o.LacpPortPriority = s.LacpPortPriority
 	o.Ipv4MssAdjust = s.Ipv4MssAdjust
 	o.Ipv6MssAdjust = s.Ipv6MssAdjust
 	o.EnableUntaggedSubinterface = s.EnableUntaggedSubinterface
@@ -118,6 +124,11 @@ func (o *entry_v1) normalize() Entry {
 		LinkState:  o.LinkState,
 		Comment:    o.Comment,
 	}
+
+	if o.Lacp != nil {
+		ans.LacpPortPriority = o.Lacp.LacpPortPriority
+	}
+
 	ans.raw = make(map[string]string)
 	switch {
 	case o.ModeL3 != nil:
@@ -166,6 +177,14 @@ func (o *entry_v1) normalize() Entry {
 		if o.ModeVwire.Lldp != nil {
 			ans.LldpEnabled = util.AsBool(o.ModeVwire.Lldp.LldpEnabled)
 			ans.LldpProfile = o.ModeVwire.Lldp.LldpProfile
+			if o.ModeVwire.Lldp.Ha != nil {
+				ans.LldpHaPassivePreNegotiation = util.AsBool(o.ModeVwire.Lldp.Ha.LldpHaPassivePreNegotiation)
+			}
+		}
+		if o.ModeVwire.Lacp != nil {
+			if o.ModeVwire.Lacp.Ha != nil {
+				ans.LacpHaPassivePreNegotiation = util.AsBool(o.ModeVwire.Lacp.Ha.LacpHaPassivePreNegotiation)
+			}
 		}
 		if o.ModeVwire.Subinterface != nil {
 			ans.raw["vwsub"] = util.CleanRawXml(o.ModeVwire.Subinterface.Text)
@@ -202,6 +221,7 @@ type entry_v1 struct {
 	LinkDuplex        string     `xml:"link-duplex,omitempty"`
 	LinkState         string     `xml:"link-state,omitempty"`
 	Comment           string     `xml:"comment"`
+	Lacp              *lacp      `xml:"lacp"`
 }
 
 type emptyMode struct{}
@@ -210,11 +230,25 @@ type otherMode struct {
 	NetflowProfile string       `xml:"netflow-profile,omitempty"`
 	Lldp           *omLldp      `xml:"lldp"`
 	Subinterface   *util.RawXml `xml:"units"`
+	Lacp           *omLacp      `xml:"lacp"`
 }
 
 type omLldp struct {
-	LldpEnabled string `xml:"enable"`
-	LldpProfile string `xml:"profile,omitempty"`
+	LldpEnabled string    `xml:"enable"`
+	LldpProfile string    `xml:"profile,omitempty"`
+	Ha          *omLldpHa `xml:"high-availability"`
+}
+
+type omLldpHa struct {
+	LldpHaPassivePreNegotiation string `xml:"passive-pre-negotiation"`
+}
+
+type omLacp struct {
+	Ha *omLacpHa `xml:"high-availability"`
+}
+
+type omLacpHa struct {
+	LacpHaPassivePreNegotiation string `xml:"passive-pre-negotiation"`
 }
 
 type l3Mode_v1 struct {
@@ -240,6 +274,10 @@ type dhcpSettings_v1 struct {
 	Enable             string `xml:"enable"`
 	CreateDefaultRoute string `xml:"create-default-route"`
 	Metric             int    `xml:"default-route-metric,omitempty"`
+}
+
+type lacp struct {
+	LacpPortPriority int `xml:"omitempty"`
 }
 
 type container_v2 struct {
@@ -272,6 +310,11 @@ func (o *entry_v2) normalize() Entry {
 		LinkState:  o.LinkState,
 		Comment:    o.Comment,
 	}
+
+	if o.Lacp != nil {
+		ans.LacpPortPriority = o.Lacp.LacpPortPriority
+	}
+
 	ans.raw = make(map[string]string)
 	switch {
 	case o.ModeL3 != nil:
@@ -330,6 +373,14 @@ func (o *entry_v2) normalize() Entry {
 		if o.ModeVwire.Lldp != nil {
 			ans.LldpEnabled = util.AsBool(o.ModeVwire.Lldp.LldpEnabled)
 			ans.LldpProfile = o.ModeVwire.Lldp.LldpProfile
+			if o.ModeVwire.Lldp.Ha != nil {
+				ans.LldpHaPassivePreNegotiation = util.AsBool(o.ModeVwire.Lldp.Ha.LldpHaPassivePreNegotiation)
+			}
+		}
+		if o.ModeVwire.Lacp != nil {
+			if o.ModeVwire.Lacp.Ha != nil {
+				ans.LacpHaPassivePreNegotiation = util.AsBool(o.ModeVwire.Lacp.Ha.LacpHaPassivePreNegotiation)
+			}
 		}
 		if o.ModeVwire.Subinterface != nil {
 			ans.raw["vwsub"] = util.CleanRawXml(o.ModeVwire.Subinterface.Text)
@@ -382,6 +433,11 @@ func (o *entry_v3) normalize() Entry {
 		LinkState:  o.LinkState,
 		Comment:    o.Comment,
 	}
+
+	if o.Lacp != nil {
+		ans.LacpPortPriority = o.Lacp.LacpPortPriority
+	}
+
 	ans.raw = make(map[string]string)
 	switch {
 	case o.ModeL3 != nil:
@@ -446,6 +502,14 @@ func (o *entry_v3) normalize() Entry {
 		if o.ModeVwire.Lldp != nil {
 			ans.LldpEnabled = util.AsBool(o.ModeVwire.Lldp.LldpEnabled)
 			ans.LldpProfile = o.ModeVwire.Lldp.LldpProfile
+			if o.ModeVwire.Lldp.Ha != nil {
+				ans.LldpHaPassivePreNegotiation = util.AsBool(o.ModeVwire.Lldp.Ha.LldpHaPassivePreNegotiation)
+			}
+		}
+		if o.ModeVwire.Lacp != nil {
+			if o.ModeVwire.Lacp.Ha != nil {
+				ans.LacpHaPassivePreNegotiation = util.AsBool(o.ModeVwire.Lacp.Ha.LacpHaPassivePreNegotiation)
+			}
 		}
 		if o.ModeVwire.Subinterface != nil {
 			ans.raw["vwsub"] = util.CleanRawXml(o.ModeVwire.Subinterface.Text)
@@ -498,6 +562,11 @@ func (o *entry_v4) normalize() Entry {
 		LinkState:  o.LinkState,
 		Comment:    o.Comment,
 	}
+
+	if o.Lacp != nil {
+		ans.LacpPortPriority = o.Lacp.LacpPortPriority
+	}
+
 	ans.raw = make(map[string]string)
 	switch {
 	case o.ModeL3 != nil:
@@ -572,6 +641,14 @@ func (o *entry_v4) normalize() Entry {
 		if o.ModeVwire.Lldp != nil {
 			ans.LldpEnabled = util.AsBool(o.ModeVwire.Lldp.LldpEnabled)
 			ans.LldpProfile = o.ModeVwire.Lldp.LldpProfile
+			if o.ModeVwire.Lldp.Ha != nil {
+				ans.LldpHaPassivePreNegotiation = util.AsBool(o.ModeVwire.Lldp.Ha.LldpHaPassivePreNegotiation)
+			}
+		}
+		if o.ModeVwire.Lacp != nil {
+			if o.ModeVwire.Lacp.Ha != nil {
+				ans.LacpHaPassivePreNegotiation = util.AsBool(o.ModeVwire.Lacp.Ha.LacpHaPassivePreNegotiation)
+			}
 		}
 		if o.ModeVwire.Subinterface != nil {
 			ans.raw["vwsub"] = util.CleanRawXml(o.ModeVwire.Subinterface.Text)
@@ -608,6 +685,7 @@ type entry_v2 struct {
 	LinkDuplex        string     `xml:"link-duplex,omitempty"`
 	LinkState         string     `xml:"link-state,omitempty"`
 	Comment           string     `xml:"comment"`
+	Lacp              *lacp      `xml:"lacp"`
 }
 
 type l3Mode_v2 struct {
@@ -641,6 +719,7 @@ type entry_v3 struct {
 	LinkDuplex        string     `xml:"link-duplex,omitempty"`
 	LinkState         string     `xml:"link-state,omitempty"`
 	Comment           string     `xml:"comment"`
+	Lacp              *lacp      `xml:"lacp"`
 }
 
 type l3Mode_v3 struct {
@@ -681,6 +760,7 @@ type entry_v4 struct {
 	LinkDuplex        string     `xml:"link-duplex,omitempty"`
 	LinkState         string     `xml:"link-state,omitempty"`
 	Comment           string     `xml:"comment"`
+	Lacp              *lacp      `xml:"lacp"`
 }
 
 type l3Mode_v4 struct {
@@ -723,6 +803,12 @@ func specify_v1(e Entry) interface{} {
 		LinkDuplex: e.LinkDuplex,
 		LinkState:  e.LinkState,
 		Comment:    e.Comment,
+	}
+
+	if e.LacpPortPriority > 0 {
+		ans.Lacp = &lacp{
+			LacpPortPriority: e.LacpPortPriority,
+		}
 	}
 
 	switch e.Mode {
@@ -783,10 +869,23 @@ func specify_v1(e Entry) interface{} {
 		ans.ModeVwire = &otherMode{
 			NetflowProfile: e.NetflowProfile,
 		}
-		if e.LldpEnabled || e.LldpProfile != "" {
+		if e.LldpEnabled || e.LldpProfile != "" || e.LldpHaPassivePreNegotiation {
 			ans.ModeVwire.Lldp = &omLldp{
 				LldpEnabled: util.YesNo(e.LldpEnabled),
 				LldpProfile: e.LldpProfile,
+			}
+
+			if e.LldpHaPassivePreNegotiation {
+				ans.ModeVwire.Lldp.Ha = &omLldpHa{
+					LldpHaPassivePreNegotiation: util.YesNo(e.LldpHaPassivePreNegotiation),
+				}
+			}
+		}
+		if e.LacpHaPassivePreNegotiation {
+			ans.ModeVwire.Lacp = &omLacp{
+				Ha: &omLacpHa{
+					LacpHaPassivePreNegotiation: util.YesNo(e.LacpHaPassivePreNegotiation),
+				},
 			}
 		}
 		if text := e.raw["vwsub"]; text != "" {
@@ -812,6 +911,12 @@ func specify_v2(e Entry) interface{} {
 		LinkDuplex: e.LinkDuplex,
 		LinkState:  e.LinkState,
 		Comment:    e.Comment,
+	}
+
+	if e.LacpPortPriority > 0 {
+		ans.Lacp = &lacp{
+			LacpPortPriority: e.LacpPortPriority,
+		}
 	}
 
 	switch e.Mode {
@@ -884,10 +989,23 @@ func specify_v2(e Entry) interface{} {
 		ans.ModeVwire = &otherMode{
 			NetflowProfile: e.NetflowProfile,
 		}
-		if e.LldpEnabled || e.LldpProfile != "" {
+		if e.LldpEnabled || e.LldpProfile != "" || e.LldpHaPassivePreNegotiation {
 			ans.ModeVwire.Lldp = &omLldp{
 				LldpEnabled: util.YesNo(e.LldpEnabled),
 				LldpProfile: e.LldpProfile,
+			}
+
+			if e.LldpHaPassivePreNegotiation {
+				ans.ModeVwire.Lldp.Ha = &omLldpHa{
+					LldpHaPassivePreNegotiation: util.YesNo(e.LldpHaPassivePreNegotiation),
+				}
+			}
+		}
+		if e.LacpHaPassivePreNegotiation {
+			ans.ModeVwire.Lacp = &omLacp{
+				Ha: &omLacpHa{
+					LacpHaPassivePreNegotiation: util.YesNo(e.LacpHaPassivePreNegotiation),
+				},
 			}
 		}
 		if text := e.raw["vwsub"]; text != "" {
@@ -913,6 +1031,12 @@ func specify_v3(e Entry) interface{} {
 		LinkDuplex: e.LinkDuplex,
 		LinkState:  e.LinkState,
 		Comment:    e.Comment,
+	}
+
+	if e.LacpPortPriority > 0 {
+		ans.Lacp = &lacp{
+			LacpPortPriority: e.LacpPortPriority,
+		}
 	}
 
 	switch e.Mode {
@@ -996,10 +1120,23 @@ func specify_v3(e Entry) interface{} {
 		ans.ModeVwire = &otherMode{
 			NetflowProfile: e.NetflowProfile,
 		}
-		if e.LldpEnabled || e.LldpProfile != "" {
+		if e.LldpEnabled || e.LldpProfile != "" || e.LldpHaPassivePreNegotiation {
 			ans.ModeVwire.Lldp = &omLldp{
 				LldpEnabled: util.YesNo(e.LldpEnabled),
 				LldpProfile: e.LldpProfile,
+			}
+
+			if e.LldpHaPassivePreNegotiation {
+				ans.ModeVwire.Lldp.Ha = &omLldpHa{
+					LldpHaPassivePreNegotiation: util.YesNo(e.LldpHaPassivePreNegotiation),
+				}
+			}
+		}
+		if e.LacpHaPassivePreNegotiation {
+			ans.ModeVwire.Lacp = &omLacp{
+				Ha: &omLacpHa{
+					LacpHaPassivePreNegotiation: util.YesNo(e.LacpHaPassivePreNegotiation),
+				},
 			}
 		}
 		if text := e.raw["vwsub"]; text != "" {
@@ -1025,6 +1162,12 @@ func specify_v4(e Entry) interface{} {
 		LinkDuplex: e.LinkDuplex,
 		LinkState:  e.LinkState,
 		Comment:    e.Comment,
+	}
+
+	if e.LacpPortPriority > 0 {
+		ans.Lacp = &lacp{
+			LacpPortPriority: e.LacpPortPriority,
+		}
 	}
 
 	switch e.Mode {
@@ -1121,10 +1264,23 @@ func specify_v4(e Entry) interface{} {
 		ans.ModeVwire = &otherMode{
 			NetflowProfile: e.NetflowProfile,
 		}
-		if e.LldpEnabled || e.LldpProfile != "" {
+		if e.LldpEnabled || e.LldpProfile != "" || e.LldpHaPassivePreNegotiation {
 			ans.ModeVwire.Lldp = &omLldp{
 				LldpEnabled: util.YesNo(e.LldpEnabled),
 				LldpProfile: e.LldpProfile,
+			}
+
+			if e.LldpHaPassivePreNegotiation {
+				ans.ModeVwire.Lldp.Ha = &omLldpHa{
+					LldpHaPassivePreNegotiation: util.YesNo(e.LldpHaPassivePreNegotiation),
+				}
+			}
+		}
+		if e.LacpHaPassivePreNegotiation {
+			ans.ModeVwire.Lacp = &omLacp{
+				Ha: &omLacpHa{
+					LacpHaPassivePreNegotiation: util.YesNo(e.LacpHaPassivePreNegotiation),
+				},
 			}
 		}
 		if text := e.raw["vwsub"]; text != "" {

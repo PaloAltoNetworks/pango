@@ -66,6 +66,27 @@ func getTests() []testCase {
 			raw: map[string]string{
 				"vwsub": "virtual wire subinterfaces",
 			},
+			Comment: "v1 vwire basic",
+		}},
+		{version.Number{5, 0, 0, ""}, "vsys6", "vsys6", []string{"ethernet1/6"}, Entry{
+			Name:                        "ethernet1/6",
+			Mode:                        ModeVirtualWire,
+			LldpEnabled:                 true,
+			LldpHaPassivePreNegotiation: true,
+			raw: map[string]string{
+				"vwsub": "virtual wire subinterfaces",
+			},
+			Comment: "v1 vwire with lldp",
+		}},
+		{version.Number{5, 0, 0, ""}, "vsys6", "vsys6", []string{"ethernet1/6"}, Entry{
+			Name:                        "ethernet1/6",
+			Mode:                        ModeVirtualWire,
+			LacpHaPassivePreNegotiation: true,
+			LacpPortPriority:            42,
+			raw: map[string]string{
+				"vwsub": "virtual wire subinterfaces",
+			},
+			Comment: "v1 vwire with lacp",
 		}},
 		{version.Number{5, 0, 0, ""}, "vsys6", "vsys6", []string{"ethernet1/7"}, Entry{
 			Name: "ethernet1/7",
@@ -132,6 +153,26 @@ func getTests() []testCase {
 			raw: map[string]string{
 				"vwsub": "virtual wire subinterfaces",
 			},
+		}},
+		{version.Number{8, 0, 0, ""}, "vsys6", "vsys6", []string{"ethernet1/6"}, Entry{
+			Name:                        "ethernet1/6",
+			Mode:                        ModeVirtualWire,
+			LldpEnabled:                 true,
+			LldpHaPassivePreNegotiation: true,
+			raw: map[string]string{
+				"vwsub": "virtual wire subinterfaces",
+			},
+			Comment: "v1 vwire with lldp",
+		}},
+		{version.Number{8, 0, 0, ""}, "vsys6", "vsys6", []string{"ethernet1/6"}, Entry{
+			Name:                        "ethernet1/6",
+			Mode:                        ModeVirtualWire,
+			LacpHaPassivePreNegotiation: true,
+			LacpPortPriority:            42,
+			raw: map[string]string{
+				"vwsub": "virtual wire subinterfaces",
+			},
+			Comment: "v1 vwire with lacp",
 		}},
 		{version.Number{8, 0, 0, ""}, "vsys6", "vsys6", []string{"ethernet1/7"}, Entry{
 			Name: "ethernet1/7",
@@ -201,6 +242,26 @@ func getTests() []testCase {
 			raw: map[string]string{
 				"vwsub": "virtual wire subinterfaces",
 			},
+		}},
+		{version.Number{8, 1, 0, ""}, "vsys6", "vsys6", []string{"ethernet1/6"}, Entry{
+			Name:                        "ethernet1/6",
+			Mode:                        ModeVirtualWire,
+			LldpEnabled:                 true,
+			LldpHaPassivePreNegotiation: true,
+			raw: map[string]string{
+				"vwsub": "virtual wire subinterfaces",
+			},
+			Comment: "v1 vwire with lldp",
+		}},
+		{version.Number{8, 1, 0, ""}, "vsys6", "vsys6", []string{"ethernet1/6"}, Entry{
+			Name:                        "ethernet1/6",
+			Mode:                        ModeVirtualWire,
+			LacpHaPassivePreNegotiation: true,
+			LacpPortPriority:            42,
+			raw: map[string]string{
+				"vwsub": "virtual wire subinterfaces",
+			},
+			Comment: "v1 vwire with lacp",
 		}},
 		{version.Number{8, 1, 0, ""}, "vsys3", "vsys3", []string{"ethernet1/3"}, Entry{
 			Name:    "ethernet1/3",
@@ -279,6 +340,26 @@ func getTests() []testCase {
 			raw: map[string]string{
 				"vwsub": "virtual wire subinterfaces",
 			},
+		}},
+		{version.Number{9, 0, 0, ""}, "vsys6", "vsys6", []string{"ethernet1/6"}, Entry{
+			Name:                        "ethernet1/6",
+			Mode:                        ModeVirtualWire,
+			LldpEnabled:                 true,
+			LldpHaPassivePreNegotiation: true,
+			raw: map[string]string{
+				"vwsub": "virtual wire subinterfaces",
+			},
+			Comment: "v1 vwire with lldp",
+		}},
+		{version.Number{9, 0, 0, ""}, "vsys6", "vsys6", []string{"ethernet1/6"}, Entry{
+			Name:                        "ethernet1/6",
+			Mode:                        ModeVirtualWire,
+			LacpHaPassivePreNegotiation: true,
+			LacpPortPriority:            42,
+			raw: map[string]string{
+				"vwsub": "virtual wire subinterfaces",
+			},
+			Comment: "v1 vwire with lacp",
 		}},
 		{version.Number{9, 0, 0, ""}, "vsys6", "vsys6", []string{"ethernet1/7"}, Entry{
 			Name: "ethernet1/7",
