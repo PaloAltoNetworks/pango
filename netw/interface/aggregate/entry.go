@@ -10,25 +10,37 @@ import (
 // Entry is a normalized, version independent representation of an aggregate
 // ethernet interface.
 type Entry struct {
-	Name                       string
-	Mode                       string
-	NetflowProfile             string
-	Mtu                        int
-	AdjustTcpMss               bool
-	Ipv4MssAdjust              int
-	Ipv6MssAdjust              int
-	EnableUntaggedSubinterface bool
-	StaticIps                  []string // ordered
-	Ipv6Enabled                bool
-	Ipv6InterfaceId            string
-	ManagementProfile          string
-	EnableDhcp                 bool
-	CreateDhcpDefaultRoute     bool
-	DhcpDefaultRouteMetric     int
-	Comment                    string
-	DecryptForward             bool   // 8.1+
-	DhcpSendHostnameEnable     bool   // 9.0+
-	DhcpSendHostnameValue      string // 9.0+
+	Name                        string
+	Mode                        string
+	NetflowProfile              string
+	Mtu                         int
+	AdjustTcpMss                bool
+	Ipv4MssAdjust               int
+	Ipv6MssAdjust               int
+	EnableUntaggedSubinterface  bool
+	StaticIps                   []string // ordered
+	Ipv6Enabled                 bool
+	Ipv6InterfaceId             string
+	ManagementProfile           string
+	EnableDhcp                  bool
+	CreateDhcpDefaultRoute      bool
+	DhcpDefaultRouteMetric      int
+	LacpEnable                  bool   // ha, l2, l3
+	LacpFastFailover            bool   // ha, l2, l3
+	LacpMode                    string // ha, l2, l3
+	LacpTransmissionRate        string // ha, l2, l3
+	LacpSystemPriority          int    // ha, l2, l3
+	LacpMaxPorts                int    // ha, l2, l3
+	LacpHaPassivePreNegotiation bool   // l2, l3
+	LacpHaEnableSameSystemMac   bool   // l2, l3
+	LacpHaSameSystemMacAddress  string // l2, l3
+	LldpEnable                  bool
+	LldpProfile                 string
+	LldpHaPassivePreNegotiation bool
+	Comment                     string
+	DecryptForward              bool   // 8.1+
+	DhcpSendHostnameEnable      bool   // 9.0+
+	DhcpSendHostnameValue       string // 9.0+
 
 	raw map[string]string
 }
@@ -51,6 +63,18 @@ func (o *Entry) Copy(s Entry) {
 	o.CreateDhcpDefaultRoute = s.CreateDhcpDefaultRoute
 	o.DhcpDefaultRouteMetric = s.DhcpDefaultRouteMetric
 	o.Comment = s.Comment
+	o.LacpEnable = s.LacpEnable
+	o.LacpFastFailover = s.LacpFastFailover
+	o.LacpMode = s.LacpMode
+	o.LacpTransmissionRate = s.LacpTransmissionRate
+	o.LacpSystemPriority = s.LacpSystemPriority
+	o.LacpMaxPorts = s.LacpMaxPorts
+	o.LacpHaPassivePreNegotiation = s.LacpHaPassivePreNegotiation
+	o.LacpHaEnableSameSystemMac = s.LacpHaEnableSameSystemMac
+	o.LacpHaSameSystemMacAddress = s.LacpHaSameSystemMacAddress
+	o.LldpEnable = s.LldpEnable
+	o.LldpProfile = s.LldpProfile
+	o.LldpHaPassivePreNegotiation = s.LldpHaPassivePreNegotiation
 	o.DecryptForward = s.DecryptForward
 	o.DhcpSendHostnameEnable = s.DhcpSendHostnameEnable
 	o.DhcpSendHostnameValue = s.DhcpSendHostnameValue
@@ -105,17 +129,60 @@ func (o *entry_v1) normalize() Entry {
 	switch {
 	case o.Ha != nil:
 		ans.Mode = ModeHa
+		if o.Ha.Lacp != nil {
+			ans.LacpEnable = util.AsBool(o.Ha.Lacp.LacpEnable)
+			ans.LacpFastFailover = util.AsBool(o.Ha.Lacp.LacpFastFailover)
+			ans.LacpMode = o.Ha.Lacp.LacpMode
+			ans.LacpTransmissionRate = o.Ha.Lacp.LacpTransmissionRate
+			ans.LacpSystemPriority = o.Ha.Lacp.LacpSystemPriority
+			ans.LacpMaxPorts = o.Ha.Lacp.LacpMaxPorts
+		}
 	case o.DecryptMirror != nil:
 		ans.Mode = ModeDecryptMirror
 	case o.VirtualWire != nil:
 		ans.Mode = ModeVirtualWire
 		ans.NetflowProfile = o.VirtualWire.NetflowProfile
+
+		if o.VirtualWire.Lldp != nil {
+			ans.LldpEnable = util.AsBool(o.VirtualWire.Lldp.LldpEnable)
+			ans.LldpProfile = o.VirtualWire.Lldp.LldpProfile
+			if o.VirtualWire.Lldp.Ha != nil {
+				ans.LldpHaPassivePreNegotiation = util.AsBool(o.VirtualWire.Lldp.Ha.LldpHaPassivePreNegotiation)
+			}
+		}
+
 		if o.VirtualWire.Subinterfaces != nil {
 			ans.raw["vwsi"] = util.CleanRawXml(o.VirtualWire.Subinterfaces.Text)
 		}
 	case o.L2 != nil:
 		ans.Mode = ModeLayer2
 		ans.NetflowProfile = o.L2.NetflowProfile
+
+		if o.L2.Lacp != nil {
+			ans.LacpEnable = util.AsBool(o.L2.Lacp.LacpEnable)
+			ans.LacpFastFailover = util.AsBool(o.L2.Lacp.LacpFastFailover)
+			ans.LacpMode = o.L2.Lacp.LacpMode
+			ans.LacpTransmissionRate = o.L2.Lacp.LacpTransmissionRate
+			ans.LacpSystemPriority = o.L2.Lacp.LacpSystemPriority
+			ans.LacpMaxPorts = o.L2.Lacp.LacpMaxPorts
+
+			if o.L2.Lacp.Ha != nil {
+				ans.LacpHaPassivePreNegotiation = util.AsBool(o.L2.Lacp.Ha.LacpHaPassivePreNegotiation)
+				if o.L2.Lacp.Ha.Mac != nil {
+					ans.LacpHaEnableSameSystemMac = util.AsBool(o.L2.Lacp.Ha.Mac.LacpHaEnableSameSystemMac)
+					ans.LacpHaSameSystemMacAddress = o.L2.Lacp.Ha.Mac.LacpHaSameSystemMacAddress
+				}
+			}
+		}
+
+		if o.L2.Lldp != nil {
+			ans.LldpEnable = util.AsBool(o.L2.Lldp.LldpEnable)
+			ans.LldpProfile = o.L2.Lldp.LldpProfile
+			if o.L2.Lldp.Ha != nil {
+				ans.LldpHaPassivePreNegotiation = util.AsBool(o.L2.Lldp.Ha.LldpHaPassivePreNegotiation)
+			}
+		}
+
 		if o.L2.Subinterfaces != nil {
 			ans.raw["l2si"] = util.CleanRawXml(o.L2.Subinterfaces.Text)
 		}
@@ -149,6 +216,31 @@ func (o *entry_v1) normalize() Entry {
 			ans.EnableDhcp = util.AsBool(o.L3.Dhcp.EnableDhcp)
 			ans.CreateDhcpDefaultRoute = util.AsBool(o.L3.Dhcp.CreateDhcpDefaultRoute)
 			ans.DhcpDefaultRouteMetric = o.L3.Dhcp.DhcpDefaultRouteMetric
+		}
+
+		if o.L3.Lacp != nil {
+			ans.LacpEnable = util.AsBool(o.L3.Lacp.LacpEnable)
+			ans.LacpFastFailover = util.AsBool(o.L3.Lacp.LacpFastFailover)
+			ans.LacpMode = o.L3.Lacp.LacpMode
+			ans.LacpTransmissionRate = o.L3.Lacp.LacpTransmissionRate
+			ans.LacpSystemPriority = o.L3.Lacp.LacpSystemPriority
+			ans.LacpMaxPorts = o.L3.Lacp.LacpMaxPorts
+
+			if o.L3.Lacp.Ha != nil {
+				ans.LacpHaPassivePreNegotiation = util.AsBool(o.L3.Lacp.Ha.LacpHaPassivePreNegotiation)
+				if o.L3.Lacp.Ha.Mac != nil {
+					ans.LacpHaEnableSameSystemMac = util.AsBool(o.L3.Lacp.Ha.Mac.LacpHaEnableSameSystemMac)
+					ans.LacpHaSameSystemMacAddress = o.L3.Lacp.Ha.Mac.LacpHaSameSystemMacAddress
+				}
+			}
+		}
+
+		if o.L3.Lldp != nil {
+			ans.LldpEnable = util.AsBool(o.L3.Lldp.LldpEnable)
+			ans.LldpProfile = o.L3.Lldp.LldpProfile
+			if o.L3.Lldp.Ha != nil {
+				ans.LldpHaPassivePreNegotiation = util.AsBool(o.L3.Lldp.Ha.LldpHaPassivePreNegotiation)
+			}
 		}
 
 		if o.L3.Arp != nil {
@@ -201,17 +293,60 @@ func (o *entry_v2) normalize() Entry {
 	switch {
 	case o.Ha != nil:
 		ans.Mode = ModeHa
+		if o.Ha.Lacp != nil {
+			ans.LacpEnable = util.AsBool(o.Ha.Lacp.LacpEnable)
+			ans.LacpFastFailover = util.AsBool(o.Ha.Lacp.LacpFastFailover)
+			ans.LacpMode = o.Ha.Lacp.LacpMode
+			ans.LacpTransmissionRate = o.Ha.Lacp.LacpTransmissionRate
+			ans.LacpSystemPriority = o.Ha.Lacp.LacpSystemPriority
+			ans.LacpMaxPorts = o.Ha.Lacp.LacpMaxPorts
+		}
 	case o.DecryptMirror != nil:
 		ans.Mode = ModeDecryptMirror
 	case o.VirtualWire != nil:
 		ans.Mode = ModeVirtualWire
 		ans.NetflowProfile = o.VirtualWire.NetflowProfile
+
+		if o.VirtualWire.Lldp != nil {
+			ans.LldpEnable = util.AsBool(o.VirtualWire.Lldp.LldpEnable)
+			ans.LldpProfile = o.VirtualWire.Lldp.LldpProfile
+			if o.VirtualWire.Lldp.Ha != nil {
+				ans.LldpHaPassivePreNegotiation = util.AsBool(o.VirtualWire.Lldp.Ha.LldpHaPassivePreNegotiation)
+			}
+		}
+
 		if o.VirtualWire.Subinterfaces != nil {
 			ans.raw["vwsi"] = util.CleanRawXml(o.VirtualWire.Subinterfaces.Text)
 		}
 	case o.L2 != nil:
 		ans.Mode = ModeLayer2
 		ans.NetflowProfile = o.L2.NetflowProfile
+
+		if o.L2.Lacp != nil {
+			ans.LacpEnable = util.AsBool(o.L2.Lacp.LacpEnable)
+			ans.LacpFastFailover = util.AsBool(o.L2.Lacp.LacpFastFailover)
+			ans.LacpMode = o.L2.Lacp.LacpMode
+			ans.LacpTransmissionRate = o.L2.Lacp.LacpTransmissionRate
+			ans.LacpSystemPriority = o.L2.Lacp.LacpSystemPriority
+			ans.LacpMaxPorts = o.L2.Lacp.LacpMaxPorts
+
+			if o.L2.Lacp.Ha != nil {
+				ans.LacpHaPassivePreNegotiation = util.AsBool(o.L2.Lacp.Ha.LacpHaPassivePreNegotiation)
+				if o.L2.Lacp.Ha.Mac != nil {
+					ans.LacpHaEnableSameSystemMac = util.AsBool(o.L2.Lacp.Ha.Mac.LacpHaEnableSameSystemMac)
+					ans.LacpHaSameSystemMacAddress = o.L2.Lacp.Ha.Mac.LacpHaSameSystemMacAddress
+				}
+			}
+		}
+
+		if o.L2.Lldp != nil {
+			ans.LldpEnable = util.AsBool(o.L2.Lldp.LldpEnable)
+			ans.LldpProfile = o.L2.Lldp.LldpProfile
+			if o.L2.Lldp.Ha != nil {
+				ans.LldpHaPassivePreNegotiation = util.AsBool(o.L2.Lldp.Ha.LldpHaPassivePreNegotiation)
+			}
+		}
+
 		if o.L2.Subinterfaces != nil {
 			ans.raw["l2si"] = util.CleanRawXml(o.L2.Subinterfaces.Text)
 		}
@@ -246,6 +381,31 @@ func (o *entry_v2) normalize() Entry {
 			ans.EnableDhcp = util.AsBool(o.L3.Dhcp.EnableDhcp)
 			ans.CreateDhcpDefaultRoute = util.AsBool(o.L3.Dhcp.CreateDhcpDefaultRoute)
 			ans.DhcpDefaultRouteMetric = o.L3.Dhcp.DhcpDefaultRouteMetric
+		}
+
+		if o.L3.Lacp != nil {
+			ans.LacpEnable = util.AsBool(o.L3.Lacp.LacpEnable)
+			ans.LacpFastFailover = util.AsBool(o.L3.Lacp.LacpFastFailover)
+			ans.LacpMode = o.L3.Lacp.LacpMode
+			ans.LacpTransmissionRate = o.L3.Lacp.LacpTransmissionRate
+			ans.LacpSystemPriority = o.L3.Lacp.LacpSystemPriority
+			ans.LacpMaxPorts = o.L3.Lacp.LacpMaxPorts
+
+			if o.L3.Lacp.Ha != nil {
+				ans.LacpHaPassivePreNegotiation = util.AsBool(o.L3.Lacp.Ha.LacpHaPassivePreNegotiation)
+				if o.L3.Lacp.Ha.Mac != nil {
+					ans.LacpHaEnableSameSystemMac = util.AsBool(o.L3.Lacp.Ha.Mac.LacpHaEnableSameSystemMac)
+					ans.LacpHaSameSystemMacAddress = o.L3.Lacp.Ha.Mac.LacpHaSameSystemMacAddress
+				}
+			}
+		}
+
+		if o.L3.Lldp != nil {
+			ans.LldpEnable = util.AsBool(o.L3.Lldp.LldpEnable)
+			ans.LldpProfile = o.L3.Lldp.LldpProfile
+			if o.L3.Lldp.Ha != nil {
+				ans.LldpHaPassivePreNegotiation = util.AsBool(o.L3.Lldp.Ha.LldpHaPassivePreNegotiation)
+			}
 		}
 
 		if o.L3.Arp != nil {
@@ -298,17 +458,60 @@ func (o *entry_v3) normalize() Entry {
 	switch {
 	case o.Ha != nil:
 		ans.Mode = ModeHa
+		if o.Ha.Lacp != nil {
+			ans.LacpEnable = util.AsBool(o.Ha.Lacp.LacpEnable)
+			ans.LacpFastFailover = util.AsBool(o.Ha.Lacp.LacpFastFailover)
+			ans.LacpMode = o.Ha.Lacp.LacpMode
+			ans.LacpTransmissionRate = o.Ha.Lacp.LacpTransmissionRate
+			ans.LacpSystemPriority = o.Ha.Lacp.LacpSystemPriority
+			ans.LacpMaxPorts = o.Ha.Lacp.LacpMaxPorts
+		}
 	case o.DecryptMirror != nil:
 		ans.Mode = ModeDecryptMirror
 	case o.VirtualWire != nil:
 		ans.Mode = ModeVirtualWire
 		ans.NetflowProfile = o.VirtualWire.NetflowProfile
+
+		if o.VirtualWire.Lldp != nil {
+			ans.LldpEnable = util.AsBool(o.VirtualWire.Lldp.LldpEnable)
+			ans.LldpProfile = o.VirtualWire.Lldp.LldpProfile
+			if o.VirtualWire.Lldp.Ha != nil {
+				ans.LldpHaPassivePreNegotiation = util.AsBool(o.VirtualWire.Lldp.Ha.LldpHaPassivePreNegotiation)
+			}
+		}
+
 		if o.VirtualWire.Subinterfaces != nil {
 			ans.raw["vwsi"] = util.CleanRawXml(o.VirtualWire.Subinterfaces.Text)
 		}
 	case o.L2 != nil:
 		ans.Mode = ModeLayer2
 		ans.NetflowProfile = o.L2.NetflowProfile
+
+		if o.L2.Lacp != nil {
+			ans.LacpEnable = util.AsBool(o.L2.Lacp.LacpEnable)
+			ans.LacpFastFailover = util.AsBool(o.L2.Lacp.LacpFastFailover)
+			ans.LacpMode = o.L2.Lacp.LacpMode
+			ans.LacpTransmissionRate = o.L2.Lacp.LacpTransmissionRate
+			ans.LacpSystemPriority = o.L2.Lacp.LacpSystemPriority
+			ans.LacpMaxPorts = o.L2.Lacp.LacpMaxPorts
+
+			if o.L2.Lacp.Ha != nil {
+				ans.LacpHaPassivePreNegotiation = util.AsBool(o.L2.Lacp.Ha.LacpHaPassivePreNegotiation)
+				if o.L2.Lacp.Ha.Mac != nil {
+					ans.LacpHaEnableSameSystemMac = util.AsBool(o.L2.Lacp.Ha.Mac.LacpHaEnableSameSystemMac)
+					ans.LacpHaSameSystemMacAddress = o.L2.Lacp.Ha.Mac.LacpHaSameSystemMacAddress
+				}
+			}
+		}
+
+		if o.L2.Lldp != nil {
+			ans.LldpEnable = util.AsBool(o.L2.Lldp.LldpEnable)
+			ans.LldpProfile = o.L2.Lldp.LldpProfile
+			if o.L2.Lldp.Ha != nil {
+				ans.LldpHaPassivePreNegotiation = util.AsBool(o.L2.Lldp.Ha.LldpHaPassivePreNegotiation)
+			}
+		}
+
 		if o.L2.Subinterfaces != nil {
 			ans.raw["l2si"] = util.CleanRawXml(o.L2.Subinterfaces.Text)
 		}
@@ -350,6 +553,31 @@ func (o *entry_v3) normalize() Entry {
 			}
 		}
 
+		if o.L3.Lacp != nil {
+			ans.LacpEnable = util.AsBool(o.L3.Lacp.LacpEnable)
+			ans.LacpFastFailover = util.AsBool(o.L3.Lacp.LacpFastFailover)
+			ans.LacpMode = o.L3.Lacp.LacpMode
+			ans.LacpTransmissionRate = o.L3.Lacp.LacpTransmissionRate
+			ans.LacpSystemPriority = o.L3.Lacp.LacpSystemPriority
+			ans.LacpMaxPorts = o.L3.Lacp.LacpMaxPorts
+
+			if o.L3.Lacp.Ha != nil {
+				ans.LacpHaPassivePreNegotiation = util.AsBool(o.L3.Lacp.Ha.LacpHaPassivePreNegotiation)
+				if o.L3.Lacp.Ha.Mac != nil {
+					ans.LacpHaEnableSameSystemMac = util.AsBool(o.L3.Lacp.Ha.Mac.LacpHaEnableSameSystemMac)
+					ans.LacpHaSameSystemMacAddress = o.L3.Lacp.Ha.Mac.LacpHaSameSystemMacAddress
+				}
+			}
+		}
+
+		if o.L3.Lldp != nil {
+			ans.LldpEnable = util.AsBool(o.L3.Lldp.LldpEnable)
+			ans.LldpProfile = o.L3.Lldp.LldpProfile
+			if o.L3.Lldp.Ha != nil {
+				ans.LldpHaPassivePreNegotiation = util.AsBool(o.L3.Lldp.Ha.LldpHaPassivePreNegotiation)
+			}
+		}
+
 		if o.L3.Arp != nil {
 			ans.raw["arp"] = util.CleanRawXml(o.L3.Arp.Text)
 		}
@@ -371,7 +599,7 @@ func (o *entry_v3) normalize() Entry {
 type entry_v1 struct {
 	XMLName       xml.Name   `xml:"entry"`
 	Name          string     `xml:"name,attr"`
-	Ha            *string    `xml:"ha"`
+	Ha            *ha        `xml:"ha"`
 	DecryptMirror *string    `xml:"decrypt-mirror"`
 	VirtualWire   *layer2    `xml:"virtual-wire"`
 	L2            *layer2    `xml:"layer2"`
@@ -379,15 +607,62 @@ type entry_v1 struct {
 	Comment       string     `xml:"comment,omitempty"`
 }
 
+type ha struct {
+	Lacp *lacpNoHa `xml:"lacp"`
+}
+
+type lacpNoHa struct {
+	LacpEnable           string `xml:"enable"`
+	LacpFastFailover     string `xml:"fast-failover"`
+	LacpMode             string `xml:"mode,omitempty"`
+	LacpTransmissionRate string `xml:"transmission-rate,omitempty"`
+	LacpSystemPriority   int    `xml:"system-priority,omitempty"`
+	LacpMaxPorts         int    `xml:"max-ports,omitempty"`
+}
+
 type layer2 struct {
 	NetflowProfile string       `xml:"netflow-profile,omitempty"`
 	Subinterfaces  *util.RawXml `xml:"units"`
+	Lacp           *lacpWithHa  `xml:"lacp"`
+	Lldp           *lldp        `xml:"lldp"`
+}
+
+type lacpWithHa struct {
+	LacpEnable           string  `xml:"enable"`
+	LacpFastFailover     string  `xml:"fast-failover"`
+	LacpMode             string  `xml:"mode,omitempty"`
+	LacpTransmissionRate string  `xml:"transmission-rate,omitempty"`
+	LacpSystemPriority   int     `xml:"system-priority,omitempty"`
+	LacpMaxPorts         int     `xml:"max-ports,omitempty"`
+	Ha                   *lacpHa `xml:"high-availability"`
+}
+
+type lacpHa struct {
+	Mac                         *lacpHaMac `xml:"use-same-system-mac"`
+	LacpHaPassivePreNegotiation string     `xml:"passive-pre-negotiation"`
+}
+
+type lacpHaMac struct {
+	LacpHaEnableSameSystemMac  string `xml:"enable"`
+	LacpHaSameSystemMacAddress string `xml:"mac-address,omitempty"`
+}
+
+type lldp struct {
+	LldpEnable  string  `xml:"enable"`
+	LldpProfile string  `xml:"profile,omitempty"`
+	Ha          *lldpHa `xml:"high-availability"`
+}
+
+type lldpHa struct {
+	LldpHaPassivePreNegotiation string `xml:"passive-pre-negotiation"`
 }
 
 type layer3_v1 struct {
 	Mtu                        int              `xml:"mtu,omitempty"`
 	Mss                        *mss             `xml:"adjust-tcp-mss"`
 	EnableUntaggedSubinterface string           `xml:"untagged-sub-interface"`
+	Lacp                       *lacpWithHa      `xml:"lacp"`
+	Lldp                       *lldp            `xml:"lldp"`
 	StaticIps                  *util.EntryType  `xml:"ip"`
 	Ipv6                       *ipv6            `xml:"ipv6"`
 	Arp                        *util.RawXml     `xml:"arp"`
@@ -425,8 +700,17 @@ func specify_v1(e Entry) interface{} {
 
 	switch e.Mode {
 	case ModeHa:
-		s := ""
-		ans.Ha = &s
+		ans.Ha = &ha{}
+		if e.LacpEnable || e.LacpFastFailover || e.LacpMode != "" || e.LacpTransmissionRate != "" || e.LacpSystemPriority != 0 || e.LacpMaxPorts != 0 {
+			ans.Ha.Lacp = &lacpNoHa{
+				LacpEnable:           util.YesNo(e.LacpEnable),
+				LacpFastFailover:     util.YesNo(e.LacpFastFailover),
+				LacpMode:             e.LacpMode,
+				LacpTransmissionRate: e.LacpTransmissionRate,
+				LacpSystemPriority:   e.LacpSystemPriority,
+				LacpMaxPorts:         e.LacpMaxPorts,
+			}
+		}
 	case ModeDecryptMirror:
 		s := ""
 		ans.DecryptMirror = &s
@@ -435,12 +719,60 @@ func specify_v1(e Entry) interface{} {
 			NetflowProfile: e.NetflowProfile,
 		}
 
+		if e.LldpEnable || e.LldpProfile != "" || e.LldpHaPassivePreNegotiation {
+			ans.VirtualWire.Lldp = &lldp{
+				LldpEnable:  util.YesNo(e.LldpEnable),
+				LldpProfile: e.LldpProfile,
+			}
+			if e.LldpHaPassivePreNegotiation {
+				ans.VirtualWire.Lldp.Ha = &lldpHa{
+					LldpHaPassivePreNegotiation: util.YesNo(e.LldpHaPassivePreNegotiation),
+				}
+			}
+		}
+
 		if text := e.raw["vwsi"]; text != "" {
 			ans.VirtualWire.Subinterfaces = &util.RawXml{text}
 		}
 	case ModeLayer2:
 		ans.L2 = &layer2{
 			NetflowProfile: e.NetflowProfile,
+		}
+
+		if e.LacpEnable || e.LacpFastFailover || e.LacpMode != "" || e.LacpTransmissionRate != "" || e.LacpSystemPriority != 0 || e.LacpMaxPorts != 0 || e.LacpHaPassivePreNegotiation || e.LacpHaEnableSameSystemMac || e.LacpHaSameSystemMacAddress != "" {
+			ans.L2.Lacp = &lacpWithHa{
+				LacpEnable:           util.YesNo(e.LacpEnable),
+				LacpFastFailover:     util.YesNo(e.LacpFastFailover),
+				LacpMode:             e.LacpMode,
+				LacpTransmissionRate: e.LacpTransmissionRate,
+				LacpSystemPriority:   e.LacpSystemPriority,
+				LacpMaxPorts:         e.LacpMaxPorts,
+			}
+
+			if e.LacpHaPassivePreNegotiation || e.LacpHaEnableSameSystemMac || e.LacpHaSameSystemMacAddress != "" {
+				ans.L2.Lacp.Ha = &lacpHa{
+					LacpHaPassivePreNegotiation: util.YesNo(e.LacpHaPassivePreNegotiation),
+				}
+
+				if e.LacpHaEnableSameSystemMac || e.LacpHaSameSystemMacAddress != "" {
+					ans.L2.Lacp.Ha.Mac = &lacpHaMac{
+						LacpHaEnableSameSystemMac:  util.YesNo(e.LacpHaEnableSameSystemMac),
+						LacpHaSameSystemMacAddress: e.LacpHaSameSystemMacAddress,
+					}
+				}
+			}
+		}
+
+		if e.LldpEnable || e.LldpProfile != "" || e.LldpHaPassivePreNegotiation {
+			ans.L2.Lldp = &lldp{
+				LldpEnable:  util.YesNo(e.LldpEnable),
+				LldpProfile: e.LldpProfile,
+			}
+			if e.LldpHaPassivePreNegotiation {
+				ans.L2.Lldp.Ha = &lldpHa{
+					LldpHaPassivePreNegotiation: util.YesNo(e.LldpHaPassivePreNegotiation),
+				}
+			}
 		}
 
 		if text := e.raw["l2si"]; text != "" {
@@ -460,6 +792,42 @@ func specify_v1(e Entry) interface{} {
 				AdjustTcpMss:  util.YesNo(e.AdjustTcpMss),
 				Ipv4MssAdjust: e.Ipv4MssAdjust,
 				Ipv6MssAdjust: e.Ipv6MssAdjust,
+			}
+		}
+
+		if e.LacpEnable || e.LacpFastFailover || e.LacpMode != "" || e.LacpTransmissionRate != "" || e.LacpSystemPriority != 0 || e.LacpMaxPorts != 0 || e.LacpHaPassivePreNegotiation || e.LacpHaEnableSameSystemMac || e.LacpHaSameSystemMacAddress != "" {
+			ans.L3.Lacp = &lacpWithHa{
+				LacpEnable:           util.YesNo(e.LacpEnable),
+				LacpFastFailover:     util.YesNo(e.LacpFastFailover),
+				LacpMode:             e.LacpMode,
+				LacpTransmissionRate: e.LacpTransmissionRate,
+				LacpSystemPriority:   e.LacpSystemPriority,
+				LacpMaxPorts:         e.LacpMaxPorts,
+			}
+
+			if e.LacpHaPassivePreNegotiation || e.LacpHaEnableSameSystemMac || e.LacpHaSameSystemMacAddress != "" {
+				ans.L3.Lacp.Ha = &lacpHa{
+					LacpHaPassivePreNegotiation: util.YesNo(e.LacpHaPassivePreNegotiation),
+				}
+
+				if e.LacpHaEnableSameSystemMac || e.LacpHaSameSystemMacAddress != "" {
+					ans.L3.Lacp.Ha.Mac = &lacpHaMac{
+						LacpHaEnableSameSystemMac:  util.YesNo(e.LacpHaEnableSameSystemMac),
+						LacpHaSameSystemMacAddress: e.LacpHaSameSystemMacAddress,
+					}
+				}
+			}
+		}
+
+		if e.LldpEnable || e.LldpProfile != "" || e.LldpHaPassivePreNegotiation {
+			ans.L3.Lldp = &lldp{
+				LldpEnable:  util.YesNo(e.LldpEnable),
+				LldpProfile: e.LldpProfile,
+			}
+			if e.LldpHaPassivePreNegotiation {
+				ans.L3.Lldp.Ha = &lldpHa{
+					LldpHaPassivePreNegotiation: util.YesNo(e.LldpHaPassivePreNegotiation),
+				}
 			}
 		}
 
@@ -504,7 +872,7 @@ func specify_v1(e Entry) interface{} {
 type entry_v2 struct {
 	XMLName       xml.Name   `xml:"entry"`
 	Name          string     `xml:"name,attr"`
-	Ha            *string    `xml:"ha"`
+	Ha            *ha        `xml:"ha"`
 	DecryptMirror *string    `xml:"decrypt-mirror"`
 	VirtualWire   *layer2    `xml:"virtual-wire"`
 	L2            *layer2    `xml:"layer2"`
@@ -517,6 +885,8 @@ type layer3_v2 struct {
 	Mss                        *mss             `xml:"adjust-tcp-mss"`
 	EnableUntaggedSubinterface string           `xml:"untagged-sub-interface"`
 	DecryptForward             string           `xml:"decrypt-forward,omitempty"`
+	Lacp                       *lacpWithHa      `xml:"lacp"`
+	Lldp                       *lldp            `xml:"lldp"`
 	StaticIps                  *util.EntryType  `xml:"ip"`
 	Ipv6                       *ipv6            `xml:"ipv6"`
 	Arp                        *util.RawXml     `xml:"arp"`
@@ -535,8 +905,17 @@ func specify_v2(e Entry) interface{} {
 
 	switch e.Mode {
 	case ModeHa:
-		s := ""
-		ans.Ha = &s
+		ans.Ha = &ha{}
+		if e.LacpEnable || e.LacpFastFailover || e.LacpMode != "" || e.LacpTransmissionRate != "" || e.LacpSystemPriority != 0 || e.LacpMaxPorts != 0 {
+			ans.Ha.Lacp = &lacpNoHa{
+				LacpEnable:           util.YesNo(e.LacpEnable),
+				LacpFastFailover:     util.YesNo(e.LacpFastFailover),
+				LacpMode:             e.LacpMode,
+				LacpTransmissionRate: e.LacpTransmissionRate,
+				LacpSystemPriority:   e.LacpSystemPriority,
+				LacpMaxPorts:         e.LacpMaxPorts,
+			}
+		}
 	case ModeDecryptMirror:
 		s := ""
 		ans.DecryptMirror = &s
@@ -545,12 +924,60 @@ func specify_v2(e Entry) interface{} {
 			NetflowProfile: e.NetflowProfile,
 		}
 
+		if e.LldpEnable || e.LldpProfile != "" || e.LldpHaPassivePreNegotiation {
+			ans.VirtualWire.Lldp = &lldp{
+				LldpEnable:  util.YesNo(e.LldpEnable),
+				LldpProfile: e.LldpProfile,
+			}
+			if e.LldpHaPassivePreNegotiation {
+				ans.VirtualWire.Lldp.Ha = &lldpHa{
+					LldpHaPassivePreNegotiation: util.YesNo(e.LldpHaPassivePreNegotiation),
+				}
+			}
+		}
+
 		if text := e.raw["vwsi"]; text != "" {
 			ans.VirtualWire.Subinterfaces = &util.RawXml{text}
 		}
 	case ModeLayer2:
 		ans.L2 = &layer2{
 			NetflowProfile: e.NetflowProfile,
+		}
+
+		if e.LacpEnable || e.LacpFastFailover || e.LacpMode != "" || e.LacpTransmissionRate != "" || e.LacpSystemPriority != 0 || e.LacpMaxPorts != 0 || e.LacpHaPassivePreNegotiation || e.LacpHaEnableSameSystemMac || e.LacpHaSameSystemMacAddress != "" {
+			ans.L2.Lacp = &lacpWithHa{
+				LacpEnable:           util.YesNo(e.LacpEnable),
+				LacpFastFailover:     util.YesNo(e.LacpFastFailover),
+				LacpMode:             e.LacpMode,
+				LacpTransmissionRate: e.LacpTransmissionRate,
+				LacpSystemPriority:   e.LacpSystemPriority,
+				LacpMaxPorts:         e.LacpMaxPorts,
+			}
+
+			if e.LacpHaPassivePreNegotiation || e.LacpHaEnableSameSystemMac || e.LacpHaSameSystemMacAddress != "" {
+				ans.L2.Lacp.Ha = &lacpHa{
+					LacpHaPassivePreNegotiation: util.YesNo(e.LacpHaPassivePreNegotiation),
+				}
+
+				if e.LacpHaEnableSameSystemMac || e.LacpHaSameSystemMacAddress != "" {
+					ans.L2.Lacp.Ha.Mac = &lacpHaMac{
+						LacpHaEnableSameSystemMac:  util.YesNo(e.LacpHaEnableSameSystemMac),
+						LacpHaSameSystemMacAddress: e.LacpHaSameSystemMacAddress,
+					}
+				}
+			}
+		}
+
+		if e.LldpEnable || e.LldpProfile != "" || e.LldpHaPassivePreNegotiation {
+			ans.L2.Lldp = &lldp{
+				LldpEnable:  util.YesNo(e.LldpEnable),
+				LldpProfile: e.LldpProfile,
+			}
+			if e.LldpHaPassivePreNegotiation {
+				ans.L2.Lldp.Ha = &lldpHa{
+					LldpHaPassivePreNegotiation: util.YesNo(e.LldpHaPassivePreNegotiation),
+				}
+			}
 		}
 
 		if text := e.raw["l2si"]; text != "" {
@@ -574,6 +1001,42 @@ func specify_v2(e Entry) interface{} {
 				AdjustTcpMss:  util.YesNo(e.AdjustTcpMss),
 				Ipv4MssAdjust: e.Ipv4MssAdjust,
 				Ipv6MssAdjust: e.Ipv6MssAdjust,
+			}
+		}
+
+		if e.LacpEnable || e.LacpFastFailover || e.LacpMode != "" || e.LacpTransmissionRate != "" || e.LacpSystemPriority != 0 || e.LacpMaxPorts != 0 || e.LacpHaPassivePreNegotiation || e.LacpHaEnableSameSystemMac || e.LacpHaSameSystemMacAddress != "" {
+			ans.L3.Lacp = &lacpWithHa{
+				LacpEnable:           util.YesNo(e.LacpEnable),
+				LacpFastFailover:     util.YesNo(e.LacpFastFailover),
+				LacpMode:             e.LacpMode,
+				LacpTransmissionRate: e.LacpTransmissionRate,
+				LacpSystemPriority:   e.LacpSystemPriority,
+				LacpMaxPorts:         e.LacpMaxPorts,
+			}
+
+			if e.LacpHaPassivePreNegotiation || e.LacpHaEnableSameSystemMac || e.LacpHaSameSystemMacAddress != "" {
+				ans.L3.Lacp.Ha = &lacpHa{
+					LacpHaPassivePreNegotiation: util.YesNo(e.LacpHaPassivePreNegotiation),
+				}
+
+				if e.LacpHaEnableSameSystemMac || e.LacpHaSameSystemMacAddress != "" {
+					ans.L3.Lacp.Ha.Mac = &lacpHaMac{
+						LacpHaEnableSameSystemMac:  util.YesNo(e.LacpHaEnableSameSystemMac),
+						LacpHaSameSystemMacAddress: e.LacpHaSameSystemMacAddress,
+					}
+				}
+			}
+		}
+
+		if e.LldpEnable || e.LldpProfile != "" || e.LldpHaPassivePreNegotiation {
+			ans.L3.Lldp = &lldp{
+				LldpEnable:  util.YesNo(e.LldpEnable),
+				LldpProfile: e.LldpProfile,
+			}
+			if e.LldpHaPassivePreNegotiation {
+				ans.L3.Lldp.Ha = &lldpHa{
+					LldpHaPassivePreNegotiation: util.YesNo(e.LldpHaPassivePreNegotiation),
+				}
 			}
 		}
 
@@ -618,7 +1081,7 @@ func specify_v2(e Entry) interface{} {
 type entry_v3 struct {
 	XMLName       xml.Name   `xml:"entry"`
 	Name          string     `xml:"name,attr"`
-	Ha            *string    `xml:"ha"`
+	Ha            *ha        `xml:"ha"`
 	DecryptMirror *string    `xml:"decrypt-mirror"`
 	VirtualWire   *layer2    `xml:"virtual-wire"`
 	L2            *layer2    `xml:"layer2"`
@@ -631,6 +1094,8 @@ type layer3_v3 struct {
 	Mss                        *mss             `xml:"adjust-tcp-mss"`
 	EnableUntaggedSubinterface string           `xml:"untagged-sub-interface"`
 	DecryptForward             string           `xml:"decrypt-forward,omitempty"`
+	Lacp                       *lacpWithHa      `xml:"lacp"`
+	Lldp                       *lldp            `xml:"lldp"`
 	StaticIps                  *util.EntryType  `xml:"ip"`
 	Ipv6                       *ipv6            `xml:"ipv6"`
 	Arp                        *util.RawXml     `xml:"arp"`
@@ -661,8 +1126,17 @@ func specify_v3(e Entry) interface{} {
 
 	switch e.Mode {
 	case ModeHa:
-		s := ""
-		ans.Ha = &s
+		ans.Ha = &ha{}
+		if e.LacpEnable || e.LacpFastFailover || e.LacpMode != "" || e.LacpTransmissionRate != "" || e.LacpSystemPriority != 0 || e.LacpMaxPorts != 0 {
+			ans.Ha.Lacp = &lacpNoHa{
+				LacpEnable:           util.YesNo(e.LacpEnable),
+				LacpFastFailover:     util.YesNo(e.LacpFastFailover),
+				LacpMode:             e.LacpMode,
+				LacpTransmissionRate: e.LacpTransmissionRate,
+				LacpSystemPriority:   e.LacpSystemPriority,
+				LacpMaxPorts:         e.LacpMaxPorts,
+			}
+		}
 	case ModeDecryptMirror:
 		s := ""
 		ans.DecryptMirror = &s
@@ -671,12 +1145,60 @@ func specify_v3(e Entry) interface{} {
 			NetflowProfile: e.NetflowProfile,
 		}
 
+		if e.LldpEnable || e.LldpProfile != "" || e.LldpHaPassivePreNegotiation {
+			ans.VirtualWire.Lldp = &lldp{
+				LldpEnable:  util.YesNo(e.LldpEnable),
+				LldpProfile: e.LldpProfile,
+			}
+			if e.LldpHaPassivePreNegotiation {
+				ans.VirtualWire.Lldp.Ha = &lldpHa{
+					LldpHaPassivePreNegotiation: util.YesNo(e.LldpHaPassivePreNegotiation),
+				}
+			}
+		}
+
 		if text := e.raw["vwsi"]; text != "" {
 			ans.VirtualWire.Subinterfaces = &util.RawXml{text}
 		}
 	case ModeLayer2:
 		ans.L2 = &layer2{
 			NetflowProfile: e.NetflowProfile,
+		}
+
+		if e.LacpEnable || e.LacpFastFailover || e.LacpMode != "" || e.LacpTransmissionRate != "" || e.LacpSystemPriority != 0 || e.LacpMaxPorts != 0 || e.LacpHaPassivePreNegotiation || e.LacpHaEnableSameSystemMac || e.LacpHaSameSystemMacAddress != "" {
+			ans.L2.Lacp = &lacpWithHa{
+				LacpEnable:           util.YesNo(e.LacpEnable),
+				LacpFastFailover:     util.YesNo(e.LacpFastFailover),
+				LacpMode:             e.LacpMode,
+				LacpTransmissionRate: e.LacpTransmissionRate,
+				LacpSystemPriority:   e.LacpSystemPriority,
+				LacpMaxPorts:         e.LacpMaxPorts,
+			}
+
+			if e.LacpHaPassivePreNegotiation || e.LacpHaEnableSameSystemMac || e.LacpHaSameSystemMacAddress != "" {
+				ans.L2.Lacp.Ha = &lacpHa{
+					LacpHaPassivePreNegotiation: util.YesNo(e.LacpHaPassivePreNegotiation),
+				}
+
+				if e.LacpHaEnableSameSystemMac || e.LacpHaSameSystemMacAddress != "" {
+					ans.L2.Lacp.Ha.Mac = &lacpHaMac{
+						LacpHaEnableSameSystemMac:  util.YesNo(e.LacpHaEnableSameSystemMac),
+						LacpHaSameSystemMacAddress: e.LacpHaSameSystemMacAddress,
+					}
+				}
+			}
+		}
+
+		if e.LldpEnable || e.LldpProfile != "" || e.LldpHaPassivePreNegotiation {
+			ans.L2.Lldp = &lldp{
+				LldpEnable:  util.YesNo(e.LldpEnable),
+				LldpProfile: e.LldpProfile,
+			}
+			if e.LldpHaPassivePreNegotiation {
+				ans.L2.Lldp.Ha = &lldpHa{
+					LldpHaPassivePreNegotiation: util.YesNo(e.LldpHaPassivePreNegotiation),
+				}
+			}
 		}
 
 		if text := e.raw["l2si"]; text != "" {
@@ -700,6 +1222,42 @@ func specify_v3(e Entry) interface{} {
 				AdjustTcpMss:  util.YesNo(e.AdjustTcpMss),
 				Ipv4MssAdjust: e.Ipv4MssAdjust,
 				Ipv6MssAdjust: e.Ipv6MssAdjust,
+			}
+		}
+
+		if e.LacpEnable || e.LacpFastFailover || e.LacpMode != "" || e.LacpTransmissionRate != "" || e.LacpSystemPriority != 0 || e.LacpMaxPorts != 0 || e.LacpHaPassivePreNegotiation || e.LacpHaEnableSameSystemMac || e.LacpHaSameSystemMacAddress != "" {
+			ans.L3.Lacp = &lacpWithHa{
+				LacpEnable:           util.YesNo(e.LacpEnable),
+				LacpFastFailover:     util.YesNo(e.LacpFastFailover),
+				LacpMode:             e.LacpMode,
+				LacpTransmissionRate: e.LacpTransmissionRate,
+				LacpSystemPriority:   e.LacpSystemPriority,
+				LacpMaxPorts:         e.LacpMaxPorts,
+			}
+
+			if e.LacpHaPassivePreNegotiation || e.LacpHaEnableSameSystemMac || e.LacpHaSameSystemMacAddress != "" {
+				ans.L3.Lacp.Ha = &lacpHa{
+					LacpHaPassivePreNegotiation: util.YesNo(e.LacpHaPassivePreNegotiation),
+				}
+
+				if e.LacpHaEnableSameSystemMac || e.LacpHaSameSystemMacAddress != "" {
+					ans.L3.Lacp.Ha.Mac = &lacpHaMac{
+						LacpHaEnableSameSystemMac:  util.YesNo(e.LacpHaEnableSameSystemMac),
+						LacpHaSameSystemMacAddress: e.LacpHaSameSystemMacAddress,
+					}
+				}
+			}
+		}
+
+		if e.LldpEnable || e.LldpProfile != "" || e.LldpHaPassivePreNegotiation {
+			ans.L3.Lldp = &lldp{
+				LldpEnable:  util.YesNo(e.LldpEnable),
+				LldpProfile: e.LldpProfile,
+			}
+			if e.LldpHaPassivePreNegotiation {
+				ans.L3.Lldp.Ha = &lldpHa{
+					LldpHaPassivePreNegotiation: util.YesNo(e.LldpHaPassivePreNegotiation),
+				}
 			}
 		}
 
