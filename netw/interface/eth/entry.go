@@ -155,6 +155,15 @@ func (o *entry_v1) normalize() Entry {
 			}
 		}
 
+		if o.ModeL3.Lldp != nil {
+			ans.LldpEnabled = util.AsBool(o.ModeL3.Lldp.LldpEnabled)
+			ans.LldpProfile = o.ModeL3.Lldp.LldpProfile
+
+			if o.ModeL3.Lldp.Ha != nil {
+				ans.LldpHaPassivePreNegotiation = util.AsBool(o.ModeL3.Lldp.Ha.LldpHaPassivePreNegotiation)
+			}
+		}
+
 		if o.ModeL3.Arp != nil {
 			ans.raw["arp"] = util.CleanRawXml(o.ModeL3.Arp.Text)
 		}
@@ -228,18 +237,18 @@ type emptyMode struct{}
 
 type otherMode struct {
 	NetflowProfile string       `xml:"netflow-profile,omitempty"`
-	Lldp           *omLldp      `xml:"lldp"`
+	Lldp           *lldp        `xml:"lldp"`
 	Subinterface   *util.RawXml `xml:"units"`
 	Lacp           *omLacp      `xml:"lacp"`
 }
 
-type omLldp struct {
-	LldpEnabled string    `xml:"enable"`
-	LldpProfile string    `xml:"profile,omitempty"`
-	Ha          *omLldpHa `xml:"high-availability"`
+type lldp struct {
+	LldpEnabled string  `xml:"enable"`
+	LldpProfile string  `xml:"profile,omitempty"`
+	Ha          *lldpHa `xml:"high-availability"`
 }
 
-type omLldpHa struct {
+type lldpHa struct {
 	LldpHaPassivePreNegotiation string `xml:"passive-pre-negotiation"`
 }
 
@@ -259,6 +268,7 @@ type l3Mode_v1 struct {
 	AdjustTcpMss      string           `xml:"adjust-tcp-mss"`
 	StaticIps         *util.EntryType  `xml:"ip"`
 	Dhcp              *dhcpSettings_v1 `xml:"dhcp-client"`
+	Lldp              *lldp            `xml:"lldp"`
 	Arp               *util.RawXml     `xml:"arp"`
 	Subinterface      *util.RawXml     `xml:"units"`
 }
@@ -342,6 +352,15 @@ func (o *entry_v2) normalize() Entry {
 			}
 			if o.ModeL3.Ipv6.Neighbor != nil {
 				ans.raw["v6nd"] = util.CleanRawXml(o.ModeL3.Ipv6.Neighbor.Text)
+			}
+		}
+
+		if o.ModeL3.Lldp != nil {
+			ans.LldpEnabled = util.AsBool(o.ModeL3.Lldp.LldpEnabled)
+			ans.LldpProfile = o.ModeL3.Lldp.LldpProfile
+
+			if o.ModeL3.Lldp.Ha != nil {
+				ans.LldpHaPassivePreNegotiation = util.AsBool(o.ModeL3.Lldp.Ha.LldpHaPassivePreNegotiation)
 			}
 		}
 
@@ -471,6 +490,15 @@ func (o *entry_v3) normalize() Entry {
 			}
 			if o.ModeL3.Ipv6.Neighbor != nil {
 				ans.raw["v6nd"] = util.CleanRawXml(o.ModeL3.Ipv6.Neighbor.Text)
+			}
+		}
+
+		if o.ModeL3.Lldp != nil {
+			ans.LldpEnabled = util.AsBool(o.ModeL3.Lldp.LldpEnabled)
+			ans.LldpProfile = o.ModeL3.Lldp.LldpProfile
+
+			if o.ModeL3.Lldp.Ha != nil {
+				ans.LldpHaPassivePreNegotiation = util.AsBool(o.ModeL3.Lldp.Ha.LldpHaPassivePreNegotiation)
 			}
 		}
 
@@ -607,6 +635,15 @@ func (o *entry_v4) normalize() Entry {
 			}
 		}
 
+		if o.ModeL3.Lldp != nil {
+			ans.LldpEnabled = util.AsBool(o.ModeL3.Lldp.LldpEnabled)
+			ans.LldpProfile = o.ModeL3.Lldp.LldpProfile
+
+			if o.ModeL3.Lldp.Ha != nil {
+				ans.LldpHaPassivePreNegotiation = util.AsBool(o.ModeL3.Lldp.Ha.LldpHaPassivePreNegotiation)
+			}
+		}
+
 		if o.ModeL3.Arp != nil {
 			ans.raw["arp"] = util.CleanRawXml(o.ModeL3.Arp.Text)
 		}
@@ -698,6 +735,7 @@ type l3Mode_v2 struct {
 	Ipv6MssAdjust              int              `xml:"adjust-tcp-mss>ipv6-mss-adjustment,omitempty"`
 	StaticIps                  *util.EntryType  `xml:"ip"`
 	Dhcp                       *dhcpSettings_v1 `xml:"dhcp-client"`
+	Lldp                       *lldp            `xml:"lldp"`
 	EnableUntaggedSubinterface string           `xml:"untagged-sub-interface,omitempty"`
 	Arp                        *util.RawXml     `xml:"arp"`
 	Pppoe                      *util.RawXml     `xml:"pppoe"`
@@ -732,6 +770,7 @@ type l3Mode_v3 struct {
 	Ipv6MssAdjust              int              `xml:"adjust-tcp-mss>ipv6-mss-adjustment,omitempty"`
 	StaticIps                  *util.EntryType  `xml:"ip"`
 	Dhcp                       *dhcpSettings_v1 `xml:"dhcp-client"`
+	Lldp                       *lldp            `xml:"lldp"`
 	EnableUntaggedSubinterface string           `xml:"untagged-sub-interface,omitempty"`
 	DecryptForward             string           `xml:"decrypt-forward,omitempty"`
 	Policing                   *policing        `xml:"policing"`
@@ -773,6 +812,7 @@ type l3Mode_v4 struct {
 	Ipv6MssAdjust              int              `xml:"adjust-tcp-mss>ipv6-mss-adjustment,omitempty"`
 	StaticIps                  *util.EntryType  `xml:"ip"`
 	Dhcp                       *dhcpSettings_v2 `xml:"dhcp-client"`
+	Lldp                       *lldp            `xml:"lldp"`
 	EnableUntaggedSubinterface string           `xml:"untagged-sub-interface,omitempty"`
 	DecryptForward             string           `xml:"decrypt-forward,omitempty"`
 	Policing                   *policing        `xml:"policing"`
@@ -829,6 +869,19 @@ func specify_v1(e Entry) interface{} {
 			}
 		}
 
+		if e.LldpEnabled || e.LldpProfile != "" || e.LldpHaPassivePreNegotiation {
+			i.Lldp = &lldp{
+				LldpEnabled: util.YesNo(e.LldpEnabled),
+				LldpProfile: e.LldpProfile,
+			}
+
+			if e.LldpHaPassivePreNegotiation {
+				i.Lldp.Ha = &lldpHa{
+					LldpHaPassivePreNegotiation: util.YesNo(e.LldpHaPassivePreNegotiation),
+				}
+			}
+		}
+
 		v6adr := e.raw["v6adr"]
 		v6nd := e.raw["v6nd"]
 		if e.Ipv6Enabled || e.Ipv6InterfaceId != "" || v6adr != "" || v6nd != "" {
@@ -857,7 +910,7 @@ func specify_v1(e Entry) interface{} {
 			NetflowProfile: e.NetflowProfile,
 		}
 		if e.LldpEnabled || e.LldpProfile != "" {
-			ans.ModeL2.Lldp = &omLldp{
+			ans.ModeL2.Lldp = &lldp{
 				LldpEnabled: util.YesNo(e.LldpEnabled),
 				LldpProfile: e.LldpProfile,
 			}
@@ -870,13 +923,13 @@ func specify_v1(e Entry) interface{} {
 			NetflowProfile: e.NetflowProfile,
 		}
 		if e.LldpEnabled || e.LldpProfile != "" || e.LldpHaPassivePreNegotiation {
-			ans.ModeVwire.Lldp = &omLldp{
+			ans.ModeVwire.Lldp = &lldp{
 				LldpEnabled: util.YesNo(e.LldpEnabled),
 				LldpProfile: e.LldpProfile,
 			}
 
 			if e.LldpHaPassivePreNegotiation {
-				ans.ModeVwire.Lldp.Ha = &omLldpHa{
+				ans.ModeVwire.Lldp.Ha = &lldpHa{
 					LldpHaPassivePreNegotiation: util.YesNo(e.LldpHaPassivePreNegotiation),
 				}
 			}
@@ -943,6 +996,19 @@ func specify_v2(e Entry) interface{} {
 			}
 		}
 
+		if e.LldpEnabled || e.LldpProfile != "" || e.LldpHaPassivePreNegotiation {
+			i.Lldp = &lldp{
+				LldpEnabled: util.YesNo(e.LldpEnabled),
+				LldpProfile: e.LldpProfile,
+			}
+
+			if e.LldpHaPassivePreNegotiation {
+				i.Lldp.Ha = &lldpHa{
+					LldpHaPassivePreNegotiation: util.YesNo(e.LldpHaPassivePreNegotiation),
+				}
+			}
+		}
+
 		v6adr := e.raw["v6adr"]
 		v6nd := e.raw["v6nd"]
 		if e.Ipv6Enabled || e.Ipv6InterfaceId != "" || v6adr != "" || v6nd != "" {
@@ -977,7 +1043,7 @@ func specify_v2(e Entry) interface{} {
 			NetflowProfile: e.NetflowProfile,
 		}
 		if e.LldpEnabled || e.LldpProfile != "" {
-			ans.ModeL2.Lldp = &omLldp{
+			ans.ModeL2.Lldp = &lldp{
 				LldpEnabled: util.YesNo(e.LldpEnabled),
 				LldpProfile: e.LldpProfile,
 			}
@@ -990,13 +1056,13 @@ func specify_v2(e Entry) interface{} {
 			NetflowProfile: e.NetflowProfile,
 		}
 		if e.LldpEnabled || e.LldpProfile != "" || e.LldpHaPassivePreNegotiation {
-			ans.ModeVwire.Lldp = &omLldp{
+			ans.ModeVwire.Lldp = &lldp{
 				LldpEnabled: util.YesNo(e.LldpEnabled),
 				LldpProfile: e.LldpProfile,
 			}
 
 			if e.LldpHaPassivePreNegotiation {
-				ans.ModeVwire.Lldp.Ha = &omLldpHa{
+				ans.ModeVwire.Lldp.Ha = &lldpHa{
 					LldpHaPassivePreNegotiation: util.YesNo(e.LldpHaPassivePreNegotiation),
 				}
 			}
@@ -1074,6 +1140,19 @@ func specify_v3(e Entry) interface{} {
 			}
 		}
 
+		if e.LldpEnabled || e.LldpProfile != "" || e.LldpHaPassivePreNegotiation {
+			i.Lldp = &lldp{
+				LldpEnabled: util.YesNo(e.LldpEnabled),
+				LldpProfile: e.LldpProfile,
+			}
+
+			if e.LldpHaPassivePreNegotiation {
+				i.Lldp.Ha = &lldpHa{
+					LldpHaPassivePreNegotiation: util.YesNo(e.LldpHaPassivePreNegotiation),
+				}
+			}
+		}
+
 		v6adr := e.raw["v6adr"]
 		v6nd := e.raw["v6nd"]
 		if e.Ipv6Enabled || e.Ipv6InterfaceId != "" || v6adr != "" || v6nd != "" {
@@ -1108,7 +1187,7 @@ func specify_v3(e Entry) interface{} {
 			NetflowProfile: e.NetflowProfile,
 		}
 		if e.LldpEnabled || e.LldpProfile != "" {
-			ans.ModeL2.Lldp = &omLldp{
+			ans.ModeL2.Lldp = &lldp{
 				LldpEnabled: util.YesNo(e.LldpEnabled),
 				LldpProfile: e.LldpProfile,
 			}
@@ -1121,13 +1200,13 @@ func specify_v3(e Entry) interface{} {
 			NetflowProfile: e.NetflowProfile,
 		}
 		if e.LldpEnabled || e.LldpProfile != "" || e.LldpHaPassivePreNegotiation {
-			ans.ModeVwire.Lldp = &omLldp{
+			ans.ModeVwire.Lldp = &lldp{
 				LldpEnabled: util.YesNo(e.LldpEnabled),
 				LldpProfile: e.LldpProfile,
 			}
 
 			if e.LldpHaPassivePreNegotiation {
-				ans.ModeVwire.Lldp.Ha = &omLldpHa{
+				ans.ModeVwire.Lldp.Ha = &lldpHa{
 					LldpHaPassivePreNegotiation: util.YesNo(e.LldpHaPassivePreNegotiation),
 				}
 			}
@@ -1212,6 +1291,19 @@ func specify_v4(e Entry) interface{} {
 			}
 		}
 
+		if e.LldpEnabled || e.LldpProfile != "" || e.LldpHaPassivePreNegotiation {
+			i.Lldp = &lldp{
+				LldpEnabled: util.YesNo(e.LldpEnabled),
+				LldpProfile: e.LldpProfile,
+			}
+
+			if e.LldpHaPassivePreNegotiation {
+				i.Lldp.Ha = &lldpHa{
+					LldpHaPassivePreNegotiation: util.YesNo(e.LldpHaPassivePreNegotiation),
+				}
+			}
+		}
+
 		v6adr := e.raw["v6adr"]
 		v6nd := e.raw["v6nd"]
 		if e.Ipv6Enabled || e.Ipv6InterfaceId != "" || v6adr != "" || v6nd != "" {
@@ -1252,7 +1344,7 @@ func specify_v4(e Entry) interface{} {
 			NetflowProfile: e.NetflowProfile,
 		}
 		if e.LldpEnabled || e.LldpProfile != "" {
-			ans.ModeL2.Lldp = &omLldp{
+			ans.ModeL2.Lldp = &lldp{
 				LldpEnabled: util.YesNo(e.LldpEnabled),
 				LldpProfile: e.LldpProfile,
 			}
@@ -1265,13 +1357,13 @@ func specify_v4(e Entry) interface{} {
 			NetflowProfile: e.NetflowProfile,
 		}
 		if e.LldpEnabled || e.LldpProfile != "" || e.LldpHaPassivePreNegotiation {
-			ans.ModeVwire.Lldp = &omLldp{
+			ans.ModeVwire.Lldp = &lldp{
 				LldpEnabled: util.YesNo(e.LldpEnabled),
 				LldpProfile: e.LldpProfile,
 			}
 
 			if e.LldpHaPassivePreNegotiation {
-				ans.ModeVwire.Lldp.Ha = &omLldpHa{
+				ans.ModeVwire.Lldp.Ha = &lldpHa{
 					LldpHaPassivePreNegotiation: util.YesNo(e.LldpHaPassivePreNegotiation),
 				}
 			}
