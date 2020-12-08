@@ -236,8 +236,8 @@ func (o *entry_v1) normalize() Entry {
 type entry_v1 struct {
 	XMLName              xml.Name         `xml:"entry"`
 	Name                 string           `xml:"name,attr"`
-	Type                 string           `xml:"rule-type"`
-	Description          string           `xml:"description"`
+	Type                 string           `xml:"rule-type,omitempty"`
+	Description          string           `xml:"description,omitempty"`
 	Tags                 *util.MemberType `xml:"tag"`
 	SourceZones          *util.MemberType `xml:"from"`
 	DestinationZones     *util.MemberType `xml:"to"`
