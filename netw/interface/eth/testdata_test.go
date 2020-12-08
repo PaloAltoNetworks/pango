@@ -52,6 +52,14 @@ func getTests() []testCase {
 			},
 			Comment: "v1 layer3 with raw config",
 		}},
+		{version.Number{5, 0, 0, ""}, "vsys5", "vsys5", []string{"ethernet1/4"}, Entry{
+			Name:                        "ethernet1/4",
+			Mode:                        ModeLayer3,
+			LldpEnabled:                 true,
+			LldpProfile:                 "myLldpProfile",
+			LldpHaPassivePreNegotiation: true,
+			Comment:                     "l3 with lldp config",
+		}},
 		{version.Number{5, 0, 0, ""}, "vsys6", "vsys6", []string{"ethernet1/5"}, Entry{
 			Name: "ethernet1/5",
 			Mode: ModeLayer2,
@@ -120,6 +128,14 @@ func getTests() []testCase {
 			CreateDhcpDefaultRoute: true,
 			DhcpDefaultRouteMetric: 12,
 			Comment:                "v2 dhcp",
+		}},
+		{version.Number{8, 0, 0, ""}, "vsys5", "vsys5", []string{"ethernet1/4"}, Entry{
+			Name:                        "ethernet1/4",
+			Mode:                        ModeLayer3,
+			LldpEnabled:                 true,
+			LldpProfile:                 "myLldpProfile",
+			LldpHaPassivePreNegotiation: true,
+			Comment:                     "l3 with lldp config",
 		}},
 		{version.Number{8, 0, 0, ""}, "vsys4", "vsys4", []string{}, Entry{
 			Name:    "ethernet1/3",
@@ -209,6 +225,14 @@ func getTests() []testCase {
 			CreateDhcpDefaultRoute: true,
 			DhcpDefaultRouteMetric: 12,
 			Comment:                "v3 dhcp",
+		}},
+		{version.Number{8, 1, 0, ""}, "vsys5", "vsys5", []string{"ethernet1/4"}, Entry{
+			Name:                        "ethernet1/4",
+			Mode:                        ModeLayer3,
+			LldpEnabled:                 true,
+			LldpProfile:                 "myLldpProfile",
+			LldpHaPassivePreNegotiation: true,
+			Comment:                     "l3 with lldp config",
 		}},
 		{version.Number{8, 1, 0, ""}, "vsys4", "vsys4", []string{}, Entry{
 			Name:    "ethernet1/3",
@@ -300,6 +324,14 @@ func getTests() []testCase {
 			DhcpSendHostnameEnable: true,
 			DhcpSendHostnameValue:  "foo-hostname",
 			Comment:                "v4 dhcp",
+		}},
+		{version.Number{9, 0, 0, ""}, "vsys5", "vsys5", []string{"ethernet1/4"}, Entry{
+			Name:                        "ethernet1/4",
+			Mode:                        ModeLayer3,
+			LldpEnabled:                 true,
+			LldpProfile:                 "myLldpProfile",
+			LldpHaPassivePreNegotiation: true,
+			Comment:                     "l3 with lldp config",
 		}},
 		{version.Number{9, 0, 0, ""}, "vsys4", "vsys4", []string{}, Entry{
 			Name:    "ethernet1/3",
