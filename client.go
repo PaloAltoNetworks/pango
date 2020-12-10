@@ -52,6 +52,15 @@ const (
 // Client is a generic connector struct.  It provides wrapper functions for
 // invoking the various PAN-OS XPath API methods.  After creating the client,
 // invoke Initialize() to prepare it for use.
+//
+// Many of the functions attached to this struct will take a param named
+// `extras`.  Under normal circumstances this will just be nil, but if you have
+// some extra values you need to send in with your request you can specify them
+// here.
+//
+// Likewise, a lot of these functions will return a slice of bytes.  Under normal
+// circumstances, you don't need to do anything with this, but sometimes you do,
+// so you can find the raw XML returned from PAN-OS there.
 type Client struct {
 	// Connection properties.
 	Hostname string `json:"hostname"`
@@ -939,11 +948,12 @@ func (c *Client) Import(cat, content, filename, fp string, extras map[string]str
 // Commit performs PAN-OS commits.
 //
 // The cmd param can be a properly formatted XML string, a struct that can
-// be marshalled into XML, or one of the commit types.
+// be marshalled into XML, or one of the commit types that can be found in the
+// commit package.
 //
-// The action param is the commit action to be taken (e.g. - "all").  If the
-// cmd param is one of the commit types, and the action passed in to this function
-// is an empty string, then the action will be determined by the commit type.
+// The action param is the commit action to be taken.  If you are using one of the
+// commit structs as the `cmd` param and the action param is an empty string, then
+// the action is taken from the commit struct passed in.
 //
 // The extras param should be either nil or a url.Values{} to be mixed in with
 // the constructed request.
