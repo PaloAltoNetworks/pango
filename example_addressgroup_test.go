@@ -66,14 +66,14 @@ func Example_createAddressGroup() {
 		Name:                 "SamplePolicy",
 		Description:          "This is where the request number goes",
 		Tags:                 tags,
-		SourceZones:          []string{"ICORPEXT"},
+		SourceZones:          []string{"CORPEXT"},
 		SourceAddresses:      []string{"any"},
-		DestinationZones:     []string{"ICORPDMZ"},
+		DestinationZones:     []string{"CORPDMZ"},
 		DestinationAddresses: []string{ag.Name},
 		Applications:         []string{"ssl"},
 		Services:             []string{"application-default"},
-		LogSetting:           "APAC-Dell-Standard-Logging",
-		Group:                "Dell_Corp_Default",
+		LogSetting:           "Standard-Logging",
+		Group:                "Corp_Default",
 	}
 	securityPolicy.Defaults()
 
