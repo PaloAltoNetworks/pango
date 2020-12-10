@@ -9,6 +9,11 @@ import (
 )
 
 // Panorama is the client.Policies.Nat namespace.
+//
+// The "dg" param in these functions is the device group.
+//
+// The "base" param in these functions should be one of the rulebase
+// constants in the "util" package.
 type Panorama struct {
 	ns *namespace.Standard
 }
