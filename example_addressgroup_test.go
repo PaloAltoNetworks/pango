@@ -11,7 +11,9 @@ import (
 	"github.com/PaloAltoNetworks/pango/util"
 )
 
-func main() {
+// Example_createAddressGroup is a Panorama example on how to create/delete a
+// security policy with the associated address group and addresses
+func Example_createAddressGroup() {
 	var deviceGroup = "MyDeviceGroup"
 	var tags = []string{"sometag"}
 	var err error
