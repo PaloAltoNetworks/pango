@@ -82,10 +82,10 @@ type Client struct {
 	Transport         *http.Transport `json:"-"`
 
 	// Variables determined at runtime.
-	Version        version.Number      `json:"-"`
-	SystemInfo     map[string]string   `json:"-"`
-	Plugin         []map[string]string `json:"-"`
-	MultiConfigure *MultiConfigure     `json:"-"`
+	Version        version.Number    `json:"-"`
+	SystemInfo     map[string]string `json:"-"`
+	Plugin         []PluginInfo      `json:"-"`
+	MultiConfigure *MultiConfigure   `json:"-"`
 
 	// Logging level.
 	Logging               uint32   `json:"-"`
@@ -133,7 +133,7 @@ func (c *Client) Versioning() version.Number {
 }
 
 // Plugins returns the plugin information.
-func (c *Client) Plugins() []map[string]string {
+func (c *Client) Plugins() []PluginInfo {
 	return c.Plugin
 }
 
@@ -1283,18 +1283,18 @@ func (c *Client) initPlugins() {
 		return
 	}
 
-	c.Plugin = make([]map[string]string, 0, len(ans.Answer))
+	c.Plugin = make([]PluginInfo, 0, len(ans.Answer))
 	for _, data := range ans.Answer {
-		c.Plugin = append(c.Plugin, map[string]string{
-			"name":             data.Name,
-			"version":          data.Version,
-			"release-date":     data.ReleaseDate,
-			"release-note-url": data.RelNote.ReleaseNoteUrl,
-			"package-file":     data.PackageFile,
-			"size":             data.Size,
-			"platform":         data.Platform,
-			"installed":        data.Installed,
-			"downloaded":       data.Downloaded,
+		c.Plugin = append(c.Plugin, PluginInfo{
+			Name:           data.Name,
+			Version:        data.Version,
+			ReleaseDate:    data.ReleaseDate,
+			ReleaseNoteUrl: data.RelNote.ReleaseNoteUrl,
+			PackageFile:    data.PackageFile,
+			Size:           data.Size,
+			Platform:       data.Platform,
+			Installed:      data.Installed,
+			Downloaded:     data.Downloaded,
 		})
 	}
 }
@@ -1793,4 +1793,17 @@ type configLocks struct {
 
 type commitLocks struct {
 	Locks []util.Lock `xml:"result>commit-locks>entry"`
+}
+
+// PluginInfo is information on plugin packages available to PAN-OS.
+type PluginInfo struct {
+	Name           string
+	Version        string
+	ReleaseDate    string
+	ReleaseNoteUrl string
+	PackageFile    string
+	Size           string
+	Platform       string
+	Installed      string
+	Downloaded     string
 }
