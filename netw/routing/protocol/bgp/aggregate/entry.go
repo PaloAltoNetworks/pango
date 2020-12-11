@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 
 	"github.com/PaloAltoNetworks/pango/util"
+	"github.com/PaloAltoNetworks/pango/version"
 )
 
 // Entry is a normalized, version independent representation of a BGP
@@ -53,86 +54,110 @@ func (o *Entry) Copy(s Entry) {
 
 /** Structs / functions for this namespace. **/
 
+func (o Entry) Specify(v version.Number) (string, interface{}) {
+	_, fn := versioning(v)
+	return o.Name, fn(o)
+}
+
 type normalizer interface {
-	Normalize() Entry
+	Normalize() []Entry
+	Names() []string
 }
 
 type container_v1 struct {
-	Answer entry_v1 `xml:"result>entry"`
+	Answer []entry_v1 `xml:"entry"`
 }
 
-func (o *container_v1) Normalize() Entry {
-	ans := Entry{
-		Name:    o.Answer.Name,
-		Prefix:  o.Answer.Prefix,
-		Enable:  util.AsBool(o.Answer.Enable),
-		Summary: util.AsBool(o.Answer.Summary),
-		AsSet:   util.AsBool(o.Answer.AsSet),
+func (o *container_v1) Normalize() []Entry {
+	ans := make([]Entry, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].normalize())
 	}
 
-	if o.Answer.Options != nil {
-		ans.LocalPreference = o.Answer.Options.LocalPreference
-		ans.Med = o.Answer.Options.Med
-		ans.Weight = o.Answer.Options.Weight
-		ans.NextHop = o.Answer.Options.NextHop
-		ans.Origin = o.Answer.Options.Origin
-		ans.AsPathLimit = o.Answer.Options.AsPathLimit
+	return ans
+}
 
-		if o.Answer.Options.AsPath != nil {
-			if o.Answer.Options.AsPath.None != nil {
+func (o *container_v1) Names() []string {
+	ans := make([]string, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].Name)
+	}
+
+	return ans
+}
+
+func (o *entry_v1) normalize() Entry {
+	ans := Entry{
+		Name:    o.Name,
+		Prefix:  o.Prefix,
+		Enable:  util.AsBool(o.Enable),
+		Summary: util.AsBool(o.Summary),
+		AsSet:   util.AsBool(o.AsSet),
+	}
+
+	if o.Options != nil {
+		ans.LocalPreference = o.Options.LocalPreference
+		ans.Med = o.Options.Med
+		ans.Weight = o.Options.Weight
+		ans.NextHop = o.Options.NextHop
+		ans.Origin = o.Options.Origin
+		ans.AsPathLimit = o.Options.AsPathLimit
+
+		if o.Options.AsPath != nil {
+			if o.Options.AsPath.None != nil {
 				ans.AsPathType = AsPathTypeNone
-			} else if o.Answer.Options.AsPath.Remove != nil {
+			} else if o.Options.AsPath.Remove != nil {
 				ans.AsPathType = AsPathTypeRemove
-			} else if o.Answer.Options.AsPath.Prepend != "" {
+			} else if o.Options.AsPath.Prepend != "" {
 				ans.AsPathType = AsPathTypePrepend
-				ans.AsPathValue = o.Answer.Options.AsPath.Prepend
-			} else if o.Answer.Options.AsPath.RemoveAndPrepend != "" {
+				ans.AsPathValue = o.Options.AsPath.Prepend
+			} else if o.Options.AsPath.RemoveAndPrepend != "" {
 				ans.AsPathType = AsPathTypeRemoveAndPrepend
-				ans.AsPathValue = o.Answer.Options.AsPath.RemoveAndPrepend
+				ans.AsPathValue = o.Options.AsPath.RemoveAndPrepend
 			}
 		}
 
-		if o.Answer.Options.Community != nil {
-			if o.Answer.Options.Community.None != nil {
+		if o.Options.Community != nil {
+			if o.Options.Community.None != nil {
 				ans.CommunityType = CommunityTypeNone
-			} else if o.Answer.Options.Community.RemoveAll != nil {
+			} else if o.Options.Community.RemoveAll != nil {
 				ans.CommunityType = CommunityTypeRemoveAll
-			} else if o.Answer.Options.Community.RemoveRegex != "" {
+			} else if o.Options.Community.RemoveRegex != "" {
 				ans.CommunityType = CommunityTypeRemoveRegex
-				ans.CommunityValue = o.Answer.Options.Community.RemoveRegex
-			} else if o.Answer.Options.Community.Append != nil {
+				ans.CommunityValue = o.Options.Community.RemoveRegex
+			} else if o.Options.Community.Append != nil {
 				ans.CommunityType = CommunityTypeAppend
-				ans.CommunityValue = util.MemToOneStr(o.Answer.Options.Community.Append)
-			} else if o.Answer.Options.Community.Overwrite != nil {
+				ans.CommunityValue = util.MemToOneStr(o.Options.Community.Append)
+			} else if o.Options.Community.Overwrite != nil {
 				ans.CommunityType = CommunityTypeOverwrite
-				ans.CommunityValue = util.MemToOneStr(o.Answer.Options.Community.Overwrite)
+				ans.CommunityValue = util.MemToOneStr(o.Options.Community.Overwrite)
 			}
 		}
 
-		if o.Answer.Options.ExtendedCommunity != nil {
-			if o.Answer.Options.ExtendedCommunity.None != nil {
+		if o.Options.ExtendedCommunity != nil {
+			if o.Options.ExtendedCommunity.None != nil {
 				ans.ExtendedCommunityType = CommunityTypeNone
-			} else if o.Answer.Options.ExtendedCommunity.RemoveAll != nil {
+			} else if o.Options.ExtendedCommunity.RemoveAll != nil {
 				ans.ExtendedCommunityType = CommunityTypeRemoveAll
-			} else if o.Answer.Options.ExtendedCommunity.RemoveRegex != "" {
+			} else if o.Options.ExtendedCommunity.RemoveRegex != "" {
 				ans.ExtendedCommunityType = CommunityTypeRemoveRegex
-				ans.ExtendedCommunityValue = o.Answer.Options.ExtendedCommunity.RemoveRegex
-			} else if o.Answer.Options.ExtendedCommunity.Append != nil {
+				ans.ExtendedCommunityValue = o.Options.ExtendedCommunity.RemoveRegex
+			} else if o.Options.ExtendedCommunity.Append != nil {
 				ans.ExtendedCommunityType = CommunityTypeAppend
-				ans.ExtendedCommunityValue = util.MemToOneStr(o.Answer.Options.ExtendedCommunity.Append)
-			} else if o.Answer.Options.ExtendedCommunity.Overwrite != nil {
+				ans.ExtendedCommunityValue = util.MemToOneStr(o.Options.ExtendedCommunity.Append)
+			} else if o.Options.ExtendedCommunity.Overwrite != nil {
 				ans.ExtendedCommunityType = CommunityTypeOverwrite
-				ans.ExtendedCommunityValue = util.MemToOneStr(o.Answer.Options.ExtendedCommunity.Overwrite)
+				ans.ExtendedCommunityValue = util.MemToOneStr(o.Options.ExtendedCommunity.Overwrite)
 			}
 		}
 	}
 
 	m := make(map[string]string)
-	if o.Answer.SuppressFilters != nil {
-		m["sf"] = util.CleanRawXml(o.Answer.SuppressFilters.Text)
+	if o.SuppressFilters != nil {
+		m["sf"] = util.CleanRawXml(o.SuppressFilters.Text)
 	}
-	if o.Answer.AdvertiseFilters != nil {
-		m["af"] = util.CleanRawXml(o.Answer.AdvertiseFilters.Text)
+	if o.AdvertiseFilters != nil {
+		m["af"] = util.CleanRawXml(o.AdvertiseFilters.Text)
 	}
 	if len(m) > 0 {
 		ans.raw = m
