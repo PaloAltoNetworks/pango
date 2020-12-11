@@ -48,8 +48,8 @@ type PanoNetw struct {
 	AggregateInterface       *aggeth.Panorama
 	Arp                      *arp.Panorama
 	BfdProfile               *bfd.PanoBfd
-	BgpAggregate             *aggregate.PanoAggregate
-	BgpAggAdvertiseFilter    *agaf.PanoAdvertise
+	BgpAggregate             *aggregate.Panorama
+	BgpAggAdvertiseFilter    *agaf.Panorama
 	BgpAggSuppressFilter     *suppress.PanoSuppress
 	BgpAuthProfile           *auth.PanoAuth
 	BgpConAdvAdvertiseFilter *advertise.PanoAdvertise
@@ -95,11 +95,8 @@ func (c *PanoNetw) Initialize(i util.XapiClient) {
 	c.BfdProfile = &bfd.PanoBfd{}
 	c.BfdProfile.Initialize(i)
 
-	c.BgpAggregate = &aggregate.PanoAggregate{}
-	c.BgpAggregate.Initialize(i)
-
-	c.BgpAggAdvertiseFilter = &agaf.PanoAdvertise{}
-	c.BgpAggAdvertiseFilter.Initialize(i)
+	c.BgpAggregate = aggregate.PanoramaNamespace(i)
+	c.BgpAggAdvertiseFilter = agaf.PanoramaNamespace(i)
 
 	c.BgpAggSuppressFilter = &suppress.PanoSuppress{}
 	c.BgpAggSuppressFilter.Initialize(i)

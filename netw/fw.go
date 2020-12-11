@@ -54,8 +54,8 @@ type FwNetw struct {
 	AggregateInterface       *aggeth.Firewall
 	Arp                      *arp.Firewall
 	BfdProfile               *bfd.FwBfd
-	BgpAggregate             *aggregate.FwAggregate
-	BgpAggAdvertiseFilter    *agaf.FwAdvertise
+	BgpAggregate             *aggregate.Firewall
+	BgpAggAdvertiseFilter    *agaf.Firewall
 	BgpAggSuppressFilter     *suppress.FwSuppress
 	BgpAuthProfile           *auth.FwAuth
 	BgpConAdvAdvertiseFilter *advertise.FwAdvertise
@@ -107,11 +107,8 @@ func (c *FwNetw) Initialize(i util.XapiClient) {
 	c.BfdProfile = &bfd.FwBfd{}
 	c.BfdProfile.Initialize(i)
 
-	c.BgpAggregate = &aggregate.FwAggregate{}
-	c.BgpAggregate.Initialize(i)
-
-	c.BgpAggAdvertiseFilter = &agaf.FwAdvertise{}
-	c.BgpAggAdvertiseFilter.Initialize(i)
+	c.BgpAggregate = aggregate.FirewallNamespace(i)
+	c.BgpAggAdvertiseFilter = agaf.FirewallNamespace(i)
 
 	c.BgpAggSuppressFilter = &suppress.FwSuppress{}
 	c.BgpAggSuppressFilter.Initialize(i)
