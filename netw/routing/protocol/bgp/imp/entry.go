@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 
 	"github.com/PaloAltoNetworks/pango/util"
+	"github.com/PaloAltoNetworks/pango/version"
 )
 
 // Entry is a normalized, version independent representation of a BGP
@@ -65,101 +66,125 @@ func (o *Entry) Copy(s Entry) {
 
 /** Structs / functions for this namespace. **/
 
+func (o Entry) Specify(v version.Number) (string, interface{}) {
+	_, fn := versioning(v)
+	return o.Name, fn(o)
+}
+
 type normalizer interface {
-	Normalize() Entry
+	Normalize() []Entry
+	Names() []string
 }
 
 type container_v1 struct {
-	Answer entry_v1 `xml:"result>entry"`
+	Answer []entry_v1 `xml:"entry"`
 }
 
-func (o *container_v1) Normalize() Entry {
-	ans := Entry{
-		Name:   o.Answer.Name,
-		Enable: util.AsBool(o.Answer.Enable),
-		UsedBy: util.MemToStr(o.Answer.UsedBy),
+func (o *container_v1) Normalize() []Entry {
+	ans := make([]Entry, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].normalize())
 	}
 
-	if o.Answer.Match != nil {
-		ans.MatchMed = o.Answer.Match.MatchMed
-		ans.MatchNextHop = util.MemToStr(o.Answer.Match.MatchNextHop)
-		ans.MatchFromPeer = util.MemToStr(o.Answer.Match.MatchFromPeer)
+	return ans
+}
 
-		if o.Answer.Match.MatchAsPathRegex != nil {
-			ans.MatchAsPathRegex = o.Answer.Match.MatchAsPathRegex.Regex
+func (o *container_v1) Names() []string {
+	ans := make([]string, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].Name)
+	}
+
+	return ans
+}
+
+func (o *entry_v1) normalize() Entry {
+	ans := Entry{
+		Name:   o.Name,
+		Enable: util.AsBool(o.Enable),
+		UsedBy: util.MemToStr(o.UsedBy),
+	}
+
+	if o.Match != nil {
+		ans.MatchMed = o.Match.MatchMed
+		ans.MatchNextHop = util.MemToStr(o.Match.MatchNextHop)
+		ans.MatchFromPeer = util.MemToStr(o.Match.MatchFromPeer)
+
+		if o.Match.MatchAsPathRegex != nil {
+			ans.MatchAsPathRegex = o.Match.MatchAsPathRegex.Regex
 		}
 
-		if o.Answer.Match.MatchCommunityRegex != nil {
-			ans.MatchCommunityRegex = o.Answer.Match.MatchCommunityRegex.Regex
+		if o.Match.MatchCommunityRegex != nil {
+			ans.MatchCommunityRegex = o.Match.MatchCommunityRegex.Regex
 		}
 
-		if o.Answer.Match.MatchExtendedCommunityRegex != nil {
-			ans.MatchExtendedCommunityRegex = o.Answer.Match.MatchExtendedCommunityRegex.Regex
+		if o.Match.MatchExtendedCommunityRegex != nil {
+			ans.MatchExtendedCommunityRegex = o.Match.MatchExtendedCommunityRegex.Regex
 		}
 
-		if o.Answer.Match.MatchAddressPrefix != nil {
+		if o.Match.MatchAddressPrefix != nil {
 			m := make(map[string]bool)
-			for _, v := range o.Answer.Match.MatchAddressPrefix.Entry {
+			for _, v := range o.Match.MatchAddressPrefix.Entry {
 				m[v.Name] = util.AsBool(v.Exact)
 			}
 			ans.MatchAddressPrefix = m
 		}
 	}
 
-	if o.Answer.Action != nil {
-		if o.Answer.Action.Deny != nil {
+	if o.Action != nil {
+		if o.Action.Deny != nil {
 			ans.Action = ActionDeny
-		} else if o.Answer.Action.Allow != nil {
+		} else if o.Action.Allow != nil {
 			ans.Action = ActionAllow
-			ans.Dampening = o.Answer.Action.Allow.Dampening
+			ans.Dampening = o.Action.Allow.Dampening
 
-			if o.Answer.Action.Allow.Update != nil {
-				ans.LocalPreference = o.Answer.Action.Allow.Update.LocalPreference
-				ans.Med = o.Answer.Action.Allow.Update.Med
-				ans.Weight = o.Answer.Action.Allow.Update.Weight
-				ans.NextHop = o.Answer.Action.Allow.Update.NextHop
-				ans.Origin = o.Answer.Action.Allow.Update.Origin
-				ans.AsPathLimit = o.Answer.Action.Allow.Update.AsPathLimit
+			if o.Action.Allow.Update != nil {
+				ans.LocalPreference = o.Action.Allow.Update.LocalPreference
+				ans.Med = o.Action.Allow.Update.Med
+				ans.Weight = o.Action.Allow.Update.Weight
+				ans.NextHop = o.Action.Allow.Update.NextHop
+				ans.Origin = o.Action.Allow.Update.Origin
+				ans.AsPathLimit = o.Action.Allow.Update.AsPathLimit
 
-				if o.Answer.Action.Allow.Update.AsPath != nil {
-					if o.Answer.Action.Allow.Update.AsPath.None != nil {
+				if o.Action.Allow.Update.AsPath != nil {
+					if o.Action.Allow.Update.AsPath.None != nil {
 						ans.AsPathType = AsPathTypeNone
-					} else if o.Answer.Action.Allow.Update.AsPath.Remove != nil {
+					} else if o.Action.Allow.Update.AsPath.Remove != nil {
 						ans.AsPathType = AsPathTypeRemove
 					}
 				}
 
-				if o.Answer.Action.Allow.Update.Community != nil {
-					if o.Answer.Action.Allow.Update.Community.None != nil {
+				if o.Action.Allow.Update.Community != nil {
+					if o.Action.Allow.Update.Community.None != nil {
 						ans.CommunityType = CommunityTypeNone
-					} else if o.Answer.Action.Allow.Update.Community.RemoveAll != nil {
+					} else if o.Action.Allow.Update.Community.RemoveAll != nil {
 						ans.CommunityType = CommunityTypeRemoveAll
-					} else if o.Answer.Action.Allow.Update.Community.RemoveRegex != "" {
+					} else if o.Action.Allow.Update.Community.RemoveRegex != "" {
 						ans.CommunityType = CommunityTypeRemoveRegex
-						ans.CommunityValue = o.Answer.Action.Allow.Update.Community.RemoveRegex
-					} else if o.Answer.Action.Allow.Update.Community.Append != nil {
+						ans.CommunityValue = o.Action.Allow.Update.Community.RemoveRegex
+					} else if o.Action.Allow.Update.Community.Append != nil {
 						ans.CommunityType = CommunityTypeAppend
-						ans.CommunityValue = util.MemToOneStr(o.Answer.Action.Allow.Update.Community.Append)
-					} else if o.Answer.Action.Allow.Update.Community.Overwrite != nil {
+						ans.CommunityValue = util.MemToOneStr(o.Action.Allow.Update.Community.Append)
+					} else if o.Action.Allow.Update.Community.Overwrite != nil {
 						ans.CommunityType = CommunityTypeOverwrite
-						ans.CommunityValue = util.MemToOneStr(o.Answer.Action.Allow.Update.Community.Overwrite)
+						ans.CommunityValue = util.MemToOneStr(o.Action.Allow.Update.Community.Overwrite)
 					}
 				}
 
-				if o.Answer.Action.Allow.Update.ExtendedCommunity != nil {
-					if o.Answer.Action.Allow.Update.ExtendedCommunity.None != nil {
+				if o.Action.Allow.Update.ExtendedCommunity != nil {
+					if o.Action.Allow.Update.ExtendedCommunity.None != nil {
 						ans.ExtendedCommunityType = CommunityTypeNone
-					} else if o.Answer.Action.Allow.Update.ExtendedCommunity.RemoveAll != nil {
+					} else if o.Action.Allow.Update.ExtendedCommunity.RemoveAll != nil {
 						ans.ExtendedCommunityType = CommunityTypeRemoveAll
-					} else if o.Answer.Action.Allow.Update.ExtendedCommunity.RemoveRegex != "" {
+					} else if o.Action.Allow.Update.ExtendedCommunity.RemoveRegex != "" {
 						ans.ExtendedCommunityType = CommunityTypeRemoveRegex
-						ans.ExtendedCommunityValue = o.Answer.Action.Allow.Update.ExtendedCommunity.RemoveRegex
-					} else if o.Answer.Action.Allow.Update.ExtendedCommunity.Append != nil {
+						ans.ExtendedCommunityValue = o.Action.Allow.Update.ExtendedCommunity.RemoveRegex
+					} else if o.Action.Allow.Update.ExtendedCommunity.Append != nil {
 						ans.ExtendedCommunityType = CommunityTypeAppend
-						ans.ExtendedCommunityValue = util.MemToOneStr(o.Answer.Action.Allow.Update.ExtendedCommunity.Append)
-					} else if o.Answer.Action.Allow.Update.ExtendedCommunity.Overwrite != nil {
+						ans.ExtendedCommunityValue = util.MemToOneStr(o.Action.Allow.Update.ExtendedCommunity.Append)
+					} else if o.Action.Allow.Update.ExtendedCommunity.Overwrite != nil {
 						ans.ExtendedCommunityType = CommunityTypeOverwrite
-						ans.ExtendedCommunityValue = util.MemToOneStr(o.Answer.Action.Allow.Update.ExtendedCommunity.Overwrite)
+						ans.ExtendedCommunityValue = util.MemToOneStr(o.Action.Allow.Update.ExtendedCommunity.Overwrite)
 					}
 				}
 			}
@@ -170,97 +195,115 @@ func (o *container_v1) Normalize() Entry {
 }
 
 type container_v2 struct {
-	Answer entry_v2 `xml:"result>entry"`
+	Answer []entry_v2 `xml:"entry"`
 }
 
-func (o *container_v2) Normalize() Entry {
-	ans := Entry{
-		Name:   o.Answer.Name,
-		Enable: util.AsBool(o.Answer.Enable),
-		UsedBy: util.MemToStr(o.Answer.UsedBy),
+func (o *container_v2) Normalize() []Entry {
+	ans := make([]Entry, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].normalize())
 	}
 
-	if o.Answer.Match != nil {
-		ans.MatchMed = o.Answer.Match.MatchMed
-		ans.MatchRouteTable = o.Answer.Match.MatchRouteTable
-		ans.MatchNextHop = util.MemToStr(o.Answer.Match.MatchNextHop)
-		ans.MatchFromPeer = util.MemToStr(o.Answer.Match.MatchFromPeer)
+	return ans
+}
 
-		if o.Answer.Match.MatchAsPathRegex != nil {
-			ans.MatchAsPathRegex = o.Answer.Match.MatchAsPathRegex.Regex
+func (o *container_v2) Names() []string {
+	ans := make([]string, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].Name)
+	}
+
+	return ans
+}
+
+func (o *entry_v2) normalize() Entry {
+	ans := Entry{
+		Name:   o.Name,
+		Enable: util.AsBool(o.Enable),
+		UsedBy: util.MemToStr(o.UsedBy),
+	}
+
+	if o.Match != nil {
+		ans.MatchMed = o.Match.MatchMed
+		ans.MatchRouteTable = o.Match.MatchRouteTable
+		ans.MatchNextHop = util.MemToStr(o.Match.MatchNextHop)
+		ans.MatchFromPeer = util.MemToStr(o.Match.MatchFromPeer)
+
+		if o.Match.MatchAsPathRegex != nil {
+			ans.MatchAsPathRegex = o.Match.MatchAsPathRegex.Regex
 		}
 
-		if o.Answer.Match.MatchCommunityRegex != nil {
-			ans.MatchCommunityRegex = o.Answer.Match.MatchCommunityRegex.Regex
+		if o.Match.MatchCommunityRegex != nil {
+			ans.MatchCommunityRegex = o.Match.MatchCommunityRegex.Regex
 		}
 
-		if o.Answer.Match.MatchExtendedCommunityRegex != nil {
-			ans.MatchExtendedCommunityRegex = o.Answer.Match.MatchExtendedCommunityRegex.Regex
+		if o.Match.MatchExtendedCommunityRegex != nil {
+			ans.MatchExtendedCommunityRegex = o.Match.MatchExtendedCommunityRegex.Regex
 		}
 
-		if o.Answer.Match.MatchAddressPrefix != nil {
+		if o.Match.MatchAddressPrefix != nil {
 			m := make(map[string]bool)
-			for _, v := range o.Answer.Match.MatchAddressPrefix.Entry {
+			for _, v := range o.Match.MatchAddressPrefix.Entry {
 				m[v.Name] = util.AsBool(v.Exact)
 			}
 			ans.MatchAddressPrefix = m
 		}
 	}
 
-	if o.Answer.Action != nil {
-		if o.Answer.Action.Deny != nil {
+	if o.Action != nil {
+		if o.Action.Deny != nil {
 			ans.Action = ActionDeny
-		} else if o.Answer.Action.Allow != nil {
+		} else if o.Action.Allow != nil {
 			ans.Action = ActionAllow
-			ans.Dampening = o.Answer.Action.Allow.Dampening
+			ans.Dampening = o.Action.Allow.Dampening
 
-			if o.Answer.Action.Allow.Update != nil {
-				ans.LocalPreference = o.Answer.Action.Allow.Update.LocalPreference
-				ans.Med = o.Answer.Action.Allow.Update.Med
-				ans.Weight = o.Answer.Action.Allow.Update.Weight
-				ans.NextHop = o.Answer.Action.Allow.Update.NextHop
-				ans.Origin = o.Answer.Action.Allow.Update.Origin
-				ans.AsPathLimit = o.Answer.Action.Allow.Update.AsPathLimit
+			if o.Action.Allow.Update != nil {
+				ans.LocalPreference = o.Action.Allow.Update.LocalPreference
+				ans.Med = o.Action.Allow.Update.Med
+				ans.Weight = o.Action.Allow.Update.Weight
+				ans.NextHop = o.Action.Allow.Update.NextHop
+				ans.Origin = o.Action.Allow.Update.Origin
+				ans.AsPathLimit = o.Action.Allow.Update.AsPathLimit
 
-				if o.Answer.Action.Allow.Update.AsPath != nil {
-					if o.Answer.Action.Allow.Update.AsPath.None != nil {
+				if o.Action.Allow.Update.AsPath != nil {
+					if o.Action.Allow.Update.AsPath.None != nil {
 						ans.AsPathType = AsPathTypeNone
-					} else if o.Answer.Action.Allow.Update.AsPath.Remove != nil {
+					} else if o.Action.Allow.Update.AsPath.Remove != nil {
 						ans.AsPathType = AsPathTypeRemove
 					}
 				}
 
-				if o.Answer.Action.Allow.Update.Community != nil {
-					if o.Answer.Action.Allow.Update.Community.None != nil {
+				if o.Action.Allow.Update.Community != nil {
+					if o.Action.Allow.Update.Community.None != nil {
 						ans.CommunityType = CommunityTypeNone
-					} else if o.Answer.Action.Allow.Update.Community.RemoveAll != nil {
+					} else if o.Action.Allow.Update.Community.RemoveAll != nil {
 						ans.CommunityType = CommunityTypeRemoveAll
-					} else if o.Answer.Action.Allow.Update.Community.RemoveRegex != "" {
+					} else if o.Action.Allow.Update.Community.RemoveRegex != "" {
 						ans.CommunityType = CommunityTypeRemoveRegex
-						ans.CommunityValue = o.Answer.Action.Allow.Update.Community.RemoveRegex
-					} else if o.Answer.Action.Allow.Update.Community.Append != nil {
+						ans.CommunityValue = o.Action.Allow.Update.Community.RemoveRegex
+					} else if o.Action.Allow.Update.Community.Append != nil {
 						ans.CommunityType = CommunityTypeAppend
-						ans.CommunityValue = util.MemToOneStr(o.Answer.Action.Allow.Update.Community.Append)
-					} else if o.Answer.Action.Allow.Update.Community.Overwrite != nil {
+						ans.CommunityValue = util.MemToOneStr(o.Action.Allow.Update.Community.Append)
+					} else if o.Action.Allow.Update.Community.Overwrite != nil {
 						ans.CommunityType = CommunityTypeOverwrite
-						ans.CommunityValue = util.MemToOneStr(o.Answer.Action.Allow.Update.Community.Overwrite)
+						ans.CommunityValue = util.MemToOneStr(o.Action.Allow.Update.Community.Overwrite)
 					}
 				}
 
-				if o.Answer.Action.Allow.Update.ExtendedCommunity != nil {
-					if o.Answer.Action.Allow.Update.ExtendedCommunity.None != nil {
+				if o.Action.Allow.Update.ExtendedCommunity != nil {
+					if o.Action.Allow.Update.ExtendedCommunity.None != nil {
 						ans.ExtendedCommunityType = CommunityTypeNone
-					} else if o.Answer.Action.Allow.Update.ExtendedCommunity.RemoveAll != nil {
+					} else if o.Action.Allow.Update.ExtendedCommunity.RemoveAll != nil {
 						ans.ExtendedCommunityType = CommunityTypeRemoveAll
-					} else if o.Answer.Action.Allow.Update.ExtendedCommunity.RemoveRegex != "" {
+					} else if o.Action.Allow.Update.ExtendedCommunity.RemoveRegex != "" {
 						ans.ExtendedCommunityType = CommunityTypeRemoveRegex
-						ans.ExtendedCommunityValue = o.Answer.Action.Allow.Update.ExtendedCommunity.RemoveRegex
-					} else if o.Answer.Action.Allow.Update.ExtendedCommunity.Append != nil {
+						ans.ExtendedCommunityValue = o.Action.Allow.Update.ExtendedCommunity.RemoveRegex
+					} else if o.Action.Allow.Update.ExtendedCommunity.Append != nil {
 						ans.ExtendedCommunityType = CommunityTypeAppend
-						ans.ExtendedCommunityValue = util.MemToOneStr(o.Answer.Action.Allow.Update.ExtendedCommunity.Append)
-					} else if o.Answer.Action.Allow.Update.ExtendedCommunity.Overwrite != nil {
+						ans.ExtendedCommunityValue = util.MemToOneStr(o.Action.Allow.Update.ExtendedCommunity.Append)
+					} else if o.Action.Allow.Update.ExtendedCommunity.Overwrite != nil {
 						ans.ExtendedCommunityType = CommunityTypeOverwrite
-						ans.ExtendedCommunityValue = util.MemToOneStr(o.Answer.Action.Allow.Update.ExtendedCommunity.Overwrite)
+						ans.ExtendedCommunityValue = util.MemToOneStr(o.Action.Allow.Update.ExtendedCommunity.Overwrite)
 					}
 				}
 			}
