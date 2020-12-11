@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 
 	"github.com/PaloAltoNetworks/pango/util"
+	"github.com/PaloAltoNetworks/pango/version"
 )
 
 // Entry is a normalized, version independent representation of a BGP
@@ -37,40 +38,64 @@ func (o *Entry) Copy(s Entry) {
 
 /** Structs / functions for this namespace. **/
 
+func (o Entry) Specify(v version.Number) (string, interface{}) {
+	_, fn := versioning(v)
+	return o.Name, fn(o)
+}
+
 type normalizer interface {
-	Normalize() Entry
+	Normalize() []Entry
+	Names() []string
 }
 
 type container_v1 struct {
-	Answer entry_v1 `xml:"result>entry"`
+	Answer []entry_v1 `xml:"entry"`
 }
 
-func (o *container_v1) Normalize() Entry {
-	ans := Entry{
-		Name:   o.Answer.Name,
-		Enable: util.AsBool(o.Answer.Enable),
+func (o *container_v1) Normalize() []Entry {
+	ans := make([]Entry, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].normalize())
 	}
 
-	if o.Answer.Match != nil {
-		ans.Med = o.Answer.Match.Med
-		ans.NextHop = util.MemToStr(o.Answer.Match.NextHop)
-		ans.FromPeer = util.MemToStr(o.Answer.Match.FromPeer)
+	return ans
+}
 
-		if o.Answer.Match.AsPathRegex != nil {
-			ans.AsPathRegex = o.Answer.Match.AsPathRegex.Regex
+func (o *container_v1) Names() []string {
+	ans := make([]string, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].Name)
+	}
+
+	return ans
+}
+
+func (o *entry_v1) normalize() Entry {
+	ans := Entry{
+		Name:   o.Name,
+		Enable: util.AsBool(o.Enable),
+	}
+
+	if o.Match != nil {
+		ans.Med = o.Match.Med
+		ans.NextHop = util.MemToStr(o.Match.NextHop)
+		ans.FromPeer = util.MemToStr(o.Match.FromPeer)
+
+		if o.Match.AsPathRegex != nil {
+			ans.AsPathRegex = o.Match.AsPathRegex.Regex
 		}
 
-		if o.Answer.Match.CommunityRegex != nil {
-			ans.CommunityRegex = o.Answer.Match.CommunityRegex.Regex
+		if o.Match.CommunityRegex != nil {
+			ans.CommunityRegex = o.Match.CommunityRegex.Regex
 		}
 
-		if o.Answer.Match.ExtendedCommunityRegex != nil {
-			ans.ExtendedCommunityRegex = o.Answer.Match.ExtendedCommunityRegex.Regex
+		if o.Match.ExtendedCommunityRegex != nil {
+			ans.ExtendedCommunityRegex = o.Match.ExtendedCommunityRegex.Regex
 		}
 
-		if o.Answer.Match.AddressPrefix != nil {
+		if o.Match.AddressPrefix != nil {
 			m := make(map[string]bool)
-			for _, v := range o.Answer.Match.AddressPrefix.Entry {
+			for _, v := range o.Match.AddressPrefix.Entry {
 				m[v.Name] = util.AsBool(v.Exact)
 			}
 			ans.AddressPrefix = m
@@ -81,36 +106,54 @@ func (o *container_v1) Normalize() Entry {
 }
 
 type container_v2 struct {
-	Answer entry_v2 `xml:"result>entry"`
+	Answer []entry_v2 `xml:"entry"`
 }
 
-func (o *container_v2) Normalize() Entry {
-	ans := Entry{
-		Name:   o.Answer.Name,
-		Enable: util.AsBool(o.Answer.Enable),
+func (o *container_v2) Normalize() []Entry {
+	ans := make([]Entry, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].normalize())
 	}
 
-	if o.Answer.Match != nil {
-		ans.Med = o.Answer.Match.Med
-		ans.NextHop = util.MemToStr(o.Answer.Match.NextHop)
-		ans.FromPeer = util.MemToStr(o.Answer.Match.FromPeer)
-		ans.RouteTable = o.Answer.Match.RouteTable
+	return ans
+}
 
-		if o.Answer.Match.AsPathRegex != nil {
-			ans.AsPathRegex = o.Answer.Match.AsPathRegex.Regex
+func (o *container_v2) Names() []string {
+	ans := make([]string, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].Name)
+	}
+
+	return ans
+}
+
+func (o *entry_v2) normalize() Entry {
+	ans := Entry{
+		Name:   o.Name,
+		Enable: util.AsBool(o.Enable),
+	}
+
+	if o.Match != nil {
+		ans.Med = o.Match.Med
+		ans.NextHop = util.MemToStr(o.Match.NextHop)
+		ans.FromPeer = util.MemToStr(o.Match.FromPeer)
+		ans.RouteTable = o.Match.RouteTable
+
+		if o.Match.AsPathRegex != nil {
+			ans.AsPathRegex = o.Match.AsPathRegex.Regex
 		}
 
-		if o.Answer.Match.CommunityRegex != nil {
-			ans.CommunityRegex = o.Answer.Match.CommunityRegex.Regex
+		if o.Match.CommunityRegex != nil {
+			ans.CommunityRegex = o.Match.CommunityRegex.Regex
 		}
 
-		if o.Answer.Match.ExtendedCommunityRegex != nil {
-			ans.ExtendedCommunityRegex = o.Answer.Match.ExtendedCommunityRegex.Regex
+		if o.Match.ExtendedCommunityRegex != nil {
+			ans.ExtendedCommunityRegex = o.Match.ExtendedCommunityRegex.Regex
 		}
 
-		if o.Answer.Match.AddressPrefix != nil {
+		if o.Match.AddressPrefix != nil {
 			m := make(map[string]bool)
-			for _, v := range o.Answer.Match.AddressPrefix.Entry {
+			for _, v := range o.Match.AddressPrefix.Entry {
 				m[v.Name] = util.AsBool(v.Exact)
 			}
 			ans.AddressPrefix = m
