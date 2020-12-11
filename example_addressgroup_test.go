@@ -95,28 +95,18 @@ func Example_createAddressGroup() {
 	log.Printf("Response XML: %v\n", string(bytes))
 
 	// Delete the addresses, address group and security policy
-	securityPolicy, err = pan.Policies.Security.Get(deviceGroup, util.PreRulebase, "SamplePolicy")
-	if err != nil {
+	// Note that the Delete function can take their respective enty structs, or just a string with the name as shown below
+	if err = pan.Policies.Security.Delete(deviceGroup, util.PreRulebase, securityPolicy.Name); err != nil {
 		log.Panic(err)
 	}
-	if err = pan.Policies.Security.Delete(deviceGroup, util.PreRulebase, securityPolicy); err != nil {
+	if err = pan.Objects.AddressGroup.Delete(deviceGroup, ag.Name); err != nil {
 		log.Panic(err)
 	}
-
-	for _, agn := range securityPolicy.DestinationAddresses {
-		ag, err := pan.Objects.AddressGroup.Get(deviceGroup, agn)
-		if err != nil {
-			log.Panic(err)
-		}
-		if err = pan.Objects.AddressGroup.Delete(deviceGroup, ag); err != nil {
-			log.Panic(err)
-		}
-		for _, an := range ag.StaticAddresses {
-			a, err := pan.Objects.Address.Get(deviceGroup, an)
-			if err = pan.Objects.Address.Delete(deviceGroup, a); err != nil {
-				log.Panic(err)
-			}
-		}
+	if err = pan.Objects.Address.Delete(deviceGroup, addr1.Name); err != nil {
+		log.Panic(err)
+	}
+	if err = pan.Objects.Address.Delete(deviceGroup, addr2.Name); err != nil {
+		log.Panic(err)
 	}
 
 	panCommit = commit.PanoramaCommit{
