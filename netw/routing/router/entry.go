@@ -308,23 +308,20 @@ func specify_v1(e Entry) interface{} {
 				},
 			}
 		case EcmpLoadBalanceMethodWeightedRoundRobin:
-			var wrrValue *wrr
+			ans.Ecmp.Algorithm = &algorithm{
+				Wrr: &wrr{},
+			}
 			if len(e.EcmpWeightedRoundRobinInterfaces) > 0 {
-				listing := make([]wrrInterface, 0, len(e.EcmpWeightedRoundRobinInterfaces))
+				list := make([]wrrInterface, 0, len(e.EcmpWeightedRoundRobinInterfaces))
 				for name, weight := range e.EcmpWeightedRoundRobinInterfaces {
-					listing = append(listing, wrrInterface{
+					list = append(list, wrrInterface{
 						Interface: name,
 						Weight:    weight,
 					})
 				}
-				wrrValue = &wrr{
-					Interfaces: &wrrInterfaces{
-						Entries: listing,
-					},
+				ans.Ecmp.Algorithm.Wrr.Interfaces = &wrrInterfaces{
+					Entries: list,
 				}
-			}
-			ans.Ecmp.Algorithm = &algorithm{
-				Wrr: wrrValue,
 			}
 		case EcmpLoadBalanceMethodBalancedRoundRobin:
 			ans.Ecmp.Algorithm = &algorithm{
