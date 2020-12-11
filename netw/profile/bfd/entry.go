@@ -2,11 +2,8 @@ package bfd
 
 import (
 	"encoding/xml"
-)
 
-const (
-	ModeActive  = "active"
-	ModePassive = "passive"
+	"github.com/PaloAltoNetworks/pango/version"
 )
 
 // Entry is a normalized, version independent representation of a BFD profile.
@@ -33,26 +30,50 @@ func (o *Entry) Copy(s Entry) {
 
 /** Structs / functions for this namespace. **/
 
+func (o Entry) Specify(v version.Number) (string, interface{}) {
+	_, fn := versioning(v)
+	return o.Name, fn(o)
+}
+
 type normalizer interface {
-	Normalize() Entry
+	Normalize() []Entry
+	Names() []string
 }
 
 type container_v1 struct {
-	Answer entry_v1 `xml:"result>entry"`
+	Answer []entry_v1 `xml:"entry"`
 }
 
-func (o *container_v1) Normalize() Entry {
-	ans := Entry{
-		Name:                o.Answer.Name,
-		Mode:                o.Answer.Mode,
-		MinimumTxInterval:   o.Answer.MinimumTxInterval,
-		MinimumRxInterval:   o.Answer.MinimumRxInterval,
-		DetectionMultiplier: o.Answer.DetectionMultiplier,
-		HoldTime:            o.Answer.HoldTime,
+func (o *container_v1) Normalize() []Entry {
+	ans := make([]Entry, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].normalize())
 	}
 
-	if o.Answer.Multihop != nil {
-		ans.MinimumRxTtl = o.Answer.Multihop.MinimumRxTtl
+	return ans
+}
+
+func (o *container_v1) Names() []string {
+	ans := make([]string, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].Name)
+	}
+
+	return ans
+}
+
+func (o *entry_v1) normalize() Entry {
+	ans := Entry{
+		Name:                o.Name,
+		Mode:                o.Mode,
+		MinimumTxInterval:   o.MinimumTxInterval,
+		MinimumRxInterval:   o.MinimumRxInterval,
+		DetectionMultiplier: o.DetectionMultiplier,
+		HoldTime:            o.HoldTime,
+	}
+
+	if o.Multihop != nil {
+		ans.MinimumRxTtl = o.Multihop.MinimumRxTtl
 	}
 
 	return ans
