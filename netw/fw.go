@@ -63,7 +63,7 @@ type FwNetw struct {
 	BgpConditionalAdv        *conadv.FwConAdv
 	BgpConfig                *bgp.Firewall
 	BgpDampeningProfile      *dampening.FwDampening
-	BgpExport                *exp.FwExp
+	BgpExport                *exp.Firewall
 	BgpImport                *imp.FwImp
 	BgpPeer                  *peer.FwPeer
 	BgpPeerGroup             *group.FwGroup
@@ -128,8 +128,7 @@ func (c *FwNetw) Initialize(i util.XapiClient) {
 	c.BgpDampeningProfile = &dampening.FwDampening{}
 	c.BgpDampeningProfile.Initialize(i)
 
-	c.BgpExport = &exp.FwExp{}
-	c.BgpExport.Initialize(i)
+	c.BgpExport = exp.FirewallNamespace(i)
 
 	c.BgpImport = &imp.FwImp{}
 	c.BgpImport.Initialize(i)

@@ -57,7 +57,7 @@ type PanoNetw struct {
 	BgpConditionalAdv        *conadv.PanoConAdv
 	BgpConfig                *bgp.Panorama
 	BgpDampeningProfile      *dampening.PanoDampening
-	BgpExport                *exp.PanoExp
+	BgpExport                *exp.Panorama
 	BgpImport                *imp.PanoImp
 	BgpPeer                  *peer.PanoPeer
 	BgpPeerGroup             *group.PanoGroup
@@ -116,8 +116,7 @@ func (c *PanoNetw) Initialize(i util.XapiClient) {
 	c.BgpDampeningProfile = &dampening.PanoDampening{}
 	c.BgpDampeningProfile.Initialize(i)
 
-	c.BgpExport = &exp.PanoExp{}
-	c.BgpExport.Initialize(i)
+	c.BgpExport = exp.PanoramaNamespace(i)
 
 	c.BgpImport = &imp.PanoImp{}
 	c.BgpImport.Initialize(i)
