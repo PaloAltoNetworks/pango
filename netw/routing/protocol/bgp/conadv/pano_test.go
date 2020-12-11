@@ -8,33 +8,10 @@ import (
 )
 
 func TestPanoNormalization(t *testing.T) {
-	testCases := []struct {
-		desc string
-		conf Entry
-	}{
-		{"minimal", Entry{
-			Name:   "one",
-			Enable: false,
-		}},
-		{"standard", Entry{
-			Name:   "two",
-			Enable: true,
-			UsedBy: []string{"one", "two"},
-		}},
-		{"with raw", Entry{
-			Name:   "three",
-			Enable: true,
-			UsedBy: []string{"one", "two"},
-			raw: map[string]string{
-				"af": "advertisement filters",
-				"nf": "non exist filters",
-			},
-		}},
-	}
+	testCases := getTests()
 
 	mc := &testdata.MockClient{}
-	ns := &PanoConAdv{}
-	ns.Initialize(mc)
+	ns := PanoramaNamespace(mc)
 
 	for _, tc := range testCases {
 		t.Run(tc.desc, func(t *testing.T) {
