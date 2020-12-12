@@ -83,6 +83,9 @@ func (c *Panorama) xpath(tmpl, ts, vr, ca string, vals []string) ([]string, erro
 	if vr == "" {
 		return nil, fmt.Errorf("vr must be specified")
 	}
+	if ca == "" {
+		return nil, fmt.Errorf("ca must be specified")
+	}
 
 	ans := make([]string, 0, 19)
 	ans = append(ans, util.TemplateXpathPrefix(tmpl, ts)...)
