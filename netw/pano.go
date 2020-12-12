@@ -47,18 +47,18 @@ import (
 type PanoNetw struct {
 	AggregateInterface       *aggeth.Panorama
 	Arp                      *arp.Panorama
-	BfdProfile               *bfd.PanoBfd
+	BfdProfile               *bfd.Panorama
 	BgpAggregate             *aggregate.Panorama
 	BgpAggAdvertiseFilter    *agaf.Panorama
 	BgpAggSuppressFilter     *suppress.Panorama
-	BgpAuthProfile           *auth.PanoAuth
-	BgpConAdvAdvertiseFilter *advertise.PanoAdvertise
-	BgpConAdvNonExistFilter  *nonexist.PanoNonExist
-	BgpConditionalAdv        *conadv.PanoConAdv
+	BgpAuthProfile           *auth.Panorama
+	BgpConAdvAdvertiseFilter *advertise.Panorama
+	BgpConAdvNonExistFilter  *nonexist.Panorama
+	BgpConditionalAdv        *conadv.Panorama
 	BgpConfig                *bgp.Panorama
 	BgpDampeningProfile      *dampening.PanoDampening
 	BgpExport                *exp.Panorama
-	BgpImport                *imp.PanoImp
+	BgpImport                *imp.Panorama
 	BgpPeer                  *peer.PanoPeer
 	BgpPeerGroup             *group.PanoGroup
 	BgpRedistRule            *bgpredist.PanoRedist
@@ -89,37 +89,22 @@ type PanoNetw struct {
 // Initialize is invoked on client.Initialize().
 func (c *PanoNetw) Initialize(i util.XapiClient) {
 	c.AggregateInterface = aggeth.PanoramaNamespace(i)
-
 	c.Arp = arp.PanoramaNamespace(i)
-
-	c.BfdProfile = &bfd.PanoBfd{}
-	c.BfdProfile.Initialize(i)
-
+	c.BfdProfile = bfd.PanoramaNamespace(i)
 	c.BgpAggregate = aggregate.PanoramaNamespace(i)
 	c.BgpAggAdvertiseFilter = agaf.PanoramaNamespace(i)
 	c.BgpAggSuppressFilter = suppress.PanoramaNamespace(i)
-
-	c.BgpAuthProfile = &auth.PanoAuth{}
-	c.BgpAuthProfile.Initialize(i)
-
-	c.BgpConAdvAdvertiseFilter = &advertise.PanoAdvertise{}
-	c.BgpConAdvAdvertiseFilter.Initialize(i)
-
-	c.BgpConAdvNonExistFilter = &nonexist.PanoNonExist{}
-	c.BgpConAdvNonExistFilter.Initialize(i)
-
-	c.BgpConditionalAdv = &conadv.PanoConAdv{}
-	c.BgpConditionalAdv.Initialize(i)
-
+	c.BgpAuthProfile = auth.PanoramaNamespace(i)
+	c.BgpConAdvAdvertiseFilter = advertise.PanoramaNamespace(i)
+	c.BgpConAdvNonExistFilter = nonexist.PanoramaNamespace(i)
+	c.BgpConditionalAdv = conadv.PanoramaNamespace(i)
 	c.BgpConfig = bgp.PanoramaNamespace(i)
 
 	c.BgpDampeningProfile = &dampening.PanoDampening{}
 	c.BgpDampeningProfile.Initialize(i)
 
 	c.BgpExport = exp.PanoramaNamespace(i)
-
-	c.BgpImport = &imp.PanoImp{}
-	c.BgpImport.Initialize(i)
+	c.BgpImport = imp.PanoramaNamespace(i)
 
 	c.BgpPeer = &peer.PanoPeer{}
 	c.BgpPeer.Initialize(i)

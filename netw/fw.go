@@ -53,18 +53,18 @@ import (
 type FwNetw struct {
 	AggregateInterface       *aggeth.Firewall
 	Arp                      *arp.Firewall
-	BfdProfile               *bfd.FwBfd
+	BfdProfile               *bfd.Firewall
 	BgpAggregate             *aggregate.Firewall
 	BgpAggAdvertiseFilter    *agaf.Firewall
 	BgpAggSuppressFilter     *suppress.Firewall
-	BgpAuthProfile           *auth.FwAuth
-	BgpConAdvAdvertiseFilter *advertise.FwAdvertise
-	BgpConAdvNonExistFilter  *nonexist.FwNonExist
-	BgpConditionalAdv        *conadv.FwConAdv
+	BgpAuthProfile           *auth.Firewall
+	BgpConAdvAdvertiseFilter *advertise.Firewall
+	BgpConAdvNonExistFilter  *nonexist.Firewall
+	BgpConditionalAdv        *conadv.Firewall
 	BgpConfig                *bgp.Firewall
 	BgpDampeningProfile      *dampening.FwDampening
 	BgpExport                *exp.Firewall
-	BgpImport                *imp.FwImp
+	BgpImport                *imp.Firewall
 	BgpPeer                  *peer.FwPeer
 	BgpPeerGroup             *group.FwGroup
 	BgpRedistRule            *bgpredist.FwRedist
@@ -101,37 +101,22 @@ type FwNetw struct {
 // Initialize is invoked on client.Initialize().
 func (c *FwNetw) Initialize(i util.XapiClient) {
 	c.AggregateInterface = aggeth.FirewallNamespace(i)
-
 	c.Arp = arp.FirewallNamespace(i)
-
-	c.BfdProfile = &bfd.FwBfd{}
-	c.BfdProfile.Initialize(i)
-
+	c.BfdProfile = bfd.FirewallNamespace(i)
 	c.BgpAggregate = aggregate.FirewallNamespace(i)
 	c.BgpAggAdvertiseFilter = agaf.FirewallNamespace(i)
 	c.BgpAggSuppressFilter = suppress.FirewallNamespace(i)
-
-	c.BgpAuthProfile = &auth.FwAuth{}
-	c.BgpAuthProfile.Initialize(i)
-
-	c.BgpConAdvAdvertiseFilter = &advertise.FwAdvertise{}
-	c.BgpConAdvAdvertiseFilter.Initialize(i)
-
-	c.BgpConAdvNonExistFilter = &nonexist.FwNonExist{}
-	c.BgpConAdvNonExistFilter.Initialize(i)
-
-	c.BgpConditionalAdv = &conadv.FwConAdv{}
-	c.BgpConditionalAdv.Initialize(i)
-
+	c.BgpAuthProfile = auth.FirewallNamespace(i)
+	c.BgpConAdvAdvertiseFilter = advertise.FirewallNamespace(i)
+	c.BgpConAdvNonExistFilter = nonexist.FirewallNamespace(i)
+	c.BgpConditionalAdv = conadv.FirewallNamespace(i)
 	c.BgpConfig = bgp.FirewallNamespace(i)
 
 	c.BgpDampeningProfile = &dampening.FwDampening{}
 	c.BgpDampeningProfile.Initialize(i)
 
 	c.BgpExport = exp.FirewallNamespace(i)
-
-	c.BgpImport = &imp.FwImp{}
-	c.BgpImport.Initialize(i)
+	c.BgpImport = imp.FirewallNamespace(i)
 
 	c.BgpPeer = &peer.FwPeer{}
 	c.BgpPeer.Initialize(i)
