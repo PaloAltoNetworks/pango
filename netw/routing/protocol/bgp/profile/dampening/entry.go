@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 
 	"github.com/PaloAltoNetworks/pango/util"
+	"github.com/PaloAltoNetworks/pango/version"
 )
 
 // Entry is a normalized, version independent representation of a dampening
@@ -31,23 +32,47 @@ func (o *Entry) Copy(s Entry) {
 
 /** Structs / functions for this namespace. **/
 
+func (o Entry) Specify(v version.Number) (string, interface{}) {
+	_, fn := versioning(v)
+	return o.Name, fn(o)
+}
+
 type normalizer interface {
-	Normalize() Entry
+	Normalize() []Entry
+	Names() []string
 }
 
 type container_v1 struct {
-	Answer entry_v1 `xml:"result>entry"`
+	Answer []entry_v1 `xml:"entry"`
 }
 
-func (o *container_v1) Normalize() Entry {
+func (o *container_v1) Normalize() []Entry {
+	ans := make([]Entry, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].normalize())
+	}
+
+	return ans
+}
+
+func (o *container_v1) Names() []string {
+	ans := make([]string, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].Name)
+	}
+
+	return ans
+}
+
+func (o *entry_v1) normalize() Entry {
 	ans := Entry{
-		Name:                     o.Answer.Name,
-		Enable:                   util.AsBool(o.Answer.Enable),
-		Cutoff:                   o.Answer.Cutoff,
-		Reuse:                    o.Answer.Reuse,
-		MaxHoldTime:              o.Answer.MaxHoldTime,
-		DecayHalfLifeReachable:   o.Answer.DecayHalfLifeReachable,
-		DecayHalfLifeUnreachable: o.Answer.DecayHalfLifeUnreachable,
+		Name:                     o.Name,
+		Enable:                   util.AsBool(o.Enable),
+		Cutoff:                   o.Cutoff,
+		Reuse:                    o.Reuse,
+		MaxHoldTime:              o.MaxHoldTime,
+		DecayHalfLifeReachable:   o.DecayHalfLifeReachable,
+		DecayHalfLifeUnreachable: o.DecayHalfLifeUnreachable,
 	}
 
 	return ans
