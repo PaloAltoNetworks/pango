@@ -56,12 +56,12 @@ type PanoNetw struct {
 	BgpConAdvNonExistFilter  *nonexist.Panorama
 	BgpConditionalAdv        *conadv.Panorama
 	BgpConfig                *bgp.Panorama
-	BgpDampeningProfile      *dampening.PanoDampening
+	BgpDampeningProfile      *dampening.Panorama
 	BgpExport                *exp.Panorama
 	BgpImport                *imp.Panorama
-	BgpPeer                  *peer.PanoPeer
-	BgpPeerGroup             *group.PanoGroup
-	BgpRedistRule            *bgpredist.PanoRedist
+	BgpPeer                  *peer.Panorama
+	BgpPeerGroup             *group.Panorama
+	BgpRedistRule            *bgpredist.Panorama
 	EthernetInterface        *eth.Panorama
 	GreTunnel                *gre.PanoGre
 	IkeCryptoProfile         *ike.PanoIke
@@ -99,22 +99,12 @@ func (c *PanoNetw) Initialize(i util.XapiClient) {
 	c.BgpConAdvNonExistFilter = nonexist.PanoramaNamespace(i)
 	c.BgpConditionalAdv = conadv.PanoramaNamespace(i)
 	c.BgpConfig = bgp.PanoramaNamespace(i)
-
-	c.BgpDampeningProfile = &dampening.PanoDampening{}
-	c.BgpDampeningProfile.Initialize(i)
-
+	c.BgpDampeningProfile = dampening.PanoramaNamespace(i)
 	c.BgpExport = exp.PanoramaNamespace(i)
 	c.BgpImport = imp.PanoramaNamespace(i)
-
-	c.BgpPeer = &peer.PanoPeer{}
-	c.BgpPeer.Initialize(i)
-
-	c.BgpPeerGroup = &group.PanoGroup{}
-	c.BgpPeerGroup.Initialize(i)
-
-	c.BgpRedistRule = &bgpredist.PanoRedist{}
-	c.BgpRedistRule.Initialize(i)
-
+	c.BgpPeer = peer.PanoramaNamespace(i)
+	c.BgpPeerGroup = group.PanoramaNamespace(i)
+	c.BgpRedistRule = bgpredist.PanoramaNamespace(i)
 	c.EthernetInterface = eth.PanoramaNamespace(i)
 
 	c.GreTunnel = &gre.PanoGre{}

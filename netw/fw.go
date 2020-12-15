@@ -62,12 +62,12 @@ type FwNetw struct {
 	BgpConAdvNonExistFilter  *nonexist.Firewall
 	BgpConditionalAdv        *conadv.Firewall
 	BgpConfig                *bgp.Firewall
-	BgpDampeningProfile      *dampening.FwDampening
+	BgpDampeningProfile      *dampening.Firewall
 	BgpExport                *exp.Firewall
 	BgpImport                *imp.Firewall
-	BgpPeer                  *peer.FwPeer
-	BgpPeerGroup             *group.FwGroup
-	BgpRedistRule            *bgpredist.FwRedist
+	BgpPeer                  *peer.Firewall
+	BgpPeerGroup             *group.Firewall
+	BgpRedistRule            *bgpredist.Firewall
 	EthernetInterface        *eth.Firewall
 	GreTunnel                *gre.FwGre
 	IkeCryptoProfile         *ike.FwIke
@@ -111,22 +111,12 @@ func (c *FwNetw) Initialize(i util.XapiClient) {
 	c.BgpConAdvNonExistFilter = nonexist.FirewallNamespace(i)
 	c.BgpConditionalAdv = conadv.FirewallNamespace(i)
 	c.BgpConfig = bgp.FirewallNamespace(i)
-
-	c.BgpDampeningProfile = &dampening.FwDampening{}
-	c.BgpDampeningProfile.Initialize(i)
-
+	c.BgpDampeningProfile = dampening.FirewallNamespace(i)
 	c.BgpExport = exp.FirewallNamespace(i)
 	c.BgpImport = imp.FirewallNamespace(i)
-
-	c.BgpPeer = &peer.FwPeer{}
-	c.BgpPeer.Initialize(i)
-
-	c.BgpPeerGroup = &group.FwGroup{}
-	c.BgpPeerGroup.Initialize(i)
-
-	c.BgpRedistRule = &bgpredist.FwRedist{}
-	c.BgpRedistRule.Initialize(i)
-
+	c.BgpPeer = peer.FirewallNamespace(i)
+	c.BgpPeerGroup = group.FirewallNamespace(i)
+	c.BgpRedistRule = bgpredist.FirewallNamespace(i)
 	c.EthernetInterface = eth.FirewallNamespace(i)
 
 	c.GreTunnel = &gre.FwGre{}
