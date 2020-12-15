@@ -5,67 +5,13 @@ import (
 	"testing"
 
 	"github.com/PaloAltoNetworks/pango/testdata"
-	"github.com/PaloAltoNetworks/pango/version"
 )
 
 func TestPanoNormalization(t *testing.T) {
-	testCases := []struct {
-		desc    string
-		version version.Number
-		conf    Entry
-	}{
-		{"v1 disable", version.Number{7, 0, 0, ""}, Entry{
-			Name:                 "one",
-			Enable:               false,
-			Metric:               42,
-			SetOrigin:            "origin",
-			SetMed:               "med",
-			SetLocalPreference:   "localpref",
-			SetAsPathLimit:       1,
-			SetCommunity:         []string{"com1", "com2"},
-			SetExtendedCommunity: []string{"ec1", "ec2"},
-		}},
-		{"v1 enable", version.Number{7, 0, 0, ""}, Entry{
-			Name:                 "two",
-			Enable:               true,
-			Metric:               42,
-			SetOrigin:            "origin",
-			SetMed:               "med",
-			SetLocalPreference:   "localpref",
-			SetAsPathLimit:       2,
-			SetCommunity:         []string{"com1", "com2"},
-			SetExtendedCommunity: []string{"ec1", "ec2"},
-		}},
-		{"v2 disable", version.Number{8, 0, 0, ""}, Entry{
-			Name:                 "three",
-			Enable:               false,
-			AddressFamily:        AddressFamilyIpv4,
-			Metric:               42,
-			SetOrigin:            "origin",
-			SetMed:               "med",
-			SetLocalPreference:   "localpref",
-			SetAsPathLimit:       3,
-			SetCommunity:         []string{"com1", "com2"},
-			SetExtendedCommunity: []string{"ec1", "ec2"},
-		}},
-		{"v2 enable", version.Number{8, 0, 0, ""}, Entry{
-			Name:                 "four",
-			Enable:               true,
-			AddressFamily:        AddressFamilyIpv6,
-			RouteTable:           RouteTableBoth,
-			Metric:               42,
-			SetOrigin:            "origin",
-			SetMed:               "med",
-			SetLocalPreference:   "localpref",
-			SetAsPathLimit:       4,
-			SetCommunity:         []string{"com1", "com2"},
-			SetExtendedCommunity: []string{"ec1", "ec2"},
-		}},
-	}
+	testCases := getTests()
 
 	mc := &testdata.MockClient{}
-	ns := &PanoRedist{}
-	ns.Initialize(mc)
+	ns := PanoramaNamespace(mc)
 
 	for _, tc := range testCases {
 		t.Run(tc.desc, func(t *testing.T) {

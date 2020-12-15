@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 
 	"github.com/PaloAltoNetworks/pango/util"
+	"github.com/PaloAltoNetworks/pango/version"
 )
 
 // Entry is a normalized, version independent representation of a
@@ -39,47 +40,89 @@ func (o *Entry) Copy(s Entry) {
 
 /** Structs / functions for this namespace. **/
 
+func (o Entry) Specify(v version.Number) (string, interface{}) {
+	_, fn := versioning(v)
+	return o.Name, fn(o)
+}
+
 type normalizer interface {
-	Normalize() Entry
+	Normalize() []Entry
+	Names() []string
 }
 
 type container_v1 struct {
-	Answer entry_v1 `xml:"result>entry"`
+	Answer []entry_v1 `xml:"entry"`
 }
 
-func (o *container_v1) Normalize() Entry {
+func (o *container_v1) Normalize() []Entry {
+	ans := make([]Entry, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].normalize())
+	}
+
+	return ans
+}
+
+func (o *container_v1) Names() []string {
+	ans := make([]string, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].Name)
+	}
+
+	return ans
+}
+
+func (o *entry_v1) normalize() Entry {
 	ans := Entry{
-		Name:                 o.Answer.Name,
-		Enable:               util.AsBool(o.Answer.Enable),
-		Metric:               o.Answer.Metric,
-		SetOrigin:            o.Answer.SetOrigin,
-		SetMed:               o.Answer.SetMed,
-		SetLocalPreference:   o.Answer.SetLocalPreference,
-		SetAsPathLimit:       o.Answer.SetAsPathLimit,
-		SetCommunity:         util.MemToStr(o.Answer.SetCommunity),
-		SetExtendedCommunity: util.MemToStr(o.Answer.SetExtendedCommunity),
+		Name:                 o.Name,
+		Enable:               util.AsBool(o.Enable),
+		Metric:               o.Metric,
+		SetOrigin:            o.SetOrigin,
+		SetMed:               o.SetMed,
+		SetLocalPreference:   o.SetLocalPreference,
+		SetAsPathLimit:       o.SetAsPathLimit,
+		SetCommunity:         util.MemToStr(o.SetCommunity),
+		SetExtendedCommunity: util.MemToStr(o.SetExtendedCommunity),
 	}
 
 	return ans
 }
 
 type container_v2 struct {
-	Answer entry_v2 `xml:"result>entry"`
+	Answer []entry_v2 `xml:"entry"`
 }
 
-func (o *container_v2) Normalize() Entry {
+func (o *container_v2) Normalize() []Entry {
+	ans := make([]Entry, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].normalize())
+	}
+
+	return ans
+}
+
+func (o *container_v2) Names() []string {
+	ans := make([]string, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].Name)
+	}
+
+	return ans
+}
+
+func (o *entry_v2) normalize() Entry {
 	ans := Entry{
-		Name:                 o.Answer.Name,
-		Enable:               util.AsBool(o.Answer.Enable),
-		AddressFamily:        o.Answer.AddressFamily,
-		RouteTable:           o.Answer.RouteTable,
-		Metric:               o.Answer.Metric,
-		SetOrigin:            o.Answer.SetOrigin,
-		SetMed:               o.Answer.SetMed,
-		SetLocalPreference:   o.Answer.SetLocalPreference,
-		SetAsPathLimit:       o.Answer.SetAsPathLimit,
-		SetCommunity:         util.MemToStr(o.Answer.SetCommunity),
-		SetExtendedCommunity: util.MemToStr(o.Answer.SetExtendedCommunity),
+		Name:                 o.Name,
+		Enable:               util.AsBool(o.Enable),
+		AddressFamily:        o.AddressFamily,
+		RouteTable:           o.RouteTable,
+		Metric:               o.Metric,
+		SetOrigin:            o.SetOrigin,
+		SetMed:               o.SetMed,
+		SetLocalPreference:   o.SetLocalPreference,
+		SetAsPathLimit:       o.SetAsPathLimit,
+		SetCommunity:         util.MemToStr(o.SetCommunity),
+		SetExtendedCommunity: util.MemToStr(o.SetExtendedCommunity),
 	}
 
 	return ans
