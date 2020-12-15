@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 
 	"github.com/PaloAltoNetworks/pango/util"
+	"github.com/PaloAltoNetworks/pango/version"
 )
 
 // Entry is a normalized, version independent representation of a BGP
@@ -69,43 +70,67 @@ func (o *Entry) Copy(s Entry) {
 
 /** Structs / functions for this namespace. **/
 
+func (o Entry) Specify(v version.Number) (string, interface{}) {
+	_, fn := versioning(v)
+	return o.Name, fn(o)
+}
+
 type normalizer interface {
-	Normalize() Entry
+	Normalize() []Entry
+	Names() []string
 }
 
 type container_v1 struct {
-	Answer entry_v1 `xml:"result>entry"`
+	Answer []entry_v1 `xml:"entry"`
 }
 
-func (o *container_v1) Normalize() Entry {
-	ans := Entry{
-		Name:                  o.Answer.Name,
-		Enable:                util.AsBool(o.Answer.Enable),
-		PeerAs:                o.Answer.PeerAs,
-		LocalAddressInterface: o.Answer.LocalAddressInterface,
-		LocalAddressIp:        o.Answer.LocalAddressIp,
-		PeerAddressIp:         o.Answer.PeerAddressIp,
-		ReflectorClient:       o.Answer.ReflectorClient,
-		PeeringType:           o.Answer.PeeringType,
-		MaxPrefixes:           o.Answer.MaxPrefixes,
+func (o *container_v1) Normalize() []Entry {
+	ans := make([]Entry, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].normalize())
 	}
 
-	if o.Answer.Options != nil {
-		ans.AuthProfile = o.Answer.Options.AuthProfile
-		ans.KeepAliveInterval = o.Answer.Options.KeepAliveInterval
-		ans.MultiHop = o.Answer.Options.MultiHop
-		ans.OpenDelayTime = o.Answer.Options.OpenDelayTime
-		ans.HoldTime = o.Answer.Options.HoldTime
-		ans.IdleHoldTime = o.Answer.Options.IdleHoldTime
+	return ans
+}
 
-		if o.Answer.Options.BgpIn != nil {
-			ans.AllowIncomingConnections = util.AsBool(o.Answer.Options.BgpIn.AllowIncomingConnections)
-			ans.IncomingConnectionsRemotePort = o.Answer.Options.BgpIn.IncomingConnectionsRemotePort
+func (o *container_v1) Names() []string {
+	ans := make([]string, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].Name)
+	}
+
+	return ans
+}
+
+func (o *entry_v1) normalize() Entry {
+	ans := Entry{
+		Name:                  o.Name,
+		Enable:                util.AsBool(o.Enable),
+		PeerAs:                o.PeerAs,
+		LocalAddressInterface: o.LocalAddressInterface,
+		LocalAddressIp:        o.LocalAddressIp,
+		PeerAddressIp:         o.PeerAddressIp,
+		ReflectorClient:       o.ReflectorClient,
+		PeeringType:           o.PeeringType,
+		MaxPrefixes:           o.MaxPrefixes,
+	}
+
+	if o.Options != nil {
+		ans.AuthProfile = o.Options.AuthProfile
+		ans.KeepAliveInterval = o.Options.KeepAliveInterval
+		ans.MultiHop = o.Options.MultiHop
+		ans.OpenDelayTime = o.Options.OpenDelayTime
+		ans.HoldTime = o.Options.HoldTime
+		ans.IdleHoldTime = o.Options.IdleHoldTime
+
+		if o.Options.BgpIn != nil {
+			ans.AllowIncomingConnections = util.AsBool(o.Options.BgpIn.AllowIncomingConnections)
+			ans.IncomingConnectionsRemotePort = o.Options.BgpIn.IncomingConnectionsRemotePort
 		}
 
-		if o.Answer.Options.BgpOut != nil {
-			ans.AllowOutgoingConnections = util.AsBool(o.Answer.Options.BgpOut.AllowOutgoingConnections)
-			ans.OutgoingConnectionsLocalPort = o.Answer.Options.BgpOut.OutgoingConnectionsLocalPort
+		if o.Options.BgpOut != nil {
+			ans.AllowOutgoingConnections = util.AsBool(o.Options.BgpOut.AllowOutgoingConnections)
+			ans.OutgoingConnectionsLocalPort = o.Options.BgpOut.OutgoingConnectionsLocalPort
 		}
 	}
 
@@ -113,42 +138,60 @@ func (o *container_v1) Normalize() Entry {
 }
 
 type container_v2 struct {
-	Answer entry_v2 `xml:"result>entry"`
+	Answer []entry_v2 `xml:"entry"`
 }
 
-func (o *container_v2) Normalize() Entry {
+func (o *container_v2) Normalize() []Entry {
+	ans := make([]Entry, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].normalize())
+	}
+
+	return ans
+}
+
+func (o *container_v2) Names() []string {
+	ans := make([]string, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].Name)
+	}
+
+	return ans
+}
+
+func (o *entry_v2) normalize() Entry {
 	ans := Entry{
-		Name:                  o.Answer.Name,
-		Enable:                util.AsBool(o.Answer.Enable),
-		PeerAs:                o.Answer.PeerAs,
-		LocalAddressInterface: o.Answer.LocalAddressInterface,
-		LocalAddressIp:        o.Answer.LocalAddressIp,
-		PeerAddressIp:         o.Answer.PeerAddressIp,
-		ReflectorClient:       o.Answer.ReflectorClient,
-		PeeringType:           o.Answer.PeeringType,
-		MaxPrefixes:           o.Answer.MaxPrefixes,
+		Name:                  o.Name,
+		Enable:                util.AsBool(o.Enable),
+		PeerAs:                o.PeerAs,
+		LocalAddressInterface: o.LocalAddressInterface,
+		LocalAddressIp:        o.LocalAddressIp,
+		PeerAddressIp:         o.PeerAddressIp,
+		ReflectorClient:       o.ReflectorClient,
+		PeeringType:           o.PeeringType,
+		MaxPrefixes:           o.MaxPrefixes,
 	}
 
-	if o.Answer.Bfd != nil {
-		ans.BfdProfile = o.Answer.Bfd.BfdProfile
+	if o.Bfd != nil {
+		ans.BfdProfile = o.Bfd.BfdProfile
 	}
 
-	if o.Answer.Options != nil {
-		ans.AuthProfile = o.Answer.Options.AuthProfile
-		ans.KeepAliveInterval = o.Answer.Options.KeepAliveInterval
-		ans.MultiHop = o.Answer.Options.MultiHop
-		ans.OpenDelayTime = o.Answer.Options.OpenDelayTime
-		ans.HoldTime = o.Answer.Options.HoldTime
-		ans.IdleHoldTime = o.Answer.Options.IdleHoldTime
+	if o.Options != nil {
+		ans.AuthProfile = o.Options.AuthProfile
+		ans.KeepAliveInterval = o.Options.KeepAliveInterval
+		ans.MultiHop = o.Options.MultiHop
+		ans.OpenDelayTime = o.Options.OpenDelayTime
+		ans.HoldTime = o.Options.HoldTime
+		ans.IdleHoldTime = o.Options.IdleHoldTime
 
-		if o.Answer.Options.BgpIn != nil {
-			ans.AllowIncomingConnections = util.AsBool(o.Answer.Options.BgpIn.AllowIncomingConnections)
-			ans.IncomingConnectionsRemotePort = o.Answer.Options.BgpIn.IncomingConnectionsRemotePort
+		if o.Options.BgpIn != nil {
+			ans.AllowIncomingConnections = util.AsBool(o.Options.BgpIn.AllowIncomingConnections)
+			ans.IncomingConnectionsRemotePort = o.Options.BgpIn.IncomingConnectionsRemotePort
 		}
 
-		if o.Answer.Options.BgpOut != nil {
-			ans.AllowOutgoingConnections = util.AsBool(o.Answer.Options.BgpOut.AllowOutgoingConnections)
-			ans.OutgoingConnectionsLocalPort = o.Answer.Options.BgpOut.OutgoingConnectionsLocalPort
+		if o.Options.BgpOut != nil {
+			ans.AllowOutgoingConnections = util.AsBool(o.Options.BgpOut.AllowOutgoingConnections)
+			ans.OutgoingConnectionsLocalPort = o.Options.BgpOut.OutgoingConnectionsLocalPort
 		}
 	}
 
@@ -156,50 +199,68 @@ func (o *container_v2) Normalize() Entry {
 }
 
 type container_v3 struct {
-	Answer entry_v3 `xml:"result>entry"`
+	Answer []entry_v3 `xml:"entry"`
 }
 
-func (o *container_v3) Normalize() Entry {
+func (o *container_v3) Normalize() []Entry {
+	ans := make([]Entry, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].normalize())
+	}
+
+	return ans
+}
+
+func (o *container_v3) Names() []string {
+	ans := make([]string, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].Name)
+	}
+
+	return ans
+}
+
+func (o *entry_v3) normalize() Entry {
 	ans := Entry{
-		Name:                          o.Answer.Name,
-		Enable:                        util.AsBool(o.Answer.Enable),
-		PeerAs:                        o.Answer.PeerAs,
-		EnableMpBgp:                   util.AsBool(o.Answer.EnableMpBgp),
-		AddressFamilyType:             o.Answer.AddressFamilyType,
-		EnableSenderSideLoopDetection: util.AsBool(o.Answer.EnableSenderSideLoopDetection),
-		LocalAddressInterface:         o.Answer.LocalAddressInterface,
-		LocalAddressIp:                o.Answer.LocalAddressIp,
-		PeerAddressIp:                 o.Answer.PeerAddressIp,
-		ReflectorClient:               o.Answer.ReflectorClient,
-		PeeringType:                   o.Answer.PeeringType,
-		MaxPrefixes:                   o.Answer.MaxPrefixes,
+		Name:                          o.Name,
+		Enable:                        util.AsBool(o.Enable),
+		PeerAs:                        o.PeerAs,
+		EnableMpBgp:                   util.AsBool(o.EnableMpBgp),
+		AddressFamilyType:             o.AddressFamilyType,
+		EnableSenderSideLoopDetection: util.AsBool(o.EnableSenderSideLoopDetection),
+		LocalAddressInterface:         o.LocalAddressInterface,
+		LocalAddressIp:                o.LocalAddressIp,
+		PeerAddressIp:                 o.PeerAddressIp,
+		ReflectorClient:               o.ReflectorClient,
+		PeeringType:                   o.PeeringType,
+		MaxPrefixes:                   o.MaxPrefixes,
 	}
 
-	if o.Answer.Safi != nil {
-		ans.SubsequentAddressFamilyUnicast = util.AsBool(o.Answer.Safi.SubsequentAddressFamilyUnicast)
-		ans.SubsequentAddressFamilyMulticast = util.AsBool(o.Answer.Safi.SubsequentAddressFamilyMulticast)
+	if o.Safi != nil {
+		ans.SubsequentAddressFamilyUnicast = util.AsBool(o.Safi.SubsequentAddressFamilyUnicast)
+		ans.SubsequentAddressFamilyMulticast = util.AsBool(o.Safi.SubsequentAddressFamilyMulticast)
 	}
 
-	if o.Answer.Bfd != nil {
-		ans.BfdProfile = o.Answer.Bfd.BfdProfile
+	if o.Bfd != nil {
+		ans.BfdProfile = o.Bfd.BfdProfile
 	}
 
-	if o.Answer.Options != nil {
-		ans.AuthProfile = o.Answer.Options.AuthProfile
-		ans.KeepAliveInterval = o.Answer.Options.KeepAliveInterval
-		ans.MultiHop = o.Answer.Options.MultiHop
-		ans.OpenDelayTime = o.Answer.Options.OpenDelayTime
-		ans.HoldTime = o.Answer.Options.HoldTime
-		ans.IdleHoldTime = o.Answer.Options.IdleHoldTime
+	if o.Options != nil {
+		ans.AuthProfile = o.Options.AuthProfile
+		ans.KeepAliveInterval = o.Options.KeepAliveInterval
+		ans.MultiHop = o.Options.MultiHop
+		ans.OpenDelayTime = o.Options.OpenDelayTime
+		ans.HoldTime = o.Options.HoldTime
+		ans.IdleHoldTime = o.Options.IdleHoldTime
 
-		if o.Answer.Options.BgpIn != nil {
-			ans.AllowIncomingConnections = util.AsBool(o.Answer.Options.BgpIn.AllowIncomingConnections)
-			ans.IncomingConnectionsRemotePort = o.Answer.Options.BgpIn.IncomingConnectionsRemotePort
+		if o.Options.BgpIn != nil {
+			ans.AllowIncomingConnections = util.AsBool(o.Options.BgpIn.AllowIncomingConnections)
+			ans.IncomingConnectionsRemotePort = o.Options.BgpIn.IncomingConnectionsRemotePort
 		}
 
-		if o.Answer.Options.BgpOut != nil {
-			ans.AllowOutgoingConnections = util.AsBool(o.Answer.Options.BgpOut.AllowOutgoingConnections)
-			ans.OutgoingConnectionsLocalPort = o.Answer.Options.BgpOut.OutgoingConnectionsLocalPort
+		if o.Options.BgpOut != nil {
+			ans.AllowOutgoingConnections = util.AsBool(o.Options.BgpOut.AllowOutgoingConnections)
+			ans.OutgoingConnectionsLocalPort = o.Options.BgpOut.OutgoingConnectionsLocalPort
 		}
 	}
 
@@ -207,51 +268,69 @@ func (o *container_v3) Normalize() Entry {
 }
 
 type container_v4 struct {
-	Answer entry_v4 `xml:"result>entry"`
+	Answer []entry_v4 `xml:"entry"`
 }
 
-func (o *container_v4) Normalize() Entry {
+func (o *container_v4) Normalize() []Entry {
+	ans := make([]Entry, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].normalize())
+	}
+
+	return ans
+}
+
+func (o *container_v4) Names() []string {
+	ans := make([]string, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].Name)
+	}
+
+	return ans
+}
+
+func (o *entry_v4) normalize() Entry {
 	ans := Entry{
-		Name:                          o.Answer.Name,
-		Enable:                        util.AsBool(o.Answer.Enable),
-		PeerAs:                        o.Answer.PeerAs,
-		EnableMpBgp:                   util.AsBool(o.Answer.EnableMpBgp),
-		AddressFamilyType:             o.Answer.AddressFamilyType,
-		EnableSenderSideLoopDetection: util.AsBool(o.Answer.EnableSenderSideLoopDetection),
-		LocalAddressInterface:         o.Answer.LocalAddressInterface,
-		LocalAddressIp:                o.Answer.LocalAddressIp,
-		PeerAddressIp:                 o.Answer.PeerAddressIp,
-		ReflectorClient:               o.Answer.ReflectorClient,
-		PeeringType:                   o.Answer.PeeringType,
-		MaxPrefixes:                   o.Answer.MaxPrefixes,
+		Name:                          o.Name,
+		Enable:                        util.AsBool(o.Enable),
+		PeerAs:                        o.PeerAs,
+		EnableMpBgp:                   util.AsBool(o.EnableMpBgp),
+		AddressFamilyType:             o.AddressFamilyType,
+		EnableSenderSideLoopDetection: util.AsBool(o.EnableSenderSideLoopDetection),
+		LocalAddressInterface:         o.LocalAddressInterface,
+		LocalAddressIp:                o.LocalAddressIp,
+		PeerAddressIp:                 o.PeerAddressIp,
+		ReflectorClient:               o.ReflectorClient,
+		PeeringType:                   o.PeeringType,
+		MaxPrefixes:                   o.MaxPrefixes,
 	}
 
-	if o.Answer.Safi != nil {
-		ans.SubsequentAddressFamilyUnicast = util.AsBool(o.Answer.Safi.SubsequentAddressFamilyUnicast)
-		ans.SubsequentAddressFamilyMulticast = util.AsBool(o.Answer.Safi.SubsequentAddressFamilyMulticast)
+	if o.Safi != nil {
+		ans.SubsequentAddressFamilyUnicast = util.AsBool(o.Safi.SubsequentAddressFamilyUnicast)
+		ans.SubsequentAddressFamilyMulticast = util.AsBool(o.Safi.SubsequentAddressFamilyMulticast)
 	}
 
-	if o.Answer.Bfd != nil {
-		ans.BfdProfile = o.Answer.Bfd.BfdProfile
+	if o.Bfd != nil {
+		ans.BfdProfile = o.Bfd.BfdProfile
 	}
 
-	if o.Answer.Options != nil {
-		ans.AuthProfile = o.Answer.Options.AuthProfile
-		ans.KeepAliveInterval = o.Answer.Options.KeepAliveInterval
-		ans.MultiHop = o.Answer.Options.MultiHop
-		ans.OpenDelayTime = o.Answer.Options.OpenDelayTime
-		ans.HoldTime = o.Answer.Options.HoldTime
-		ans.IdleHoldTime = o.Answer.Options.IdleHoldTime
-		ans.MinRouteAdvertisementInterval = o.Answer.Options.MinRouteAdvertisementInterval
+	if o.Options != nil {
+		ans.AuthProfile = o.Options.AuthProfile
+		ans.KeepAliveInterval = o.Options.KeepAliveInterval
+		ans.MultiHop = o.Options.MultiHop
+		ans.OpenDelayTime = o.Options.OpenDelayTime
+		ans.HoldTime = o.Options.HoldTime
+		ans.IdleHoldTime = o.Options.IdleHoldTime
+		ans.MinRouteAdvertisementInterval = o.Options.MinRouteAdvertisementInterval
 
-		if o.Answer.Options.BgpIn != nil {
-			ans.AllowIncomingConnections = util.AsBool(o.Answer.Options.BgpIn.AllowIncomingConnections)
-			ans.IncomingConnectionsRemotePort = o.Answer.Options.BgpIn.IncomingConnectionsRemotePort
+		if o.Options.BgpIn != nil {
+			ans.AllowIncomingConnections = util.AsBool(o.Options.BgpIn.AllowIncomingConnections)
+			ans.IncomingConnectionsRemotePort = o.Options.BgpIn.IncomingConnectionsRemotePort
 		}
 
-		if o.Answer.Options.BgpOut != nil {
-			ans.AllowOutgoingConnections = util.AsBool(o.Answer.Options.BgpOut.AllowOutgoingConnections)
-			ans.OutgoingConnectionsLocalPort = o.Answer.Options.BgpOut.OutgoingConnectionsLocalPort
+		if o.Options.BgpOut != nil {
+			ans.AllowOutgoingConnections = util.AsBool(o.Options.BgpOut.AllowOutgoingConnections)
+			ans.OutgoingConnectionsLocalPort = o.Options.BgpOut.OutgoingConnectionsLocalPort
 		}
 	}
 
