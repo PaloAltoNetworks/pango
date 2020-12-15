@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 
 	"github.com/PaloAltoNetworks/pango/util"
+	"github.com/PaloAltoNetworks/pango/version"
 )
 
 // Entry is a normalized, version independent representation of a BGP
@@ -35,43 +36,67 @@ func (o *Entry) Copy(s Entry) {
 
 /** Structs / functions for this namespace. **/
 
+func (o Entry) Specify(v version.Number) (string, interface{}) {
+	_, fn := versioning(v)
+	return o.Name, fn(o)
+}
+
 type normalizer interface {
-	Normalize() Entry
+	Normalize() []Entry
+	Names() []string
 }
 
 type container_v1 struct {
-	Answer entry_v1 `xml:"result>entry"`
+	Answer []entry_v1 `xml:"entry"`
 }
 
-func (o *container_v1) Normalize() Entry {
+func (o *container_v1) Normalize() []Entry {
+	ans := make([]Entry, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].normalize())
+	}
+
+	return ans
+}
+
+func (o *container_v1) Names() []string {
+	ans := make([]string, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].Name)
+	}
+
+	return ans
+}
+
+func (o *entry_v1) normalize() Entry {
 	ans := Entry{
-		Name:                    o.Answer.Name,
-		Enable:                  util.AsBool(o.Answer.Enable),
-		AggregatedConfedAsPath:  util.AsBool(o.Answer.AggregatedConfedAsPath),
-		SoftResetWithStoredInfo: util.AsBool(o.Answer.SoftResetWithStoredInfo),
+		Name:                    o.Name,
+		Enable:                  util.AsBool(o.Enable),
+		AggregatedConfedAsPath:  util.AsBool(o.AggregatedConfedAsPath),
+		SoftResetWithStoredInfo: util.AsBool(o.SoftResetWithStoredInfo),
 	}
 
-	if o.Answer.Type == nil {
+	if o.Type == nil {
 		ans.Type = TypeEbgp
-	} else if o.Answer.Type.Ebgp != nil {
+	} else if o.Type.Ebgp != nil {
 		ans.Type = TypeEbgp
-		ans.ExportNextHop = o.Answer.Type.Ebgp.ExportNextHop
-		ans.ImportNextHop = o.Answer.Type.Ebgp.ImportNextHop
-		ans.RemovePrivateAs = util.AsBool(o.Answer.Type.Ebgp.RemovePrivateAs)
-	} else if o.Answer.Type.EbgpConfed != nil {
+		ans.ExportNextHop = o.Type.Ebgp.ExportNextHop
+		ans.ImportNextHop = o.Type.Ebgp.ImportNextHop
+		ans.RemovePrivateAs = util.AsBool(o.Type.Ebgp.RemovePrivateAs)
+	} else if o.Type.EbgpConfed != nil {
 		ans.Type = TypeEbgpConfed
-		ans.ExportNextHop = o.Answer.Type.EbgpConfed.ExportNextHop
-	} else if o.Answer.Type.Ibgp != nil {
+		ans.ExportNextHop = o.Type.EbgpConfed.ExportNextHop
+	} else if o.Type.Ibgp != nil {
 		ans.Type = TypeIbgp
-		ans.ExportNextHop = o.Answer.Type.Ibgp.ExportNextHop
-	} else if o.Answer.Type.IbgpConfed != nil {
+		ans.ExportNextHop = o.Type.Ibgp.ExportNextHop
+	} else if o.Type.IbgpConfed != nil {
 		ans.Type = TypeIbgpConfed
-		ans.ExportNextHop = o.Answer.Type.IbgpConfed.ExportNextHop
+		ans.ExportNextHop = o.Type.IbgpConfed.ExportNextHop
 	}
 
-	if o.Answer.Peer != nil {
+	if o.Peer != nil {
 		ans.raw = map[string]string{
-			"peer": util.CleanRawXml(o.Answer.Peer.Text),
+			"peer": util.CleanRawXml(o.Peer.Text),
 		}
 	}
 
