@@ -75,6 +75,11 @@ func (c *Firewall) Set(vr string, e ...Entry) error {
 	return err
 }
 
+// Edit performs EDIT to configure the specified object.
+func (c *Firewall) Edit(vr string, e Entry) error {
+	return c.ns.Edit(c.pather(vr), e)
+}
+
 // Delete performs DELETE to remove the specified objects.
 //
 // Objects can be either a string or an Entry object.

@@ -75,6 +75,11 @@ func (c *Panorama) Set(tmpl, ts, vr string, e ...Entry) error {
 	return err
 }
 
+// Edit performs EDIT to configure the specified object.
+func (c *Panorama) Edit(tmpl, ts, vr string, e Entry) error {
+	return c.ns.Edit(c.pather(tmpl, ts, vr), e)
+}
+
 // Delete performs DELETE to remove the specified objects.
 //
 // Objects can be either a string or an Entry object.
