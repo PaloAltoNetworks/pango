@@ -87,7 +87,8 @@ func (o *Entry) Defaults() {
 // Copy copies the information from source Entry `s` to this object.  As the
 // Name field relates to the XPATH of this object, this field is not copied.
 func (o *Entry) Copy(s Entry) {
-	o.Interfaces = s.Interfaces
+	o.Interfaces = make([]string, len(s.Interfaces))
+	copy(o.Interfaces, s.Interfaces)
 	o.StaticDist = s.StaticDist
 	o.StaticIpv6Dist = s.StaticIpv6Dist
 	o.OspfIntDist = s.OspfIntDist
