@@ -146,7 +146,7 @@ type entry_v1 struct {
 	XMLName         xml.Name     `xml:"entry"`
 	Name            string       `xml:"name,attr"`
 	Description     string       `xml:"description,omitempty"`
-	Botnet          *botnet_v1   `xml:"botnet-domain"`
+	Botnet          *botnet_v1   `xml:"botnet-domains"`
 	Rules           *util.RawXml `xml:"rules"`
 	ThreatException *util.RawXml `xml:"threat-exception"`
 }
@@ -317,7 +317,7 @@ type entry_v2 struct {
 	XMLName         xml.Name     `xml:"entry"`
 	Name            string       `xml:"name,attr"`
 	Description     string       `xml:"description,omitempty"`
-	Botnet          *botnet_v2   `xml:"botnet-domain"`
+	Botnet          *botnet_v2   `xml:"botnet-domains"`
 	Rules           *util.RawXml `xml:"rules"`
 	ThreatException *util.RawXml `xml:"threat-exception"`
 }
@@ -502,7 +502,7 @@ type entry_v3 struct {
 	XMLName         xml.Name     `xml:"entry"`
 	Name            string       `xml:"name,attr"`
 	Description     string       `xml:"description,omitempty"`
-	Botnet          *botnet_v3   `xml:"botnet-domain"`
+	Botnet          *botnet_v3   `xml:"botnet-domains"`
 	Rules           *util.RawXml `xml:"rules"`
 	ThreatException *util.RawXml `xml:"threat-exception"`
 }
