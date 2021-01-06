@@ -388,27 +388,27 @@ type interfaces struct {
 	Ha4Backup *ha4Interface       `xml:"ha4-backup"`
 }
 
-type common struct {
-	Port      string `xml:"port,omitempty"`
-	IpAddress string `xml:"ip-address,omitempty"`
-	Netmask   string `xml:"netmask,omitempty"`
-}
-
 type ha1Interface struct {
-	common
+	Port             string `xml:"port,omitempty"`
+	IpAddress        string `xml:"ip-address,omitempty"`
+	Netmask          string `xml:"netmask,omitempty"`
 	Gateway          string `xml:"gateway,omitempty"`
 	EncryptionEnable string `xml:"encryption>enabled"`
 	MonitorHoldTime  int    `xml:"monitor-hold-time,omitempty"`
 }
 
 type ha1BackupInterface struct {
-	common
-	Gateway string `xml:"gateway,omitempty"`
+	Port      string `xml:"port,omitempty"`
+	IpAddress string `xml:"ip-address,omitempty"`
+	Netmask   string `xml:"netmask,omitempty"`
+	Gateway   string `xml:"gateway,omitempty"`
 }
 
 type ha2Interface struct {
-	common
-	Gateway string `xml:"gateway,omitempty"`
+	Port      string `xml:"port,omitempty"`
+	IpAddress string `xml:"ip-address,omitempty"`
+	Netmask   string `xml:"netmask,omitempty"`
+	Gateway   string `xml:"gateway,omitempty"`
 }
 
 type ha3Interface struct {
@@ -416,7 +416,9 @@ type ha3Interface struct {
 }
 
 type ha4Interface struct {
-	common
+	Port      string `xml:"port,omitempty"`
+	IpAddress string `xml:"ip-address,omitempty"`
+	Netmask   string `xml:"netmask,omitempty"`
 }
 
 type electionOption struct {
@@ -501,11 +503,9 @@ func specify_v1(e Config) interface{} {
 	ans.Interfaces = &interfaces{} // optional="no"
 	if e.Ha1 != nil {
 		ans.Interfaces.Ha1 = &ha1Interface{
-			common: common{
-				Port:      e.Ha1.Port,
-				IpAddress: e.Ha1.IpAddress,
-				Netmask:   e.Ha1.Netmask,
-			},
+			Port:             e.Ha1.Port,
+			IpAddress:        e.Ha1.IpAddress,
+			Netmask:          e.Ha1.Netmask,
 			Gateway:          e.Ha1.Gateway,
 			EncryptionEnable: util.YesNo(e.Ha1.EncryptionEnable),
 			MonitorHoldTime:  e.Ha1.MonitorHoldTime,
@@ -513,32 +513,26 @@ func specify_v1(e Config) interface{} {
 	}
 	if e.Ha1Backup != nil {
 		ans.Interfaces.Ha1Backup = &ha1BackupInterface{
-			common: common{
-				Port:      e.Ha1Backup.Port,
-				IpAddress: e.Ha1Backup.IpAddress,
-				Netmask:   e.Ha1Backup.Netmask,
-			},
-			Gateway: e.Ha1Backup.Gateway,
+			Port:      e.Ha1Backup.Port,
+			IpAddress: e.Ha1Backup.IpAddress,
+			Netmask:   e.Ha1Backup.Netmask,
+			Gateway:   e.Ha1Backup.Gateway,
 		}
 	}
 	if e.Ha2 != nil {
 		ans.Interfaces.Ha2 = &ha2Interface{
-			common: common{
-				Port:      e.Ha2.Port,
-				IpAddress: e.Ha2.IpAddress,
-				Netmask:   e.Ha2.Netmask,
-			},
-			Gateway: e.Ha2.Gateway,
+			Port:      e.Ha2.Port,
+			IpAddress: e.Ha2.IpAddress,
+			Netmask:   e.Ha2.Netmask,
+			Gateway:   e.Ha2.Gateway,
 		}
 	}
 	if e.Ha2Backup != nil {
 		ans.Interfaces.Ha2Backup = &ha2Interface{
-			common: common{
-				Port:      e.Ha2Backup.Port,
-				IpAddress: e.Ha2Backup.IpAddress,
-				Netmask:   e.Ha2Backup.Netmask,
-			},
-			Gateway: e.Ha2Backup.Gateway,
+			Port:      e.Ha2Backup.Port,
+			IpAddress: e.Ha2Backup.IpAddress,
+			Netmask:   e.Ha2Backup.Netmask,
+			Gateway:   e.Ha2Backup.Gateway,
 		}
 	}
 	if e.Ha3 != nil {
@@ -548,20 +542,16 @@ func specify_v1(e Config) interface{} {
 	}
 	if e.Ha4 != nil {
 		ans.Interfaces.Ha4 = &ha4Interface{
-			common: common{
-				Port:      e.Ha4.Port,
-				IpAddress: e.Ha4.IpAddress,
-				Netmask:   e.Ha4.Netmask,
-			},
+			Port:      e.Ha4.Port,
+			IpAddress: e.Ha4.IpAddress,
+			Netmask:   e.Ha4.Netmask,
 		}
 	}
 	if e.Ha4Backup != nil {
 		ans.Interfaces.Ha4Backup = &ha4Interface{
-			common: common{
-				Port:      e.Ha4Backup.Port,
-				IpAddress: e.Ha4Backup.IpAddress,
-				Netmask:   e.Ha4Backup.Netmask,
-			},
+			Port:      e.Ha4Backup.Port,
+			IpAddress: e.Ha4Backup.IpAddress,
+			Netmask:   e.Ha4Backup.Netmask,
 		}
 	}
 
