@@ -11,6 +11,7 @@ import (
 	"github.com/PaloAltoNetworks/pango/netw"
 	"github.com/PaloAltoNetworks/pango/objs"
 	"github.com/PaloAltoNetworks/pango/poli"
+	"github.com/PaloAltoNetworks/pango/predefined"
 	"github.com/PaloAltoNetworks/pango/userid"
 )
 
@@ -19,6 +20,7 @@ import (
 // Initialize() to prepare it for use.
 //
 // It has the following namespaces:
+//      * Predefined
 //      * Network
 //      * Device
 //      * Policies
@@ -29,12 +31,13 @@ type Firewall struct {
 	Client
 
 	// Namespaces
-	Network   *netw.FwNetw
-	Device    *dev.FwDev
-	Policies  *poli.FwPoli
-	Objects   *objs.FwObjs
-	Licensing *licen.Licen
-	UserId    *userid.UserId
+	Predefined *predefined.Firewall
+	Network    *netw.FwNetw
+	Device     *dev.FwDev
+	Policies   *poli.FwPoli
+	Objects    *objs.FwObjs
+	Licensing  *licen.Licen
+	UserId     *userid.UserId
 }
 
 // Initialize does some initial setup of the Firewall connection, retrieves
@@ -145,6 +148,8 @@ func (c *Firewall) GetDhcpInfo(i string) (map[string]string, error) {
 /** Private functions **/
 
 func (c *Firewall) initNamespaces() {
+	c.Predefined = predefined.FirewallNamespace(c)
+
 	c.Network = &netw.FwNetw{}
 	c.Network.Initialize(c)
 

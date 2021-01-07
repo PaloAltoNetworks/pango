@@ -15,6 +15,7 @@ import (
 	"github.com/PaloAltoNetworks/pango/objs"
 	"github.com/PaloAltoNetworks/pango/pnrm"
 	"github.com/PaloAltoNetworks/pango/poli"
+	"github.com/PaloAltoNetworks/pango/predefined"
 	"github.com/PaloAltoNetworks/pango/userid"
 )
 
@@ -29,13 +30,14 @@ type Panorama struct {
 	Client
 
 	// Namespaces
-	Device    *dev.PanoDev
-	Licensing *licen.Licen
-	UserId    *userid.UserId
-	Panorama  *pnrm.Pnrm
-	Objects   *objs.PanoObjs
-	Policies  *poli.PanoPoli
-	Network   *netw.PanoNetw
+	Predefined *predefined.Panorama
+	Device     *dev.PanoDev
+	Licensing  *licen.Licen
+	UserId     *userid.UserId
+	Panorama   *pnrm.Pnrm
+	Objects    *objs.PanoObjs
+	Policies   *poli.PanoPoli
+	Network    *netw.PanoNetw
 }
 
 // Initialize does some initial setup of the Panorama connection, retrieves
@@ -240,6 +242,8 @@ func (c *Panorama) AssignDeviceGroupParent(child, parent string) error {
 /** Private functions **/
 
 func (c *Panorama) initNamespaces() {
+	c.Predefined = predefined.PanoramaNamespace(c)
+
 	c.Device = &dev.PanoDev{}
 	c.Device.Initialize(c)
 
