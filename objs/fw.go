@@ -25,8 +25,6 @@ import (
 	ufsp "github.com/PaloAltoNetworks/pango/objs/profile/security/url"
 	"github.com/PaloAltoNetworks/pango/objs/profile/security/virus"
 	"github.com/PaloAltoNetworks/pango/objs/profile/security/vulnerability"
-	vulnexcep "github.com/PaloAltoNetworks/pango/objs/profile/security/vulnerability/exception"
-	vulnrule "github.com/PaloAltoNetworks/pango/objs/profile/security/vulnerability/rule"
 	wfasp "github.com/PaloAltoNetworks/pango/objs/profile/security/wildfire"
 	"github.com/PaloAltoNetworks/pango/objs/srvc"
 	"github.com/PaloAltoNetworks/pango/objs/srvcgrp"
@@ -60,8 +58,6 @@ type FwObjs struct {
 	Tags                                *tags.FwTags
 	UrlFilteringProfile                 *ufsp.Firewall
 	VulnerabilityProfile                *vulnerability.Firewall
-	VulnerabilityProfileException       *vulnexcep.Firewall
-	VulnerabilityProfileRule            *vulnrule.Firewall
 	WildfireAnalysisProfile             *wfasp.Firewall
 }
 
@@ -120,7 +116,5 @@ func (c *FwObjs) Initialize(i util.XapiClient) {
 
 	c.UrlFilteringProfile = ufsp.FirewallNamespace(i)
 	c.VulnerabilityProfile = vulnerability.FirewallNamespace(i)
-	c.VulnerabilityProfileException = vulnexcep.FirewallNamespace(i)
-	c.VulnerabilityProfileRule = vulnrule.FirewallNamespace(i)
 	c.WildfireAnalysisProfile = wfasp.FirewallNamespace(i)
 }
