@@ -14,6 +14,10 @@ const (
 	ElectionTimersModeAggressive  = "aggressive"
 	ElectionTimersModeAdvanced    = "advanced"
 
+	// ElectionTimersAdvFlapMax Values
+	ElectionTimersAdvFlapMaxInfinite = "infinite"
+	ElectionTimersAdvFlapMaxDisable  = "disable"
+
 	// Ha2StateSyncTransport Values
 	Ha2StateSyncTransportEthernet = "ethernet"
 	Ha2StateSyncTransportIp       = "ip"
