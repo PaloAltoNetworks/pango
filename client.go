@@ -1096,8 +1096,8 @@ func (c *Client) initCon() error {
 			c.Timeout = 10
 		}
 	}
-	if c.Timeout <= 0 || c.Timeout > 60 {
-		return fmt.Errorf("Timeout for %q is %d, expecting a number between [0, 60]", c.Hostname, c.Timeout)
+	if c.Timeout <= 0 || c.Timeout > 600 {
+		return fmt.Errorf("Timeout for %q is %d, expecting a number between [0, 600]", c.Hostname, c.Timeout)
 	}
 	tout = time.Duration(time.Duration(c.Timeout) * time.Second)
 
