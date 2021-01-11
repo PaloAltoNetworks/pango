@@ -38,7 +38,8 @@ func (o *Entry) Copy(s Entry) {
 	o.TransitDelay = s.TransitDelay
 	o.AuthProfile = s.AuthProfile
 	o.GraceRestartDelay = s.GraceRestartDelay
-	o.Neighbors = s.Neighbors
+	o.Neighbors = make([]string, len(s.Neighbors))
+	copy(o.Neighbors, s.Neighbors)
 	o.BfdProfile = s.BfdProfile
 }
 
