@@ -21,8 +21,8 @@ type Entry struct {
 	SinkholeIpv4Address string
 	SinkholeIpv6Address string
 	ThreatExceptions    []string
-
-	raw map[string]string
+	Rules               []Rule
+	Exceptions          []Exception
 }
 
 type BotnetList struct {
@@ -31,6 +31,7 @@ type BotnetList struct {
 	PacketCapture string // 9.0+
 }
 
+// DnsCategory is present in PAN-OS 10.0+.
 type DnsCategory struct {
 	Name          string
 	Action        string
@@ -38,9 +39,30 @@ type DnsCategory struct {
 	PacketCapture string
 }
 
+// WhiteList is present in PAN-OS 10.0+.
 type WhiteList struct {
 	Name        string
 	Description string
+}
+
+type Rule struct {
+	Name            string
+	ThreatName      string
+	Category        string
+	Severities      []string
+	PacketCapture   string
+	Action          string
+	BlockIpTrackBy  string
+	BlockIpDuration int
+}
+
+type Exception struct {
+	Name            string
+	PacketCapture   string
+	Action          string
+	BlockIpTrackBy  string
+	BlockIpDuration int
+	ExemptIps       []string
 }
 
 // Copy copies the information from source Entry `s` to this object.  As the
@@ -48,10 +70,92 @@ type WhiteList struct {
 func (o *Entry) Copy(s Entry) {
 	o.Description = s.Description
 	o.PacketCapture = s.PacketCapture
-	o.BotnetLists = s.BotnetLists
+	if len(s.BotnetLists) == 0 {
+		o.BotnetLists = nil
+	} else {
+		o.BotnetLists = make([]BotnetList, 0, len(s.BotnetLists))
+		for _, x := range s.BotnetLists {
+			o.BotnetLists = append(o.BotnetLists, BotnetList{
+				Name:          x.Name,
+				Action:        x.Action,
+				PacketCapture: x.PacketCapture,
+			})
+		}
+	}
+	if len(s.DnsCategories) == 0 {
+		o.DnsCategories = nil
+	} else {
+		o.DnsCategories = make([]DnsCategory, 0, len(s.DnsCategories))
+		for _, x := range s.DnsCategories {
+			o.DnsCategories = append(o.DnsCategories, DnsCategory{
+				Name:          x.Name,
+				Action:        x.Action,
+				LogLevel:      x.LogLevel,
+				PacketCapture: x.PacketCapture,
+			})
+		}
+	}
+	if len(s.WhiteLists) == 0 {
+		o.WhiteLists = nil
+	} else {
+		o.WhiteLists = make([]WhiteList, 0, len(s.WhiteLists))
+		for _, x := range s.WhiteLists {
+			o.WhiteLists = append(o.WhiteLists, WhiteList{
+				Name:        x.Name,
+				Description: x.Description,
+			})
+		}
+	}
 	o.SinkholeIpv4Address = s.SinkholeIpv4Address
 	o.SinkholeIpv6Address = s.SinkholeIpv6Address
-	o.ThreatExceptions = s.ThreatExceptions
+	if len(s.ThreatExceptions) == 0 {
+		o.ThreatExceptions = nil
+	} else {
+		o.ThreatExceptions = make([]string, len(s.ThreatExceptions))
+		copy(o.ThreatExceptions, s.ThreatExceptions)
+	}
+	if len(s.Rules) == 0 {
+		o.Rules = nil
+	} else {
+		o.Rules = make([]Rule, 0, len(s.Rules))
+		for _, x := range s.Rules {
+			var sevs []string
+			if len(x.Severities) > 0 {
+				sevs = make([]string, len(x.Severities))
+				copy(sevs, x.Severities)
+			}
+			o.Rules = append(o.Rules, Rule{
+				Name:            x.Name,
+				ThreatName:      x.ThreatName,
+				Category:        x.Category,
+				Severities:      sevs,
+				PacketCapture:   x.PacketCapture,
+				Action:          x.Action,
+				BlockIpTrackBy:  x.BlockIpTrackBy,
+				BlockIpDuration: x.BlockIpDuration,
+			})
+		}
+	}
+	if len(s.Exceptions) == 0 {
+		o.Exceptions = nil
+	} else {
+		o.Exceptions = make([]Exception, 0, len(s.Exceptions))
+		for _, x := range s.Exceptions {
+			var eis []string
+			if len(x.ExemptIps) > 0 {
+				eis = make([]string, len(x.ExemptIps))
+				copy(eis, x.ExemptIps)
+			}
+			o.Exceptions = append(o.Exceptions, Exception{
+				Name:            x.Name,
+				PacketCapture:   x.PacketCapture,
+				Action:          x.Action,
+				BlockIpTrackBy:  x.BlockIpTrackBy,
+				BlockIpDuration: x.BlockIpDuration,
+				ExemptIps:       eis,
+			})
+		}
+	}
 }
 
 /** Structs / functions for this namespace. **/
@@ -128,27 +232,91 @@ func (o *entry_v1) normalize() Entry {
 		}
 	}
 
-	raw := make(map[string]string)
 	if o.Rules != nil {
-		raw["rules"] = util.CleanRawXml(o.Rules.Text)
+		list := make([]Rule, 0, len(o.Rules.Entries))
+		for _, x := range o.Rules.Entries {
+			item := Rule{
+				Name:          x.Name,
+				ThreatName:    x.ThreatName,
+				Category:      x.Category,
+				Severities:    util.MemToStr(x.Severities),
+				PacketCapture: x.PacketCapture,
+			}
+
+			if x.Action != nil {
+				switch {
+				case x.Action.Default != nil:
+					item.Action = ActionDefault
+				case x.Action.Allow != nil:
+					item.Action = ActionAllow
+				case x.Action.Alert != nil:
+					item.Action = ActionAlert
+				case x.Action.Drop != nil:
+					item.Action = ActionDrop
+				case x.Action.ResetClient != nil:
+					item.Action = ActionResetClient
+				case x.Action.ResetServer != nil:
+					item.Action = ActionResetServer
+				case x.Action.ResetBoth != nil:
+					item.Action = ActionResetBoth
+				case x.Action.BlockIp != nil:
+					item.Action = ActionBlockIp
+					item.BlockIpTrackBy = x.Action.BlockIp.TrackBy
+					item.BlockIpDuration = x.Action.BlockIp.Duration
+				}
+			}
+
+			list = append(list, item)
+		}
+		ans.Rules = list
 	}
-	if o.ThreatException != nil {
-		raw["threat"] = util.CleanRawXml(o.ThreatException.Text)
-	}
-	if len(raw) > 0 {
-		ans.raw = raw
+
+	if o.Exceptions != nil {
+		list := make([]Exception, 0, len(o.Exceptions.Entries))
+		for _, x := range o.Exceptions.Entries {
+			item := Exception{
+				Name:          x.Name,
+				PacketCapture: x.PacketCapture,
+				ExemptIps:     util.EntToStr(x.ExemptIps),
+			}
+
+			if x.Action != nil {
+				switch {
+				case x.Action.Default != nil:
+					item.Action = ActionDefault
+				case x.Action.Allow != nil:
+					item.Action = ActionAllow
+				case x.Action.Alert != nil:
+					item.Action = ActionAlert
+				case x.Action.Drop != nil:
+					item.Action = ActionDrop
+				case x.Action.ResetClient != nil:
+					item.Action = ActionResetClient
+				case x.Action.ResetServer != nil:
+					item.Action = ActionResetServer
+				case x.Action.ResetBoth != nil:
+					item.Action = ActionResetBoth
+				case x.Action.BlockIp != nil:
+					item.Action = ActionBlockIp
+					item.BlockIpTrackBy = x.Action.BlockIp.TrackBy
+					item.BlockIpDuration = x.Action.BlockIp.Duration
+				}
+			}
+			list = append(list, item)
+		}
+		ans.Exceptions = list
 	}
 
 	return ans
 }
 
 type entry_v1 struct {
-	XMLName         xml.Name     `xml:"entry"`
-	Name            string       `xml:"name,attr"`
-	Description     string       `xml:"description,omitempty"`
-	Botnet          *botnet_v1   `xml:"botnet-domains"`
-	Rules           *util.RawXml `xml:"rules"`
-	ThreatException *util.RawXml `xml:"threat-exception"`
+	XMLName     xml.Name    `xml:"entry"`
+	Name        string      `xml:"name,attr"`
+	Description string      `xml:"description,omitempty"`
+	Botnet      *botnet_v1  `xml:"botnet-domains"`
+	Rules       *rules      `xml:"rules"`
+	Exceptions  *exceptions `xml:"threat-exception"`
 }
 
 type botnet_v1 struct {
@@ -179,11 +347,64 @@ type sinkhole struct {
 	SinkholeIpv6Address string `xml:"ipv6-address,omitempty"`
 }
 
+type rules struct {
+	Entries []rule `xml:"entry"`
+}
+
+type rule struct {
+	Name          string           `xml:"name,attr"`
+	ThreatName    string           `xml:"threat-name,omitempty"`
+	Category      string           `xml:"category"`
+	Severities    *util.MemberType `xml:"severity"`
+	PacketCapture string           `xml:"packet-capture,omitempty"`
+	Action        *ruleAction      `xml:"action"`
+}
+
+type ruleAction struct {
+	Default     *string  `xml:"default"`
+	Allow       *string  `xml:"allow"`
+	Alert       *string  `xml:"alert"`
+	Drop        *string  `xml:"drop"`
+	ResetClient *string  `xml:"reset-client"`
+	ResetServer *string  `xml:"reset-server"`
+	ResetBoth   *string  `xml:"reset-both"`
+	BlockIp     *blockIp `xml:"block-ip"`
+}
+
+type blockIp struct {
+	TrackBy  string `xml:"track-by"`
+	Duration int    `xml:"duration"`
+}
+
+type exceptions struct {
+	Entries []exception `xml:"entry"`
+}
+
+type exception struct {
+	Name          string           `xml:"name,attr"`
+	PacketCapture string           `xml:"packet-capture,omitempty"`
+	Action        *exceptionAction `xml:"action"`
+	ExemptIps     *util.EntryType  `xml:"exempt-ip"`
+}
+
+type exceptionAction struct {
+	Default     *string  `xml:"default"`
+	Allow       *string  `xml:"allow"`
+	Alert       *string  `xml:"alert"`
+	Drop        *string  `xml:"drop"`
+	ResetClient *string  `xml:"reset-client"`
+	ResetServer *string  `xml:"reset-server"`
+	ResetBoth   *string  `xml:"reset-both"`
+	BlockIp     *blockIp `xml:"block-ip"`
+}
+
 func specify_v1(e Entry) interface{} {
 	ans := entry_v1{
 		Name:        e.Name,
 		Description: e.Description,
 	}
+
+	s := ""
 
 	if e.PacketCapture != "" || len(e.ThreatExceptions) > 0 || len(e.BotnetLists) > 0 || e.SinkholeIpv4Address != "" || e.SinkholeIpv6Address != "" {
 		spec := botnet_v1{
@@ -198,7 +419,6 @@ func specify_v1(e Entry) interface{} {
 					Name: x.Name,
 				}
 
-				s := ""
 				switch x.Action {
 				case ActionAlert:
 					val.Action.Alert = &s
@@ -226,12 +446,109 @@ func specify_v1(e Entry) interface{} {
 		ans.Botnet = &spec
 	}
 
-	if text, ok := e.raw["rules"]; ok {
-		ans.Rules = &util.RawXml{text}
+	if len(e.Rules) > 0 {
+		list := make([]rule, 0, len(e.Rules))
+		for _, x := range e.Rules {
+			item := rule{
+				Name:          x.Name,
+				ThreatName:    x.ThreatName,
+				Category:      x.Category,
+				Severities:    util.StrToMem(x.Severities),
+				PacketCapture: x.PacketCapture,
+			}
+
+			switch x.Action {
+			case ActionDefault:
+				item.Action = &ruleAction{
+					Default: &s,
+				}
+			case ActionAllow:
+				item.Action = &ruleAction{
+					Allow: &s,
+				}
+			case ActionAlert:
+				item.Action = &ruleAction{
+					Alert: &s,
+				}
+			case ActionDrop:
+				item.Action = &ruleAction{
+					Drop: &s,
+				}
+			case ActionResetClient:
+				item.Action = &ruleAction{
+					ResetClient: &s,
+				}
+			case ActionResetServer:
+				item.Action = &ruleAction{
+					ResetServer: &s,
+				}
+			case ActionResetBoth:
+				item.Action = &ruleAction{
+					ResetBoth: &s,
+				}
+			case ActionBlockIp:
+				item.Action = &ruleAction{
+					BlockIp: &blockIp{
+						TrackBy:  x.BlockIpTrackBy,
+						Duration: x.BlockIpDuration,
+					},
+				}
+			}
+
+			list = append(list, item)
+		}
+		ans.Rules = &rules{Entries: list}
 	}
 
-	if text, ok := e.raw["threat"]; ok {
-		ans.ThreatException = &util.RawXml{text}
+	if len(e.Exceptions) > 0 {
+		list := make([]exception, 0, len(e.Exceptions))
+		for _, x := range e.Exceptions {
+			item := exception{
+				Name:          x.Name,
+				PacketCapture: x.PacketCapture,
+				ExemptIps:     util.StrToEnt(x.ExemptIps),
+			}
+
+			switch x.Action {
+			case ActionDefault:
+				item.Action = &exceptionAction{
+					Default: &s,
+				}
+			case ActionAllow:
+				item.Action = &exceptionAction{
+					Allow: &s,
+				}
+			case ActionAlert:
+				item.Action = &exceptionAction{
+					Alert: &s,
+				}
+			case ActionDrop:
+				item.Action = &exceptionAction{
+					Drop: &s,
+				}
+			case ActionResetClient:
+				item.Action = &exceptionAction{
+					ResetClient: &s,
+				}
+			case ActionResetServer:
+				item.Action = &exceptionAction{
+					ResetServer: &s,
+				}
+			case ActionResetBoth:
+				item.Action = &exceptionAction{
+					ResetBoth: &s,
+				}
+			case ActionBlockIp:
+				item.Action = &exceptionAction{
+					BlockIp: &blockIp{
+						TrackBy:  x.BlockIpTrackBy,
+						Duration: x.BlockIpDuration,
+					},
+				}
+			}
+			list = append(list, item)
+		}
+		ans.Exceptions = &exceptions{Entries: list}
 	}
 
 	return ans
@@ -299,27 +616,91 @@ func (o *entry_v2) normalize() Entry {
 		}
 	}
 
-	raw := make(map[string]string)
 	if o.Rules != nil {
-		raw["rules"] = util.CleanRawXml(o.Rules.Text)
+		list := make([]Rule, 0, len(o.Rules.Entries))
+		for _, x := range o.Rules.Entries {
+			item := Rule{
+				Name:          x.Name,
+				ThreatName:    x.ThreatName,
+				Category:      x.Category,
+				Severities:    util.MemToStr(x.Severities),
+				PacketCapture: x.PacketCapture,
+			}
+
+			if x.Action != nil {
+				switch {
+				case x.Action.Default != nil:
+					item.Action = ActionDefault
+				case x.Action.Allow != nil:
+					item.Action = ActionAllow
+				case x.Action.Alert != nil:
+					item.Action = ActionAlert
+				case x.Action.Drop != nil:
+					item.Action = ActionDrop
+				case x.Action.ResetClient != nil:
+					item.Action = ActionResetClient
+				case x.Action.ResetServer != nil:
+					item.Action = ActionResetServer
+				case x.Action.ResetBoth != nil:
+					item.Action = ActionResetBoth
+				case x.Action.BlockIp != nil:
+					item.Action = ActionBlockIp
+					item.BlockIpTrackBy = x.Action.BlockIp.TrackBy
+					item.BlockIpDuration = x.Action.BlockIp.Duration
+				}
+			}
+
+			list = append(list, item)
+		}
+		ans.Rules = list
 	}
-	if o.ThreatException != nil {
-		raw["threat"] = util.CleanRawXml(o.ThreatException.Text)
-	}
-	if len(raw) > 0 {
-		ans.raw = raw
+
+	if o.Exceptions != nil {
+		list := make([]Exception, 0, len(o.Exceptions.Entries))
+		for _, x := range o.Exceptions.Entries {
+			item := Exception{
+				Name:          x.Name,
+				PacketCapture: x.PacketCapture,
+				ExemptIps:     util.EntToStr(x.ExemptIps),
+			}
+
+			if x.Action != nil {
+				switch {
+				case x.Action.Default != nil:
+					item.Action = ActionDefault
+				case x.Action.Allow != nil:
+					item.Action = ActionAllow
+				case x.Action.Alert != nil:
+					item.Action = ActionAlert
+				case x.Action.Drop != nil:
+					item.Action = ActionDrop
+				case x.Action.ResetClient != nil:
+					item.Action = ActionResetClient
+				case x.Action.ResetServer != nil:
+					item.Action = ActionResetServer
+				case x.Action.ResetBoth != nil:
+					item.Action = ActionResetBoth
+				case x.Action.BlockIp != nil:
+					item.Action = ActionBlockIp
+					item.BlockIpTrackBy = x.Action.BlockIp.TrackBy
+					item.BlockIpDuration = x.Action.BlockIp.Duration
+				}
+			}
+			list = append(list, item)
+		}
+		ans.Exceptions = list
 	}
 
 	return ans
 }
 
 type entry_v2 struct {
-	XMLName         xml.Name     `xml:"entry"`
-	Name            string       `xml:"name,attr"`
-	Description     string       `xml:"description,omitempty"`
-	Botnet          *botnet_v2   `xml:"botnet-domains"`
-	Rules           *util.RawXml `xml:"rules"`
-	ThreatException *util.RawXml `xml:"threat-exception"`
+	XMLName     xml.Name    `xml:"entry"`
+	Name        string      `xml:"name,attr"`
+	Description string      `xml:"description,omitempty"`
+	Botnet      *botnet_v2  `xml:"botnet-domains"`
+	Rules       *rules      `xml:"rules"`
+	Exceptions  *exceptions `xml:"threat-exception"`
 }
 
 type botnet_v2 struct {
@@ -385,12 +766,111 @@ func specify_v2(e Entry) interface{} {
 		ans.Botnet = &spec
 	}
 
-	if text, ok := e.raw["rules"]; ok {
-		ans.Rules = &util.RawXml{text}
+	s := ""
+
+	if len(e.Rules) > 0 {
+		list := make([]rule, 0, len(e.Rules))
+		for _, x := range e.Rules {
+			item := rule{
+				Name:          x.Name,
+				ThreatName:    x.ThreatName,
+				Category:      x.Category,
+				Severities:    util.StrToMem(x.Severities),
+				PacketCapture: x.PacketCapture,
+			}
+
+			switch x.Action {
+			case ActionDefault:
+				item.Action = &ruleAction{
+					Default: &s,
+				}
+			case ActionAllow:
+				item.Action = &ruleAction{
+					Allow: &s,
+				}
+			case ActionAlert:
+				item.Action = &ruleAction{
+					Alert: &s,
+				}
+			case ActionDrop:
+				item.Action = &ruleAction{
+					Drop: &s,
+				}
+			case ActionResetClient:
+				item.Action = &ruleAction{
+					ResetClient: &s,
+				}
+			case ActionResetServer:
+				item.Action = &ruleAction{
+					ResetServer: &s,
+				}
+			case ActionResetBoth:
+				item.Action = &ruleAction{
+					ResetBoth: &s,
+				}
+			case ActionBlockIp:
+				item.Action = &ruleAction{
+					BlockIp: &blockIp{
+						TrackBy:  x.BlockIpTrackBy,
+						Duration: x.BlockIpDuration,
+					},
+				}
+			}
+
+			list = append(list, item)
+		}
+		ans.Rules = &rules{Entries: list}
 	}
 
-	if text, ok := e.raw["threat"]; ok {
-		ans.ThreatException = &util.RawXml{text}
+	if len(e.Exceptions) > 0 {
+		list := make([]exception, 0, len(e.Exceptions))
+		for _, x := range e.Exceptions {
+			item := exception{
+				Name:          x.Name,
+				PacketCapture: x.PacketCapture,
+				ExemptIps:     util.StrToEnt(x.ExemptIps),
+			}
+
+			switch x.Action {
+			case ActionDefault:
+				item.Action = &exceptionAction{
+					Default: &s,
+				}
+			case ActionAllow:
+				item.Action = &exceptionAction{
+					Allow: &s,
+				}
+			case ActionAlert:
+				item.Action = &exceptionAction{
+					Alert: &s,
+				}
+			case ActionDrop:
+				item.Action = &exceptionAction{
+					Drop: &s,
+				}
+			case ActionResetClient:
+				item.Action = &exceptionAction{
+					ResetClient: &s,
+				}
+			case ActionResetServer:
+				item.Action = &exceptionAction{
+					ResetServer: &s,
+				}
+			case ActionResetBoth:
+				item.Action = &exceptionAction{
+					ResetBoth: &s,
+				}
+			case ActionBlockIp:
+				item.Action = &exceptionAction{
+					BlockIp: &blockIp{
+						TrackBy:  x.BlockIpTrackBy,
+						Duration: x.BlockIpDuration,
+					},
+				}
+			}
+			list = append(list, item)
+		}
+		ans.Exceptions = &exceptions{Entries: list}
 	}
 
 	return ans
@@ -484,27 +964,91 @@ func (o *entry_v3) normalize() Entry {
 		}
 	}
 
-	raw := make(map[string]string)
 	if o.Rules != nil {
-		raw["rules"] = util.CleanRawXml(o.Rules.Text)
+		list := make([]Rule, 0, len(o.Rules.Entries))
+		for _, x := range o.Rules.Entries {
+			item := Rule{
+				Name:          x.Name,
+				ThreatName:    x.ThreatName,
+				Category:      x.Category,
+				Severities:    util.MemToStr(x.Severities),
+				PacketCapture: x.PacketCapture,
+			}
+
+			if x.Action != nil {
+				switch {
+				case x.Action.Default != nil:
+					item.Action = ActionDefault
+				case x.Action.Allow != nil:
+					item.Action = ActionAllow
+				case x.Action.Alert != nil:
+					item.Action = ActionAlert
+				case x.Action.Drop != nil:
+					item.Action = ActionDrop
+				case x.Action.ResetClient != nil:
+					item.Action = ActionResetClient
+				case x.Action.ResetServer != nil:
+					item.Action = ActionResetServer
+				case x.Action.ResetBoth != nil:
+					item.Action = ActionResetBoth
+				case x.Action.BlockIp != nil:
+					item.Action = ActionBlockIp
+					item.BlockIpTrackBy = x.Action.BlockIp.TrackBy
+					item.BlockIpDuration = x.Action.BlockIp.Duration
+				}
+			}
+
+			list = append(list, item)
+		}
+		ans.Rules = list
 	}
-	if o.ThreatException != nil {
-		raw["threat"] = util.CleanRawXml(o.ThreatException.Text)
-	}
-	if len(raw) > 0 {
-		ans.raw = raw
+
+	if o.Exceptions != nil {
+		list := make([]Exception, 0, len(o.Exceptions.Entries))
+		for _, x := range o.Exceptions.Entries {
+			item := Exception{
+				Name:          x.Name,
+				PacketCapture: x.PacketCapture,
+				ExemptIps:     util.EntToStr(x.ExemptIps),
+			}
+
+			if x.Action != nil {
+				switch {
+				case x.Action.Default != nil:
+					item.Action = ActionDefault
+				case x.Action.Allow != nil:
+					item.Action = ActionAllow
+				case x.Action.Alert != nil:
+					item.Action = ActionAlert
+				case x.Action.Drop != nil:
+					item.Action = ActionDrop
+				case x.Action.ResetClient != nil:
+					item.Action = ActionResetClient
+				case x.Action.ResetServer != nil:
+					item.Action = ActionResetServer
+				case x.Action.ResetBoth != nil:
+					item.Action = ActionResetBoth
+				case x.Action.BlockIp != nil:
+					item.Action = ActionBlockIp
+					item.BlockIpTrackBy = x.Action.BlockIp.TrackBy
+					item.BlockIpDuration = x.Action.BlockIp.Duration
+				}
+			}
+			list = append(list, item)
+		}
+		ans.Exceptions = list
 	}
 
 	return ans
 }
 
 type entry_v3 struct {
-	XMLName         xml.Name     `xml:"entry"`
-	Name            string       `xml:"name,attr"`
-	Description     string       `xml:"description,omitempty"`
-	Botnet          *botnet_v3   `xml:"botnet-domains"`
-	Rules           *util.RawXml `xml:"rules"`
-	ThreatException *util.RawXml `xml:"threat-exception"`
+	XMLName     xml.Name    `xml:"entry"`
+	Name        string      `xml:"name,attr"`
+	Description string      `xml:"description,omitempty"`
+	Botnet      *botnet_v3  `xml:"botnet-domains"`
+	Rules       *rules      `xml:"rules"`
+	Exceptions  *exceptions `xml:"threat-exception"`
 }
 
 type botnet_v3 struct {
@@ -608,12 +1152,111 @@ func specify_v3(e Entry) interface{} {
 		ans.Botnet = &spec
 	}
 
-	if text, ok := e.raw["rules"]; ok {
-		ans.Rules = &util.RawXml{text}
+	s := ""
+
+	if len(e.Rules) > 0 {
+		list := make([]rule, 0, len(e.Rules))
+		for _, x := range e.Rules {
+			item := rule{
+				Name:          x.Name,
+				ThreatName:    x.ThreatName,
+				Category:      x.Category,
+				Severities:    util.StrToMem(x.Severities),
+				PacketCapture: x.PacketCapture,
+			}
+
+			switch x.Action {
+			case ActionDefault:
+				item.Action = &ruleAction{
+					Default: &s,
+				}
+			case ActionAllow:
+				item.Action = &ruleAction{
+					Allow: &s,
+				}
+			case ActionAlert:
+				item.Action = &ruleAction{
+					Alert: &s,
+				}
+			case ActionDrop:
+				item.Action = &ruleAction{
+					Drop: &s,
+				}
+			case ActionResetClient:
+				item.Action = &ruleAction{
+					ResetClient: &s,
+				}
+			case ActionResetServer:
+				item.Action = &ruleAction{
+					ResetServer: &s,
+				}
+			case ActionResetBoth:
+				item.Action = &ruleAction{
+					ResetBoth: &s,
+				}
+			case ActionBlockIp:
+				item.Action = &ruleAction{
+					BlockIp: &blockIp{
+						TrackBy:  x.BlockIpTrackBy,
+						Duration: x.BlockIpDuration,
+					},
+				}
+			}
+
+			list = append(list, item)
+		}
+		ans.Rules = &rules{Entries: list}
 	}
 
-	if text, ok := e.raw["threat"]; ok {
-		ans.ThreatException = &util.RawXml{text}
+	if len(e.Exceptions) > 0 {
+		list := make([]exception, 0, len(e.Exceptions))
+		for _, x := range e.Exceptions {
+			item := exception{
+				Name:          x.Name,
+				PacketCapture: x.PacketCapture,
+				ExemptIps:     util.StrToEnt(x.ExemptIps),
+			}
+
+			switch x.Action {
+			case ActionDefault:
+				item.Action = &exceptionAction{
+					Default: &s,
+				}
+			case ActionAllow:
+				item.Action = &exceptionAction{
+					Allow: &s,
+				}
+			case ActionAlert:
+				item.Action = &exceptionAction{
+					Alert: &s,
+				}
+			case ActionDrop:
+				item.Action = &exceptionAction{
+					Drop: &s,
+				}
+			case ActionResetClient:
+				item.Action = &exceptionAction{
+					ResetClient: &s,
+				}
+			case ActionResetServer:
+				item.Action = &exceptionAction{
+					ResetServer: &s,
+				}
+			case ActionResetBoth:
+				item.Action = &exceptionAction{
+					ResetBoth: &s,
+				}
+			case ActionBlockIp:
+				item.Action = &exceptionAction{
+					BlockIp: &blockIp{
+						TrackBy:  x.BlockIpTrackBy,
+						Duration: x.BlockIpDuration,
+					},
+				}
+			}
+			list = append(list, item)
+		}
+		ans.Exceptions = &exceptions{Entries: list}
 	}
 
 	return ans

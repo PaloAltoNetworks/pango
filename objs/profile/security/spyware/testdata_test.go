@@ -19,10 +19,6 @@ func getTests() []tc {
 		{"v1 with raw", version.Number{8, 0, 0, ""}, Entry{
 			Name:        "t1",
 			Description: "my desc",
-			raw: map[string]string{
-				"rules":  "rules config",
-				"threat": "threat exceptions",
-			},
 		}},
 		{"v1 with packet capture", version.Number{8, 0, 0, ""}, Entry{
 			Name:          "t1",
@@ -66,6 +62,97 @@ func getTests() []tc {
 				},
 			},
 		}},
+		{"v1 with rules", version.Number{8, 0, 0, ""}, Entry{
+			Name:        "with rules",
+			Description: "blah",
+			Rules: []Rule{
+				Rule{
+					Name:          "t1",
+					ThreatName:    "any",
+					Category:      "my category",
+					Severities:    []string{"high", "low"},
+					PacketCapture: Disable,
+					Action:        ActionDefault,
+				},
+				Rule{
+					Name:          "t1",
+					PacketCapture: SinglePacket,
+					Action:        ActionAllow,
+				},
+				Rule{
+					Name:          "t1",
+					PacketCapture: ExtendedCapture,
+					Action:        ActionAlert,
+				},
+				Rule{
+					Name:   "t1",
+					Action: ActionDrop,
+				},
+				Rule{
+					Name:   "t1",
+					Action: ActionResetClient,
+				},
+				Rule{
+					Name:   "t1",
+					Action: ActionResetServer,
+				},
+				Rule{
+					Name:   "t1",
+					Action: ActionResetBoth,
+				},
+				Rule{
+					Name:            "t1",
+					Action:          ActionBlockIp,
+					BlockIpTrackBy:  TrackBySourceAndDestination,
+					BlockIpDuration: 42,
+				},
+			},
+		}},
+		{"v1 with exceptions", version.Number{8, 0, 0, ""}, Entry{
+			Name:        "with exceptions",
+			Description: "with exceptions",
+			Exceptions: []Exception{
+				Exception{
+					Name:          "t1",
+					PacketCapture: Disable,
+					Action:        ActionDefault,
+					ExemptIps:     []string{"192.168.50.1", "192.168.50.2"},
+				},
+				Exception{
+					Name:          "t1",
+					PacketCapture: SinglePacket,
+					Action:        ActionAllow,
+					ExemptIps:     []string{"192.168.50.1", "192.168.50.2"},
+				},
+				Exception{
+					Name:          "t1",
+					PacketCapture: ExtendedCapture,
+					Action:        ActionAlert,
+				},
+				Exception{
+					Name:   "t1",
+					Action: ActionDrop,
+				},
+				Exception{
+					Name:   "t1",
+					Action: ActionResetClient,
+				},
+				Exception{
+					Name:   "t1",
+					Action: ActionResetServer,
+				},
+				Exception{
+					Name:   "t1",
+					Action: ActionResetBoth,
+				},
+				Exception{
+					Name:            "t1",
+					Action:          ActionBlockIp,
+					BlockIpTrackBy:  TrackBySourceAndDestination,
+					BlockIpDuration: 42,
+				},
+			},
+		}},
 		{"v2 only desc", version.Number{9, 0, 0, ""}, Entry{
 			Name:        "t1",
 			Description: "my desc",
@@ -73,10 +160,6 @@ func getTests() []tc {
 		{"v2 with raw", version.Number{9, 0, 0, ""}, Entry{
 			Name:        "t1",
 			Description: "my desc",
-			raw: map[string]string{
-				"rules":  "rules config",
-				"threat": "threat exceptions",
-			},
 		}},
 		{"v2 with ipv4 sinkhole", version.Number{9, 0, 0, ""}, Entry{
 			Name:                "t1",
@@ -118,6 +201,97 @@ func getTests() []tc {
 				},
 			},
 		}},
+		{"v2 with rules", version.Number{9, 0, 0, ""}, Entry{
+			Name:        "with rules",
+			Description: "blah",
+			Rules: []Rule{
+				Rule{
+					Name:          "t1",
+					ThreatName:    "any",
+					Category:      "my category",
+					Severities:    []string{"high", "low"},
+					PacketCapture: Disable,
+					Action:        ActionDefault,
+				},
+				Rule{
+					Name:          "t1",
+					PacketCapture: SinglePacket,
+					Action:        ActionAllow,
+				},
+				Rule{
+					Name:          "t1",
+					PacketCapture: ExtendedCapture,
+					Action:        ActionAlert,
+				},
+				Rule{
+					Name:   "t1",
+					Action: ActionDrop,
+				},
+				Rule{
+					Name:   "t1",
+					Action: ActionResetClient,
+				},
+				Rule{
+					Name:   "t1",
+					Action: ActionResetServer,
+				},
+				Rule{
+					Name:   "t1",
+					Action: ActionResetBoth,
+				},
+				Rule{
+					Name:            "t1",
+					Action:          ActionBlockIp,
+					BlockIpTrackBy:  TrackBySourceAndDestination,
+					BlockIpDuration: 42,
+				},
+			},
+		}},
+		{"v2 with exceptions", version.Number{9, 0, 0, ""}, Entry{
+			Name:        "with exceptions",
+			Description: "with exceptions",
+			Exceptions: []Exception{
+				Exception{
+					Name:          "t1",
+					PacketCapture: Disable,
+					Action:        ActionDefault,
+					ExemptIps:     []string{"192.168.50.1", "192.168.50.2"},
+				},
+				Exception{
+					Name:          "t1",
+					PacketCapture: SinglePacket,
+					Action:        ActionAllow,
+					ExemptIps:     []string{"192.168.50.1", "192.168.50.2"},
+				},
+				Exception{
+					Name:          "t1",
+					PacketCapture: ExtendedCapture,
+					Action:        ActionAlert,
+				},
+				Exception{
+					Name:   "t1",
+					Action: ActionDrop,
+				},
+				Exception{
+					Name:   "t1",
+					Action: ActionResetClient,
+				},
+				Exception{
+					Name:   "t1",
+					Action: ActionResetServer,
+				},
+				Exception{
+					Name:   "t1",
+					Action: ActionResetBoth,
+				},
+				Exception{
+					Name:            "t1",
+					Action:          ActionBlockIp,
+					BlockIpTrackBy:  TrackBySourceAndDestination,
+					BlockIpDuration: 42,
+				},
+			},
+		}},
 		{"v3 only desc", version.Number{10, 0, 0, ""}, Entry{
 			Name:        "t1",
 			Description: "my desc",
@@ -125,10 +299,6 @@ func getTests() []tc {
 		{"v3 with raw", version.Number{10, 0, 0, ""}, Entry{
 			Name:        "t1",
 			Description: "my desc",
-			raw: map[string]string{
-				"rules":  "rules config",
-				"threat": "threat exceptions",
-			},
 		}},
 		{"v3 with ipv4 sinkhole", version.Number{10, 0, 0, ""}, Entry{
 			Name:                "t1",
@@ -199,6 +369,97 @@ func getTests() []tc {
 					Action:        ActionSinkhole,
 					LogLevel:      LogLevelHigh,
 					PacketCapture: Disable,
+				},
+			},
+		}},
+		{"v3 with rules", version.Number{10, 0, 0, ""}, Entry{
+			Name:        "with rules",
+			Description: "blah",
+			Rules: []Rule{
+				Rule{
+					Name:          "t1",
+					ThreatName:    "any",
+					Category:      "my category",
+					Severities:    []string{"high", "low"},
+					PacketCapture: Disable,
+					Action:        ActionDefault,
+				},
+				Rule{
+					Name:          "t1",
+					PacketCapture: SinglePacket,
+					Action:        ActionAllow,
+				},
+				Rule{
+					Name:          "t1",
+					PacketCapture: ExtendedCapture,
+					Action:        ActionAlert,
+				},
+				Rule{
+					Name:   "t1",
+					Action: ActionDrop,
+				},
+				Rule{
+					Name:   "t1",
+					Action: ActionResetClient,
+				},
+				Rule{
+					Name:   "t1",
+					Action: ActionResetServer,
+				},
+				Rule{
+					Name:   "t1",
+					Action: ActionResetBoth,
+				},
+				Rule{
+					Name:            "t1",
+					Action:          ActionBlockIp,
+					BlockIpTrackBy:  TrackBySourceAndDestination,
+					BlockIpDuration: 42,
+				},
+			},
+		}},
+		{"v3 with exceptions", version.Number{10, 0, 0, ""}, Entry{
+			Name:        "with exceptions",
+			Description: "with exceptions",
+			Exceptions: []Exception{
+				Exception{
+					Name:          "t1",
+					PacketCapture: Disable,
+					Action:        ActionDefault,
+					ExemptIps:     []string{"192.168.50.1", "192.168.50.2"},
+				},
+				Exception{
+					Name:          "t1",
+					PacketCapture: SinglePacket,
+					Action:        ActionAllow,
+					ExemptIps:     []string{"192.168.50.1", "192.168.50.2"},
+				},
+				Exception{
+					Name:          "t1",
+					PacketCapture: ExtendedCapture,
+					Action:        ActionAlert,
+				},
+				Exception{
+					Name:   "t1",
+					Action: ActionDrop,
+				},
+				Exception{
+					Name:   "t1",
+					Action: ActionResetClient,
+				},
+				Exception{
+					Name:   "t1",
+					Action: ActionResetServer,
+				},
+				Exception{
+					Name:   "t1",
+					Action: ActionResetBoth,
+				},
+				Exception{
+					Name:            "t1",
+					Action:          ActionBlockIp,
+					BlockIpTrackBy:  TrackBySourceAndDestination,
+					BlockIpDuration: 42,
 				},
 			},
 		}},

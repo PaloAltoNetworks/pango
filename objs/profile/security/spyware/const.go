@@ -20,15 +20,22 @@ const (
 
 // Valid values for Action params.
 const (
-	// Valid for Entry.Action and BlockList.Action only.
-	ActionAlert = "alert"
+	ActionAlert       = "alert"        // BotnetList, BlockList, Rule, Exception
+	ActionAllow       = "allow"        // BotnetList, DnsCategory, Rule, Exception
+	ActionBlock       = "block"        // BotnetList, DnsCategory
+	ActionBlockIp     = "block-ip"     // Rule, Exception
+	ActionDefault     = "default"      // DnsCategory, Rule, Exception
+	ActionDrop        = "drop"         // Rule, Exception
+	ActionResetBoth   = "reset-both"   // Rule, Exception
+	ActionResetClient = "reset-client" // Rule, Exception
+	ActionResetServer = "reset-server" // Rule, Exception
+	ActionSinkhole    = "sinkhole"     // BotnetList, DnsCategory
+)
 
-	// Valid for DnsCategory.Action only.
-	ActionDefault = "default"
-
-	ActionAllow    = "allow"
-	ActionBlock    = "block"
-	ActionSinkhole = "sinkhole"
+// Valid values for BlockIpTrackBy.
+const (
+	TrackBySource               = "source"
+	TrackBySourceAndDestination = "source-and-destination"
 )
 
 const (
