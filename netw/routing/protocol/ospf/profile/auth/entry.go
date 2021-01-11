@@ -25,7 +25,8 @@ type Md5Key struct {
 func (o *Entry) Copy(s Entry) {
 	o.AuthType = s.AuthType
 	o.Password = s.Password
-	o.Md5Keys = s.Md5Keys
+	o.Md5Keys = make([]Md5Key, len(s.Md5Keys))
+	copy(o.Md5Keys, s.Md5Keys)
 }
 
 /** Structs / functions for this namespace. **/

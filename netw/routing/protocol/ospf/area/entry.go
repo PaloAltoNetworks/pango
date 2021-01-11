@@ -33,8 +33,10 @@ func (o *Entry) Copy(s Entry) {
 	o.DefaultRouteAdvertise = s.DefaultRouteAdvertise
 	o.AdvertiseMetric = s.AdvertiseMetric
 	o.AdvertiseType = s.AdvertiseType
-	o.ExtRanges = s.ExtRanges
-	o.Ranges = s.Ranges
+	o.ExtRanges = make([]Range, len(s.ExtRanges))
+	copy(o.ExtRanges, s.ExtRanges)
+	o.Ranges = make([]Range, len(s.Ranges))
+	copy(o.Ranges, s.Ranges)
 }
 
 /** Structs / functions for this namespace. **/
