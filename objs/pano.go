@@ -20,8 +20,6 @@ import (
 	dpsp "github.com/PaloAltoNetworks/pango/objs/profile/security/dos"
 	fprof "github.com/PaloAltoNetworks/pango/objs/profile/security/file"
 	"github.com/PaloAltoNetworks/pango/objs/profile/security/spyware"
-	asr "github.com/PaloAltoNetworks/pango/objs/profile/security/spyware/rule"
-	aste "github.com/PaloAltoNetworks/pango/objs/profile/security/spyware/texception"
 	ufsp "github.com/PaloAltoNetworks/pango/objs/profile/security/url"
 	"github.com/PaloAltoNetworks/pango/objs/profile/security/virus"
 	"github.com/PaloAltoNetworks/pango/objs/profile/security/vulnerability"
@@ -36,8 +34,6 @@ type PanoObjs struct {
 	Address                             *addr.Panorama
 	AddressGroup                        *addrgrp.PanoAddrGrp
 	AntiSpywareProfile                  *spyware.Panorama
-	AntiSpywareRule                     *asr.Panorama
-	AntiSpywareThreatException          *aste.Panorama
 	AntivirusProfile                    *virus.Panorama
 	Application                         *app.PanoApp
 	AppGroup                            *appgrp.PanoGroup
@@ -69,8 +65,6 @@ func (c *PanoObjs) Initialize(i util.XapiClient) {
 	c.AddressGroup.Initialize(i)
 
 	c.AntiSpywareProfile = spyware.PanoramaNamespace(i)
-	c.AntiSpywareRule = asr.PanoramaNamespace(i)
-	c.AntiSpywareThreatException = aste.PanoramaNamespace(i)
 	c.AntivirusProfile = virus.PanoramaNamespace(i)
 
 	c.Application = &app.PanoApp{}
