@@ -6,6 +6,7 @@ import (
 
 	"github.com/PaloAltoNetworks/pango/namespace"
 	"github.com/PaloAltoNetworks/pango/util"
+	"github.com/PaloAltoNetworks/pango/version"
 )
 
 // Firewall is the client.Policies.PolicyBasedForwarding namespace.
