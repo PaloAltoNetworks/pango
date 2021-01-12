@@ -33,10 +33,18 @@ func (o *Entry) Copy(s Entry) {
 	o.DefaultRouteAdvertise = s.DefaultRouteAdvertise
 	o.AdvertiseMetric = s.AdvertiseMetric
 	o.AdvertiseType = s.AdvertiseType
-	o.ExtRanges = make([]Range, len(s.ExtRanges))
-	copy(o.ExtRanges, s.ExtRanges)
-	o.Ranges = make([]Range, len(s.Ranges))
-	copy(o.Ranges, s.Ranges)
+	if s.ExtRanges == nil {
+		o.ExtRanges = nil
+	} else {
+		o.ExtRanges = make([]Range, len(s.ExtRanges))
+		copy(o.ExtRanges, s.ExtRanges)
+	}
+	if s.Ranges == nil {
+		o.Ranges = nil
+	} else {
+		o.Ranges = make([]Range, len(s.Ranges))
+		copy(o.Ranges, s.Ranges)
+	}
 }
 
 /** Structs / functions for this namespace. **/
