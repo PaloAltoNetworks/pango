@@ -6,6 +6,7 @@ import (
 
 	"github.com/PaloAltoNetworks/pango/namespace"
 	"github.com/PaloAltoNetworks/pango/util"
+	"github.com/PaloAltoNetworks/pango/version"
 )
 
 // Firewall is the client.Policies.Nat namespace.
@@ -110,6 +111,23 @@ func (c *Firewall) MoveGroup(vsys string, movement int, rule string, e ...Entry)
 	names, _ := toNames(ei)
 
 	return c.ns.MoveGroup(c.pather(vsys), lister, movement, rule, names)
+}
+
+// HitCount gets the rule hit count for the given rules.
+//
+// If the rules param is nil, then the hit count for all rules is returned.
+func (c *Firewall) HitCount(vsys string, rules []string) ([]util.HitCount, error) {
+	if !c.ns.Client.Versioning().Gte(version.Number{9, 0, 0, ""}) {
+		return nil, fmt.Errorf("rule hit count requires PAN-OS 9.0+")
+	}
+
+	req := util.NewHitCountRequest("nat", vsys, rules)
+	resp := util.HitCountResponse{}
+	if _, err := c.ns.Client.Op(req, "", nil, &resp); err != nil {
+		return nil, err
+	}
+
+	return resp.Results, nil
 }
 
 func (c *Firewall) pather(vsys string) namespace.Pather {
