@@ -1,11 +1,11 @@
 package url
 
-// Valid values for CesMode.
+// Valid values for UcdMode.
 const (
-	CesModeDisabled          = "disabled"
-	CesModeIpUser            = "ip-user"
-	CesModeDomainCredentials = "domain-credentials"
-	CesModeGroupMapping      = "group-mapping"
+	UcdModeDisabled          = "disabled"
+	UcdModeIpUser            = "ip-user"
+	UcdModeDomainCredentials = "domain-credentials"
+	UcdModeGroupMapping      = "group-mapping"
 )
 
 const (
