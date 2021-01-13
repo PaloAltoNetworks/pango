@@ -18,24 +18,24 @@ type Entry struct {
 	BlockListAction           string   // Removed in 9.0
 	BlockList                 []string // Removed in 9.0
 	AllowList                 []string // Removed in 9.0
-	AllowCategories           []string
-	AlertCategories           []string
-	BlockCategories           []string
-	ContinueCategories        []string
-	OverrideCategories        []string
+	AllowCategories           []string // ordered
+	AlertCategories           []string // ordered
+	BlockCategories           []string // ordered
+	ContinueCategories        []string // ordered
+	OverrideCategories        []string // ordered
 	TrackContainerPage        bool
 	LogContainerPageOnly      bool
 	SafeSearchEnforcement     bool
 	LogHttpHeaderXff          bool
 	LogHttpHeaderUserAgent    bool
 	LogHttpHeaderReferer      bool
-	CesMode                   string                 // 8.0
-	CesModeGroupMapping       string                 // 8.0
-	CesLogSeverity            string                 // 8.0
-	CesAllowCategories        []string               // 8.0
-	CesAlertCategories        []string               // 8.0
-	CesBlockCategories        []string               // 8.0
-	CesContinueCategories     []string               // 8.0
+	UcdMode                   string                 // 8.0
+	UcdModeGroupMapping       string                 // 8.0
+	UcdLogSeverity            string                 // 8.0
+	UcdAllowCategories        []string               // 8.0, ordered
+	UcdAlertCategories        []string               // 8.0, ordered
+	UcdBlockCategories        []string               // 8.0, ordered
+	UcdContinueCategories     []string               // 8.0, ordered
 	HttpHeaderInsertions      []HttpHeaderInsertion  // 8.1
 	MachineLearningModels     []MachineLearningModel // 10.0
 	MachineLearningExceptions []string               // 10.0
@@ -44,7 +44,7 @@ type Entry struct {
 type HttpHeaderInsertion struct {
 	Name        string
 	Type        string
-	Domains     []string
+	Domains     []string // ordered
 	HttpHeaders []HttpHeader
 }
 
@@ -70,29 +70,125 @@ func (o *Entry) Copy(s Entry) {
 	o.DynamicUrl = s.DynamicUrl
 	o.ExpiredLicenseAction = s.ExpiredLicenseAction
 	o.BlockListAction = s.BlockListAction
-	o.BlockList = s.BlockList
-	o.AllowList = s.AllowList
-	o.AllowCategories = s.AllowCategories
-	o.AlertCategories = s.AlertCategories
-	o.BlockCategories = s.BlockCategories
-	o.ContinueCategories = s.ContinueCategories
-	o.OverrideCategories = s.OverrideCategories
+	if s.BlockList == nil {
+		o.BlockList = nil
+	} else {
+		o.BlockList = make([]string, len(s.BlockList))
+		copy(o.BlockList, s.BlockList)
+	}
+	if s.AllowList == nil {
+		o.AllowList = nil
+	} else {
+		o.AllowList = make([]string, len(s.AllowList))
+		copy(o.AllowList, s.AllowList)
+	}
+	if s.AllowCategories == nil {
+		o.AllowCategories = nil
+	} else {
+		o.AllowCategories = make([]string, len(s.AllowCategories))
+		copy(o.AllowCategories, s.AllowCategories)
+	}
+	if s.AlertCategories == nil {
+		o.AlertCategories = nil
+	} else {
+		o.AlertCategories = make([]string, len(s.AlertCategories))
+		copy(o.AlertCategories, s.AlertCategories)
+	}
+	if s.BlockCategories == nil {
+		o.BlockCategories = nil
+	} else {
+		o.BlockCategories = make([]string, len(s.BlockCategories))
+		copy(o.BlockCategories, s.BlockCategories)
+	}
+	if s.ContinueCategories == nil {
+		o.ContinueCategories = nil
+	} else {
+		o.ContinueCategories = make([]string, len(s.ContinueCategories))
+		copy(o.ContinueCategories, s.ContinueCategories)
+	}
+	if s.OverrideCategories == nil {
+		o.OverrideCategories = nil
+	} else {
+		o.OverrideCategories = make([]string, len(s.OverrideCategories))
+		copy(o.OverrideCategories, s.OverrideCategories)
+	}
 	o.TrackContainerPage = s.TrackContainerPage
 	o.LogContainerPageOnly = s.LogContainerPageOnly
 	o.SafeSearchEnforcement = s.SafeSearchEnforcement
 	o.LogHttpHeaderXff = s.LogHttpHeaderXff
 	o.LogHttpHeaderUserAgent = s.LogHttpHeaderUserAgent
 	o.LogHttpHeaderReferer = s.LogHttpHeaderReferer
-	o.CesMode = s.CesMode
-	o.CesModeGroupMapping = s.CesModeGroupMapping
-	o.CesLogSeverity = s.CesLogSeverity
-	o.CesAllowCategories = s.CesAllowCategories
-	o.CesAlertCategories = s.CesAlertCategories
-	o.CesBlockCategories = s.CesBlockCategories
-	o.CesContinueCategories = s.CesContinueCategories
-	o.HttpHeaderInsertions = s.HttpHeaderInsertions
-	o.MachineLearningModels = s.MachineLearningModels
-	o.MachineLearningExceptions = s.MachineLearningExceptions
+	o.UcdMode = s.UcdMode
+	o.UcdModeGroupMapping = s.UcdModeGroupMapping
+	o.UcdLogSeverity = s.UcdLogSeverity
+	if s.UcdAllowCategories == nil {
+		o.UcdAllowCategories = nil
+	} else {
+		o.UcdAllowCategories = make([]string, len(s.UcdAllowCategories))
+		copy(o.UcdAllowCategories, s.UcdAllowCategories)
+	}
+	if s.UcdAlertCategories == nil {
+		o.UcdAlertCategories = nil
+	} else {
+		o.UcdAlertCategories = make([]string, len(s.UcdAlertCategories))
+		copy(o.UcdAlertCategories, s.UcdAlertCategories)
+	}
+	if s.UcdBlockCategories == nil {
+		o.UcdBlockCategories = nil
+	} else {
+		o.UcdBlockCategories = make([]string, len(s.UcdBlockCategories))
+		copy(o.UcdBlockCategories, s.UcdBlockCategories)
+	}
+	if s.UcdContinueCategories == nil {
+		o.UcdContinueCategories = nil
+	} else {
+		o.UcdContinueCategories = make([]string, len(s.UcdContinueCategories))
+		copy(o.UcdContinueCategories, s.UcdContinueCategories)
+	}
+	if s.HttpHeaderInsertions == nil {
+		o.HttpHeaderInsertions = nil
+	} else {
+		o.HttpHeaderInsertions = make([]HttpHeaderInsertion, 0, len(s.HttpHeaderInsertions))
+		for _, hi := range s.HttpHeaderInsertions {
+			item := HttpHeaderInsertion{
+				Name: hi.Name,
+				Type: hi.Type,
+			}
+			if hi.Domains != nil {
+				item.Domains = make([]string, len(hi.Domains))
+				copy(item.Domains, hi.Domains)
+			}
+			if hi.HttpHeaders != nil {
+				item.HttpHeaders = make([]HttpHeader, 0, len(hi.HttpHeaders))
+				for _, hh := range hi.HttpHeaders {
+					item.HttpHeaders = append(item.HttpHeaders, HttpHeader{
+						Name:   hh.Name,
+						Header: hh.Header,
+						Value:  hh.Value,
+						Log:    hh.Log,
+					})
+				}
+			}
+			o.HttpHeaderInsertions = append(o.HttpHeaderInsertions, item)
+		}
+	}
+	if s.MachineLearningModels == nil {
+		o.MachineLearningModels = nil
+	} else {
+		o.MachineLearningModels = make([]MachineLearningModel, 0, len(s.MachineLearningModels))
+		for _, mlm := range s.MachineLearningModels {
+			o.MachineLearningModels = append(o.MachineLearningModels, MachineLearningModel{
+				Model:  mlm.Model,
+				Action: mlm.Action,
+			})
+		}
+	}
+	if s.MachineLearningExceptions == nil {
+		o.MachineLearningExceptions = nil
+	} else {
+		o.MachineLearningExceptions = make([]string, len(s.MachineLearningExceptions))
+		copy(o.MachineLearningExceptions, s.MachineLearningExceptions)
+	}
 }
 
 /** Structs / functions for this namespace. **/
@@ -244,24 +340,24 @@ func (o *entry_v2) normalize() Entry {
 		LogHttpHeaderReferer:   util.AsBool(o.LogHttpHeaderReferer),
 	}
 
-	if o.Ces != nil {
+	if o.Ucd != nil {
 		switch {
-		case o.Ces.Mode.CesModeDisabled != nil:
-			ans.CesMode = CesModeDisabled
-		case o.Ces.Mode.CesModeIpUser != nil:
-			ans.CesMode = CesModeIpUser
-		case o.Ces.Mode.CesModeDomainCredentials != nil:
-			ans.CesMode = CesModeDomainCredentials
-		case o.Ces.Mode.CesModeGroupMapping != "":
-			ans.CesMode = CesModeGroupMapping
-			ans.CesModeGroupMapping = o.Ces.Mode.CesModeGroupMapping
+		case o.Ucd.Mode.UcdModeDisabled != nil:
+			ans.UcdMode = UcdModeDisabled
+		case o.Ucd.Mode.UcdModeIpUser != nil:
+			ans.UcdMode = UcdModeIpUser
+		case o.Ucd.Mode.UcdModeDomainCredentials != nil:
+			ans.UcdMode = UcdModeDomainCredentials
+		case o.Ucd.Mode.UcdModeGroupMapping != "":
+			ans.UcdMode = UcdModeGroupMapping
+			ans.UcdModeGroupMapping = o.Ucd.Mode.UcdModeGroupMapping
 		}
 
-		ans.CesLogSeverity = o.Ces.CesLogSeverity
-		ans.CesAllowCategories = util.MemToStr(o.Ces.CesAllowCategories)
-		ans.CesAlertCategories = util.MemToStr(o.Ces.CesAlertCategories)
-		ans.CesBlockCategories = util.MemToStr(o.Ces.CesBlockCategories)
-		ans.CesContinueCategories = util.MemToStr(o.Ces.CesContinueCategories)
+		ans.UcdLogSeverity = o.Ucd.UcdLogSeverity
+		ans.UcdAllowCategories = util.MemToStr(o.Ucd.UcdAllowCategories)
+		ans.UcdAlertCategories = util.MemToStr(o.Ucd.UcdAlertCategories)
+		ans.UcdBlockCategories = util.MemToStr(o.Ucd.UcdBlockCategories)
+		ans.UcdContinueCategories = util.MemToStr(o.Ucd.UcdContinueCategories)
 	}
 
 	return ans
@@ -282,7 +378,7 @@ type entry_v2 struct {
 	BlockCategories        *util.MemberType `xml:"block"`
 	ContinueCategories     *util.MemberType `xml:"continue"`
 	OverrideCategories     *util.MemberType `xml:"override"`
-	Ces                    *creds           `xml:"credential-enforcement"`
+	Ucd                    *creds           `xml:"credential-enforcement"`
 	TrackContainerPage     string           `xml:"enable-container-page"`
 	LogContainerPageOnly   string           `xml:"log-container-page-only"`
 	SafeSearchEnforcement  string           `xml:"safe-search-enforcement"`
@@ -293,18 +389,18 @@ type entry_v2 struct {
 
 type creds struct {
 	Mode                  credMode         `xml:"mode"`
-	CesLogSeverity        string           `xml:"log-severity"`
-	CesAllowCategories    *util.MemberType `xml:"allow"`
-	CesAlertCategories    *util.MemberType `xml:"alert"`
-	CesBlockCategories    *util.MemberType `xml:"block"`
-	CesContinueCategories *util.MemberType `xml:"continue"`
+	UcdLogSeverity        string           `xml:"log-severity"`
+	UcdAllowCategories    *util.MemberType `xml:"allow"`
+	UcdAlertCategories    *util.MemberType `xml:"alert"`
+	UcdBlockCategories    *util.MemberType `xml:"block"`
+	UcdContinueCategories *util.MemberType `xml:"continue"`
 }
 
 type credMode struct {
-	CesModeDisabled          *string `xml:"disabled"`
-	CesModeIpUser            *string `xml:"ip-user"`
-	CesModeDomainCredentials *string `xml:"domain-credentials"`
-	CesModeGroupMapping      string  `xml:"group-mapping,omitempty"`
+	UcdModeDisabled          *string `xml:"disabled"`
+	UcdModeIpUser            *string `xml:"ip-user"`
+	UcdModeDomainCredentials *string `xml:"domain-credentials"`
+	UcdModeGroupMapping      string  `xml:"group-mapping,omitempty"`
 }
 
 func specify_v2(e Entry) interface{} {
@@ -329,35 +425,35 @@ func specify_v2(e Entry) interface{} {
 		LogHttpHeaderReferer:   util.YesNo(e.LogHttpHeaderReferer),
 	}
 
-	if e.CesMode != "" || e.CesLogSeverity != "" || len(e.CesAllowCategories) != 0 || len(e.CesAlertCategories) != 0 || len(e.CesBlockCategories) != 0 || len(e.CesContinueCategories) != 0 {
+	if e.UcdMode != "" || e.UcdLogSeverity != "" || len(e.UcdAllowCategories) != 0 || len(e.UcdAlertCategories) != 0 || len(e.UcdBlockCategories) != 0 || len(e.UcdContinueCategories) != 0 {
 		s := ""
 		var m credMode
-		switch e.CesMode {
-		case CesModeDisabled:
+		switch e.UcdMode {
+		case UcdModeDisabled:
 			m = credMode{
-				CesModeDisabled: &s,
+				UcdModeDisabled: &s,
 			}
-		case CesModeIpUser:
+		case UcdModeIpUser:
 			m = credMode{
-				CesModeIpUser: &s,
+				UcdModeIpUser: &s,
 			}
-		case CesModeDomainCredentials:
+		case UcdModeDomainCredentials:
 			m = credMode{
-				CesModeDomainCredentials: &s,
+				UcdModeDomainCredentials: &s,
 			}
-		case CesModeGroupMapping:
+		case UcdModeGroupMapping:
 			m = credMode{
-				CesModeGroupMapping: e.CesModeGroupMapping,
+				UcdModeGroupMapping: e.UcdModeGroupMapping,
 			}
 		}
 
-		ans.Ces = &creds{
+		ans.Ucd = &creds{
 			Mode:                  m,
-			CesLogSeverity:        e.CesLogSeverity,
-			CesAllowCategories:    util.StrToMem(e.CesAllowCategories),
-			CesAlertCategories:    util.StrToMem(e.CesAlertCategories),
-			CesBlockCategories:    util.StrToMem(e.CesBlockCategories),
-			CesContinueCategories: util.StrToMem(e.CesContinueCategories),
+			UcdLogSeverity:        e.UcdLogSeverity,
+			UcdAllowCategories:    util.StrToMem(e.UcdAllowCategories),
+			UcdAlertCategories:    util.StrToMem(e.UcdAlertCategories),
+			UcdBlockCategories:    util.StrToMem(e.UcdBlockCategories),
+			UcdContinueCategories: util.StrToMem(e.UcdContinueCategories),
 		}
 	}
 
@@ -408,24 +504,24 @@ func (o *entry_v3) normalize() Entry {
 		LogHttpHeaderReferer:   util.AsBool(o.LogHttpHeaderReferer),
 	}
 
-	if o.Ces != nil {
+	if o.Ucd != nil {
 		switch {
-		case o.Ces.Mode.CesModeDisabled != nil:
-			ans.CesMode = CesModeDisabled
-		case o.Ces.Mode.CesModeIpUser != nil:
-			ans.CesMode = CesModeIpUser
-		case o.Ces.Mode.CesModeDomainCredentials != nil:
-			ans.CesMode = CesModeDomainCredentials
-		case o.Ces.Mode.CesModeGroupMapping != "":
-			ans.CesMode = CesModeGroupMapping
-			ans.CesModeGroupMapping = o.Ces.Mode.CesModeGroupMapping
+		case o.Ucd.Mode.UcdModeDisabled != nil:
+			ans.UcdMode = UcdModeDisabled
+		case o.Ucd.Mode.UcdModeIpUser != nil:
+			ans.UcdMode = UcdModeIpUser
+		case o.Ucd.Mode.UcdModeDomainCredentials != nil:
+			ans.UcdMode = UcdModeDomainCredentials
+		case o.Ucd.Mode.UcdModeGroupMapping != "":
+			ans.UcdMode = UcdModeGroupMapping
+			ans.UcdModeGroupMapping = o.Ucd.Mode.UcdModeGroupMapping
 		}
 
-		ans.CesLogSeverity = o.Ces.CesLogSeverity
-		ans.CesAllowCategories = util.MemToStr(o.Ces.CesAllowCategories)
-		ans.CesAlertCategories = util.MemToStr(o.Ces.CesAlertCategories)
-		ans.CesBlockCategories = util.MemToStr(o.Ces.CesBlockCategories)
-		ans.CesContinueCategories = util.MemToStr(o.Ces.CesContinueCategories)
+		ans.UcdLogSeverity = o.Ucd.UcdLogSeverity
+		ans.UcdAllowCategories = util.MemToStr(o.Ucd.UcdAllowCategories)
+		ans.UcdAlertCategories = util.MemToStr(o.Ucd.UcdAlertCategories)
+		ans.UcdBlockCategories = util.MemToStr(o.Ucd.UcdBlockCategories)
+		ans.UcdContinueCategories = util.MemToStr(o.Ucd.UcdContinueCategories)
 	}
 
 	if o.Hhi != nil {
@@ -472,7 +568,7 @@ type entry_v3 struct {
 	BlockCategories        *util.MemberType `xml:"block"`
 	ContinueCategories     *util.MemberType `xml:"continue"`
 	OverrideCategories     *util.MemberType `xml:"override"`
-	Ces                    *creds           `xml:"credential-enforcement"`
+	Ucd                    *creds           `xml:"credential-enforcement"`
 	TrackContainerPage     string           `xml:"enable-container-page"`
 	LogContainerPageOnly   string           `xml:"log-container-page-only"`
 	SafeSearchEnforcement  string           `xml:"safe-search-enforcement"`
@@ -496,7 +592,7 @@ type hhiType struct {
 }
 
 type hhiTypeEntry struct {
-	Type    string           `xml:"name"`
+	Type    string           `xml:"name,attr"`
 	Domains *util.MemberType `xml:"domains"`
 	Headers *headers         `xml:"headers"`
 }
@@ -534,35 +630,35 @@ func specify_v3(e Entry) interface{} {
 		LogHttpHeaderReferer:   util.YesNo(e.LogHttpHeaderReferer),
 	}
 
-	if e.CesMode != "" || e.CesLogSeverity != "" || len(e.CesAllowCategories) != 0 || len(e.CesAlertCategories) != 0 || len(e.CesBlockCategories) != 0 || len(e.CesContinueCategories) != 0 {
+	if e.UcdMode != "" || e.UcdLogSeverity != "" || len(e.UcdAllowCategories) != 0 || len(e.UcdAlertCategories) != 0 || len(e.UcdBlockCategories) != 0 || len(e.UcdContinueCategories) != 0 {
 		s := ""
 		var m credMode
-		switch e.CesMode {
-		case CesModeDisabled:
+		switch e.UcdMode {
+		case UcdModeDisabled:
 			m = credMode{
-				CesModeDisabled: &s,
+				UcdModeDisabled: &s,
 			}
-		case CesModeIpUser:
+		case UcdModeIpUser:
 			m = credMode{
-				CesModeIpUser: &s,
+				UcdModeIpUser: &s,
 			}
-		case CesModeDomainCredentials:
+		case UcdModeDomainCredentials:
 			m = credMode{
-				CesModeDomainCredentials: &s,
+				UcdModeDomainCredentials: &s,
 			}
-		case CesModeGroupMapping:
+		case UcdModeGroupMapping:
 			m = credMode{
-				CesModeGroupMapping: e.CesModeGroupMapping,
+				UcdModeGroupMapping: e.UcdModeGroupMapping,
 			}
 		}
 
-		ans.Ces = &creds{
+		ans.Ucd = &creds{
 			Mode:                  m,
-			CesLogSeverity:        e.CesLogSeverity,
-			CesAllowCategories:    util.StrToMem(e.CesAllowCategories),
-			CesAlertCategories:    util.StrToMem(e.CesAlertCategories),
-			CesBlockCategories:    util.StrToMem(e.CesBlockCategories),
-			CesContinueCategories: util.StrToMem(e.CesContinueCategories),
+			UcdLogSeverity:        e.UcdLogSeverity,
+			UcdAllowCategories:    util.StrToMem(e.UcdAllowCategories),
+			UcdAlertCategories:    util.StrToMem(e.UcdAlertCategories),
+			UcdBlockCategories:    util.StrToMem(e.UcdBlockCategories),
+			UcdContinueCategories: util.StrToMem(e.UcdContinueCategories),
 		}
 	}
 
@@ -653,24 +749,24 @@ func (o *entry_v4) normalize() Entry {
 		LogHttpHeaderReferer:   util.AsBool(o.LogHttpHeaderReferer),
 	}
 
-	if o.Ces != nil {
+	if o.Ucd != nil {
 		switch {
-		case o.Ces.Mode.CesModeDisabled != nil:
-			ans.CesMode = CesModeDisabled
-		case o.Ces.Mode.CesModeIpUser != nil:
-			ans.CesMode = CesModeIpUser
-		case o.Ces.Mode.CesModeDomainCredentials != nil:
-			ans.CesMode = CesModeDomainCredentials
-		case o.Ces.Mode.CesModeGroupMapping != "":
-			ans.CesMode = CesModeGroupMapping
-			ans.CesModeGroupMapping = o.Ces.Mode.CesModeGroupMapping
+		case o.Ucd.Mode.UcdModeDisabled != nil:
+			ans.UcdMode = UcdModeDisabled
+		case o.Ucd.Mode.UcdModeIpUser != nil:
+			ans.UcdMode = UcdModeIpUser
+		case o.Ucd.Mode.UcdModeDomainCredentials != nil:
+			ans.UcdMode = UcdModeDomainCredentials
+		case o.Ucd.Mode.UcdModeGroupMapping != "":
+			ans.UcdMode = UcdModeGroupMapping
+			ans.UcdModeGroupMapping = o.Ucd.Mode.UcdModeGroupMapping
 		}
 
-		ans.CesLogSeverity = o.Ces.CesLogSeverity
-		ans.CesAllowCategories = util.MemToStr(o.Ces.CesAllowCategories)
-		ans.CesAlertCategories = util.MemToStr(o.Ces.CesAlertCategories)
-		ans.CesBlockCategories = util.MemToStr(o.Ces.CesBlockCategories)
-		ans.CesContinueCategories = util.MemToStr(o.Ces.CesContinueCategories)
+		ans.UcdLogSeverity = o.Ucd.UcdLogSeverity
+		ans.UcdAllowCategories = util.MemToStr(o.Ucd.UcdAllowCategories)
+		ans.UcdAlertCategories = util.MemToStr(o.Ucd.UcdAlertCategories)
+		ans.UcdBlockCategories = util.MemToStr(o.Ucd.UcdBlockCategories)
+		ans.UcdContinueCategories = util.MemToStr(o.Ucd.UcdContinueCategories)
 	}
 
 	if o.Hhi != nil {
@@ -712,7 +808,7 @@ type entry_v4 struct {
 	BlockCategories        *util.MemberType `xml:"block"`
 	ContinueCategories     *util.MemberType `xml:"continue"`
 	OverrideCategories     *util.MemberType `xml:"override"`
-	Ces                    *creds           `xml:"credential-enforcement"`
+	Ucd                    *creds           `xml:"credential-enforcement"`
 	TrackContainerPage     string           `xml:"enable-container-page"`
 	LogContainerPageOnly   string           `xml:"log-container-page-only"`
 	SafeSearchEnforcement  string           `xml:"safe-search-enforcement"`
@@ -739,35 +835,35 @@ func specify_v4(e Entry) interface{} {
 		LogHttpHeaderReferer:   util.YesNo(e.LogHttpHeaderReferer),
 	}
 
-	if e.CesMode != "" || e.CesLogSeverity != "" || len(e.CesAllowCategories) != 0 || len(e.CesAlertCategories) != 0 || len(e.CesBlockCategories) != 0 || len(e.CesContinueCategories) != 0 {
+	if e.UcdMode != "" || e.UcdLogSeverity != "" || len(e.UcdAllowCategories) != 0 || len(e.UcdAlertCategories) != 0 || len(e.UcdBlockCategories) != 0 || len(e.UcdContinueCategories) != 0 {
 		s := ""
 		var m credMode
-		switch e.CesMode {
-		case CesModeDisabled:
+		switch e.UcdMode {
+		case UcdModeDisabled:
 			m = credMode{
-				CesModeDisabled: &s,
+				UcdModeDisabled: &s,
 			}
-		case CesModeIpUser:
+		case UcdModeIpUser:
 			m = credMode{
-				CesModeIpUser: &s,
+				UcdModeIpUser: &s,
 			}
-		case CesModeDomainCredentials:
+		case UcdModeDomainCredentials:
 			m = credMode{
-				CesModeDomainCredentials: &s,
+				UcdModeDomainCredentials: &s,
 			}
-		case CesModeGroupMapping:
+		case UcdModeGroupMapping:
 			m = credMode{
-				CesModeGroupMapping: e.CesModeGroupMapping,
+				UcdModeGroupMapping: e.UcdModeGroupMapping,
 			}
 		}
 
-		ans.Ces = &creds{
+		ans.Ucd = &creds{
 			Mode:                  m,
-			CesLogSeverity:        e.CesLogSeverity,
-			CesAllowCategories:    util.StrToMem(e.CesAllowCategories),
-			CesAlertCategories:    util.StrToMem(e.CesAlertCategories),
-			CesBlockCategories:    util.StrToMem(e.CesBlockCategories),
-			CesContinueCategories: util.StrToMem(e.CesContinueCategories),
+			UcdLogSeverity:        e.UcdLogSeverity,
+			UcdAllowCategories:    util.StrToMem(e.UcdAllowCategories),
+			UcdAlertCategories:    util.StrToMem(e.UcdAlertCategories),
+			UcdBlockCategories:    util.StrToMem(e.UcdBlockCategories),
+			UcdContinueCategories: util.StrToMem(e.UcdContinueCategories),
 		}
 	}
 
@@ -859,24 +955,24 @@ func (o *entry_v5) normalize() Entry {
 		MachineLearningExceptions: util.MemToStr(o.MachineLearningExceptions),
 	}
 
-	if o.Ces != nil {
+	if o.Ucd != nil {
 		switch {
-		case o.Ces.Mode.CesModeDisabled != nil:
-			ans.CesMode = CesModeDisabled
-		case o.Ces.Mode.CesModeIpUser != nil:
-			ans.CesMode = CesModeIpUser
-		case o.Ces.Mode.CesModeDomainCredentials != nil:
-			ans.CesMode = CesModeDomainCredentials
-		case o.Ces.Mode.CesModeGroupMapping != "":
-			ans.CesMode = CesModeGroupMapping
-			ans.CesModeGroupMapping = o.Ces.Mode.CesModeGroupMapping
+		case o.Ucd.Mode.UcdModeDisabled != nil:
+			ans.UcdMode = UcdModeDisabled
+		case o.Ucd.Mode.UcdModeIpUser != nil:
+			ans.UcdMode = UcdModeIpUser
+		case o.Ucd.Mode.UcdModeDomainCredentials != nil:
+			ans.UcdMode = UcdModeDomainCredentials
+		case o.Ucd.Mode.UcdModeGroupMapping != "":
+			ans.UcdMode = UcdModeGroupMapping
+			ans.UcdModeGroupMapping = o.Ucd.Mode.UcdModeGroupMapping
 		}
 
-		ans.CesLogSeverity = o.Ces.CesLogSeverity
-		ans.CesAllowCategories = util.MemToStr(o.Ces.CesAllowCategories)
-		ans.CesAlertCategories = util.MemToStr(o.Ces.CesAlertCategories)
-		ans.CesBlockCategories = util.MemToStr(o.Ces.CesBlockCategories)
-		ans.CesContinueCategories = util.MemToStr(o.Ces.CesContinueCategories)
+		ans.UcdLogSeverity = o.Ucd.UcdLogSeverity
+		ans.UcdAllowCategories = util.MemToStr(o.Ucd.UcdAllowCategories)
+		ans.UcdAlertCategories = util.MemToStr(o.Ucd.UcdAlertCategories)
+		ans.UcdBlockCategories = util.MemToStr(o.Ucd.UcdBlockCategories)
+		ans.UcdContinueCategories = util.MemToStr(o.Ucd.UcdContinueCategories)
 	}
 
 	if o.Hhi != nil {
@@ -930,7 +1026,7 @@ type entry_v5 struct {
 	BlockCategories           *util.MemberType `xml:"block"`
 	ContinueCategories        *util.MemberType `xml:"continue"`
 	OverrideCategories        *util.MemberType `xml:"override"`
-	Ces                       *creds           `xml:"credential-enforcement"`
+	Ucd                       *creds           `xml:"credential-enforcement"`
 	TrackContainerPage        string           `xml:"enable-container-page"`
 	LogContainerPageOnly      string           `xml:"log-container-page-only"`
 	SafeSearchEnforcement     string           `xml:"safe-search-enforcement"`
@@ -969,35 +1065,35 @@ func specify_v5(e Entry) interface{} {
 		MachineLearningExceptions: util.StrToMem(e.MachineLearningExceptions),
 	}
 
-	if e.CesMode != "" || e.CesLogSeverity != "" || len(e.CesAllowCategories) != 0 || len(e.CesAlertCategories) != 0 || len(e.CesBlockCategories) != 0 || len(e.CesContinueCategories) != 0 {
+	if e.UcdMode != "" || e.UcdLogSeverity != "" || len(e.UcdAllowCategories) != 0 || len(e.UcdAlertCategories) != 0 || len(e.UcdBlockCategories) != 0 || len(e.UcdContinueCategories) != 0 {
 		s := ""
 		var m credMode
-		switch e.CesMode {
-		case CesModeDisabled:
+		switch e.UcdMode {
+		case UcdModeDisabled:
 			m = credMode{
-				CesModeDisabled: &s,
+				UcdModeDisabled: &s,
 			}
-		case CesModeIpUser:
+		case UcdModeIpUser:
 			m = credMode{
-				CesModeIpUser: &s,
+				UcdModeIpUser: &s,
 			}
-		case CesModeDomainCredentials:
+		case UcdModeDomainCredentials:
 			m = credMode{
-				CesModeDomainCredentials: &s,
+				UcdModeDomainCredentials: &s,
 			}
-		case CesModeGroupMapping:
+		case UcdModeGroupMapping:
 			m = credMode{
-				CesModeGroupMapping: e.CesModeGroupMapping,
+				UcdModeGroupMapping: e.UcdModeGroupMapping,
 			}
 		}
 
-		ans.Ces = &creds{
+		ans.Ucd = &creds{
 			Mode:                  m,
-			CesLogSeverity:        e.CesLogSeverity,
-			CesAllowCategories:    util.StrToMem(e.CesAllowCategories),
-			CesAlertCategories:    util.StrToMem(e.CesAlertCategories),
-			CesBlockCategories:    util.StrToMem(e.CesBlockCategories),
-			CesContinueCategories: util.StrToMem(e.CesContinueCategories),
+			UcdLogSeverity:        e.UcdLogSeverity,
+			UcdAllowCategories:    util.StrToMem(e.UcdAllowCategories),
+			UcdAlertCategories:    util.StrToMem(e.UcdAlertCategories),
+			UcdBlockCategories:    util.StrToMem(e.UcdBlockCategories),
+			UcdContinueCategories: util.StrToMem(e.UcdContinueCategories),
 		}
 	}
 
