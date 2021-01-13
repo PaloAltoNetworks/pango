@@ -316,7 +316,7 @@ type config_v1 struct {
 	IpAddress             string       `xml:"ip-address,omitempty"`
 	Netmask               string       `xml:"netmask,omitempty"`
 	Gateway               string       `xml:"default-gateway,omitempty"`
-	Timezone              string       `xml:"timezone"`
+	Timezone              string       `xml:"timezone,omitempty"`
 	Domain                string       `xml:"domain,omitempty"`
 	UpdateServer          string       `xml:"update-server,omitempty"`
 	VerifyUpdateServer    string       `xml:"server-verification"`
