@@ -7,7 +7,8 @@ const (
 	DirectionBoth     = "both"
 )
 
-// Valid values for Rule.Action.
+// Valid values for Rule.Action.  The ActionForward and
+// ActionContineAndForward constants are valid for PAN-OS 6.1 only.
 const (
 	ActionAlert              = "alert"
 	ActionBlock              = "block"
