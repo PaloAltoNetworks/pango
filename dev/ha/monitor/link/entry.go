@@ -19,8 +19,12 @@ type Entry struct {
 func (o *Entry) Copy(s Entry) {
 	o.Enable = s.Enable
 	o.FailureCondition = s.FailureCondition
-	o.Interfaces = make([]string, len(s.Interfaces))
-	copy(o.Interfaces, s.Interfaces)
+	if s.Interfaces == nil {
+		o.Interfaces = nil
+	} else {
+		o.Interfaces = make([]string, len(s.Interfaces))
+		copy(o.Interfaces, s.Interfaces)
+	}
 }
 
 /** Structs / functions for this namespace. **/
