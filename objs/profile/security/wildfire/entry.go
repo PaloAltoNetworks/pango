@@ -19,8 +19,8 @@ type Entry struct {
 
 type Rule struct {
 	Name         string
-	Applications []string
-	FileTypes    []string
+	Applications []string // ordered
+	FileTypes    []string // ordered
 	Direction    string
 	Analysis     string
 }
