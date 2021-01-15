@@ -9,11 +9,9 @@ import (
 )
 
 func versioning(v version.Number) (normalizer, func(Entry) interface{}) {
-	if v.Gte(version.Number{7, 0, 0, ""}) {
-		return &container_v2{}, specify_v2
-	} else {
-		return &container_v1{}, specify_v1
-	}
+	// The constants for Rule.Action changes between 6.1 and 7.0, but
+	// the schema itself is the same, so no new normalization is needed.
+	return &container_v1{}, specify_v1
 }
 
 func specifier(e ...Entry) []namespace.Specifier {
