@@ -20,12 +20,12 @@ type Entry struct {
 
 type PredefinedPattern struct {
 	Name      string
-	FileTypes []string
+	FileTypes []string // ordered
 }
 
 type Regex struct {
 	Name      string
-	FileTypes []string
+	FileTypes []string // ordered
 	Regex     string
 }
 
@@ -41,9 +41,50 @@ type FileProperty struct {
 func (o *Entry) Copy(s Entry) {
 	o.Description = s.Description
 	o.Type = s.Type
-	o.PredefinedPatterns = s.PredefinedPatterns
-	o.Regexes = s.Regexes
-	o.FileProperties = s.FileProperties
+	if s.PredefinedPatterns == nil {
+		o.PredefinedPatterns = nil
+	} else {
+		o.PredefinedPatterns = make([]PredefinedPattern, 0, len(s.PredefinedPatterns))
+		for _, x := range s.PredefinedPatterns {
+			item := PredefinedPattern{
+				Name: x.Name,
+			}
+			if len(x.FileTypes) != 0 {
+				item.FileTypes = make([]string, len(x.FileTypes))
+				copy(item.FileTypes, x.FileTypes)
+			}
+			o.PredefinedPatterns = append(o.PredefinedPatterns, item)
+		}
+	}
+	if s.Regexes == nil {
+		o.Regexes = nil
+	} else {
+		o.Regexes = make([]Regex, 0, len(s.Regexes))
+		for _, x := range s.Regexes {
+			item := Regex{
+				Name:  x.Name,
+				Regex: x.Regex,
+			}
+			if len(x.FileTypes) != 0 {
+				item.FileTypes = make([]string, len(x.FileTypes))
+				copy(item.FileTypes, x.FileTypes)
+			}
+			o.Regexes = append(o.Regexes, item)
+		}
+	}
+	if s.FileProperties == nil {
+		o.FileProperties = nil
+	} else {
+		o.FileProperties = make([]FileProperty, 0, len(s.FileProperties))
+		for _, x := range s.FileProperties {
+			o.FileProperties = append(o.FileProperties, FileProperty{
+				Name:          x.Name,
+				FileType:      x.FileType,
+				FileProperty:  x.FileProperty,
+				PropertyValue: x.PropertyValue,
+			})
+		}
+	}
 }
 
 /** Structs / functions for this namespace. **/
