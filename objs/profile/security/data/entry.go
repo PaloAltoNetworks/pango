@@ -2,6 +2,7 @@ package data
 
 import (
 	"encoding/xml"
+	"fmt"
 
 	"github.com/PaloAltoNetworks/pango/util"
 	"github.com/PaloAltoNetworks/pango/version"
@@ -16,11 +17,14 @@ type Entry struct {
 	Rules       []Rule
 }
 
+// Rule is a data filtering rule.  In PAN-OS, the Name param is
+// auto generated and look like "rule1", "rule2"...  If the Name param
+// is an empty string, the name will be auto populated as appropriate.
 type Rule struct {
 	Name           string
 	DataObject     string
-	Applications   []string
-	FileTypes      []string
+	Applications   []string // ordered
+	FileTypes      []string // ordered
 	Direction      string
 	AlertThreshold int
 	BlockThreshold int
@@ -32,7 +36,30 @@ type Rule struct {
 func (o *Entry) Copy(s Entry) {
 	o.Description = s.Description
 	o.DataCapture = s.DataCapture
-	o.Rules = s.Rules
+	if s.Rules == nil {
+		o.Rules = nil
+	} else {
+		o.Rules = make([]Rule, 0, len(s.Rules))
+		for _, x := range s.Rules {
+			r := Rule{
+				Name:           x.Name,
+				DataObject:     x.DataObject,
+				Direction:      x.Direction,
+				AlertThreshold: x.AlertThreshold,
+				BlockThreshold: x.BlockThreshold,
+				LogSeverity:    x.LogSeverity,
+			}
+			if len(x.Applications) != 0 {
+				r.Applications = make([]string, len(x.Applications))
+				copy(r.Applications, x.Applications)
+			}
+			if len(x.FileTypes) != 0 {
+				r.FileTypes = make([]string, len(x.FileTypes))
+				copy(r.FileTypes, x.FileTypes)
+			}
+			o.Rules = append(o.Rules, r)
+		}
+	}
 }
 
 /** Structs / functions for this namespace. **/
@@ -126,7 +153,7 @@ func specify_v1(e Entry) interface{} {
 
 	if len(e.Rules) > 0 {
 		rules := make([]rule_v1, 0, len(e.Rules))
-		for _, er := range e.Rules {
+		for num, er := range e.Rules {
 			r := rule_v1{
 				Name:           er.Name,
 				DataObject:     er.DataObject,
@@ -135,7 +162,9 @@ func specify_v1(e Entry) interface{} {
 				Direction:      er.Direction,
 				AlertThreshold: er.AlertThreshold,
 				BlockThreshold: er.BlockThreshold,
-				//LogSeverity: er.LogSeverity,
+			}
+			if er.Name == "" {
+				r.Name = fmt.Sprintf("rule%d", num)
 			}
 			rules = append(rules, r)
 		}
@@ -226,7 +255,7 @@ func specify_v2(e Entry) interface{} {
 
 	if len(e.Rules) > 0 {
 		rules := make([]rule_v2, 0, len(e.Rules))
-		for _, er := range e.Rules {
+		for num, er := range e.Rules {
 			r := rule_v2{
 				Name:           er.Name,
 				DataObject:     er.DataObject,
@@ -236,6 +265,9 @@ func specify_v2(e Entry) interface{} {
 				AlertThreshold: er.AlertThreshold,
 				BlockThreshold: er.BlockThreshold,
 				LogSeverity:    er.LogSeverity,
+			}
+			if er.Name == "" {
+				r.Name = fmt.Sprintf("rule%d", num)
 			}
 			rules = append(rules, r)
 		}
