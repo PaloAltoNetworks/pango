@@ -22,7 +22,7 @@ func getTests() []tc {
 			Description: "second",
 			Rules: []Rule{
 				Rule{
-					Name:           "rule1",
+					Name:           "rule0",
 					Applications:   []string{"aim-mail"},
 					FileTypes:      []string{"text/html", "rtf"},
 					Direction:      DirectionDownload,
@@ -42,7 +42,7 @@ func getTests() []tc {
 			DataCapture: true,
 			Rules: []Rule{
 				Rule{
-					Name:           "rule1",
+					Name:           "rule0",
 					Applications:   []string{"aim-mail"},
 					FileTypes:      []string{"text/html", "rtf"},
 					Direction:      DirectionDownload,
