@@ -1,6 +1,7 @@
 package netw
 
 import (
+	"github.com/PaloAltoNetworks/pango/netw/dhcp"
 	"github.com/PaloAltoNetworks/pango/netw/ikegw"
 	aggeth "github.com/PaloAltoNetworks/pango/netw/interface/aggregate"
 	"github.com/PaloAltoNetworks/pango/netw/interface/arp"
@@ -68,6 +69,7 @@ type FwNetw struct {
 	BgpPeer                  *peer.Firewall
 	BgpPeerGroup             *group.Firewall
 	BgpRedistRule            *bgpredist.Firewall
+	Dhcp                     *dhcp.Firewall
 	EthernetInterface        *eth.Firewall
 	GreTunnel                *gre.FwGre
 	IkeCryptoProfile         *ike.FwIke
@@ -117,6 +119,7 @@ func (c *FwNetw) Initialize(i util.XapiClient) {
 	c.BgpPeer = peer.FirewallNamespace(i)
 	c.BgpPeerGroup = group.FirewallNamespace(i)
 	c.BgpRedistRule = bgpredist.FirewallNamespace(i)
+	c.Dhcp = dhcp.FirewallNamespace(i)
 	c.EthernetInterface = eth.FirewallNamespace(i)
 
 	c.GreTunnel = &gre.FwGre{}
