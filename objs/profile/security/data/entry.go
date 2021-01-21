@@ -22,7 +22,7 @@ type Entry struct {
 // is an empty string, the name will be auto populated as appropriate.
 type Rule struct {
 	Name           string
-	DataObject     string
+	DataPattern    string
 	Applications   []string // ordered
 	FileTypes      []string // ordered
 	Direction      string
@@ -43,7 +43,7 @@ func (o *Entry) Copy(s Entry) {
 		for _, x := range s.Rules {
 			r := Rule{
 				Name:           x.Name,
-				DataObject:     x.DataObject,
+				DataPattern:    x.DataPattern,
 				Direction:      x.Direction,
 				AlertThreshold: x.AlertThreshold,
 				BlockThreshold: x.BlockThreshold,
@@ -107,7 +107,7 @@ func (o *entry_v1) normalize() Entry {
 		for _, v := range o.Rules.Entries {
 			r := Rule{
 				Name:           v.Name,
-				DataObject:     v.DataObject,
+				DataPattern:    v.DataPattern,
 				Applications:   util.MemToStr(v.Applications),
 				FileTypes:      util.MemToStr(v.FileTypes),
 				Direction:      v.Direction,
@@ -136,7 +136,7 @@ type rules_v1 struct {
 
 type rule_v1 struct {
 	Name           string           `xml:"name,attr"`
-	DataObject     string           `xml:"data-object"`
+	DataPattern    string           `xml:"data-object"`
 	Applications   *util.MemberType `xml:"application"`
 	FileTypes      *util.MemberType `xml:"file-type"`
 	Direction      string           `xml:"direction,omitempty"`
@@ -156,7 +156,7 @@ func specify_v1(e Entry) interface{} {
 		for num, er := range e.Rules {
 			r := rule_v1{
 				Name:           er.Name,
-				DataObject:     er.DataObject,
+				DataPattern:    er.DataPattern,
 				Applications:   util.StrToMem(er.Applications),
 				FileTypes:      util.StrToMem(er.FileTypes),
 				Direction:      er.Direction,
@@ -207,7 +207,7 @@ func (o *entry_v2) normalize() Entry {
 		for _, v := range o.Rules.Entries {
 			r := Rule{
 				Name:           v.Name,
-				DataObject:     v.DataObject,
+				DataPattern:    v.DataPattern,
 				Applications:   util.MemToStr(v.Applications),
 				FileTypes:      util.MemToStr(v.FileTypes),
 				Direction:      v.Direction,
@@ -237,7 +237,7 @@ type rules_v2 struct {
 
 type rule_v2 struct {
 	Name           string           `xml:"name,attr"`
-	DataObject     string           `xml:"data-object"`
+	DataPattern    string           `xml:"data-object"`
 	Applications   *util.MemberType `xml:"application"`
 	FileTypes      *util.MemberType `xml:"file-type"`
 	Direction      string           `xml:"direction,omitempty"`
@@ -258,7 +258,7 @@ func specify_v2(e Entry) interface{} {
 		for num, er := range e.Rules {
 			r := rule_v2{
 				Name:           er.Name,
-				DataObject:     er.DataObject,
+				DataPattern:    er.DataPattern,
 				Applications:   util.StrToMem(er.Applications),
 				FileTypes:      util.StrToMem(er.FileTypes),
 				Direction:      er.Direction,
