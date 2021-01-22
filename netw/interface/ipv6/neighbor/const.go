@@ -15,5 +15,5 @@ const (
 )
 
 const (
-	singular = "bgp config"
+	singular = "ipv6 neighbor"
 )
