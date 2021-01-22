@@ -10,9 +10,11 @@ import (
 // Entry is a normalized, version independent representation of a DHCP
 // relay and server.
 type Entry struct {
-	Name   string
-	Relay  *Relay
-	Server *Server
+	Name  string
+	Relay *Relay
+	//Server *Server
+
+	raw map[string]string
 }
 
 type Relay struct {
@@ -27,9 +29,7 @@ type Ipv6Server struct {
 	Interface string
 }
 
-type Server struct {
-	raw map[string]string
-}
+//type Server struct{}
 
 func (o *Entry) Copy(s Entry) {
 	if s.Relay != nil {
@@ -51,19 +51,6 @@ func (o *Entry) Copy(s Entry) {
 		}
 	} else {
 		o.Relay = nil
-	}
-	if s.Server != nil {
-		o.Server = &Server{}
-		if s.Server.raw != nil {
-			o.Server.raw = make(map[string]string)
-			for k, v := range s.Server.raw {
-				o.Server.raw[k] = v
-			}
-		} else {
-			o.Server.raw = nil
-		}
-	} else {
-		o.Server = nil
 	}
 }
 
@@ -130,8 +117,7 @@ func (o *entry_v1) normalize() Entry {
 	}
 
 	if len(raw) != 0 {
-		ans.Server = &Server{}
-		ans.Server.raw = raw
+		ans.raw = raw
 	}
 
 	return ans
@@ -197,10 +183,8 @@ func specify_v1(e Entry) interface{} {
 		}
 	}
 
-	if e.Server != nil {
-		if text, present := e.Server.raw["server"]; present {
-			ans.Server = &util.RawXml{text}
-		}
+	if text, present := e.raw["server"]; present {
+		ans.Server = &util.RawXml{text}
 	}
 
 	return ans
