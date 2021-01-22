@@ -57,7 +57,7 @@ func getTests() []testCase {
 				},
 			},
 		}},
-		{"v1 relay ipv4+ipv6 server raw", version.Number{10, 0, 0, ""}, Entry{
+		{"v1 relay ipv4+ipv6 with raw", version.Number{10, 0, 0, ""}, Entry{
 			Name: "t4",
 			Relay: &Relay{
 				Ipv4Enabled: true,
@@ -76,10 +76,8 @@ func getTests() []testCase {
 					},
 				},
 			},
-			Server: &Server{
-				raw: map[string]string{
-					"server": "dhcp server",
-				},
+			raw: map[string]string{
+				"server": "dhcp server",
 			},
 		}},
 	}
