@@ -21,7 +21,12 @@ type Entry struct {
 func (o *Entry) Copy(s Entry) {
 	o.Description = s.Description
 	o.Filter = s.Filter
-	o.Tags = s.Tags
+    if s.Tags == nil {
+        o.Tags = nil
+    } else {
+        o.Tags = make([]string, len(s.Tags))
+        copy(o.Tags, s.Tags)
+    }
 }
 
 /** Structs / functions for normalization. **/
