@@ -10,76 +10,98 @@ import (
 // Entry is a normalized, version independent representation of a
 // DOS protection security profile.
 type Entry struct {
-	Name        string
-	Description string
-
-	EnableSyn        bool
-	SynAction        string
-	SynAlarmRate     int
-	SynActivateRate  int
-	SynMaxRate       int
-	SynBlockDuration int
-
-	EnableUdp        bool
-	UdpAlarmRate     int
-	UdpActivateRate  int
-	UdpMaxRate       int
-	UdpBlockDuration int
-
-	EnableIcmp        bool
-	IcmpAlarmRate     int
-	IcmpActivateRate  int
-	IcmpMaxRate       int
-	IcmpBlockDuration int
-
-	EnableIcmpv6        bool
-	Icmpv6AlarmRate     int
-	Icmpv6ActivateRate  int
-	Icmpv6MaxRate       int
-	Icmpv6BlockDuration int
-
-	EnableOther        bool
-	OtherAlarmRate     int
-	OtherActivateRate  int
-	OtherMaxRate       int
-	OtherBlockDuration int
-
+	Name                      string
+	Description               string
+	Type                      string
 	EnableSessionsProtections bool
 	MaxConcurrentSessions     int
+	Syn                       *SynProtection
+	Udp                       *Protection
+	Icmp                      *Protection
+	Icmpv6                    *Protection
+	Other                     *Protection
+}
+
+type SynProtection struct {
+	Enable        bool
+	Action        string
+	AlarmRate     int
+	ActivateRate  int
+	MaxRate       int
+	BlockDuration int
+}
+
+type Protection struct {
+	Enable        bool
+	AlarmRate     int
+	ActivateRate  int
+	MaxRate       int
+	BlockDuration int
 }
 
 // Copy copies the information from source Entry `s` to this object.  As the
 // Name field relates to the XPATH of this object, this field is not copied.
 func (o *Entry) Copy(s Entry) {
 	o.Description = s.Description
-	o.EnableSyn = s.EnableSyn
-	o.SynAction = s.SynAction
-	o.SynAlarmRate = s.SynAlarmRate
-	o.SynActivateRate = s.SynActivateRate
-	o.SynMaxRate = s.SynMaxRate
-	o.SynBlockDuration = s.SynBlockDuration
-	o.EnableUdp = s.EnableUdp
-	o.UdpAlarmRate = s.UdpAlarmRate
-	o.UdpActivateRate = s.UdpActivateRate
-	o.UdpMaxRate = s.UdpMaxRate
-	o.UdpBlockDuration = s.UdpBlockDuration
-	o.EnableIcmp = s.EnableIcmp
-	o.IcmpAlarmRate = s.IcmpAlarmRate
-	o.IcmpActivateRate = s.IcmpActivateRate
-	o.IcmpMaxRate = s.IcmpMaxRate
-	o.IcmpBlockDuration = s.IcmpBlockDuration
-	o.EnableIcmpv6 = s.EnableIcmpv6
-	o.Icmpv6AlarmRate = s.Icmpv6AlarmRate
-	o.Icmpv6ActivateRate = s.Icmpv6ActivateRate
-	o.Icmpv6MaxRate = s.Icmpv6MaxRate
-	o.Icmpv6BlockDuration = s.Icmpv6BlockDuration
-	o.EnableOther = s.EnableOther
-	o.OtherAlarmRate = s.OtherAlarmRate
-	o.OtherActivateRate = s.OtherActivateRate
-	o.OtherMaxRate = s.OtherMaxRate
-	o.OtherBlockDuration = s.OtherBlockDuration
+	o.Type = s.Type
 	o.EnableSessionsProtections = s.EnableSessionsProtections
 	o.MaxConcurrentSessions = s.MaxConcurrentSessions
+	if s.Syn == nil {
+		o.Syn = nil
+	} else {
+		o.Syn = &SynProtection{
+			Enable:        s.Syn.Enable,
+			Action:        s.Syn.Action,
+			AlarmRate:     s.Syn.AlarmRate,
+			ActivateRate:  s.Syn.ActivateRate,
+			MaxRate:       s.Syn.MaxRate,
+			BlockDuration: s.Syn.BlockDuration,
+		}
+	}
+	if s.Udp == nil {
+		o.Udp = nil
+	} else {
+		o.Udp = &Protection{
+			Enable:        s.Udp.Enable,
+			AlarmRate:     s.Udp.AlarmRate,
+			ActivateRate:  s.Udp.ActivateRate,
+			MaxRate:       s.Udp.MaxRate,
+			BlockDuration: s.Udp.BlockDuration,
+		}
+	}
+	if s.Icmp == nil {
+		o.Icmp = nil
+	} else {
+		o.Icmp = &Protection{
+			Enable:        s.Icmp.Enable,
+			AlarmRate:     s.Icmp.AlarmRate,
+			ActivateRate:  s.Icmp.ActivateRate,
+			MaxRate:       s.Icmp.MaxRate,
+			BlockDuration: s.Icmp.BlockDuration,
+		}
+	}
+	if s.Icmpv6 == nil {
+		o.Icmpv6 = nil
+	} else {
+		o.Icmpv6 = &Protection{
+			Enable:        s.Icmpv6.Enable,
+			AlarmRate:     s.Icmpv6.AlarmRate,
+			ActivateRate:  s.Icmpv6.ActivateRate,
+			MaxRate:       s.Icmpv6.MaxRate,
+			BlockDuration: s.Icmpv6.BlockDuration,
+		}
+	}
+	if s.Other == nil {
+		o.Other = nil
+	} else {
+		o.Other = &Protection{
+			Enable:        s.Other.Enable,
+			AlarmRate:     s.Other.AlarmRate,
+			ActivateRate:  s.Other.ActivateRate,
+			MaxRate:       s.Other.MaxRate,
+			BlockDuration: s.Other.BlockDuration,
+		}
+	}
 }
 
 /** Structs / functions for this namespace. **/
@@ -119,76 +141,99 @@ func (o *entry_v1) normalize() Entry {
 	ans := Entry{
 		Name:        o.Name,
 		Description: o.Description,
+		Type:        o.Type,
 	}
 
 	if o.Flood != nil {
 		if o.Flood.Syn != nil {
-			ans.EnableSyn = util.AsBool(o.Flood.Syn.EnableSyn)
 			if o.Flood.Syn.Red != nil {
-				ans.SynAction = SynActionRed
-				ans.SynAlarmRate = o.Flood.Syn.Red.AlarmRate
-				ans.SynActivateRate = o.Flood.Syn.Red.ActivateRate
-				ans.SynMaxRate = o.Flood.Syn.Red.MaxRate
+				ans.Syn = &SynProtection{
+					Action:       SynActionRed,
+					AlarmRate:    o.Flood.Syn.Red.AlarmRate,
+					ActivateRate: o.Flood.Syn.Red.ActivateRate,
+					MaxRate:      o.Flood.Syn.Red.MaxRate,
+				}
 				if o.Flood.Syn.Red.Block != nil {
-					ans.SynBlockDuration = o.Flood.Syn.Red.Block.BlockDuration
+					ans.Syn.BlockDuration = o.Flood.Syn.Red.Block.BlockDuration
 				}
 			} else if o.Flood.Syn.Cookies != nil {
-				ans.SynAction = SynActionCookies
-				ans.SynAlarmRate = o.Flood.Syn.Cookies.AlarmRate
-				ans.SynActivateRate = o.Flood.Syn.Cookies.ActivateRate
-				ans.SynMaxRate = o.Flood.Syn.Cookies.MaxRate
-				if o.Flood.Syn.Cookies.Block != nil {
-					ans.SynBlockDuration = o.Flood.Syn.Cookies.Block.BlockDuration
+				ans.Syn = &SynProtection{
+					Action:       SynActionCookies,
+					AlarmRate:    o.Flood.Syn.Cookies.AlarmRate,
+					ActivateRate: o.Flood.Syn.Cookies.ActivateRate,
+					MaxRate:      o.Flood.Syn.Cookies.MaxRate,
 				}
+				if o.Flood.Syn.Cookies.Block != nil {
+					ans.Syn.BlockDuration = o.Flood.Syn.Cookies.Block.BlockDuration
+				}
+			} else {
+				ans.Syn = &SynProtection{}
 			}
+			ans.Syn.Enable = util.AsBool(o.Flood.Syn.Enable)
 		}
 
 		if o.Flood.Udp != nil {
-			ans.EnableUdp = util.AsBool(o.Flood.Udp.Enable)
 			if o.Flood.Udp.Red != nil {
-				ans.UdpAlarmRate = o.Flood.Udp.Red.AlarmRate
-				ans.UdpActivateRate = o.Flood.Udp.Red.ActivateRate
-				ans.UdpMaxRate = o.Flood.Udp.Red.MaxRate
-				if o.Flood.Udp.Red.Block != nil {
-					ans.UdpBlockDuration = o.Flood.Udp.Red.Block.BlockDuration
+				ans.Udp = &Protection{
+					AlarmRate:    o.Flood.Udp.Red.AlarmRate,
+					ActivateRate: o.Flood.Udp.Red.ActivateRate,
+					MaxRate:      o.Flood.Udp.Red.MaxRate,
 				}
+				if o.Flood.Udp.Red.Block != nil {
+					ans.Udp.BlockDuration = o.Flood.Udp.Red.Block.BlockDuration
+				}
+			} else {
+				ans.Udp = &Protection{}
 			}
+			ans.Udp.Enable = util.AsBool(o.Flood.Udp.Enable)
 		}
 
 		if o.Flood.Icmp != nil {
-			ans.EnableIcmp = util.AsBool(o.Flood.Icmp.Enable)
 			if o.Flood.Icmp.Red != nil {
-				ans.IcmpAlarmRate = o.Flood.Icmp.Red.AlarmRate
-				ans.IcmpActivateRate = o.Flood.Icmp.Red.ActivateRate
-				ans.IcmpMaxRate = o.Flood.Icmp.Red.MaxRate
-				if o.Flood.Icmp.Red.Block != nil {
-					ans.IcmpBlockDuration = o.Flood.Icmp.Red.Block.BlockDuration
+				ans.Icmp = &Protection{
+					AlarmRate:    o.Flood.Icmp.Red.AlarmRate,
+					ActivateRate: o.Flood.Icmp.Red.ActivateRate,
+					MaxRate:      o.Flood.Icmp.Red.MaxRate,
 				}
+				if o.Flood.Icmp.Red.Block != nil {
+					ans.Icmp.BlockDuration = o.Flood.Icmp.Red.Block.BlockDuration
+				}
+			} else {
+				ans.Icmp = &Protection{}
 			}
+			ans.Icmp.Enable = util.AsBool(o.Flood.Icmp.Enable)
 		}
 
 		if o.Flood.Icmpv6 != nil {
-			ans.EnableIcmpv6 = util.AsBool(o.Flood.Icmpv6.Enable)
 			if o.Flood.Icmpv6.Red != nil {
-				ans.Icmpv6AlarmRate = o.Flood.Icmpv6.Red.AlarmRate
-				ans.Icmpv6ActivateRate = o.Flood.Icmpv6.Red.ActivateRate
-				ans.Icmpv6MaxRate = o.Flood.Icmpv6.Red.MaxRate
-				if o.Flood.Icmpv6.Red.Block != nil {
-					ans.Icmpv6BlockDuration = o.Flood.Icmpv6.Red.Block.BlockDuration
+				ans.Icmpv6 = &Protection{
+					AlarmRate:    o.Flood.Icmpv6.Red.AlarmRate,
+					ActivateRate: o.Flood.Icmpv6.Red.ActivateRate,
+					MaxRate:      o.Flood.Icmpv6.Red.MaxRate,
 				}
+				if o.Flood.Icmpv6.Red.Block != nil {
+					ans.Icmpv6.BlockDuration = o.Flood.Icmpv6.Red.Block.BlockDuration
+				}
+			} else {
+				ans.Icmpv6 = &Protection{}
 			}
+			ans.Icmpv6.Enable = util.AsBool(o.Flood.Icmpv6.Enable)
 		}
 
 		if o.Flood.Other != nil {
-			ans.EnableOther = util.AsBool(o.Flood.Other.Enable)
 			if o.Flood.Other.Red != nil {
-				ans.OtherAlarmRate = o.Flood.Other.Red.AlarmRate
-				ans.OtherActivateRate = o.Flood.Other.Red.ActivateRate
-				ans.OtherMaxRate = o.Flood.Other.Red.MaxRate
-				if o.Flood.Other.Red.Block != nil {
-					ans.OtherBlockDuration = o.Flood.Other.Red.Block.BlockDuration
+				ans.Other = &Protection{
+					AlarmRate:    o.Flood.Other.Red.AlarmRate,
+					ActivateRate: o.Flood.Other.Red.ActivateRate,
+					MaxRate:      o.Flood.Other.Red.MaxRate,
 				}
+				if o.Flood.Other.Red.Block != nil {
+					ans.Other.BlockDuration = o.Flood.Other.Red.Block.BlockDuration
+				}
+			} else {
+				ans.Other = &Protection{}
 			}
+			ans.Other.Enable = util.AsBool(o.Flood.Other.Enable)
 		}
 	}
 
@@ -206,6 +251,7 @@ type entry_v1 struct {
 	XMLName     xml.Name  `xml:"entry"`
 	Name        string    `xml:"name,attr"`
 	Description string    `xml:"description,omitempty"`
+	Type        string    `xml:"type"`
 	Flood       *flood    `xml:"flood"`
 	Resource    *resource `xml:"resource"`
 }
@@ -219,9 +265,9 @@ type flood struct {
 }
 
 type syn struct {
-	EnableSyn string   `xml:"enable"`
-	Red       *details `xml:"red"`
-	Cookies   *details `xml:"syn-cookies"`
+	Enable  string   `xml:"enable"`
+	Red     *details `xml:"red"`
+	Cookies *details `xml:"syn-cookies"`
 }
 
 type details struct {
@@ -253,120 +299,113 @@ func specify_v1(e Entry) interface{} {
 	ans := entry_v1{
 		Name:        e.Name,
 		Description: e.Description,
+		Type:        e.Type,
 	}
 
-	incSyn := e.SynAction != "" || e.SynAlarmRate != 0 || e.SynActivateRate != 0 || e.SynMaxRate != 0 || e.SynBlockDuration != 0
-	incUdp := e.UdpAlarmRate != 0 || e.UdpActivateRate != 0 || e.UdpMaxRate != 0 || e.UdpBlockDuration != 0
-	incIcmp := e.IcmpAlarmRate != 0 || e.IcmpActivateRate != 0 || e.IcmpMaxRate != 0 || e.IcmpBlockDuration != 0
-	incIcmpv6 := e.Icmpv6AlarmRate != 0 || e.Icmpv6ActivateRate != 0 || e.Icmpv6MaxRate != 0 || e.Icmpv6BlockDuration != 0
-	incOther := e.OtherAlarmRate != 0 || e.OtherActivateRate != 0 || e.OtherMaxRate != 0 || e.OtherBlockDuration != 0
-
-	if e.EnableSyn || incSyn || e.EnableUdp || incUdp || e.EnableIcmp || incIcmp || e.EnableIcmpv6 || incIcmpv6 || e.EnableOther || incOther {
+	if e.Syn != nil || e.Udp != nil || e.Icmp != nil || e.Icmpv6 != nil || e.Other != nil {
 		ans.Flood = &flood{}
-		if e.EnableSyn || incSyn {
+		if e.Syn != nil {
 			ans.Flood.Syn = &syn{
-				EnableSyn: util.YesNo(e.EnableSyn),
+				Enable: util.YesNo(e.Syn.Enable),
 			}
 
-			if incSyn {
-				switch e.SynAction {
-				case SynActionRed:
-					ans.Flood.Syn.Red = &details{
-						AlarmRate:    e.SynAlarmRate,
-						ActivateRate: e.SynActivateRate,
-						MaxRate:      e.SynMaxRate,
+			switch e.Syn.Action {
+			case SynActionRed:
+				ans.Flood.Syn.Red = &details{
+					AlarmRate:    e.Syn.AlarmRate,
+					ActivateRate: e.Syn.ActivateRate,
+					MaxRate:      e.Syn.MaxRate,
+				}
+				if e.Syn.BlockDuration != 0 {
+					ans.Flood.Syn.Red.Block = &block{
+						BlockDuration: e.Syn.BlockDuration,
 					}
-					if e.SynBlockDuration != 0 {
-						ans.Flood.Syn.Red.Block = &block{
-							BlockDuration: e.SynBlockDuration,
-						}
-					}
-				case SynActionCookies:
-					ans.Flood.Syn.Cookies = &details{
-						AlarmRate:    e.SynAlarmRate,
-						ActivateRate: e.SynActivateRate,
-						MaxRate:      e.SynMaxRate,
-					}
-					if e.SynBlockDuration != 0 {
-						ans.Flood.Syn.Cookies.Block = &block{
-							BlockDuration: e.SynBlockDuration,
-						}
+				}
+			case SynActionCookies:
+				ans.Flood.Syn.Cookies = &details{
+					AlarmRate:    e.Syn.AlarmRate,
+					ActivateRate: e.Syn.ActivateRate,
+					MaxRate:      e.Syn.MaxRate,
+				}
+				if e.Syn.BlockDuration != 0 {
+					ans.Flood.Syn.Cookies.Block = &block{
+						BlockDuration: e.Syn.BlockDuration,
 					}
 				}
 			}
 		}
 
-		if e.EnableUdp || incUdp {
+		if e.Udp != nil {
 			ans.Flood.Udp = &common{
-				Enable: util.YesNo(e.EnableUdp),
+				Enable: util.YesNo(e.Udp.Enable),
 			}
 
-			if incUdp {
+			if e.Udp.AlarmRate != 0 || e.Udp.ActivateRate != 0 || e.Udp.MaxRate != 0 || e.Udp.BlockDuration != 0 {
 				ans.Flood.Udp.Red = &details{
-					AlarmRate:    e.UdpAlarmRate,
-					ActivateRate: e.UdpActivateRate,
-					MaxRate:      e.UdpMaxRate,
+					AlarmRate:    e.Udp.AlarmRate,
+					ActivateRate: e.Udp.ActivateRate,
+					MaxRate:      e.Udp.MaxRate,
 				}
-				if e.UdpBlockDuration != 0 {
+				if e.Udp.BlockDuration != 0 {
 					ans.Flood.Udp.Red.Block = &block{
-						BlockDuration: e.UdpBlockDuration,
+						BlockDuration: e.Udp.BlockDuration,
 					}
 				}
 			}
 		}
 
-		if e.EnableIcmp || incIcmp {
+		if e.Icmp != nil {
 			ans.Flood.Icmp = &common{
-				Enable: util.YesNo(e.EnableIcmp),
+				Enable: util.YesNo(e.Icmp.Enable),
 			}
 
-			if incIcmp {
+			if e.Icmp.AlarmRate != 0 || e.Icmp.ActivateRate != 0 || e.Icmp.MaxRate != 0 || e.Icmp.BlockDuration != 0 {
 				ans.Flood.Icmp.Red = &details{
-					AlarmRate:    e.IcmpAlarmRate,
-					ActivateRate: e.IcmpActivateRate,
-					MaxRate:      e.IcmpMaxRate,
+					AlarmRate:    e.Icmp.AlarmRate,
+					ActivateRate: e.Icmp.ActivateRate,
+					MaxRate:      e.Icmp.MaxRate,
 				}
-				if e.IcmpBlockDuration != 0 {
+				if e.Icmp.BlockDuration != 0 {
 					ans.Flood.Icmp.Red.Block = &block{
-						BlockDuration: e.IcmpBlockDuration,
+						BlockDuration: e.Icmp.BlockDuration,
 					}
 				}
 			}
 		}
 
-		if e.EnableIcmpv6 || incIcmpv6 {
+		if e.Icmpv6 != nil {
 			ans.Flood.Icmpv6 = &common{
-				Enable: util.YesNo(e.EnableIcmpv6),
+				Enable: util.YesNo(e.Icmpv6.Enable),
 			}
 
-			if incIcmpv6 {
+			if e.Icmpv6.AlarmRate != 0 || e.Icmpv6.ActivateRate != 0 || e.Icmpv6.MaxRate != 0 || e.Icmpv6.BlockDuration != 0 {
 				ans.Flood.Icmpv6.Red = &details{
-					AlarmRate:    e.Icmpv6AlarmRate,
-					ActivateRate: e.Icmpv6ActivateRate,
-					MaxRate:      e.Icmpv6MaxRate,
+					AlarmRate:    e.Icmpv6.AlarmRate,
+					ActivateRate: e.Icmpv6.ActivateRate,
+					MaxRate:      e.Icmpv6.MaxRate,
 				}
-				if e.Icmpv6BlockDuration != 0 {
+				if e.Icmpv6.BlockDuration != 0 {
 					ans.Flood.Icmpv6.Red.Block = &block{
-						BlockDuration: e.Icmpv6BlockDuration,
+						BlockDuration: e.Icmpv6.BlockDuration,
 					}
 				}
 			}
 		}
 
-		if e.EnableOther || incOther {
+		if e.Other != nil {
 			ans.Flood.Other = &common{
-				Enable: util.YesNo(e.EnableOther),
+				Enable: util.YesNo(e.Other.Enable),
 			}
 
-			if incOther {
+			if e.Other.AlarmRate != 0 || e.Other.ActivateRate != 0 || e.Other.MaxRate != 0 || e.Other.BlockDuration != 0 {
 				ans.Flood.Other.Red = &details{
-					AlarmRate:    e.OtherAlarmRate,
-					ActivateRate: e.OtherActivateRate,
-					MaxRate:      e.OtherMaxRate,
+					AlarmRate:    e.Other.AlarmRate,
+					ActivateRate: e.Other.ActivateRate,
+					MaxRate:      e.Other.MaxRate,
 				}
-				if e.OtherBlockDuration != 0 {
+				if e.Other.BlockDuration != 0 {
 					ans.Flood.Other.Red.Block = &block{
-						BlockDuration: e.OtherBlockDuration,
+						BlockDuration: e.Other.BlockDuration,
 					}
 				}
 			}

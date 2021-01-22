@@ -6,7 +6,7 @@ const (
 	TypeClassified = "classified"
 )
 
-// Valid values for SynAction.
+// Valid values for Syn.Action.
 const (
 	SynActionRed     = "red"
 	SynActionCookies = "syn-cookies"
