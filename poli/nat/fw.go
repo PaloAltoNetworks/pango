@@ -117,8 +117,8 @@ func (c *Firewall) MoveGroup(vsys string, movement int, rule string, e ...Entry)
 //
 // If the rules param is nil, then the hit count for all rules is returned.
 func (c *Firewall) HitCount(vsys string, rules []string) ([]util.HitCount, error) {
-	if !c.ns.Client.Versioning().Gte(version.Number{9, 0, 0, ""}) {
-		return nil, fmt.Errorf("rule hit count requires PAN-OS 9.0+")
+	if !c.ns.Client.Versioning().Gte(version.Number{8, 1, 0, ""}) {
+		return nil, fmt.Errorf("rule hit count requires PAN-OS 8.1+")
 	}
 
 	req := util.NewHitCountRequest("nat", vsys, rules)
