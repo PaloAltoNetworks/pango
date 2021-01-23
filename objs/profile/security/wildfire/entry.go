@@ -29,7 +29,26 @@ type Rule struct {
 // Name field relates to the XPATH of this object, this field is not copied.
 func (o *Entry) Copy(s Entry) {
 	o.Description = s.Description
-	o.Rules = s.Rules
+	if s.Rules == nil {
+		o.Rules = nil
+	} else {
+		o.Rules = make([]Rule, 0, len(s.Rules))
+		for _, x := range s.Rules {
+			item := Rule{
+				Name:      x.Name,
+				Direction: x.Direction,
+				Analysis:  x.Analysis,
+			}
+			if x.Applications != nil {
+				item.Applications = make([]string, len(x.Applications))
+				copy(item.Applications, x.Applications)
+			}
+			if x.FileTypes != nil {
+				item.FileTypes = make([]string, len(x.FileTypes))
+				copy(item.FileTypes, x.FileTypes)
+			}
+		}
+	}
 }
 
 /** Structs / functions for this namespace. **/
