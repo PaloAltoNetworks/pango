@@ -48,10 +48,54 @@ type MachineLearningException struct {
 func (o *Entry) Copy(s Entry) {
 	o.Description = s.Description
 	o.PacketCapture = s.PacketCapture
-	o.Decoders = s.Decoders
-	o.ApplicationExceptions = s.ApplicationExceptions
+	if s.Decoders == nil {
+		o.Decoders = nil
+	} else {
+		o.Decoders = make([]Decoder, 0, len(s.Decoders))
+		for _, x := range s.Decoders {
+			o.Decoders = append(o.Decoders, Decoder{
+				Name:                  x.Name,
+				Action:                x.Action,
+				WildfireAction:        x.WildfireAction,
+				MachineLearningAction: x.MachineLearningAction,
+			})
+		}
+	}
+	if s.ApplicationExceptions == nil {
+		o.ApplicationExceptions = nil
+	} else {
+		o.ApplicationExceptions = make([]ApplicationException, 0, len(s.ApplicationExceptions))
+		for _, x := range s.ApplicationExceptions {
+			o.ApplicationExceptions = append(o.ApplicationExceptions, ApplicationException{
+				Application: x.Application,
+				Action:      x.Action,
+			})
+		}
+	}
 	o.ThreatExceptions = s.ThreatExceptions
-	o.MachineLearningModels = s.MachineLearningModels
+	if s.MachineLearningModels == nil {
+		o.MachineLearningModels = nil
+	} else {
+		o.MachineLearningModels = make([]MachineLearningModel, 0, len(s.MachineLearningModels))
+		for _, x := range s.MachineLearningModels {
+			o.MachineLearningModels = append(o.MachineLearningModels, MachineLearningModel{
+				Model:  x.Model,
+				Action: x.Action,
+			})
+		}
+	}
+	if s.MachineLearningExceptions == nil {
+		o.MachineLearningExceptions = nil
+	} else {
+		o.MachineLearningExceptions = make([]MachineLearningException, 0, len(s.MachineLearningExceptions))
+		for _, x := range s.MachineLearningExceptions {
+			o.MachineLearningExceptions = append(o.MachineLearningExceptions, MachineLearningException{
+				Name:        x.Name,
+				Description: x.Description,
+				Filename:    x.Filename,
+			})
+		}
+	}
 }
 
 /** Structs / functions for this namespace. **/
