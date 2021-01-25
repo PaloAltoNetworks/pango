@@ -17,7 +17,7 @@ import (
 
 // Pnrm is the panorama.DeviceGroup namespace.
 type Pnrm struct {
-	DeviceGroup      *dg.Dg
+	DeviceGroup      *dg.Panorama
 	GcpAccount       *account.Account
 	GkeCluster       *cluster.Cluster
 	GkeClusterGroup  *group.Group
@@ -28,8 +28,7 @@ type Pnrm struct {
 
 // Initialize is invoked on panorama.Initialize().
 func (c *Pnrm) Initialize(i util.XapiClient) {
-	c.DeviceGroup = &dg.Dg{}
-	c.DeviceGroup.Initialize(i)
+	c.DeviceGroup = dg.PanoramaNamespace(i)
 
 	c.GcpAccount = &account.Account{}
 	c.GcpAccount.Initialize(i)
