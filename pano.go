@@ -6,8 +6,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/PaloAltoNetworks/pango/util"
-
 	// Various namespace imports.
 	"github.com/PaloAltoNetworks/pango/dev"
 	"github.com/PaloAltoNetworks/pango/licen"
