@@ -159,6 +159,23 @@ func (c *Panorama) GetVmAuthKeys() ([]VmAuthKey, error) {
 	return ans.List, nil
 }
 
+// RemoveVmAuthKey revokes a VM auth key.
+func (c *Panorama) RevokeVmAuthKey(key string) error {
+	type rreq struct {
+		XMLName xml.Name `xml:"request"`
+		Key     string   `xml:"bootstrap>vm-auth-key>revoke>vm-auth-key"`
+	}
+
+	req := rreq{
+		Key: key,
+	}
+
+	c.LogOp("(op) revoking vm auth code: %s", key)
+
+	_, err := c.Op(req, "", nil, nil)
+	return err
+}
+
 /** Public structs **/
 
 // VmAuthKey is a VM auth key paired with when it expires.
