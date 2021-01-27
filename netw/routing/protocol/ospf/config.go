@@ -20,7 +20,7 @@ type Config struct {
 	EnableGracefulRestart         bool
 	GracePeriod                   int
 	HelperEnable                  bool
-	StrictLSAChecking             bool
+	StrictLsaChecking             bool
 	MaxNeighborRestartTime        int
 	BfdProfile                    string // BFD profile or "None" to disable BFD
 
@@ -39,7 +39,7 @@ func (o *Config) Copy(s Config) {
 	o.EnableGracefulRestart = s.EnableGracefulRestart
 	o.GracePeriod = s.GracePeriod
 	o.HelperEnable = s.HelperEnable
-	o.StrictLSAChecking = s.StrictLSAChecking
+	o.StrictLsaChecking = s.StrictLsaChecking
 	o.MaxNeighborRestartTime = s.MaxNeighborRestartTime
 	o.BfdProfile = s.BfdProfile
 }
@@ -92,7 +92,7 @@ func (o *entry_v1) normalize() Config {
 		ans.EnableGracefulRestart = util.AsBool(o.GracefulRestart.EnableGracefulRestart)
 		ans.GracePeriod = o.GracefulRestart.GracePeriod
 		ans.HelperEnable = util.AsBool(o.GracefulRestart.HelperEnable)
-		ans.StrictLSAChecking = util.AsBool(o.GracefulRestart.StrictLSAChecking)
+		ans.StrictLsaChecking = util.AsBool(o.GracefulRestart.StrictLsaChecking)
 		ans.MaxNeighborRestartTime = o.GracefulRestart.MaxNeighborRestartTime
 	}
 	if o.GlobalBfd != nil {
@@ -141,7 +141,7 @@ type gracefulRestart struct {
 	EnableGracefulRestart  string `xml:"enable"`
 	GracePeriod            int    `xml:"grace-period,omitempty"`
 	HelperEnable           string `xml:"helper-enable"`
-	StrictLSAChecking      string `xml:"strict-LSA-checking"`
+	StrictLsaChecking      string `xml:"strict-LSA-checking"`
 	MaxNeighborRestartTime int    `xml:"max-neighbor-restart-time,omitempty""`
 }
 
@@ -165,15 +165,15 @@ func specify_v1(e Config) interface{} {
 		}
 	}
 
-	// EnableGracefulRestart, HelperEnable, StrictLSAChecking schema elements
+	// EnableGracefulRestart, HelperEnable, StrictLsaChecking schema elements
 	// are default="yes"
-	if !e.EnableGracefulRestart || !e.HelperEnable || !e.StrictLSAChecking ||
+	if !e.EnableGracefulRestart || !e.HelperEnable || !e.StrictLsaChecking ||
 		e.GracePeriod != 0 || e.MaxNeighborRestartTime != 0 {
 		ans.GracefulRestart = &gracefulRestart{
 			EnableGracefulRestart:  util.YesNo(e.EnableGracefulRestart),
 			GracePeriod:            e.GracePeriod,
 			HelperEnable:           util.YesNo(e.HelperEnable),
-			StrictLSAChecking:      util.YesNo(e.StrictLSAChecking),
+			StrictLsaChecking:      util.YesNo(e.StrictLsaChecking),
 			MaxNeighborRestartTime: e.MaxNeighborRestartTime,
 		}
 	}

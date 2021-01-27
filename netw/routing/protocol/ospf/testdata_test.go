@@ -23,7 +23,7 @@ func getTests() []testCase {
 			EnableGracefulRestart:         true,
 			GracePeriod:                   1000,
 			HelperEnable:                  true,
-			StrictLSAChecking:             true,
+			StrictLsaChecking:             true,
 			MaxNeighborRestartTime:        500,
 			BfdProfile:                    "bfd profile",
 		}},
@@ -38,7 +38,7 @@ func getTests() []testCase {
 			EnableGracefulRestart:         true,
 			GracePeriod:                   1000,
 			HelperEnable:                  true,
-			StrictLSAChecking:             true,
+			StrictLsaChecking:             true,
 			MaxNeighborRestartTime:        500,
 			BfdProfile:                    "bfd profile",
 			raw: map[string]string{
