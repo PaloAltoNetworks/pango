@@ -34,6 +34,9 @@ import (
 	"github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/profile/auth"
 	"github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/profile/dampening"
 	bgpredist "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/redist"
+	"github.com/PaloAltoNetworks/pango/netw/routing/protocol/ospf"
+	ospfexp "github.com/PaloAltoNetworks/pango/netw/routing/protocol/ospf/exp"
+	ospfauth "github.com/PaloAltoNetworks/pango/netw/routing/protocol/ospf/profile/auth"
 	"github.com/PaloAltoNetworks/pango/netw/routing/route/static/ipv4"
 	ipv6sr "github.com/PaloAltoNetworks/pango/netw/routing/route/static/ipv6"
 	"github.com/PaloAltoNetworks/pango/netw/routing/router"
@@ -77,6 +80,9 @@ type PanoNetw struct {
 	LoopbackInterface        *loopback.Panorama
 	ManagementProfile        *mngtprof.PanoMngtProf
 	MonitorProfile           *monitor.PanoMonitor
+	OspfAuthProfile          *ospfauth.Panorama
+	OspfConfig               *ospf.Panorama
+	OspfExport               *ospfexp.Panorama
 	RedistributionProfile    *redist4.PanoIpv4
 	StaticRoute              *ipv4.Panorama
 	TunnelInterface          *tunnel.Panorama
@@ -137,6 +143,10 @@ func (c *PanoNetw) Initialize(i util.XapiClient) {
 
 	c.MonitorProfile = &monitor.PanoMonitor{}
 	c.MonitorProfile.Initialize(i)
+
+	c.OspfAuthProfile = ospfauth.PanoramaNamespace(i)
+	c.OspfConfig = ospf.PanoramaNamespace(i)
+	c.OspfExport = ospfexp.PanoramaNamespace(i)
 
 	c.RedistributionProfile = &redist4.PanoIpv4{}
 	c.RedistributionProfile.Initialize(i)
