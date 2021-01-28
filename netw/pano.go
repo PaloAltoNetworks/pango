@@ -35,6 +35,7 @@ import (
 	"github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/profile/dampening"
 	bgpredist "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/redist"
 	"github.com/PaloAltoNetworks/pango/netw/routing/protocol/ospf"
+	ospfarea "github.com/PaloAltoNetworks/pango/netw/routing/protocol/ospf/area"
 	ospfexp "github.com/PaloAltoNetworks/pango/netw/routing/protocol/ospf/exp"
 	ospfauth "github.com/PaloAltoNetworks/pango/netw/routing/protocol/ospf/profile/auth"
 	"github.com/PaloAltoNetworks/pango/netw/routing/route/static/ipv4"
@@ -80,6 +81,7 @@ type PanoNetw struct {
 	LoopbackInterface        *loopback.Panorama
 	ManagementProfile        *mngtprof.PanoMngtProf
 	MonitorProfile           *monitor.PanoMonitor
+	OspfArea                 *ospfarea.Panorama
 	OspfAuthProfile          *ospfauth.Panorama
 	OspfConfig               *ospf.Panorama
 	OspfExport               *ospfexp.Panorama
@@ -144,6 +146,7 @@ func (c *PanoNetw) Initialize(i util.XapiClient) {
 	c.MonitorProfile = &monitor.PanoMonitor{}
 	c.MonitorProfile.Initialize(i)
 
+	c.OspfArea = ospfarea.PanoramaNamespace(i)
 	c.OspfAuthProfile = ospfauth.PanoramaNamespace(i)
 	c.OspfConfig = ospf.PanoramaNamespace(i)
 	c.OspfExport = ospfexp.PanoramaNamespace(i)
