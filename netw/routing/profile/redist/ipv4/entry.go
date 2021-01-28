@@ -27,15 +27,24 @@ type Entry struct {
 func (o *Entry) Copy(s Entry) {
 	o.Priority = s.Priority
 	o.Action = s.Action
-	o.Types = s.Types
-	o.Interfaces = s.Interfaces
-	o.Destinations = s.Destinations
-	o.NextHops = s.NextHops
-	o.OspfPathTypes = s.OspfPathTypes
-	o.OspfAreas = s.OspfAreas
-	o.OspfTags = s.OspfTags
-	o.BgpCommunities = s.BgpCommunities
-	o.BgpExtendedCommunities = s.BgpExtendedCommunities
+	o.Types = make([]string, len(s.Types))
+	copy(o.Types, s.Types)
+	o.Interfaces = make([]string, len(s.Interfaces))
+	copy(o.Interfaces, s.Interfaces)
+	o.Destinations = make([]string, len(s.Destinations))
+	copy(o.Destinations, s.Destinations)
+	o.NextHops = make([]string, len(s.NextHops))
+	copy(o.NextHops, s.NextHops)
+	o.OspfPathTypes = make([]string, len(s.OspfPathTypes))
+	copy(o.OspfPathTypes, s.OspfPathTypes)
+	o.OspfAreas = make([]string, len(s.OspfAreas))
+	copy(o.OspfAreas, s.OspfAreas)
+	o.OspfTags = make([]string, len(s.OspfTags))
+	copy(o.OspfTags, s.OspfTags)
+	o.BgpCommunities = make([]string, len(s.BgpCommunities))
+	copy(o.BgpCommunities, s.BgpCommunities)
+	o.BgpExtendedCommunities = make([]string, len(s.BgpExtendedCommunities))
+	copy(o.BgpExtendedCommunities, s.BgpExtendedCommunities)
 }
 
 /** Structs / functions for this namespace. **/
