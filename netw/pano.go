@@ -36,6 +36,8 @@ import (
 	bgpredist "github.com/PaloAltoNetworks/pango/netw/routing/protocol/bgp/redist"
 	"github.com/PaloAltoNetworks/pango/netw/routing/protocol/ospf"
 	ospfarea "github.com/PaloAltoNetworks/pango/netw/routing/protocol/ospf/area"
+	ospfint "github.com/PaloAltoNetworks/pango/netw/routing/protocol/ospf/area/iface"
+	ospfvlink "github.com/PaloAltoNetworks/pango/netw/routing/protocol/ospf/area/vlink"
 	ospfexp "github.com/PaloAltoNetworks/pango/netw/routing/protocol/ospf/exp"
 	ospfauth "github.com/PaloAltoNetworks/pango/netw/routing/protocol/ospf/profile/auth"
 	"github.com/PaloAltoNetworks/pango/netw/routing/route/static/ipv4"
@@ -82,6 +84,8 @@ type PanoNetw struct {
 	ManagementProfile        *mngtprof.PanoMngtProf
 	MonitorProfile           *monitor.PanoMonitor
 	OspfArea                 *ospfarea.Panorama
+	OspfAreaInterface        *ospfint.Panorama
+	OspfAreaVirtualLink      *ospfvlink.Panorama
 	OspfAuthProfile          *ospfauth.Panorama
 	OspfConfig               *ospf.Panorama
 	OspfExport               *ospfexp.Panorama
@@ -147,6 +151,8 @@ func (c *PanoNetw) Initialize(i util.XapiClient) {
 	c.MonitorProfile.Initialize(i)
 
 	c.OspfArea = ospfarea.PanoramaNamespace(i)
+	c.OspfAreaInterface = ospfint.PanoramaNamespace(i)
+	c.OspfAreaVirtualLink = ospfvlink.PanoramaNamespace(i)
 	c.OspfAuthProfile = ospfauth.PanoramaNamespace(i)
 	c.OspfConfig = ospf.PanoramaNamespace(i)
 	c.OspfExport = ospfexp.PanoramaNamespace(i)
