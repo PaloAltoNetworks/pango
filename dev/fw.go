@@ -6,6 +6,7 @@ import (
 	"github.com/PaloAltoNetworks/pango/dev/general"
 	"github.com/PaloAltoNetworks/pango/dev/ha"
 	halink "github.com/PaloAltoNetworks/pango/dev/ha/monitor/link"
+	hapath "github.com/PaloAltoNetworks/pango/dev/ha/monitor/path"
 	"github.com/PaloAltoNetworks/pango/dev/profile/email"
 	emailsrv "github.com/PaloAltoNetworks/pango/dev/profile/email/server"
 	"github.com/PaloAltoNetworks/pango/dev/profile/http"
@@ -27,6 +28,7 @@ type FwDev struct {
 	GeneralSettings     *general.FwGeneral
 	HaConfig            *ha.Firewall
 	HaLinkMonitorGroup  *halink.Firewall
+	HaPathMonitorGroup  *hapath.Firewall
 	HttpHeader          *header.FwHeader
 	HttpParam           *param.FwParam
 	HttpServer          *httpsrv.FwServer
@@ -52,6 +54,7 @@ func (c *FwDev) Initialize(i util.XapiClient) {
 
 	c.HaConfig = ha.FirewallNamespace(i)
 	c.HaLinkMonitorGroup = halink.FirewallNamespace(i)
+	c.HaPathMonitorGroup = hapath.FirewallNamespace(i)
 
 	c.HttpHeader = &header.FwHeader{}
 	c.HttpHeader.Initialize(i)
