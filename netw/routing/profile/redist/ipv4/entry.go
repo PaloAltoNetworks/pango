@@ -27,15 +27,60 @@ type Entry struct {
 func (o *Entry) Copy(s Entry) {
 	o.Priority = s.Priority
 	o.Action = s.Action
-	o.Types = s.Types
-	o.Interfaces = s.Interfaces
-	o.Destinations = s.Destinations
-	o.NextHops = s.NextHops
-	o.OspfPathTypes = s.OspfPathTypes
-	o.OspfAreas = s.OspfAreas
-	o.OspfTags = s.OspfTags
-	o.BgpCommunities = s.BgpCommunities
-	o.BgpExtendedCommunities = s.BgpExtendedCommunities
+	if s.Types == nil {
+		o.Types = nil
+	} else {
+		o.Types = make([]string, len(s.Types))
+		copy(o.Types, s.Types)
+	}
+	if s.Interfaces == nil {
+		o.Interfaces = nil
+	} else {
+		o.Interfaces = make([]string, len(s.Interfaces))
+		copy(o.Interfaces, s.Interfaces)
+	}
+	if s.Destinations == nil {
+		o.Destinations = nil
+	} else {
+		o.Destinations = make([]string, len(s.Destinations))
+		copy(o.Destinations, s.Destinations)
+	}
+	if s.NextHops == nil {
+		o.NextHops = nil
+	} else {
+		o.NextHops = make([]string, len(s.NextHops))
+		copy(o.NextHops, s.NextHops)
+	}
+	if s.OspfPathTypes == nil {
+		o.OspfPathTypes = nil
+	} else {
+		o.OspfPathTypes = make([]string, len(s.OspfPathTypes))
+		copy(o.OspfPathTypes, s.OspfPathTypes)
+	}
+	if s.OspfAreas == nil {
+		o.OspfAreas = nil
+	} else {
+		o.OspfAreas = make([]string, len(s.OspfAreas))
+		copy(o.OspfAreas, s.OspfAreas)
+	}
+	if s.OspfTags == nil {
+		o.OspfTags = nil
+	} else {
+		o.OspfTags = make([]string, len(s.OspfTags))
+		copy(o.OspfTags, s.OspfTags)
+	}
+	if s.BgpCommunities == nil {
+		o.BgpCommunities = nil
+	} else {
+		o.BgpCommunities = make([]string, len(s.BgpCommunities))
+		copy(o.BgpCommunities, s.BgpCommunities)
+	}
+	if s.BgpExtendedCommunities == nil {
+		o.BgpExtendedCommunities = nil
+	} else {
+		o.BgpExtendedCommunities = make([]string, len(s.BgpExtendedCommunities))
+		copy(o.BgpExtendedCommunities, s.BgpExtendedCommunities)
+	}
 }
 
 /** Structs / functions for this namespace. **/
