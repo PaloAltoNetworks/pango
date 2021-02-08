@@ -173,12 +173,14 @@ func (o *container_v1) Normalize() Config {
 		UpdateServer:       o.Answer.UpdateServer,
 		VerifyUpdateServer: util.AsBool(o.Answer.VerifyUpdateServer),
 		LoginBanner:        o.Answer.LoginBanner,
-		PanoramaPrimary:    o.Answer.PanoramaPrimary,
-		PanoramaSecondary:  o.Answer.PanoramaSecondary,
 		ProxyServer:        o.Answer.ProxyServer,
 		ProxyPort:          o.Answer.ProxyPort,
 		ProxyUser:          o.Answer.ProxyUser,
 		ProxyPassword:      o.Answer.ProxyPassword,
+	}
+	if o.Answer.Panorama != nil {
+		ans.PanoramaPrimary = o.Answer.Panorama.Primary
+		ans.PanoramaSecondary = o.Answer.Panorama.Secondary
 	}
 	if o.Answer.Dns != nil {
 		ans.DnsPrimary = o.Answer.Dns.Primary
@@ -311,49 +313,53 @@ func (o *container_v1) Normalize() Config {
 }
 
 type config_v1 struct {
-	XMLName               xml.Name     `xml:"system"`
-	Hostname              string       `xml:"hostname"`
-	IpAddress             string       `xml:"ip-address,omitempty"`
-	Netmask               string       `xml:"netmask,omitempty"`
-	Gateway               string       `xml:"default-gateway,omitempty"`
-	Timezone              string       `xml:"timezone,omitempty"`
-	Domain                string       `xml:"domain,omitempty"`
-	UpdateServer          string       `xml:"update-server,omitempty"`
-	VerifyUpdateServer    string       `xml:"server-verification"`
-	LoginBanner           string       `xml:"login-banner,omitempty"`
-	PanoramaPrimary       string       `xml:"panorama-server,omitempty"`
-	PanoramaSecondary     string       `xml:"panorama-server-2,omitempty"`
-	ProxyServer           string       `xml:"secure-proxy-server,omitempty"`
-	ProxyPort             int          `xml:"secure-proxy-port,omitempty"`
-	ProxyUser             string       `xml:"secure-proxy-user,omitempty"`
-	ProxyPassword         string       `xml:"secure-proxy-password,omitempty"`
-	Dns                   *deviceDns   `xml:"dns-setting"`
-	Ntp                   *deviceNtp   `xml:"ntp-servers"`
-	AckLoginBanner        *util.RawXml `xml:"ack-login-banner"`
-	AuthenticationProfile *util.RawXml `xml:"authentication-profile"`
-	CertificateProfile    *util.RawXml `xml:"certificate-profile"`
-	DomainLookupUrl       *util.RawXml `xml:"domain-lookup-url"`
-	FqdnForceRefreshTime  *util.RawXml `xml:"fqdn-forcerefresh-time"`
-	FqdnRefreshTime       *util.RawXml `xml:"fqdn-refresh-time"`
-	GeoLocation           *util.RawXml `xml:"geo-location"`
-	HsmSettings           *util.RawXml `xml:"hsm-settings"`
-	IpAddressLookupUrl    *util.RawXml `xml:"ip-address-lookup-url"`
-	Ipv6Address           *util.RawXml `xml:"ipv6-address"`
-	Ipv6DefaultGateway    *util.RawXml `xml:"ipv6-default-gateway"`
-	Locale                *util.RawXml `xml:"locale"`
-	LogExportSchedule     *util.RawXml `xml:"log-export-schedule"`
-	LogLink               *util.RawXml `xml:"log-link"`
-	MotdAndBanner         *util.RawXml `xml:"motd-and-banner"`
-	Mtu                   *util.RawXml `xml:"mtu"`
-	PermittedIp           *util.RawXml `xml:"permitted-ip"`
-	Route                 *util.RawXml `xml:"route"`
-	Service               *util.RawXml `xml:"service"`
-	SnmpSetting           *util.RawXml `xml:"snmp-setting"`
-	SpeedDuplex           *util.RawXml `xml:"speed-duplex"`
-	SslTlsServiceProfile  *util.RawXml `xml:"ssl-tls-service-profile"`
-	SyslogCertificate     *util.RawXml `xml:"syslog-certificate"`
-	Type                  *util.RawXml `xml:"type"`
-	UpdateSchedule        *util.RawXml `xml:"update-schedule"`
+	XMLName               xml.Name        `xml:"system"`
+	Hostname              string          `xml:"hostname"`
+	IpAddress             string          `xml:"ip-address,omitempty"`
+	Netmask               string          `xml:"netmask,omitempty"`
+	Gateway               string          `xml:"default-gateway,omitempty"`
+	Timezone              string          `xml:"timezone,omitempty"`
+	Domain                string          `xml:"domain,omitempty"`
+	UpdateServer          string          `xml:"update-server,omitempty"`
+	VerifyUpdateServer    string          `xml:"server-verification"`
+	LoginBanner           string          `xml:"login-banner,omitempty"`
+	ProxyServer           string          `xml:"secure-proxy-server,omitempty"`
+	ProxyPort             int             `xml:"secure-proxy-port,omitempty"`
+	ProxyUser             string          `xml:"secure-proxy-user,omitempty"`
+	ProxyPassword         string          `xml:"secure-proxy-password,omitempty"`
+	Panorama              *devicePanorama `xml:"panorama"`
+	Dns                   *deviceDns      `xml:"dns-setting"`
+	Ntp                   *deviceNtp      `xml:"ntp-servers"`
+	AckLoginBanner        *util.RawXml    `xml:"ack-login-banner"`
+	AuthenticationProfile *util.RawXml    `xml:"authentication-profile"`
+	CertificateProfile    *util.RawXml    `xml:"certificate-profile"`
+	DomainLookupUrl       *util.RawXml    `xml:"domain-lookup-url"`
+	FqdnForceRefreshTime  *util.RawXml    `xml:"fqdn-forcerefresh-time"`
+	FqdnRefreshTime       *util.RawXml    `xml:"fqdn-refresh-time"`
+	GeoLocation           *util.RawXml    `xml:"geo-location"`
+	HsmSettings           *util.RawXml    `xml:"hsm-settings"`
+	IpAddressLookupUrl    *util.RawXml    `xml:"ip-address-lookup-url"`
+	Ipv6Address           *util.RawXml    `xml:"ipv6-address"`
+	Ipv6DefaultGateway    *util.RawXml    `xml:"ipv6-default-gateway"`
+	Locale                *util.RawXml    `xml:"locale"`
+	LogExportSchedule     *util.RawXml    `xml:"log-export-schedule"`
+	LogLink               *util.RawXml    `xml:"log-link"`
+	MotdAndBanner         *util.RawXml    `xml:"motd-and-banner"`
+	Mtu                   *util.RawXml    `xml:"mtu"`
+	PermittedIp           *util.RawXml    `xml:"permitted-ip"`
+	Route                 *util.RawXml    `xml:"route"`
+	Service               *util.RawXml    `xml:"service"`
+	SnmpSetting           *util.RawXml    `xml:"snmp-setting"`
+	SpeedDuplex           *util.RawXml    `xml:"speed-duplex"`
+	SslTlsServiceProfile  *util.RawXml    `xml:"ssl-tls-service-profile"`
+	SyslogCertificate     *util.RawXml    `xml:"syslog-certificate"`
+	Type                  *util.RawXml    `xml:"type"`
+	UpdateSchedule        *util.RawXml    `xml:"update-schedule"`
+}
+
+type devicePanorama struct {
+	Primary   string `xml:"local-panorama>panorama-server"`
+	Secondary string `xml:"local-panorama>panorama-server-2"`
 }
 
 type deviceDns struct {
@@ -402,13 +408,19 @@ func specify_v1(c Config) interface{} {
 		UpdateServer:       c.UpdateServer,
 		VerifyUpdateServer: util.YesNo(c.VerifyUpdateServer),
 		LoginBanner:        c.LoginBanner,
-		PanoramaPrimary:    c.PanoramaPrimary,
-		PanoramaSecondary:  c.PanoramaSecondary,
 		ProxyServer:        c.ProxyServer,
 		ProxyPort:          c.ProxyPort,
 		ProxyUser:          c.ProxyUser,
 		ProxyPassword:      c.ProxyPassword,
 	}
+	// Panorama
+	if c.PanoramaPrimary != "" || c.PanoramaSecondary != "" {
+		ans.Panorama = &devicePanorama{
+			c.PanoramaPrimary,
+			c.PanoramaSecondary,
+		}
+	}
+	// DNS
 	if c.DnsPrimary != "" || c.DnsSecondary != "" {
 		ans.Dns = &deviceDns{
 			c.DnsPrimary,
