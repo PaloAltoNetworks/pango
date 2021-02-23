@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 
 	"github.com/PaloAltoNetworks/pango/util"
+	"github.com/PaloAltoNetworks/pango/version"
 )
 
 // Entry is a normalized, version independent representation of a redist profile.
@@ -85,41 +86,65 @@ func (o *Entry) Copy(s Entry) {
 
 /** Structs / functions for this namespace. **/
 
+func (o Entry) Specify(v version.Number) (string, interface{}) {
+	_, fn := versioning(v)
+	return o.Name, fn(o)
+}
+
 type normalizer interface {
-	Normalize() Entry
+	Normalize() []Entry
+	Names() []string
 }
 
 type container_v1 struct {
-	Answer entry_v1 `xml:"result>entry"`
+	Answer []entry_v1 `xml:"entry"`
 }
 
-func (o *container_v1) Normalize() Entry {
-	ans := Entry{
-		Name:     o.Answer.Name,
-		Priority: o.Answer.Priority,
+func (o *container_v1) Normalize() []Entry {
+	ans := make([]Entry, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].normalize())
 	}
 
-	if o.Answer.Action.Redist != nil {
+	return ans
+}
+
+func (o *container_v1) Names() []string {
+	ans := make([]string, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].Name)
+	}
+
+	return ans
+}
+
+func (o *entry_v1) normalize() Entry {
+	ans := Entry{
+		Name:     o.Name,
+		Priority: o.Priority,
+	}
+
+	if o.Action.Redist != nil {
 		ans.Action = ActionRedist
-	} else if o.Answer.Action.NoRedist != nil {
+	} else if o.Action.NoRedist != nil {
 		ans.Action = ActionNoRedist
 	}
 
-	if o.Answer.Filter != nil {
-		ans.Types = util.MemToStr(o.Answer.Filter.Types)
-		ans.Interfaces = util.MemToStr(o.Answer.Filter.Interfaces)
-		ans.Destinations = util.MemToStr(o.Answer.Filter.Destinations)
-		ans.NextHops = util.MemToStr(o.Answer.Filter.NextHops)
+	if o.Filter != nil {
+		ans.Types = util.MemToStr(o.Filter.Types)
+		ans.Interfaces = util.MemToStr(o.Filter.Interfaces)
+		ans.Destinations = util.MemToStr(o.Filter.Destinations)
+		ans.NextHops = util.MemToStr(o.Filter.NextHops)
 
-		if o.Answer.Filter.Ospf != nil {
-			ans.OspfPathTypes = util.MemToStr(o.Answer.Filter.Ospf.OspfPathTypes)
-			ans.OspfAreas = util.MemToStr(o.Answer.Filter.Ospf.OspfAreas)
-			ans.OspfTags = util.MemToStr(o.Answer.Filter.Ospf.OspfTags)
+		if o.Filter.Ospf != nil {
+			ans.OspfPathTypes = util.MemToStr(o.Filter.Ospf.OspfPathTypes)
+			ans.OspfAreas = util.MemToStr(o.Filter.Ospf.OspfAreas)
+			ans.OspfTags = util.MemToStr(o.Filter.Ospf.OspfTags)
 		}
 
-		if o.Answer.Filter.Bgp != nil {
-			ans.BgpCommunities = util.MemToStr(o.Answer.Filter.Bgp.BgpCommunities)
-			ans.BgpExtendedCommunities = util.MemToStr(o.Answer.Filter.Bgp.BgpExtendedCommunities)
+		if o.Filter.Bgp != nil {
+			ans.BgpCommunities = util.MemToStr(o.Filter.Bgp.BgpCommunities)
+			ans.BgpExtendedCommunities = util.MemToStr(o.Filter.Bgp.BgpExtendedCommunities)
 		}
 	}
 
