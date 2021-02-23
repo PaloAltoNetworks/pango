@@ -91,7 +91,7 @@ type FwNetw struct {
 	OspfAuthProfile          *ospfauth.Firewall
 	OspfConfig               *ospf.Firewall
 	OspfExport               *ospfexp.Firewall
-	RedistributionProfile    *redist4.FwIpv4
+	RedistributionProfile    *redist4.Firewall
 	StaticRoute              *ipv4.Firewall
 	TunnelInterface          *tunnel.Firewall
 	VirtualRouter            *router.Firewall
@@ -164,10 +164,7 @@ func (c *FwNetw) Initialize(i util.XapiClient) {
 	c.OspfConfig = ospf.FirewallNamespace(i)
 
 	c.OspfExport = ospfexp.FirewallNamespace(i)
-
-	c.RedistributionProfile = &redist4.FwIpv4{}
-	c.RedistributionProfile.Initialize(i)
-
+	c.RedistributionProfile = redist4.FirewallNamespace(i)
 	c.StaticRoute = ipv4.FirewallNamespace(i)
 	c.TunnelInterface = tunnel.FirewallNamespace(i)
 	c.VirtualRouter = router.FirewallNamespace(i)

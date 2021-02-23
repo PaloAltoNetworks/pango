@@ -89,7 +89,7 @@ type PanoNetw struct {
 	OspfAuthProfile          *ospfauth.Panorama
 	OspfConfig               *ospf.Panorama
 	OspfExport               *ospfexp.Panorama
-	RedistributionProfile    *redist4.PanoIpv4
+	RedistributionProfile    *redist4.Panorama
 	StaticRoute              *ipv4.Panorama
 	TunnelInterface          *tunnel.Panorama
 	VirtualRouter            *router.Panorama
@@ -156,10 +156,7 @@ func (c *PanoNetw) Initialize(i util.XapiClient) {
 	c.OspfAuthProfile = ospfauth.PanoramaNamespace(i)
 	c.OspfConfig = ospf.PanoramaNamespace(i)
 	c.OspfExport = ospfexp.PanoramaNamespace(i)
-
-	c.RedistributionProfile = &redist4.PanoIpv4{}
-	c.RedistributionProfile.Initialize(i)
-
+	c.RedistributionProfile = redist4.PanoramaNamespace(i)
 	c.StaticRoute = ipv4.PanoramaNamespace(i)
 	c.TunnelInterface = tunnel.PanoramaNamespace(i)
 	c.VirtualRouter = router.PanoramaNamespace(i)
