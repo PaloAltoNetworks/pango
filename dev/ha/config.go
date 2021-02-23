@@ -333,9 +333,11 @@ func (o *entry_v1) normalize() Config {
 	if o.StateSync != nil {
 		ans.Ha2StateSyncEnable = util.AsBool(o.StateSync.Enable)
 		ans.Ha2StateSyncTransport = o.StateSync.Transport
-		ans.Ha2StateSyncKeepAliveEnable = util.AsBool(o.StateSync.Ha2KeepAlive.Enable)
-		ans.Ha2StateSyncKeepAliveAction = o.StateSync.Ha2KeepAlive.Action
-		ans.Ha2StateSyncKeepAliveThreshold = o.StateSync.Ha2KeepAlive.Threshold
+		if o.StateSync.Ha2KeepAlive != nil {
+			ans.Ha2StateSyncKeepAliveEnable = util.AsBool(o.StateSync.Ha2KeepAlive.Enable)
+			ans.Ha2StateSyncKeepAliveAction = o.StateSync.Ha2KeepAlive.Action
+			ans.Ha2StateSyncKeepAliveThreshold = o.StateSync.Ha2KeepAlive.Threshold
+		}
 	}
 
 	if o.LinkMonitor != nil {
