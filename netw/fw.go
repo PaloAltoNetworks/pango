@@ -154,15 +154,10 @@ func (c *FwNetw) Initialize(i util.XapiClient) {
 	c.MonitorProfile.Initialize(i)
 
 	c.OspfArea = ospfarea.FirewallNamespace(i)
-
 	c.OspfAreaInterface = ospfint.FirewallNamespace(i)
-
 	c.OspfAreaVirtualLink = ospfvlink.FirewallNamespace(i)
-
 	c.OspfAuthProfile = ospfauth.FirewallNamespace(i)
-
 	c.OspfConfig = ospf.FirewallNamespace(i)
-
 	c.OspfExport = ospfexp.FirewallNamespace(i)
 	c.RedistributionProfile = redist4.FirewallNamespace(i)
 	c.StaticRoute = ipv4.FirewallNamespace(i)
