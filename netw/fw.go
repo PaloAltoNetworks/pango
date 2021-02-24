@@ -71,7 +71,7 @@ type FwNetw struct {
 	BgpRedistRule            *bgpredist.Firewall
 	Dhcp                     *dhcp.Firewall
 	EthernetInterface        *eth.Firewall
-	GreTunnel                *gre.FwGre
+	GreTunnel                *gre.Firewall
 	IkeCryptoProfile         *ike.FwIke
 	IkeGateway               *ikegw.FwIkeGw
 	IpsecCryptoProfile       *ipsec.FwIpsec
@@ -122,8 +122,7 @@ func (c *FwNetw) Initialize(i util.XapiClient) {
 	c.Dhcp = dhcp.FirewallNamespace(i)
 	c.EthernetInterface = eth.FirewallNamespace(i)
 
-	c.GreTunnel = &gre.FwGre{}
-	c.GreTunnel.Initialize(i)
+	c.GreTunnel = gre.FirewallNamespace(i)
 
 	c.IkeCryptoProfile = &ike.FwIke{}
 	c.IkeCryptoProfile.Initialize(i)
