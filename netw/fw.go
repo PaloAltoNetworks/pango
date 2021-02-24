@@ -84,7 +84,7 @@ type FwNetw struct {
 	Layer3Subinterface       *layer3.Firewall
 	LoopbackInterface        *loopback.Firewall
 	ManagementProfile        *mngtprof.FwMngtProf
-	MonitorProfile           *monitor.FwMonitor
+	MonitorProfile           *monitor.Firewall
 	OspfArea                 *ospfarea.Firewall
 	OspfAreaInterface        *ospfint.Firewall
 	OspfAreaVirtualLink      *ospfvlink.Firewall
@@ -149,8 +149,7 @@ func (c *FwNetw) Initialize(i util.XapiClient) {
 	c.ManagementProfile = &mngtprof.FwMngtProf{}
 	c.ManagementProfile.Initialize(i)
 
-	c.MonitorProfile = &monitor.FwMonitor{}
-	c.MonitorProfile.Initialize(i)
+	c.MonitorProfile = monitor.FirewallNamespace(i)
 
 	c.OspfArea = ospfarea.FirewallNamespace(i)
 	c.OspfAreaInterface = ospfint.FirewallNamespace(i)

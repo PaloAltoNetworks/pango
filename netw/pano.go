@@ -82,7 +82,7 @@ type PanoNetw struct {
 	Layer3Subinterface       *layer3.Panorama
 	LoopbackInterface        *loopback.Panorama
 	ManagementProfile        *mngtprof.PanoMngtProf
-	MonitorProfile           *monitor.PanoMonitor
+	MonitorProfile           *monitor.Panorama
 	OspfArea                 *ospfarea.Panorama
 	OspfAreaInterface        *ospfint.Panorama
 	OspfAreaVirtualLink      *ospfvlink.Panorama
@@ -146,8 +146,7 @@ func (c *PanoNetw) Initialize(i util.XapiClient) {
 	c.ManagementProfile = &mngtprof.PanoMngtProf{}
 	c.ManagementProfile.Initialize(i)
 
-	c.MonitorProfile = &monitor.PanoMonitor{}
-	c.MonitorProfile.Initialize(i)
+	c.MonitorProfile = monitor.PanoramaNamespace(i)
 
 	c.OspfArea = ospfarea.PanoramaNamespace(i)
 	c.OspfAreaInterface = ospfint.PanoramaNamespace(i)
