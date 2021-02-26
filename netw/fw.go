@@ -72,7 +72,7 @@ type FwNetw struct {
 	Dhcp                     *dhcp.Firewall
 	EthernetInterface        *eth.Firewall
 	GreTunnel                *gre.Firewall
-	IkeCryptoProfile         *ike.FwIke
+	IkeCryptoProfile         *ike.Firewall
 	IkeGateway               *ikegw.FwIkeGw
 	IpsecCryptoProfile       *ipsec.FwIpsec
 	IpsecTunnel              *ipsectunnel.FwIpsecTunnel
@@ -124,8 +124,7 @@ func (c *FwNetw) Initialize(i util.XapiClient) {
 
 	c.GreTunnel = gre.FirewallNamespace(i)
 
-	c.IkeCryptoProfile = &ike.FwIke{}
-	c.IkeCryptoProfile.Initialize(i)
+	c.IkeCryptoProfile = ike.FirewallNamespace(i)
 
 	c.IkeGateway = &ikegw.FwIkeGw{}
 	c.IkeGateway.Initialize(i)
