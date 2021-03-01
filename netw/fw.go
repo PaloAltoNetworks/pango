@@ -76,7 +76,7 @@ type FwNetw struct {
 	IkeGateway               *ikegw.Firewall
 	IpsecCryptoProfile       *ipsec.Firewall
 	IpsecTunnel              *ipsectunnel.Firewall
-	IpsecTunnelProxyId       *tpiv4.FwIpv4
+	IpsecTunnelProxyId       *tpiv4.Firewall
 	Ipv6Address              *ipv6a.Firewall
 	Ipv6NeighborDiscovery    *ipv6n.Firewall
 	Ipv6StaticRoute          *ipv6sr.Firewall
@@ -132,8 +132,7 @@ func (c *FwNetw) Initialize(i util.XapiClient) {
 
 	c.IpsecTunnel = ipsectunnel.FirewallNamespace(i)
 
-	c.IpsecTunnelProxyId = &tpiv4.FwIpv4{}
-	c.IpsecTunnelProxyId.Initialize(i)
+	c.IpsecTunnelProxyId = tpiv4.FirewallNamespace(i)
 
 	c.Ipv6Address = ipv6a.FirewallNamespace(i)
 	c.Ipv6NeighborDiscovery = ipv6n.FirewallNamespace(i)

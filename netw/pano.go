@@ -74,7 +74,7 @@ type PanoNetw struct {
 	IkeGateway               *ikegw.Panorama
 	IpsecCryptoProfile       *ipsec.Panorama
 	IpsecTunnel              *ipsectunnel.Panorama
-	IpsecTunnelProxyId       *tpiv4.PanoIpv4
+	IpsecTunnelProxyId       *tpiv4.Panorama
 	Ipv6Address              *ipv6a.Panorama
 	Ipv6NeighborDiscovery    *ipv6n.Panorama
 	Ipv6StaticRoute          *ipv6sr.Panorama
@@ -129,8 +129,7 @@ func (c *PanoNetw) Initialize(i util.XapiClient) {
 
 	c.IpsecTunnel = ipsectunnel.PanoramaNamespace(i)
 
-	c.IpsecTunnelProxyId = &tpiv4.PanoIpv4{}
-	c.IpsecTunnelProxyId.Initialize(i)
+	c.IpsecTunnelProxyId = tpiv4.PanoramaNamespace(i)
 
 	c.Ipv6Address = ipv6a.PanoramaNamespace(i)
 	c.Ipv6NeighborDiscovery = ipv6n.PanoramaNamespace(i)
