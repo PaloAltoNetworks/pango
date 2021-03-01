@@ -35,7 +35,7 @@ type Panorama struct {
 	Panorama   *pnrm.Pnrm
 	Objects    *objs.PanoObjs
 	Policies   *poli.PanoPoli
-	Network    *netw.PanoNetw
+	Network    *netw.Panorama
 }
 
 // Initialize does some initial setup of the Panorama connection, retrieves
@@ -225,6 +225,5 @@ func (c *Panorama) initNamespaces() {
 	c.Policies = &poli.PanoPoli{}
 	c.Policies.Initialize(c)
 
-	c.Network = &netw.PanoNetw{}
-	c.Network.Initialize(c)
+	c.Network = netw.PanoramaNamespace(c)
 }

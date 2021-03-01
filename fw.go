@@ -32,7 +32,7 @@ type Firewall struct {
 
 	// Namespaces
 	Predefined *predefined.Firewall
-	Network    *netw.FwNetw
+	Network    *netw.Firewall
 	Device     *dev.FwDev
 	Policies   *poli.FwPoli
 	Objects    *objs.FwObjs
@@ -150,8 +150,7 @@ func (c *Firewall) GetDhcpInfo(i string) (map[string]string, error) {
 func (c *Firewall) initNamespaces() {
 	c.Predefined = predefined.FirewallNamespace(c)
 
-	c.Network = &netw.FwNetw{}
-	c.Network.Initialize(c)
+	c.Network = netw.FirewallNamespace(c)
 
 	c.Device = &dev.FwDev{}
 	c.Device.Initialize(c)
