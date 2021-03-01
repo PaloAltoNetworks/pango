@@ -8,16 +8,17 @@ import (
 	"github.com/PaloAltoNetworks/pango/poli/security"
 )
 
-// Poli is the client.Policies namespace.
-type FwPoli struct {
+// Firewall is the client.Policies namespace.
+type Firewall struct {
 	Nat                   *nat.Firewall
 	PolicyBasedForwarding *pbf.Firewall
 	Security              *security.Firewall
 }
 
-// Initialize is invoked on client.Initialize().
-func (c *FwPoli) Initialize(i util.XapiClient) {
-	c.Nat = nat.FirewallNamespace(i)
-	c.PolicyBasedForwarding = pbf.FirewallNamespace(i)
-	c.Security = security.FirewallNamespace(i)
+func FirewallNamespace(x util.XapiClient) *Firewall {
+	return &Firewall{
+		Nat:                   nat.FirewallNamespace(x),
+		PolicyBasedForwarding: pbf.FirewallNamespace(x),
+		Security:              security.FirewallNamespace(x),
+	}
 }

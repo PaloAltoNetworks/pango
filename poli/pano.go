@@ -8,16 +8,17 @@ import (
 	"github.com/PaloAltoNetworks/pango/poli/security"
 )
 
-// Poli is the client.Policies namespace.
-type PanoPoli struct {
+// Panorama is the client.Policies namespace.
+type Panorama struct {
 	Nat                   *nat.Panorama
 	PolicyBasedForwarding *pbf.Panorama
 	Security              *security.Panorama
 }
 
-// Initialize is invoked on client.Initialize().
-func (c *PanoPoli) Initialize(i util.XapiClient) {
-	c.Nat = nat.PanoramaNamespace(i)
-	c.PolicyBasedForwarding = pbf.PanoramaNamespace(i)
-	c.Security = security.PanoramaNamespace(i)
+func PanoramaNamespace(x util.XapiClient) *Panorama {
+	return &Panorama{
+		Nat:                   nat.PanoramaNamespace(x),
+		PolicyBasedForwarding: pbf.PanoramaNamespace(x),
+		Security:              security.PanoramaNamespace(x),
+	}
 }
