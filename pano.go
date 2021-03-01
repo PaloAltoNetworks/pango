@@ -34,7 +34,7 @@ type Panorama struct {
 	UserId     *userid.UserId
 	Panorama   *pnrm.Pnrm
 	Objects    *objs.PanoObjs
-	Policies   *poli.PanoPoli
+	Policies   *poli.Panorama
 	Network    *netw.Panorama
 }
 
@@ -222,8 +222,7 @@ func (c *Panorama) initNamespaces() {
 	c.Objects = &objs.PanoObjs{}
 	c.Objects.Initialize(c)
 
-	c.Policies = &poli.PanoPoli{}
-	c.Policies.Initialize(c)
+	c.Policies = poli.PanoramaNamespace(c)
 
 	c.Network = netw.PanoramaNamespace(c)
 }
