@@ -50,8 +50,8 @@ import (
 	"github.com/PaloAltoNetworks/pango/util"
 )
 
-// Netw is the client.Network namespace.
-type FwNetw struct {
+// Firewall is the client.Network namespace.
+type Firewall struct {
 	AggregateInterface       *aggeth.Firewall
 	Arp                      *arp.Firewall
 	BfdProfile               *bfd.Firewall
@@ -100,62 +100,53 @@ type FwNetw struct {
 	Zone                     *zone.Firewall
 }
 
-// Initialize is invoked on client.Initialize().
-func (c *FwNetw) Initialize(i util.XapiClient) {
-	c.AggregateInterface = aggeth.FirewallNamespace(i)
-	c.Arp = arp.FirewallNamespace(i)
-	c.BfdProfile = bfd.FirewallNamespace(i)
-	c.BgpAggregate = aggregate.FirewallNamespace(i)
-	c.BgpAggAdvertiseFilter = agaf.FirewallNamespace(i)
-	c.BgpAggSuppressFilter = suppress.FirewallNamespace(i)
-	c.BgpAuthProfile = auth.FirewallNamespace(i)
-	c.BgpConAdvAdvertiseFilter = advertise.FirewallNamespace(i)
-	c.BgpConAdvNonExistFilter = nonexist.FirewallNamespace(i)
-	c.BgpConditionalAdv = conadv.FirewallNamespace(i)
-	c.BgpConfig = bgp.FirewallNamespace(i)
-	c.BgpDampeningProfile = dampening.FirewallNamespace(i)
-	c.BgpExport = exp.FirewallNamespace(i)
-	c.BgpImport = imp.FirewallNamespace(i)
-	c.BgpPeer = peer.FirewallNamespace(i)
-	c.BgpPeerGroup = group.FirewallNamespace(i)
-	c.BgpRedistRule = bgpredist.FirewallNamespace(i)
-	c.Dhcp = dhcp.FirewallNamespace(i)
-	c.EthernetInterface = eth.FirewallNamespace(i)
-
-	c.GreTunnel = gre.FirewallNamespace(i)
-
-	c.IkeCryptoProfile = ike.FirewallNamespace(i)
-
-	c.IkeGateway = ikegw.FirewallNamespace(i)
-
-	c.IpsecCryptoProfile = ipsec.FirewallNamespace(i)
-
-	c.IpsecTunnel = ipsectunnel.FirewallNamespace(i)
-
-	c.IpsecTunnelProxyId = tpiv4.FirewallNamespace(i)
-
-	c.Ipv6Address = ipv6a.FirewallNamespace(i)
-	c.Ipv6NeighborDiscovery = ipv6n.FirewallNamespace(i)
-	c.Ipv6StaticRoute = ipv6sr.FirewallNamespace(i)
-	c.Layer2Subinterface = layer2.FirewallNamespace(i)
-	c.Layer3Subinterface = layer3.FirewallNamespace(i)
-	c.LoopbackInterface = loopback.FirewallNamespace(i)
-
-	c.ManagementProfile = mngtprof.FirewallNamespace(i)
-
-	c.MonitorProfile = monitor.FirewallNamespace(i)
-
-	c.OspfArea = ospfarea.FirewallNamespace(i)
-	c.OspfAreaInterface = ospfint.FirewallNamespace(i)
-	c.OspfAreaVirtualLink = ospfvlink.FirewallNamespace(i)
-	c.OspfAuthProfile = ospfauth.FirewallNamespace(i)
-	c.OspfConfig = ospf.FirewallNamespace(i)
-	c.OspfExport = ospfexp.FirewallNamespace(i)
-	c.RedistributionProfile = redist4.FirewallNamespace(i)
-	c.StaticRoute = ipv4.FirewallNamespace(i)
-	c.TunnelInterface = tunnel.FirewallNamespace(i)
-	c.VirtualRouter = router.FirewallNamespace(i)
-	c.Vlan = vlan.FirewallNamespace(i)
-	c.VlanInterface = vli.FirewallNamespace(i)
-	c.Zone = zone.FirewallNamespace(i)
+func FirewallNamespace(x util.XapiClient) *Firewall {
+	return &Firewall{
+		AggregateInterface:       aggeth.FirewallNamespace(x),
+		Arp:                      arp.FirewallNamespace(x),
+		BfdProfile:               bfd.FirewallNamespace(x),
+		BgpAggregate:             aggregate.FirewallNamespace(x),
+		BgpAggAdvertiseFilter:    agaf.FirewallNamespace(x),
+		BgpAggSuppressFilter:     suppress.FirewallNamespace(x),
+		BgpAuthProfile:           auth.FirewallNamespace(x),
+		BgpConAdvAdvertiseFilter: advertise.FirewallNamespace(x),
+		BgpConAdvNonExistFilter:  nonexist.FirewallNamespace(x),
+		BgpConditionalAdv:        conadv.FirewallNamespace(x),
+		BgpConfig:                bgp.FirewallNamespace(x),
+		BgpDampeningProfile:      dampening.FirewallNamespace(x),
+		BgpExport:                exp.FirewallNamespace(x),
+		BgpImport:                imp.FirewallNamespace(x),
+		BgpPeer:                  peer.FirewallNamespace(x),
+		BgpPeerGroup:             group.FirewallNamespace(x),
+		BgpRedistRule:            bgpredist.FirewallNamespace(x),
+		Dhcp:                     dhcp.FirewallNamespace(x),
+		EthernetInterface:        eth.FirewallNamespace(x),
+		GreTunnel:                gre.FirewallNamespace(x),
+		IkeCryptoProfile:         ike.FirewallNamespace(x),
+		IkeGateway:               ikegw.FirewallNamespace(x),
+		IpsecCryptoProfile:       ipsec.FirewallNamespace(x),
+		IpsecTunnel:              ipsectunnel.FirewallNamespace(x),
+		IpsecTunnelProxyId:       tpiv4.FirewallNamespace(x),
+		Ipv6Address:              ipv6a.FirewallNamespace(x),
+		Ipv6NeighborDiscovery:    ipv6n.FirewallNamespace(x),
+		Ipv6StaticRoute:          ipv6sr.FirewallNamespace(x),
+		Layer2Subinterface:       layer2.FirewallNamespace(x),
+		Layer3Subinterface:       layer3.FirewallNamespace(x),
+		LoopbackInterface:        loopback.FirewallNamespace(x),
+		ManagementProfile:        mngtprof.FirewallNamespace(x),
+		MonitorProfile:           monitor.FirewallNamespace(x),
+		OspfArea:                 ospfarea.FirewallNamespace(x),
+		OspfAreaInterface:        ospfint.FirewallNamespace(x),
+		OspfAreaVirtualLink:      ospfvlink.FirewallNamespace(x),
+		OspfAuthProfile:          ospfauth.FirewallNamespace(x),
+		OspfConfig:               ospf.FirewallNamespace(x),
+		OspfExport:               ospfexp.FirewallNamespace(x),
+		RedistributionProfile:    redist4.FirewallNamespace(x),
+		StaticRoute:              ipv4.FirewallNamespace(x),
+		TunnelInterface:          tunnel.FirewallNamespace(x),
+		VirtualRouter:            router.FirewallNamespace(x),
+		Vlan:                     vlan.FirewallNamespace(x),
+		VlanInterface:            vli.FirewallNamespace(x),
+		Zone:                     zone.FirewallNamespace(x),
+	}
 }

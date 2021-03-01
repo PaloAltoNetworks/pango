@@ -49,8 +49,8 @@ import (
 	"github.com/PaloAltoNetworks/pango/util"
 )
 
-// PanoNetw is the client.Network namespace.
-type PanoNetw struct {
+// Panorama is the client.Network namespace.
+type Panorama struct {
 	AggregateInterface       *aggeth.Panorama
 	Arp                      *arp.Panorama
 	BfdProfile               *bfd.Panorama
@@ -98,61 +98,52 @@ type PanoNetw struct {
 	Zone                     *zone.Panorama
 }
 
-// Initialize is invoked on client.Initialize().
-func (c *PanoNetw) Initialize(i util.XapiClient) {
-	c.AggregateInterface = aggeth.PanoramaNamespace(i)
-	c.Arp = arp.PanoramaNamespace(i)
-	c.BfdProfile = bfd.PanoramaNamespace(i)
-	c.BgpAggregate = aggregate.PanoramaNamespace(i)
-	c.BgpAggAdvertiseFilter = agaf.PanoramaNamespace(i)
-	c.BgpAggSuppressFilter = suppress.PanoramaNamespace(i)
-	c.BgpAuthProfile = auth.PanoramaNamespace(i)
-	c.BgpConAdvAdvertiseFilter = advertise.PanoramaNamespace(i)
-	c.BgpConAdvNonExistFilter = nonexist.PanoramaNamespace(i)
-	c.BgpConditionalAdv = conadv.PanoramaNamespace(i)
-	c.BgpConfig = bgp.PanoramaNamespace(i)
-	c.BgpDampeningProfile = dampening.PanoramaNamespace(i)
-	c.BgpExport = exp.PanoramaNamespace(i)
-	c.BgpImport = imp.PanoramaNamespace(i)
-	c.BgpPeer = peer.PanoramaNamespace(i)
-	c.BgpPeerGroup = group.PanoramaNamespace(i)
-	c.BgpRedistRule = bgpredist.PanoramaNamespace(i)
-	c.EthernetInterface = eth.PanoramaNamespace(i)
-
-	c.GreTunnel = gre.PanoramaNamespace(i)
-
-	c.IkeCryptoProfile = ike.PanoramaNamespace(i)
-
-	c.IkeGateway = ikegw.PanoramaNamespace(i)
-
-	c.IpsecCryptoProfile = ipsec.PanoramaNamespace(i)
-
-	c.IpsecTunnel = ipsectunnel.PanoramaNamespace(i)
-
-	c.IpsecTunnelProxyId = tpiv4.PanoramaNamespace(i)
-
-	c.Ipv6Address = ipv6a.PanoramaNamespace(i)
-	c.Ipv6NeighborDiscovery = ipv6n.PanoramaNamespace(i)
-	c.Ipv6StaticRoute = ipv6sr.PanoramaNamespace(i)
-	c.Layer2Subinterface = layer2.PanoramaNamespace(i)
-	c.Layer3Subinterface = layer3.PanoramaNamespace(i)
-	c.LoopbackInterface = loopback.PanoramaNamespace(i)
-
-	c.ManagementProfile = mngtprof.PanoramaNamespace(i)
-
-	c.MonitorProfile = monitor.PanoramaNamespace(i)
-
-	c.OspfArea = ospfarea.PanoramaNamespace(i)
-	c.OspfAreaInterface = ospfint.PanoramaNamespace(i)
-	c.OspfAreaVirtualLink = ospfvlink.PanoramaNamespace(i)
-	c.OspfAuthProfile = ospfauth.PanoramaNamespace(i)
-	c.OspfConfig = ospf.PanoramaNamespace(i)
-	c.OspfExport = ospfexp.PanoramaNamespace(i)
-	c.RedistributionProfile = redist4.PanoramaNamespace(i)
-	c.StaticRoute = ipv4.PanoramaNamespace(i)
-	c.TunnelInterface = tunnel.PanoramaNamespace(i)
-	c.VirtualRouter = router.PanoramaNamespace(i)
-	c.Vlan = vlan.PanoramaNamespace(i)
-	c.VlanInterface = vli.PanoramaNamespace(i)
-	c.Zone = zone.PanoramaNamespace(i)
+func PanoramaNamespace(x util.XapiClient) *Panorama {
+	return &Panorama{
+		AggregateInterface:       aggeth.PanoramaNamespace(x),
+		Arp:                      arp.PanoramaNamespace(x),
+		BfdProfile:               bfd.PanoramaNamespace(x),
+		BgpAggregate:             aggregate.PanoramaNamespace(x),
+		BgpAggAdvertiseFilter:    agaf.PanoramaNamespace(x),
+		BgpAggSuppressFilter:     suppress.PanoramaNamespace(x),
+		BgpAuthProfile:           auth.PanoramaNamespace(x),
+		BgpConAdvAdvertiseFilter: advertise.PanoramaNamespace(x),
+		BgpConAdvNonExistFilter:  nonexist.PanoramaNamespace(x),
+		BgpConditionalAdv:        conadv.PanoramaNamespace(x),
+		BgpConfig:                bgp.PanoramaNamespace(x),
+		BgpDampeningProfile:      dampening.PanoramaNamespace(x),
+		BgpExport:                exp.PanoramaNamespace(x),
+		BgpImport:                imp.PanoramaNamespace(x),
+		BgpPeer:                  peer.PanoramaNamespace(x),
+		BgpPeerGroup:             group.PanoramaNamespace(x),
+		BgpRedistRule:            bgpredist.PanoramaNamespace(x),
+		EthernetInterface:        eth.PanoramaNamespace(x),
+		GreTunnel:                gre.PanoramaNamespace(x),
+		IkeCryptoProfile:         ike.PanoramaNamespace(x),
+		IkeGateway:               ikegw.PanoramaNamespace(x),
+		IpsecCryptoProfile:       ipsec.PanoramaNamespace(x),
+		IpsecTunnel:              ipsectunnel.PanoramaNamespace(x),
+		IpsecTunnelProxyId:       tpiv4.PanoramaNamespace(x),
+		Ipv6Address:              ipv6a.PanoramaNamespace(x),
+		Ipv6NeighborDiscovery:    ipv6n.PanoramaNamespace(x),
+		Ipv6StaticRoute:          ipv6sr.PanoramaNamespace(x),
+		Layer2Subinterface:       layer2.PanoramaNamespace(x),
+		Layer3Subinterface:       layer3.PanoramaNamespace(x),
+		LoopbackInterface:        loopback.PanoramaNamespace(x),
+		ManagementProfile:        mngtprof.PanoramaNamespace(x),
+		MonitorProfile:           monitor.PanoramaNamespace(x),
+		OspfArea:                 ospfarea.PanoramaNamespace(x),
+		OspfAreaInterface:        ospfint.PanoramaNamespace(x),
+		OspfAreaVirtualLink:      ospfvlink.PanoramaNamespace(x),
+		OspfAuthProfile:          ospfauth.PanoramaNamespace(x),
+		OspfConfig:               ospf.PanoramaNamespace(x),
+		OspfExport:               ospfexp.PanoramaNamespace(x),
+		RedistributionProfile:    redist4.PanoramaNamespace(x),
+		StaticRoute:              ipv4.PanoramaNamespace(x),
+		TunnelInterface:          tunnel.PanoramaNamespace(x),
+		VirtualRouter:            router.PanoramaNamespace(x),
+		Vlan:                     vlan.PanoramaNamespace(x),
+		VlanInterface:            vli.PanoramaNamespace(x),
+		Zone:                     zone.PanoramaNamespace(x),
+	}
 }
