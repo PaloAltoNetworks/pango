@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/PaloAltoNetworks/pango/testdata"
+	"github.com/PaloAltoNetworks/pango/version"
 )
 
 func TestFwNormalization(t *testing.T) {
@@ -32,5 +33,102 @@ func TestFwNormalization(t *testing.T) {
 				}
 			}
 		})
+	}
+}
+
+func TestHa2StateSyncEnableIsTrueWithNoStateSyncConfig(t *testing.T) {
+	mc := &testdata.MockClient{
+		Version: version.Number{6, 1, 0, ""},
+	}
+	ns := FirewallNamespace(mc)
+	mc.AddResp(`
+<high-availability>
+    <enabled>yes</enabled>
+    <group>
+        <group-id>2</group-id>
+        <description>My description</description>
+        <peer-ip>127.0.0.1</peer-ip>
+        <configuration-synchronization>
+            <enabled>yes</enabled>
+        </configuration-synchronization>
+    </group>
+</high-availability>
+`)
+	ans, err := ns.Get()
+	if err != nil {
+		t.Errorf("Error in get: %s", err)
+	}
+	if ans.GroupId != 2 {
+		t.Errorf("GroupId is %d, not 2", ans.GroupId)
+	}
+	if !ans.Ha2StateSyncEnable {
+		t.Errorf("Ha2StateSyncEnable is incorrectly set to %t", ans.Ha2StateSyncEnable)
+	}
+}
+
+func TestHa2StateSyncEnableIsTrueWithStateSyncConfig(t *testing.T) {
+	mc := &testdata.MockClient{
+		Version: version.Number{6, 1, 0, ""},
+	}
+	ns := FirewallNamespace(mc)
+	mc.AddResp(`
+<high-availability>
+    <enabled>yes</enabled>
+    <group>
+        <group-id>2</group-id>
+        <description>My description</description>
+        <peer-ip>127.0.0.1</peer-ip>
+        <configuration-synchronization>
+            <enabled>yes</enabled>
+        </configuration-synchronization>
+        <state-synchronization>
+            <transport>mytransport</transport>
+        </state-synchronization>
+    </group>
+</high-availability>
+`)
+	ans, err := ns.Get()
+	if err != nil {
+		t.Errorf("Error in get: %s", err)
+	}
+	if ans.GroupId != 2 {
+		t.Errorf("GroupId is %d, not 2", ans.GroupId)
+	}
+	if !ans.Ha2StateSyncEnable {
+		t.Errorf("Ha2StateSyncEnable is incorrectly set to %t", ans.Ha2StateSyncEnable)
+	}
+}
+
+func TestHa2StateSyncEnableCanBeFalse(t *testing.T) {
+	mc := &testdata.MockClient{
+		Version: version.Number{6, 1, 0, ""},
+	}
+	ns := FirewallNamespace(mc)
+	mc.AddResp(`
+<high-availability>
+    <enabled>yes</enabled>
+    <group>
+        <group-id>2</group-id>
+        <description>My description</description>
+        <peer-ip>127.0.0.1</peer-ip>
+        <configuration-synchronization>
+            <enabled>yes</enabled>
+        </configuration-synchronization>
+        <state-synchronization>
+            <enabled>no</enabled>
+            <transport>mytransport</transport>
+        </state-synchronization>
+    </group>
+</high-availability>
+`)
+	ans, err := ns.Get()
+	if err != nil {
+		t.Errorf("Error in get: %s", err)
+	}
+	if ans.GroupId != 2 {
+		t.Errorf("GroupId is %d, not 2", ans.GroupId)
+	}
+	if ans.Ha2StateSyncEnable {
+		t.Errorf("Ha2StateSyncEnable is incorrectly set to %t", ans.Ha2StateSyncEnable)
 	}
 }

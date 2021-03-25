@@ -430,6 +430,20 @@ type entry_v1 struct {
 	Cluster     *util.RawXml `xml:"cluster"`
 }
 
+func (e *entry_v1) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
+	type localEntry_v1 entry_v1
+	ans := localEntry_v1{
+		StateSync: &stateSync{
+			Enable: util.YesNo(true),
+		},
+	}
+	if err := d.DecodeElement(&ans, &start); err != nil {
+		return err
+	}
+	*e = entry_v1(ans)
+	return nil
+}
+
 type interfaces struct {
 	Ha1       *ha1Interface       `xml:"ha1"`
 	Ha1Backup *ha1BackupInterface `xml:"ha1-backup"`
