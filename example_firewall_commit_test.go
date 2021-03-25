@@ -17,6 +17,7 @@ func Example_firewallCommit() {
 		edan, eso, epao, force                                   bool
 		jobId                                                    uint
 		sleep                                                    int64
+		timeout                                                  int
 	)
 
 	log.SetFlags(log.Ldate | log.Ltime | log.Lmicroseconds)
@@ -32,6 +33,7 @@ func Example_firewallCommit() {
 	flag.BoolVar(&epao, "exclude-policy-and-objects", false, "Exclude policy and objects")
 	flag.BoolVar(&force, "force", false, "Force a commit even if one isn't needed")
 	flag.Int64Var(&sleep, "sleep", 0, "Seconds to sleep between checks for commit completion")
+	flag.IntVar(&timeout, "timeout", 10, "The timeout for all PAN-OS API calls")
 	flag.Parse()
 
 	// Connect to the firewall.
@@ -41,6 +43,7 @@ func Example_firewallCommit() {
 		Password: password,
 		ApiKey:   apiKey,
 		Logging:  pango.LogOp | pango.LogAction,
+		Timeout:  timeout,
 	}}
 	if err = fw.InitializeUsing(configFile, true); err != nil {
 		log.Fatalf("Failed: %s", err)
