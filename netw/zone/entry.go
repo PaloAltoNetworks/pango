@@ -27,12 +27,41 @@ type Entry struct {
 // Name field relates to the XPATH of this object, this field is not copied.
 func (o *Entry) Copy(s Entry) {
 	o.Mode = s.Mode
-	o.Interfaces = s.Interfaces
+	if s.Interfaces == nil {
+		o.Interfaces = nil
+	} else {
+		o.Interfaces = make([]string, len(s.Interfaces))
+		copy(o.Interfaces, s.Interfaces)
+	}
 	o.ZoneProfile = s.ZoneProfile
 	o.LogSetting = s.LogSetting
 	o.EnableUserId = s.EnableUserId
-	o.IncludeAcls = s.IncludeAcls
-	o.ExcludeAcls = s.ExcludeAcls
+	if s.IncludeAcls == nil {
+		o.IncludeAcls = nil
+	} else {
+		o.IncludeAcls = make([]string, len(s.IncludeAcls))
+		copy(o.IncludeAcls, s.IncludeAcls)
+	}
+	if s.ExcludeAcls == nil {
+		o.ExcludeAcls = nil
+	} else {
+		o.ExcludeAcls = make([]string, len(s.ExcludeAcls))
+		copy(o.ExcludeAcls, s.ExcludeAcls)
+	}
+	o.EnablePacketBufferProtection = s.EnablePacketBufferProtection
+	o.EnableDeviceIdentification = s.EnableDeviceIdentification
+	if s.DeviceIncludeAcls == nil {
+		o.DeviceIncludeAcls = nil
+	} else {
+		o.DeviceIncludeAcls = make([]string, len(s.DeviceIncludeAcls))
+		copy(o.DeviceIncludeAcls, s.DeviceIncludeAcls)
+	}
+	if s.DeviceExcludeAcls == nil {
+		o.DeviceExcludeAcls = nil
+	} else {
+		o.DeviceExcludeAcls = make([]string, len(s.DeviceExcludeAcls))
+		copy(o.DeviceExcludeAcls, s.DeviceExcludeAcls)
+	}
 }
 
 /** Structs / functions for this namespace. **/
