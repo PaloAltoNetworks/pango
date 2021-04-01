@@ -16,6 +16,7 @@ func TestPanoNormalization(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.desc, func(t *testing.T) {
 			mc.Reset()
+			mc.Version = tc.version
 			mc.AddResp("")
 			err := ns.Set("my template", "", tc.vsys, tc.conf)
 			if err != nil {
