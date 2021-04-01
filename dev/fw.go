@@ -25,7 +25,7 @@ import (
 type FwDev struct {
 	EmailServer         *emailsrv.FwServer
 	EmailServerProfile  *email.FwEmail
-	GeneralSettings     *general.FwGeneral
+	GeneralSettings     *general.Firewall
 	HaConfig            *ha.Firewall
 	HaLinkMonitorGroup  *halink.Firewall
 	HaPathMonitorGroup  *hapath.Firewall
@@ -49,8 +49,7 @@ func (c *FwDev) Initialize(i util.XapiClient) {
 	c.EmailServerProfile = &email.FwEmail{}
 	c.EmailServerProfile.Initialize(i)
 
-	c.GeneralSettings = &general.FwGeneral{}
-	c.GeneralSettings.Initialize(i)
+	c.GeneralSettings = general.FirewallNamespace(i)
 
 	c.HaConfig = ha.FirewallNamespace(i)
 	c.HaLinkMonitorGroup = halink.FirewallNamespace(i)
