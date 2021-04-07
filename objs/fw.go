@@ -32,7 +32,7 @@ import (
 // FwObjs is the client.Objects namespace.
 type FwObjs struct {
 	Address                             *addr.Firewall
-	AddressGroup                        *addrgrp.FwAddrGrp
+	AddressGroup                        *addrgrp.Firewall
 	AntiSpywareProfile                  *spyware.Firewall
 	AntivirusProfile                    *virus.Firewall
 	Application                         *app.FwApp
@@ -60,10 +60,7 @@ type FwObjs struct {
 // Initialize is invoked on client.Initialize().
 func (c *FwObjs) Initialize(i util.XapiClient) {
 	c.Address = addr.FirewallNamespace(i)
-
-	c.AddressGroup = &addrgrp.FwAddrGrp{}
-	c.AddressGroup.Initialize(i)
-
+	c.AddressGroup = addrgrp.FirewallNamespace(i)
 	c.AntiSpywareProfile = spyware.FirewallNamespace(i)
 	c.AntivirusProfile = virus.FirewallNamespace(i)
 

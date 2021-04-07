@@ -32,7 +32,7 @@ import (
 // PanoObjs is the client.Objects namespace.
 type PanoObjs struct {
 	Address                             *addr.Panorama
-	AddressGroup                        *addrgrp.PanoAddrGrp
+	AddressGroup                        *addrgrp.Panorama
 	AntiSpywareProfile                  *spyware.Panorama
 	AntivirusProfile                    *virus.Panorama
 	Application                         *app.PanoApp
@@ -60,10 +60,7 @@ type PanoObjs struct {
 // Initialize is invoked on client.Initialize().
 func (c *PanoObjs) Initialize(i util.XapiClient) {
 	c.Address = addr.PanoramaNamespace(i)
-
-	c.AddressGroup = &addrgrp.PanoAddrGrp{}
-	c.AddressGroup.Initialize(i)
-
+	c.AddressGroup = addrgrp.PanoramaNamespace(i)
 	c.AntiSpywareProfile = spyware.PanoramaNamespace(i)
 	c.AntivirusProfile = virus.PanoramaNamespace(i)
 
