@@ -38,19 +38,18 @@ func TestFwNormalization(t *testing.T) {
 	}
 
 	mc := &testdata.MockClient{}
-	ns := &FwAddrGrp{}
-	ns.Initialize(mc)
+	ns := FirewallNamespace(mc)
 
 	for _, tc := range testCases {
 		t.Run(tc.desc, func(t *testing.T) {
 			mc.Reset()
 			mc.AddResp("")
-			err := ns.Set(tc.vsys, tc.conf)
+			err := ns.Set("", tc.conf)
 			if err != nil {
 				t.Errorf("Error in set: %s", err)
 			} else {
 				mc.AddResp(mc.Elm)
-				r, err := ns.Get(tc.vsys, tc.conf.Name)
+				r, err := ns.Get("", tc.conf.Name)
 				if err != nil {
 					t.Errorf("Error in get: %s", err)
 				} else if !reflect.DeepEqual(tc.conf, r) {
