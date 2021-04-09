@@ -63,14 +63,15 @@ const (
 // so you can find the raw XML returned from PAN-OS there.
 type Client struct {
 	// Connection properties.
-	Hostname string `json:"hostname"`
-	Username string `json:"username"`
-	Password string `json:"password"`
-	ApiKey   string `json:"api_key"`
-	Protocol string `json:"protocol"`
-	Port     uint   `json:"port"`
-	Timeout  int    `json:"timeout"`
-	Target   string `json:"target"`
+	Hostname string            `json:"hostname"`
+	Username string            `json:"username"`
+	Password string            `json:"password"`
+	ApiKey   string            `json:"api_key"`
+	Protocol string            `json:"protocol"`
+	Port     uint              `json:"port"`
+	Timeout  int               `json:"timeout"`
+	Target   string            `json:"target"`
+	Headers  map[string]string `json:"headers"`
 
 	// Set to true if you want to check environment variables
 	// for auth and connection properties.
@@ -674,6 +675,9 @@ func (c *Client) CommunicateFile(content, filename, fp string, data url.Values, 
 		return nil, err
 	}
 	req.Header.Set("Content-Type", w.FormDataContentType())
+	for k, v := range c.Headers {
+		req.Header.Set(k, v)
+	}
 
 	res, err := c.con.Do(req)
 	if err != nil {
@@ -1096,8 +1100,8 @@ func (c *Client) initCon() error {
 			c.Timeout = 10
 		}
 	}
-	if c.Timeout <= 0 || c.Timeout > 600 {
-		return fmt.Errorf("Timeout for %q is %d, expecting a number between [0, 600]", c.Hostname, c.Timeout)
+	if c.Timeout <= 0 {
+		return fmt.Errorf("Timeout for %q must be a positive int", c.Hostname)
 	}
 	tout = time.Duration(time.Duration(c.Timeout) * time.Second)
 
@@ -1107,6 +1111,21 @@ func (c *Client) initCon() error {
 			c.Target = val
 		} else {
 			c.Target = json_client.Target
+		}
+	}
+
+	// Headers.
+	if len(c.Headers) == 0 {
+		if val := os.Getenv("PANOS_HEADERS"); c.CheckEnvironment && val != "" {
+			if err := json.Unmarshal([]byte(val), &c.Headers); err != nil {
+				return err
+			}
+		}
+		if len(c.Headers) == 0 && len(json_client.Headers) > 0 {
+			c.Headers = make(map[string]string)
+			for k, v := range json_client.Headers {
+				c.Headers[k] = v
+			}
 		}
 	}
 
@@ -1428,7 +1447,16 @@ func (c *Client) xpathImport(tmpl, ts, vsys string) []string {
 
 func (c *Client) post(data url.Values) ([]byte, error) {
 	if len(c.rb) == 0 {
-		r, err := c.con.PostForm(c.api_url, data)
+		req, err := http.NewRequest("POST", c.api_url, strings.NewReader(data.Encode()))
+		if err != nil {
+			return nil, err
+		}
+		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+		for k, v := range c.Headers {
+			req.Header.Set(k, v)
+		}
+
+		r, err := c.con.Do(req)
 		if err != nil {
 			return nil, err
 		}
