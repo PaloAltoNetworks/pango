@@ -50,7 +50,7 @@ type PanoObjs struct {
 	LogForwardingProfileMatchList       *matchlist.PanoMatchList
 	LogForwardingProfileMatchListAction *action.PanoAction
 	Services                            *srvc.Panorama
-	ServiceGroup                        *srvcgrp.PanoSrvcGrp
+	ServiceGroup                        *srvcgrp.Panorama
 	Tags                                *tags.PanoTags
 	UrlFilteringProfile                 *ufsp.Panorama
 	VulnerabilityProfile                *vulnerability.Panorama
@@ -97,9 +97,7 @@ func (c *PanoObjs) Initialize(i util.XapiClient) {
 	c.LogForwardingProfileMatchListAction.Initialize(i)
 
 	c.Services = srvc.PanoramaNamespace(i)
-
-	c.ServiceGroup = &srvcgrp.PanoSrvcGrp{}
-	c.ServiceGroup.Initialize(i)
+	c.ServiceGroup = srvcgrp.PanoramaNamespace(i)
 
 	c.Tags = &tags.PanoTags{}
 	c.Tags.Initialize(i)
