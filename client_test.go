@@ -3,7 +3,9 @@ package pango
 import (
 	"bytes"
 	"encoding/xml"
+	"fmt"
 	"log"
+	"net/url"
 	"os"
 	"strings"
 	"testing"
@@ -227,5 +229,188 @@ func TestAsStringWithElementer(t *testing.T) {
 func TestAsStringWithNil(t *testing.T) {
 	if _, err := asString(nil, true); err == nil {
 		t.Errorf("asString() returned no error on nil input")
+	}
+}
+
+func TestLogSendBasic(t *testing.T) {
+	var buf bytes.Buffer
+	log.SetOutput(&buf)
+	defer rl()
+
+	c := &Client{
+		ApiKey:  "secret",
+		Logging: LogSend,
+	}
+	values := url.Values{
+		"type":     []string{"keygen"},
+		"user":     []string{"foo"},
+		"password": []string{"bar"},
+		"key":      []string{c.ApiKey},
+	}
+	c.logSend(values)
+
+	s := buf.String()
+	if s == "" {
+		t.Fail()
+	} else if strings.Contains(s, c.ApiKey) {
+		t.Errorf("API key was not masked")
+	} else {
+		for _, k := range []string{"type", "keygen", "user", "foo", "password", "bar"} {
+			if !strings.Contains(s, k) {
+				t.Errorf("%s is not present in basic logsend", k)
+			}
+		}
+	}
+}
+
+func TestLogSendOsxCurlWithoutPersonalDataWithoutElement(t *testing.T) {
+	var buf bytes.Buffer
+	log.SetOutput(&buf)
+	defer rl()
+
+	c := &Client{
+		Hostname: "127.0.0.1",
+		ApiKey:   "secret",
+		Protocol: "https",
+		Logging:  LogOsxCurl,
+	}
+	values := url.Values{
+		"type":   []string{"config"},
+		"action": []string{"delete"},
+		"xpath":  []string{"mypathhere"},
+		"key":    []string{"APIKEY"},
+	}
+	expected := fmt.Sprintf("curl -k 'https://HOST/api?%s'\n", values.Encode())
+	values.Set("key", c.ApiKey)
+	c.logSend(values)
+
+	s := buf.String()
+	if s == "" {
+		t.Fail()
+	} else if strings.Contains(s, c.ApiKey) {
+		t.Errorf("API key was included in the output")
+	} else if expected != s {
+		t.Errorf("expected: %q\ngot: %q", expected, s)
+	}
+}
+
+func TestLogSendOsxCurlVerifyCertificate(t *testing.T) {
+	var buf bytes.Buffer
+	log.SetOutput(&buf)
+	defer rl()
+
+	c := &Client{
+		Hostname:          "127.0.0.1",
+		ApiKey:            "secret",
+		Protocol:          "https",
+		VerifyCertificate: true,
+		Logging:           LogOsxCurl,
+	}
+	values := url.Values{
+		"type":   []string{"config"},
+		"action": []string{"delete"},
+		"xpath":  []string{"mypathhere"},
+		"key":    []string{c.ApiKey},
+	}
+	c.logSend(values)
+
+	s := buf.String()
+	if s == "" {
+		t.Fail()
+	} else if strings.Contains(s, c.ApiKey) {
+		t.Errorf("API key was included in the output")
+	} else if strings.Contains(s, " -k ") {
+		t.Errorf("Insecure flag was incorrectly present")
+	}
+}
+
+func TestLogSendOsxCurlWithoutPersonalDataWithElement(t *testing.T) {
+	var buf bytes.Buffer
+	log.SetOutput(&buf)
+	defer rl()
+
+	c := &Client{
+		Hostname: "127.0.0.1",
+		ApiKey:   "secret",
+		Protocol: "https",
+		Logging:  LogOsxCurl,
+		Headers: map[string]string{
+			"X-Header-1": "value",
+		},
+	}
+	element := "<my><xml/></my>"
+	values := url.Values{
+		"type":   []string{"config"},
+		"action": []string{"set"},
+		"xpath":  []string{"mypathhere"},
+		"key":    []string{"APIKEY"},
+	}
+	lines := []string{
+		fmt.Sprintf("curl -k --data-urlencode element@element.xml 'https://HOST/api?%s'\n", values.Encode()),
+		"element.xml:\n",
+		fmt.Sprintf("%s\n", element),
+	}
+	expected := strings.Join(lines, "")
+	values.Set("element", element)
+	values.Set("key", c.ApiKey)
+	c.logSend(values)
+
+	s := buf.String()
+	if s == "" {
+		t.Fail()
+	} else if strings.Contains(s, c.ApiKey) {
+		t.Errorf("API key was included in the output")
+	} else if strings.Contains(s, " --header ") {
+		t.Errorf("Header was incorrectly included")
+	} else if expected != s {
+		t.Errorf("expected: %q\ngot: %q", expected, s)
+	}
+}
+
+func TestLogSendOsxCurlWithPersonalDataHeadersWithValues(t *testing.T) {
+	var buf bytes.Buffer
+	log.SetOutput(&buf)
+	defer rl()
+
+	c := &Client{
+		Hostname: "127.0.0.1",
+		ApiKey:   "secret",
+		Protocol: "https",
+		Logging:  LogOsxCurl | LogCurlWithPersonalData,
+		Headers: map[string]string{
+			"X-Header-1": "wu tang clan",
+			"X-Do-Stuff": "daft punk",
+		},
+	}
+	values := url.Values{
+		"type":   []string{"config"},
+		"action": []string{"delete"},
+		"xpath":  []string{"mypathhere"},
+		"key":    []string{c.ApiKey},
+	}
+	c.logSend(values)
+
+	s := buf.String()
+
+	if s == "" {
+		t.Fail()
+	} else {
+		regular := []string{
+			" -k ",
+			c.Hostname,
+			c.ApiKey,
+		}
+		expected := make([]string, 0, len(regular)+len(c.Headers))
+		for _, k := range regular {
+			expected = append(expected, k)
+		}
+		for k, v := range c.Headers {
+			expected = append(expected, fmt.Sprintf(" --header '%s: %s'", k, v))
+		}
+		for _, v := range expected {
+			if !strings.Contains(s, v) {
+				t.Errorf("Could not find %q in output: %s", v, s)
+			}
+		}
 	}
 }

@@ -28,6 +28,15 @@ import (
 // such, those two flags should be considered for debugging only.  To disable
 // all logging, set the logging level as LogQuiet.
 //
+// As of right now, pango is not officially supported by Palo Alto Networks TAC,
+// however using the API itself via cURL is.  If you run into an issue and you believe
+// it to be a PAN-OS problem, you can enable a cURL output logging style to have pango
+// output an equivalent cURL command to use when interfacing with TAC.
+//
+// If you want to get the cURL command so that you can run it yourself, then set
+// the LogCurlWithPersonalData flag, which will output your real API key, hostname,
+// and any custom headers you have configured the client to send to PAN-OS.
+//
 // The bit-wise flags are as follows:
 //
 //      * LogQuiet: disables all logging
@@ -38,6 +47,9 @@ import (
 //      * LogXpath: the resultant xpath
 //      * LogSend: xml docuemnt being sent
 //      * LogReceive: xml responses being received
+//      * LogOsxCurl: output an OSX cURL command for the data being sent in
+//      * LogCurlWithPersonalData: If doing a curl style logging, then include
+//        personal data in the curl command instead of tokens.
 const (
 	LogQuiet = 1 << (iota + 1)
 	LogAction
@@ -47,6 +59,8 @@ const (
 	LogXpath
 	LogSend
 	LogReceive
+	LogOsxCurl
+	LogCurlWithPersonalData
 )
 
 // Client is a generic connector struct.  It provides wrapper functions for
@@ -595,16 +609,7 @@ func (c *Client) Communicate(data url.Values, ans interface{}) ([]byte, error) {
 		data.Set("key", c.ApiKey)
 	}
 
-	if c.Logging&LogSend == LogSend {
-		old_key := data.Get("key")
-		if old_key != "" {
-			data.Set("key", "########")
-		}
-		log.Printf("Sending data: %#v", data)
-		if old_key != "" {
-			data.Set("key", old_key)
-		}
-	}
+	c.logSend(data)
 
 	body, err := c.post(data)
 	if err != nil {
@@ -641,16 +646,7 @@ func (c *Client) CommunicateFile(content, filename, fp string, data url.Values, 
 		data.Set("key", c.ApiKey)
 	}
 
-	if c.Logging&LogSend == LogSend {
-		old_key := data.Get("key")
-		if old_key != "" {
-			data.Set("key", "########")
-		}
-		log.Printf("Sending data: %#v", data)
-		if old_key != "" {
-			data.Set("key", old_key)
-		}
-	}
+	c.logSend(data)
 
 	buf := bytes.Buffer{}
 	w := multipart.NewWriter(&buf)
@@ -1635,6 +1631,102 @@ func (c *Client) SendMultiConfigure(strict bool) (MultiConfigureResponse, error)
 
 	_, ans, err := c.MultiConfig(*mc, strict, nil)
 	return ans, err
+}
+
+func (c *Client) logSend(data url.Values) {
+	var b strings.Builder
+
+	// Traditional send logging.
+	if c.Logging&LogSend == LogSend {
+		if b.Len() > 0 {
+			fmt.Fprintf(&b, "\n")
+		}
+		realKey := data.Get("key")
+		if realKey != "" {
+			data.Set("key", "########")
+		}
+		fmt.Fprintf(&b, "Sending data: %#v", data)
+		if realKey != "" {
+			data.Set("key", realKey)
+		}
+	}
+
+	// Log the send data as an OSX curl command.
+	if c.Logging&LogOsxCurl == LogOsxCurl {
+		if b.Len() > 0 {
+			fmt.Fprintf(&b, "\n")
+		}
+		special := map[string]string{
+			"key":     "",
+			"element": "",
+		}
+		ev := url.Values{}
+		for k := range data {
+			var isSpecial bool
+			for sk := range special {
+				if sk == k {
+					isSpecial = true
+					special[k] = data.Get(k)
+					break
+				}
+			}
+			if !isSpecial {
+				ev[k] = make([]string, 0, len(data[k]))
+				for i := range data[k] {
+					ev[k] = append(ev[k], data[k][i])
+				}
+			}
+		}
+
+		// Build up the curl command.
+		fmt.Fprintf(&b, "curl")
+		// Verify cert.
+		if !c.VerifyCertificate {
+			fmt.Fprintf(&b, " -k")
+		}
+		// Headers.
+		if len(c.Headers) > 0 && c.Logging&LogCurlWithPersonalData == LogCurlWithPersonalData {
+			for k, v := range c.Headers {
+				if v != "" {
+					fmt.Fprintf(&b, " --header '%s: %s'", k, v)
+				} else {
+					fmt.Fprintf(&b, " --header '%s;'", k)
+				}
+			}
+		}
+		// Add URL encoded values.
+		if special["key"] != "" {
+			if c.Logging&LogCurlWithPersonalData == LogCurlWithPersonalData {
+				ev.Set("key", special["key"])
+			} else {
+				ev.Set("key", "APIKEY")
+			}
+		}
+		// Add in the element, if present.
+		if special["element"] != "" {
+			fmt.Fprintf(&b, " --data-urlencode element@element.xml")
+		}
+		// URL.
+		fmt.Fprintf(&b, " '%s://", c.Protocol)
+		if c.Logging&LogCurlWithPersonalData == LogCurlWithPersonalData {
+			fmt.Fprintf(&b, "%s", c.Hostname)
+		} else {
+			fmt.Fprintf(&b, "HOST")
+		}
+		if c.Port != 0 {
+			fmt.Fprintf(&b, ":%d", c.Port)
+		}
+		fmt.Fprintf(&b, "/api")
+		if len(ev) > 0 {
+			fmt.Fprintf(&b, "?%s", ev.Encode())
+		}
+		fmt.Fprintf(&b, "'")
+		// Data.
+		if special["element"] != "" {
+			fmt.Fprintf(&b, "\nelement.xml:\n%s", special["element"])
+		}
+	}
+	log.Printf("%s", b.String())
 }
 
 /** Non-struct private functions **/
