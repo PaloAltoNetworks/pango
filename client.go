@@ -1726,7 +1726,10 @@ func (c *Client) logSend(data url.Values) {
 			fmt.Fprintf(&b, "\nelement.xml:\n%s", special["element"])
 		}
 	}
-	log.Printf("%s", b.String())
+
+	if b.Len() > 0 {
+		log.Printf("%s", b.String())
+	}
 }
 
 /** Non-struct private functions **/
