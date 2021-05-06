@@ -181,6 +181,14 @@ func VsysXpathPrefix(vsys string) []string {
 	}
 }
 
+// PanoramaXpathPrefix returns the panorama xpath prefix.
+func PanoramaXpathPrefix() []string {
+	return []string{
+		"config",
+		"panorama",
+	}
+}
+
 // StripPanosPackaging removes the response / result and an optional third
 // containing XML tag from the given byte slice.
 func StripPanosPackaging(input []byte, tag string) []byte {
