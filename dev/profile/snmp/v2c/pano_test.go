@@ -19,12 +19,12 @@ func TestPanoNormalization(t *testing.T) {
 			mc.Version = tc.version
 			mc.Reset()
 			mc.AddResp("")
-			err := ns.Set("", "", "", "shared", "snmp profile", tc.conf)
+			err := ns.Set("", "", "", "snmp profile", tc.conf)
 			if err != nil {
 				t.Errorf("Error in set: %s", err)
 			} else {
 				mc.AddResp(mc.Elm)
-				r, err := ns.Get("", "", "", "shared", "snmp profile", tc.conf.Name)
+				r, err := ns.Get("", "", "", "snmp profile", tc.conf.Name)
 				if err != nil {
 					t.Errorf("Error in get: %s", err)
 				}

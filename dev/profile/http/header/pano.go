@@ -18,33 +18,33 @@ func (c *PanoHeader) Initialize(con util.XapiClient) {
 }
 
 // ShowList performs SHOW to retrieve a list of values.
-func (c *PanoHeader) ShowList(tmpl, ts, vsys, dg, profile, logtype string) ([]string, error) {
+func (c *PanoHeader) ShowList(tmpl, ts, vsys, profile, logtype string) ([]string, error) {
 	c.con.LogQuery("(show) list of %s", plural)
-	path := c.xpath(tmpl, ts, vsys, dg, profile, logtype, nil)
+	path := c.xpath(tmpl, ts, vsys, profile, logtype, nil)
 	return c.con.EntryListUsing(c.con.Show, path[:len(path)-1])
 }
 
 // GetList performs GET to retrieve a list of values.
-func (c *PanoHeader) GetList(tmpl, ts, vsys, dg, profile, logtype string) ([]string, error) {
+func (c *PanoHeader) GetList(tmpl, ts, vsys, profile, logtype string) ([]string, error) {
 	c.con.LogQuery("(get) list of %s", plural)
-	path := c.xpath(tmpl, ts, vsys, dg, profile, logtype, nil)
+	path := c.xpath(tmpl, ts, vsys, profile, logtype, nil)
 	return c.con.EntryListUsing(c.con.Get, path[:len(path)-1])
 }
 
 // Get performs GET to retrieve information for the given uid.
-func (c *PanoHeader) Get(tmpl, ts, vsys, dg, profile, logtype, name string) (Entry, error) {
+func (c *PanoHeader) Get(tmpl, ts, vsys, profile, logtype, name string) (Entry, error) {
 	c.con.LogQuery("(get) %s %q", singular, name)
-	return c.details(c.con.Get, tmpl, ts, vsys, dg, profile, logtype, name)
+	return c.details(c.con.Get, tmpl, ts, vsys, profile, logtype, name)
 }
 
 // Show performs SHOW to retrieve information for the given uid.
-func (c *PanoHeader) Show(tmpl, ts, vsys, dg, profile, logtype, name string) (Entry, error) {
+func (c *PanoHeader) Show(tmpl, ts, vsys, profile, logtype, name string) (Entry, error) {
 	c.con.LogQuery("(show) %s %q", singular, name)
-	return c.details(c.con.Show, tmpl, ts, vsys, dg, profile, logtype, name)
+	return c.details(c.con.Show, tmpl, ts, vsys, profile, logtype, name)
 }
 
 // Set performs SET to create / update one or more objects.
-func (c *PanoHeader) Set(tmpl, ts, vsys, dg, profile, logtype string, e ...Entry) error {
+func (c *PanoHeader) Set(tmpl, ts, vsys, profile, logtype string, e ...Entry) error {
 	var err error
 
 	if len(e) == 0 {
@@ -67,7 +67,7 @@ func (c *PanoHeader) Set(tmpl, ts, vsys, dg, profile, logtype string, e ...Entry
 	c.con.LogAction("(set) %s: %v", plural, names)
 
 	// Set xpath.
-	path := c.xpath(tmpl, ts, vsys, dg, profile, logtype, names)
+	path := c.xpath(tmpl, ts, vsys, profile, logtype, names)
 	d.XMLName = xml.Name{Local: path[len(path)-2]}
 	if len(e) == 1 {
 		path = path[:len(path)-1]
@@ -81,7 +81,7 @@ func (c *PanoHeader) Set(tmpl, ts, vsys, dg, profile, logtype string, e ...Entry
 }
 
 // Edit performs EDIT to create / update one object.
-func (c *PanoHeader) Edit(tmpl, ts, vsys, dg, profile, logtype string, e Entry) error {
+func (c *PanoHeader) Edit(tmpl, ts, vsys, profile, logtype string, e Entry) error {
 	var err error
 
 	if profile == "" {
@@ -95,7 +95,7 @@ func (c *PanoHeader) Edit(tmpl, ts, vsys, dg, profile, logtype string, e Entry) 
 	c.con.LogAction("(edit) %s %q", singular, e.Name)
 
 	// Set xpath.
-	path := c.xpath(tmpl, ts, vsys, dg, profile, logtype, []string{e.Name})
+	path := c.xpath(tmpl, ts, vsys, profile, logtype, []string{e.Name})
 
 	// Edit the object.
 	_, err = c.con.Edit(path, fn(e), nil, nil)
@@ -105,7 +105,7 @@ func (c *PanoHeader) Edit(tmpl, ts, vsys, dg, profile, logtype string, e Entry) 
 // Delete removes the given objects.
 //
 // Objects can be a string or an Entry object.
-func (c *PanoHeader) Delete(tmpl, ts, vsys, dg, profile, logtype string, e ...interface{}) error {
+func (c *PanoHeader) Delete(tmpl, ts, vsys, profile, logtype string, e ...interface{}) error {
 	var err error
 
 	if len(e) == 0 {
@@ -130,7 +130,7 @@ func (c *PanoHeader) Delete(tmpl, ts, vsys, dg, profile, logtype string, e ...in
 	c.con.LogAction("(delete) %s: %v", plural, names)
 
 	// Remove the objects.
-	path := c.xpath(tmpl, ts, vsys, dg, profile, logtype, names)
+	path := c.xpath(tmpl, ts, vsys, profile, logtype, names)
 	_, err = c.con.Delete(path, nil, nil)
 	return err
 }
@@ -141,8 +141,8 @@ func (c *PanoHeader) versioning() (normalizer, func(Entry) interface{}) {
 	return &container_v1{}, specify_v1
 }
 
-func (c *PanoHeader) details(fn util.Retriever, tmpl, ts, vsys, dg, profile, logtype, name string) (Entry, error) {
-	path := c.xpath(tmpl, ts, vsys, dg, profile, logtype, []string{name})
+func (c *PanoHeader) details(fn util.Retriever, tmpl, ts, vsys, profile, logtype, name string) (Entry, error) {
+	path := c.xpath(tmpl, ts, vsys, profile, logtype, []string{name})
 	obj, _ := c.versioning()
 	if _, err := fn(path, nil, obj); err != nil {
 		return Entry{}, err
@@ -152,7 +152,7 @@ func (c *PanoHeader) details(fn util.Retriever, tmpl, ts, vsys, dg, profile, log
 	return ans, nil
 }
 
-func (c *PanoHeader) xpath(tmpl, ts, vsys, dg, profile, logtype string, vals []string) []string {
+func (c *PanoHeader) xpath(tmpl, ts, vsys, profile, logtype string, vals []string) []string {
 	var ans []string
 
 	if tmpl != "" || ts != "" {
@@ -160,16 +160,12 @@ func (c *PanoHeader) xpath(tmpl, ts, vsys, dg, profile, logtype string, vals []s
 			vsys = "shared"
 		}
 
-		ans = make([]string, 0, 15)
+		ans = make([]string, 0, 17)
 		ans = append(ans, util.TemplateXpathPrefix(tmpl, ts)...)
 		ans = append(ans, util.VsysXpathPrefix(vsys)...)
 	} else {
-		if dg == "" {
-			dg = "shared"
-		}
-
-		ans = make([]string, 0, 10)
-		ans = append(ans, util.DeviceGroupXpathPrefix(dg)...)
+		ans = make([]string, 0, 7)
+		ans = append(ans, util.PanoramaXpathPrefix()...)
 	}
 
 	ans = append(ans,

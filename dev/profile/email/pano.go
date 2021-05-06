@@ -19,33 +19,33 @@ func (c *PanoEmail) Initialize(con util.XapiClient) {
 }
 
 // ShowList performs SHOW to retrieve a list of values.
-func (c *PanoEmail) ShowList(tmpl, ts, vsys, dg string) ([]string, error) {
+func (c *PanoEmail) ShowList(tmpl, ts, vsys string) ([]string, error) {
 	c.con.LogQuery("(show) list of %s", plural)
-	path := c.xpath(tmpl, ts, vsys, dg, nil)
+	path := c.xpath(tmpl, ts, vsys, nil)
 	return c.con.EntryListUsing(c.con.Show, path[:len(path)-1])
 }
 
 // GetList performs GET to retrieve a list of values.
-func (c *PanoEmail) GetList(tmpl, ts, vsys, dg string) ([]string, error) {
+func (c *PanoEmail) GetList(tmpl, ts, vsys string) ([]string, error) {
 	c.con.LogQuery("(get) list of %s", plural)
-	path := c.xpath(tmpl, ts, vsys, dg, nil)
+	path := c.xpath(tmpl, ts, vsys, nil)
 	return c.con.EntryListUsing(c.con.Get, path[:len(path)-1])
 }
 
 // Get performs GET to retrieve information for the given uid.
-func (c *PanoEmail) Get(tmpl, ts, vsys, dg, name string) (Entry, error) {
+func (c *PanoEmail) Get(tmpl, ts, vsys, name string) (Entry, error) {
 	c.con.LogQuery("(get) %s %q", singular, name)
-	return c.details(c.con.Get, tmpl, ts, vsys, dg, name)
+	return c.details(c.con.Get, tmpl, ts, vsys, name)
 }
 
 // Show performs SHOW to retrieve information for the given uid.
-func (c *PanoEmail) Show(tmpl, ts, vsys, dg, name string) (Entry, error) {
+func (c *PanoEmail) Show(tmpl, ts, vsys, name string) (Entry, error) {
 	c.con.LogQuery("(show) %s %q", singular, name)
-	return c.details(c.con.Show, tmpl, ts, vsys, dg, name)
+	return c.details(c.con.Show, tmpl, ts, vsys, name)
 }
 
 // Set performs SET to create / update one or more objects.
-func (c *PanoEmail) Set(tmpl, ts, vsys, dg string, e ...Entry) error {
+func (c *PanoEmail) Set(tmpl, ts, vsys string, e ...Entry) error {
 	var err error
 
 	if len(e) == 0 {
@@ -64,7 +64,7 @@ func (c *PanoEmail) Set(tmpl, ts, vsys, dg string, e ...Entry) error {
 	c.con.LogAction("(set) %s: %v", plural, names)
 
 	// Set xpath.
-	path := c.xpath(tmpl, ts, vsys, dg, names)
+	path := c.xpath(tmpl, ts, vsys, names)
 	d.XMLName = xml.Name{Local: path[len(path)-2]}
 	if len(e) == 1 {
 		path = path[:len(path)-1]
@@ -78,7 +78,7 @@ func (c *PanoEmail) Set(tmpl, ts, vsys, dg string, e ...Entry) error {
 }
 
 // Edit performs EDIT to create / update one object.
-func (c *PanoEmail) Edit(tmpl, ts, vsys, dg string, e Entry) error {
+func (c *PanoEmail) Edit(tmpl, ts, vsys string, e Entry) error {
 	var err error
 
 	_, fn := c.versioning()
@@ -86,7 +86,7 @@ func (c *PanoEmail) Edit(tmpl, ts, vsys, dg string, e Entry) error {
 	c.con.LogAction("(edit) %s %q", singular, e.Name)
 
 	// Set xpath.
-	path := c.xpath(tmpl, ts, vsys, dg, []string{e.Name})
+	path := c.xpath(tmpl, ts, vsys, []string{e.Name})
 
 	// Edit the object.
 	_, err = c.con.Edit(path, fn(e), nil, nil)
@@ -95,10 +95,10 @@ func (c *PanoEmail) Edit(tmpl, ts, vsys, dg string, e Entry) error {
 
 // SetWithoutSubconfig performs a DELETE to remove any subconfig
 // before performing a SET to create an object.
-func (c *PanoEmail) SetWithoutSubconfig(tmpl, ts, vsys, dg string, e Entry) error {
+func (c *PanoEmail) SetWithoutSubconfig(tmpl, ts, vsys string, e Entry) error {
 	c.con.LogAction("(delete) %s subconfig for %s", singular, e.Name)
 
-	path := c.xpath(tmpl, ts, vsys, dg, []string{e.Name})
+	path := c.xpath(tmpl, ts, vsys, []string{e.Name})
 
 	path = append(path, "server")
 	_, _ = c.con.Delete(path, nil, nil)
@@ -106,13 +106,13 @@ func (c *PanoEmail) SetWithoutSubconfig(tmpl, ts, vsys, dg string, e Entry) erro
 	path[len(path)-1] = "format"
 	_, _ = c.con.Delete(path, nil, nil)
 
-	return c.Set(tmpl, ts, vsys, dg, e)
+	return c.Set(tmpl, ts, vsys, e)
 }
 
 // Delete removes the given objects.
 //
 // Objects can be a string or an Entry object.
-func (c *PanoEmail) Delete(tmpl, ts, vsys, dg string, e ...interface{}) error {
+func (c *PanoEmail) Delete(tmpl, ts, vsys string, e ...interface{}) error {
 	var err error
 
 	if len(e) == 0 {
@@ -133,7 +133,7 @@ func (c *PanoEmail) Delete(tmpl, ts, vsys, dg string, e ...interface{}) error {
 	c.con.LogAction("(delete) %s: %v", plural, names)
 
 	// Remove the objects.
-	path := c.xpath(tmpl, ts, vsys, dg, names)
+	path := c.xpath(tmpl, ts, vsys, names)
 	_, err = c.con.Delete(path, nil, nil)
 	return err
 }
@@ -154,8 +154,8 @@ func (c *PanoEmail) versioning() (normalizer, func(Entry) interface{}) {
 	}
 }
 
-func (c *PanoEmail) details(fn util.Retriever, tmpl, ts, vsys, dg, name string) (Entry, error) {
-	path := c.xpath(tmpl, ts, vsys, dg, []string{name})
+func (c *PanoEmail) details(fn util.Retriever, tmpl, ts, vsys, name string) (Entry, error) {
+	path := c.xpath(tmpl, ts, vsys, []string{name})
 	obj, _ := c.versioning()
 	if _, err := fn(path, nil, obj); err != nil {
 		return Entry{}, err
@@ -165,7 +165,7 @@ func (c *PanoEmail) details(fn util.Retriever, tmpl, ts, vsys, dg, name string) 
 	return ans, nil
 }
 
-func (c *PanoEmail) xpath(tmpl, ts, vsys, dg string, vals []string) []string {
+func (c *PanoEmail) xpath(tmpl, ts, vsys string, vals []string) []string {
 	var ans []string
 
 	if tmpl != "" || ts != "" {
@@ -177,12 +177,8 @@ func (c *PanoEmail) xpath(tmpl, ts, vsys, dg string, vals []string) []string {
 		ans = append(ans, util.TemplateXpathPrefix(tmpl, ts)...)
 		ans = append(ans, util.VsysXpathPrefix(vsys)...)
 	} else {
-		if dg == "" {
-			dg = "shared"
-		}
-
-		ans = make([]string, 0, 8)
-		ans = append(ans, util.DeviceGroupXpathPrefix(dg)...)
+		ans = make([]string, 0, 5)
+		ans = append(ans, "config", "panorama")
 	}
 
 	ans = append(ans,
