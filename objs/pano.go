@@ -44,7 +44,7 @@ type PanoObjs struct {
 	DataPattern                         *datapat.Panorama
 	DosProtectionProfile                *dpsp.Panorama
 	DynamicUserGroup                    *dug.Panorama
-	Edl                                 *edl.PanoEdl
+	Edl                                 *edl.Panorama
 	FileBlockingProfile                 *fprof.Panorama
 	LogForwardingProfile                *logfwd.Panorama
 	LogForwardingProfileMatchList       *matchlist.PanoMatchList
@@ -83,10 +83,7 @@ func (c *PanoObjs) Initialize(i util.XapiClient) {
 	c.DataPattern = datapat.PanoramaNamespace(i)
 	c.DosProtectionProfile = dpsp.PanoramaNamespace(i)
 	c.DynamicUserGroup = dug.PanoramaNamespace(i)
-
-	c.Edl = &edl.PanoEdl{}
-	c.Edl.Initialize(i)
-
+	c.Edl = edl.PanoramaNamespace(i)
 	c.FileBlockingProfile = fprof.PanoramaNamespace(i)
 	c.LogForwardingProfile = logfwd.PanoramaNamespace(i)
 

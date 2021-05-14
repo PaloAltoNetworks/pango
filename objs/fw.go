@@ -44,7 +44,7 @@ type FwObjs struct {
 	DataFilteringProfile                *dfsp.Firewall
 	DosProtectionProfile                *dpsp.Firewall
 	DynamicUserGroup                    *dug.Firewall
-	Edl                                 *edl.FwEdl
+	Edl                                 *edl.Firewall
 	FileBlockingProfile                 *fprof.Firewall
 	LogForwardingProfile                *logfwd.Firewall
 	LogForwardingProfileMatchList       *matchlist.FwMatchList
@@ -83,10 +83,7 @@ func (c *FwObjs) Initialize(i util.XapiClient) {
 	c.DataPattern = datapat.FirewallNamespace(i)
 	c.DosProtectionProfile = dpsp.FirewallNamespace(i)
 	c.DynamicUserGroup = dug.FirewallNamespace(i)
-
-	c.Edl = &edl.FwEdl{}
-	c.Edl.Initialize(i)
-
+	c.Edl = edl.FirewallNamespace(i)
 	c.FileBlockingProfile = fprof.FirewallNamespace(i)
 	c.LogForwardingProfile = logfwd.FirewallNamespace(i)
 
