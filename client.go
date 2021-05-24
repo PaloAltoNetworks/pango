@@ -40,10 +40,11 @@ import (
 // The bit-wise flags are as follows:
 //
 //      * LogQuiet: disables all logging
-//      * LogAction: action being performed (Set / Delete functions)
+//      * LogAction: action being performed (Set / Edit / Delete functions)
 //      * LogQuery: queries being run (Get / Show functions)
 //      * LogOp: operation commands (Op functions)
 //      * LogUid: User-Id commands (Uid functions)
+//      * LogLog: log retrieval commands
 //      * LogXpath: the resultant xpath
 //      * LogSend: xml docuemnt being sent
 //      * LogReceive: xml responses being received
@@ -56,6 +57,7 @@ const (
 	LogQuery
 	LogOp
 	LogUid
+	LogLog
 	LogXpath
 	LogSend
 	LogReceive
@@ -591,6 +593,13 @@ func (c *Client) LogUid(msg string, i ...interface{}) {
 	}
 }
 
+// LogLog writes a log message for Log operations if LogLog is set.
+func (c *Client) LogLog(msg string, i ...interface{}) {
+	if c.Logging&LogLog == LogLog {
+		log.Printf(msg, i...)
+	}
+}
+
 // Communicate sends the given data to PAN-OS.
 //
 // The ans param should be a pointer to a struct to unmarshal the response
@@ -726,6 +735,114 @@ func (c *Client) Op(req interface{}, vsys string, extras, ans interface{}) ([]by
 	}
 
 	return c.Communicate(data, ans)
+}
+
+// Log submits a "log" command.
+//
+// Use `WaitForLogs` to get the results of the log command.
+//
+// The extras param should be either nil or a url.Values{} to be mixed in with
+// the constructed request.
+//
+// Any response received from the server is returned, along with any errors
+// encountered.
+func (c *Client) Log(logType, action, query, dir string, nlogs, skip int, extras, ans interface{}) ([]byte, error) {
+	data := url.Values{}
+	data.Set("type", "log")
+
+	if logType != "" {
+		data.Set("log-type", logType)
+	}
+
+	if action != "" {
+		data.Set("action", action)
+	}
+
+	if query != "" {
+		data.Set("query", query)
+	}
+
+	if dir != "" {
+		data.Set("dir", dir)
+	}
+
+	if nlogs != 0 {
+		data.Set("nlogs", strconv.Itoa(nlogs))
+	}
+
+	if skip != 0 {
+		data.Set("skip", strconv.Itoa(skip))
+	}
+
+	if err := mergeUrlValues(&data, extras); err != nil {
+		return nil, err
+	}
+
+	return c.Communicate(data, &ans)
+}
+
+// WaitForLogs performs repeated log retrieval operations until the log job is complete
+// or the timeout is reached.
+//
+// Specify a timeout of zero to wait indefinitely.
+//
+// The ans param should be a pointer to a struct to unmarshal the response
+// into or nil.
+//
+// Any response received from the server is returned, along with any errors
+// encountered.
+func (c *Client) WaitForLogs(id uint, sleep, timeout time.Duration, ans interface{}) ([]byte, error) {
+	var err error
+	var data []byte
+	var prev string
+	start := time.Now()
+	end := start.Add(timeout)
+	extras := url.Values{}
+	extras.Set("job-id", fmt.Sprintf("%d", id))
+
+	c.LogLog("(log) waiting for logs: %d", id)
+
+	var resp util.BasicJob
+	for {
+		resp = util.BasicJob{}
+
+		data, err = c.Log("", "get", "", "", 0, 0, extras, &resp)
+		if err != nil {
+			return data, err
+		}
+
+		if resp.Status != prev {
+			prev = resp.Status
+			c.LogLog("(log) job %d status: %s", id, prev)
+		}
+
+		if resp.Status == "FIN" {
+			break
+		}
+
+		if timeout > 0 && end.After(time.Now()) {
+			return data, fmt.Errorf("timeout")
+		}
+
+		if sleep > 0 {
+			time.Sleep(sleep)
+		}
+	}
+
+	if resp.Result == "FAIL" {
+		if len(resp.Details.Lines) > 0 {
+			return data, fmt.Errorf(resp.Details.String())
+		} else {
+			return data, fmt.Errorf("Job %d has failed to complete successfully", id)
+		}
+	}
+
+	if ans == nil {
+		return data, nil
+	}
+
+	err = xml.Unmarshal(data, ans)
+	return data, err
 }
 
 // Show runs a "show" type command.
