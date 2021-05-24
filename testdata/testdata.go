@@ -42,6 +42,8 @@ func (c *MockClient) LogAction(f string, a ...interface{}) {}
 func (c *MockClient) LogQuery(f string, a ...interface{})  {}
 func (c *MockClient) LogOp(f string, a ...interface{})     {}
 func (c *MockClient) LogUid(f string, a ...interface{})    {}
+func (c *MockClient) LogLog(f string, a ...interface{})    {}
+func (c *MockClient) Clock() (time.Time, error)            { return time.Now(), nil }
 func (c *MockClient) Commit(d interface{}, e string, f interface{}) (uint, []byte, error) {
 	return 0, nil, nil
 }
@@ -119,6 +121,13 @@ func (c *MockClient) Uid(cmd interface{}, vsys string, extras, resp interface{})
 	return c.finalize(resp)
 }
 
+func (c *MockClient) Log(logType, action, query, dir string, nlogs, skip int, extras, ans interface{}) ([]byte, error) {
+	c.Function = "log"
+	c.Extras = extras
+
+	return c.finalize(ans)
+}
+
 func (c *MockClient) EntryListUsing(fn util.Retriever, path []string) ([]string, error) {
 	c.Path = util.AsXpath(path)
 	return nil, nil
@@ -180,6 +189,10 @@ func (c *MockClient) VsysUnimport(ns, tmpl, ts string, names []string) error {
 func (c *MockClient) WaitForJob(a uint, d time.Duration, resp interface{}) error {
 	_, err := c.finalize(resp)
 	return err
+}
+
+func (c *MockClient) WaitForLogs(a uint, t1, t2 time.Duration, ans interface{}) ([]byte, error) {
+	return c.finalize(ans)
 }
 
 func (c *MockClient) AddResp(val string) {
