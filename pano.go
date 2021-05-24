@@ -15,6 +15,8 @@ import (
 	"github.com/PaloAltoNetworks/pango/poli"
 	"github.com/PaloAltoNetworks/pango/predefined"
 	"github.com/PaloAltoNetworks/pango/userid"
+
+	"github.com/PaloAltoNetworks/pango/util"
 )
 
 // Panorama is a panorama specific client, providing version safe functions
@@ -195,9 +197,7 @@ type VmAuthKey struct {
 // information.  Then in the string parsing for Expires, the location
 // information of the system clock is applied.
 func (o *VmAuthKey) ParseExpires(clock time.Time) {
-	format := "2006/01/02 15:04:05"
-
-	if t, err := time.ParseInLocation(format, o.Expiry, clock.Location()); err == nil {
+	if t, err := time.ParseInLocation(util.PanosTimeWithoutTimezoneFormat, o.Expiry, clock.Location()); err == nil {
 		o.Expires = t
 	}
 }
