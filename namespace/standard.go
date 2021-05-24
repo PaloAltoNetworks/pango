@@ -263,17 +263,23 @@ func (n *Standard) AuditCommentHistory(pather Pather, rule, direction string, nl
 	path, err := pather([]string{rule})
 	if err != nil {
 		return nil, err
-	} else if len(path) != 9 {
-		return nil, fmt.Errorf("Invalid path length %d != 9", len(path))
+	} else if len(path) != 6 && len(path) != 9 {
+		return nil, fmt.Errorf("Invalid path length %d != (6, 9)", len(path))
 	}
 
-	tokens := strings.Split(path[4], "'")
-	if len(tokens) != 3 {
-		return nil, fmt.Errorf("vsys/dg retrieval not possible: %s", path[4])
+	var vsysDg string
+	switch len(path) {
+	case 6:
+		vsysDg = "shared"
+	case 9:
+		tokens := strings.Split(path[4], "'")
+		if len(tokens) != 3 {
+			return nil, fmt.Errorf("vsys/dg retrieval not possible: %s", path[4])
+		}
+		vsysDg = tokens[1]
 	}
-	vsysDg := tokens[1]
-	base := path[5]
-	rType := path[6]
+	base := path[len(path)-4]
+	rType := path[len(path)-3]
 	query := strings.Join([]string{
 		"(subtype eq audit-comment)",
 		fmt.Sprintf("(path contains '\\'%s\\'')", rule),   // Name.
