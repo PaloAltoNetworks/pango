@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/PaloAltoNetworks/pango/audit"
 	"github.com/PaloAltoNetworks/pango/namespace"
 	"github.com/PaloAltoNetworks/pango/util"
 	"github.com/PaloAltoNetworks/pango/version"
@@ -128,6 +129,21 @@ func (c *Firewall) HitCount(vsys string, rules []string) ([]util.HitCount, error
 	}
 
 	return resp.Results, nil
+}
+
+// SetAuditComment sets the audit comment for the given rule.
+func (c *Firewall) SetAuditComment(vsys, rule, comment string) error {
+    return c.ns.SetAuditComment(c.pather(vsys), rule, comment)
+}
+
+// CurrentAuditComment returns the current audit comment.
+func (c *Firewall) CurrentAuditComment(vsys, rule string) (string, error) {
+    return c.ns.CurrentAuditComment(c.pather(vsys), rule)
+}
+
+// AuditCommentHistory returns a chunk of historical audit comment logs.
+func (c *Firewall) AuditCommentHistory(vsys, rule, direction string, nlogs, skip int) ([]audit.Comment, error) {
+    return c.ns.AuditCommentHistory(c.pather(vsys), rule, direction, nlogs, skip)
 }
 
 func (c *Firewall) pather(vsys string) namespace.Pather {

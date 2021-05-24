@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/PaloAltoNetworks/pango/audit"
 	"github.com/PaloAltoNetworks/pango/namespace"
 	"github.com/PaloAltoNetworks/pango/util"
 )
@@ -195,6 +196,21 @@ func (c *Panorama) MoveGroup(dg, base string, movement int, rule string, e ...En
 	return c.ns.MoveGroup(c.pather(dg, base), lister, movement, rule, names)
 }
 
+// SetAuditComment sets the audit comment for the given rule.
+func (c *Panorama) SetAuditComment(dg, base, rule, comment string) error {
+	return c.ns.SetAuditComment(c.pather(dg, base), rule, comment)
+}
+
+// CurrentAuditComment returns the current audit comment.
+func (c *Panorama) CurrentAuditComment(dg, base, rule string) (string, error) {
+	return c.ns.CurrentAuditComment(c.pather(dg, base), rule)
+}
+
+// AuditCommentHistory returns a chunk of historical audit comment logs.
+func (c *Panorama) AuditCommentHistory(dg, base, rule, direction string, nlogs, skip int) ([]audit.Comment, error) {
+	return c.ns.AuditCommentHistory(c.pather(dg, base), rule, direction, nlogs, skip)
+}
+
 func (c *Panorama) pather(dg, base string) namespace.Pather {
 	return func(v []string) ([]string, error) {
 		return c.xpath(dg, base, v)
@@ -202,11 +218,6 @@ func (c *Panorama) pather(dg, base string) namespace.Pather {
 }
 
 func (c *Panorama) xpath(dg, base string, vals []string) ([]string, error) {
-	/*
-	   if base == "" {
-	       base = util.PreRulebase
-	   }
-	*/
 	if err := util.ValidateRulebase(base); err != nil {
 		return nil, err
 	}
