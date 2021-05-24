@@ -19,6 +19,7 @@ type BasicJob struct {
 	Progress uint            `xml:"result>job>progress"`
 	Details  BasicJobDetails `xml:"result>job>details"`
 	Devices  []devJob        `xml:"result>job>devices>entry"`
+	Status   string          `xml:"result>job>status"` // For log retrieval jobs.
 }
 
 type BasicJobDetails struct {
