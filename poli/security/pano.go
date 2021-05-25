@@ -218,7 +218,7 @@ func (c *Panorama) pather(dg, base string) namespace.Pather {
 }
 
 func (c *Panorama) xpath(dg, base string, vals []string) ([]string, error) {
-	if err := util.ValidateRulebase(base); err != nil {
+	if err := util.ValidateRulebase(dg, base); err != nil {
 		return nil, err
 	}
 
