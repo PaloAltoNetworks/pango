@@ -64,11 +64,13 @@ func toNames(e []interface{}) ([]string, error) {
 // FirewallNamespace returns an initialized namespace.
 func FirewallNamespace(client util.XapiClient) *Firewall {
 	return &Firewall{
-		ns: &namespace.Standard{
-			Common: namespace.Common{
-				Singular: singular,
-				Plural:   plural,
-				Client:   client,
+		ns: &namespace.Policy{
+			Standard: namespace.Standard{
+				Common: namespace.Common{
+					Singular: singular,
+					Plural:   plural,
+					Client:   client,
+				},
 			},
 		},
 	}
@@ -77,11 +79,13 @@ func FirewallNamespace(client util.XapiClient) *Firewall {
 // PanoramaNamespace returns an initialized namespace.
 func PanoramaNamespace(client util.XapiClient) *Panorama {
 	return &Panorama{
-		ns: &namespace.Standard{
-			Common: namespace.Common{
-				Singular: singular,
-				Plural:   plural,
-				Client:   client,
+		ns: &namespace.Policy{
+			Standard: namespace.Standard{
+				Common: namespace.Common{
+					Singular: singular,
+					Plural:   plural,
+					Client:   client,
+				},
 			},
 		},
 	}

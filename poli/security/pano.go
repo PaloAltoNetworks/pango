@@ -16,7 +16,7 @@ import (
 // The "base" param in these functions should be one of the rulebase
 // constants in the "util" package.
 type Panorama struct {
-	ns *namespace.Standard
+	ns *namespace.Policy
 }
 
 // GetList performs GET to retrieve a list of all objects.
