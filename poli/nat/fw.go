@@ -7,12 +7,11 @@ import (
 	"github.com/PaloAltoNetworks/pango/audit"
 	"github.com/PaloAltoNetworks/pango/namespace"
 	"github.com/PaloAltoNetworks/pango/util"
-	"github.com/PaloAltoNetworks/pango/version"
 )
 
 // Firewall is the client.Policies.Nat namespace.
 type Firewall struct {
-	ns *namespace.Standard
+	ns *namespace.Policy
 }
 
 // GetList performs GET to retrieve a list of all objects.
@@ -118,32 +117,22 @@ func (c *Firewall) MoveGroup(vsys string, movement int, rule string, e ...Entry)
 //
 // If the rules param is nil, then the hit count for all rules is returned.
 func (c *Firewall) HitCount(vsys string, rules []string) ([]util.HitCount, error) {
-	if !c.ns.Client.Versioning().Gte(version.Number{8, 1, 0, ""}) {
-		return nil, fmt.Errorf("rule hit count requires PAN-OS 8.1+")
-	}
-
-	req := util.NewHitCountRequest("nat", vsys, rules)
-	resp := util.HitCountResponse{}
-	if _, err := c.ns.Client.Op(req, "", nil, &resp); err != nil {
-		return nil, err
-	}
-
-	return resp.Results, nil
+	return c.ns.HitCount("nat", vsys, rules)
 }
 
 // SetAuditComment sets the audit comment for the given rule.
 func (c *Firewall) SetAuditComment(vsys, rule, comment string) error {
-    return c.ns.SetAuditComment(c.pather(vsys), rule, comment)
+	return c.ns.SetAuditComment(c.pather(vsys), rule, comment)
 }
 
 // CurrentAuditComment returns the current audit comment.
 func (c *Firewall) CurrentAuditComment(vsys, rule string) (string, error) {
-    return c.ns.CurrentAuditComment(c.pather(vsys), rule)
+	return c.ns.CurrentAuditComment(c.pather(vsys), rule)
 }
 
 // AuditCommentHistory returns a chunk of historical audit comment logs.
 func (c *Firewall) AuditCommentHistory(vsys, rule, direction string, nlogs, skip int) ([]audit.Comment, error) {
-    return c.ns.AuditCommentHistory(c.pather(vsys), rule, direction, nlogs, skip)
+	return c.ns.AuditCommentHistory(c.pather(vsys), rule, direction, nlogs, skip)
 }
 
 func (c *Firewall) pather(vsys string) namespace.Pather {
