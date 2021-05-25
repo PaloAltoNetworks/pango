@@ -16,7 +16,7 @@ import (
 // The "base" param in these functions should be one of the rulebase
 // constants in the "util" package.
 type Panorama struct {
-	ns *namespace.Standard
+	ns *namespace.Policy
 }
 
 // GetList performs GET to retrieve a list of all objects.
@@ -120,17 +120,17 @@ func (c *Panorama) MoveGroup(dg, base string, movement int, rule string, e ...En
 
 // SetAuditComment sets the audit comment for the given rule.
 func (c *Panorama) SetAuditComment(dg, base, rule, comment string) error {
-    return c.ns.SetAuditComment(c.pather(dg, base), rule, comment)
+	return c.ns.SetAuditComment(c.pather(dg, base), rule, comment)
 }
 
 // CurrentAuditComment returns the current audit comment.
 func (c *Panorama) CurrentAuditComment(dg, base, rule string) (string, error) {
-    return c.ns.CurrentAuditComment(c.pather(dg, base), rule)
+	return c.ns.CurrentAuditComment(c.pather(dg, base), rule)
 }
 
 // AuditCommentHistory returns a chunk of historical audit comment logs.
 func (c *Panorama) AuditCommentHistory(dg, base, rule, direction string, nlogs, skip int) ([]audit.Comment, error) {
-    return c.ns.AuditCommentHistory(c.pather(dg, base), rule, direction, nlogs, skip)
+	return c.ns.AuditCommentHistory(c.pather(dg, base), rule, direction, nlogs, skip)
 }
 
 func (c *Panorama) pather(dg, base string) namespace.Pather {
