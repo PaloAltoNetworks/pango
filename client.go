@@ -17,6 +17,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/PaloAltoNetworks/pango/plugin"
 	"github.com/PaloAltoNetworks/pango/util"
 	"github.com/PaloAltoNetworks/pango/version"
 )
@@ -101,7 +102,7 @@ type Client struct {
 	// Variables determined at runtime.
 	Version        version.Number    `json:"-"`
 	SystemInfo     map[string]string `json:"-"`
-	Plugin         []PluginInfo      `json:"-"`
+	Plugin         []plugin.Info     `json:"-"`
 	MultiConfigure *MultiConfigure   `json:"-"`
 
 	// Logging level.
@@ -150,7 +151,7 @@ func (c *Client) Versioning() version.Number {
 }
 
 // Plugins returns the plugin information.
-func (c *Client) Plugins() []PluginInfo {
+func (c *Client) Plugins() []plugin.Info {
 	return c.Plugin
 }
 
@@ -1382,53 +1383,15 @@ func (c *Client) initSystemInfo() error {
 func (c *Client) initPlugins() {
 	c.LogOp("(op) getting plugin info")
 
-	type plugin_req struct {
-		XMLName xml.Name `xml:"show"`
-		Cmd     string   `xml:"plugins>packages"`
-	}
-
-	type relNote struct {
-		ReleaseNoteUrl string `xml:",cdata"`
-	}
-
-	type pkgInfo struct {
-		Name        string  `xml:"name"`
-		Version     string  `xml:"version"`
-		ReleaseDate string  `xml:"release-date"`
-		RelNote     relNote `xml:"release-note-url"`
-		PackageFile string  `xml:"pkg-file"`
-		Size        string  `xml:"size"`
-		Platform    string  `xml:"platform"`
-		Installed   string  `xml:"installed"`
-		Downloaded  string  `xml:"downloaded"`
-	}
-
-	type pluginResp struct {
-		Answer []pkgInfo `xml:"result>plugins>entry"`
-	}
-
-	req := plugin_req{}
-	ans := pluginResp{}
+	var req plugin.GetPlugins
+	var ans plugin.PackageListing
 
 	if _, err := c.Op(req, "", nil, &ans); err != nil {
 		c.LogAction("WARNING: Failed to get plugin info: %s", err)
 		return
 	}
 
-	c.Plugin = make([]PluginInfo, 0, len(ans.Answer))
-	for _, data := range ans.Answer {
-		c.Plugin = append(c.Plugin, PluginInfo{
-			Name:           data.Name,
-			Version:        data.Version,
-			ReleaseDate:    data.ReleaseDate,
-			ReleaseNoteUrl: data.RelNote.ReleaseNoteUrl,
-			PackageFile:    data.PackageFile,
-			Size:           data.Size,
-			Platform:       data.Platform,
-			Installed:      data.Installed,
-			Downloaded:     data.Downloaded,
-		})
-	}
+	c.Plugin = ans.Listing()
 }
 
 func (c *Client) typeConfig(action string, data url.Values, element, extras, ans interface{}) ([]byte, error) {
@@ -2033,17 +1996,4 @@ type configLocks struct {
 
 type commitLocks struct {
 	Locks []util.Lock `xml:"result>commit-locks>entry"`
-}
-
-// PluginInfo is information on plugin packages available to PAN-OS.
-type PluginInfo struct {
-	Name           string
-	Version        string
-	ReleaseDate    string
-	ReleaseNoteUrl string
-	PackageFile    string
-	Size           string
-	Platform       string
-	Installed      string
-	Downloaded     string
 }
