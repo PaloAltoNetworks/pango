@@ -40,8 +40,7 @@ func TestNormalization(t *testing.T) {
 	}
 
 	mc := &testdata.MockClient{}
-	ns := &Variable{}
-	ns.Initialize(mc)
+	ns := PanoramaNamespace(mc)
 
 	for _, tc := range testCases {
 		t.Run(tc.desc, func(t *testing.T) {
