@@ -3,6 +3,7 @@ package util
 import (
 	"time"
 
+	"github.com/PaloAltoNetworks/pango/plugin"
 	"github.com/PaloAltoNetworks/pango/version"
 )
 
@@ -10,6 +11,7 @@ import (
 type XapiClient interface {
 	String() string
 	Versioning() version.Number
+	Plugins() []plugin.Info
 	LogAction(string, ...interface{})
 	LogQuery(string, ...interface{})
 	LogOp(string, ...interface{})
