@@ -68,9 +68,12 @@ func (n *Common) retrieve(cmd string, path []string, singular bool, singleDesc s
 	var data []byte
 	var tag string
 
-	// Sanity check.
+	// Sanity checks.
 	if cmd != util.Get && cmd != util.Show {
 		return fmt.Errorf("invalid cmd: %s", cmd)
+	}
+	if ans == nil {
+		return fmt.Errorf("ans must be specified")
 	}
 
 	if pErr != nil {
