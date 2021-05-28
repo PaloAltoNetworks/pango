@@ -4,6 +4,7 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/PaloAltoNetworks/pango/plugin"
 	"github.com/PaloAltoNetworks/pango/testdata"
 )
 
@@ -11,12 +12,11 @@ func TestPanoNormalization(t *testing.T) {
 	testCases := getTests()
 
 	mc := &testdata.MockClient{}
-	ns := &Account{}
-	ns.Initialize(mc)
+	ns := PanoramaNamespace(mc)
 
 	for _, tc := range testCases {
 		t.Run(tc.desc, func(t *testing.T) {
-			mc.Version = tc.version
+			mc.Plugin = []plugin.Info{tc.plugin}
 			mc.Reset()
 			mc.AddResp("")
 			err := ns.Set(tc.conf)
