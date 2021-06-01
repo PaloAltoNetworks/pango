@@ -1,18 +1,18 @@
 package group
 
 import (
-	"github.com/PaloAltoNetworks/pango/version"
+	"github.com/PaloAltoNetworks/pango/plugin"
 )
 
 type tc struct {
-	desc    string
-	version version.Number
-	conf    Entry
+	desc   string
+	plugin plugin.Info
+	conf   Entry
 }
 
 func getTests() []tc {
 	return []tc{
-		{"basic check", version.Number{9, 0, 0, ""}, Entry{
+		{"basic check", plugin.Info{Name: "gcp", Installed: "yes", Version: "1.0.0"}, Entry{
 			Name:                 "v1",
 			Description:          "test",
 			DeviceGroup:          "dev group",
