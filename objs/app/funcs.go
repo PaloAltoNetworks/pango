@@ -78,20 +78,6 @@ func FirewallNamespace(client util.XapiClient) *Firewall {
 	}
 }
 
-// PredefinedFirewallNamespace returns an initialized namespace.
-func PredefinedNamespace(client util.XapiClient) *Predefined {
-	return &Predefined{
-		ns: &namespace.Standard{
-			Common: namespace.Common{
-				Singular:   singular,
-				Plural:     plural,
-				Client:     client,
-				Predefined: true,
-			},
-		},
-	}
-}
-
 // PanoramaNamespace returns an initialized namespace.
 func PanoramaNamespace(client util.XapiClient) *Panorama {
 	return &Panorama{
@@ -100,6 +86,20 @@ func PanoramaNamespace(client util.XapiClient) *Panorama {
 				Singular: singular,
 				Plural:   plural,
 				Client:   client,
+			},
+		},
+	}
+}
+
+// PredefinedNamespace returns an initialized namespace.
+func PredefinedNamespace(client util.XapiClient) *Predefined {
+	return &Predefined{
+		ns: &namespace.Standard{
+			Common: namespace.Common{
+				Singular:   singular,
+				Plural:     plural,
+				Client:     client,
+				Predefined: true,
 			},
 		},
 	}
