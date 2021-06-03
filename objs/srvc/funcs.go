@@ -90,3 +90,17 @@ func PanoramaNamespace(client util.XapiClient) *Panorama {
 		},
 	}
 }
+
+// PredefinedNamespace returns an initialized namespace.
+func PredefinedNamespace(client util.XapiClient) *Predefined {
+	return &Predefined{
+		ns: &namespace.Standard{
+			Common: namespace.Common{
+				Singular:   singular,
+				Plural:     plural,
+				Client:     client,
+				Predefined: true,
+			},
+		},
+	}
+}
