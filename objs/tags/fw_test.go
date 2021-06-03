@@ -8,32 +8,10 @@ import (
 )
 
 func TestFwNormalization(t *testing.T) {
-	testCases := []struct {
-		desc string
-		vsys string
-		conf Entry
-	}{
-		{"test with all fields", "", Entry{
-			Name:    "one",
-			Color:   "color1",
-			Comment: "first test",
-		}},
-		{"test no color", "", Entry{
-			Name:    "two",
-			Comment: "second test",
-		}},
-		{"test no comment", "vsys1", Entry{
-			Name:  "three",
-			Color: "color3",
-		}},
-		{"test no color or comment", "vsys2", Entry{
-			Name: "four",
-		}},
-	}
+	testCases := getTests()
 
 	mc := &testdata.MockClient{}
-	ns := &FwTags{}
-	ns.Initialize(mc)
+	ns := FirewallNamespace(mc)
 
 	for _, tc := range testCases {
 		t.Run(tc.desc, func(t *testing.T) {
