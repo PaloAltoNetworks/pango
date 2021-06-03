@@ -66,7 +66,7 @@ func getTests() []tc {
 		{"v1 default ip protocol", version.Number{7, 1, 0, ""}, Entry{
 			Name:                                 "v1",
 			DefaultType:                          DefaultTypeIpProtocol,
-			DefaultIpProtocol:                    101,
+			DefaultIpProtocol:                    "101",
 			Category:                             "category",
 			Subcategory:                          "subcat",
 			Technology:                           "tech",
@@ -193,7 +193,7 @@ func getTests() []tc {
 		{"v2 default ip protocol", version.Number{8, 1, 0, ""}, Entry{
 			Name:                                 "v2",
 			DefaultType:                          DefaultTypeIpProtocol,
-			DefaultIpProtocol:                    101,
+			DefaultIpProtocol:                    "101",
 			Category:                             "category",
 			Subcategory:                          "subcat",
 			Technology:                           "tech",
