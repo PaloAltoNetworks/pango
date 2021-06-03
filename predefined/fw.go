@@ -1,6 +1,7 @@
 package predefined
 
 import (
+	"github.com/PaloAltoNetworks/pango/objs/app"
 	dlpft "github.com/PaloAltoNetworks/pango/predefined/dlp/filetype"
 	tdbft "github.com/PaloAltoNetworks/pango/predefined/tdb/filetype"
 	"github.com/PaloAltoNetworks/pango/predefined/threat"
@@ -8,6 +9,7 @@ import (
 )
 
 type Firewall struct {
+	Application *app.Predefined
 	DlpFileType *dlpft.Firewall
 	TdbFileType *tdbft.Firewall
 	Threat      *threat.Firewall
@@ -15,6 +17,7 @@ type Firewall struct {
 
 func FirewallNamespace(x util.XapiClient) *Firewall {
 	return &Firewall{
+		Application: app.PredefinedNamespace(x),
 		DlpFileType: dlpft.FirewallNamespace(x),
 		TdbFileType: tdbft.FirewallNamespace(x),
 		Threat:      threat.FirewallNamespace(x),
