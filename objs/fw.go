@@ -51,7 +51,7 @@ type FwObjs struct {
 	LogForwardingProfileMatchListAction *action.FwAction
 	Services                            *srvc.Firewall
 	ServiceGroup                        *srvcgrp.Firewall
-	Tags                                *tags.FwTags
+	Tags                                *tags.Firewall
 	UrlFilteringProfile                 *ufsp.Firewall
 	VulnerabilityProfile                *vulnerability.Firewall
 	WildfireAnalysisProfile             *wfasp.Firewall
@@ -93,10 +93,7 @@ func (c *FwObjs) Initialize(i util.XapiClient) {
 
 	c.Services = srvc.FirewallNamespace(i)
 	c.ServiceGroup = srvcgrp.FirewallNamespace(i)
-
-	c.Tags = &tags.FwTags{}
-	c.Tags.Initialize(i)
-
+	c.Tags = tags.FirewallNamespace(i)
 	c.UrlFilteringProfile = ufsp.FirewallNamespace(i)
 	c.VulnerabilityProfile = vulnerability.FirewallNamespace(i)
 	c.WildfireAnalysisProfile = wfasp.FirewallNamespace(i)
