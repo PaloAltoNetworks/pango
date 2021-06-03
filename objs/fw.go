@@ -35,7 +35,7 @@ type FwObjs struct {
 	AddressGroup                        *addrgrp.Firewall
 	AntiSpywareProfile                  *spyware.Firewall
 	AntivirusProfile                    *virus.Firewall
-	Application                         *app.FwApp
+	Application                         *app.Firewall
 	AppGroup                            *appgrp.FwGroup
 	AppSignature                        *signature.FwSignature
 	AppSigAndCond                       *andcond.FwAndCond
@@ -63,9 +63,7 @@ func (c *FwObjs) Initialize(i util.XapiClient) {
 	c.AddressGroup = addrgrp.FirewallNamespace(i)
 	c.AntiSpywareProfile = spyware.FirewallNamespace(i)
 	c.AntivirusProfile = virus.FirewallNamespace(i)
-
-	c.Application = &app.FwApp{}
-	c.Application.Initialize(i)
+	c.Application = app.FirewallNamespace(i)
 
 	c.AppGroup = &appgrp.FwGroup{}
 	c.AppGroup.Initialize(i)

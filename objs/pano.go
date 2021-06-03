@@ -35,7 +35,7 @@ type PanoObjs struct {
 	AddressGroup                        *addrgrp.Panorama
 	AntiSpywareProfile                  *spyware.Panorama
 	AntivirusProfile                    *virus.Panorama
-	Application                         *app.PanoApp
+	Application                         *app.Panorama
 	AppGroup                            *appgrp.PanoGroup
 	AppSignature                        *signature.PanoSignature
 	AppSigAndCond                       *andcond.PanoAndCond
@@ -63,9 +63,7 @@ func (c *PanoObjs) Initialize(i util.XapiClient) {
 	c.AddressGroup = addrgrp.PanoramaNamespace(i)
 	c.AntiSpywareProfile = spyware.PanoramaNamespace(i)
 	c.AntivirusProfile = virus.PanoramaNamespace(i)
-
-	c.Application = &app.PanoApp{}
-	c.Application.Initialize(i)
+	c.Application = app.PanoramaNamespace(i)
 
 	c.AppGroup = &appgrp.PanoGroup{}
 	c.AppGroup.Initialize(i)
