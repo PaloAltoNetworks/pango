@@ -8,9 +8,10 @@ import (
 
 // Common contains the shared methods every namespace has.
 type Common struct {
-	Singular string
-	Plural   string
-	Client   util.XapiClient
+	Singular   string
+	Plural     string
+	Client     util.XapiClient
+	Predefined bool
 }
 
 /*
@@ -81,11 +82,15 @@ func (n *Common) retrieve(cmd string, path []string, singular bool, singleDesc s
 	}
 
 	// Do logging and determine the actual path to query.
+	var predef string
+	if n.Predefined {
+		predef = "predefined "
+	}
 	if singular {
 		if singleDesc != "" {
-			n.Client.LogQuery("(%s) %s: %s", cmd, n.Singular, singleDesc)
+			n.Client.LogQuery("(%s) %s%s: %s", cmd, predef, n.Singular, singleDesc)
 		} else {
-			n.Client.LogQuery("(%s) %s", cmd, n.Singular)
+			n.Client.LogQuery("(%s) %s%s", cmd, predef, n.Singular)
 		}
 	} else if plural {
 		tag = path[len(path)-2]
@@ -96,12 +101,12 @@ func (n *Common) retrieve(cmd string, path []string, singular bool, singleDesc s
 			if cmd == util.Get {
 				path = append(path, "@name")
 			}
-			n.Client.LogQuery("(%s) %s names", cmd, n.Singular)
+			n.Client.LogQuery("(%s) %s%s names", cmd, predef, n.Singular)
 		} else {
 			if cmd == util.Get {
 				path = path[:len(path)-1]
 			}
-			n.Client.LogQuery("(%s) list of %s", cmd, n.Plural)
+			n.Client.LogQuery("(%s) list of %s%s", cmd, predef, n.Plural)
 		}
 	}
 
