@@ -1107,6 +1107,33 @@ func (c *Client) Commit(cmd interface{}, action string, extras interface{}) (uin
 	return ans.Id, b, err
 }
 
+// Export runs an "export" type command.
+//
+// The category param specifies the desired file type to export.
+//
+// The extras param should be either nil or a url.Values{} to be mixed in with
+// the constructed request.
+//
+// The ans param should be a pointer to a struct to unmarshal the response
+// into or nil.
+//
+// Any response received from the server is returned, along with any errors
+// encountered.
+func (c *Client) Export(category string, extras, ans interface{}) ([]byte, error) {
+	data := url.Values{}
+	data.Set("type", "export")
+
+	if category != "" {
+		data.Set("category", category)
+	}
+
+	if err := mergeUrlValues(&data, extras); err != nil {
+		return nil, err
+	}
+
+	return c.Communicate(data, &ans)
+}
+
 /*** Internal functions ***/
 
 func (c *Client) initCon() error {

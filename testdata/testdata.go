@@ -129,6 +129,13 @@ func (c *MockClient) Log(logType, action, query, dir string, nlogs, skip int, ex
 	return c.finalize(ans)
 }
 
+func (c *MockClient) Export(category string, extras, ans interface{}) ([]byte, error) {
+	c.Function = "export"
+	c.Extras = extras
+
+	return c.finalize(ans)
+}
+
 func (c *MockClient) EntryListUsing(fn util.Retriever, path []string) ([]string, error) {
 	c.Path = util.AsXpath(path)
 	return nil, nil
