@@ -15,6 +15,7 @@ import (
 	"github.com/PaloAltoNetworks/pango/poli"
 	"github.com/PaloAltoNetworks/pango/predefined"
 	"github.com/PaloAltoNetworks/pango/userid"
+	"github.com/PaloAltoNetworks/pango/vsys"
 
 	"github.com/PaloAltoNetworks/pango/util"
 )
@@ -38,6 +39,7 @@ type Panorama struct {
 	Objects    *objs.PanoObjs
 	Policies   *poli.Panorama
 	Network    *netw.Panorama
+	Vsys       *vsys.Panorama
 }
 
 // Initialize does some initial setup of the Panorama connection, retrieves
@@ -224,4 +226,6 @@ func (c *Panorama) initNamespaces() {
 	c.Policies = poli.PanoramaNamespace(c)
 
 	c.Network = netw.PanoramaNamespace(c)
+
+	c.Vsys = vsys.PanoramaNamespace(c)
 }

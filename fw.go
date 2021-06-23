@@ -13,6 +13,7 @@ import (
 	"github.com/PaloAltoNetworks/pango/poli"
 	"github.com/PaloAltoNetworks/pango/predefined"
 	"github.com/PaloAltoNetworks/pango/userid"
+	"github.com/PaloAltoNetworks/pango/vsys"
 )
 
 // Firewall is a firewall specific client, providing version safe functions
@@ -38,6 +39,7 @@ type Firewall struct {
 	Objects    *objs.FwObjs
 	Licensing  *licen.Licen
 	UserId     *userid.UserId
+	Vsys       *vsys.Firewall
 }
 
 // Initialize does some initial setup of the Firewall connection, retrieves
@@ -165,4 +167,6 @@ func (c *Firewall) initNamespaces() {
 
 	c.UserId = &userid.UserId{}
 	c.UserId.Initialize(c)
+
+	c.Vsys = vsys.FirewallNamespace(c)
 }
