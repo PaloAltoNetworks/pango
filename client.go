@@ -9,6 +9,7 @@ import (
 	"io"
 	"io/ioutil"
 	"log"
+	"mime"
 	"mime/multipart"
 	"net/http"
 	"net/url"
@@ -114,9 +115,10 @@ type Client struct {
 	con       *http.Client
 	api_url   string
 
-	// Variables for testing, response bytes and response index.
+	// Variables for testing, response bytes, headers, and response index.
 	rp              []url.Values
 	rb              [][]byte
+	rh              []http.Header
 	ri              int
 	authFileContent []byte
 }
@@ -217,7 +219,7 @@ func (c *Client) RetrieveApiKey() error {
 	data.Add("password", c.Password)
 	data.Add("type", "keygen")
 
-	_, err := c.Communicate(data, &ans)
+	_, _, err := c.Communicate(data, &ans)
 	if err != nil {
 		return err
 	}
@@ -614,19 +616,19 @@ func (c *Client) LogLog(msg string, i ...interface{}) {
 // performed.
 //
 // If the API key is set, but not present in the given data, then it is added in.
-func (c *Client) Communicate(data url.Values, ans interface{}) ([]byte, error) {
+func (c *Client) Communicate(data url.Values, ans interface{}) ([]byte, http.Header, error) {
 	if c.ApiKey != "" && data.Get("key") == "" {
 		data.Set("key", c.ApiKey)
 	}
 
 	c.logSend(data)
 
-	body, err := c.post(data)
+	body, hdrs, err := c.post(data)
 	if err != nil {
-		return nil, err
+		return body, hdrs, err
 	}
 
-	return c.endCommunication(body, ans)
+	return body, hdrs, c.endCommunication(body, ans)
 }
 
 // CommunicateFile does a file upload to PAN-OS.
@@ -649,7 +651,7 @@ func (c *Client) Communicate(data url.Values, ans interface{}) ([]byte, error) {
 // performed.
 //
 // If the API key is set, but not present in the given data, then it is added in.
-func (c *Client) CommunicateFile(content, filename, fp string, data url.Values, ans interface{}) ([]byte, error) {
+func (c *Client) CommunicateFile(content, filename, fp string, data url.Values, ans interface{}) ([]byte, http.Header, error) {
 	var err error
 
 	if c.ApiKey != "" && data.Get("key") == "" {
@@ -667,18 +669,18 @@ func (c *Client) CommunicateFile(content, filename, fp string, data url.Values, 
 
 	w2, err := w.CreateFormFile(fp, filename)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	if _, err = io.Copy(w2, strings.NewReader(content)); err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	w.Close()
 
 	req, err := http.NewRequest("POST", c.api_url, &buf)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	req.Header.Set("Content-Type", w.FormDataContentType())
 	for k, v := range c.Headers {
@@ -687,16 +689,16 @@ func (c *Client) CommunicateFile(content, filename, fp string, data url.Values, 
 
 	res, err := c.con.Do(req)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	defer res.Body.Close()
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
-		return nil, err
+		return body, res.Header, err
 	}
 
-	return c.endCommunication(body, ans)
+	return body, res.Header, c.endCommunication(body, ans)
 }
 
 // Op runs an operational or "op" type command.
@@ -735,7 +737,8 @@ func (c *Client) Op(req interface{}, vsys string, extras, ans interface{}) ([]by
 		return nil, err
 	}
 
-	return c.Communicate(data, ans)
+	b, _, err := c.Communicate(data, ans)
+	return b, err
 }
 
 // Log submits a "log" command.
@@ -779,7 +782,8 @@ func (c *Client) Log(logType, action, query, dir string, nlogs, skip int, extras
 		return nil, err
 	}
 
-	return c.Communicate(data, &ans)
+	b, _, err := c.Communicate(data, ans)
+	return b, err
 }
 
 // WaitForLogs performs repeated log retrieval operations until the log job is complete
@@ -1030,7 +1034,8 @@ func (c *Client) Uid(cmd interface{}, vsys string, extras, ans interface{}) ([]b
 		return nil, err
 	}
 
-	return c.Communicate(data, ans)
+	b, _, err := c.Communicate(data, ans)
+	return b, err
 }
 
 // Import performs an import type command.
@@ -1060,7 +1065,8 @@ func (c *Client) Import(cat, content, filename, fp string, extras map[string]str
 		data.Set(k, extras[k])
 	}
 
-	return c.CommunicateFile(content, filename, fp, data, ans)
+	b, _, err := c.CommunicateFile(content, filename, fp, data, ans)
+	return b, err
 }
 
 // Commit performs PAN-OS commits.
@@ -1103,7 +1109,7 @@ func (c *Client) Commit(cmd interface{}, action string, extras interface{}) (uin
 	}
 
 	ans := util.JobResponse{}
-	b, err := c.Communicate(data, &ans)
+	b, _, err := c.Communicate(data, &ans)
 	return ans.Id, b, err
 }
 
@@ -1119,7 +1125,11 @@ func (c *Client) Commit(cmd interface{}, action string, extras interface{}) (uin
 //
 // Any response received from the server is returned, along with any errors
 // encountered.
-func (c *Client) Export(category string, extras, ans interface{}) ([]byte, error) {
+//
+// If the export invoked results in a file being downloaded from PAN-OS, then
+// the string returned is the name of the remote file that is retrieved,
+// otherwise it's just an empty string.
+func (c *Client) Export(category string, extras, ans interface{}) (string, []byte, error) {
 	data := url.Values{}
 	data.Set("type", "export")
 
@@ -1128,10 +1138,20 @@ func (c *Client) Export(category string, extras, ans interface{}) ([]byte, error
 	}
 
 	if err := mergeUrlValues(&data, extras); err != nil {
-		return nil, err
+		return "", nil, err
 	}
 
-	return c.Communicate(data, &ans)
+	var filename string
+	b, hdrs, err := c.Communicate(data, ans)
+	if err == nil && hdrs != nil {
+		// Check and see if there's a filename in the content disposition.
+		mediatype, params, err := mime.ParseMediaType(hdrs.Get("Content-Disposition"))
+		if err == nil && mediatype == "attachment" {
+			filename = params["filename"]
+		}
+	}
+
+	return filename, b, err
 }
 
 /*** Internal functions ***/
@@ -1455,7 +1475,8 @@ func (c *Client) typeConfig(action string, data url.Values, element, extras, ans
 		return nil, err
 	}
 
-	return c.Communicate(data, ans)
+	b, _, err := c.Communicate(data, ans)
+	return b, err
 }
 
 func (c *Client) logXpath(p string) {
@@ -1548,11 +1569,11 @@ func (c *Client) xpathImport(tmpl, ts, vsys string) []string {
 	return ans
 }
 
-func (c *Client) post(data url.Values) ([]byte, error) {
+func (c *Client) post(data url.Values) ([]byte, http.Header, error) {
 	if len(c.rb) == 0 {
 		req, err := http.NewRequest("POST", c.api_url, strings.NewReader(data.Encode()))
 		if err != nil {
-			return nil, err
+			return nil, nil, err
 		}
 		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 		for k, v := range c.Headers {
@@ -1561,22 +1582,27 @@ func (c *Client) post(data url.Values) ([]byte, error) {
 
 		r, err := c.con.Do(req)
 		if err != nil {
-			return nil, err
+			return nil, nil, err
 		}
 
 		defer r.Body.Close()
-		return ioutil.ReadAll(r.Body)
+		ans, err := ioutil.ReadAll(r.Body)
+		return ans, r.Header, err
 	} else {
 		if c.ri < len(c.rb) {
 			c.rp = append(c.rp, data)
 		}
 		body := c.rb[c.ri%len(c.rb)]
+		var hdr http.Header
+		if len(c.rh) > 0 {
+			hdr = c.rh[c.ri%len(c.rh)]
+		}
 		c.ri++
-		return body, nil
+		return body, hdr, nil
 	}
 }
 
-func (c *Client) endCommunication(body []byte, ans interface{}) ([]byte, error) {
+func (c *Client) endCommunication(body []byte, ans interface{}) error {
 	var err error
 
 	if c.Logging&LogReceive == LogReceive {
@@ -1592,29 +1618,29 @@ func (c *Client) endCommunication(body []byte, ans interface{}) ([]byte, error) 
 	// a result.
 	if errType1.Failed() {
 		if err == nil && errType1.Error() != "" {
-			return body, PanosError{errType1.Error(), errType1.ResponseCode}
+			return PanosError{errType1.Error(), errType1.ResponseCode}
 		}
 		errType2 := panosErrorResponseWithLine{}
 		err = xml.Unmarshal(body, &errType2)
 		if err == nil && errType2.Error() != "" {
-			return body, PanosError{errType2.Error(), errType2.ResponseCode}
+			return PanosError{errType2.Error(), errType2.ResponseCode}
 		}
 		// Still an error, but some unknown format.
-		return body, fmt.Errorf("Unknown error format: %s", body)
+		return fmt.Errorf("Unknown error format: %s", body)
 	}
 
 	// Return the body string if we weren't given something to unmarshal into
 	if ans == nil {
-		return body, nil
+		return nil
 	}
 
 	// Unmarshal using the struct passed in
 	err = xml.Unmarshal(body, ans)
 	if err != nil {
-		return body, fmt.Errorf("Error unmarshaling into provided interface: %s", err)
+		return fmt.Errorf("Error unmarshaling into provided interface: %s", err)
 	}
 
-	return body, nil
+	return nil
 }
 
 /*

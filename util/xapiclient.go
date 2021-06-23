@@ -25,7 +25,7 @@ type XapiClient interface {
 	Edit(interface{}, interface{}, interface{}, interface{}) ([]byte, error)
 	Move(interface{}, string, string, interface{}, interface{}) ([]byte, error)
 	Log(string, string, string, string, int, int, interface{}, interface{}) ([]byte, error)
-	Export(string, interface{}, interface{}) ([]byte, error)
+	Export(string, interface{}, interface{}) (string, []byte, error)
 	Uid(interface{}, string, interface{}, interface{}) ([]byte, error)
 	EntryListUsing(Retriever, []string) ([]string, error)
 	MemberListUsing(Retriever, []string) ([]string, error)
