@@ -47,6 +47,7 @@ import (
 //      * LogOp: operation commands (Op functions)
 //      * LogUid: User-Id commands (Uid functions)
 //      * LogLog: log retrieval commands
+//      * LogExport: log export commands
 //      * LogXpath: the resultant xpath
 //      * LogSend: xml docuemnt being sent
 //      * LogReceive: xml responses being received
@@ -60,6 +61,7 @@ const (
 	LogOp
 	LogUid
 	LogLog
+	LogExport
 	LogXpath
 	LogSend
 	LogReceive
@@ -568,7 +570,7 @@ func (c *Client) WaitForJob(id uint, sleep time.Duration, resp interface{}) erro
 	return xml.Unmarshal(data, resp)
 }
 
-// LogAction writes a log message for SET/DELETE operations if LogAction is set.
+// LogAction writes a log message for SET/EDIT/DELETE operations if LogAction is set.
 func (c *Client) LogAction(msg string, i ...interface{}) {
 	if c.Logging&LogAction == LogAction {
 		log.Printf(msg, i...)
@@ -596,9 +598,16 @@ func (c *Client) LogUid(msg string, i ...interface{}) {
 	}
 }
 
-// LogLog writes a log message for Log operations if LogLog is set.
+// LogLog writes a log message for LOG operations if LogLog is set.
 func (c *Client) LogLog(msg string, i ...interface{}) {
 	if c.Logging&LogLog == LogLog {
+		log.Printf(msg, i...)
+	}
+}
+
+// LogExport writes a log message for EXPORT operations if LogExport is set.
+func (c *Client) LogExport(msg string, i ...interface{}) {
+	if c.Logging&LogExport == LogExport {
 		log.Printf(msg, i...)
 	}
 }
@@ -1764,6 +1773,62 @@ func (c *Client) SendMultiConfigure(strict bool) (MultiConfigureResponse, error)
 
 	_, ans, err := c.MultiConfig(*mc, strict, nil)
 	return ans, err
+}
+
+// GetTechSupportFile returns the tech support .tgz file.
+//
+// This function returns the name of the tech support file, the file
+// contents, and an error if one occurred.
+func (c *Client) GetTechSupportFile() (string, []byte, error) {
+	var err error
+	var resp util.JobResponse
+	cmd := "tech-support"
+
+	c.LogExport("(export) tech support file")
+
+	// Request the tech support file creation.
+	_, _, err = c.Export(cmd, nil, &resp)
+	if err != nil {
+		return "", nil, err
+	}
+	if resp.Id == 0 {
+		return "", nil, fmt.Errorf("Job ID was not found")
+	}
+
+	extras := url.Values{}
+	extras.Set("action", "status")
+	extras.Set("job-id", fmt.Sprintf("%d", resp.Id))
+
+	// Poll the job until it's done.
+	var pr util.BasicJob
+	var prev uint
+	for {
+		_, _, err = c.Export(cmd, extras, &pr)
+		if err != nil {
+			return "", nil, err
+		}
+
+		// The progress is not an uint when the job completes, so don't print
+		// the progress as 0 when the job is actually complete.
+		if pr.Progress != prev && pr.Progress != 0 {
+			prev = pr.Progress
+			c.LogExport("(export) tech support job %d: %d percent complete", resp.Id, prev)
+		}
+
+		if pr.Status == "FIN" {
+			break
+		}
+
+		time.Sleep(2 * time.Second)
+	}
+
+	if pr.Result == "FAIL" {
+		return "", nil, fmt.Errorf(pr.Details.String())
+	}
+
+	// Return the tech support file.
+	extras.Set("action", "get")
+	return c.Export(cmd, extras, nil)
 }
 
 func (c *Client) logSend(data url.Values) {
