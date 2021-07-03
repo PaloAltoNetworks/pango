@@ -1,4 +1,4 @@
-package licensemgr
+package manager
 
 import (
 	"encoding/xml"
@@ -11,7 +11,7 @@ type Panorama struct {
 	ns *namespace.Plugin
 }
 
-// GetBootstrapParams for specific licensemgr and returns a string of the bootstrap parameters and an error if needed
+// GetBootstrapParams for specific manager and returns a string of the bootstrap parameters and an error if needed
 func (c *Panorama) GetBootstrapParams(licensemgr string) (string, error) {
 	type requestStruct struct {
 		XMLName    xml.Name `xml:"request"`
@@ -23,18 +23,13 @@ func (c *Panorama) GetBootstrapParams(licensemgr string) (string, error) {
 	}
 
 	var result resultStruct
-	
-	c.ns.Client.LogOp("(op) request license manager bootstrap parameters for " + licensemgr )
-	body, err := c.ns.Client.Op(requestStruct{LicenseMgr: licensemgr}, "", nil, nil)
+
+	c.ns.Client.LogOp("(op) request license manager bootstrap parameters for " + licensemgr)
+	_, err := c.ns.Client.Op(requestStruct{LicenseMgr: licensemgr}, "", nil, &result)
 	if err != nil {
 		return "", err
 	} else {
-		err = xml.Unmarshal(body, &result)
-		if err != nil {
-			return "", err
-		} else {
-			return result.BootstarpParams, nil
-		}
+		return result.BootstarpParams, nil
 	}
 }
 

@@ -7,9 +7,9 @@ import (
 
 // Version Independent Data Structure
 type Entry struct {
-	Name string
+	Name        string
 	Description string
-	Authcode string
+	Authcode    string
 }
 
 // normalizer interface refers to container_v1

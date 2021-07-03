@@ -1,4 +1,4 @@
-package bootstrapdef
+package manager
 
 import (
 	"github.com/PaloAltoNetworks/pango/plugin"
@@ -15,9 +15,13 @@ func getTests() []tc {
 		{
 			"basic project",
 			plugin.Info{Name: "sw_fw_license", Installed: "yes", Version: "1.0.0"},
-			Entry{Name: "bootstrapdef",
-				Description: "some desc",
-				Authcode:    "abcdefg",
+			Entry{
+				Name:                "licmanager",
+				Description:         "some desc",
+				DeviceGroup:         "dg",
+				TemplateStack:       "ts",
+				BootstrapDefinition: "bsdef",
+				AutoDeactivate:      5,
 			},
 		},
 	}

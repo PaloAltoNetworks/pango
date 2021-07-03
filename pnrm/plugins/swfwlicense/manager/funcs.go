@@ -1,4 +1,4 @@
-package licensemgr
+package manager
 
 import (
 	"fmt"

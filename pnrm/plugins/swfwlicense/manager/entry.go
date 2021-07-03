@@ -1,4 +1,4 @@
-package licensemgr
+package manager
 
 import (
 	"encoding/xml"
@@ -7,12 +7,12 @@ import (
 
 // Version Independent Data Structure
 type Entry struct {
-	Name string
-	Description string
-	DeviceGroup string
-	TemplateStack string
+	Name                string
+	Description         string
+	DeviceGroup         string
+	TemplateStack       string
 	BootstrapDefinition string
-	AutoDeactivate int
+	AutoDeactivate      int
 }
 
 // normalizer interface refers to container_v1
@@ -75,7 +75,7 @@ type entry_v1 struct {
 	DeviceGroup         string   `xml:"device-group"`
 	TemplateStack       string   `xml:"template-stack"`
 	BootstrapDefinition string   `xml:"bootstrap-definition"`
-	AutoDeactivate		int		 `xml:"auto-deactivate"`
+	AutoDeactivate      int      `xml:"auto-deactivate"`
 }
 
 // entry_v1 function normalize returns version independent Entry

@@ -11,7 +11,7 @@ import (
 	"github.com/PaloAltoNetworks/pango/pnrm/plugins/gcp/gke/cluster"
 	"github.com/PaloAltoNetworks/pango/pnrm/plugins/gcp/gke/cluster/group"
 	"github.com/PaloAltoNetworks/pango/pnrm/plugins/swfwlicense/bootstrapdef"
-	"github.com/PaloAltoNetworks/pango/pnrm/plugins/swfwlicense/licensemgr"
+	"github.com/PaloAltoNetworks/pango/pnrm/plugins/swfwlicense/manager"
 	"github.com/PaloAltoNetworks/pango/pnrm/template"
 	"github.com/PaloAltoNetworks/pango/pnrm/template/stack"
 	"github.com/PaloAltoNetworks/pango/pnrm/template/variable"
@@ -31,7 +31,7 @@ type Panorama struct {
 	LicenseBootstrapDefinition *bootstrapdef.Panorama
 
 	// Software Firewall Licensing Plugin - License Manager
-	LicenseManager *licensemgr.Panorama
+	LicenseManager *manager.Panorama
 }
 
 func PanoramaNamespace(x util.XapiClient) *Panorama {
@@ -48,6 +48,6 @@ func PanoramaNamespace(x util.XapiClient) *Panorama {
 		LicenseBootstrapDefinition: bootstrapdef.PanoramaNamespace(x),
 
 		// Software Firewall Licensing Plugin - License Manager
-		LicenseManager: licensemgr.PanoramaNamespace(x),
+		LicenseManager: manager.PanoramaNamespace(x),
 	}
 }
