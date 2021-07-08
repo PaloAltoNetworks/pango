@@ -26,11 +26,7 @@ func (c *Panorama) GetBootstrapParams(licensemgr string) (string, error) {
 
 	c.ns.Client.LogOp("(op) request license manager bootstrap parameters for " + licensemgr)
 	_, err := c.ns.Client.Op(requestStruct{LicenseMgr: licensemgr}, "", nil, &result)
-	if err != nil {
-		return "", err
-	} else {
-		return result.BootstrapParams, nil
-	}
+	return result.BootstrapParams, err
 }
 
 // GetList performs GET to retrieve a list of all objects.
