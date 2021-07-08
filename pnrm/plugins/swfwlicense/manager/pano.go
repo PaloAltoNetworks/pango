@@ -19,7 +19,7 @@ func (c *Panorama) GetBootstrapParams(licensemgr string) (string, error) {
 	}
 
 	type resultStruct struct {
-		BootstarpParams string `xml:"result>bootstrap-parameters"`
+		BootstrapParams string `xml:"result>bootstrap-parameters"`
 	}
 
 	var result resultStruct
@@ -29,7 +29,7 @@ func (c *Panorama) GetBootstrapParams(licensemgr string) (string, error) {
 	if err != nil {
 		return "", err
 	} else {
-		return result.BootstarpParams, nil
+		return result.BootstrapParams, nil
 	}
 }
 
