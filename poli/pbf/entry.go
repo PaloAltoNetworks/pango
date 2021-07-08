@@ -46,7 +46,7 @@ type Entry struct {
 }
 
 // Copy copies the information from source Entry `s` to this object.  As the
-// Name field relates to the XPATH of this object, this field is not copied.
+// Name and Uuid fields relates to the identify of this object, they are not copied.
 func (o *Entry) Copy(s Entry) {
 	o.Description = s.Description
 	o.Tags = s.Tags
@@ -74,7 +74,6 @@ func (o *Entry) Copy(s Entry) {
 	o.ActiveActiveDeviceBinding = s.ActiveActiveDeviceBinding
 	o.Targets = s.Targets
 	o.NegateTarget = s.NegateTarget
-	o.Uuid = s.Uuid
 }
 
 /** Structs / functions for this namespace. **/
