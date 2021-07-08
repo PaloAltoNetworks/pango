@@ -19,35 +19,27 @@ import (
 
 // Panorama is the panorama.Panorama namespace.
 type Panorama struct {
-	DeviceGroup      *dg.Panorama
-	GcpAccount       *account.Panorama
-	GkeCluster       *cluster.Panorama
-	GkeClusterGroup  *group.Panorama
-	Template         *template.Panorama
-	TemplateStack    *stack.Panorama
-	TemplateVariable *variable.Panorama
-
-	// Software Firewall Licensing Plugin - Bootstrap Definition
+	DeviceGroup                *dg.Panorama
+	GcpAccount                 *account.Panorama
+	GkeCluster                 *cluster.Panorama
+	GkeClusterGroup            *group.Panorama
 	LicenseBootstrapDefinition *bootstrapdef.Panorama
-
-	// Software Firewall Licensing Plugin - License Manager
-	LicenseManager *manager.Panorama
+	LicenseManager             *manager.Panorama
+	Template                   *template.Panorama
+	TemplateStack              *stack.Panorama
+	TemplateVariable           *variable.Panorama
 }
 
 func PanoramaNamespace(x util.XapiClient) *Panorama {
 	return &Panorama{
-		DeviceGroup:      dg.PanoramaNamespace(x),
-		GcpAccount:       account.PanoramaNamespace(x),
-		GkeCluster:       cluster.PanoramaNamespace(x),
-		GkeClusterGroup:  group.PanoramaNamespace(x),
-		Template:         template.PanoramaNamespace(x),
-		TemplateStack:    stack.PanoramaNamespace(x),
-		TemplateVariable: variable.PanoramaNamespace(x),
-
-		// Software Firewall Licensing Plugin - Bootstrap Definition
+		DeviceGroup:                dg.PanoramaNamespace(x),
+		GcpAccount:                 account.PanoramaNamespace(x),
+		GkeCluster:                 cluster.PanoramaNamespace(x),
+		GkeClusterGroup:            group.PanoramaNamespace(x),
 		LicenseBootstrapDefinition: bootstrapdef.PanoramaNamespace(x),
-
-		// Software Firewall Licensing Plugin - License Manager
-		LicenseManager: manager.PanoramaNamespace(x),
+		LicenseManager:             manager.PanoramaNamespace(x),
+		Template:                   template.PanoramaNamespace(x),
+		TemplateStack:              stack.PanoramaNamespace(x),
+		TemplateVariable:           variable.PanoramaNamespace(x),
 	}
 }
