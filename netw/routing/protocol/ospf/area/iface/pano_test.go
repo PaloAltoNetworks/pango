@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/PaloAltoNetworks/pango/testdata"
+	"github.com/PaloAltoNetworks/pango/version"
 )
 
 func TestPanoNormalization(t *testing.T) {
@@ -34,5 +35,31 @@ func TestPanoNormalization(t *testing.T) {
 				}
 			}
 		})
+	}
+}
+
+func TestPanoramaPriorityDefaultsToOne(t *testing.T) {
+	mc := &testdata.MockClient{
+		Version: version.Number{6, 1, 0, ""},
+	}
+	ns := FirewallNamespace(mc)
+	mc.AddResp(`
+<entry name="myinterface">
+    <enable>yes</enable>
+    <metric>5</metric>
+</entry>
+`)
+	ans, err := ns.Get("vr", "area", "myinterface")
+	if err != nil {
+		t.Errorf("Error in get: %s", err)
+	}
+	if !ans.Enable {
+		t.Errorf("Not enabled")
+	}
+	if ans.Metric != 5 {
+		t.Errorf("Metric is not 5")
+	}
+	if ans.Priority != 1 {
+		t.Errorf("Priority is not 1")
 	}
 }
