@@ -11,6 +11,7 @@ import (
 	"github.com/PaloAltoNetworks/pango/objs/app/signature/andcond"
 	"github.com/PaloAltoNetworks/pango/objs/app/signature/orcond"
 	datapat "github.com/PaloAltoNetworks/pango/objs/custom/data"
+	cusspy "github.com/PaloAltoNetworks/pango/objs/custom/spyware"
 	"github.com/PaloAltoNetworks/pango/objs/dug"
 	"github.com/PaloAltoNetworks/pango/objs/edl"
 	"github.com/PaloAltoNetworks/pango/objs/profile/logfwd"
@@ -40,6 +41,7 @@ type FwObjs struct {
 	AppSignature                        *signature.FwSignature
 	AppSigAndCond                       *andcond.FwAndCond
 	AppSigOrCond                        *orcond.FwOrCond
+	CustomSpyware                       *cusspy.Firewall
 	DataPattern                         *datapat.Firewall
 	DataFilteringProfile                *dfsp.Firewall
 	DosProtectionProfile                *dpsp.Firewall
@@ -77,6 +79,7 @@ func (c *FwObjs) Initialize(i util.XapiClient) {
 	c.AppSigOrCond = &orcond.FwOrCond{}
 	c.AppSigOrCond.Initialize(i)
 
+	c.CustomSpyware = cusspy.FirewallNamespace(i)
 	c.DataFilteringProfile = dfsp.FirewallNamespace(i)
 	c.DataPattern = datapat.FirewallNamespace(i)
 	c.DosProtectionProfile = dpsp.FirewallNamespace(i)
