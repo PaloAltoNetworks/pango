@@ -12,6 +12,7 @@ import (
 	"github.com/PaloAltoNetworks/pango/objs/app/signature/orcond"
 	datapat "github.com/PaloAltoNetworks/pango/objs/custom/data"
 	cusspy "github.com/PaloAltoNetworks/pango/objs/custom/spyware"
+	cusurl "github.com/PaloAltoNetworks/pango/objs/custom/url"
 	cusvuln "github.com/PaloAltoNetworks/pango/objs/custom/vulnerability"
 	"github.com/PaloAltoNetworks/pango/objs/dug"
 	"github.com/PaloAltoNetworks/pango/objs/edl"
@@ -43,6 +44,7 @@ type PanoObjs struct {
 	AppSigAndCond                       *andcond.PanoAndCond
 	AppSigOrCond                        *orcond.PanoOrCond
 	CustomSpyware                       *cusspy.Panorama
+	CustomUrlCategory                   *cusurl.Panorama
 	CustomVulnerability                 *cusvuln.Panorama
 	DataFilteringProfile                *dfsp.Panorama
 	DataPattern                         *datapat.Panorama
@@ -82,6 +84,7 @@ func (c *PanoObjs) Initialize(i util.XapiClient) {
 	c.AppSigOrCond.Initialize(i)
 
 	c.CustomSpyware = cusspy.PanoramaNamespace(i)
+	c.CustomUrlCategory = cusurl.PanoramaNamespace(i)
 	c.CustomVulnerability = cusvuln.PanoramaNamespace(i)
 	c.DataFilteringProfile = dfsp.PanoramaNamespace(i)
 	c.DataPattern = datapat.PanoramaNamespace(i)
