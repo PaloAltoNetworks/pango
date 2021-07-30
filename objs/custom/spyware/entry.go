@@ -497,7 +497,7 @@ type standard_v1 struct {
 type standardEntry_v1 struct {
 	Name      string   `xml:"name,attr"`
 	Comment   string   `xml:"comment,omitempty"`
-	Scope     string   `xml:"protocol-data-unit,omitempty"`
+	Scope     string   `xml:"scope,omitempty"`
 	OrderFree string   `xml:"order-free"`
 	Ands      *ands_v1 `xml:"and-condition"`
 }
@@ -920,7 +920,7 @@ type standard_v2 struct {
 type standardEntry_v2 struct {
 	Name      string   `xml:"name,attr"`
 	Comment   string   `xml:"comment,omitempty"`
-	Scope     string   `xml:"protocol-data-unit,omitempty"`
+	Scope     string   `xml:"scope,omitempty"`
 	OrderFree string   `xml:"order-free"`
 	Ands      *ands_v2 `xml:"and-condition"`
 }
