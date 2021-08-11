@@ -38,28 +38,42 @@ func TestPanoNormalization(t *testing.T) {
 	}
 }
 
-func TestPanoramaPriorityDefaultsToOne(t *testing.T) {
+func TestPanoramaDefaults(t *testing.T) {
 	mc := &testdata.MockClient{
 		Version: version.Number{6, 1, 0, ""},
 	}
-	ns := FirewallNamespace(mc)
+	ns := PanoramaNamespace(mc)
 	mc.AddResp(`
 <entry name="myinterface">
     <enable>yes</enable>
-    <metric>5</metric>
 </entry>
 `)
-	ans, err := ns.Get("vr", "area", "myinterface")
+	ans, err := ns.Get("tmpl", "", "vr", "area", "myinterface")
 	if err != nil {
 		t.Errorf("Error in get: %s", err)
 	}
 	if !ans.Enable {
 		t.Errorf("Not enabled")
 	}
-	if ans.Metric != 5 {
-		t.Errorf("Metric is not 5")
+	if ans.Metric != 10 {
+		t.Errorf("Metric is not 10")
 	}
 	if ans.Priority != 1 {
 		t.Errorf("Priority is not 1")
+	}
+	if ans.HelloInterval != 10 {
+		t.Errorf("Hello interval is not 10")
+	}
+	if ans.DeadCounts != 4 {
+		t.Errorf("Dead counts is not 4")
+	}
+	if ans.RetransmitInterval != 5 {
+		t.Errorf("Retransmit interval is not 5")
+	}
+	if ans.TransitDelay != 1 {
+		t.Errorf("Transit delay is not 1")
+	}
+	if ans.GraceRestartDelay != 10 {
+		t.Errorf("Grace restart delay is not 10")
 	}
 }
