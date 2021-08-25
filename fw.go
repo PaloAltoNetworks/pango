@@ -10,6 +10,7 @@ import (
 	"github.com/PaloAltoNetworks/pango/licen"
 	"github.com/PaloAltoNetworks/pango/netw"
 	"github.com/PaloAltoNetworks/pango/objs"
+	"github.com/PaloAltoNetworks/pango/panosplugin"
 	"github.com/PaloAltoNetworks/pango/poli"
 	"github.com/PaloAltoNetworks/pango/predefined"
 	"github.com/PaloAltoNetworks/pango/userid"
@@ -32,14 +33,15 @@ type Firewall struct {
 	Client
 
 	// Namespaces
-	Predefined *predefined.Firewall
-	Network    *netw.Firewall
-	Device     *dev.FwDev
-	Policies   *poli.Firewall
-	Objects    *objs.FwObjs
-	Licensing  *licen.Licen
-	UserId     *userid.UserId
-	Vsys       *vsys.Firewall
+	Predefined  *predefined.Firewall
+	Network     *netw.Firewall
+	Device      *dev.FwDev
+	Policies    *poli.Firewall
+	Objects     *objs.FwObjs
+	Licensing   *licen.Licen
+	UserId      *userid.UserId
+	Vsys        *vsys.Firewall
+	PanosPlugin *panosplugin.Firewall
 }
 
 // Initialize does some initial setup of the Firewall connection, retrieves
@@ -169,4 +171,5 @@ func (c *Firewall) initNamespaces() {
 	c.UserId.Initialize(c)
 
 	c.Vsys = vsys.FirewallNamespace(c)
+	c.PanosPlugin = panosplugin.FirewallNamespace(c)
 }
