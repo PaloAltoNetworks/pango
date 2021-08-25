@@ -21,6 +21,7 @@ import (
 	"github.com/PaloAltoNetworks/pango/plugin"
 	"github.com/PaloAltoNetworks/pango/util"
 	"github.com/PaloAltoNetworks/pango/version"
+	"github.com/antchfx/xmlquery"
 )
 
 // These bit flags control what is logged by client connections.  Of the flags
@@ -116,6 +117,10 @@ type Client struct {
 	credsFile string
 	con       *http.Client
 	api_url   string
+
+	// XML document for client's running-config
+	UseRunningCfg bool
+	RunningCfgDoc *xmlquery.Node
 
 	// Variables for testing, response bytes, headers, and response index.
 	rp              []url.Values
@@ -1466,6 +1471,21 @@ func (c *Client) typeConfig(action string, data url.Values, element, extras, ans
 		c.MultiConfigure.Reqs = append(c.MultiConfigure.Reqs, r)
 		return nil, nil
 	}
+	if c.UseRunningCfg && (action == "show" || action == "get") {
+		buf := bytes.Buffer{}
+		for _, xpath := range data["xpath"] {
+			if list := xmlquery.Find(c.RunningCfgDoc, xpath); list != nil {
+				buf.Write([]byte("<response status='success'><result>"))
+				for _, listE := range list {
+					buf.Write([]byte(listE.OutputXML(true)))
+				}
+				buf.Write([]byte("</result></response>"))
+			} else {
+				return nil, PanosError{Msg: "No such node", Code: 0}
+			}
+		}
+		return buf.Bytes(), nil
+	}
 
 	data.Set("type", "config")
 	data.Set("action", action)
@@ -1928,6 +1948,22 @@ func (c *Client) logSend(data url.Values) {
 	if b.Len() > 0 {
 		log.Printf("%s", b.String())
 	}
+}
+
+func (c *Client) LoadRunningConfig() (err error) {
+	if !c.UseRunningCfg {
+		return fmt.Errorf("pango not initialized to use running config")
+	}
+	var runningCfgFile *os.File
+	runningCfgPath := "running-config.xml"
+
+	if runningCfgFile, err = os.Open(runningCfgPath); err != nil {
+		return
+	}
+	if c.RunningCfgDoc, err = xmlquery.Parse(runningCfgFile); err != nil {
+		return
+	}
+	return
 }
 
 /** Non-struct private functions **/
