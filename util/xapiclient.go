@@ -37,4 +37,5 @@ type XapiClient interface {
 	Commit(interface{}, string, interface{}) (uint, []byte, error)
 	Clock() (time.Time, error)
 	PositionFirstEntity(int, string, string, []string, []string) error
+	ConfigTree() *XmlNode
 }

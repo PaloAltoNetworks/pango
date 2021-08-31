@@ -49,6 +49,7 @@ func (c *MockClient) Commit(d interface{}, e string, f interface{}) (uint, []byt
 	return 0, nil, nil
 }
 func (c *MockClient) PositionFirstEntity(d int, e, f string, g, h []string) error { return nil }
+func (c *MockClient) ConfigTree() *util.XmlNode                                   { return nil }
 
 func (c *MockClient) Op(req interface{}, vsys string, extras interface{}, ans interface{}) ([]byte, error) {
 	c.Function = "op"

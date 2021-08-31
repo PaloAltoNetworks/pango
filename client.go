@@ -113,9 +113,10 @@ type Client struct {
 	LoggingFromInitialize []string `json:"logging"`
 
 	// Internal variables.
-	credsFile string
-	con       *http.Client
-	api_url   string
+	credsFile  string
+	con        *http.Client
+	api_url    string
+	configTree *util.XmlNode
 
 	// Variables for testing, response bytes, headers, and response index.
 	rp              []url.Values
@@ -1829,6 +1830,92 @@ func (c *Client) GetTechSupportFile() (string, []byte, error) {
 	// Return the tech support file.
 	extras.Set("action", "get")
 	return c.Export(cmd, extras, nil)
+}
+
+// RetrievePanosConfig retrieves either the running config, candidate config,
+// or the specified saved config file, then does `LoadPanosConfig()` to save it.
+//
+// After the config is loaded, config can be queried and retrieved using
+// any `FromPanosConfig()` methods.
+//
+// Param `value` can be the word "candidate" to load candidate config or
+// `running` to load running config.  If the value is neither of those, it
+// is assumed to be the name of a saved config and that is loaded.
+func (c *Client) RetrievePanosConfig(value string) error {
+	type getConfig struct {
+		XMLName   xml.Name `xml:"show"`
+		Running   *string  `xml:"config>running"`
+		Candidate *string  `xml:"config>candidate"`
+		Saved     *string  `xml:"config>saved"`
+	}
+
+	type data struct {
+		Data []byte `xml:",innerxml"`
+	}
+
+	type resp struct {
+		XMLName xml.Name `xml:"response"`
+		Result  data     `xml:"result"`
+	}
+
+	s := ""
+	req := getConfig{}
+	switch value {
+	case "candidate":
+		req.Candidate = &s
+	case "running":
+		req.Running = &s
+	default:
+		req.Saved = &value
+	}
+	ans := resp{}
+
+	if _, err := c.Op(req, "", nil, &ans); err != nil {
+		return err
+	}
+
+	return c.LoadPanosConfig(ans.Result.Data)
+}
+
+// LoadPanosConfig stores the given XML document into the local client instance.
+//
+// The `config` can either be `<config>...</config>` or something that contians
+// only the config document (such as `<result ...><config>...</config></result>`).
+//
+// After the config is loaded, config can be queried and retrieved using
+// any `FromPanosConfig()` methods.
+func (c *Client) LoadPanosConfig(config []byte) error {
+	log.Printf("load panos config")
+	if err := xml.Unmarshal(config, &c.configTree); err != nil {
+		return err
+	}
+
+	if c.configTree.XMLName.Local == "config" {
+		// Add a place holder parent util.XmlNode.
+		c.configTree = &util.XmlNode{
+			XMLName: xml.Name{
+				Local: "a",
+			},
+			Nodes: []util.XmlNode{
+				*c.configTree,
+			},
+		}
+		return nil
+	}
+
+	if len(c.configTree.Nodes) == 1 && c.configTree.Nodes[0].XMLName.Local == "config" {
+		// Already has a place holder parent.
+		return nil
+	}
+
+	c.configTree = nil
+	return fmt.Errorf("doesn't seem to be a config tree")
+}
+
+// ConfigTree returns the configuration tree that was loaded either via
+// `RetrievePanosConfig()` or `LoadPanosConfig()`.
+func (c *Client) ConfigTree() *util.XmlNode {
+	return c.configTree
 }
 
 func (c *Client) logSend(data url.Values) {
