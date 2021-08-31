@@ -1,6 +1,7 @@
 package namespace
 
 import (
+	"encoding/xml"
 	"fmt"
 
 	"github.com/PaloAltoNetworks/pango/util"
@@ -126,5 +127,36 @@ func (n *Common) retrieve(cmd string, path []string, singular bool, singleDesc s
 
 	// Unmarshal the response into the given struct.
 	data = util.StripPanosPackaging(data, tag)
+	return UnpackageXmlInto(data, ans)
+}
+
+/*
+FromPanosConfig returns multiple objects' config from the configuration
+retrieved from PAN-OS and stored in the client's config tree.
+
+path is the xpath function.
+ans is an interface to unmarshal the found config into.
+*/
+func (n *Common) FromPanosConfig(pather Pather, ans interface{}) error {
+	path, pErr := pather(nil)
+	if pErr != nil {
+		return pErr
+	}
+
+	config := n.Client.ConfigTree()
+	if config == nil {
+		return fmt.Errorf("no config tree loaded")
+	}
+
+	elm := util.FindXmlNodeInTree(path, config)
+	if elm == nil {
+		return nil
+	}
+
+	data, err := xml.Marshal(elm)
+	if err != nil {
+		return err
+	}
+
 	return UnpackageXmlInto(data, ans)
 }
