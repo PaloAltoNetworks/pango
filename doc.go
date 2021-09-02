@@ -65,11 +65,11 @@ Loading PAN-OS Config
 
 A PAN-OS configuration can be loaded from a PAN-OS device using `RetrievePanosConfig()`
 to pull it from a live device or `LoadPanosConfig()` if already in local memory.  Once
-it's been loaded, the `FromPanosConfig()` namespace functions can be used to retrieve
-normalized objects from the loaded config.
+it's been loaded, use `FromPanosConfig()` for singletons and `AllFromPanosConfig()`
+for slices of normalized objects from the loaded config.
 
-You can use this file load and config retrieval to do offline inspection of the
-config as well, just make sure to set `pango.Client.Version` to the appropriate PAN-OS
+You can also use this file load and config retrieval to do offline inspection of the
+config, just make sure to set `pango.Client.Version` to the appropriate PAN-OS
 version so the version normalization can take place.
 
 
