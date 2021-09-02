@@ -1,6 +1,8 @@
 package bgp
 
 import (
+	"fmt"
+
 	"github.com/PaloAltoNetworks/pango/namespace"
 	"github.com/PaloAltoNetworks/pango/util"
 	"github.com/PaloAltoNetworks/pango/version"
@@ -32,7 +34,13 @@ func first(ans normalizer, err error) (Config, error) {
 		return Config{}, err
 	}
 
-	return ans.Normalize()[0], nil
+	// TODO(shinmog): return the real ObjectNotFound error.
+	list := ans.Normalize()
+	if len(list) == 0 {
+		return Config{}, fmt.Errorf("Object not found")
+	}
+
+	return list[0], nil
 }
 
 // FirewallNamespace returns an initialized namespace.
