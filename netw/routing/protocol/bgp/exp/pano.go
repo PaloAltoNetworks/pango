@@ -88,6 +88,13 @@ func (c *Panorama) Delete(tmpl, ts, vr string, e ...interface{}) error {
 	return c.ns.Delete(c.pather(tmpl, ts, vr), names, nErr)
 }
 
+// FromPanosConfig retrieves all objects stored in the retrieved config.
+func (c *Panorama) FromPanosConfig(tmpl, ts, vr string) ([]Entry, error) {
+	ans := c.container()
+	err := c.ns.FromPanosConfig(c.pather(tmpl, ts, vr), ans)
+	return all(ans, err)
+}
+
 // MoveGroup moves a logical group of bgp export rules somewhere in relation
 // to another security policy.
 //
