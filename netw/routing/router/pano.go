@@ -129,6 +129,13 @@ func (c *Panorama) CleanupDefault(tmpl, ts string) error {
 	return c.Edit(tmpl, ts, "", info)
 }
 
+// FromPanosConfig retrieves all objects stored in the retrieved config.
+func (c *Panorama) FromPanosConfig(tmpl, ts string) ([]Entry, error) {
+	ans := c.container()
+	err := c.ns.FromPanosConfig(c.pather(tmpl, ts), ans)
+	return all(ans, err)
+}
+
 func (c *Panorama) pather(tmpl, ts string) namespace.Pather {
 	return func(v []string) ([]string, error) {
 		return c.xpath(tmpl, ts, v)
