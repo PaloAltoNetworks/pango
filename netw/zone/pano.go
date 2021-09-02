@@ -130,6 +130,13 @@ func (c *Panorama) Delete(tmpl, ts, vsys string, e ...interface{}) error {
 	return c.ns.Delete(c.pather(tmpl, ts, vsys), names, nErr)
 }
 
+// FromPanosConfig retrieves all objects stored in the retrieved config.
+func (c *Panorama) FromPanosConfig(tmpl, ts, vsys string) ([]Entry, error) {
+	ans := c.container()
+	err := c.ns.FromPanosConfig(c.pather(tmpl, ts, vsys), ans)
+	return all(ans, err)
+}
+
 func (c *Panorama) pather(tmpl, ts, vsys string) namespace.Pather {
 	return func(v []string) ([]string, error) {
 		return c.xpath(tmpl, ts, vsys, v)
