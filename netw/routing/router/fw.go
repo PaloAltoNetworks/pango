@@ -124,7 +124,7 @@ func (c *Firewall) CleanupDefault() error {
 // AllFromPanosConfig retrieves all objects stored in the retrieved config.
 func (c *Firewall) AllFromPanosConfig() ([]Entry, error) {
 	ans := c.container()
-	err := c.ns.FromPanosConfig(c.pather(), ans)
+	err := c.ns.AllFromPanosConfig(c.pather(), ans)
 	return all(ans, err)
 }
 

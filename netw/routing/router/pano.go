@@ -132,7 +132,7 @@ func (c *Panorama) CleanupDefault(tmpl, ts string) error {
 // AllFromPanosConfig retrieves all objects stored in the retrieved config.
 func (c *Panorama) AllFromPanosConfig(tmpl, ts string) ([]Entry, error) {
 	ans := c.container()
-	err := c.ns.FromPanosConfig(c.pather(tmpl, ts), ans)
+	err := c.ns.AllFromPanosConfig(c.pather(tmpl, ts), ans)
 	return all(ans, err)
 }
 

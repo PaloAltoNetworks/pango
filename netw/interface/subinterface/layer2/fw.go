@@ -73,7 +73,7 @@ func (c *Firewall) Delete(iType, eth, mType string, e ...interface{}) error {
 // AllFromPanosConfig retrieves all objects stored in the retrieved config.
 func (c *Firewall) AllFromPanosConfig(iType, eth, mType string) ([]Entry, error) {
 	ans := c.container()
-	err := c.ns.FromPanosConfig(c.pather(iType, eth, mType), ans)
+	err := c.ns.AllFromPanosConfig(c.pather(iType, eth, mType), ans)
 	return all(ans, err)
 }
 

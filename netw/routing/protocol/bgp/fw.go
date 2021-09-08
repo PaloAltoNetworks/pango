@@ -44,7 +44,7 @@ func (c *Firewall) Delete(vr string) error {
 // FromPanosConfig retrieves the object stored in the retrieved config.
 func (c *Firewall) FromPanosConfig(vr string) (Config, error) {
 	ans := c.container()
-	err := c.ns.FromPanosConfig(c.pather(vr), ans)
+	err := c.ns.FromPanosConfig(c.pather(vr), "", ans)
 	return first(ans, err)
 }
 

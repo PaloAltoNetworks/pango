@@ -18,6 +18,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/PaloAltoNetworks/pango/errors"
 	"github.com/PaloAltoNetworks/pango/plugin"
 	"github.com/PaloAltoNetworks/pango/util"
 	"github.com/PaloAltoNetworks/pango/version"
@@ -252,7 +253,7 @@ func (c *Client) EntryListUsing(fn util.Retriever, path []string) ([]string, err
 
 	_, err = fn(path, nil, &resp)
 	if err != nil {
-		e2, ok := err.(PanosError)
+		e2, ok := err.(errors.Panos)
 		if ok && e2.ObjectNotFound() {
 			return nil, nil
 		}
@@ -282,7 +283,7 @@ func (c *Client) MemberListUsing(fn util.Retriever, path []string) ([]string, er
 
 	_, err := fn(path, nil, &resp)
 	if err != nil {
-		e2, ok := err.(PanosError)
+		e2, ok := err.(errors.Panos)
 		if ok && e2.ObjectNotFound() {
 			return nil, nil
 		}
@@ -1525,7 +1526,7 @@ func (c *Client) VsysUnimport(loc, tmpl, ts string, names []string) error {
 
 	_, err := c.Delete(path, nil, nil)
 	if err != nil {
-		e2, ok := err.(PanosError)
+		e2, ok := err.(errors.Panos)
 		if ok && e2.ObjectNotFound() {
 			return nil
 		}
@@ -1549,7 +1550,7 @@ func (c *Client) IsImported(loc, tmpl, ts, vsys, name string) (bool, error) {
 		}
 	}
 
-	e2, ok := err.(PanosError)
+	e2, ok := err.(errors.Panos)
 	if ok && e2.ObjectNotFound() {
 		if vsys != "" {
 			return false, nil
@@ -1628,12 +1629,12 @@ func (c *Client) endCommunication(body []byte, ans interface{}) error {
 	// a result.
 	if errType1.Failed() {
 		if err == nil && errType1.Error() != "" {
-			return PanosError{errType1.Error(), errType1.ResponseCode}
+			return errors.Panos{errType1.Error(), errType1.ResponseCode}
 		}
 		errType2 := panosErrorResponseWithLine{}
 		err = xml.Unmarshal(body, &errType2)
 		if err == nil && errType2.Error() != "" {
-			return PanosError{errType2.Error(), errType2.ResponseCode}
+			return errors.Panos{errType2.Error(), errType2.ResponseCode}
 		}
 		// Still an error, but some unknown format.
 		return fmt.Errorf("Unknown error format: %s", body)
@@ -2076,29 +2077,6 @@ func asString(i interface{}, attemptMarshal bool) (string, error) {
 		return string(rb), nil
 	}
 }
-
-// PanosError is the error struct returned from the Communicate method.
-type PanosError struct {
-	Msg  string
-	Code int
-}
-
-// Error returns the error message.
-func (e PanosError) Error() string {
-	return e.Msg
-}
-
-// ObjectNotFound returns true on missing object error.
-func (e PanosError) ObjectNotFound() bool {
-	return e.Code == 7
-}
-
-/*
-// Code returns the error code.
-func (e PanosError) Code() int {
-    return e.ErrCode
-}
-*/
 
 type panosStatus struct {
 	ResponseStatus string `xml:"status,attr"`

@@ -73,7 +73,7 @@ func (c *Panorama) Delete(tmpl, ts, tun string, e ...interface{}) error {
 // AllFromPanosConfig retrieves all objects stored in the retrieved config.
 func (c *Panorama) AllFromPanosConfig(tmpl, ts, tun string) ([]Entry, error) {
 	ans := c.container()
-	err := c.ns.FromPanosConfig(c.pather(tmpl, ts, tun), ans)
+	err := c.ns.AllFromPanosConfig(c.pather(tmpl, ts, tun), ans)
 	return all(ans, err)
 }
 

@@ -44,7 +44,7 @@ func (c *Firewall) Delete(iType, iName, subName string) error {
 // FromPanosConfig retrieves the object stored in the retrieved config.
 func (c *Firewall) FromPanosConfig(iType, iName, subName string) (Config, error) {
 	ans := c.container()
-	err := c.ns.FromPanosConfig(c.pather(iType, iName, subName), ans)
+	err := c.ns.FromPanosConfig(c.pather(iType, iName, subName), "", ans)
 	return first(ans, err)
 }
 

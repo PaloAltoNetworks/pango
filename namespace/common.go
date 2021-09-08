@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 	"fmt"
 
+	"github.com/PaloAltoNetworks/pango/errors"
 	"github.com/PaloAltoNetworks/pango/util"
 )
 
@@ -131,14 +132,40 @@ func (n *Common) retrieve(cmd string, path []string, singular bool, singleDesc s
 }
 
 /*
-FromPanosConfig returns multiple objects' config from the configuration
+AllFromPanosConfig returns multiple objects' config from the configuration
 retrieved from PAN-OS and stored in the client's config tree.
 
 path is the xpath function.
 ans is an interface to unmarshal the found config into.
 */
-func (n *Common) FromPanosConfig(pather Pather, ans interface{}) error {
+func (n *Common) AllFromPanosConfig(pather Pather, ans interface{}) error {
 	path, pErr := pather(nil)
+	return n.loadConfig(path, ans, pErr)
+}
+
+/*
+FromPanosConfig returns a single object's config from the configuration
+retrieved from PAN-OS and stored in the client's config tree.
+
+path is the xpath function.
+name is the name of the object to retrieve.
+ans is an interface to unmarshal the found config into.
+*/
+func (n *Common) FromPanosConfig(pather Pather, name string, ans Namer) error {
+	path, pErr := pather([]string{name})
+	if err := n.loadConfig(path, ans, pErr); err != nil {
+		return err
+	}
+
+	names := ans.Names()
+	if len(names) == 0 {
+		return errors.ObjectNotFound()
+	}
+
+	return nil
+}
+
+func (n *Common) loadConfig(path []string, ans interface{}, pErr error) error {
 	if pErr != nil {
 		return pErr
 	}

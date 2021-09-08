@@ -73,7 +73,7 @@ func (c *Firewall) Delete(vr, area string, e ...interface{}) error {
 // AllFromPanosConfig retrieves all objects stored in the retrieved config.
 func (c *Firewall) AllFromPanosConfig(vr, area string) ([]Entry, error) {
 	ans := c.container()
-	err := c.ns.FromPanosConfig(c.pather(vr, area), ans)
+	err := c.ns.AllFromPanosConfig(c.pather(vr, area), ans)
 	return all(ans, err)
 }
 
