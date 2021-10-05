@@ -7,6 +7,7 @@ import (
 	"github.com/PaloAltoNetworks/pango/dev/ha"
 	halink "github.com/PaloAltoNetworks/pango/dev/ha/monitor/link"
 	hapath "github.com/PaloAltoNetworks/pango/dev/ha/monitor/path"
+	"github.com/PaloAltoNetworks/pango/dev/profile/certificate"
 	"github.com/PaloAltoNetworks/pango/dev/profile/email"
 	emailsrv "github.com/PaloAltoNetworks/pango/dev/profile/email/server"
 	"github.com/PaloAltoNetworks/pango/dev/profile/http"
@@ -23,6 +24,7 @@ import (
 
 // FwDev is the client.Device namespace.
 type FwDev struct {
+	CertificateProfile  *certificate.Firewall
 	EmailServer         *emailsrv.FwServer
 	EmailServerProfile  *email.FwEmail
 	GeneralSettings     *general.Firewall
@@ -43,6 +45,8 @@ type FwDev struct {
 
 // Initialize is invoked on client.Initialize().
 func (c *FwDev) Initialize(i util.XapiClient) {
+	c.CertificateProfile = certificate.FirewallNamespace(i)
+
 	c.EmailServer = &emailsrv.FwServer{}
 	c.EmailServer.Initialize(i)
 
