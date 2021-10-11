@@ -7,7 +7,7 @@ import (
 	"github.com/PaloAltoNetworks/pango/util"
 )
 
-// Firewall is the client.Network.BgpConfig namespace.
+// Firewall is the client.Device.SslDecrypt namespace.
 type Firewall struct {
 	ns *namespace.Standard
 }

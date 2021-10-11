@@ -7,7 +7,7 @@ import (
 	"github.com/PaloAltoNetworks/pango/util"
 )
 
-// Panorama is the client.Network.BgpConfig namespace.
+// Panorama is the client.Device.SslDecrypt namespace.
 type Panorama struct {
 	ns *namespace.Standard
 }
@@ -87,7 +87,7 @@ func (c *Panorama) xpath(tmpl, ts, vsys string) ([]string, error) {
 
 	if tmpl == "" && ts == "" {
 		if vsys != "" {
-			return nil, fmt.Errorf("vsys should be shared for local %s config", singular)
+			return nil, fmt.Errorf("vsys should be empty for local %s config", singular)
 		}
 
 		ans = append(ans, "config", "shared")
