@@ -15,6 +15,7 @@ import (
 	"github.com/PaloAltoNetworks/pango/dev/profile/snmp/v3"
 	"github.com/PaloAltoNetworks/pango/dev/profile/syslog"
 	syslogsrv "github.com/PaloAltoNetworks/pango/dev/profile/syslog/server"
+	"github.com/PaloAltoNetworks/pango/dev/ssldecrypt"
 )
 
 // PanoDev is the client.Device namespace.
@@ -26,6 +27,7 @@ type PanoDev struct {
 	HttpParam           *param.PanoParam
 	HttpServer          *httpsrv.PanoServer
 	HttpServerProfile   *http.PanoHttp
+	SslDecrypt          *ssldecrypt.Panorama
 	SnmpServerProfile   *snmp.PanoSnmp
 	SnmpV2cServer       *v2c.PanoV2c
 	SnmpV3Server        *v3.PanoV3
@@ -54,6 +56,8 @@ func (c *PanoDev) Initialize(i util.XapiClient) {
 
 	c.HttpServerProfile = &http.PanoHttp{}
 	c.HttpServerProfile.Initialize(i)
+
+	c.SslDecrypt = ssldecrypt.PanoramaNamespace(i)
 
 	c.SnmpServerProfile = &snmp.PanoSnmp{}
 	c.SnmpServerProfile.Initialize(i)
