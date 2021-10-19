@@ -15,6 +15,16 @@ func getTests() []tc {
 		{"v1 config", version.Number{7, 1, 0, ""}, Entry{
 			Name:   "t1",
 			Config: "custom format",
+			Servers: []Server{
+				{
+					Name:         "foo",
+					DisplayName:  "bar",
+					From:         "src@example.com",
+					To:           "dst@example.com",
+					AlsoTo:       "also@example.com",
+					EmailGateway: "smtp.example.com",
+				},
+			},
 		}},
 		{"v1 system", version.Number{7, 1, 0, ""}, Entry{
 			Name:   "t1",
@@ -43,6 +53,16 @@ func getTests() []tc {
 		{"v2 config", version.Number{8, 0, 0, ""}, Entry{
 			Name:   "t1",
 			Config: "custom format",
+			Servers: []Server{
+				{
+					Name:         "foo",
+					DisplayName:  "bar",
+					From:         "src@example.com",
+					To:           "dst@example.com",
+					AlsoTo:       "also@example.com",
+					EmailGateway: "smtp.example.com",
+				},
+			},
 		}},
 		{"v2 system", version.Number{8, 0, 0, ""}, Entry{
 			Name:   "t1",
@@ -99,6 +119,16 @@ func getTests() []tc {
 		{"v3 config", version.Number{8, 1, 0, ""}, Entry{
 			Name:   "t1",
 			Config: "custom format",
+			Servers: []Server{
+				{
+					Name:         "foo",
+					DisplayName:  "bar",
+					From:         "src@example.com",
+					To:           "dst@example.com",
+					AlsoTo:       "also@example.com",
+					EmailGateway: "smtp.example.com",
+				},
+			},
 		}},
 		{"v3 system", version.Number{8, 1, 0, ""}, Entry{
 			Name:   "t1",
@@ -159,6 +189,16 @@ func getTests() []tc {
 		{"v4 config", version.Number{9, 0, 0, ""}, Entry{
 			Name:   "t1",
 			Config: "custom format",
+			Servers: []Server{
+				{
+					Name:         "foo",
+					DisplayName:  "bar",
+					From:         "src@example.com",
+					To:           "dst@example.com",
+					AlsoTo:       "also@example.com",
+					EmailGateway: "smtp.example.com",
+				},
+			},
 		}},
 		{"v4 system", version.Number{9, 0, 0, ""}, Entry{
 			Name:   "t1",
