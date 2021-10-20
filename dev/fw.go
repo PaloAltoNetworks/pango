@@ -10,9 +10,6 @@ import (
 	"github.com/PaloAltoNetworks/pango/dev/profile/certificate"
 	"github.com/PaloAltoNetworks/pango/dev/profile/email"
 	"github.com/PaloAltoNetworks/pango/dev/profile/http"
-	"github.com/PaloAltoNetworks/pango/dev/profile/http/header"
-	"github.com/PaloAltoNetworks/pango/dev/profile/http/param"
-	httpsrv "github.com/PaloAltoNetworks/pango/dev/profile/http/server"
 	"github.com/PaloAltoNetworks/pango/dev/profile/snmp"
 	"github.com/PaloAltoNetworks/pango/dev/profile/snmp/v2c"
 	"github.com/PaloAltoNetworks/pango/dev/profile/snmp/v3"
@@ -30,10 +27,7 @@ type FwDev struct {
 	HaConfig            *ha.Firewall
 	HaLinkMonitorGroup  *halink.Firewall
 	HaPathMonitorGroup  *hapath.Firewall
-	HttpHeader          *header.FwHeader
-	HttpParam           *param.FwParam
-	HttpServer          *httpsrv.FwServer
-	HttpServerProfile   *http.FwHttp
+	HttpServerProfile   *http.Firewall
 	SslDecrypt          *ssldecrypt.Firewall
 	SnmpServerProfile   *snmp.FwSnmp
 	SnmpV2cServer       *v2c.FwV2c
@@ -51,19 +45,7 @@ func (c *FwDev) Initialize(i util.XapiClient) {
 	c.HaConfig = ha.FirewallNamespace(i)
 	c.HaLinkMonitorGroup = halink.FirewallNamespace(i)
 	c.HaPathMonitorGroup = hapath.FirewallNamespace(i)
-
-	c.HttpHeader = &header.FwHeader{}
-	c.HttpHeader.Initialize(i)
-
-	c.HttpParam = &param.FwParam{}
-	c.HttpParam.Initialize(i)
-
-	c.HttpServer = &httpsrv.FwServer{}
-	c.HttpServer.Initialize(i)
-
-	c.HttpServerProfile = &http.FwHttp{}
-	c.HttpServerProfile.Initialize(i)
-
+	c.HttpServerProfile = http.FirewallNamespace(i)
 	c.SslDecrypt = ssldecrypt.FirewallNamespace(i)
 
 	c.SnmpServerProfile = &snmp.FwSnmp{}
