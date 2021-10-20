@@ -34,7 +34,7 @@ type FwDev struct {
 	SnmpV3Server        *v3.FwV3
 	SyslogServer        *syslogsrv.FwServer
 	SyslogServerProfile *syslog.FwSyslog
-	Telemetry           *telemetry.FwTelemetry
+	Telemetry           *telemetry.Firewall
 }
 
 // Initialize is invoked on client.Initialize().
@@ -63,6 +63,5 @@ func (c *FwDev) Initialize(i util.XapiClient) {
 	c.SyslogServerProfile = &syslog.FwSyslog{}
 	c.SyslogServerProfile.Initialize(i)
 
-	c.Telemetry = &telemetry.FwTelemetry{}
-	c.Telemetry.Initialize(i)
+	c.Telemetry = telemetry.FirewallNamespace(i)
 }
