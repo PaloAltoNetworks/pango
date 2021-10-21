@@ -16,8 +16,8 @@ import (
 	"github.com/PaloAltoNetworks/pango/dev/telemetry"
 )
 
-// FwDev is the client.Device namespace.
-type FwDev struct {
+// Firewall is the client.Device namespace.
+type Firewall struct {
 	CertificateProfile  *certificate.Firewall
 	EmailServerProfile  *email.Firewall
 	GeneralSettings     *general.Firewall
@@ -31,17 +31,18 @@ type FwDev struct {
 	Telemetry           *telemetry.Firewall
 }
 
-// Initialize is invoked on client.Initialize().
-func (c *FwDev) Initialize(i util.XapiClient) {
-	c.CertificateProfile = certificate.FirewallNamespace(i)
-	c.EmailServerProfile = email.FirewallNamespace(i)
-	c.GeneralSettings = general.FirewallNamespace(i)
-	c.HaConfig = ha.FirewallNamespace(i)
-	c.HaLinkMonitorGroup = halink.FirewallNamespace(i)
-	c.HaPathMonitorGroup = hapath.FirewallNamespace(i)
-	c.HttpServerProfile = http.FirewallNamespace(i)
-	c.SslDecrypt = ssldecrypt.FirewallNamespace(i)
-	c.SnmpServerProfile = snmp.FirewallNamespace(i)
-	c.SyslogServerProfile = syslog.FirewallNamespace(i)
-	c.Telemetry = telemetry.FirewallNamespace(i)
+func FirewallNamespace(x util.XapiClient) *Firewall {
+	return &Firewall{
+		CertificateProfile:  certificate.FirewallNamespace(x),
+		EmailServerProfile:  email.FirewallNamespace(x),
+		GeneralSettings:     general.FirewallNamespace(x),
+		HaConfig:            ha.FirewallNamespace(x),
+		HaLinkMonitorGroup:  halink.FirewallNamespace(x),
+		HaPathMonitorGroup:  hapath.FirewallNamespace(x),
+		HttpServerProfile:   http.FirewallNamespace(x),
+		SslDecrypt:          ssldecrypt.FirewallNamespace(x),
+		SnmpServerProfile:   snmp.FirewallNamespace(x),
+		SyslogServerProfile: syslog.FirewallNamespace(x),
+		Telemetry:           telemetry.FirewallNamespace(x),
+	}
 }

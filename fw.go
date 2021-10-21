@@ -35,7 +35,7 @@ type Firewall struct {
 	// Namespaces
 	Predefined  *predefined.Firewall
 	Network     *netw.Firewall
-	Device      *dev.FwDev
+	Device      *dev.Firewall
 	Policies    *poli.Firewall
 	Objects     *objs.FwObjs
 	Licensing   *licen.Licen
@@ -156,8 +156,7 @@ func (c *Firewall) initNamespaces() {
 
 	c.Network = netw.FirewallNamespace(c)
 
-	c.Device = &dev.FwDev{}
-	c.Device.Initialize(c)
+	c.Device = dev.FirewallNamespace(c)
 
 	c.Policies = poli.FirewallNamespace(c)
 

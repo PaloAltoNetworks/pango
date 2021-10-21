@@ -11,8 +11,8 @@ import (
 	"github.com/PaloAltoNetworks/pango/dev/ssldecrypt"
 )
 
-// PanoDev is the client.Device namespace.
-type PanoDev struct {
+// Panorama is the client.Device namespace.
+type Panorama struct {
 	CertificateProfile  *certificate.Panorama
 	EmailServerProfile  *email.Panorama
 	HttpServerProfile   *http.Panorama
@@ -22,11 +22,13 @@ type PanoDev struct {
 }
 
 // Initialize is invoked on client.Initialize().
-func (c *PanoDev) Initialize(i util.XapiClient) {
-	c.CertificateProfile = certificate.PanoramaNamespace(i)
-	c.EmailServerProfile = email.PanoramaNamespace(i)
-	c.HttpServerProfile = http.PanoramaNamespace(i)
-	c.SslDecrypt = ssldecrypt.PanoramaNamespace(i)
-	c.SnmpServerProfile = snmp.PanoramaNamespace(i)
-	c.SyslogServerProfile = syslog.PanoramaNamespace(i)
+func PanoramaNamespace(x util.XapiClient) *Panorama {
+	return &Panorama{
+		CertificateProfile:  certificate.PanoramaNamespace(x),
+		EmailServerProfile:  email.PanoramaNamespace(x),
+		HttpServerProfile:   http.PanoramaNamespace(x),
+		SslDecrypt:          ssldecrypt.PanoramaNamespace(x),
+		SnmpServerProfile:   snmp.PanoramaNamespace(x),
+		SyslogServerProfile: syslog.PanoramaNamespace(x),
+	}
 }

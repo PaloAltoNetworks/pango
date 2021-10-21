@@ -32,7 +32,7 @@ type Panorama struct {
 
 	// Namespaces
 	Predefined *predefined.Panorama
-	Device     *dev.PanoDev
+	Device     *dev.Panorama
 	Licensing  *licen.Licen
 	UserId     *userid.UserId
 	Panorama   *pnrm.Panorama
@@ -209,8 +209,7 @@ func (o *VmAuthKey) ParseExpires(clock time.Time) {
 func (c *Panorama) initNamespaces() {
 	c.Predefined = predefined.PanoramaNamespace(c)
 
-	c.Device = &dev.PanoDev{}
-	c.Device.Initialize(c)
+	c.Device = dev.PanoramaNamespace(c)
 
 	c.Licensing = &licen.Licen{}
 	c.Licensing.Initialize(c)
