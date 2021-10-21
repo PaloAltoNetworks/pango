@@ -11,8 +11,7 @@ func TestFwNormalization(t *testing.T) {
 	testCases := getTests()
 
 	mc := &testdata.MockClient{}
-	ns := &FwSnmp{}
-	ns.Initialize(mc)
+	ns := FirewallNamespace(mc)
 
 	for _, tc := range testCases {
 		t.Run(tc.desc, func(t *testing.T) {

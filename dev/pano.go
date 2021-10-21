@@ -7,8 +7,6 @@ import (
 	"github.com/PaloAltoNetworks/pango/dev/profile/email"
 	"github.com/PaloAltoNetworks/pango/dev/profile/http"
 	"github.com/PaloAltoNetworks/pango/dev/profile/snmp"
-	"github.com/PaloAltoNetworks/pango/dev/profile/snmp/v2c"
-	"github.com/PaloAltoNetworks/pango/dev/profile/snmp/v3"
 	"github.com/PaloAltoNetworks/pango/dev/profile/syslog"
 	syslogsrv "github.com/PaloAltoNetworks/pango/dev/profile/syslog/server"
 	"github.com/PaloAltoNetworks/pango/dev/ssldecrypt"
@@ -20,9 +18,7 @@ type PanoDev struct {
 	EmailServerProfile  *email.Panorama
 	HttpServerProfile   *http.Panorama
 	SslDecrypt          *ssldecrypt.Panorama
-	SnmpServerProfile   *snmp.PanoSnmp
-	SnmpV2cServer       *v2c.PanoV2c
-	SnmpV3Server        *v3.PanoV3
+	SnmpServerProfile   *snmp.Panorama
 	SyslogServer        *syslogsrv.PanoServer
 	SyslogServerProfile *syslog.PanoSyslog
 }
@@ -33,15 +29,7 @@ func (c *PanoDev) Initialize(i util.XapiClient) {
 	c.EmailServerProfile = email.PanoramaNamespace(i)
 	c.HttpServerProfile = http.PanoramaNamespace(i)
 	c.SslDecrypt = ssldecrypt.PanoramaNamespace(i)
-
-	c.SnmpServerProfile = &snmp.PanoSnmp{}
-	c.SnmpServerProfile.Initialize(i)
-
-	c.SnmpV2cServer = &v2c.PanoV2c{}
-	c.SnmpV2cServer.Initialize(i)
-
-	c.SnmpV3Server = &v3.PanoV3{}
-	c.SnmpV3Server.Initialize(i)
+	c.SnmpServerProfile = snmp.PanoramaNamespace(i)
 
 	c.SyslogServer = &syslogsrv.PanoServer{}
 	c.SyslogServer.Initialize(i)

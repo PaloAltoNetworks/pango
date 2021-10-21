@@ -11,8 +11,6 @@ import (
 	"github.com/PaloAltoNetworks/pango/dev/profile/email"
 	"github.com/PaloAltoNetworks/pango/dev/profile/http"
 	"github.com/PaloAltoNetworks/pango/dev/profile/snmp"
-	"github.com/PaloAltoNetworks/pango/dev/profile/snmp/v2c"
-	"github.com/PaloAltoNetworks/pango/dev/profile/snmp/v3"
 	"github.com/PaloAltoNetworks/pango/dev/profile/syslog"
 	syslogsrv "github.com/PaloAltoNetworks/pango/dev/profile/syslog/server"
 	"github.com/PaloAltoNetworks/pango/dev/ssldecrypt"
@@ -29,9 +27,7 @@ type FwDev struct {
 	HaPathMonitorGroup  *hapath.Firewall
 	HttpServerProfile   *http.Firewall
 	SslDecrypt          *ssldecrypt.Firewall
-	SnmpServerProfile   *snmp.FwSnmp
-	SnmpV2cServer       *v2c.FwV2c
-	SnmpV3Server        *v3.FwV3
+	SnmpServerProfile   *snmp.Firewall
 	SyslogServer        *syslogsrv.FwServer
 	SyslogServerProfile *syslog.FwSyslog
 	Telemetry           *telemetry.Firewall
@@ -47,15 +43,7 @@ func (c *FwDev) Initialize(i util.XapiClient) {
 	c.HaPathMonitorGroup = hapath.FirewallNamespace(i)
 	c.HttpServerProfile = http.FirewallNamespace(i)
 	c.SslDecrypt = ssldecrypt.FirewallNamespace(i)
-
-	c.SnmpServerProfile = &snmp.FwSnmp{}
-	c.SnmpServerProfile.Initialize(i)
-
-	c.SnmpV2cServer = &v2c.FwV2c{}
-	c.SnmpV2cServer.Initialize(i)
-
-	c.SnmpV3Server = &v3.FwV3{}
-	c.SnmpV3Server.Initialize(i)
+	c.SnmpServerProfile = snmp.FirewallNamespace(i)
 
 	c.SyslogServer = &syslogsrv.FwServer{}
 	c.SyslogServer.Initialize(i)
