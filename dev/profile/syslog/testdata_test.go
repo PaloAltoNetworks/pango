@@ -16,6 +16,20 @@ func getTests() []tc {
 			Name:   "t1",
 			Config: "custom format",
 		}},
+		{"v1 config with servers", version.Number{7, 1, 0, ""}, Entry{
+			Name:   "t1",
+			Config: "custom format",
+			Servers: []Server{
+				{
+					Name:         "t1",
+					Server:       "syslog.server.int",
+					Transport:    TransportSsl,
+					Port:         42,
+					SyslogFormat: SyslogFormatIetf,
+					Facility:     FacilityLocal4,
+				},
+			},
+		}},
 		{"v1 system", version.Number{7, 1, 0, ""}, Entry{
 			Name:   "t1",
 			System: "custom format",
@@ -43,6 +57,20 @@ func getTests() []tc {
 		{"v2 config", version.Number{8, 0, 0, ""}, Entry{
 			Name:   "t1",
 			Config: "custom format",
+		}},
+		{"v2 config with servers", version.Number{8, 0, 0, ""}, Entry{
+			Name:   "t1",
+			Config: "custom format",
+			Servers: []Server{
+				{
+					Name:         "t1",
+					Server:       "syslog.server.int",
+					Transport:    TransportSsl,
+					Port:         42,
+					SyslogFormat: SyslogFormatIetf,
+					Facility:     FacilityLocal4,
+				},
+			},
 		}},
 		{"v2 system", version.Number{8, 0, 0, ""}, Entry{
 			Name:   "t1",
@@ -99,6 +127,20 @@ func getTests() []tc {
 		{"v3 config", version.Number{8, 1, 0, ""}, Entry{
 			Name:   "t1",
 			Config: "custom format",
+		}},
+		{"v3 config with servers", version.Number{8, 1, 0, ""}, Entry{
+			Name:   "t1",
+			Config: "custom format",
+			Servers: []Server{
+				{
+					Name:         "t1",
+					Server:       "syslog.server.int",
+					Transport:    TransportSsl,
+					Port:         42,
+					SyslogFormat: SyslogFormatIetf,
+					Facility:     FacilityLocal4,
+				},
+			},
 		}},
 		{"v3 system", version.Number{8, 1, 0, ""}, Entry{
 			Name:   "t1",
@@ -159,6 +201,20 @@ func getTests() []tc {
 		{"v4 config", version.Number{9, 0, 0, ""}, Entry{
 			Name:   "t1",
 			Config: "custom format",
+		}},
+		{"v4 config with servers", version.Number{9, 0, 0, ""}, Entry{
+			Name:   "t1",
+			Config: "custom format",
+			Servers: []Server{
+				{
+					Name:         "t1",
+					Server:       "syslog.server.int",
+					Transport:    TransportSsl,
+					Port:         42,
+					SyslogFormat: SyslogFormatIetf,
+					Facility:     FacilityLocal4,
+				},
+			},
 		}},
 		{"v4 system", version.Number{9, 0, 0, ""}, Entry{
 			Name:   "t1",

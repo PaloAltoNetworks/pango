@@ -8,7 +8,6 @@ import (
 	"github.com/PaloAltoNetworks/pango/dev/profile/http"
 	"github.com/PaloAltoNetworks/pango/dev/profile/snmp"
 	"github.com/PaloAltoNetworks/pango/dev/profile/syslog"
-	syslogsrv "github.com/PaloAltoNetworks/pango/dev/profile/syslog/server"
 	"github.com/PaloAltoNetworks/pango/dev/ssldecrypt"
 )
 
@@ -19,8 +18,7 @@ type PanoDev struct {
 	HttpServerProfile   *http.Panorama
 	SslDecrypt          *ssldecrypt.Panorama
 	SnmpServerProfile   *snmp.Panorama
-	SyslogServer        *syslogsrv.PanoServer
-	SyslogServerProfile *syslog.PanoSyslog
+	SyslogServerProfile *syslog.Panorama
 }
 
 // Initialize is invoked on client.Initialize().
@@ -30,10 +28,5 @@ func (c *PanoDev) Initialize(i util.XapiClient) {
 	c.HttpServerProfile = http.PanoramaNamespace(i)
 	c.SslDecrypt = ssldecrypt.PanoramaNamespace(i)
 	c.SnmpServerProfile = snmp.PanoramaNamespace(i)
-
-	c.SyslogServer = &syslogsrv.PanoServer{}
-	c.SyslogServer.Initialize(i)
-
-	c.SyslogServerProfile = &syslog.PanoSyslog{}
-	c.SyslogServerProfile.Initialize(i)
+	c.SyslogServerProfile = syslog.PanoramaNamespace(i)
 }

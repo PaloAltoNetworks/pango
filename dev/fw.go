@@ -12,7 +12,6 @@ import (
 	"github.com/PaloAltoNetworks/pango/dev/profile/http"
 	"github.com/PaloAltoNetworks/pango/dev/profile/snmp"
 	"github.com/PaloAltoNetworks/pango/dev/profile/syslog"
-	syslogsrv "github.com/PaloAltoNetworks/pango/dev/profile/syslog/server"
 	"github.com/PaloAltoNetworks/pango/dev/ssldecrypt"
 	"github.com/PaloAltoNetworks/pango/dev/telemetry"
 )
@@ -28,8 +27,7 @@ type FwDev struct {
 	HttpServerProfile   *http.Firewall
 	SslDecrypt          *ssldecrypt.Firewall
 	SnmpServerProfile   *snmp.Firewall
-	SyslogServer        *syslogsrv.FwServer
-	SyslogServerProfile *syslog.FwSyslog
+	SyslogServerProfile *syslog.Firewall
 	Telemetry           *telemetry.Firewall
 }
 
@@ -44,12 +42,6 @@ func (c *FwDev) Initialize(i util.XapiClient) {
 	c.HttpServerProfile = http.FirewallNamespace(i)
 	c.SslDecrypt = ssldecrypt.FirewallNamespace(i)
 	c.SnmpServerProfile = snmp.FirewallNamespace(i)
-
-	c.SyslogServer = &syslogsrv.FwServer{}
-	c.SyslogServer.Initialize(i)
-
-	c.SyslogServerProfile = &syslog.FwSyslog{}
-	c.SyslogServerProfile.Initialize(i)
-
+	c.SyslogServerProfile = syslog.FirewallNamespace(i)
 	c.Telemetry = telemetry.FirewallNamespace(i)
 }
