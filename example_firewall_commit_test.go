@@ -70,7 +70,7 @@ func Example_firewallCommit() {
 		log.Fatalf("Error in commit: %s", err)
 	} else if jobId == 0 {
 		log.Printf("No commit needed")
-	} else if err = fw.WaitForJob(jobId, sd, nil); err != nil {
+	} else if err = fw.WaitForJob(jobId, sd, nil, nil); err != nil {
 		log.Printf("Error in commit: %s", err)
 	} else {
 		log.Printf("Committed config successfully")
