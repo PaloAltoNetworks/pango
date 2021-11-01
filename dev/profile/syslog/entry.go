@@ -155,7 +155,7 @@ type entry_v1 struct {
 }
 
 type servers struct {
-	Entries []serverEntry `xml:"server>entry"`
+	Entries []serverEntry `xml:"entry"`
 }
 
 type serverEntry struct {
