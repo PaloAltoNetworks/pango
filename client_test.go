@@ -11,6 +11,7 @@ import (
 	"testing"
 
 	"github.com/PaloAltoNetworks/pango/commit"
+	"github.com/PaloAltoNetworks/pango/errors"
 	"github.com/PaloAltoNetworks/pango/testdata"
 )
 
@@ -412,5 +413,61 @@ func TestLogSendOsxCurlWithPersonalDataHeadersWithValues(t *testing.T) {
 				t.Errorf("Could not find %q in output: %s", v, s)
 			}
 		}
+	}
+}
+
+func TestGetOnMissingObjectReturnsObjectNotFoundError(t *testing.T) {
+	resp := `<response status="success" code="7"><result/></response>`
+
+	c := &Client{}
+
+	err := c.endCommunication([]byte(resp), nil)
+	if err == nil {
+		t.Errorf("Error is nil")
+	}
+	e2, ok := err.(errors.Panos)
+	if !ok {
+		t.Errorf("Error is not an errors.Panos")
+	}
+	if !e2.ObjectNotFound() {
+		t.Errorf("Is not an object not found error")
+	}
+}
+
+func TestShowOnMissingObjectReturnsNoSuchNode(t *testing.T) {
+	expected := "No such node"
+	resp := `<response status="error"><msg><line>No such node</line></msg></response>`
+
+	c := &Client{}
+
+	err := c.endCommunication([]byte(resp), nil)
+	if err == nil {
+		t.Errorf("Error is nil")
+	}
+	e2, ok := err.(errors.Panos)
+	if !ok {
+		t.Errorf("Error is not an errors.Panos")
+	}
+	if e2.Msg != "No such node" {
+		t.Errorf("Error is %q, not %q", e2.Msg, expected)
+	}
+}
+
+func TestMultilineErrorMessage(t *testing.T) {
+	expected := "HTTP method must be GET"
+	resp := fmt.Sprintf(`<response status="error" code="12"><msg><line><![CDATA[ tf123456 -> server -> first server  is invalid. %s, Username/Password must not be empty when Tag Distribution is chosen]]></line><line><![CDATA[ tf123456 -> server is invalid]]></line></msg></response>`, expected)
+
+	c := &Client{}
+
+	err := c.endCommunication([]byte(resp), nil)
+	if err == nil {
+		t.Errorf("Error is nil")
+	}
+	e2, ok := err.(errors.Panos)
+	if !ok {
+		t.Errorf("Error is not an errors.Panos")
+	}
+	if !strings.Contains(e2.Msg, expected) {
+		t.Errorf("Error does not have the %q substring in the first error line", expected)
 	}
 }

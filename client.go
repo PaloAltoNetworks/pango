@@ -1621,23 +1621,8 @@ func (c *Client) endCommunication(body []byte, ans interface{}) error {
 	}
 
 	// Check for errors first
-	errType1 := &panosErrorResponseWithoutLine{}
-	err = xml.Unmarshal(body, errType1)
-	// At this point, we make use of the shared error error checking that exists
-	// between response types.  If the first response is not an error type, we
-	// don't have to check the others.  We can get some modest speed gains as
-	// a result.
-	if errType1.Failed() {
-		if err == nil && errType1.Error() != "" {
-			return errors.Panos{errType1.Error(), errType1.ResponseCode}
-		}
-		errType2 := panosErrorResponseWithLine{}
-		err = xml.Unmarshal(body, &errType2)
-		if err == nil && errType2.Error() != "" {
-			return errors.Panos{errType2.Error(), errType2.ResponseCode}
-		}
-		// Still an error, but some unknown format.
-		return fmt.Errorf("Unknown error format: %s", body)
+	if err = errors.Parse(body); err != nil {
+		return err
 	}
 
 	// Return the body string if we weren't given something to unmarshal into
@@ -2075,95 +2060,6 @@ func asString(i interface{}, attemptMarshal bool) (string, error) {
 			return "", err
 		}
 		return string(rb), nil
-	}
-}
-
-type panosStatus struct {
-	ResponseStatus string `xml:"status,attr"`
-	ResponseCode   int    `xml:"code,attr"`
-}
-
-// Failed checks for a status of "failed" or "error".
-func (e panosStatus) Failed() bool {
-	if e.ResponseStatus == "failed" || e.ResponseStatus == "error" {
-		return true
-	} else if e.ResponseCode == 0 || e.ResponseCode == 19 || e.ResponseCode == 20 {
-		return false
-	} else {
-		return true
-	}
-}
-
-func (e panosStatus) codeError() string {
-	switch e.ResponseCode {
-	case 1:
-		return "Unknown command"
-	case 2, 3, 4, 5, 11:
-		return fmt.Sprintf("Internal error (%d) encountered", e.ResponseCode)
-	case 6:
-		return "Bad Xpath"
-	case 7:
-		return "Object not found"
-	case 8:
-		return "Object not unique"
-	case 10:
-		return "Reference count not zero"
-	case 12:
-		return "Invalid object"
-	case 14:
-		return "Operation not possible"
-	case 15:
-		return "Operation denied"
-	case 16:
-		return "Unauthorized"
-	case 17:
-		return "Invalid command"
-	case 18:
-		return "Malformed command"
-	case 0, 19, 20:
-		return ""
-	case 22:
-		return "Session timed out"
-	default:
-		return fmt.Sprintf("(%d) Unknown failure code, operation failed", e.ResponseCode)
-	}
-}
-
-// panosErrorResponseWithLine is one of a few known error formats that PAN-OS
-// outputs.  This has to be split from the other error struct because the
-// the XML unmarshaler doesn't like a single struct to have overlapping
-// definitions (the msg>line part).
-type panosErrorResponseWithLine struct {
-	XMLName xml.Name `xml:"response"`
-	panosStatus
-	ResponseMsg string `xml:"msg>line"`
-}
-
-// Error retrieves the parsed error message.
-func (e panosErrorResponseWithLine) Error() string {
-	if e.ResponseMsg != "" {
-		return e.ResponseMsg
-	} else {
-		return e.codeError()
-	}
-}
-
-// panosErrorResponseWithoutLine is one of a few known error formats that PAN-OS
-// outputs.  It checks two locations that the error could be, and returns the
-// one that was discovered in its Error().
-type panosErrorResponseWithoutLine struct {
-	XMLName xml.Name `xml:"response"`
-	panosStatus
-	ResponseMsg1 string `xml:"result>msg"`
-	ResponseMsg2 string `xml:"msg"`
-}
-
-// Error retrieves the parsed error message.
-func (e panosErrorResponseWithoutLine) Error() string {
-	if e.ResponseMsg1 != "" {
-		return e.ResponseMsg1
-	} else {
-		return e.ResponseMsg2
 	}
 }
 
