@@ -12,8 +12,8 @@ import (
 type Entry struct {
 	Name        string
 	Description string
-	Sites       []string
-	Type        string // PAN-OS 9.0
+	Sites       []string // Ordered
+	Type        string   // PAN-OS 9.0
 }
 
 // Copy copies the information from source Entry `s` to this object.  As the
@@ -66,7 +66,7 @@ func (o *container_v1) Normalize() []Entry {
 type entry_v1 struct {
 	XMLName     xml.Name         `xml:"entry"`
 	Name        string           `xml:"name,attr"`
-	Description string           `xml:"description"`
+	Description string           `xml:"description,omitempty"`
 	Sites       *util.MemberType `xml:"list"`
 }
 
@@ -116,7 +116,7 @@ func (o *container_v2) Normalize() []Entry {
 type entry_v2 struct {
 	XMLName     xml.Name         `xml:"entry"`
 	Name        string           `xml:"name,attr"`
-	Description string           `xml:"description"`
+	Description string           `xml:"description,omitempty"`
 	Sites       *util.MemberType `xml:"list"`
 	Type        string           `xml:"type"`
 }
