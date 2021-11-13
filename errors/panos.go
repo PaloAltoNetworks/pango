@@ -50,10 +50,11 @@ func Parse(body []byte) error {
 }
 
 type errorCheck struct {
-	XMLName xml.Name       `xml:"response"`
-	Status  string         `xml:"status,attr"`
-	Code    int            `xml:"code,attr"`
-	Msg     *errorCheckMsg `xml:"msg"`
+	XMLName   xml.Name       `xml:"response"`
+	Status    string         `xml:"status,attr"`
+	Code      int            `xml:"code,attr"`
+	Msg       *errorCheckMsg `xml:"msg"`
+	ResultMsg *string        `xml:"result>msg"`
 }
 
 type errorCheckMsg struct {
@@ -72,26 +73,28 @@ func (e *errorCheck) Failed() bool {
 }
 
 func (e *errorCheck) Message() string {
-	if e.Msg == nil {
-		return e.CodeError()
-	}
-
-	if len(e.Msg.Line) > 0 {
-		var b strings.Builder
-		for i := range e.Msg.Line {
-			if i != 0 {
-				b.WriteString(" | ")
+	if e.Msg != nil {
+		if len(e.Msg.Line) > 0 {
+			var b strings.Builder
+			for i := range e.Msg.Line {
+				if i != 0 {
+					b.WriteString(" | ")
+				}
+				b.WriteString(strings.TrimSpace(e.Msg.Line[i].Text))
 			}
-			b.WriteString(strings.TrimSpace(e.Msg.Line[i].Text))
+			return b.String()
 		}
-		return b.String()
+
+		if e.Msg.Message != "" {
+			return e.Msg.Message
+		}
 	}
 
-	if e.Msg.Message != "" {
-		return e.Msg.Message
+	if e.ResultMsg != nil {
+		return *e.ResultMsg
 	}
 
-	return ""
+	return e.CodeError()
 }
 
 func (e *errorCheck) CodeError() string {

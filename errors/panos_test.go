@@ -54,3 +54,20 @@ func TestMultilineErrorMessage(t *testing.T) {
 		}
 	}
 }
+
+func TestFailedExportErrorMessage(t *testing.T) {
+	expected := `Parameter "format" is required while exporting certificate`
+	data := `<response status = 'error' code = '400'><result><msg>Parameter &quot;format&quot; is required while exporting certificate</msg></result></response>`
+
+	err := Parse([]byte(data))
+	if err == nil {
+		t.Errorf("Error is nil")
+	} else {
+		e2, ok := err.(Panos)
+		if !ok {
+			t.Errorf("Not a pnos error")
+		} else if !strings.Contains(e2.Msg, expected) {
+			t.Errorf("Does not contain the expected substring: %s", e2.Msg)
+		}
+	}
+}
