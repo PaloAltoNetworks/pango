@@ -1060,20 +1060,21 @@ func (c *Client) Uid(cmd interface{}, vsys string, extras, ans interface{}) ([]b
 //
 // The fp param is the name of the param for the file upload.
 //
-// The extras param is any additional key/value file upload params.
+// The extras param should be either nil or a url.Values{} to be mixed in with
+// the constructed request.
 //
 // The ans param should be a pointer to a struct to unmarshal the response
 // into or nil.
 //
 // Any response received from the server is returned, along with any errors
 // encountered.
-func (c *Client) Import(cat, content, filename, fp string, extras map[string]string, ans interface{}) ([]byte, error) {
+func (c *Client) Import(cat, content, filename, fp string, extras, ans interface{}) ([]byte, error) {
 	data := url.Values{}
 	data.Set("type", "import")
 	data.Set("category", cat)
 
-	for k := range extras {
-		data.Set(k, extras[k])
+	if err := mergeUrlValues(&data, extras); err != nil {
+		return nil, err
 	}
 
 	b, _, err := c.CommunicateFile(content, filename, fp, data, ans)
