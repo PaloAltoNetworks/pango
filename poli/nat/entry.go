@@ -132,19 +132,19 @@ func (o *Entry) Defaults() {
 func (o *Entry) Copy(s Entry) {
 	o.Description = s.Description
 	o.Type = s.Type
-	o.SourceZones = s.SourceZones
+	o.SourceZones = util.CopyStringSlice(s.SourceZones)
 	o.DestinationZone = s.DestinationZone
 	o.ToInterface = s.ToInterface
 	o.Service = s.Service
-	o.SourceAddresses = s.SourceAddresses
-	o.DestinationAddresses = s.DestinationAddresses
+	o.SourceAddresses = util.CopyStringSlice(s.SourceAddresses)
+	o.DestinationAddresses = util.CopyStringSlice(s.DestinationAddresses)
 	o.SatType = s.SatType
 	o.SatAddressType = s.SatAddressType
-	o.SatTranslatedAddresses = s.SatTranslatedAddresses
+	o.SatTranslatedAddresses = util.CopyStringSlice(s.SatTranslatedAddresses)
 	o.SatInterface = s.SatInterface
 	o.SatIpAddress = s.SatIpAddress
 	o.SatFallbackType = s.SatFallbackType
-	o.SatFallbackTranslatedAddresses = s.SatFallbackTranslatedAddresses
+	o.SatFallbackTranslatedAddresses = util.CopyStringSlice(s.SatFallbackTranslatedAddresses)
 	o.SatFallbackInterface = s.SatFallbackInterface
 	o.SatFallbackIpType = s.SatFallbackIpType
 	o.SatFallbackIpAddress = s.SatFallbackIpAddress
@@ -153,9 +153,9 @@ func (o *Entry) Copy(s Entry) {
 	o.DatAddress = s.DatAddress
 	o.DatPort = s.DatPort
 	o.Disabled = s.Disabled
-	o.Targets = s.Targets
+	o.Targets = util.CopyTargets(s.Targets)
 	o.NegateTarget = s.NegateTarget
-	o.Tags = s.Tags
+	o.Tags = util.CopyStringSlice(s.Tags)
 	o.DatType = s.DatType
 	o.DatDynamicDistribution = s.DatDynamicDistribution
 }
