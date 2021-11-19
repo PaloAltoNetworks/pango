@@ -123,68 +123,18 @@ func (o *Entry) Defaults() {
 func (o *Entry) Copy(s Entry) {
 	o.Type = s.Type
 	o.Description = s.Description
-	if s.Tags == nil {
-		o.Tags = nil
-	} else {
-		s.Tags = make([]string, len(s.Tags))
-		copy(o.Tags, s.Tags)
-	}
-	if s.SourceZones == nil {
-		o.SourceZones = nil
-	} else {
-		o.SourceZones = make([]string, len(s.SourceZones))
-		copy(o.SourceZones, s.SourceZones)
-	}
-	if s.SourceAddresses == nil {
-		o.SourceAddresses = nil
-	} else {
-		o.SourceAddresses = make([]string, len(s.SourceAddresses))
-		copy(o.SourceAddresses, s.SourceAddresses)
-	}
+	o.Tags = util.CopyStringSlice(s.Tags)
+	o.SourceZones = util.CopyStringSlice(s.SourceZones)
+	o.SourceAddresses = util.CopyStringSlice(s.SourceAddresses)
 	o.NegateSource = s.NegateSource
-	if s.SourceUsers == nil {
-		o.SourceUsers = nil
-	} else {
-		o.SourceUsers = make([]string, len(s.SourceUsers))
-		copy(o.SourceUsers, s.SourceUsers)
-	}
-	if s.HipProfiles == nil {
-		o.HipProfiles = nil
-	} else {
-		o.HipProfiles = make([]string, len(s.HipProfiles))
-		copy(o.HipProfiles, s.HipProfiles)
-	}
-	if s.DestinationZones == nil {
-		o.DestinationZones = nil
-	} else {
-		o.DestinationZones = make([]string, len(s.DestinationZones))
-		copy(o.DestinationZones, s.DestinationZones)
-	}
-	if s.DestinationAddresses == nil {
-		o.DestinationAddresses = nil
-	} else {
-		o.DestinationAddresses = make([]string, len(s.DestinationAddresses))
-		copy(o.DestinationAddresses, s.DestinationAddresses)
-	}
+	o.SourceUsers = util.CopyStringSlice(s.SourceUsers)
+	o.HipProfiles = util.CopyStringSlice(s.HipProfiles)
+	o.DestinationZones = util.CopyStringSlice(s.DestinationZones)
+	o.DestinationAddresses = util.CopyStringSlice(s.DestinationAddresses)
 	o.NegateDestination = s.NegateDestination
-	if s.Applications == nil {
-		o.Applications = nil
-	} else {
-		o.Applications = make([]string, len(s.Applications))
-		copy(o.Applications, s.Applications)
-	}
-	if s.Services == nil {
-		o.Services = nil
-	} else {
-		o.Services = make([]string, len(s.Services))
-		copy(o.Services, s.Services)
-	}
-	if s.Categories == nil {
-		o.Categories = nil
-	} else {
-		o.Categories = make([]string, len(s.Categories))
-		copy(o.Categories, s.Categories)
-	}
+	o.Applications = util.CopyStringSlice(s.Applications)
+	o.Services = util.CopyStringSlice(s.Services)
+	o.Categories = util.CopyStringSlice(s.Categories)
 	o.Action = s.Action
 	o.LogSetting = s.LogSetting
 	o.LogStart = s.LogStart
@@ -194,20 +144,7 @@ func (o *Entry) Copy(s Entry) {
 	o.IcmpUnreachable = s.IcmpUnreachable
 	o.DisableServerResponseInspection = s.DisableServerResponseInspection
 	o.Group = s.Group
-	if s.Targets == nil {
-		o.Targets = nil
-	} else {
-		o.Targets = make(map[string][]string)
-		for key, oval := range s.Targets {
-			if oval == nil {
-				o.Targets[key] = nil
-			} else {
-				val := make([]string, len(oval))
-				copy(val, oval)
-				o.Targets[key] = val
-			}
-		}
-	}
+	o.Targets = util.CopyTargets(s.Targets)
 	o.NegateTarget = s.NegateTarget
 	o.Virus = s.Virus
 	o.Spyware = s.Spyware
@@ -216,18 +153,8 @@ func (o *Entry) Copy(s Entry) {
 	o.FileBlocking = s.FileBlocking
 	o.WildFireAnalysis = s.WildFireAnalysis
 	o.DataFiltering = s.DataFiltering
-	if s.SourceDevices == nil {
-		o.SourceDevices = nil
-	} else {
-		o.SourceDevices = make([]string, len(s.SourceDevices))
-		copy(o.SourceDevices, s.SourceDevices)
-	}
-	if s.DestinationDevices == nil {
-		o.DestinationDevices = nil
-	} else {
-		o.DestinationDevices = make([]string, len(s.DestinationDevices))
-		copy(o.DestinationDevices, s.DestinationDevices)
-	}
+	o.SourceDevices = util.CopyStringSlice(s.SourceDevices)
+	o.DestinationDevices = util.CopyStringSlice(s.DestinationDevices)
 }
 
 /** Structs / functions for normalization. **/
