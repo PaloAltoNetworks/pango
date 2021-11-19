@@ -49,16 +49,16 @@ type Entry struct {
 // Name and Uuid fields relates to the identify of this object, they are not copied.
 func (o *Entry) Copy(s Entry) {
 	o.Description = s.Description
-	o.Tags = s.Tags
+	o.Tags = util.CopyStringSlice(s.Tags)
 	o.FromType = s.FromType
-	o.FromValues = s.FromValues
-	o.SourceAddresses = s.SourceAddresses
-	o.SourceUsers = s.SourceUsers
+	o.FromValues = util.CopyStringSlice(s.FromValues)
+	o.SourceAddresses = util.CopyStringSlice(s.SourceAddresses)
+	o.SourceUsers = util.CopyStringSlice(s.SourceUsers)
 	o.NegateSource = s.NegateSource
-	o.DestinationAddresses = s.DestinationAddresses
+	o.DestinationAddresses = util.CopyStringSlice(s.DestinationAddresses)
 	o.NegateDestination = s.NegateDestination
-	o.Applications = s.Applications
-	o.Services = s.Services
+	o.Applications = util.CopyStringSlice(s.Applications)
+	o.Services = util.CopyStringSlice(s.Services)
 	o.Schedule = s.Schedule
 	o.Disabled = s.Disabled
 	o.Action = s.Action
@@ -70,9 +70,9 @@ func (o *Entry) Copy(s Entry) {
 	o.ForwardMonitorIpAddress = s.ForwardMonitorIpAddress
 	o.ForwardMonitorDisableIfUnreachable = s.ForwardMonitorDisableIfUnreachable
 	o.EnableEnforceSymmetricReturn = s.EnableEnforceSymmetricReturn
-	o.SymmetricReturnAddresses = s.SymmetricReturnAddresses
+	o.SymmetricReturnAddresses = util.CopyStringSlice(s.SymmetricReturnAddresses)
 	o.ActiveActiveDeviceBinding = s.ActiveActiveDeviceBinding
-	o.Targets = s.Targets
+	o.Targets = util.CopyTargets(s.Targets)
 	o.NegateTarget = s.NegateTarget
 }
 
