@@ -34,24 +34,9 @@ func (o *Config) Copy(s Config) {
 	o.ForwardTrustCertificateEcdsa = s.ForwardTrustCertificateEcdsa
 	o.ForwardUntrustCertificateRsa = s.ForwardUntrustCertificateRsa
 	o.ForwardUntrustCertificateEcdsa = s.ForwardUntrustCertificateEcdsa
-	if s.RootCaExcludes == nil {
-		o.RootCaExcludes = nil
-	} else {
-		o.RootCaExcludes = make([]string, 0, len(s.RootCaExcludes))
-		copy(o.RootCaExcludes, s.RootCaExcludes)
-	}
-	if s.TrustedRootCas == nil {
-		o.TrustedRootCas = nil
-	} else {
-		o.TrustedRootCas = make([]string, 0, len(s.TrustedRootCas))
-		copy(o.TrustedRootCas, s.TrustedRootCas)
-	}
-	if s.DisabledPredefinedExcludeCertificates == nil {
-		o.DisabledPredefinedExcludeCertificates = nil
-	} else {
-		o.DisabledPredefinedExcludeCertificates = make([]string, 0, len(s.DisabledPredefinedExcludeCertificates))
-		copy(o.DisabledPredefinedExcludeCertificates, s.DisabledPredefinedExcludeCertificates)
-	}
+	o.RootCaExcludes = util.CopyStringSlice(s.RootCaExcludes)
+	o.TrustedRootCas = util.CopyStringSlice(s.TrustedRootCas)
+	o.DisabledPredefinedExcludeCertificates = util.CopyStringSlice(s.DisabledPredefinedExcludeCertificates)
 	if s.SslDecryptExcludeCertificates == nil {
 		o.SslDecryptExcludeCertificates = nil
 	} else {
