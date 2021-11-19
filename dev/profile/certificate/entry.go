@@ -541,7 +541,7 @@ type certEntry_v2 struct {
 	Name                  string `xml:"name,attr"`
 	DefaultOcspUrl        string `xml:"default-ocsp-url,omitempty"`
 	OcspVerifyCertificate string `xml:"ocsp-verify-cert,omitempty"`
-	TemplateName          string `xml:"template-name"`
+	TemplateName          string `xml:"template-name,omitempty"`
 }
 
 func (e *entry_v4) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
