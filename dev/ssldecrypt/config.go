@@ -9,6 +9,8 @@ import (
 
 // Config is a normalized, version independent representation of
 // SSL decrypt settings associated with certificates.
+//
+// Note: PAN-OS 8.0+
 type Config struct {
 	ForwardTrustCertificateRsa            string
 	ForwardTrustCertificateEcdsa          string
