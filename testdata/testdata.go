@@ -130,6 +130,14 @@ func (c *MockClient) Log(logType, action, query, dir string, nlogs, skip int, ex
 	return c.finalize(ans)
 }
 
+func (c *MockClient) Import(cat, content, filename, fp string, extras, ans interface{}) ([]byte, error) {
+	c.Function = "import"
+	c.Extras = extras
+
+	b, err := c.finalize(ans)
+	return b, err
+}
+
 func (c *MockClient) Export(category string, extras, ans interface{}) (string, []byte, error) {
 	c.Function = "export"
 	c.Extras = extras

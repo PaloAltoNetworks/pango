@@ -34,6 +34,7 @@ type XapiClient interface {
 	VsysUnimport(string, string, string, []string) error
 	WaitForJob(uint, time.Duration, interface{}) error
 	WaitForLogs(uint, time.Duration, time.Duration, interface{}) ([]byte, error)
+	Import(string, string, string, string, interface{}, interface{}) ([]byte, error)
 	Commit(interface{}, string, interface{}) (uint, []byte, error)
 	Clock() (time.Time, error)
 	PositionFirstEntity(int, string, string, []string, []string) error
