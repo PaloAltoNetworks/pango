@@ -48,92 +48,29 @@ type Entry struct {
 // Name and Uuid fields relate to the identify of this object, they are not copied.
 func (o *Entry) Copy(s Entry) {
 	o.Description = s.Description
-	if s.SourceZones == nil {
-		o.SourceZones = nil
-	} else {
-		o.SourceZones = make([]string, len(s.SourceZones))
-		copy(o.SourceZones, s.SourceZones)
-	}
-	if s.SourceAddresses == nil {
-		o.SourceAddresses = nil
-	} else {
-		o.SourceAddresses = make([]string, len(s.SourceAddresses))
-		copy(o.SourceAddresses, s.SourceAddresses)
-	}
+	o.SourceZones = util.CopyStringSlice(s.SourceZones)
+	o.SourceAddresses = util.CopyStringSlice(s.SourceAddresses)
 	o.NegateSource = s.NegateSource
-	if s.SourceUsers == nil {
-		o.SourceUsers = nil
-	} else {
-		o.SourceUsers = make([]string, len(s.SourceUsers))
-		copy(o.SourceUsers, s.SourceUsers)
-	}
-	if s.DestinationZones == nil {
-		o.DestinationZones = nil
-	} else {
-		o.DestinationZones = make([]string, len(s.DestinationZones))
-		copy(o.DestinationZones, s.DestinationZones)
-	}
-	if s.DestinationAddresses == nil {
-		o.DestinationAddresses = nil
-	} else {
-		o.DestinationAddresses = make([]string, len(s.DestinationAddresses))
-		copy(o.DestinationAddresses, s.DestinationAddresses)
-	}
+	o.SourceUsers = util.CopyStringSlice(s.SourceUsers)
+	o.DestinationZones = util.CopyStringSlice(s.DestinationZones)
+	o.DestinationAddresses = util.CopyStringSlice(s.DestinationAddresses)
 	o.NegateDestination = s.NegateDestination
-	if s.Tags == nil {
-		o.Tags = nil
-	} else {
-		s.Tags = make([]string, len(s.Tags))
-		copy(o.Tags, s.Tags)
-	}
+	o.Tags = util.CopyStringSlice(s.Tags)
 	o.Disabled = s.Disabled
-	if s.Services == nil {
-		o.Services = nil
-	} else {
-		o.Services = make([]string, len(s.Services))
-		copy(o.Services, s.Services)
-	}
-	if s.UrlCategories == nil {
-		o.UrlCategories = nil
-	} else {
-		o.UrlCategories = make([]string, len(s.UrlCategories))
-		copy(o.UrlCategories, s.UrlCategories)
-	}
+	o.Services = util.CopyStringSlice(s.Services)
+	o.UrlCategories = util.CopyStringSlice(s.UrlCategories)
 	o.Action = s.Action
 	o.DecryptionType = s.DecryptionType
 	o.SslCertificate = s.SslCertificate
 	o.DecryptionProfile = s.DecryptionProfile
 	o.ForwardingProfile = s.ForwardingProfile
 	o.GroupTag = s.GroupTag
-	if s.SourceHips == nil {
-		o.SourceHips = nil
-	} else {
-		o.SourceHips = make([]string, len(s.SourceHips))
-		copy(o.SourceHips, s.SourceHips)
-	}
-	if s.DestinationHips == nil {
-		o.DestinationHips = nil
-	} else {
-		o.DestinationHips = make([]string, len(s.DestinationHips))
-		copy(o.DestinationHips, s.DestinationHips)
-	}
+	o.SourceHips = util.CopyStringSlice(s.SourceHips)
+	o.DestinationHips = util.CopyStringSlice(s.DestinationHips)
 	o.LogSuccessfulTlsHandshakes = s.LogSuccessfulTlsHandshakes
 	o.LogFailedTlsHandshakes = s.LogFailedTlsHandshakes
 	o.LogSetting = s.LogSetting
-	if s.Targets == nil {
-		o.Targets = nil
-	} else {
-		o.Targets = make(map[string][]string)
-		for key, oval := range s.Targets {
-			if oval == nil {
-				o.Targets[key] = nil
-			} else {
-				val := make([]string, len(oval))
-				copy(val, oval)
-				o.Targets[key] = val
-			}
-		}
-	}
+	o.Targets = util.CopyTargets(s.Targets)
 	o.NegateTarget = s.NegateTarget
 }
 
