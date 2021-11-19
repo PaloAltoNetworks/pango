@@ -3,6 +3,7 @@ package dev
 import (
 	"github.com/PaloAltoNetworks/pango/util"
 
+	cert "github.com/PaloAltoNetworks/pango/dev/certificate"
 	"github.com/PaloAltoNetworks/pango/dev/general"
 	"github.com/PaloAltoNetworks/pango/dev/ha"
 	halink "github.com/PaloAltoNetworks/pango/dev/ha/monitor/link"
@@ -18,6 +19,7 @@ import (
 
 // Firewall is the client.Device namespace.
 type Firewall struct {
+	Certificate         *cert.Firewall
 	CertificateProfile  *certificate.Firewall
 	EmailServerProfile  *email.Firewall
 	GeneralSettings     *general.Firewall
@@ -33,6 +35,7 @@ type Firewall struct {
 
 func FirewallNamespace(x util.XapiClient) *Firewall {
 	return &Firewall{
+		Certificate:         cert.FirewallNamespace(x),
 		CertificateProfile:  certificate.FirewallNamespace(x),
 		EmailServerProfile:  email.FirewallNamespace(x),
 		GeneralSettings:     general.FirewallNamespace(x),

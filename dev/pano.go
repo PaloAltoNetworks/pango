@@ -3,6 +3,7 @@ package dev
 import (
 	"github.com/PaloAltoNetworks/pango/util"
 
+	cert "github.com/PaloAltoNetworks/pango/dev/certificate"
 	"github.com/PaloAltoNetworks/pango/dev/profile/certificate"
 	"github.com/PaloAltoNetworks/pango/dev/profile/email"
 	"github.com/PaloAltoNetworks/pango/dev/profile/http"
@@ -13,6 +14,7 @@ import (
 
 // Panorama is the client.Device namespace.
 type Panorama struct {
+	Certificate         *cert.Panorama
 	CertificateProfile  *certificate.Panorama
 	EmailServerProfile  *email.Panorama
 	HttpServerProfile   *http.Panorama
@@ -24,6 +26,7 @@ type Panorama struct {
 // Initialize is invoked on client.Initialize().
 func PanoramaNamespace(x util.XapiClient) *Panorama {
 	return &Panorama{
+		Certificate:         cert.PanoramaNamespace(x),
 		CertificateProfile:  certificate.PanoramaNamespace(x),
 		EmailServerProfile:  email.PanoramaNamespace(x),
 		HttpServerProfile:   http.PanoramaNamespace(x),
