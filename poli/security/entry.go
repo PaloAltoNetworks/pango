@@ -267,6 +267,18 @@ type entry_v1 struct {
 	ProfileSettings      *profileSettings `xml:"profile-setting"`
 }
 
+func (e *entry_v1) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
+	type local entry_v1
+	ans := local{
+		LogEnd: util.YesNo(true),
+	}
+	if err := d.DecodeElement(&ans, &start); err != nil {
+		return err
+	}
+	*e = entry_v1(ans)
+	return nil
+}
+
 type secOptions struct {
 	DisableServerResponseInspection string `xml:"disable-server-response-inspection,omitempty"`
 }
@@ -447,6 +459,18 @@ type entry_v2 struct {
 	ProfileSettings      *profileSettings `xml:"profile-setting"`
 }
 
+func (e *entry_v2) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
+	type local entry_v2
+	ans := local{
+		LogEnd: util.YesNo(true),
+	}
+	if err := d.DecodeElement(&ans, &start); err != nil {
+		return err
+	}
+	*e = entry_v2(ans)
+	return nil
+}
+
 func specify_v2(e Entry) interface{} {
 	ans := entry_v2{
 		Name:                 e.Name,
@@ -606,6 +630,18 @@ type entry_v3 struct {
 	ProfileSettings      *profileSettings `xml:"profile-setting"`
 	SourceDevices        *util.MemberType `xml:"source-hip"`
 	DestinationDevices   *util.MemberType `xml:"destination-hip"`
+}
+
+func (e *entry_v3) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
+	type local entry_v3
+	ans := local{
+		LogEnd: util.YesNo(true),
+	}
+	if err := d.DecodeElement(&ans, &start); err != nil {
+		return err
+	}
+	*e = entry_v3(ans)
+	return nil
 }
 
 func specify_v3(e Entry) interface{} {

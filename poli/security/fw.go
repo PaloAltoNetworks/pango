@@ -78,7 +78,12 @@ func (c *Firewall) Set(vsys string, e ...Entry) error {
 
 // VerifiableSet behaves like Set(), except policies with LogEnd as true
 // will first be created with LogEnd as false, and then a second Set() is
-// performed which will do LogEnd as true.  This is due to the unique
+// performed which will do LogEnd as true.
+//
+// NOTE:  Custom XML unmarshaling is now implemented, making this function
+// unnecessary.
+//
+// This is due to the unique
 // combination of being a boolean value that is true by default, the XML
 // returned from querying the rule details will omit the LogEnd setting,
 // which will be interpreted as false, when in fact it is true.  We can
@@ -113,7 +118,12 @@ func (c *Firewall) Edit(vsys string, e Entry) error {
 
 // VerifiableEdit behaves like Edit(), except policies with LogEnd as true
 // will first be created with LogEnd as false, and then a second Set() is
-// performed which will do LogEnd as true.  This is due to the unique
+// performed which will do LogEnd as true.
+//
+// NOTE:  Custom XML unmarshaling is now implemented, making this function
+// unnecessary.
+//
+// This is due to the unique
 // combination of being a boolean value that is true by default, the XML
 // returned from querying the rule details will omit the LogEnd setting,
 // which will be interpreted as false, when in fact it is true.  We can
