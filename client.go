@@ -1767,7 +1767,15 @@ func (c *Client) SendMultiConfigure(strict bool) (MultiConfigureResponse, error)
 //
 // This function returns the name of the tech support file, the file
 // contents, and an error if one occurred.
-func (c *Client) GetTechSupportFile() (string, []byte, error) {
+//
+// The timeout param is the new timeout (in seconds) to temporarily assign to
+// client connections to allow for the successful download of the tech support
+// file.  If the timeout is zero, then the timeout is left as-is.
+func (c *Client) GetTechSupportFile(timeout time.Duration) (string, []byte, error) {
+	if timeout < 0 {
+		return "", nil, fmt.Errorf("timeout cannot be negative")
+	}
+
 	var err error
 	var resp util.JobResponse
 	cmd := "tech-support"
@@ -1815,6 +1823,13 @@ func (c *Client) GetTechSupportFile() (string, []byte, error) {
 	}
 
 	// Return the tech support file.
+	if timeout > 0 {
+		defer func(c *Client, v time.Duration) {
+			c.con.Timeout = v
+		}(c, c.con.Timeout)
+		c.con.Timeout = timeout
+	}
+
 	extras.Set("action", "get")
 	return c.Export(cmd, extras, nil)
 }
