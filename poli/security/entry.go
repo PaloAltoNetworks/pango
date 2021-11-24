@@ -48,6 +48,7 @@ type Entry struct {
 	FileBlocking                    string
 	WildFireAnalysis                string
 	DataFiltering                   string
+	GroupTag                        string   // PAN-OS 9.0+
 	Uuid                            string   // PAN-OS 9.0+
 	SourceDevices                   []string // PAN-OS 10.0+
 	DestinationDevices              []string // PAN-OS 10.0+
@@ -153,6 +154,7 @@ func (o *Entry) Copy(s Entry) {
 	o.FileBlocking = s.FileBlocking
 	o.WildFireAnalysis = s.WildFireAnalysis
 	o.DataFiltering = s.DataFiltering
+	o.GroupTag = s.GroupTag
 	o.SourceDevices = util.CopyStringSlice(s.SourceDevices)
 	o.DestinationDevices = util.CopyStringSlice(s.DestinationDevices)
 }
@@ -405,6 +407,7 @@ func (o *entry_v2) normalize() Entry {
 		Disabled:             util.AsBool(o.Disabled),
 		Schedule:             o.Schedule,
 		IcmpUnreachable:      util.AsBool(o.IcmpUnreachable),
+		GroupTag:             o.GroupTag,
 	}
 	if o.Options != nil {
 		ans.DisableServerResponseInspection = util.AsBool(o.Options.DisableServerResponseInspection)
@@ -457,6 +460,7 @@ type entry_v2 struct {
 	Options              *secOptions      `xml:"option"`
 	TargetInfo           *targetInfo      `xml:"target"`
 	ProfileSettings      *profileSettings `xml:"profile-setting"`
+	GroupTag             string           `xml:"group-tag,omitempty"`
 }
 
 func (e *entry_v2) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
@@ -497,6 +501,7 @@ func specify_v2(e Entry) interface{} {
 		Schedule:             e.Schedule,
 		IcmpUnreachable:      util.YesNo(e.IcmpUnreachable),
 		Options:              &secOptions{util.YesNo(e.DisableServerResponseInspection)},
+		GroupTag:             e.GroupTag,
 	}
 	if e.Targets != nil || e.NegateTarget {
 		nfo := &targetInfo{
@@ -574,6 +579,7 @@ func (o *entry_v3) normalize() Entry {
 		Disabled:             util.AsBool(o.Disabled),
 		Schedule:             o.Schedule,
 		IcmpUnreachable:      util.AsBool(o.IcmpUnreachable),
+		GroupTag:             o.GroupTag,
 		SourceDevices:        util.MemToStr(o.SourceDevices),
 		DestinationDevices:   util.MemToStr(o.DestinationDevices),
 	}
@@ -628,6 +634,7 @@ type entry_v3 struct {
 	Options              *secOptions      `xml:"option"`
 	TargetInfo           *targetInfo      `xml:"target"`
 	ProfileSettings      *profileSettings `xml:"profile-setting"`
+	GroupTag             string           `xml:"group-tag,omitempty"`
 	SourceDevices        *util.MemberType `xml:"source-hip"`
 	DestinationDevices   *util.MemberType `xml:"destination-hip"`
 }
@@ -670,6 +677,7 @@ func specify_v3(e Entry) interface{} {
 		Schedule:             e.Schedule,
 		IcmpUnreachable:      util.YesNo(e.IcmpUnreachable),
 		Options:              &secOptions{util.YesNo(e.DisableServerResponseInspection)},
+		GroupTag:             e.GroupTag,
 		SourceDevices:        util.StrToMem(e.SourceDevices),
 		DestinationDevices:   util.StrToMem(e.DestinationDevices),
 	}
