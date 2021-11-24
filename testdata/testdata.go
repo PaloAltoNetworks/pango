@@ -44,6 +44,8 @@ func (c *MockClient) LogQuery(f string, a ...interface{})  {}
 func (c *MockClient) LogOp(f string, a ...interface{})     {}
 func (c *MockClient) LogUid(f string, a ...interface{})    {}
 func (c *MockClient) LogLog(f string, a ...interface{})    {}
+func (c *MockClient) LogExport(f string, a ...interface{}) {}
+func (c *MockClient) LogImport(f string, a ...interface{}) {}
 func (c *MockClient) Clock() (time.Time, error)            { return time.Now(), nil }
 func (c *MockClient) Commit(d interface{}, e string, f interface{}) (uint, []byte, error) {
 	return 0, nil, nil
@@ -130,7 +132,7 @@ func (c *MockClient) Log(logType, action, query, dir string, nlogs, skip int, ex
 	return c.finalize(ans)
 }
 
-func (c *MockClient) Import(cat, content, filename, fp string, extras, ans interface{}) ([]byte, error) {
+func (c *MockClient) Import(cat, content, filename, fp string, timeout time.Duration, extras, ans interface{}) ([]byte, error) {
 	c.Function = "import"
 	c.Extras = extras
 
@@ -138,7 +140,7 @@ func (c *MockClient) Import(cat, content, filename, fp string, extras, ans inter
 	return b, err
 }
 
-func (c *MockClient) Export(category string, extras, ans interface{}) (string, []byte, error) {
+func (c *MockClient) Export(category string, timeout time.Duration, extras, ans interface{}) (string, []byte, error) {
 	c.Function = "export"
 	c.Extras = extras
 
