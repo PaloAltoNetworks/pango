@@ -2,6 +2,7 @@ package certificate
 
 import (
 	"net/url"
+	"time"
 
 	"github.com/PaloAltoNetworks/pango/namespace"
 	"github.com/PaloAltoNetworks/pango/util"
@@ -85,8 +86,10 @@ func (c *Panorama) AllFromPanosConfig(shared bool, tmpl, vsys string) ([]Entry, 
 }
 
 // ImportPem imports a PEM certificate.
-func (c *Panorama) ImportPem(tmpl, vsys string, cert Pem) error {
+func (c *Panorama) ImportPem(tmpl, vsys string, timeout time.Duration, cert Pem) error {
 	var err error
+
+	c.ns.Client.LogImport("(import) pem %s: %s", singular, cert.Name)
 
 	ex := url.Values{}
 	ex.Set("certificate-name", cert.Name)
@@ -100,7 +103,7 @@ func (c *Panorama) ImportPem(tmpl, vsys string, cert Pem) error {
 		ex.Set("target-tpl-vsys", vsys)
 	}
 
-	_, err = c.ns.Client.Import("certificate", cert.Certificate, cert.CertificateFilename, "file", ex, nil)
+	_, err = c.ns.Client.Import("certificate", cert.Certificate, cert.CertificateFilename, "file", timeout, ex, nil)
 
 	if err != nil || cert.PrivateKey == "" {
 		return err
@@ -108,13 +111,15 @@ func (c *Panorama) ImportPem(tmpl, vsys string, cert Pem) error {
 
 	ex.Set("passphrase", cert.Passphrase)
 
-	_, err = c.ns.Client.Import("certificate", cert.PrivateKey, cert.PrivateKeyFilename, "file", ex, nil)
+	_, err = c.ns.Client.Import("certificate", cert.PrivateKey, cert.PrivateKeyFilename, "file", timeout, ex, nil)
 
 	return err
 }
 
 // ImportPkcs12 imports a PKCS12 certificate.
-func (c *Panorama) ImportPkcs12(tmpl, vsys string, cert Pkcs12) error {
+func (c *Panorama) ImportPkcs12(tmpl, vsys string, timeout time.Duration, cert Pkcs12) error {
+	c.ns.Client.LogImport("(import) pkcs12 %s: %s", singular, cert.Name)
+
 	ex := url.Values{}
 	ex.Set("certificate-name", cert.Name)
 	ex.Set("format", "pkcs12")
@@ -128,7 +133,7 @@ func (c *Panorama) ImportPkcs12(tmpl, vsys string, cert Pkcs12) error {
 		ex.Set("target-tpl-vsys", vsys)
 	}
 
-	_, err := c.ns.Client.Import("certificate", cert.Certificate, cert.CertificateFilename, "file", ex, nil)
+	_, err := c.ns.Client.Import("certificate", cert.Certificate, cert.CertificateFilename, "file", timeout, ex, nil)
 
 	return err
 }
@@ -142,7 +147,9 @@ func (c *Panorama) ImportPkcs12(tmpl, vsys string, cert Pkcs12) error {
 // Attempting to export a PKCS12 cert as a PEM cert will result in an error.
 //
 // Return values are the filename, file contents, and an error.
-func (c *Panorama) Export(format, tmpl, vsys, name, passphrase string, includeKey bool) (string, []byte, error) {
+func (c *Panorama) Export(format, tmpl, vsys, name, passphrase string, includeKey bool, timeout time.Duration) (string, []byte, error) {
+	c.ns.Client.LogExport("(export) %s %s: %s", format, singular, name)
+
 	ex := url.Values{}
 	ex.Set("certificate-name", name)
 	ex.Set("format", format)
@@ -153,11 +160,12 @@ func (c *Panorama) Export(format, tmpl, vsys, name, passphrase string, includeKe
 	if tmpl != "" {
 		ex.Set("target-tpl", tmpl)
 		if vsys != "" && vsys != "shared" {
-			ex.Set("vsys", vsys)
+			// TODO: This doesn't seem to work, but it's what the docs say.
+			ex.Set("target-tpl-vsys", vsys)
 		}
 	}
 
-	return c.ns.Client.Export("certificate", ex, nil)
+	return c.ns.Client.Export("certificate", timeout, ex, nil)
 }
 
 func (c *Panorama) pather(shared bool, tmpl, vsys string) namespace.Pather {

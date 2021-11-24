@@ -2,6 +2,7 @@ package certificate
 
 import (
 	"net/url"
+	"time"
 
 	"github.com/PaloAltoNetworks/pango/namespace"
 	"github.com/PaloAltoNetworks/pango/util"
@@ -85,8 +86,10 @@ func (c *Firewall) AllFromPanosConfig(vsys string) ([]Entry, error) {
 }
 
 // ImportPem imports a PEM certificate.
-func (c *Firewall) ImportPem(vsys string, cert Pem) error {
+func (c *Firewall) ImportPem(vsys string, timeout time.Duration, cert Pem) error {
 	var err error
+
+	c.ns.Client.LogImport("(import) pem %s: %s", singular, cert.Name)
 
 	ex := url.Values{}
 	ex.Set("certificate-name", cert.Name)
@@ -95,7 +98,7 @@ func (c *Firewall) ImportPem(vsys string, cert Pem) error {
 		ex.Set("vsys", vsys)
 	}
 
-	_, err = c.ns.Client.Import("certificate", cert.Certificate, cert.CertificateFilename, "file", ex, nil)
+	_, err = c.ns.Client.Import("certificate", cert.Certificate, cert.CertificateFilename, "file", timeout, ex, nil)
 
 	if err != nil || cert.PrivateKey == "" {
 		return err
@@ -103,14 +106,16 @@ func (c *Firewall) ImportPem(vsys string, cert Pem) error {
 
 	ex.Set("passphrase", cert.Passphrase)
 
-	_, err = c.ns.Client.Import("private-key", cert.PrivateKey, cert.PrivateKeyFilename, "file", ex, nil)
+	_, err = c.ns.Client.Import("private-key", cert.PrivateKey, cert.PrivateKeyFilename, "file", timeout, ex, nil)
 
 	return err
 }
 
 // ImportPkcs12 imports a PKCS12 certificate.
-func (c *Firewall) ImportPkcs12(vsys string, cert Pkcs12) error {
+func (c *Firewall) ImportPkcs12(vsys string, timeout time.Duration, cert Pkcs12) error {
 	var err error
+
+	c.ns.Client.LogImport("(import) pkcs12 %s: %s", singular, cert.Name)
 
 	ex := url.Values{}
 	ex.Set("certificate-name", cert.Name)
@@ -120,7 +125,7 @@ func (c *Firewall) ImportPkcs12(vsys string, cert Pkcs12) error {
 		ex.Set("vsys", vsys)
 	}
 
-	_, err = c.ns.Client.Import("certificate", cert.Certificate, cert.CertificateFilename, "file", ex, nil)
+	_, err = c.ns.Client.Import("certificate", cert.Certificate, cert.CertificateFilename, "file", timeout, ex, nil)
 
 	return err
 }
@@ -134,7 +139,9 @@ func (c *Firewall) ImportPkcs12(vsys string, cert Pkcs12) error {
 // Attempting to export a PKCS12 cert as a PEM cert will result in an error.
 //
 // Return values are the filename, file contents, and an error.
-func (c *Firewall) Export(format, vsys, name, passphrase string, includeKey bool) (string, []byte, error) {
+func (c *Firewall) Export(format, vsys, name, passphrase string, includeKey bool, timeout time.Duration) (string, []byte, error) {
+	c.ns.Client.LogExport("(export) %s %s: %s", format, singular, name)
+
 	ex := url.Values{}
 	ex.Set("certificate-name", name)
 	ex.Set("format", format)
@@ -146,7 +153,7 @@ func (c *Firewall) Export(format, vsys, name, passphrase string, includeKey bool
 		ex.Set("vsys", vsys)
 	}
 
-	return c.ns.Client.Export("certificate", ex, nil)
+	return c.ns.Client.Export("certificate", timeout, ex, nil)
 }
 
 func (c *Firewall) pather(vsys string) namespace.Pather {
