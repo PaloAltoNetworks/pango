@@ -63,6 +63,7 @@ const (
 	LogUid
 	LogLog
 	LogExport
+	LogImport
 	LogXpath
 	LogSend
 	LogReceive
@@ -614,6 +615,13 @@ func (c *Client) LogExport(msg string, i ...interface{}) {
 	}
 }
 
+// LogImport writes a log message for IMPORT operations if LogImport is set.
+func (c *Client) LogImport(msg string, i ...interface{}) {
+	if c.Logging&LogImport == LogImport {
+		log.Printf(msg, i...)
+	}
+}
+
 // Communicate sends the given data to PAN-OS.
 //
 // The ans param should be a pointer to a struct to unmarshal the response
@@ -1068,7 +1076,16 @@ func (c *Client) Uid(cmd interface{}, vsys string, extras, ans interface{}) ([]b
 //
 // Any response received from the server is returned, along with any errors
 // encountered.
-func (c *Client) Import(cat, content, filename, fp string, extras, ans interface{}) ([]byte, error) {
+func (c *Client) Import(cat, content, filename, fp string, timeout time.Duration, extras, ans interface{}) ([]byte, error) {
+	if timeout < 0 {
+		return nil, fmt.Errorf("timeout cannot be negative")
+	} else if timeout > 0 {
+		defer func(c *Client, v time.Duration) {
+			c.con.Timeout = v
+		}(c, c.con.Timeout)
+		c.con.Timeout = timeout
+	}
+
 	data := url.Values{}
 	data.Set("type", "import")
 	data.Set("category", cat)
@@ -1141,7 +1158,16 @@ func (c *Client) Commit(cmd interface{}, action string, extras interface{}) (uin
 // If the export invoked results in a file being downloaded from PAN-OS, then
 // the string returned is the name of the remote file that is retrieved,
 // otherwise it's just an empty string.
-func (c *Client) Export(category string, extras, ans interface{}) (string, []byte, error) {
+func (c *Client) Export(category string, timeout time.Duration, extras, ans interface{}) (string, []byte, error) {
+	if timeout < 0 {
+		return "", nil, fmt.Errorf("timeout cannot be negative")
+	} else if timeout > 0 {
+		defer func(c *Client, v time.Duration) {
+			c.con.Timeout = v
+		}(c, c.con.Timeout)
+		c.con.Timeout = timeout
+	}
+
 	data := url.Values{}
 	data.Set("type", "export")
 
@@ -1770,7 +1796,8 @@ func (c *Client) SendMultiConfigure(strict bool) (MultiConfigureResponse, error)
 //
 // The timeout param is the new timeout (in seconds) to temporarily assign to
 // client connections to allow for the successful download of the tech support
-// file.  If the timeout is zero, then the timeout is left as-is.
+// file.  If the timeout is zero, then pango.Client.Timeout is the timeout for
+// tech support file retrieval.
 func (c *Client) GetTechSupportFile(timeout time.Duration) (string, []byte, error) {
 	if timeout < 0 {
 		return "", nil, fmt.Errorf("timeout cannot be negative")
@@ -1783,7 +1810,7 @@ func (c *Client) GetTechSupportFile(timeout time.Duration) (string, []byte, erro
 	c.LogExport("(export) tech support file")
 
 	// Request the tech support file creation.
-	_, _, err = c.Export(cmd, nil, &resp)
+	_, _, err = c.Export(cmd, 0, nil, &resp)
 	if err != nil {
 		return "", nil, err
 	}
@@ -1799,7 +1826,7 @@ func (c *Client) GetTechSupportFile(timeout time.Duration) (string, []byte, erro
 	var pr util.BasicJob
 	var prev uint
 	for {
-		_, _, err = c.Export(cmd, extras, &pr)
+		_, _, err = c.Export(cmd, 0, extras, &pr)
 		if err != nil {
 			return "", nil, err
 		}
@@ -1822,16 +1849,8 @@ func (c *Client) GetTechSupportFile(timeout time.Duration) (string, []byte, erro
 		return "", nil, fmt.Errorf(pr.Details.String())
 	}
 
-	// Return the tech support file.
-	if timeout > 0 {
-		defer func(c *Client, v time.Duration) {
-			c.con.Timeout = v
-		}(c, c.con.Timeout)
-		c.con.Timeout = timeout
-	}
-
 	extras.Set("action", "get")
-	return c.Export(cmd, extras, nil)
+	return c.Export(cmd, timeout, extras, nil)
 }
 
 // RetrievePanosConfig retrieves either the running config, candidate config,
