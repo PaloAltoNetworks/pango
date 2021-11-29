@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/PaloAltoNetworks/pango/testdata"
+	"github.com/PaloAltoNetworks/pango/version"
 )
 
 func TestPanoNormalization(t *testing.T) {
@@ -46,5 +47,64 @@ func TestPanoNormalization(t *testing.T) {
 				}
 			}
 		})
+	}
+}
+
+func TestPanoAllDistancesDefault(t *testing.T) {
+	mc := &testdata.MockClient{
+		Version: version.Number{6, 1, 0, ""},
+	}
+	ns := PanoramaNamespace(mc)
+	mc.AddResp(`
+<entry name="foo">
+    <interface>
+        <member>ethernet1/1</member>
+    </interface>
+</entry>
+`)
+	ans, err := ns.Get("myTmpl", "", "foo")
+	if err != nil {
+		t.Errorf("Error in get: %s", err)
+	} else if len(ans.Interfaces) != 1 {
+		t.Errorf("Interfaces is len %d, not 1", len(ans.Interfaces))
+	} else if ans.Interfaces[0] != "ethernet1/1" {
+		t.Errorf("entry.Interfaces[0] = %q, not \"ethernet1/1\"", ans.Interfaces[0])
+	} else {
+		if ans.StaticDist != 10 || ans.StaticIpv6Dist != 10 || ans.OspfIntDist != 30 || ans.OspfExtDist != 110 || ans.Ospfv3IntDist != 30 || ans.Ospfv3ExtDist != 110 || ans.IbgpDist != 200 || ans.EbgpDist != 20 || ans.RipDist != 120 {
+			t.Errorf("ans defaults are wrong: %#v", ans)
+		}
+	}
+}
+
+func TestPanoPartialDistancesWithDefaults(t *testing.T) {
+	mc := &testdata.MockClient{
+		Version: version.Number{6, 1, 0, ""},
+	}
+	ns := PanoramaNamespace(mc)
+	mc.AddResp(`
+<entry name="foo">
+    <interface>
+        <member>ethernet1/1</member>
+    </interface>
+    <admin-dists>
+        <static>1</static>
+        <ospf-int>2</ospf-int>
+        <ospfv3-int>3</ospfv3-int>
+        <ibgp>4</ibgp>
+        <rip>5</rip>
+    </admin-dists>
+</entry>
+`)
+	ans, err := ns.Get("myTmpl", "", "foo")
+	if err != nil {
+		t.Errorf("Error in get: %s", err)
+	} else if len(ans.Interfaces) != 1 {
+		t.Errorf("Interfaces is len %d, not 1", len(ans.Interfaces))
+	} else if ans.Interfaces[0] != "ethernet1/1" {
+		t.Errorf("entry.Interfaces[0] = %q, not \"ethernet1/1\"", ans.Interfaces[0])
+	} else {
+		if ans.StaticDist != 1 || ans.StaticIpv6Dist != 10 || ans.OspfIntDist != 2 || ans.OspfExtDist != 110 || ans.Ospfv3IntDist != 3 || ans.Ospfv3ExtDist != 110 || ans.IbgpDist != 4 || ans.EbgpDist != 20 || ans.RipDist != 5 {
+			t.Errorf("ans defaults are wrong: %#v", ans)
+		}
 	}
 }
