@@ -8,6 +8,8 @@ import (
 	"github.com/PaloAltoNetworks/pango/dev/ha"
 	halink "github.com/PaloAltoNetworks/pango/dev/ha/monitor/link"
 	hapath "github.com/PaloAltoNetworks/pango/dev/ha/monitor/path"
+	"github.com/PaloAltoNetworks/pango/dev/localuserdb/group"
+	"github.com/PaloAltoNetworks/pango/dev/localuserdb/user"
 	"github.com/PaloAltoNetworks/pango/dev/profile/certificate"
 	"github.com/PaloAltoNetworks/pango/dev/profile/email"
 	"github.com/PaloAltoNetworks/pango/dev/profile/http"
@@ -27,6 +29,8 @@ type Firewall struct {
 	HaLinkMonitorGroup  *halink.Firewall
 	HaPathMonitorGroup  *hapath.Firewall
 	HttpServerProfile   *http.Firewall
+	LocalUserDbGroup    *group.Firewall
+	LocalUserDbUser     *user.Firewall
 	SslDecrypt          *ssldecrypt.Firewall
 	SnmpServerProfile   *snmp.Firewall
 	SyslogServerProfile *syslog.Firewall
@@ -43,6 +47,8 @@ func FirewallNamespace(x util.XapiClient) *Firewall {
 		HaLinkMonitorGroup:  halink.FirewallNamespace(x),
 		HaPathMonitorGroup:  hapath.FirewallNamespace(x),
 		HttpServerProfile:   http.FirewallNamespace(x),
+		LocalUserDbGroup:    group.FirewallNamespace(x),
+		LocalUserDbUser:     user.FirewallNamespace(x),
 		SslDecrypt:          ssldecrypt.FirewallNamespace(x),
 		SnmpServerProfile:   snmp.FirewallNamespace(x),
 		SyslogServerProfile: syslog.FirewallNamespace(x),

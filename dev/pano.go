@@ -4,6 +4,8 @@ import (
 	"github.com/PaloAltoNetworks/pango/util"
 
 	cert "github.com/PaloAltoNetworks/pango/dev/certificate"
+	"github.com/PaloAltoNetworks/pango/dev/localuserdb/group"
+	"github.com/PaloAltoNetworks/pango/dev/localuserdb/user"
 	"github.com/PaloAltoNetworks/pango/dev/profile/certificate"
 	"github.com/PaloAltoNetworks/pango/dev/profile/email"
 	"github.com/PaloAltoNetworks/pango/dev/profile/http"
@@ -18,6 +20,8 @@ type Panorama struct {
 	CertificateProfile  *certificate.Panorama
 	EmailServerProfile  *email.Panorama
 	HttpServerProfile   *http.Panorama
+	LocalUserDbGroup    *group.Panorama
+	LocalUserDbUser     *user.Panorama
 	SslDecrypt          *ssldecrypt.Panorama
 	SnmpServerProfile   *snmp.Panorama
 	SyslogServerProfile *syslog.Panorama
@@ -30,6 +34,8 @@ func PanoramaNamespace(x util.XapiClient) *Panorama {
 		CertificateProfile:  certificate.PanoramaNamespace(x),
 		EmailServerProfile:  email.PanoramaNamespace(x),
 		HttpServerProfile:   http.PanoramaNamespace(x),
+		LocalUserDbGroup:    group.PanoramaNamespace(x),
+		LocalUserDbUser:     user.PanoramaNamespace(x),
 		SslDecrypt:          ssldecrypt.PanoramaNamespace(x),
 		SnmpServerProfile:   snmp.PanoramaNamespace(x),
 		SyslogServerProfile: syslog.PanoramaNamespace(x),
