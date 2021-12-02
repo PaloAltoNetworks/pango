@@ -22,6 +22,7 @@ import (
 	dfsp "github.com/PaloAltoNetworks/pango/objs/profile/security/data"
 	dpsp "github.com/PaloAltoNetworks/pango/objs/profile/security/dos"
 	fprof "github.com/PaloAltoNetworks/pango/objs/profile/security/file"
+	spg "github.com/PaloAltoNetworks/pango/objs/profile/security/group"
 	"github.com/PaloAltoNetworks/pango/objs/profile/security/spyware"
 	ufsp "github.com/PaloAltoNetworks/pango/objs/profile/security/url"
 	"github.com/PaloAltoNetworks/pango/objs/profile/security/virus"
@@ -55,6 +56,7 @@ type PanoObjs struct {
 	LogForwardingProfile                *logfwd.Panorama
 	LogForwardingProfileMatchList       *matchlist.PanoMatchList
 	LogForwardingProfileMatchListAction *action.PanoAction
+	SecurityProfileGroup                *spg.Panorama
 	Services                            *srvc.Panorama
 	ServiceGroup                        *srvcgrp.Panorama
 	Tags                                *tags.Panorama
@@ -100,6 +102,7 @@ func (c *PanoObjs) Initialize(i util.XapiClient) {
 	c.LogForwardingProfileMatchListAction = &action.PanoAction{}
 	c.LogForwardingProfileMatchListAction.Initialize(i)
 
+	c.SecurityProfileGroup = spg.PanoramaNamespace(i)
 	c.Services = srvc.PanoramaNamespace(i)
 	c.ServiceGroup = srvcgrp.PanoramaNamespace(i)
 	c.Tags = tags.PanoramaNamespace(i)
