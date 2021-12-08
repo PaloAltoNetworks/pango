@@ -98,3 +98,33 @@ func PanoramaNamespace(client util.XapiClient) *Panorama {
 		},
 	}
 }
+
+func RulesMatch(a, b Entry) bool {
+	return a.Name == b.Name &&
+		a.Description == b.Description &&
+		util.UnorderedListsMatch(a.SourceZones, b.SourceZones) &&
+		util.UnorderedListsMatch(a.SourceAddresses, b.SourceAddresses) &&
+		a.NegateSource == b.NegateSource &&
+		util.UnorderedListsMatch(a.SourceUsers, b.SourceUsers) &&
+		util.UnorderedListsMatch(a.DestinationZones, b.DestinationZones) &&
+		util.UnorderedListsMatch(a.DestinationAddresses, b.DestinationAddresses) &&
+		a.NegateDestination == b.NegateDestination &&
+		util.OrderedListsMatch(a.Tags, b.Tags) &&
+		a.Disabled == b.Disabled &&
+		util.UnorderedListsMatch(a.Services, b.Services) &&
+		util.UnorderedListsMatch(a.UrlCategories, b.UrlCategories) &&
+		a.Action == b.Action &&
+		a.DecryptionType == b.DecryptionType &&
+		a.SslCertificate == b.SslCertificate &&
+		a.DecryptionProfile == b.DecryptionProfile &&
+		util.TargetsMatch(a.Targets, b.Targets) &&
+		a.NegateTarget == b.NegateTarget &&
+		a.ForwardingProfile == b.ForwardingProfile &&
+		// Don't compare UUID
+		a.GroupTag == b.GroupTag &&
+		util.UnorderedListsMatch(a.SourceHips, b.SourceHips) &&
+		util.UnorderedListsMatch(a.DestinationHips, b.DestinationHips) &&
+		a.LogSuccessfulTlsHandshakes == b.LogSuccessfulTlsHandshakes &&
+		a.LogFailedTlsHandshakes == b.LogFailedTlsHandshakes &&
+		a.LogSetting == b.LogSetting
+}
