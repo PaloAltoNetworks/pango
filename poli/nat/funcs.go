@@ -94,3 +94,35 @@ func PanoramaNamespace(client util.XapiClient) *Panorama {
 		},
 	}
 }
+
+func RulesMatch(a, b Entry) bool {
+	return a.Name == b.Name &&
+		a.Description == b.Description &&
+		a.Type == b.Type &&
+		util.UnorderedListsMatch(a.SourceZones, b.SourceZones) &&
+		a.DestinationZone == b.DestinationZone &&
+		a.ToInterface == b.ToInterface &&
+		a.Service == b.Service &&
+		util.UnorderedListsMatch(a.SourceAddresses, b.SourceAddresses) &&
+		util.UnorderedListsMatch(a.DestinationAddresses, b.DestinationAddresses) &&
+		a.SatType == b.SatType &&
+		a.SatAddressType == b.SatAddressType &&
+		util.UnorderedListsMatch(a.SatTranslatedAddresses, b.SatTranslatedAddresses) &&
+		a.SatInterface == b.SatInterface &&
+		a.SatIpAddress == b.SatIpAddress &&
+		a.SatFallbackType == b.SatFallbackType &&
+		util.UnorderedListsMatch(a.SatFallbackTranslatedAddresses, b.SatFallbackTranslatedAddresses) &&
+		a.SatFallbackInterface == b.SatFallbackInterface &&
+		a.SatFallbackIpType == b.SatFallbackIpType &&
+		a.SatFallbackIpAddress == b.SatFallbackIpAddress &&
+		a.SatStaticTranslatedAddress == b.SatStaticTranslatedAddress &&
+		a.SatStaticBiDirectional == b.SatStaticBiDirectional &&
+		a.DatType == b.DatType &&
+		a.DatAddress == b.DatAddress &&
+		a.DatPort == b.DatPort &&
+		a.DatDynamicDistribution == b.DatDynamicDistribution &&
+		a.Disabled == b.Disabled &&
+		util.TargetsMatch(a.Targets, b.Targets) &&
+		a.NegateTarget == b.NegateTarget &&
+		util.OrderedListsMatch(a.Tags, b.Tags)
+}
