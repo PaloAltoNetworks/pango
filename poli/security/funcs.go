@@ -96,3 +96,43 @@ func PanoramaNamespace(client util.XapiClient) *Panorama {
 		},
 	}
 }
+
+func RulesMatch(a, b Entry) bool {
+	return a.Name == b.Name &&
+		a.Type == b.Type &&
+		a.Description == b.Description &&
+		util.OrderedListsMatch(a.Tags, b.Tags) &&
+		util.UnorderedListsMatch(a.SourceZones, b.SourceZones) &&
+		util.UnorderedListsMatch(a.SourceAddresses, b.SourceAddresses) &&
+		a.NegateSource == b.NegateSource &&
+		util.UnorderedListsMatch(a.SourceUsers, b.SourceUsers) &&
+		util.UnorderedListsMatch(a.HipProfiles, b.HipProfiles) &&
+		util.UnorderedListsMatch(a.DestinationZones, b.DestinationZones) &&
+		util.UnorderedListsMatch(a.DestinationAddresses, b.DestinationAddresses) &&
+		a.NegateDestination == b.NegateDestination &&
+		util.UnorderedListsMatch(a.Applications, b.Applications) &&
+		util.UnorderedListsMatch(a.Services, b.Services) &&
+		util.UnorderedListsMatch(a.Categories, b.Categories) &&
+		a.Action == b.Action &&
+		a.LogSetting == b.LogSetting &&
+		a.LogStart == b.LogStart &&
+		a.LogEnd == b.LogEnd &&
+		a.Disabled == b.Disabled &&
+		a.Schedule == b.Schedule &&
+		a.IcmpUnreachable == b.IcmpUnreachable &&
+		a.DisableServerResponseInspection == b.DisableServerResponseInspection &&
+		a.Group == b.Group &&
+		util.TargetsMatch(a.Targets, b.Targets) &&
+		a.NegateTarget == b.NegateTarget &&
+		a.Virus == b.Virus &&
+		a.Spyware == b.Spyware &&
+		a.Vulnerability == b.Vulnerability &&
+		a.UrlFiltering == b.UrlFiltering &&
+		a.FileBlocking == b.FileBlocking &&
+		a.WildFireAnalysis == b.WildFireAnalysis &&
+		a.DataFiltering == b.DataFiltering &&
+		// Don't compare UUID.
+		a.GroupTag == b.GroupTag &&
+		util.UnorderedListsMatch(a.SourceDevices, b.SourceDevices) &&
+		util.UnorderedListsMatch(a.DestinationDevices, b.DestinationDevices)
+}
