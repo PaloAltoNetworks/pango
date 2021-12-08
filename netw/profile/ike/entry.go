@@ -78,6 +78,10 @@ func specifyEncryption(vals []string, v int) []string {
 				nv[i] = "aes-192-cbc"
 			case EncryptionAes256:
 				nv[i] = "aes-256-cbc"
+			case EncryptionAes128Gcm:
+				nv[i] = "aes-128-gcm"
+			case EncryptionAes256Gcm:
+				nv[i] = "aes-256-gcm"
 			default:
 				nv[i] = vals[i]
 			}
@@ -122,6 +126,10 @@ func normalizeEncryption(v []string) []string {
 			ans[i] = EncryptionAes192
 		case "aes-256-cbc", "aes256":
 			ans[i] = EncryptionAes256
+		case "aes-128-gcm":
+			ans[i] = EncryptionAes128Gcm
+		case "aes-256-gcm":
+			ans[i] = EncryptionAes256Gcm
 		default:
 			ans[i] = v[i]
 		}
