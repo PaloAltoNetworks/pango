@@ -17,6 +17,7 @@ import (
 	"github.com/PaloAltoNetworks/pango/dev/profile/syslog"
 	"github.com/PaloAltoNetworks/pango/dev/ssldecrypt"
 	"github.com/PaloAltoNetworks/pango/dev/telemetry"
+	"github.com/PaloAltoNetworks/pango/dev/vminfosource"
 )
 
 // Firewall is the client.Device namespace.
@@ -35,6 +36,7 @@ type Firewall struct {
 	SnmpServerProfile   *snmp.Firewall
 	SyslogServerProfile *syslog.Firewall
 	Telemetry           *telemetry.Firewall
+	VmInfoSource        *vminfosource.Firewall
 }
 
 func FirewallNamespace(x util.XapiClient) *Firewall {
@@ -53,5 +55,6 @@ func FirewallNamespace(x util.XapiClient) *Firewall {
 		SnmpServerProfile:   snmp.FirewallNamespace(x),
 		SyslogServerProfile: syslog.FirewallNamespace(x),
 		Telemetry:           telemetry.FirewallNamespace(x),
+		VmInfoSource:        vminfosource.FirewallNamespace(x),
 	}
 }

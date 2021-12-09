@@ -12,6 +12,7 @@ import (
 	"github.com/PaloAltoNetworks/pango/dev/profile/snmp"
 	"github.com/PaloAltoNetworks/pango/dev/profile/syslog"
 	"github.com/PaloAltoNetworks/pango/dev/ssldecrypt"
+	"github.com/PaloAltoNetworks/pango/dev/vminfosource"
 )
 
 // Panorama is the client.Device namespace.
@@ -25,6 +26,7 @@ type Panorama struct {
 	SslDecrypt          *ssldecrypt.Panorama
 	SnmpServerProfile   *snmp.Panorama
 	SyslogServerProfile *syslog.Panorama
+	VmInfoSource        *vminfosource.Panorama
 }
 
 // Initialize is invoked on client.Initialize().
@@ -39,5 +41,6 @@ func PanoramaNamespace(x util.XapiClient) *Panorama {
 		SslDecrypt:          ssldecrypt.PanoramaNamespace(x),
 		SnmpServerProfile:   snmp.PanoramaNamespace(x),
 		SyslogServerProfile: syslog.PanoramaNamespace(x),
+		VmInfoSource:        vminfosource.PanoramaNamespace(x),
 	}
 }
