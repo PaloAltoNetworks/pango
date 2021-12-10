@@ -11,13 +11,13 @@ import (
 // VM information source.
 type Entry struct {
 	Name          string
-	Vpc           *Vpc
+	AwsVpc        *AwsVpc
 	Esxi          *Esxi
 	Vcenter       *Vcenter
 	GoogleCompute *GoogleCompute // PAN-OS 8.1
 }
 
-type Vpc struct {
+type AwsVpc struct {
 	Description     string
 	Disabled        bool
 	Source          string
@@ -54,33 +54,33 @@ type Vcenter struct {
 }
 
 type GoogleCompute struct {
-	Description    string
-	Disabled       bool
-	AuthType       string
-	AuthTypeValue  string // encrypted
-	ProjectId      string
-	ZoneName       string
-	UpdateInterval int
-	EnableTimeout  bool
-	Timeout        int
+	Description              string
+	Disabled                 bool
+	AuthType                 string
+	ServiceAccountCredential string // encrypted
+	ProjectId                string
+	ZoneName                 string
+	UpdateInterval           int
+	EnableTimeout            bool
+	Timeout                  int
 }
 
 // Copy copies the information from source Entry `s` to this object.  As the
 // Name field relates to the XPATH of this object, this field is not copied.
 func (o *Entry) Copy(s Entry) {
-	if s.Vpc == nil {
-		o.Vpc = nil
+	if s.AwsVpc == nil {
+		o.AwsVpc = nil
 	} else {
-		s.Vpc = &Vpc{
-			Description:     s.Vpc.Description,
-			Disabled:        s.Vpc.Disabled,
-			Source:          s.Vpc.Source,
-			AccessKeyId:     s.Vpc.AccessKeyId,
-			SecretAccessKey: s.Vpc.SecretAccessKey,
-			UpdateInterval:  s.Vpc.UpdateInterval,
-			EnableTimeout:   s.Vpc.EnableTimeout,
-			Timeout:         s.Vpc.Timeout,
-			VpcId:           s.Vpc.VpcId,
+		s.AwsVpc = &AwsVpc{
+			Description:     s.AwsVpc.Description,
+			Disabled:        s.AwsVpc.Disabled,
+			Source:          s.AwsVpc.Source,
+			AccessKeyId:     s.AwsVpc.AccessKeyId,
+			SecretAccessKey: s.AwsVpc.SecretAccessKey,
+			UpdateInterval:  s.AwsVpc.UpdateInterval,
+			EnableTimeout:   s.AwsVpc.EnableTimeout,
+			Timeout:         s.AwsVpc.Timeout,
+			VpcId:           s.AwsVpc.VpcId,
 		}
 	}
 	if s.Esxi == nil {
@@ -117,15 +117,15 @@ func (o *Entry) Copy(s Entry) {
 		o.GoogleCompute = nil
 	} else {
 		o.GoogleCompute = &GoogleCompute{
-			Description:    s.GoogleCompute.Description,
-			Disabled:       s.GoogleCompute.Disabled,
-			AuthType:       s.GoogleCompute.AuthType,
-			AuthTypeValue:  s.GoogleCompute.AuthTypeValue,
-			ProjectId:      s.GoogleCompute.ProjectId,
-			ZoneName:       s.GoogleCompute.ZoneName,
-			UpdateInterval: s.GoogleCompute.UpdateInterval,
-			EnableTimeout:  s.GoogleCompute.EnableTimeout,
-			Timeout:        s.GoogleCompute.Timeout,
+			Description:              s.GoogleCompute.Description,
+			Disabled:                 s.GoogleCompute.Disabled,
+			AuthType:                 s.GoogleCompute.AuthType,
+			ServiceAccountCredential: s.GoogleCompute.ServiceAccountCredential,
+			ProjectId:                s.GoogleCompute.ProjectId,
+			ZoneName:                 s.GoogleCompute.ZoneName,
+			UpdateInterval:           s.GoogleCompute.UpdateInterval,
+			EnableTimeout:            s.GoogleCompute.EnableTimeout,
+			Timeout:                  s.GoogleCompute.Timeout,
 		}
 	}
 }
@@ -167,7 +167,7 @@ func (o *container_v1) Normalize() []Entry {
 type entry_v1 struct {
 	XMLName xml.Name `xml:"entry"`
 	Name    string   `xml:"name,attr"`
-	Vpc     *vpc     `xml:"SourceType>AWS-VPC"`
+	AwsVpc  *vpc     `xml:"SourceType>AWS-VPC"`
 	Esxi    *esxi    `xml:"SourceType>VMware-ESXi"`
 	Vcenter *vcenter `xml:"SourceType>VMware-vCenter"`
 }
@@ -254,17 +254,17 @@ func specify_v1(e Entry) interface{} {
 		Name: e.Name,
 	}
 
-	if e.Vpc != nil {
-		ans.Vpc = &vpc{
-			Description:     e.Vpc.Description,
-			Disabled:        util.YesNo(e.Vpc.Disabled),
-			Source:          e.Vpc.Source,
-			AccessKeyId:     e.Vpc.AccessKeyId,
-			SecretAccessKey: e.Vpc.SecretAccessKey,
-			UpdateInterval:  e.Vpc.UpdateInterval,
-			EnableTimeout:   util.YesNo(e.Vpc.EnableTimeout),
-			Timeout:         e.Vpc.Timeout,
-			VpcId:           e.Vpc.VpcId,
+	if e.AwsVpc != nil {
+		ans.AwsVpc = &vpc{
+			Description:     e.AwsVpc.Description,
+			Disabled:        util.YesNo(e.AwsVpc.Disabled),
+			Source:          e.AwsVpc.Source,
+			AccessKeyId:     e.AwsVpc.AccessKeyId,
+			SecretAccessKey: e.AwsVpc.SecretAccessKey,
+			UpdateInterval:  e.AwsVpc.UpdateInterval,
+			EnableTimeout:   util.YesNo(e.AwsVpc.EnableTimeout),
+			Timeout:         e.AwsVpc.Timeout,
+			VpcId:           e.AwsVpc.VpcId,
 		}
 	}
 
@@ -304,17 +304,17 @@ func (e *entry_v1) normalize() Entry {
 		Name: e.Name,
 	}
 
-	if e.Vpc != nil {
-		ans.Vpc = &Vpc{
-			Description:     e.Vpc.Description,
-			Disabled:        util.AsBool(e.Vpc.Disabled),
-			Source:          e.Vpc.Source,
-			AccessKeyId:     e.Vpc.AccessKeyId,
-			SecretAccessKey: e.Vpc.SecretAccessKey,
-			UpdateInterval:  e.Vpc.UpdateInterval,
-			EnableTimeout:   util.AsBool(e.Vpc.EnableTimeout),
-			Timeout:         e.Vpc.Timeout,
-			VpcId:           e.Vpc.VpcId,
+	if e.AwsVpc != nil {
+		ans.AwsVpc = &AwsVpc{
+			Description:     e.AwsVpc.Description,
+			Disabled:        util.AsBool(e.AwsVpc.Disabled),
+			Source:          e.AwsVpc.Source,
+			AccessKeyId:     e.AwsVpc.AccessKeyId,
+			SecretAccessKey: e.AwsVpc.SecretAccessKey,
+			UpdateInterval:  e.AwsVpc.UpdateInterval,
+			EnableTimeout:   util.AsBool(e.AwsVpc.EnableTimeout),
+			Timeout:         e.AwsVpc.Timeout,
+			VpcId:           e.AwsVpc.VpcId,
 		}
 	}
 
@@ -375,7 +375,7 @@ func (o *container_v2) Normalize() []Entry {
 type entry_v2 struct {
 	XMLName       xml.Name       `xml:"entry"`
 	Name          string         `xml:"name,attr"`
-	Vpc           *vpc           `xml:"SourceType>AWS-VPC"`
+	AwsVpc        *vpc           `xml:"SourceType>AWS-VPC"`
 	Esxi          *esxi          `xml:"SourceType>VMware-ESXi"`
 	Vcenter       *vcenter       `xml:"SourceType>VMware-vCenter"`
 	GoogleCompute *googleCompute `xml:"SourceType>Google-Compute-Engine"`
@@ -406,17 +406,17 @@ func specify_v2(e Entry) interface{} {
 		Name: e.Name,
 	}
 
-	if e.Vpc != nil {
-		ans.Vpc = &vpc{
-			Description:     e.Vpc.Description,
-			Disabled:        util.YesNo(e.Vpc.Disabled),
-			Source:          e.Vpc.Source,
-			AccessKeyId:     e.Vpc.AccessKeyId,
-			SecretAccessKey: e.Vpc.SecretAccessKey,
-			UpdateInterval:  e.Vpc.UpdateInterval,
-			EnableTimeout:   util.YesNo(e.Vpc.EnableTimeout),
-			Timeout:         e.Vpc.Timeout,
-			VpcId:           e.Vpc.VpcId,
+	if e.AwsVpc != nil {
+		ans.AwsVpc = &vpc{
+			Description:     e.AwsVpc.Description,
+			Disabled:        util.YesNo(e.AwsVpc.Disabled),
+			Source:          e.AwsVpc.Source,
+			AccessKeyId:     e.AwsVpc.AccessKeyId,
+			SecretAccessKey: e.AwsVpc.SecretAccessKey,
+			UpdateInterval:  e.AwsVpc.UpdateInterval,
+			EnableTimeout:   util.YesNo(e.AwsVpc.EnableTimeout),
+			Timeout:         e.AwsVpc.Timeout,
+			VpcId:           e.AwsVpc.VpcId,
 		}
 	}
 
@@ -465,7 +465,7 @@ func specify_v2(e Entry) interface{} {
 			ans.GoogleCompute.Auth.ServiceInGce = &s
 		case AuthTypeServiceAccount:
 			ans.GoogleCompute.Auth.ServiceAccount = &gcAuthServiceAccount{
-				ServiceAccountCredential: e.GoogleCompute.AuthTypeValue,
+				ServiceAccountCredential: e.GoogleCompute.ServiceAccountCredential,
 			}
 		}
 	}
@@ -478,17 +478,17 @@ func (e *entry_v2) normalize() Entry {
 		Name: e.Name,
 	}
 
-	if e.Vpc != nil {
-		ans.Vpc = &Vpc{
-			Description:     e.Vpc.Description,
-			Disabled:        util.AsBool(e.Vpc.Disabled),
-			Source:          e.Vpc.Source,
-			AccessKeyId:     e.Vpc.AccessKeyId,
-			SecretAccessKey: e.Vpc.SecretAccessKey,
-			UpdateInterval:  e.Vpc.UpdateInterval,
-			EnableTimeout:   util.AsBool(e.Vpc.EnableTimeout),
-			Timeout:         e.Vpc.Timeout,
-			VpcId:           e.Vpc.VpcId,
+	if e.AwsVpc != nil {
+		ans.AwsVpc = &AwsVpc{
+			Description:     e.AwsVpc.Description,
+			Disabled:        util.AsBool(e.AwsVpc.Disabled),
+			Source:          e.AwsVpc.Source,
+			AccessKeyId:     e.AwsVpc.AccessKeyId,
+			SecretAccessKey: e.AwsVpc.SecretAccessKey,
+			UpdateInterval:  e.AwsVpc.UpdateInterval,
+			EnableTimeout:   util.AsBool(e.AwsVpc.EnableTimeout),
+			Timeout:         e.AwsVpc.Timeout,
+			VpcId:           e.AwsVpc.VpcId,
 		}
 	}
 
@@ -536,7 +536,7 @@ func (e *entry_v2) normalize() Entry {
 			ans.GoogleCompute.AuthType = AuthTypeServiceInGce
 		case e.GoogleCompute.Auth.ServiceAccount != nil:
 			ans.GoogleCompute.AuthType = AuthTypeServiceAccount
-			ans.GoogleCompute.AuthTypeValue = e.GoogleCompute.Auth.ServiceAccount.ServiceAccountCredential
+			ans.GoogleCompute.ServiceAccountCredential = e.GoogleCompute.Auth.ServiceAccount.ServiceAccountCredential
 		}
 	}
 

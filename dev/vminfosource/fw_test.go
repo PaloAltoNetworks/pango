@@ -35,7 +35,7 @@ func TestFwNormalization(t *testing.T) {
 	}
 }
 
-func TestVpcDefaults(t *testing.T) {
+func TestAwsVpcDefaults(t *testing.T) {
 	mc := &testdata.MockClient{
 		Version: version.Number{6, 1, 0, ""},
 	}
@@ -52,14 +52,14 @@ func TestVpcDefaults(t *testing.T) {
 	ans, err := ns.Get("vsys1", "jack")
 	if err != nil {
 		t.Errorf("Error in get: %s", err)
-	} else if ans.Vpc == nil {
-		t.Errorf("Vpc is nil")
-	} else if ans.Vpc.Description != "hi" {
-		t.Errorf("Vpc description is %q, not \"hi\"", ans.Vpc.Description)
-	} else if ans.Vpc.UpdateInterval != 60 {
-		t.Errorf("Vpc update interval is %d", ans.Vpc.UpdateInterval)
-	} else if ans.Vpc.Timeout != 2 {
-		t.Errorf("Vpc timeout is %d", ans.Vpc.Timeout)
+	} else if ans.AwsVpc == nil {
+		t.Errorf("AwsVpc is nil")
+	} else if ans.AwsVpc.Description != "hi" {
+		t.Errorf("AwsVpc description is %q, not \"hi\"", ans.AwsVpc.Description)
+	} else if ans.AwsVpc.UpdateInterval != 60 {
+		t.Errorf("AwsVpc update interval is %d", ans.AwsVpc.UpdateInterval)
+	} else if ans.AwsVpc.Timeout != 2 {
+		t.Errorf("AwsVpc timeout is %d", ans.AwsVpc.Timeout)
 	}
 }
 
