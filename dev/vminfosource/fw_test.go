@@ -42,11 +42,9 @@ func TestAwsVpcDefaults(t *testing.T) {
 	ns := FirewallNamespace(mc)
 	mc.AddResp(`
 <entry name="jack">
-    <SourceType>
-        <AWS-VPC>
-            <description>hi</description>
-        </AWS-VPC>
-    </SourceType>
+    <AWS-VPC>
+        <description>hi</description>
+    </AWS-VPC>
 </entry>
 `)
 	ans, err := ns.Get("vsys1", "jack")
@@ -70,11 +68,9 @@ func TestEsxiDefaults(t *testing.T) {
 	ns := FirewallNamespace(mc)
 	mc.AddResp(`
 <entry name="jack">
-    <SourceType>
-        <VMware-ESXi>
-            <description>hi</description>
-        </VMware-ESXi>
-    </SourceType>
+    <VMware-ESXi>
+        <description>hi</description>
+    </VMware-ESXi>
 </entry>
 `)
 	ans, err := ns.Get("vsys1", "jack")
@@ -100,11 +96,9 @@ func TestVcenterDefaults(t *testing.T) {
 	ns := FirewallNamespace(mc)
 	mc.AddResp(`
 <entry name="jack">
-    <SourceType>
-        <VMware-vCenter>
-            <description>hi</description>
-        </VMware-vCenter>
-    </SourceType>
+    <VMware-vCenter>
+        <description>hi</description>
+    </VMware-vCenter>
 </entry>
 `)
 	ans, err := ns.Get("vsys1", "jack")
