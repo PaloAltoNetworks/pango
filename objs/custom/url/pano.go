@@ -10,6 +10,34 @@ type Panorama struct {
 	ns *namespace.Standard
 }
 
+// SetSite performs a SET to add a site to the custom URL category.
+func (c *Panorama) SetSite(dg, name, site string) error {
+	c.ns.Client.LogAction("(set) site for %s: %s", name, site)
+
+	path, err := c.xpath(dg, []string{name})
+	if err != nil {
+		return err
+	}
+	path = append(path, "list")
+
+	_, err = c.ns.Client.Set(path, util.Member{Value: site}, nil, nil)
+	return err
+}
+
+// DeleteSite performs a DELETE to remove a site from the custom URL category.
+func (c *Panorama) DeleteSite(dg, name, site string) error {
+	c.ns.Client.LogAction("(delete) site from %s: %s", name, site)
+
+	path, err := c.xpath(dg, []string{name})
+	if err != nil {
+		return err
+	}
+	path = append(path, "list", util.AsMemberXpath([]string{site}))
+
+	_, err = c.ns.Client.Delete(path, nil, nil)
+	return err
+}
+
 // GetList performs GET to retrieve a list of all objects.
 func (c *Panorama) GetList(dg string) ([]string, error) {
 	ans := c.container()
