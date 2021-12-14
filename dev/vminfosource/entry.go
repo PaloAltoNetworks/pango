@@ -21,7 +21,7 @@ type AwsVpc struct {
 	Description     string
 	Disabled        bool
 	Source          string
-	AccessKeyId     string // encrypted
+	AccessKeyId     string
 	SecretAccessKey string // encrypted
 	UpdateInterval  int
 	EnableTimeout   bool
@@ -167,9 +167,9 @@ func (o *container_v1) Normalize() []Entry {
 type entry_v1 struct {
 	XMLName xml.Name `xml:"entry"`
 	Name    string   `xml:"name,attr"`
-	AwsVpc  *vpc     `xml:"SourceType>AWS-VPC"`
-	Esxi    *esxi    `xml:"SourceType>VMware-ESXi"`
-	Vcenter *vcenter `xml:"SourceType>VMware-vCenter"`
+	AwsVpc  *vpc     `xml:"AWS-VPC"`
+	Esxi    *esxi    `xml:"VMware-ESXi"`
+	Vcenter *vcenter `xml:"VMware-vCenter"`
 }
 
 type vpc struct {
@@ -375,10 +375,10 @@ func (o *container_v2) Normalize() []Entry {
 type entry_v2 struct {
 	XMLName       xml.Name       `xml:"entry"`
 	Name          string         `xml:"name,attr"`
-	AwsVpc        *vpc           `xml:"SourceType>AWS-VPC"`
-	Esxi          *esxi          `xml:"SourceType>VMware-ESXi"`
-	Vcenter       *vcenter       `xml:"SourceType>VMware-vCenter"`
-	GoogleCompute *googleCompute `xml:"SourceType>Google-Compute-Engine"`
+	AwsVpc        *vpc           `xml:"AWS-VPC"`
+	Esxi          *esxi          `xml:"VMware-ESXi"`
+	Vcenter       *vcenter       `xml:"VMware-vCenter"`
+	GoogleCompute *googleCompute `xml:"Google-Compute-Engine"`
 }
 
 type googleCompute struct {
