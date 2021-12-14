@@ -20,12 +20,7 @@ type Entry struct {
 // Name field relates to the XPATH of this object, this field is not copied.
 func (o *Entry) Copy(s Entry) {
 	o.Description = s.Description
-	if s.Sites == nil {
-		o.Sites = nil
-	} else {
-		o.Sites = make([]string, len(s.Sites))
-		copy(o.Sites, s.Sites)
-	}
+	o.Sites = util.CopyStringSlice(s.Sites)
 	o.Type = s.Type
 }
 
