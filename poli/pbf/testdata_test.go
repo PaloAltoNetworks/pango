@@ -219,6 +219,7 @@ func getTests() []tc {
 		{"v2 forward fqdn nexthop", version.Number{9, 0, 0, ""}, Entry{
 			Name:                   "v2",
 			Uuid:                   "aaaa-bb-ccccc",
+			GroupTag:               "myGroupTag",
 			Description:            "my desc",
 			FromType:               FromTypeInterface,
 			FromValues:             []string{"ethernet1/1", "ethernet1/2"},
