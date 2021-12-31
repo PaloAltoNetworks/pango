@@ -206,7 +206,8 @@ func (c *MockClient) VsysUnimport(ns, tmpl, ts string, names []string) error {
 	return c.UnimportError
 }
 
-func (c *MockClient) WaitForJob(a uint, d time.Duration, resp interface{}) error {
+func (c *MockClient) WaitForJob(a uint, d time.Duration, extras, resp interface{}) error {
+	c.Extras = extras
 	_, err := c.finalize(resp)
 	return err
 }
