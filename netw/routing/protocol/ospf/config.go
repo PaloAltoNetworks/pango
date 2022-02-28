@@ -147,7 +147,7 @@ type gracefulRestart struct {
 	GracePeriod            int    `xml:"grace-period,omitempty"`
 	HelperEnable           string `xml:"helper-enable"`
 	StrictLsaChecking      string `xml:"strict-LSA-checking"`
-	MaxNeighborRestartTime int    `xml:"max-neighbor-restart-time,omitempty""`
+	MaxNeighborRestartTime int    `xml:"max-neighbor-restart-time,omitempty"`
 }
 
 type globalBfd struct {

@@ -196,11 +196,11 @@ type advertise struct {
 type nssa struct {
 	DefaultRoute  *defroute      `xml:"default-route"`
 	AcceptSummary string         `xml:"accept-summary"`
-	Ranges        *advrangeEntry `xml:"nssa-ext-range""`
+	Ranges        *advrangeEntry `xml:"nssa-ext-range"`
 }
 
 type advrangeEntry struct {
-	Entry []advrange `xml:"entry""`
+	Entry []advrange `xml:"entry"`
 }
 
 type advrange struct {
