@@ -40,6 +40,45 @@ func (c *Panorama) DeleteTrustedRootCa(tmpl, ts, vsys, name string) error {
 	return err
 }
 
+// SetSslDecryptExclude updates ssl decrypt exclusion entires.
+func (c *Panorama) SetSslDecryptExclude(tmpl, ts, vsys string, e Config) error {
+	path, err := c.xpath(tmpl, ts, vsys)
+	if err != nil {
+		return err
+	}
+	path = append(path, "ssl-exclude-cert")
+
+	list := make([]sdecEntry, 0, len(e.SslDecryptExcludeCertificates))
+	for _, x := range e.SslDecryptExcludeCertificates {
+		list = append(list, sdecEntry{
+			Name:        x.Name,
+			Description: x.Description,
+			Exclude:     util.YesNo(x.Exclude),
+		})
+	}
+	entries := struct {
+		XMLName  xml.Name  `xml:"ssl-exclude-cert"`
+		Entries []sdecEntry `xml:"entry"`
+	}{Entries: list}
+	
+	_, err = c.ns.Client.Edit(path, &entries, nil, nil)
+	return err
+}
+
+// DeleteSslDecryptExclude deletes ssl decrypt exclusion entires.
+func (c *Panorama) DeleteSslDecryptExclude(tmpl, ts, vsys string, e Config) error {
+	path, err := c.xpath(tmpl, ts, vsys)
+	if err != nil {
+		return err
+	}
+
+	path = append(path, "ssl-exclude-cert")
+
+	_, err = c.ns.Client.Delete(path, nil, nil)
+	
+	return err
+}
+
 // Get performs GET to retrieve configuration for the given object.
 func (c *Panorama) Get(tmpl, ts, vsys string) (Config, error) {
 	ans := c.container()
