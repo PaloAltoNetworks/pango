@@ -151,7 +151,9 @@ func (c *Panorama) ConfigureRules(dg, base string, rules []Entry, auditComments 
 		}
 
 		if len(rmList) != 0 {
-			_ = c.Delete(dg, base, rmList...)
+			if err = c.Delete(dg, base, rmList...); err != nil {
+				return err
+			}
 		}
 	}
 
