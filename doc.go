@@ -1,7 +1,7 @@
 /*
 Package pango is a golang cross version mechanism for interacting with Palo Alto
 Networks devices (including physical and virtualized Next-generation Firewalls
-and Panorama).  Versioning support is in place for PAN-OS 6.1 to 8.1.
+and Panorama).  Versioning support is in place for PAN-OS 6.1 and up.
 
 To start, create a client connection with the desired parameters and then
 initialize the connection:
@@ -84,5 +84,15 @@ config.
 
 To learn more about PAN-OS XML API, please refer to the Palo Alto Netowrks
 API documentation.
+
+
+XPATHs
+
+Functions such as `panos.Client.Set`, `panos.Client.Edit`, and `panos.Client.Delete`
+take a parameter named `path`.  This path can be either a fully formed XPATH as a
+string or a list of strings such as `[]string{"config", "shared", "address"}`.  The
+grand majority of namespaces give their paths as a list of strings, as the XPATH
+oftentimes needs to be tweaked depending on SET vs EDIT, single objects vs
+multiple objects, etc, so handling path updates is easier this way.
 */
 package pango
