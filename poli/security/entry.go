@@ -61,7 +61,6 @@ type Entry struct {
 //      * SourceZones: ["any"]
 //      * SourceAddresses: ["any"]
 //      * SourceUsers: ["any"]
-//      * HipProfiles: ["any"]
 //      * DestinationZones: ["any"]
 //      * DestinationAddresses: ["any"]
 //      * Applications: ["any"]
@@ -88,10 +87,6 @@ func (o *Entry) Defaults() {
 
 	if len(o.SourceUsers) == 0 {
 		o.SourceUsers = []string{"any"}
-	}
-
-	if len(o.HipProfiles) == 0 {
-		o.HipProfiles = []string{"any"}
 	}
 
 	if len(o.DestinationAddresses) == 0 {
