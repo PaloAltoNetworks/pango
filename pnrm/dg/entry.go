@@ -25,20 +25,7 @@ type Entry struct {
 // Name field relates to the XPATH of this object, this field is not copied.
 func (o *Entry) Copy(s Entry) {
 	o.Description = s.Description
-	if s.Devices == nil {
-		o.Devices = nil
-	} else {
-		o.Devices = make(map[string][]string)
-		for key, val := range s.Devices {
-			if val == nil {
-				o.Devices[key] = nil
-			} else {
-				list := make([]string, len(val))
-				copy(list, val)
-				o.Devices[key] = list
-			}
-		}
-	}
+	o.Devices = util.CopyTargets(s.Devices)
 }
 
 /** Structs / functions for normalization. **/
