@@ -146,7 +146,9 @@ func (c *Firewall) ConfigureRules(vsys string, rules []Entry, auditComments map[
 		}
 
 		if len(rmList) != 0 {
-			_ = c.Delete(vsys, rmList...)
+			if err = c.Delete(vsys, rmList...); err != nil {
+				return err
+			}
 		}
 	}
 
