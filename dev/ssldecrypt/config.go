@@ -137,9 +137,10 @@ type sdec struct {
 }
 
 type sdecEntry struct {
-	Name        string `xml:"name,attr"`
-	Description string `xml:"description,omitempty"`
-	Exclude     string `xml:"exclude"`
+	XMLName     xml.Name `xml:"entry"`
+	Name        string   `xml:"name,attr"`
+	Description string   `xml:"description,omitempty"`
+	Exclude     string   `xml:"exclude"`
 }
 
 func specify_v1(e Config) interface{} {

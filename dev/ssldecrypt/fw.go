@@ -40,6 +40,40 @@ func (c *Firewall) DeleteTrustedRootCa(vsys, name string) error {
 	return err
 }
 
+// SetSslDecryptExcludeCertificate adds a SSL decrypt exclude certificate.
+func (c *Firewall) SetSslDecryptExcludeCertificate(vsys string, e SslDecryptExcludeCertificate) error {
+	c.ns.Client.LogAction("(set) %s ssl decrypt exclude certificate: %s", singular, e.Name)
+
+	path, err := c.xpath(vsys)
+	if err != nil {
+		return err
+	}
+	path = append(path, "ssl-exclude-cert")
+
+	ei := sdecEntry{
+		Name:        e.Name,
+		Description: e.Description,
+		Exclude:     util.YesNo(e.Exclude),
+	}
+
+	_, err = c.ns.Client.Set(path, ei, nil, nil)
+	return err
+}
+
+// DeleteSslDecryptExcludeCertificate removes a SSL decrypt exclude certificate.
+func (c *Firewall) DeleteSslDecryptExcludeCertificate(vsys, name string) error {
+	c.ns.Client.LogAction("(delete) %s ssl decrypt exclude certificate: %s", singular, name)
+
+	path, err := c.xpath(vsys)
+	if err != nil {
+		return err
+	}
+	path = append(path, "ssl-exclude-cert", util.AsEntryXpath([]string{name}))
+
+	_, err = c.ns.Client.Delete(path, nil, nil)
+	return err
+}
+
 // Get performs GET to retrieve configuration for the given object.
 func (c *Firewall) Get(vsys string) (Config, error) {
 	ans := c.container()
