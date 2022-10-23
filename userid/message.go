@@ -24,10 +24,11 @@ type Message struct {
 	UntagUsers []UntagUser
 }
 
-// Login logs a user in.
+// Login logs a user in. Note that `Timeout` is in Minutes.
 type Login struct {
-	User string
-	Ip   string
+	User    string
+	Ip      string
+	Timeout int
 }
 
 // Logout logs a user out.
@@ -143,6 +144,7 @@ type inOut struct {
 	XMLName xml.Name `xml:"entry"`
 	Name    string   `xml:"name,attr"`
 	Ip      string   `xml:"ip,attr"`
+	Timeout int      `xml:"timeout,attr,omitempty"`
 }
 
 type tagUntagIpSpec struct {
@@ -201,8 +203,9 @@ func encode(m *Message) (*uid, string) {
 		msg.Payload.Login.Entry = make([]inOut, 0, len(m.Logins))
 		for i := range m.Logins {
 			x := inOut{
-				Name: m.Logins[i].User,
-				Ip:   m.Logins[i].Ip,
+				Name:    m.Logins[i].User,
+				Ip:      m.Logins[i].Ip,
+				Timeout: m.Logins[i].Timeout,
 			}
 			msg.Payload.Login.Entry = append(msg.Payload.Login.Entry, x)
 		}
