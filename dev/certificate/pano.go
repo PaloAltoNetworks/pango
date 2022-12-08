@@ -111,7 +111,7 @@ func (c *Panorama) ImportPem(tmpl, vsys string, timeout time.Duration, cert Pem)
 
 	ex.Set("passphrase", cert.Passphrase)
 
-	_, err = c.ns.Client.Import("certificate", cert.PrivateKey, cert.PrivateKeyFilename, "file", timeout, ex, nil)
+	_, err = c.ns.Client.Import("private-key", cert.PrivateKey, cert.PrivateKeyFilename, "file", timeout, ex, nil)
 
 	return err
 }
