@@ -118,6 +118,8 @@ func (c *Panorama) ImportPem(tmpl, vsys string, timeout time.Duration, cert Pem)
 
 // ImportPkcs12 imports a PKCS12 certificate.
 func (c *Panorama) ImportPkcs12(tmpl, vsys string, timeout time.Duration, cert Pkcs12) error {
+	var err error
+
 	c.ns.Client.LogImport("(import) pkcs12 %s: %s", singular, cert.Name)
 
 	ex := url.Values{}
@@ -133,7 +135,7 @@ func (c *Panorama) ImportPkcs12(tmpl, vsys string, timeout time.Duration, cert P
 		ex.Set("target-tpl-vsys", vsys)
 	}
 
-	_, err := c.ns.Client.Import("certificate", cert.Certificate, cert.CertificateFilename, "file", timeout, ex, nil)
+	_, err = c.ns.Client.Import("certificate", cert.Certificate, cert.CertificateFilename, "file", timeout, ex, nil)
 
 	return err
 }
