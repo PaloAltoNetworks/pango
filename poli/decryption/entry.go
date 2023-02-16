@@ -725,7 +725,7 @@ type entry_v5 struct {
 type dType_v2 struct {
 	SslForwardProxy *string          `xml:"ssl-forward-proxy"`
 	SshProxy        *string          `xml:"ssh-proxy"`
-	SslCertificates *util.MemberType `xml:"ssl-inbound-inspection"`
+	SslCertificates *util.MemberType `xml:"ssl-inbound-inspection>certificates"`
 }
 
 func (e *entry_v5) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {

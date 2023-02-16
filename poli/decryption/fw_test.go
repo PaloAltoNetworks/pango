@@ -2,9 +2,11 @@ package decryption
 
 import (
 	"reflect"
+	"strings"
 	"testing"
 
 	"github.com/PaloAltoNetworks/pango/testdata"
+	"github.com/PaloAltoNetworks/pango/version"
 )
 
 func TestFwNormalization(t *testing.T) {
@@ -31,5 +33,32 @@ func TestFwNormalization(t *testing.T) {
 				}
 			}
 		})
+	}
+}
+
+func TestNotPresent(t *testing.T) {
+	mc := &testdata.MockClient{}
+	ns := FirewallNamespace(mc)
+
+	mc.Version = version.Number{10, 2, 0, ""}
+	mc.AddResp("")
+
+	elm := Entry{
+		Name:                   "rule1",
+		Uuid:                   "uuid123",
+		GroupTag:               "tag123",
+		Description:            "blah",
+		DestinationHips:        []string{"dst2", "dst1"},
+		LogFailedTlsHandshakes: true,
+		LogSetting:             "my log setting",
+	}
+
+	err := ns.Set("vsys1", elm)
+	if err != nil {
+		t.Fatalf("Failed set: %s", err)
+	}
+
+	if strings.Contains(mc.Elm, "ssl-inbound-inspection") {
+		t.Fatalf("Contains ssl-inbound-inspection")
 	}
 }
