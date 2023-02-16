@@ -6,6 +6,7 @@ import (
 
 	"github.com/PaloAltoNetworks/pango/errors"
 	"github.com/PaloAltoNetworks/pango/util"
+	"github.com/PaloAltoNetworks/pango/version"
 )
 
 /*
@@ -81,6 +82,38 @@ func (n *Standard) Edit(pather Pather, spec Specifier) error {
 	return err
 }
 
+/*
+// MultiConfigureRequest converts the object to a multi-config request.
+func (n *Standard) MultiConfigureRequest(action string, pather Pather, spec Specifier) (*pango.MultiConfigureRequest, error) {
+    if action != "set" && action != "edit" && action != "delete" {
+        return nil, fmt.Errorf("unsupported action: %s", action)
+    }
+
+    name, data := spec.Specify(n.Client.Versioning())
+    path, err := pather([]string{name})
+    if err != nil {
+        return nil, err
+    } else if name == "" {
+        return nil, fmt.Errorf("no name/uid present for multi-config buildup")
+    }
+
+    if action == "set" {
+        path = path[:len(path)-1]
+    }
+
+    var dataInterface interface{}
+    if action != "delete" {
+        dataInterface = data
+    }
+
+    return &pango.MultiConfigureRequest{
+        XMLName: xml.Name{Local: action},
+        Xpath: path,
+        Data: dataInterface,
+    }, nil
+}
+*/
+
 // Delete performs a DELETE to remove config.
 func (n *Standard) Delete(pather Pather, names []string, nErr error) error {
 	if nErr != nil {
@@ -98,39 +131,56 @@ func (n *Standard) Delete(pather Pather, names []string, nErr error) error {
 
 	var err error
 
-	if nameChunk(0, names) == len(names) {
-		// If we don't have to chunk, don't chunk the deletes.
-		path, pErr := pather(names)
-		if pErr != nil {
-			return pErr
+	if n.Client.Versioning().Gte(version.Number{10, 1, 5, ""}) {
+		// We are forced to delete everything one at a time, at least until
+		// pango is reorganized for multi-config support for the panos provider.
+		for i := range names {
+			path, pErr := pather([]string{names[i]})
+			if pErr != nil {
+				return pErr
+			}
+			_, err = n.Client.Delete(path, nil, nil)
+			if err != nil {
+				e2, ok := err.(errors.Panos)
+				if !ok || !e2.ObjectNotFound() {
+					break
+				}
+			}
 		}
-
-		_, err = n.Client.Delete(path, nil, nil)
 	} else {
-		// After some testing, PAN-OS seems to be able to handle a DELETE API call
-		// with up to 25k characters in around 3.3sec while not under stress, but
-		// this can baloon up to 15sec with PAN-OS under load.  Seems like a timeout
-		// of 30sec is more reliably correct, so will have to document this in the
-		// provider.
-		var start int
-		breaks := nameChunks(names)
-		for i, end := range breaks {
-			n.Client.LogAction("(delete) %d of %d - %d item(s)", i+1, len(breaks), end-start)
-			path, pErr := pather(names[start:end])
+		if nameChunk(0, names) == len(names) {
+			// If we don't have to chunk, don't chunk the deletes.
+			path, pErr := pather(names)
 			if pErr != nil {
 				return pErr
 			}
 
-			_, delError := n.Client.Delete(path, nil, nil)
-			if delError != nil {
-				err = delError
-				e2, ok := delError.(errors.Panos)
-				if !ok || !e2.ObjectNotFound() {
-					return err
+			_, err = n.Client.Delete(path, nil, nil)
+		} else {
+			// After some testing, PAN-OS seems to be able to handle a DELETE API call
+			// with up to 25k characters in around 3.3sec while not under stress, but
+			// this can baloon up to 15sec with PAN-OS under load.  Seems like a timeout
+			// of 30sec is more reliably correct, so will have to document this in the
+			// provider.
+			var start int
+			breaks := nameChunks(names)
+			for i, end := range breaks {
+				n.Client.LogAction("(delete) %d of %d - %d item(s)", i+1, len(breaks), end-start)
+				path, pErr := pather(names[start:end])
+				if pErr != nil {
+					return pErr
 				}
-			}
 
-			start = end
+				_, err = n.Client.Delete(path, nil, nil)
+				if err != nil {
+					e2, ok := err.(errors.Panos)
+					if !ok || !e2.ObjectNotFound() {
+						break
+					}
+				}
+
+				start = end
+			}
 		}
 	}
 
