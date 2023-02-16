@@ -9,7 +9,9 @@ import (
 )
 
 func versioning(v version.Number) (normalizer, func(Entry) interface{}) {
-	if v.Gte(version.Number{10, 0, 0, ""}) {
+	if v.Gte(version.Number{10, 2, 0, ""}) {
+		return &container_v5{}, specify_v5
+	} else if v.Gte(version.Number{10, 0, 0, ""}) {
 		return &container_v4{}, specify_v4
 	} else if v.Gte(version.Number{9, 0, 0, ""}) {
 		return &container_v3{}, specify_v3

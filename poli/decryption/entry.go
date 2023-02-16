@@ -42,6 +42,7 @@ type Entry struct {
 	LogSuccessfulTlsHandshakes bool     // PAN-OS 10.0+
 	LogFailedTlsHandshakes     bool     // PAN-OS 10.0+
 	LogSetting                 string   // PAN-OS 10.0+
+	SslCertificates            []string // PAN-OS 10.2+, unordered
 }
 
 // Copy copies the information from source Entry `s` to this object.  As the
@@ -72,6 +73,7 @@ func (o *Entry) Copy(s Entry) {
 	o.LogSetting = s.LogSetting
 	o.Targets = util.CopyTargets(s.Targets)
 	o.NegateTarget = s.NegateTarget
+	o.SslCertificates = util.CopyStringSlice(o.SslCertificates)
 }
 
 /** Structs / functions for normalization. **/
@@ -611,6 +613,168 @@ func specify_v4(e Entry) interface{} {
 		ans.Type.SshProxy = &s
 	case DecryptionTypeSslInboundInspection:
 		ans.Type.SslCertificate = e.SslCertificate
+	}
+
+	if e.Targets != nil || e.NegateTarget {
+		nfo := &targetInfo{
+			Targets:      util.MapToVsysEnt(e.Targets),
+			NegateTarget: util.YesNo(e.NegateTarget),
+		}
+		ans.TargetInfo = nfo
+	}
+
+	return ans
+}
+
+// PAN-OS 10.2
+type container_v5 struct {
+	Answer []entry_v5 `xml:"entry"`
+}
+
+func (o *container_v5) Names() []string {
+	ans := make([]string, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].Name)
+	}
+
+	return ans
+}
+
+func (o *container_v5) Normalize() []Entry {
+	arr := make([]Entry, 0, len(o.Answer))
+	for i := range o.Answer {
+		arr = append(arr, o.Answer[i].normalize())
+	}
+	return arr
+}
+
+func (o *entry_v5) normalize() Entry {
+	ans := Entry{
+		Name:                       o.Name,
+		Uuid:                       o.Uuid,
+		Description:                o.Description,
+		SourceZones:                util.MemToStr(o.SourceZones),
+		SourceAddresses:            util.MemToStr(o.SourceAddresses),
+		NegateSource:               util.AsBool(o.NegateSource),
+		SourceUsers:                util.MemToStr(o.SourceUsers),
+		DestinationZones:           util.MemToStr(o.DestinationZones),
+		DestinationAddresses:       util.MemToStr(o.DestinationAddresses),
+		NegateDestination:          util.AsBool(o.NegateDestination),
+		Tags:                       util.MemToStr(o.Tags),
+		Disabled:                   util.AsBool(o.Disabled),
+		Services:                   util.MemToStr(o.Services),
+		UrlCategories:              util.MemToStr(o.UrlCategories),
+		Action:                     o.Action,
+		DecryptionProfile:          o.DecryptionProfile,
+		ForwardingProfile:          o.ForwardingProfile,
+		GroupTag:                   o.GroupTag,
+		SourceHips:                 util.MemToStr(o.SourceHips),
+		DestinationHips:            util.MemToStr(o.DestinationHips),
+		LogSuccessfulTlsHandshakes: util.AsBool(o.LogSuccessfulTlsHandshakes),
+		LogFailedTlsHandshakes:     util.AsBool(o.LogFailedTlsHandshakes),
+		LogSetting:                 o.LogSetting,
+	}
+
+	switch {
+	case o.Type.SslForwardProxy != nil:
+		ans.DecryptionType = DecryptionTypeSslForwardProxy
+	case o.Type.SshProxy != nil:
+		ans.DecryptionType = DecryptionTypeSshProxy
+	case o.Type.SslCertificates != nil:
+		ans.DecryptionType = DecryptionTypeSslInboundInspection
+		ans.SslCertificates = util.MemToStr(o.Type.SslCertificates)
+	}
+
+	if o.TargetInfo != nil {
+		ans.NegateTarget = util.AsBool(o.TargetInfo.NegateTarget)
+		ans.Targets = util.VsysEntToMap(o.TargetInfo.Targets)
+	}
+
+	return ans
+}
+
+type entry_v5 struct {
+	XMLName                    xml.Name         `xml:"entry"`
+	Name                       string           `xml:"name,attr"`
+	Uuid                       string           `xml:"uuid,attr,omitempty"`
+	Description                string           `xml:"description,omitempty"`
+	SourceZones                *util.MemberType `xml:"from"`
+	SourceAddresses            *util.MemberType `xml:"source"`
+	NegateSource               string           `xml:"negate-source"`
+	SourceUsers                *util.MemberType `xml:"source-user"`
+	DestinationZones           *util.MemberType `xml:"to"`
+	DestinationAddresses       *util.MemberType `xml:"destination"`
+	NegateDestination          string           `xml:"negate-destination"`
+	Tags                       *util.MemberType `xml:"tag"`
+	Disabled                   string           `xml:"disabled"`
+	Services                   *util.MemberType `xml:"service"`
+	UrlCategories              *util.MemberType `xml:"category"`
+	Action                     string           `xml:"action"`
+	Type                       dType_v2         `xml:"type"`
+	DecryptionProfile          string           `xml:"profile,omitempty"`
+	ForwardingProfile          string           `xml:"forwarding-profile,omitempty"`
+	GroupTag                   string           `xml:"group-tag,omitempty"`
+	SourceHips                 *util.MemberType `xml:"source-hip"`
+	DestinationHips            *util.MemberType `xml:"destination-hip"`
+	LogSuccessfulTlsHandshakes string           `xml:"log-success"`
+	LogFailedTlsHandshakes     string           `xml:"log-fail"`
+	LogSetting                 string           `xml:"log-setting,omitempty"`
+	TargetInfo                 *targetInfo      `xml:"target"`
+}
+
+type dType_v2 struct {
+	SslForwardProxy *string          `xml:"ssl-forward-proxy"`
+	SshProxy        *string          `xml:"ssh-proxy"`
+	SslCertificates *util.MemberType `xml:"ssl-inbound-inspection"`
+}
+
+func (e *entry_v5) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
+	type local entry_v5
+	ans := local{
+		LogFailedTlsHandshakes: util.YesNo(true),
+	}
+	if err := d.DecodeElement(&ans, &start); err != nil {
+		return err
+	}
+	*e = entry_v5(ans)
+	return nil
+}
+
+func specify_v5(e Entry) interface{} {
+	ans := entry_v5{
+		Name:                       e.Name,
+		Uuid:                       e.Uuid,
+		Description:                e.Description,
+		SourceZones:                util.StrToMem(e.SourceZones),
+		SourceAddresses:            util.StrToMem(e.SourceAddresses),
+		NegateSource:               util.YesNo(e.NegateSource),
+		SourceUsers:                util.StrToMem(e.SourceUsers),
+		DestinationZones:           util.StrToMem(e.DestinationZones),
+		DestinationAddresses:       util.StrToMem(e.DestinationAddresses),
+		NegateDestination:          util.YesNo(e.NegateDestination),
+		Tags:                       util.StrToMem(e.Tags),
+		Disabled:                   util.YesNo(e.Disabled),
+		Services:                   util.StrToMem(e.Services),
+		UrlCategories:              util.StrToMem(e.UrlCategories),
+		Action:                     e.Action,
+		DecryptionProfile:          e.DecryptionProfile,
+		ForwardingProfile:          e.ForwardingProfile,
+		GroupTag:                   e.GroupTag,
+		SourceHips:                 util.StrToMem(e.SourceHips),
+		DestinationHips:            util.StrToMem(e.DestinationHips),
+		LogSuccessfulTlsHandshakes: util.YesNo(e.LogSuccessfulTlsHandshakes),
+		LogFailedTlsHandshakes:     util.YesNo(e.LogFailedTlsHandshakes),
+		LogSetting:                 e.LogSetting,
+	}
+
+	s := ""
+	switch e.DecryptionType {
+	case DecryptionTypeSslForwardProxy:
+		ans.Type.SslForwardProxy = &s
+	case DecryptionTypeSshProxy:
+		ans.Type.SshProxy = &s
+	case DecryptionTypeSslInboundInspection:
+		ans.Type.SslCertificates = util.StrToMem(e.SslCertificates)
 	}
 
 	if e.Targets != nil || e.NegateTarget {
