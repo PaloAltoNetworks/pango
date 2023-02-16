@@ -65,3 +65,42 @@ func TestLogEndMissingIsTrue(t *testing.T) {
 		})
 	}
 }
+
+func TestHipProfilesIsAbsent(t *testing.T) {
+	mc := &testdata.MockClient{}
+	ns := FirewallNamespace(mc)
+
+	mc.Version = version.Number{10, 1, 5, ""}
+	mc.AddResp("")
+
+	elm := Entry{
+		Name:                 "rule1",
+		Type:                 "universal",
+		SourceZones:          []string{"sz1", "sz2"},
+		SourceAddresses:      []string{"sa1", "sa2"},
+		SourceUsers:          []string{"su1", "su2"},
+		DestinationZones:     []string{"dz1", "dz2"},
+		HipProfiles:          []string{"hip1", "hip2"},
+		DestinationAddresses: []string{"da1", "da2"},
+		Applications:         []string{"app1"},
+		Services:             []string{"s2", "s1"},
+		Categories:           []string{"cat1"},
+		Action:               "allow",
+		LogEnd:               true,
+		SourceDevices:        []string{"src2", "src1"},
+		DestinationDevices:   []string{"dstDev"},
+	}
+
+	err := ns.Set("vsys1", elm)
+	if err != nil {
+		t.Fatalf("Failed set: %s", err)
+	}
+	mc.AddResp(mc.Elm)
+	r, err := ns.Get("vsys1", elm.Name)
+	if err != nil {
+		t.Fatalf("Failed get: %s", err)
+	}
+	if len(r.HipProfiles) != 0 {
+		t.Fatalf("HipProfiles has data and shouldn't")
+	}
+}

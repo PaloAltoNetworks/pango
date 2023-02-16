@@ -57,17 +57,17 @@ type Entry struct {
 // Defaults sets params with uninitialized values to their GUI default setting.
 //
 // The defaults are as follows:
-//      * Type: "universal"
-//      * SourceZones: ["any"]
-//      * SourceAddresses: ["any"]
-//      * SourceUsers: ["any"]
-//      * DestinationZones: ["any"]
-//      * DestinationAddresses: ["any"]
-//      * Applications: ["any"]
-//      * Services: ["application-default"]
-//      * Categories: ["any"]
-//      * Action: "allow"
-//      * LogEnd: true
+//   - Type: "universal"
+//   - SourceZones: ["any"]
+//   - SourceAddresses: ["any"]
+//   - SourceUsers: ["any"]
+//   - DestinationZones: ["any"]
+//   - DestinationAddresses: ["any"]
+//   - Applications: ["any"]
+//   - Services: ["application-default"]
+//   - Categories: ["any"]
+//   - Action: "allow"
+//   - LogEnd: true
 func (o *Entry) Defaults() {
 	if o.Type == "" {
 		o.Type = "universal"
