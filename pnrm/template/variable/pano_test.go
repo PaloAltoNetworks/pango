@@ -39,7 +39,7 @@ func TestNormalization(t *testing.T) {
 		}},
 		{"device priority test", Entry{
 			Name:  "$prio1",
-			Type:  TypeInterface,
+			Type:  TypeDevicePriority,
 			Value: "150",
 		}},
 	}
