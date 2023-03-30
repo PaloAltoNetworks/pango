@@ -12,14 +12,14 @@ type Panorama struct {
 	ns *namespace.Standard
 }
 
-// Get performs GET to retrieve the device's general settings.
+// Get performs GET to retrieve the device's ha config.
 func (c *Panorama) Get(tmpl, ts, vsys string) (Config, error) {
 	ans := c.container()
 	err := c.ns.Object(util.Get, c.pather(tmpl, ts, vsys), "", ans)
 	return first(ans, err)
 }
 
-// Show performs SHOW to retrieve the device's general settings.
+// Show performs SHOW to retrieve the device's ha config.
 func (c *Panorama) Show(tmpl, ts, vsys string) (Config, error) {
 	ans := c.container()
 	err := c.ns.Object(util.Show, c.pather(tmpl, ts, vsys), "", ans)
@@ -31,9 +31,21 @@ func (c *Panorama) Set(tmpl, ts, vsys string, e Config) error {
 	return c.ns.Set(c.pather(tmpl, ts, vsys), specifier(e))
 }
 
-// Edit performs EDIT to update the device's general settings.
+// Edit performs EDIT to update the device's ha config.
 func (c *Panorama) Edit(tmpl, ts, vsys string, e Config) error {
 	return c.ns.Edit(c.pather(tmpl, ts, vsys), e)
+}
+
+// Delete performs DELETE to remove the config.
+func (c *Panorama) Delete(tmpl, ts, vsys string) error {
+	var err error
+	path, err := c.xpath(tmpl, ts, vsys)
+	if err != nil {
+		return err
+	}
+
+	_, err = c.ns.Client.Delete(path, nil, nil)
+	return err
 }
 
 func (c *Panorama) pather(tmpl, ts, vsys string) namespace.Pather {
