@@ -1,4 +1,4 @@
-package ha
+package general
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 	"github.com/PaloAltoNetworks/pango/util"
 )
 
-// Panorama is the client.Device.HaConfig namespace.
+// Panorama is the client.Device.GeneralSettings namespace.
 type Panorama struct {
 	ns *namespace.Standard
 }
@@ -54,7 +54,7 @@ func (c *Panorama) xpath(tmpl, ts, vsys string) ([]string, error) {
 		"devices",
 		util.AsEntryXpath([]string{"localhost.localdomain"}),
 		"deviceconfig",
-		"high-availability",
+		"system",
 	)
 
 	return ans, nil

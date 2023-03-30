@@ -4,6 +4,7 @@ import (
 	"github.com/PaloAltoNetworks/pango/util"
 
 	cert "github.com/PaloAltoNetworks/pango/dev/certificate"
+	"github.com/PaloAltoNetworks/pango/dev/general"
 	"github.com/PaloAltoNetworks/pango/dev/ha"
 	halink "github.com/PaloAltoNetworks/pango/dev/ha/monitor/link"
 	hapath "github.com/PaloAltoNetworks/pango/dev/ha/monitor/path"
@@ -31,6 +32,7 @@ type Panorama struct {
 	Certificate           *cert.Panorama
 	CertificateProfile    *certificate.Panorama
 	EmailServerProfile    *email.Panorama
+	GeneralSettings       *general.Panorama
 	HaConfig              *ha.Panorama
 	HaLinkMonitorGroup    *halink.Panorama
 	HaPathMonitorGroup    *hapath.Panorama
@@ -56,6 +58,7 @@ func PanoramaNamespace(x util.XapiClient) *Panorama {
 		Certificate:           cert.PanoramaNamespace(x),
 		CertificateProfile:    certificate.PanoramaNamespace(x),
 		EmailServerProfile:    email.PanoramaNamespace(x),
+		GeneralSettings:       general.PanoramaNamespace(x),
 		HaConfig:              ha.PanoramaNamespace(x),
 		HaLinkMonitorGroup:    halink.PanoramaNamespace(x),
 		HaPathMonitorGroup:    hapath.PanoramaNamespace(x),
