@@ -65,6 +65,9 @@ type Config struct {
 	LinkMonitorEnable           bool
 	LinkMonitorFailureCondition string
 
+	PathMonitorEnable           bool
+	PathMonitorFailureCondition string
+
 	raw map[string]string
 }
 
@@ -212,6 +215,9 @@ func (o *Config) Copy(s Config) {
 
 	o.LinkMonitorEnable = s.LinkMonitorEnable
 	o.LinkMonitorFailureCondition = s.LinkMonitorFailureCondition
+
+	o.PathMonitorEnable = s.PathMonitorEnable
+	o.PathMonitorFailureCondition = s.PathMonitorFailureCondition
 }
 
 /** Structs / functions for this namespace. **/
@@ -394,15 +400,20 @@ func (o *entry_v1) normalize() Config {
 		ans.LinkMonitorEnable = util.AsBool(o.LinkMonitor.Enable)
 		ans.LinkMonitorFailureCondition = o.LinkMonitor.FailureCondition
 		if o.LinkMonitor.LinkGroup != nil {
-			raw["linkgroup"] = util.CleanRawXml(o.LinkMonitor.LinkGroup.Text)
+			raw["link-group"] = util.CleanRawXml(o.LinkMonitor.LinkGroup.Text)
+		}
+	}
+
+	if o.PathMonitor != nil {
+		ans.PathMonitorEnable = util.AsBool(o.PathMonitor.Enable)
+		ans.PathMonitorFailureCondition = o.PathMonitor.FailureCondition
+		if o.LinkMonitor.LinkGroup != nil {
+			raw["path-group"] = util.CleanRawXml(o.PathMonitor.PathGroup.Text)
 		}
 	}
 
 	if o.Cluster != nil {
 		raw["cluster"] = util.CleanRawXml(o.Cluster.Text)
-	}
-	if o.PathMonitor != nil {
-		raw["pathmonitor"] = util.CleanRawXml(o.PathMonitor.Text)
 	}
 
 	if len(raw) != 0 {
@@ -425,9 +436,9 @@ type entry_v1 struct {
 	ElectionOption         *electionOption `xml:"group>election-option"`
 	StateSync              *stateSync      `xml:"group>state-synchronization"`
 	LinkMonitor            *linkMonitor    `xml:"group>monitoring>link-monitoring"`
+	PathMonitor            *pathMonitor    `xml:"group>monitoring>path-monitoring"`
 
-	PathMonitor *util.RawXml `xml:"group>monitoring>path-monitoring"`
-	Cluster     *util.RawXml `xml:"cluster"`
+	Cluster *util.RawXml `xml:"cluster"`
 }
 
 func (e *entry_v1) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
@@ -567,6 +578,12 @@ type linkMonitor struct {
 	Enable           string       `xml:"enabled"`
 	FailureCondition string       `xml:"failure-condition,omitempty"`
 	LinkGroup        *util.RawXml `xml:"link-group"`
+}
+
+type pathMonitor struct {
+	Enable           string       `xml:"enabled"`
+	FailureCondition string       `xml:"failure-condition,omitempty"`
+	PathGroup        *util.RawXml `xml:"path-group"`
 }
 
 func specify_v1(e Config) interface{} {
@@ -730,7 +747,7 @@ func specify_v1(e Config) interface{} {
 		}
 	}
 
-	if text, present := e.raw["linkgroup"]; present || !e.LinkMonitorEnable ||
+	if text, present := e.raw["link-group"]; present || !e.LinkMonitorEnable ||
 		e.LinkMonitorFailureCondition != "" {
 		ans.LinkMonitor = &linkMonitor{
 			Enable:           util.YesNo(e.LinkMonitorEnable),
@@ -741,11 +758,19 @@ func specify_v1(e Config) interface{} {
 		}
 	}
 
+	if text, present := e.raw["path-group"]; present || !e.PathMonitorEnable ||
+		e.PathMonitorFailureCondition != "" {
+		ans.PathMonitor = &pathMonitor{
+			Enable:           util.YesNo(e.PathMonitorEnable),
+			FailureCondition: e.PathMonitorFailureCondition,
+		}
+		if present {
+			ans.PathMonitor.PathGroup = &util.RawXml{text}
+		}
+	}
+
 	if text, present := e.raw["cluster"]; present {
 		ans.Cluster = &util.RawXml{text}
-	}
-	if text, present := e.raw["pathmonitor"]; present {
-		ans.PathMonitor = &util.RawXml{text}
 	}
 
 	return ans
