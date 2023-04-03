@@ -246,7 +246,7 @@ func CleanRawXml(v string) string {
 // ValidMovement returns if the movement constant is valid or not.
 func ValidMovement(v int) bool {
 	switch v {
-	case MoveSkip, MoveBefore, MoveDirectlyBefore, MoveAfter, MoveDirectlyAfter, MoveTop, MoveBottom:
+	case MoveSkip, MoveBefore, MoveDirectlyBefore, MoveAfter, MoveDirectlyAfter, MoveTop, MoveBottom, MoveLoose:
 		return true
 	}
 

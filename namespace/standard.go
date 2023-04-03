@@ -243,7 +243,7 @@ func (n *Standard) MoveGroup(pather Pather, lister MoveLister, movement int, rul
 		return pErr
 	}
 
-	if movement != util.MoveSkip {
+	if movement != util.MoveSkip && movement != util.MoveLoose {
 		// Get the list of current security policies.
 		curList, err := lister()
 		if err != nil {

@@ -25,6 +25,7 @@ const (
 	MoveDirectlyAfter
 	MoveTop
 	MoveBottom
+	MoveLoose
 )
 
 // Valid values to use for any function expecting a pango query type `qt`.

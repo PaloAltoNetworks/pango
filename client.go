@@ -1688,7 +1688,7 @@ func (c *Client) PositionFirstEntity(mvt int, rel, ent string, path, elms []stri
 	// Sanity checks.
 	if rel == ent {
 		return fmt.Errorf("Can't position %q in relation to itself", rel)
-	} else if mvt < util.MoveSkip && mvt > util.MoveBottom {
+	} else if mvt < util.MoveSkip && mvt > util.MoveLoose {
 		return fmt.Errorf("Invalid position int given: %d", mvt)
 	} else if (mvt == util.MoveBefore || mvt == util.MoveDirectlyBefore || mvt == util.MoveAfter || mvt == util.MoveDirectlyAfter) && rel == "" {
 		return fmt.Errorf("Specify 'ref' in order to perform relative group positioning")
@@ -1699,7 +1699,7 @@ func (c *Client) PositionFirstEntity(mvt int, rel, ent string, path, elms []stri
 	oIdx := -1
 
 	switch mvt {
-	case util.MoveSkip:
+	case util.MoveSkip, util.MoveLoose:
 		return nil
 	case util.MoveTop:
 		_, em := c.Move(path, "top", "", nil, nil)
