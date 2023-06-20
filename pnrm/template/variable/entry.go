@@ -77,19 +77,23 @@ func (o *entry_v1) normalize() Entry {
 	} else if o.Interface != "" {
 		ans.Type = TypeInterface
 		ans.Value = o.Interface
+	} else if o.DevicePriority != "" {
+		ans.Type = TypeDevicePriority
+		ans.Value = o.DevicePriority
 	}
 
 	return ans
 }
 
 type entry_v1 struct {
-	XMLName   xml.Name `xml:"entry"`
-	Name      string   `xml:"name,attr"`
-	IpNetmask string   `xml:"type>ip-netmask,omitempty"`
-	IpRange   string   `xml:"type>ip-range,omitempty"`
-	Fqdn      string   `xml:"type>fqdn,omitempty"`
-	GroupId   string   `xml:"type>group-id,omitempty"`
-	Interface string   `xml:"type>interface,omitempty"`
+	XMLName        xml.Name `xml:"entry"`
+	Name           string   `xml:"name,attr"`
+	IpNetmask      string   `xml:"type>ip-netmask,omitempty"`
+	IpRange        string   `xml:"type>ip-range,omitempty"`
+	Fqdn           string   `xml:"type>fqdn,omitempty"`
+	GroupId        string   `xml:"type>group-id,omitempty"`
+	Interface      string   `xml:"type>interface,omitempty"`
+	DevicePriority string   `xml:"type>device-priority,omitempty"`
 }
 
 func specify_v1(e Entry) interface{} {
@@ -108,6 +112,8 @@ func specify_v1(e Entry) interface{} {
 		ans.GroupId = e.Value
 	case TypeInterface:
 		ans.Interface = e.Value
+	case TypeDevicePriority:
+		ans.DevicePriority = e.Value
 	}
 
 	return ans

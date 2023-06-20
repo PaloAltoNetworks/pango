@@ -37,6 +37,11 @@ func TestNormalization(t *testing.T) {
 			Type:  TypeInterface,
 			Value: "ethernet1/1",
 		}},
+		{"device priority test", Entry{
+			Name:  "$prio1",
+			Type:  TypeDevicePriority,
+			Value: "100",
+		}},
 	}
 
 	mc := &testdata.MockClient{}
