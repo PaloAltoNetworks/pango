@@ -1981,9 +1981,7 @@ func (c *Client) logSend(data url.Values) {
 			}
 			if !isSpecial {
 				ev[k] = make([]string, 0, len(data[k]))
-				for i := range data[k] {
-					ev[k] = append(ev[k], data[k][i])
-				}
+				ev[k] = append(ev[k], data[k]...)
 			}
 		}
 
