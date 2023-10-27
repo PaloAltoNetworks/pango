@@ -2,7 +2,6 @@ package commit
 
 import (
 	"encoding/xml"
-
 	"github.com/PaloAltoNetworks/pango/util"
 )
 
@@ -116,6 +115,8 @@ type PanoramaCommitAll struct {
 	Description         string
 	IncludeTemplate     bool
 	ForceTemplateValues bool
+	ValidateOnly        bool
+	Admins              []string
 	Devices             []string
 }
 
@@ -139,7 +140,11 @@ func (o PanoramaCommitAll) Element() interface{} {
 				Description:         o.Description,
 				IncludeTemplate:     util.YesNo(o.IncludeTemplate),
 				ForceTemplateValues: util.YesNo(o.ForceTemplateValues),
+				ValidateOnly:        util.YesNo(o.ValidateOnly),
 			},
+		}
+		if len(o.Admins) > 0 {
+			ans.DeviceGroup.Admins = util.StrToMem(o.Admins)
 		}
 	case TypeTemplate:
 		ans = panoCommitAll{
@@ -148,7 +153,11 @@ func (o PanoramaCommitAll) Element() interface{} {
 				Description:         o.Description,
 				ForceTemplateValues: util.YesNo(o.ForceTemplateValues),
 				Devices:             util.StrToMem(o.Devices),
+				ValidateOnly:        util.YesNo(o.ValidateOnly),
 			},
+		}
+		if len(o.Admins) > 0 {
+			ans.Template.Admins = util.StrToMem(o.Admins)
 		}
 	case TypeTemplateStack:
 		ans = panoCommitAll{
@@ -157,7 +166,11 @@ func (o PanoramaCommitAll) Element() interface{} {
 				Description:         o.Description,
 				ForceTemplateValues: util.YesNo(o.ForceTemplateValues),
 				Devices:             util.StrToMem(o.Devices),
+				ValidateOnly:        util.YesNo(o.ValidateOnly),
 			},
+		}
+		if len(o.Admins) > 0 {
+			ans.TemplateStack.Admins = util.StrToMem(o.Admins)
 		}
 	case TypeLogCollectorGroup:
 		ans = panoCommitAll{
@@ -181,7 +194,6 @@ func (o PanoramaCommitAll) Element() interface{} {
 			},
 		}
 	}
-
 	return ans
 }
 
@@ -195,10 +207,12 @@ type panoCommitAll struct {
 }
 
 type pcaDeviceGroup struct {
-	DgInfo              pcaDgInfo `xml:"device-group"`
-	Description         string    `xml:"description,omitempty"`
-	IncludeTemplate     string    `xml:"include-template"`
-	ForceTemplateValues string    `xml:"force-template-values"`
+	DgInfo              pcaDgInfo        `xml:"device-group"`
+	Admins              *util.MemberType `xml:"admin,omitempty"`
+	Description         string           `xml:"description,omitempty"`
+	IncludeTemplate     string           `xml:"include-template"`
+	ForceTemplateValues string           `xml:"force-template-values"`
+	ValidateOnly        string           `xml:"validate-only"`
 }
 
 type pcaDgInfo struct {
@@ -211,10 +225,12 @@ type pcaDgInfoEntry struct {
 }
 
 type pcaTemplate struct {
+	Admins              *util.MemberType `xml:"admin,omitempty"`
+	Devices             *util.MemberType `xml:"device"`
 	Name                string           `xml:"name"`
 	Description         string           `xml:"description,omitempty"`
-	Devices             *util.MemberType `xml:"device"`
 	ForceTemplateValues string           `xml:"force-template-values"`
+	ValidateOnly        string           `xml:"validate-only"`
 }
 
 type pcaLogCollectorGroup struct {
