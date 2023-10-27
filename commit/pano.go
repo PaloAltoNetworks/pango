@@ -225,8 +225,8 @@ type pcaDgInfoEntry struct {
 }
 
 type pcaTemplate struct {
-	Devices             *util.MemberType `xml:"device"`
 	Admins              *util.MemberType `xml:"admin,omitempty"`
+	Devices             *util.MemberType `xml:"device"`
 	Name                string           `xml:"name"`
 	Description         string           `xml:"description,omitempty"`
 	ForceTemplateValues string           `xml:"force-template-values"`
