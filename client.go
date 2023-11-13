@@ -42,19 +42,19 @@ import (
 //
 // The bit-wise flags are as follows:
 //
-//      * LogQuiet: disables all logging
-//      * LogAction: action being performed (Set / Edit / Delete functions)
-//      * LogQuery: queries being run (Get / Show functions)
-//      * LogOp: operation commands (Op functions)
-//      * LogUid: User-Id commands (Uid functions)
-//      * LogLog: log retrieval commands
-//      * LogExport: log export commands
-//      * LogXpath: the resultant xpath
-//      * LogSend: xml docuemnt being sent
-//      * LogReceive: xml responses being received
-//      * LogOsxCurl: output an OSX cURL command for the data being sent in
-//      * LogCurlWithPersonalData: If doing a curl style logging, then include
-//        personal data in the curl command instead of tokens.
+//   - LogQuiet: disables all logging
+//   - LogAction: action being performed (Set / Edit / Delete functions)
+//   - LogQuery: queries being run (Get / Show functions)
+//   - LogOp: operation commands (Op functions)
+//   - LogUid: User-Id commands (Uid functions)
+//   - LogLog: log retrieval commands
+//   - LogExport: log export commands
+//   - LogXpath: the resultant xpath
+//   - LogSend: xml docuemnt being sent
+//   - LogReceive: xml responses being received
+//   - LogOsxCurl: output an OSX cURL command for the data being sent in
+//   - LogCurlWithPersonalData: If doing a curl style logging, then include
+//     personal data in the curl command instead of tokens.
 const (
 	LogQuiet = 1 << (iota + 1)
 	LogAction
@@ -168,10 +168,10 @@ func (c *Client) Plugins() []plugin.Info {
 // client's SystemInfo map.
 //
 // If not specified, the following is assumed:
-//  * Protocol: https
-//  * Port: (unspecified)
-//  * Timeout: 10
-//  * Logging: LogAction | LogUid
+//   - Protocol: https
+//   - Port: (unspecified)
+//   - Timeout: 10
+//   - Logging: LogAction | LogUid
 func (c *Client) Initialize() error {
 	if len(c.rb) == 0 {
 		var e error
@@ -321,7 +321,6 @@ func (c *Client) RequestPasswordHash(val string) (string, error) {
 // Setting sync to true means that this function will block until the job
 // finishes.
 //
-//
 // The sleep param is an optional sleep duration to wait between polling for
 // job completion.  This param is only used if sync is set to true.
 //
@@ -356,10 +355,10 @@ func (c *Client) RevertToRunningConfig() error {
 	return err
 }
 
-// ConfigLocks returns any config locks that are currently in place.
+// ShowConfigLocks returns any config locks that are currently in place.
 //
 // If vsys is an empty string, then the vsys will default to "shared".
-func (c *Client) ConfigLocks(vsys string) ([]util.Lock, error) {
+func (c *Client) ShowConfigLocks(vsys string) ([]util.Lock, error) {
 	var err error
 	var cmd string
 	ans := configLocks{}
@@ -368,7 +367,7 @@ func (c *Client) ConfigLocks(vsys string) ([]util.Lock, error) {
 		vsys = "shared"
 	}
 
-	if c.Version.Gte(version.Number{9, 1, 0, ""}) {
+	if !c.Version.Gte(version.Number{Major: 9, Minor: 1}) {
 		var tgt string
 		if vsys == "shared" {
 			tgt = "all"
@@ -427,10 +426,10 @@ func (c *Client) UnlockConfig(vsys string) error {
 	return err
 }
 
-// CommitLocks returns any commit locks that are currently in place.
+// ShowCommitLocks returns any commit locks that are currently in place.
 //
 // If vsys is an empty string, then the vsys will default to "shared".
-func (c *Client) CommitLocks(vsys string) ([]util.Lock, error) {
+func (c *Client) ShowCommitLocks(vsys string) ([]util.Lock, error) {
 	if vsys == "" {
 		vsys = "shared"
 	}
