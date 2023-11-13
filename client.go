@@ -318,33 +318,23 @@ func (c *Client) RequestPasswordHash(val string) (string, error) {
 
 // ValidateConfig performs a commit config validation check.
 //
-// Setting sync to true means that this function will block until the job
-// finishes.
-//
-// The sleep param is an optional sleep duration to wait between polling for
-// job completion.  This param is only used if sync is set to true.
+// # Cmd interface contained a formatted XML string struct which can be used to either marshalled into XML or one of the
+// validate function.
 //
 // This function returns the job ID and if any errors were encountered.
-func (c *Client) ValidateConfig(sync bool, sleep time.Duration) (uint, error) {
+func (c *Client) ValidateConfig(cmd interface{}) (uint, []byte, error) {
 	var err error
+	data := url.Values{}
+	data.Set("type", "op")
 
-	c.LogOp("(op) validating config")
-	type op_req struct {
-		XMLName xml.Name `xml:"validate"`
-		Cmd     string   `xml:"full"`
-	}
-	job_ans := util.JobResponse{}
-	_, err = c.Op(op_req{}, "", nil, &job_ans)
-	if err != nil {
-		return 0, err
+	if err = addToData("cmd", cmd, true, &data); err != nil {
+		return 0, nil, err
 	}
 
-	id := job_ans.Id
-	if !sync {
-		return id, nil
-	}
+	ans := util.JobResponse{}
 
-	return id, c.WaitForJob(id, sleep, nil, nil)
+	b, _, err := c.Communicate(data, &ans)
+	return ans.Id, b, err
 }
 
 // RevertToRunningConfig discards any changes made and reverts to the last
