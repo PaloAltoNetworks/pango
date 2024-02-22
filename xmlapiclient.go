@@ -45,9 +45,9 @@ type XmlApiClient struct {
     CheckEnvironment bool `json:"-"`
     AuthFile string `json:"-"`
 
-    // HTTP transport options.  Note that the VerifyCertificate setting is
-    // only used if you do not specify a HTTP transport yourself.
-    VerifyCertificate bool            `json:"verify_certificate"`
+    // HTTP transport options.  Note that the SkipVerifyCertificate setting
+    // is only used if you do not specify a HTTP transport yourself.
+    SkipVerifyCertificate bool            `json:"skip_verify_certificate"`
     Transport         *http.Transport `json:"-"`
 
     // Variables determined at runtime.
@@ -188,17 +188,17 @@ func (c *XmlApiClient) Setup() error {
 		}
 	}
 
-	// Verify cert.
-	if !c.VerifyCertificate {
-		if val := os.Getenv("PANOS_VERIFY_CERTIFICATE"); c.CheckEnvironment && val != "" {
+	// Skip verify cert.
+	if !c.SkipVerifyCertificate {
+		if val := os.Getenv("PANOS_SKIP_VERIFY_CERTIFICATE"); c.CheckEnvironment && val != "" {
 			if vcb, err := strconv.ParseBool(val); err != nil {
 				return err
 			} else if vcb {
-				c.VerifyCertificate = vcb
+				c.SkipVerifyCertificate = vcb
 			}
 		}
-		if !c.VerifyCertificate && json_client.VerifyCertificate {
-			c.VerifyCertificate = json_client.VerifyCertificate
+		if !c.SkipVerifyCertificate && json_client.SkipVerifyCertificate {
+			c.SkipVerifyCertificate = true
 		}
 	}
 
@@ -227,7 +227,7 @@ func (c *XmlApiClient) Setup() error {
 		c.Transport = &http.Transport{
 			Proxy: http.ProxyFromEnvironment,
 			TLSClientConfig: &tls.Config{
-				InsecureSkipVerify: !c.VerifyCertificate,
+				InsecureSkipVerify: c.SkipVerifyCertificate,
 			},
 		}
 	}
