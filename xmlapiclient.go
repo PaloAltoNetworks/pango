@@ -261,6 +261,54 @@ func (c *XmlApiClient) Initialize(ctx context.Context) error {
         }
     }
 
+    if err := c.RetrieveSystemInfo(ctx); err != nil {
+        return err
+    }
+
+    return nil
+}
+
+// RetrieveSystemInfo performs "show system info" and saves it SystemInfo.
+func (c *XmlApiClient) RetrieveSystemInfo(ctx context.Context) error {
+    var err error
+
+    type req struct {
+        XMLName xml.Name `xml:"show"`
+        Cmd string `xml:"system>info"`
+    }
+
+    type system struct {
+        Tags []generic.Xml `xml:",any"`
+    }
+
+    type resp struct {
+        System system `xml:"result>system"`
+    }
+
+    cmd := &xmlapi.Op{
+        Command: req{},
+        Target: c.Target,
+    }
+
+    var ans resp
+    if _, _, err = c.Communicate(ctx, cmd, false, &ans); err != nil {
+        return err
+    }
+
+	c.SystemInfo = make(map[string]string, len(ans.System.Tags))
+    for _, t := range ans.System.Tags {
+        if t.TrimmedText == nil {
+            continue
+        }
+        c.SystemInfo[t.XMLName.Local] = *t.TrimmedText
+        if t.XMLName.Local == "sw-version" {
+            c.Version, err = version.New(*t.TrimmedText)
+            if err != nil {
+                return err
+            }
+        }
+    }
+
     return nil
 }
 
