@@ -28,29 +28,29 @@ func (o Location) Xpath(vn version.Number, name string) ([]string, error) {
         if o.Vsys.NgfwDevice == "" {
             return nil, fmt.Errorf("NgfwDevice is unspecified")
         }
-        if o.Vsys.Vsys == "" {
-            return nil, fmt.Errorf("Vsys is unspecified")
+        if o.Vsys.Name == "" {
+            return nil, fmt.Errorf("Name is unspecified")
         }
         ans = []string{
             "config",
             "devices",
             util.AsEntryXpath([]string{o.Vsys.NgfwDevice}),
             "vsys",
-            util.AsEntryXpath([]string{o.Vsys.Vsys}),
+            util.AsEntryXpath([]string{o.Vsys.Name}),
         }
     case o.DeviceGroup != nil:
         if o.DeviceGroup.PanoramaDevice == "" {
             return nil, fmt.Errorf("PanoramaDevice is unspecified")
         }
-        if o.DeviceGroup.DeviceGroup == "" {
-            return nil, fmt.Errorf("DeviceGroup is unspecified")
+        if o.DeviceGroup.Name == "" {
+            return nil, fmt.Errorf("Name is unspecified")
         }
         ans = []string{
             "config",
             "devices",
             util.AsEntryXpath([]string{o.DeviceGroup.PanoramaDevice}),
             "device-group",
-            util.AsEntryXpath([]string{o.DeviceGroup.DeviceGroup}),
+            util.AsEntryXpath([]string{o.DeviceGroup.Name}),
         }
     case o.FromPanorama:
         ans = []string{"config", "panorama"}
@@ -66,10 +66,10 @@ func (o Location) Xpath(vn version.Number, name string) ([]string, error) {
 
 type VsysLocation struct {
     NgfwDevice string
-    Vsys string
+    Name string
 }
 
 type DeviceGroupLocation struct {
     PanoramaDevice string
-    DeviceGroup string
+    Name string
 }
