@@ -1,12 +1,18 @@
 package errors
 
 import (
+    stderr "errors"
 	"encoding/xml"
 	"fmt"
 	"strings"
 
 	"github.com/PaloAltoNetworks/pango/util"
 )
+
+
+var NoLocationSpecifiedError = stderr.New("no location specified")
+var NameNotSpecifiedError = stderr.New("name is not specified")
+
 
 // Panos is an error returned from PAN-OS.
 //
