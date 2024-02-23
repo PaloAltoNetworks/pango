@@ -9,10 +9,52 @@ import (
 )
 
 type Location struct {
-    Shared bool
-    Vsys *VsysLocation
-    DeviceGroup *DeviceGroupLocation
-    FromPanorama bool
+    Shared bool `json:"shared"`
+    Vsys *VsysLocation `json:"vsys,omitempty"`
+    DeviceGroup *DeviceGroupLocation `json:"device_group,omitempty"`
+    FromPanorama bool `json:"from_panorama"`
+}
+
+func (o Location) IsValid() error {
+    count := 0
+
+    if o.Shared {
+        count++
+    }
+
+    if o.Vsys != nil {
+        if o.Vsys.Name == "" {
+            return fmt.Errorf("vsys.name is unspecified")
+        }
+        if o.Vsys.NgfwDevice == "" {
+            return fmt.Errorf("vsys.ngfw_device is unspecified")
+        }
+        count++
+    }
+
+    if o.DeviceGroup != nil {
+        if o.DeviceGroup.Name == "" {
+            return fmt.Errorf("device_group.name is unspecified")
+        }
+        if o.DeviceGroup.PanoramaDevice == "" {
+            return fmt.Errorf("device_group.panorama_device is unspecified")
+        }
+        count++
+    }
+
+    if o.FromPanorama {
+        count++
+    }
+
+    if count == 0 {
+        return fmt.Errorf("no path specified")
+    }
+
+    if count > 1 {
+        return fmt.Errorf("multiple paths specified: only one should be specified")
+    }
+
+    return nil
 }
 
 func (o Location) Xpath(vn version.Number, name string) ([]string, error) {
@@ -65,11 +107,11 @@ func (o Location) Xpath(vn version.Number, name string) ([]string, error) {
 }
 
 type VsysLocation struct {
-    NgfwDevice string
-    Name string
+    NgfwDevice string `json:"ngfw_device"`
+    Name string `json:"name"`
 }
 
 type DeviceGroupLocation struct {
-    PanoramaDevice string
-    Name string
+    PanoramaDevice string `json:"panorama_device"`
+    Name string `json:"name"`
 }
