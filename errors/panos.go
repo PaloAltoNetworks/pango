@@ -1,18 +1,19 @@
 package errors
 
 import (
-    stderr "errors"
 	"encoding/xml"
+	stderr "errors"
 	"fmt"
 	"strings"
 
 	"github.com/PaloAltoNetworks/pango/util"
 )
 
-
-var NoLocationSpecifiedError = stderr.New("no location specified")
+var InvalidFilterError = stderr.New("filter is improperly formatted")
 var NameNotSpecifiedError = stderr.New("name is not specified")
-
+var NoLocationSpecifiedError = stderr.New("no location specified")
+var UnrecognizedOperatorError = stderr.New("unsupported filter operator")
+var UnsupportedFilterTypeError = stderr.New("unsupported type for filtering")
 
 // Panos is an error returned from PAN-OS.
 //
