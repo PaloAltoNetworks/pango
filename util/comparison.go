@@ -62,15 +62,15 @@ func TargetsMatch(a, b map[string][]string) bool {
 }
 
 func OptionalStringsMatch(a, b *string) bool {
-    if a == nil && b == nil {
-        return true
-    } else if a == nil || b == nil {
-        return false
-    }
+	if a == nil && b == nil {
+		return true
+	} else if a == nil || b == nil {
+		return false
+	}
 
-    return *a == *b
+	return *a == *b
 }
 
 func StringsMatch(a, b string) bool {
-    return a == b
+	return a == b
 }

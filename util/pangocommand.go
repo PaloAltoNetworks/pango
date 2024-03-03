@@ -1,9 +1,9 @@
 package util
 
 import (
-    "net/url"
+	"net/url"
 )
 
 type PangoCommand interface {
-    AsUrlValues() (url.Values, error)
+	AsUrlValues() (url.Values, error)
 }
