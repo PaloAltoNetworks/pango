@@ -42,28 +42,28 @@ func (e *Entry) CopyMiscFrom(v *Entry) {
 }
 
 func (e *Entry) Field(v string) (any, error) {
-	if v == "name" {
+	if v == "name" || v == "Name" {
 		return e.Name, nil
 	}
-	if v == "description" {
+	if v == "description" || v == "Description" {
 		return e.Description, nil
 	}
-	if v == "tags" {
+	if v == "tags" || v == "Tags" {
 		return e.Tags, nil
 	}
-	if v == "tags|LENGTH" {
+	if v == "tags|LENGTH" || v == "Tags|LENGTH" {
 		return int64(len(e.Tags)), nil
 	}
-	if v == "ip_netmask" {
+	if v == "ip_netmask" || v == "IpNetmask" {
 		return e.IpNetmask, nil
 	}
-	if v == "ip_range" {
+	if v == "ip_range" || v == "IpRange" {
 		return e.IpRange, nil
 	}
-	if v == "fqdn" {
+	if v == "fqdn" || v == "Fqdn" {
 		return e.Fqdn, nil
 	}
-	if v == "ip_wildcard" {
+	if v == "ip_wildcard" || v == "IpWildcard" {
 		return e.IpWildcard, nil
 	}
 
