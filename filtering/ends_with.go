@@ -32,12 +32,6 @@ func (o *EndsWith) Matches(f Fielder) (bool, error) {
 		return strings.HasSuffix(*v, o.Value), nil
 	case string:
 		return strings.HasSuffix(v, o.Value), nil
-	case []string:
-		if len(v) == 0 {
-			return false, nil
-		}
-
-		return v[len(v)-1] == o.Value, nil
 	}
 
 	return false, errors.UnsupportedFilterTypeError

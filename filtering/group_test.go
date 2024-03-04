@@ -1,6 +1,7 @@
 package filtering
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -260,5 +261,98 @@ func TestGroupWithTwoChecksXorOperatorReturnsFalse(t *testing.T) {
 	}
 	if ans {
 		t.Fatalf("ans was true")
+	}
+}
+
+func TestGroupWithOrDoesOneCheckIfFirstIsTrue(t *testing.T) {
+	g := &Group{
+		Matchers: []Matcher{
+			&Contains{
+				Value: "e",
+			},
+			&Contains{
+				Value: "st",
+				Operator: &Operator{
+					Or: true,
+				},
+			},
+		},
+	}
+
+	f := &testFielder{
+		Answers: []testFielderResponse{
+			{Value: "blue"},
+			{Error: fmt.Errorf("test error")},
+		},
+	}
+
+	ans, err := g.Matches(f)
+	if err != nil {
+		t.Fatalf("err in matches: %s", err)
+	}
+	if !ans {
+		t.Fatalf("ans was false")
+	}
+}
+
+func TestGroupWithAndDoesOneCheckIfFirstIsFalse(t *testing.T) {
+	g := &Group{
+		Matchers: []Matcher{
+			&Contains{
+				Value: "e",
+			},
+			&Contains{
+				Value: "st",
+				Operator: &Operator{
+					And: true,
+				},
+			},
+		},
+	}
+
+	f := &testFielder{
+		Answers: []testFielderResponse{
+			{Value: "blah"},
+			{Error: fmt.Errorf("test error")},
+		},
+	}
+
+	ans, err := g.Matches(f)
+	if err != nil {
+		t.Fatalf("err in matches: %s", err)
+	}
+	if ans {
+		t.Fatalf("ans was true")
+	}
+}
+
+func TestGroupWithXorDoesBothChecks(t *testing.T) {
+	g := &Group{
+		Matchers: []Matcher{
+			&Contains{
+				Value: "e",
+			},
+			&Contains{
+				Value: "st",
+				Operator: &Operator{
+					Xor: true,
+				},
+			},
+		},
+	}
+
+	f := &testFielder{
+		Answers: []testFielderResponse{
+			{Value: "blah"},
+			{Value: "test"},
+		},
+	}
+
+	ans, err := g.Matches(f)
+	if err != nil {
+		t.Fatalf("err in matches: %s", err)
+	}
+	if !ans {
+		t.Fatalf("ans was false")
 	}
 }

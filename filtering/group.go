@@ -30,24 +30,49 @@ func (o *Group) Matches(f Fielder) (bool, error) {
 			return false, errors.InvalidFilterError
 		}
 
-		ma, err := m.Matches(f)
-		if err != nil {
-			return false, err
+		// First check sets the group's result so far.
+		if num == 0 {
+			ma, err := m.Matches(f)
+			if err != nil {
+				return false, err
+			}
+			ans = ma
+			continue
 		}
 
-		if op == nil {
-			ans = ma
-		} else {
-			switch {
-			case op.And:
-				ans = ans && ma
-			case op.Or:
-				ans = ans || ma
-			case op.Xor:
-				ans = ans != ma
-			default:
-				return false, errors.InvalidFilterError
+		// Subsequent checks update the result.
+		switch {
+		case op.And:
+			// Don't bother running the check if the result is already false.
+			if !ans {
+				continue
 			}
+
+			ma, err := m.Matches(f)
+			if err != nil {
+				return false, err
+			}
+			ans = ma
+		case op.Or:
+			// Run the check only if the result is currently false.
+			if ans {
+				continue
+			}
+
+			ma, err := m.Matches(f)
+			if err != nil {
+				return false, err
+			}
+			ans = ma
+		case op.Xor:
+			// We always have to run the check here.
+			ma, err := m.Matches(f)
+			if err != nil {
+				return false, err
+			}
+			ans = ans != ma
+		default:
+			return false, errors.InvalidFilterError
 		}
 	}
 
