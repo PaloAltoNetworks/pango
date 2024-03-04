@@ -42,6 +42,35 @@ func (o *LessThan) Matches(f Fielder) (bool, error) {
 		}
 
 		return v < vi, nil
+	case []*int64:
+		vi, err := strconv.ParseInt(o.Value, 10, 64)
+		if err != nil {
+			return false, err
+		}
+
+		for _, val := range v {
+			if val == nil {
+				continue
+			}
+			if *val < vi {
+				return true, nil
+			}
+		}
+
+		return false, nil
+	case []int64:
+		vi, err := strconv.ParseInt(o.Value, 10, 64)
+		if err != nil {
+			return false, err
+		}
+
+		for _, val := range v {
+			if val < vi {
+				return true, nil
+			}
+		}
+
+		return false, nil
 	case *float64:
 		if v == nil {
 			return false, nil
@@ -60,6 +89,35 @@ func (o *LessThan) Matches(f Fielder) (bool, error) {
 		}
 
 		return v < vf, nil
+	case []*float64:
+		vf, err := strconv.ParseFloat(o.Value, 64)
+		if err != nil {
+			return false, err
+		}
+
+		for _, val := range v {
+			if val == nil {
+				continue
+			}
+			if *val < vf {
+				return true, nil
+			}
+		}
+
+		return false, nil
+	case []float64:
+		vf, err := strconv.ParseFloat(o.Value, 64)
+		if err != nil {
+			return false, err
+		}
+
+		for _, val := range v {
+			if val < vf {
+				return true, nil
+			}
+		}
+
+		return false, nil
 	}
 
 	return false, errors.UnsupportedFilterTypeError

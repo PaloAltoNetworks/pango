@@ -32,6 +32,25 @@ func (o *StartsWith) Matches(f Fielder) (bool, error) {
 		return strings.HasPrefix(*v, o.Value), nil
 	case string:
 		return strings.HasPrefix(v, o.Value), nil
+	case []*string:
+		for _, val := range v {
+			if val == nil {
+				continue
+			}
+			if strings.HasPrefix(*val, o.Value) {
+				return true, nil
+			}
+		}
+
+		return false, nil
+	case []string:
+		for _, val := range v {
+			if strings.HasPrefix(val, o.Value) {
+				return true, nil
+			}
+		}
+
+		return false, nil
 	}
 
 	return false, errors.UnsupportedFilterTypeError

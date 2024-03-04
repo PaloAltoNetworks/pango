@@ -32,9 +32,21 @@ func (o *Contains) Matches(f Fielder) (bool, error) {
 		return strings.Contains(*v, o.Value), nil
 	case string:
 		return strings.Contains(v, o.Value), nil
+	case []*string:
+		for _, str := range v {
+			if str == nil {
+				continue
+			}
+
+			if strings.Contains(*str, o.Value) {
+				return true, nil
+			}
+		}
+
+		return false, nil
 	case []string:
 		for _, str := range v {
-			if str == o.Value {
+			if strings.Contains(str, o.Value) {
 				return true, nil
 			}
 		}

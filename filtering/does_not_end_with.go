@@ -32,6 +32,25 @@ func (o *DoesNotEndWith) Matches(f Fielder) (bool, error) {
 		return !strings.HasSuffix(*v, o.Value), nil
 	case string:
 		return !strings.HasSuffix(v, o.Value), nil
+	case []*string:
+		for _, str := range v {
+			if str == nil {
+				continue
+			}
+			if strings.HasSuffix(*str, o.Value) {
+				return false, nil
+			}
+		}
+
+		return true, nil
+	case []string:
+		for _, str := range v {
+			if strings.HasSuffix(str, o.Value) {
+				return false, nil
+			}
+		}
+
+		return true, nil
 	}
 
 	return false, errors.UnsupportedFilterTypeError

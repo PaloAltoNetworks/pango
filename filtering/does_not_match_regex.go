@@ -33,6 +33,25 @@ func (o *DoesNotMatchRegex) Matches(f Fielder) (bool, error) {
 		return !re.Match([]byte(*v)), nil
 	case string:
 		return !re.Match([]byte(v)), nil
+	case []*string:
+		for _, str := range v {
+			if str == nil {
+				continue
+			}
+			if re.Match([]byte(*str)) {
+				return false, nil
+			}
+		}
+
+		return true, nil
+	case []string:
+		for _, str := range v {
+			if re.Match([]byte(str)) {
+				return false, nil
+			}
+		}
+
+		return true, nil
 	}
 
 	return false, errors.UnsupportedFilterTypeError
