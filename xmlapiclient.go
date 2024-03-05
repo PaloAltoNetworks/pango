@@ -8,7 +8,6 @@ import (
 	"encoding/xml"
 	"fmt"
 	"io"
-	"log"
 	_ "mime"
 	"mime/multipart"
 	"net/http"
@@ -352,6 +351,97 @@ func (c *XmlApiClient) RetrievePlugins(ctx context.Context) error {
 	c.Plugin = ans.Listing()
 
 	return nil
+}
+
+// LoadPanosConfig stores the given XML document into this client, allowing
+// the user to use various namespace functions to query the config.
+//
+// The config given must be in the form of `<config>...</config>`.
+func (c *XmlApiClient) LoadPanosConfig(config []byte) error {
+	var ans generic.Xml
+	if err := xml.Unmarshal(config, &ans); err != nil {
+		return err
+	}
+
+	if ans.XMLName.Local != "config" {
+		return fmt.Errorf("Expected \"config\" at the root, found %q", ans.XMLName.Local)
+	}
+
+	c.configTree = &generic.Xml{
+		XMLName: xml.Name{
+			Local: "a",
+		},
+		Nodes: []generic.Xml{ans},
+	}
+
+	return nil
+}
+
+// ReadFromConfig returns the XML at the given XPATH location.
+//
+// If the XPATH is a listing, then set withPackaging to false.
+func (c *XmlApiClient) ReadFromConfig(ctx context.Context, path []string, withPackaging bool, ans any) ([]byte, error) {
+	if c.configTree == nil {
+		return nil, fmt.Errorf("no config loaded")
+	}
+
+	if len(path) == 0 {
+		return nil, fmt.Errorf("path is empty")
+	}
+
+	entryPrefix := "entry[@name='"
+	entrySuffix := "']"
+
+	config := c.configTree
+	for _, pp := range path {
+		var tag, name string
+		if strings.HasPrefix(pp, entryPrefix) && strings.HasSuffix(pp, entrySuffix) {
+			tag = "entry"
+			name = strings.TrimSuffix(strings.TrimPrefix(pp, entryPrefix), entrySuffix)
+		} else {
+			tag = pp
+		}
+
+		found := false
+		for _, node := range config.Nodes {
+			if node.XMLName.Local == tag && (node.Name == nil || *node.Name == name) {
+				found = true
+				config = &node
+				break
+			}
+		}
+
+		if !found {
+			config = nil
+			break
+		}
+	}
+
+	if config == nil {
+		return nil, errors.ObjectNotFound()
+	}
+
+	b, err := xml.Marshal(config)
+	if err != nil {
+		return b, err
+	}
+
+	var newb []byte
+	if !withPackaging {
+		newb = append([]byte(nil), b...)
+	} else {
+		newb = make([]byte, 0, len(b)+7)
+		newb = append(newb, []byte("<q>")...)
+		newb = append(newb, b...)
+		newb = append(newb, []byte("</q>")...)
+	}
+
+	if ans == nil {
+		return newb, nil
+	}
+
+	err = xml.Unmarshal(newb, ans)
+	return newb, err
 }
 
 // GetTarget returns the Target param, used in certain API calls.
