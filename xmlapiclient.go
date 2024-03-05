@@ -529,26 +529,25 @@ func (c *XmlApiClient) sendRequest(ctx context.Context, req *http.Request, strip
 		return body, resp, err
 	}
 
-	if true {
-		log.Printf("Response = %s", body)
-	}
-
 	// Check the response for errors.
 	if err = errors.Parse(body); err != nil {
 		return body, resp, err
 	}
 
+	// Optional: strip the "response" tag from the XML returned.
 	if strip {
 		var index int
 		gt := []byte(">")
 		lt := []byte("<")
 
-		// Remove 'response'.
 		index = bytes.Index(body, gt)
-		body = body[index+1:]
-		index = bytes.LastIndex(body, lt)
-		body = body[:index]
-		log.Printf("new body: %q", body)
+		if index > 0 {
+			body = body[index+1:]
+			index = bytes.LastIndex(body, lt)
+			if index > 0 {
+				body = body[:index]
+			}
+		}
 	}
 
 	if ans == nil {
