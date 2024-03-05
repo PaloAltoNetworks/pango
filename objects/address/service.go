@@ -94,7 +94,40 @@ func (s *Service) Read(ctx context.Context, loc Location, name, action string) (
 	if err != nil {
 		return nil, err
 	} else if len(list) != 1 {
-		return nil, fmt.Errorf("expected to 'get' 1 entry, got %d", len(list))
+		return nil, fmt.Errorf("expected to %q 1 entry, got %d", action, len(list))
+	}
+
+	return &list[0], nil
+}
+
+// ReadFromConfig returns the given config object from the loaded XML config.
+//
+// Requires that client.LoadPanosConfig() has been invoked.
+func (s *Service) ReadFromConfig(ctx context.Context, loc Location, name string) (*Entry, error) {
+	if name == "" {
+		return nil, errors.NameNotSpecifiedError
+	}
+
+	vn := s.client.Versioning()
+	_, normalizer, err := Versioning(vn)
+	if err != nil {
+		return nil, err
+	}
+
+	path, err := loc.Xpath(vn, name)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, err = s.client.ReadFromConfig(ctx, path, true, normalizer); err != nil {
+		return nil, err
+	}
+
+	list, err := normalizer.Normalize()
+	if err != nil {
+		return nil, err
+	} else if len(list) != 1 {
+		return nil, fmt.Errorf("expected to find 1 entry, got %d", len(list))
 	}
 
 	return &list[0], nil
@@ -201,9 +234,9 @@ func (s *Service) Delete(ctx context.Context, loc Location, name string) error {
 func (s *Service) List(ctx context.Context, loc Location, action, filter, quote string) ([]Entry, error) {
 	var err error
 
-	var f *filtering.Group
+	var logic *filtering.Group
 	if filter != "" {
-		f, err = filtering.Parse(filter, quote)
+		logic, err = filtering.Parse(filter, quote)
 		if err != nil {
 			return nil, err
 		}
@@ -232,13 +265,65 @@ func (s *Service) List(ctx context.Context, loc Location, action, filter, quote 
 	}
 
 	listing, err := normalizer.Normalize()
-	if err != nil || f == nil {
+	if err != nil || logic == nil {
 		return listing, err
 	}
 
 	filtered := make([]Entry, 0, len(listing))
 	for _, x := range listing {
-		ok, err := f.Matches(&x)
+		ok, err := logic.Matches(&x)
+		if err != nil {
+			return nil, err
+		}
+		if ok {
+			filtered = append(filtered, x)
+		}
+	}
+
+	return filtered, nil
+}
+
+// ListFromConfig returns a list of objects at the given location.
+//
+// Requires that client.LoadPanosConfig() has been invoked.
+//
+// Params filter and quote are for client side filtering.
+func (s *Service) ListFromConfig(ctx context.Context, loc Location, filter, quote string) ([]Entry, error) {
+	var err error
+
+	var logic *filtering.Group
+	if filter != "" {
+		logic, err = filtering.Parse(filter, quote)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	vn := s.client.Versioning()
+
+	_, normalizer, err := Versioning(vn)
+	if err != nil {
+		return nil, err
+	}
+
+	path, err := loc.Xpath(vn, "")
+	if err != nil {
+		return nil, err
+	}
+	path = path[:len(path)-1]
+
+	if _, err = s.client.ReadFromConfig(ctx, path, false, normalizer); err != nil {
+		return nil, err
+	}
+
+	listing, err := normalizer.Normalize()
+	if err != nil || logic == nil {
+		return listing, err
+	}
+
+	filtered := make([]Entry, 0, len(listing))
+	for _, x := range listing {
+		ok, err := logic.Matches(&x)
 		if err != nil {
 			return nil, err
 		}
