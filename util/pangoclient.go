@@ -17,4 +17,5 @@ type PangoClient interface {
 	MultiConfig(context.Context, *xmlapi.MultiConfig, bool, url.Values) ([]byte, *http.Response, *xmlapi.MultiConfigResponse, error)
 	Communicate(context.Context, PangoCommand, bool, any) ([]byte, *http.Response, error)
 	CommunicateFile(context.Context, string, string, string, url.Values, bool, any) ([]byte, *http.Response, error)
+	ReadFromConfig(context.Context, []string, bool, any) ([]byte, error)
 }
