@@ -252,6 +252,22 @@ func (c *XmlApiClient) Setup() error {
 	return nil
 }
 
+// SetupLocalInspection configures the client for local inspection.
+func (c *XmlApiClient) SetupLocalInspection(theSchema, theVersion string) error {
+	var err error
+
+	c.Version, err = version.New(theVersion)
+	if err != nil {
+		return err
+	}
+
+	if err = c.LoadPanosConfig([]byte(theSchema)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // Initialize retrieves the API key if needed then retrieves the system info.
 func (c *XmlApiClient) Initialize(ctx context.Context) error {
 	if c.ApiKey == "" {
