@@ -253,16 +253,25 @@ func (c *XmlApiClient) Setup() error {
 }
 
 // SetupLocalInspection configures the client for local inspection.
-func (c *XmlApiClient) SetupLocalInspection(theSchema, theVersion string) error {
+//
+// The version number is taken from the schema if it's present.  If it is not
+// present, then the version number falls back to what's specified in panosVersion.
+func (c *XmlApiClient) SetupLocalInspection(schema, panosVersion string) error {
 	var err error
 
-	c.Version, err = version.New(theVersion)
-	if err != nil {
+	if err = c.LoadPanosConfig([]byte(schema)); err != nil {
 		return err
 	}
 
-	if err = c.LoadPanosConfig([]byte(theSchema)); err != nil {
-		return err
+	if c.Version.Major == 0 && c.Version.Minor == 0 && c.Version.Patch == 0 {
+		if panosVersion == "" {
+			return fmt.Errorf("no version found in the schema; the version must be specified")
+		}
+
+		c.Version, err = version.New(panosVersion)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -373,6 +382,9 @@ func (c *XmlApiClient) RetrievePlugins(ctx context.Context) error {
 // the user to use various namespace functions to query the config.
 //
 // The config given must be in the form of `<config>...</config>`.
+//
+// If the 'detail-version' attribute is present in the XML, then it's saved to this
+// instance's Version attribute.
 func (c *XmlApiClient) LoadPanosConfig(config []byte) error {
 	var ans generic.Xml
 	if err := xml.Unmarshal(config, &ans); err != nil {
@@ -381,6 +393,14 @@ func (c *XmlApiClient) LoadPanosConfig(config []byte) error {
 
 	if ans.XMLName.Local != "config" {
 		return fmt.Errorf("Expected \"config\" at the root, found %q", ans.XMLName.Local)
+	}
+
+	if ans.DetailedVersion != nil {
+		vn, err := version.New(*ans.DetailedVersion)
+		if err != nil {
+			return err
+		}
+		c.Version = vn
 	}
 
 	c.configTree = &generic.Xml{
