@@ -87,6 +87,10 @@ func (s *Service) Read(ctx context.Context, loc Location, name, action string) (
 	}
 
 	if _, _, err = s.client.Communicate(ctx, cmd, true, normalizer); err != nil {
+		// action=show returns empty config like this
+		if err.Error() == "No such node" && action == "show" {
+			return nil, errors.ObjectNotFound()
+		}
 		return nil, err
 	}
 
@@ -261,6 +265,10 @@ func (s *Service) List(ctx context.Context, loc Location, action, filter, quote 
 	}
 
 	if _, _, err = s.client.Communicate(ctx, cmd, true, normalizer); err != nil {
+		// action=show returns empty config like this, it is not an error.
+		if err.Error() == "No such node" && action == "show" {
+			return nil, nil
+		}
 		return nil, err
 	}
 
