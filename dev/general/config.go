@@ -44,7 +44,7 @@ type Config struct {
 // Defaults sets params with uninitialized values to their GUI default setting.
 //
 // The defaults are as follows:
-//      * UpdateServer: updates.paloaltonetworks.com
+//   - UpdateServer: updates.paloaltonetworks.com
 func (o *Config) Defaults() {
 	if o.UpdateServer == "" {
 		o.UpdateServer = "updates.paloaltonetworks.com"
@@ -54,9 +54,9 @@ func (o *Config) Defaults() {
 // Merge copies non connectivity variables from source Config `s` to this
 // object.  The fields that are not copied are as follows:
 //
-//      * IpAddress
-//      * Netmask
-//      * Gateway
+//   - IpAddress
+//   - Netmask
+//   - Gateway
 func (o *Config) Merge(s Config) {
 	if s.Hostname != "" {
 		o.Hostname = s.Hostname
@@ -1185,7 +1185,7 @@ func (o *config_v3) normalize() Config {
 
 type config_v3 struct {
 	XMLName               xml.Name     `xml:"system"`
-	Hostname              string       `xml:"hostname"`
+	Hostname              string       `xml:"hostname,omitempty"`
 	IpAddress             string       `xml:"ip-address,omitempty"`
 	Netmask               string       `xml:"netmask,omitempty"`
 	Gateway               string       `xml:"default-gateway,omitempty"`
