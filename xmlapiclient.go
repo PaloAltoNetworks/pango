@@ -8,13 +8,14 @@ import (
 	"encoding/xml"
 	"fmt"
 	"io"
-	_ "mime"
+	"mime"
 	"mime/multipart"
 	"net/http"
 	"net/url"
 	"os"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/PaloAltoNetworks/pango/errors"
 	"github.com/PaloAltoNetworks/pango/generic"
@@ -67,10 +68,43 @@ type XmlApiClient struct {
 	authFileContent []byte
 }
 
-func (c *XmlApiClient) Versioning() version.Number { return c.Version }
+// Versioning returns the version number of PAN-OS.
+func (c *XmlApiClient) Versioning() version.Number {
+	return c.Version
+}
 
+// Plugins returns the list of plugins.
 func (c *XmlApiClient) Plugins() []plugin.Info {
 	return c.Plugin
+}
+
+// GetTarget returns the Target param, used in certain API calls.
+func (c *XmlApiClient) GetTarget() string {
+	return c.Target
+}
+
+// IsPanorama returns true if this is Panorama.
+func (c *XmlApiClient) IsPanorama() (bool, error) {
+	if len(c.SystemInfo) == 0 {
+		return false, fmt.Errorf("SystemInfo is nil")
+	}
+
+	model, ok := c.SystemInfo["model"]
+	if !ok {
+		return false, fmt.Errorf("model not present in SystemInfo")
+	}
+
+	return model == "Panorama" || strings.HasPrefix(model, "M-"), nil
+}
+
+// IsFirewall returns true if this PAN-OS seems to be a NGFW instance.
+func (c *XmlApiClient) IsFirewall() (bool, error) {
+	ans, err := c.IsPanorama()
+	if err != nil {
+		return ans, err
+	}
+
+	return !ans, nil
 }
 
 // Setup does validation and initialization in preparation to start executing API
@@ -279,13 +313,19 @@ func (c *XmlApiClient) SetupLocalInspection(schema, panosVersion string) error {
 
 // Initialize retrieves the API key if needed then retrieves the system info.
 func (c *XmlApiClient) Initialize(ctx context.Context) error {
+	var err error
+
 	if c.ApiKey == "" {
-		if err := c.RetrieveApiKey(ctx); err != nil {
+		if err = c.RetrieveApiKey(ctx); err != nil {
 			return err
 		}
 	}
 
-	if err := c.RetrieveSystemInfo(ctx); err != nil {
+	if err = c.RetrieveSystemInfo(ctx); err != nil {
+		return err
+	}
+
+	if err = c.RetrievePlugins(ctx); err != nil {
 		return err
 	}
 
@@ -336,6 +376,53 @@ func (c *XmlApiClient) RetrieveSystemInfo(ctx context.Context) error {
 	return nil
 }
 
+// RetrievePanosConfig retrieves the running config, candidate config,
+// or the specified saved config file.
+//
+// If the name is candidate, then the candidate config is retrieved.  If the
+// name is running, then the running config is retrieved.  Otherwise, then
+// the name is assumed to be the name of the saved config.
+func (c *XmlApiClient) RetrievePanosConfig(ctx context.Context, name string) ([]byte, error) {
+	type req struct {
+		XMLName   xml.Name `xml:"show"`
+		Running   *string  `xml:"config>running"`
+		Candidate *string  `xml:"config>candidate"`
+		Saved     *string  `xml:"config>saved"`
+	}
+
+	type rdata struct {
+		Data []byte `xml:",innerxml"`
+	}
+
+	type resp struct {
+		XMLName xml.Name `xml:"response"`
+		Result  rdata    `xml:"result"`
+	}
+
+	var s string
+	cs := req{}
+	switch name {
+	case "candidate":
+		cs.Candidate = &s
+	case "running":
+		cs.Running = &s
+	default:
+		cs.Saved = &name
+	}
+
+	cmd := &xmlapi.Op{
+		Command: cs,
+		Target:  c.Target,
+	}
+
+	var ans resp
+	if _, _, err := c.Communicate(ctx, cmd, false, &ans); err != nil {
+		return nil, err
+	}
+
+	return ans.Result.Data, nil
+}
+
 // RetrieveApiKey refreshes the API key.
 //
 // This function unsets the ApiKey value and thus requires that the Username and Password
@@ -379,7 +466,8 @@ func (c *XmlApiClient) RetrievePlugins(ctx context.Context) error {
 }
 
 // LoadPanosConfig stores the given XML document into this client, allowing
-// the user to use various namespace functions to query the config.
+// the user to use various namespace functions to query the config.  This
+// is referred to as local inspection mode.
 //
 // The config given must be in the form of `<config>...</config>`.
 //
@@ -413,7 +501,8 @@ func (c *XmlApiClient) LoadPanosConfig(config []byte) error {
 	return nil
 }
 
-// ReadFromConfig returns the XML at the given XPATH location.
+// ReadFromConfig returns the XML at the given XPATH location.  This is
+// referred to as local inspection mode.
 //
 // If the XPATH is a listing, then set withPackaging to false.
 func (c *XmlApiClient) ReadFromConfig(ctx context.Context, path []string, withPackaging bool, ans any) ([]byte, error) {
@@ -480,11 +569,6 @@ func (c *XmlApiClient) ReadFromConfig(ctx context.Context, path []string, withPa
 	return newb, err
 }
 
-// GetTarget returns the Target param, used in certain API calls.
-func (c *XmlApiClient) GetTarget() string {
-	return c.Target
-}
-
 // MultiConfig does a "multi-config" type command.
 //
 // Param strict should be true if you want strict transactional support.
@@ -547,12 +631,204 @@ func (c *XmlApiClient) RequestPasswordHash(ctx context.Context, v string) (strin
 	return ans.Hash, nil
 }
 
+// ValidateConfig performs a commit config validation check.
+//
+// Use WaitForJob and the uint returned from this function to get the
+// results of the job.
+func (c *XmlApiClient) ValidateConfig(ctx context.Context, sleep time.Duration) (uint, error) {
+	type req struct {
+		XMLName xml.Name `xml:"validate"`
+		Cmd     string   `xml:"full"`
+	}
+
+	cmd := &xmlapi.Op{
+		Command: req{},
+		Target:  c.Target,
+	}
+
+	id, _, _, err := c.StartJob(ctx, cmd)
+	return id, err
+}
+
+// WaitForLogs polls PAN-OS until the given log retrieval job is complete.
+//
+// The sleep param is the time to wait between polling. Note that a sleep
+// time less than 2 seconds may cause PAN-OS to take longer to finish the
+// job.
+func (c *XmlApiClient) WaitForLogs(ctx context.Context, id uint, sleep time.Duration, resp any) ([]byte, error) {
+	if id == 0 {
+		return nil, fmt.Errorf("job ID must be specified")
+	}
+
+	var err error
+	var data []byte
+	var prev string
+
+	cmd := &xmlapi.Log{
+		Action: "get",
+		JobId:  id,
+	}
+
+	var ans util.BasicJob
+	for {
+		ans = util.BasicJob{}
+
+		data, _, err = c.Communicate(ctx, cmd, false, &ans)
+		if err != nil {
+			return data, err
+		}
+
+		if ans.Status != prev {
+			prev = ans.Status
+			// log %d id and %s prev
+		}
+
+		if ans.Status == "FIN" {
+			break
+		}
+
+		if sleep > 0 {
+			time.Sleep(sleep)
+		}
+	}
+
+	if ans.Result == "FAIL" {
+		if len(ans.Details.Lines) > 0 {
+			return data, fmt.Errorf(ans.Details.String())
+		} else {
+			return data, fmt.Errorf("Job %d has failed", id)
+		}
+	}
+
+	if resp == nil {
+		return data, nil
+	}
+
+	err = xml.Unmarshal(data, resp)
+	return data, err
+}
+
+// WaitForJob polls PAN-OS until the given job finishes.
+//
+// The sleep param is the time to wait between polling. Note that a sleep
+// time less than 2 seconds may cause PAN-OS to take longer to finish the
+// job.
+func (c *XmlApiClient) WaitForJob(ctx context.Context, id uint, sleep time.Duration, resp any) error {
+	var err error
+	var prev uint
+	var data []byte
+	dp := false
+	all_ok := true
+
+	type req struct {
+		XMLName xml.Name `xml:"show"`
+		Id      uint     `xml:"jobs>id"`
+	}
+
+	cmd := &xmlapi.Op{
+		Command: req{
+			Id: id,
+		},
+		Target: c.Target,
+	}
+
+	var ans util.BasicJob
+	for {
+		ans = util.BasicJob{}
+
+		data, _, err = c.Communicate(ctx, cmd, false, &ans)
+		if err != nil {
+			return err
+		}
+
+		if ans.Progress != prev {
+			prev = ans.Progress
+			// log the change.
+		}
+
+		// Check for device commits.
+		all_done := true
+		for _, d := range ans.Devices {
+			// log %q d.Serial %s d.Result
+			if d.Result == "PEND" {
+				all_done = false
+				break
+			} else if d.Result != "OK" && all_ok {
+				all_ok = false
+			}
+		}
+
+		// Check if the job's done.
+		if ans.Progress == 100 {
+			if all_done {
+				break
+			} else if !dp {
+				// log waiting for %d devices len(ans.Devices)
+				dp = true
+			}
+		}
+
+		if sleep > 0 {
+			time.Sleep(sleep)
+		}
+	}
+
+	if ans.Result == "FAIL" {
+		if len(ans.Details.Lines) > 0 {
+			return fmt.Errorf(ans.Details.String())
+		} else {
+			return fmt.Errorf("Job %d has failed", id)
+		}
+	} else if !all_ok {
+		return fmt.Errorf("Commit failed on one or more devices")
+	}
+
+	if resp == nil {
+		return nil
+	}
+
+	return xml.Unmarshal(data, resp)
+}
+
+// RevertToRunningConfig discards any changes made and reverts to the last
+// committed config.
+func (c *XmlApiClient) RevertToRunningConfig(ctx context.Context, vsys string) error {
+	type req struct {
+		XMLName xml.Name `xml:"load"`
+		Cmd     string   `xml:"config>from"`
+	}
+
+	cmd := &xmlapi.Op{
+		Command: req{
+			Cmd: "running-config.xml",
+		},
+		Vsys:   vsys,
+		Target: c.Target,
+	}
+
+	_, _, err := c.Communicate(ctx, cmd, false, nil)
+	return err
+}
+
+// StartJob sends the given command, which starts a job on PAN-OS.
+//
+// The uint returned is the job ID.
+func (c *XmlApiClient) StartJob(ctx context.Context, cmd util.PangoCommand) (uint, []byte, *http.Response, error) {
+	var ans util.JobResponse
+	b, resp, err := c.Communicate(ctx, cmd, false, &ans)
+	if err != nil {
+		return 0, b, resp, err
+	}
+
+	return ans.Id, b, resp, nil
+}
+
 // Communicate sends the given content to PAN-OS.
 //
 // The API key is sent either in the request body or as a header.
 //
 // The timeout for the operation is taken from the context.
-func (c *XmlApiClient) Communicate(ctx context.Context, cmd util.PangoCommand, strip bool, ans interface{}) ([]byte, *http.Response, error) {
+func (c *XmlApiClient) Communicate(ctx context.Context, cmd util.PangoCommand, strip bool, ans any) ([]byte, *http.Response, error) {
 	if cmd == nil {
 		return nil, nil, fmt.Errorf("cmd is nil")
 	}
@@ -576,13 +852,16 @@ func (c *XmlApiClient) Communicate(ctx context.Context, cmd util.PangoCommand, s
 	return c.sendRequest(ctx, req, strip, ans)
 }
 
-// CommunicateFile sends the given file to PAN-OS.
-//
-// The API key is sent either in the request body or as a header.
-//
-// The timeout for the operation is taken from the context.
-func (c *XmlApiClient) CommunicateFile(ctx context.Context, content, filename, fp string, data url.Values, strip bool, ans interface{}) ([]byte, *http.Response, error) {
-	var err error
+// ImportFile imports the given file into PAN-OS.
+func (c *XmlApiClient) ImportFile(ctx context.Context, cmd *xmlapi.Import, content, filename, fp string, strip bool, ans any) ([]byte, *http.Response, error) {
+	if cmd == nil {
+		return nil, nil, fmt.Errorf("cmd is nil")
+	}
+
+	data, err := cmd.AsUrlValues()
+	if err != nil {
+		return nil, nil, err
+	}
 
 	if c.ApiKeyInRequest && c.ApiKey != "" && data.Get("key") == "" {
 		data.Set("key", c.ApiKey)
@@ -618,11 +897,92 @@ func (c *XmlApiClient) CommunicateFile(ctx context.Context, content, filename, f
 	return c.sendRequest(ctx, req, strip, ans)
 }
 
+// ExportFile retrieves a file from PAN-OS.
+func (c *XmlApiClient) ExportFile(ctx context.Context, cmd *xmlapi.Export, ans any) (string, []byte, *http.Response, error) {
+	if cmd == nil {
+		return "", nil, nil, fmt.Errorf("cmd is nil")
+	}
+
+	data, err := cmd.AsUrlValues()
+	if err != nil {
+		return "", nil, nil, err
+	}
+
+	if c.ApiKeyInRequest && c.ApiKey != "" && data.Get("key") == "" {
+		data.Set("key", c.ApiKey)
+	}
+
+	req, err := http.NewRequestWithContext(ctx, "POST", c.api_url, strings.NewReader(data.Encode()))
+	if err != nil {
+		return "", nil, nil, err
+	}
+
+	b, resp, err := c.sendRequest(ctx, req, false, ans)
+	if err != nil {
+		return "", b, resp, err
+	}
+
+	var filename string
+	mediatype, params, err := mime.ParseMediaType(resp.Header.Get("Content-Disposition"))
+	if err == nil && mediatype == "attachment" {
+		filename = params["filename"]
+	}
+
+	return filename, b, resp, nil
+}
+
+// GetTechSupportFile returns the tech support file .tgz file.
+func (c *XmlApiClient) GetTechSupportFile(ctx context.Context) (string, []byte, error) {
+	cmd := &xmlapi.Export{
+		Category: "tech-support",
+	}
+
+	id, _, _, err := c.StartJob(ctx, cmd)
+	if err != nil {
+		return "", nil, err
+	}
+
+	cmd.Action = "status"
+	cmd.JobId = id
+
+	var resp util.BasicJob
+	var prev uint
+	for {
+		resp = util.BasicJob{}
+
+		if _, _, _, err = c.ExportFile(ctx, cmd, &resp); err != nil {
+			return "", nil, err
+		}
+
+		// The progress is not an uint when the job completes, so don't print
+		// the progress as 0 when the job is actually complete.
+		if resp.Progress != prev && resp.Progress != 0 {
+			prev = resp.Progress
+			// log %d resp.Id at %d prev percentage complete.
+		}
+
+		if resp.Status == "FIN" {
+			break
+		}
+
+		time.Sleep(2 * time.Second)
+	}
+
+	if resp.Result == "FAIL" {
+		return "", nil, fmt.Errorf(resp.Details.String())
+	}
+
+	cmd.Action = "get"
+
+	filename, b, _, err := c.ExportFile(ctx, cmd, nil)
+	return filename, b, err
+}
+
 //
 // Internal functions.
 //
 
-func (c *XmlApiClient) sendRequest(ctx context.Context, req *http.Request, strip bool, ans interface{}) ([]byte, *http.Response, error) {
+func (c *XmlApiClient) sendRequest(ctx context.Context, req *http.Request, strip bool, ans any) ([]byte, *http.Response, error) {
 	// Optional: set the API key in the header.
 	if !c.ApiKeyInRequest && c.ApiKey != "" {
 		req.Header.Set("X-PAN-KEY", c.ApiKey)
