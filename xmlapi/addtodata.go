@@ -7,10 +7,10 @@ import (
 )
 
 type elementer interface {
-	Element() interface{}
+	Element() any
 }
 
-func addToData(key string, i interface{}, attemptMarshal bool, data *url.Values) error {
+func addToData(key string, i any, attemptMarshal bool, data *url.Values) error {
 	if i == nil {
 		return nil
 	}
@@ -24,7 +24,7 @@ func addToData(key string, i interface{}, attemptMarshal bool, data *url.Values)
 	return nil
 }
 
-func asString(i interface{}, attemptMarshal bool) (string, error) {
+func asString(i any, attemptMarshal bool) (string, error) {
 	if a, ok := i.(fmt.Stringer); ok {
 		return a.String(), nil
 	}
