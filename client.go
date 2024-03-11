@@ -42,19 +42,19 @@ import (
 //
 // The bit-wise flags are as follows:
 //
-//      * LogQuiet: disables all logging
-//      * LogAction: action being performed (Set / Edit / Delete functions)
-//      * LogQuery: queries being run (Get / Show functions)
-//      * LogOp: operation commands (Op functions)
-//      * LogUid: User-Id commands (Uid functions)
-//      * LogLog: log retrieval commands
-//      * LogExport: log export commands
-//      * LogXpath: the resultant xpath
-//      * LogSend: xml docuemnt being sent
-//      * LogReceive: xml responses being received
-//      * LogOsxCurl: output an OSX cURL command for the data being sent in
-//      * LogCurlWithPersonalData: If doing a curl style logging, then include
-//        personal data in the curl command instead of tokens.
+//   - LogQuiet: disables all logging
+//   - LogAction: action being performed (Set / Edit / Delete functions)
+//   - LogQuery: queries being run (Get / Show functions)
+//   - LogOp: operation commands (Op functions)
+//   - LogUid: User-Id commands (Uid functions)
+//   - LogLog: log retrieval commands
+//   - LogExport: log export commands
+//   - LogXpath: the resultant xpath
+//   - LogSend: xml docuemnt being sent
+//   - LogReceive: xml responses being received
+//   - LogOsxCurl: output an OSX cURL command for the data being sent in
+//   - LogCurlWithPersonalData: If doing a curl style logging, then include
+//     personal data in the curl command instead of tokens.
 const (
 	LogQuiet = 1 << (iota + 1)
 	LogAction
@@ -168,10 +168,10 @@ func (c *Client) Plugins() []plugin.Info {
 // client's SystemInfo map.
 //
 // If not specified, the following is assumed:
-//  * Protocol: https
-//  * Port: (unspecified)
-//  * Timeout: 10
-//  * Logging: LogAction | LogUid
+//   - Protocol: https
+//   - Port: (unspecified)
+//   - Timeout: 10
+//   - Logging: LogAction | LogUid
 func (c *Client) Initialize() error {
 	if len(c.rb) == 0 {
 		var e error
@@ -318,34 +318,23 @@ func (c *Client) RequestPasswordHash(val string) (string, error) {
 
 // ValidateConfig performs a commit config validation check.
 //
-// Setting sync to true means that this function will block until the job
-// finishes.
-//
-//
-// The sleep param is an optional sleep duration to wait between polling for
-// job completion.  This param is only used if sync is set to true.
+// # Cmd interface contained a formatted XML string struct which can be used to either marshalled into XML or one of the
+// validate function.
 //
 // This function returns the job ID and if any errors were encountered.
-func (c *Client) ValidateConfig(sync bool, sleep time.Duration) (uint, error) {
+func (c *Client) ValidateConfig(cmd interface{}) (uint, []byte, error) {
 	var err error
+	data := url.Values{}
+	data.Set("type", "op")
 
-	c.LogOp("(op) validating config")
-	type op_req struct {
-		XMLName xml.Name `xml:"validate"`
-		Cmd     string   `xml:"full"`
-	}
-	job_ans := util.JobResponse{}
-	_, err = c.Op(op_req{}, "", nil, &job_ans)
-	if err != nil {
-		return 0, err
+	if err = addToData("cmd", cmd, true, &data); err != nil {
+		return 0, nil, err
 	}
 
-	id := job_ans.Id
-	if !sync {
-		return id, nil
-	}
+	ans := util.JobResponse{}
 
-	return id, c.WaitForJob(id, sleep, nil, nil)
+	b, _, err := c.Communicate(data, &ans)
+	return ans.Id, b, err
 }
 
 // RevertToRunningConfig discards any changes made and reverts to the last
@@ -356,10 +345,10 @@ func (c *Client) RevertToRunningConfig() error {
 	return err
 }
 
-// ConfigLocks returns any config locks that are currently in place.
+// ShowConfigLocks returns any config locks that are currently in place.
 //
 // If vsys is an empty string, then the vsys will default to "shared".
-func (c *Client) ConfigLocks(vsys string) ([]util.Lock, error) {
+func (c *Client) ShowConfigLocks(vsys string) ([]util.Lock, error) {
 	var err error
 	var cmd string
 	ans := configLocks{}
@@ -368,7 +357,7 @@ func (c *Client) ConfigLocks(vsys string) ([]util.Lock, error) {
 		vsys = "shared"
 	}
 
-	if c.Version.Gte(version.Number{9, 1, 0, ""}) {
+	if !c.Version.Gte(version.Number{Major: 9, Minor: 1}) {
 		var tgt string
 		if vsys == "shared" {
 			tgt = "all"
@@ -427,10 +416,10 @@ func (c *Client) UnlockConfig(vsys string) error {
 	return err
 }
 
-// CommitLocks returns any commit locks that are currently in place.
+// ShowCommitLocks returns any commit locks that are currently in place.
 //
 // If vsys is an empty string, then the vsys will default to "shared".
-func (c *Client) CommitLocks(vsys string) ([]util.Lock, error) {
+func (c *Client) ShowCommitLocks(vsys string) ([]util.Lock, error) {
 	if vsys == "" {
 		vsys = "shared"
 	}

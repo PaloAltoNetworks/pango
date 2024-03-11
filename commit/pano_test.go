@@ -119,6 +119,7 @@ func TestPanoCommitAllDeviceGroup(t *testing.T) {
 		"<description>device group</description>",
 		"<include-template>yes</include-template>",
 		"<force-template-values>no</force-template-values>",
+		"<validate-only>no</validate-only>",
 		"</shared-policy>",
 		"</commit-all>",
 	}
@@ -142,10 +143,11 @@ func TestPanoCommitAllTemplate(t *testing.T) {
 	s := []string{
 		"<commit-all>",
 		"<template>",
+		"<device><member>12321</member></device>",
 		"<name>tmpl1</name>",
 		"<description>template</description>",
-		"<device><member>12321</member></device>",
 		"<force-template-values>yes</force-template-values>",
+		"<validate-only>no</validate-only>",
 		"</template>",
 		"</commit-all>",
 	}
@@ -169,10 +171,11 @@ func TestPanoCommitAllTemplateStack(t *testing.T) {
 	s := []string{
 		"<commit-all>",
 		"<template-stack>",
+		"<device><member>12321</member></device>",
 		"<name>ts1</name>",
 		"<description>template stack</description>",
-		"<device><member>12321</member></device>",
 		"<force-template-values>yes</force-template-values>",
+		"<validate-only>no</validate-only>",
 		"</template-stack>",
 		"</commit-all>",
 	}
