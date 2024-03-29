@@ -1,4 +1,4 @@
-package xmlapi
+package util
 
 // For reference: https://github.com/golang/go/issues/45624
 
