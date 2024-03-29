@@ -71,6 +71,44 @@ func OptionalStringsMatch(a, b *string) bool {
 	return *a == *b
 }
 
-func StringsMatch(a, b string) bool {
-	return a == b
+func OptionalBoolsMatch(a, b *bool) bool {
+	if a == nil && b == nil {
+		return true
+	} else if a == nil || b == nil {
+		return false
+	}
+
+    return *a == *b
+}
+
+func OptionalFloatsMatch(a, b *float64) bool {
+	if a == nil && b == nil {
+		return true
+	} else if a == nil || b == nil {
+		return false
+	}
+
+    return *a == *b
+}
+
+func OptionalIntsMatch(a, b *int64) bool {
+	if a == nil && b == nil {
+		return true
+	} else if a == nil || b == nil {
+		return false
+	}
+
+    return *a == *b
+}
+
+func AnysMatch(a, b any) bool {
+    if a == nil && b == nil {
+        return true
+    }
+
+    if a == nil || b == nil {
+        return false
+    }
+
+    return true
 }
