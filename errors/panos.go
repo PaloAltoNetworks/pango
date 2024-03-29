@@ -12,6 +12,7 @@ import (
 var InvalidFilterError = stderr.New("filter is improperly formatted")
 var NameNotSpecifiedError = stderr.New("name is not specified")
 var NoLocationSpecifiedError = stderr.New("no location specified")
+var RelativePositionWithRemoveEverythingElseError = stderr.New("cannot do relative positioning when removing all other rules")
 var UnrecognizedOperatorError = stderr.New("unsupported filter operator")
 var UnsupportedFilterTypeError = stderr.New("unsupported type for filtering")
 var UuidNotSpecifiedError = stderr.New("uuid is not specified")
