@@ -14,6 +14,7 @@ var NameNotSpecifiedError = stderr.New("name is not specified")
 var NoLocationSpecifiedError = stderr.New("no location specified")
 var UnrecognizedOperatorError = stderr.New("unsupported filter operator")
 var UnsupportedFilterTypeError = stderr.New("unsupported type for filtering")
+var UuidNotSpecifiedError = stderr.New("uuid is not specified")
 
 // Panos is an error returned from PAN-OS.
 //
