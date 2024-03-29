@@ -61,7 +61,7 @@ func TargetsMatch(a, b map[string][]string) bool {
 	return true
 }
 
-func OptionalStringsMatch(a, b *string) bool {
+func StringsMatch(a, b *string) bool {
 	if a == nil && b == nil {
 		return true
 	} else if a == nil || b == nil {
@@ -71,7 +71,7 @@ func OptionalStringsMatch(a, b *string) bool {
 	return *a == *b
 }
 
-func OptionalBoolsMatch(a, b *bool) bool {
+func BoolsMatch(a, b *bool) bool {
 	if a == nil && b == nil {
 		return true
 	} else if a == nil || b == nil {
@@ -81,7 +81,7 @@ func OptionalBoolsMatch(a, b *bool) bool {
     return *a == *b
 }
 
-func OptionalFloatsMatch(a, b *float64) bool {
+func FloatsMatch(a, b *float64) bool {
 	if a == nil && b == nil {
 		return true
 	} else if a == nil || b == nil {
@@ -91,7 +91,7 @@ func OptionalFloatsMatch(a, b *float64) bool {
     return *a == *b
 }
 
-func OptionalIntsMatch(a, b *int64) bool {
+func IntsMatch(a, b *int64) bool {
 	if a == nil && b == nil {
 		return true
 	} else if a == nil || b == nil {
