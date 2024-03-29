@@ -34,7 +34,7 @@ type PangoClient interface {
 	// Specialized communication functions around specific XPI API commands.
 	MultiConfig(context.Context, *xmlapi.MultiConfig, bool, url.Values) ([]byte, *http.Response, *xmlapi.MultiConfigResponse, error)
 	ImportFile(context.Context, *xmlapi.Import, string, string, string, bool, any) ([]byte, *http.Response, error)
-	ExportFile(context.Context, *xmlapi.Export, any) (string, []byte, error)
+	ExportFile(context.Context, *xmlapi.Export, any) (string, []byte, *http.Response, error)
 
 	// Operational functions in use by one or more resources / data sources / namespaces.
 	RequestPasswordHash(context.Context, string) (string, error)
