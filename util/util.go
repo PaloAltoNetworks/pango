@@ -108,6 +108,11 @@ func AsEntryXpath(vals []string) string {
 	return buf.String()
 }
 
+// AsUuidXpath returns an xpath segment as a UUID location.
+func AsUuidXpath(v string) string {
+    return fmt.Sprintf("entry[@uuid='%s']", v)
+}
+
 // AsMemberXpath returns the given values as a member xpath segment.
 func AsMemberXpath(vals []string) string {
 	var buf bytes.Buffer
