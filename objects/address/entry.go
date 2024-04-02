@@ -136,7 +136,7 @@ func SpecMatches(a, b *Entry) bool {
 
 	// Don't compare Name.
 
-	if !util.OptionalStringsMatch(a.Description, b.Description) {
+	if !util.StringsMatch(a.Description, b.Description) {
 		return false
 	}
 
@@ -144,19 +144,19 @@ func SpecMatches(a, b *Entry) bool {
 		return false
 	}
 
-	if !util.OptionalStringsMatch(a.IpNetmask, b.IpNetmask) {
+	if !util.StringsMatch(a.IpNetmask, b.IpNetmask) {
 		return false
 	}
 
-	if !util.OptionalStringsMatch(a.IpRange, b.IpRange) {
+	if !util.StringsMatch(a.IpRange, b.IpRange) {
 		return false
 	}
 
-	if !util.OptionalStringsMatch(a.Fqdn, b.Fqdn) {
+	if !util.StringsMatch(a.Fqdn, b.Fqdn) {
 		return false
 	}
 
-	if !util.OptionalStringsMatch(a.IpWildcard, b.IpWildcard) {
+	if !util.StringsMatch(a.IpWildcard, b.IpWildcard) {
 		return false
 	}
 
