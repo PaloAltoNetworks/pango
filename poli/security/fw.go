@@ -124,9 +124,25 @@ func (c *Firewall) ConfigureRules(vsys string, rules []Entry, auditComments map[
 		}
 	}
 
-	// Move the group into place.
-	if err = c.MoveGroup(vsys, move, oRule, rules...); err != nil {
-		return err
+	if move == util.MoveLoose && len(curRules) > 0 {
+		if len(setRules) > 0 {
+			// we just move the newly created rules under one of the other rules
+			// (possibly one we are removing, but we should not really care).
+			// Goal is to have rules of the security rule group ordered one after another
+			// but we don't really care about the specific order.
+			reorderedRules := make([]Entry, 0, len(setRules)+1)
+			reorderedRules = append(reorderedRules, curRules[0])
+			reorderedRules = append(reorderedRules, setRules...)
+
+			if err = c.MoveGroup(vsys, move, oRule, reorderedRules...); err != nil {
+				return err
+			}
+		}
+	} else {
+		// Move the group into place.
+		if err = c.MoveGroup(vsys, move, oRule, rules...); err != nil {
+			return err
+		}
 	}
 
 	// Delete rules removed from the group.
