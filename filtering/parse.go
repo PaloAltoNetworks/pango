@@ -14,7 +14,7 @@ func Parse(s string, quote string) (*Group, error) {
 	} else if quote == "&" || quote == "|" || quote == "(" || quote == ")" || quote == " " || quote == `\` || quote == "!" || quote == "." || quote == "<" || quote == ">" || quote == "=" || quote == "-" || quote == "_" {
 		return nil, fmt.Errorf("quote character cannot be a reserved character")
 	} else if s == "" {
-		return nil, fmt.Errorf("logic string is empty")
+		return nil, nil
 	}
 
 	var ch rune
