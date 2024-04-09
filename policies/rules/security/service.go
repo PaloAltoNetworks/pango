@@ -3,7 +3,9 @@ package security
 import (
 	"context"
 	"fmt"
-	"log"
+	"net/url"
+	"strings"
+	"time"
 
 	"github.com/PaloAltoNetworks/pango/audit"
 	"github.com/PaloAltoNetworks/pango/errors"
@@ -237,43 +239,53 @@ func (s *Service) doUpdate(ctx context.Context, loc Location, entry Entry, value
 }
 
 // Delete deletes the given item.
-func (s *Service) Delete(ctx context.Context, loc Location, name string) error {
-	return s.doDelete(ctx, loc, name, true)
+func (s *Service) Delete(ctx context.Context, loc Location, names ...string) error {
+	return s.doDelete(ctx, loc, names, true)
 }
 
 // DeleteById deletes the given item using the uuid.
-func (s *Service) DeleteById(ctx context.Context, loc Location, uuid string) error {
-	return s.doDelete(ctx, loc, uuid, false)
+func (s *Service) DeleteById(ctx context.Context, loc Location, uuids ...string) error {
+	return s.doDelete(ctx, loc, uuids, false)
 }
 
-func (s *Service) doDelete(ctx context.Context, loc Location, value string, byName bool) error {
-	if value == "" {
-		if byName {
-			return errors.NameNotSpecifiedError
+func (s *Service) doDelete(ctx context.Context, loc Location, values []string, byName bool) error {
+	if len(values) == 0 {
+		return nil
+	} else {
+		for _, value := range values {
+			if value == "" {
+				if byName {
+					return errors.NameNotSpecifiedError
+				}
+				return errors.UuidNotSpecifiedError
+			}
 		}
-		return errors.UuidNotSpecifiedError
 	}
 
 	vn := s.client.Versioning()
 
-	var path []string
 	var err error
-	if byName {
-		path, err = loc.Xpath(vn, value, "")
-	} else {
-		path, err = loc.Xpath(vn, "", value)
-	}
-	if err != nil {
-		return err
+	updates := xmlapi.NewMultiConfig(len(values))
+	for _, value := range values {
+		var path []string
+
+		if byName {
+			path, err = loc.Xpath(vn, value, "")
+		} else {
+			path, err = loc.Xpath(vn, "", value)
+		}
+		if err != nil {
+			return err
+		}
+
+		updates.Add(&xmlapi.Config{
+			Action: "delete",
+			Xpath:  util.AsXpath(path),
+			Target: s.client.GetTarget(),
+		})
 	}
 
-	cmd := &xmlapi.Config{
-		Action: "delete",
-		Xpath:  util.AsXpath(path),
-		Target: s.client.GetTarget(),
-	}
-
-	_, _, err = s.client.Communicate(ctx, cmd, false, nil)
+	_, _, _, err = s.client.MultiConfig(ctx, updates, false, nil)
 
 	return err
 }
@@ -354,6 +366,474 @@ func (s *Service) doList(ctx context.Context, loc Location, action, filter, quot
 
 	return filtered, nil
 }
+
+// MoveGroup arranges the given rules in the order specified.
+//
+// Any rule with a UUID specified is ignored.  Only the rule names are considered for the
+// purposes of the rule placement.
+func (s *Service) MoveGroup(ctx context.Context, loc Location, position rule.Position, entries []Entry) error {
+	if len(entries) == 0 {
+		return nil
+	}
+
+	listing, err := s.List(ctx, loc, "get", "", "")
+	if err != nil {
+		return err
+	} else if len(listing) == 0 {
+		return fmt.Errorf("no rules present")
+	}
+
+	// Rule placement mapping.
+	rp := make(map[string]int)
+	for idx, live := range listing {
+		rp[live.Name] = idx
+	}
+
+	vn := s.client.Versioning()
+	updates := xmlapi.NewMultiConfig(len(entries))
+
+	var ok, topDown bool
+	var otherIndex int
+	baseIndex := -1
+	switch {
+	case position.First != nil && *position.First:
+		topDown = true
+		target := entries[0]
+
+		baseIndex, ok = rp[target.Name]
+		if !ok {
+			return fmt.Errorf("could not find rule %q for first positioning", target.Name)
+		}
+
+		if baseIndex != 0 {
+			path, err := loc.Xpath(vn, target.Name, "")
+			if err != nil {
+				return err
+			}
+
+			for name, val := range rp {
+				switch {
+				case name == entries[0].Name:
+					rp[name] = 0
+				case val < baseIndex:
+					rp[name] = val + 1
+				}
+			}
+
+			updates.Add(&xmlapi.Config{
+				Action: "move",
+				Xpath:  util.AsXpath(path),
+				Where:  "top",
+				Target: s.client.GetTarget(),
+			})
+
+			baseIndex = 0
+		}
+	case position.Last != nil && *position.Last:
+		target := entries[len(entries)-1]
+
+		baseIndex, ok = rp[target.Name]
+		if !ok {
+			return fmt.Errorf("could not find rule %q for last positioning", target.Name)
+		}
+
+		if baseIndex != len(listing)-1 {
+			path, err := loc.Xpath(vn, target.Name, "")
+			if err != nil {
+				return err
+			}
+
+			for name, val := range rp {
+				switch {
+				case name == target.Name:
+					rp[name] = len(listing) - 1
+				case val > baseIndex:
+					rp[name] = val - 1
+				}
+			}
+
+			updates.Add(&xmlapi.Config{
+				Action: "move",
+				Xpath:  util.AsXpath(path),
+				Where:  "bottom",
+				Target: s.client.GetTarget(),
+			})
+
+			baseIndex = len(listing) - 1
+		}
+	case position.SomewhereAfter != nil && *position.SomewhereAfter != "":
+		topDown = true
+		target := entries[0]
+
+		baseIndex, ok = rp[target.Name]
+		if !ok {
+			return fmt.Errorf("could not find rule %q for initial positioning", target.Name)
+		}
+
+		otherIndex, ok = rp[*position.SomewhereAfter]
+		if !ok {
+			return fmt.Errorf("could not find referenced rule %q for initial positioning", *position.SomewhereAfter)
+		}
+
+		if baseIndex < otherIndex {
+			path, err := loc.Xpath(vn, target.Name, "")
+			if err != nil {
+				return err
+			}
+
+			for name, val := range rp {
+				switch {
+				case name == target.Name:
+					rp[name] = otherIndex
+				case val > baseIndex && val <= otherIndex:
+					rp[name] = otherIndex - 1
+				}
+			}
+
+			updates.Add(&xmlapi.Config{
+				Action:      "move",
+				Xpath:       util.AsXpath(path),
+				Where:       "after",
+				Destination: *position.SomewhereAfter,
+				Target:      s.client.GetTarget(),
+			})
+
+			baseIndex = otherIndex
+		}
+	case position.SomewhereBefore != nil && *position.SomewhereBefore != "":
+		target := entries[len(entries)-1]
+
+		baseIndex, ok = rp[target.Name]
+		if !ok {
+			return fmt.Errorf("could not find rule %q for initial positioning", target.Name)
+		}
+
+		otherIndex, ok = rp[*position.SomewhereBefore]
+		if !ok {
+			return fmt.Errorf("could not find referenced rule %q", *position.SomewhereBefore)
+		}
+
+		if baseIndex > otherIndex {
+			path, err := loc.Xpath(vn, target.Name, "")
+			if err != nil {
+				return err
+			}
+
+			for name, val := range rp {
+				switch {
+				case name == target.Name:
+					rp[name] = otherIndex
+				case val < baseIndex && val >= otherIndex:
+					rp[name] = val + 1
+				}
+			}
+
+			updates.Add(&xmlapi.Config{
+				Action:      "move",
+				Xpath:       util.AsXpath(path),
+				Where:       "before",
+				Destination: *position.SomewhereBefore,
+				Target:      s.client.GetTarget(),
+			})
+
+			baseIndex = otherIndex
+		}
+	case position.DirectlyAfter != nil && *position.DirectlyAfter != "":
+		topDown = true
+		target := entries[0]
+
+		baseIndex, ok = rp[target.Name]
+		if !ok {
+			return fmt.Errorf("could not find rule %q for initial positioning", target.Name)
+		}
+
+		otherIndex, ok = rp[*position.DirectlyAfter]
+		if !ok {
+			return fmt.Errorf("could not find referenced rule %q for initial positioning", *position.DirectlyAfter)
+		}
+
+		if baseIndex != otherIndex+1 {
+			path, err := loc.Xpath(vn, target.Name, "")
+			if err != nil {
+				return err
+			}
+
+			for name, val := range rp {
+				switch {
+				case name == target.Name:
+					rp[name] = otherIndex
+				case val > baseIndex && val <= otherIndex:
+					rp[name] = otherIndex - 1
+				}
+			}
+
+			updates.Add(&xmlapi.Config{
+				Action:      "move",
+				Xpath:       util.AsXpath(path),
+				Where:       "after",
+				Destination: *position.DirectlyAfter,
+				Target:      s.client.GetTarget(),
+			})
+
+			baseIndex = otherIndex
+		}
+	case position.DirectlyBefore != nil && *position.DirectlyBefore != "":
+		target := entries[len(entries)-1]
+
+		baseIndex, ok = rp[target.Name]
+		if !ok {
+			return fmt.Errorf("could not find rule %q for initial positioning", target.Name)
+		}
+
+		otherIndex, ok = rp[*position.DirectlyBefore]
+		if !ok {
+			return fmt.Errorf("could not find referenced rule %q", *position.DirectlyBefore)
+		}
+
+		if baseIndex+1 != otherIndex {
+			path, err := loc.Xpath(vn, target.Name, "")
+			if err != nil {
+				return err
+			}
+
+			for name, val := range rp {
+				switch {
+				case name == target.Name:
+					rp[name] = otherIndex
+				case val < baseIndex && val >= otherIndex:
+					rp[name] = val + 1
+				}
+			}
+
+			updates.Add(&xmlapi.Config{
+				Action:      "move",
+				Xpath:       util.AsXpath(path),
+				Where:       "before",
+				Destination: *position.DirectlyBefore,
+				Target:      s.client.GetTarget(),
+			})
+
+			baseIndex = otherIndex
+		}
+	default:
+		topDown = true
+		target := entries[0]
+
+		baseIndex, ok = rp[target.Name]
+		if !ok {
+			return fmt.Errorf("could not find rule %q for first positioning", target.Name)
+		}
+	}
+
+	var prevName, where string
+	if topDown {
+		prevName = entries[0].Name
+		where = "after"
+	} else {
+		prevName = entries[len(entries)-1].Name
+		where = "before"
+	}
+
+	// Move the rest of the rules if necessary.
+	for i := 1; i < len(entries); i++ {
+		var target Entry
+		var desiredIndex int
+		if topDown {
+			target = entries[i]
+			desiredIndex = baseIndex + i
+		} else {
+			target = entries[len(entries)-1-i]
+			desiredIndex = baseIndex - i
+		}
+
+		idx, ok := rp[target.Name]
+		if !ok {
+			return fmt.Errorf("rule %q not present", target.Name)
+		}
+
+		if idx != desiredIndex {
+			path, err := loc.Xpath(vn, target.Name, "")
+			if err != nil {
+				return err
+			}
+
+			if idx < desiredIndex {
+				for name, val := range rp {
+					if val > idx && val <= desiredIndex {
+						rp[name] = val - 1
+					}
+				}
+			} else {
+				for name, val := range rp {
+					if val < idx && val >= desiredIndex {
+						rp[name] = val + 1
+					}
+				}
+			}
+			rp[target.Name] = desiredIndex
+
+			updates.Add(&xmlapi.Config{
+				Action:      "move",
+				Xpath:       util.AsXpath(path),
+				Where:       where,
+				Destination: prevName,
+				Target:      s.client.GetTarget(),
+			})
+		}
+
+		prevName = target.Name
+	}
+
+	if len(updates.Operations) > 0 {
+		_, _, _, err = s.client.MultiConfig(ctx, updates, false, nil)
+		return err
+	}
+
+	return nil
+}
+
+// HitCount returns the hit count for the given rule.
+func (s *Service) HitCount(ctx context.Context, loc Location, rules ...string) ([]util.HitCount, error) {
+	switch {
+	case loc.Vsys != nil:
+		cmd := &xmlapi.Op{
+			Command: util.NewHitCountRequest(RuleType, loc.Vsys.Name, rules),
+			Target:  s.client.GetTarget(),
+		}
+		var resp util.HitCountResponse
+
+		if _, _, err := s.client.Communicate(ctx, cmd, false, &resp); err != nil {
+			return nil, err
+		}
+
+		return resp.Results, nil
+		// TODO: what does the hit count request and response look like for rules
+		// pushed from Panorama?
+	}
+
+	return nil, fmt.Errorf("unsupported location")
+}
+
+// SetAuditComment sets the given audit comment for the given rule.
+func (s *Service) SetAuditComment(ctx context.Context, loc Location, name, comment string) error {
+	if name == "" {
+		return errors.NameNotSpecifiedError
+	}
+
+	vn := s.client.Versioning()
+
+	path, err := loc.Xpath(vn, name, "")
+	if err != nil {
+		return err
+	}
+
+	cmd := &xmlapi.Op{
+		Command: audit.SetComment{
+			Xpath:   util.AsXpath(path),
+			Comment: comment,
+		},
+		Target: s.client.GetTarget(),
+	}
+
+	_, _, err = s.client.Communicate(ctx, cmd, false, nil)
+	return err
+}
+
+// CurrentAuditComment gets any current uncommitted audit comment for the given rule.
+func (s *Service) CurrentAuditComment(ctx context.Context, loc Location, name string) (string, error) {
+	if name == "" {
+		return "", errors.NameNotSpecifiedError
+	}
+
+	vn := s.client.Versioning()
+
+	path, err := loc.Xpath(vn, name, "")
+	if err != nil {
+		return "", err
+	}
+
+	cmd := &xmlapi.Op{
+		Command: audit.GetComment{
+			Xpath: util.AsXpath(path),
+		},
+		Target: s.client.GetTarget(),
+	}
+
+	var resp audit.UncommittedComment
+	if _, _, err = s.client.Communicate(ctx, cmd, false, &resp); err != nil {
+		return "", err
+	}
+
+	return resp.Comment, nil
+}
+
+// AuditCommentHistory returns a chunk of historical audit comment logs.
+func (s *Service) AuditCommentHistory(ctx context.Context, loc Location, name, direction string, nlogs, skip int) ([]audit.Comment, error) {
+	if name == "" {
+		return nil, errors.NameNotSpecifiedError
+	}
+
+	var err error
+	var base, vsysDg string
+	switch {
+	case loc.Vsys != nil:
+		vsysDg = loc.Vsys.Name
+		base = "rulebase"
+	case loc.Shared != nil:
+		vsysDg = "shared"
+		base = loc.Shared.Rulebase
+	case loc.DeviceGroup != nil:
+		vsysDg = loc.DeviceGroup.Name
+		base = loc.DeviceGroup.Rulebase
+	}
+
+	if vsysDg == "" || base == "" {
+		return nil, fmt.Errorf("unsupported location")
+	}
+
+	query := strings.Join([]string{
+		"(subtype eq audit-comment)",
+		fmt.Sprintf("(path contains '\\'%s\\'')", name),   // Name.
+		fmt.Sprintf("(path contains '%s')", RuleType),     // Rule type.
+		fmt.Sprintf("(path contains %s)", base),           // Rulebase.
+		fmt.Sprintf("(path contains '\\'%s\\'')", vsysDg), // Vsys or device group.
+	}, " and ")
+	extras := url.Values{}
+	extras.Set("uniq", "yes")
+
+	cmd := &xmlapi.Log{
+		LogType:   "config",
+		Query:     query,
+		Direction: direction,
+		Nlogs:     nlogs,
+		Skip:      skip,
+		Extras:    extras,
+	}
+
+	var job util.JobResponse
+	if _, _, err = s.client.Communicate(ctx, cmd, false, &job); err != nil {
+		return nil, err
+	}
+
+	var resp audit.CommentHistory
+	if _, err = s.client.WaitForLogs(ctx, job.Id, 1*time.Second, &resp); err != nil {
+		return nil, err
+	}
+
+	if len(resp.Comments) != 0 {
+		if clock, err := s.client.Clock(ctx); err == nil {
+			for i := range resp.Comments {
+				resp.Comments[i].SetTime(clock)
+			}
+		}
+	}
+
+	return resp.Comments, nil
+}
+
+/*
+// NOTE:  Move all logic past this point to the Terraform provider.
+
 
 // ConfigureGroup performs all necessary edit, rename, and delete commands to ensure that
 // the objects are configured as specified.
@@ -1021,3 +1501,4 @@ func (s *Service) DeleteGroup(ctx context.Context, loc Location, uuids map[strin
 
 	return err
 }
+*/
