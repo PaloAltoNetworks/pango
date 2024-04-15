@@ -5,8 +5,6 @@ import (
 	stderr "errors"
 	"fmt"
 	"strings"
-
-	"github.com/PaloAltoNetworks/pango/util"
 )
 
 var InvalidFilterError = stderr.New("filter is improperly formatted")
@@ -67,8 +65,12 @@ type errorCheck struct {
 }
 
 type errorCheckMsg struct {
-	Line    []util.CdataText `xml:"line"`
-	Message string           `xml:",chardata"`
+	Line    []errLine `xml:"line"`
+	Message string    `xml:",chardata"`
+}
+
+type errLine struct {
+	Text string `xml:",cdata"`
 }
 
 func (e *errorCheck) Failed() bool {
