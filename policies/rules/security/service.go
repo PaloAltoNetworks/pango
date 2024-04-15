@@ -420,11 +420,18 @@ func (s *Service) MoveGroup(ctx context.Context, loc Location, position rule.Pos
 				}
 			}
 
+			// Some versions of PAN-OS require that the destination always be set.
+			var dst string
+			if !vn.Gte(util.FixedPanosVersionForMultiConfigMove) {
+				dst = "top"
+			}
+
 			updates.Add(&xmlapi.Config{
-				Action: "move",
-				Xpath:  util.AsXpath(path),
-				Where:  "top",
-				Target: s.client.GetTarget(),
+				Action:      "move",
+				Xpath:       util.AsXpath(path),
+				Where:       "top",
+				Destination: dst,
+				Target:      s.client.GetTarget(),
 			})
 
 			baseIndex = 0
@@ -452,11 +459,18 @@ func (s *Service) MoveGroup(ctx context.Context, loc Location, position rule.Pos
 				}
 			}
 
+			// Some versions of PAN-OS require that the destination always be set.
+			var dst string
+			if !vn.Gte(util.FixedPanosVersionForMultiConfigMove) {
+				dst = "bottom"
+			}
+
 			updates.Add(&xmlapi.Config{
-				Action: "move",
-				Xpath:  util.AsXpath(path),
-				Where:  "bottom",
-				Target: s.client.GetTarget(),
+				Action:      "move",
+				Xpath:       util.AsXpath(path),
+				Where:       "bottom",
+				Destination: dst,
+				Target:      s.client.GetTarget(),
 			})
 
 			baseIndex = len(listing) - 1
