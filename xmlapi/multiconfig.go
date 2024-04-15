@@ -4,6 +4,8 @@ import (
 	"encoding/xml"
 	"fmt"
 	"strings"
+
+	"github.com/PaloAltoNetworks/pango/errors"
 )
 
 // Returns a new struct for performing multi-config operations with.
@@ -72,7 +74,7 @@ func NewMultiConfigResponse(text []byte) (*MultiConfigResponse, error) {
 		return nil, fmt.Errorf("no data received in the multi-config response")
 	}
 
-	var ans MultiConfigResponse
+	ans := MultiConfigResponse{raw: text}
 	err := xml.Unmarshal(text, &ans)
 
 	return &ans, err
@@ -85,6 +87,8 @@ type MultiConfigResponse struct {
 	Status  string                       `xml:"status,attr"`
 	Code    int                          `xml:"code,attr"`
 	Results []MultiConfigResponseElement `xml:"response"`
+
+	raw []byte `xml:"-"`
 }
 
 // Ok returns if there was an error or not.
@@ -95,7 +99,10 @@ func (m *MultiConfigResponse) Ok() bool {
 // Error returns the error if there was one.
 func (m *MultiConfigResponse) Error() string {
 	if len(m.Results) == 0 {
-		return ""
+		if err := errors.Parse(m.raw); err != nil {
+			return err.Error()
+		}
+		return "unknown multi-config error format"
 	}
 
 	r := m.Results[len(m.Results)-1]
