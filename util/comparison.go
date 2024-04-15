@@ -78,7 +78,7 @@ func BoolsMatch(a, b *bool) bool {
 		return false
 	}
 
-    return *a == *b
+	return *a == *b
 }
 
 func FloatsMatch(a, b *float64) bool {
@@ -88,7 +88,7 @@ func FloatsMatch(a, b *float64) bool {
 		return false
 	}
 
-    return *a == *b
+	return *a == *b
 }
 
 func IntsMatch(a, b *int64) bool {
@@ -98,17 +98,17 @@ func IntsMatch(a, b *int64) bool {
 		return false
 	}
 
-    return *a == *b
+	return *a == *b
 }
 
 func AnysMatch(a, b any) bool {
-    if a == nil && b == nil {
-        return true
-    }
+	if a == nil && b == nil {
+		return true
+	}
 
-    if a == nil || b == nil {
-        return false
-    }
+	if a == nil || b == nil {
+		return false
+	}
 
-    return true
+	return true
 }
