@@ -36,8 +36,8 @@ type Entry struct {
 	Services                        []string // unordered
 	Categories                      []string // unordered
 	Applications                    []string // unordered
-	SourceDevices                   []string
-	DestinationDevices              []string
+	SourceDevices                   []string // unordered
+	DestinationDevices              []string // unordered
 	Schedule                        *string
 	Tags                            []string // ordered
 	NegateSource                    *bool
@@ -350,31 +350,31 @@ func Entry1Specify(o Entry) (any, error) {
 	ans.Schedule = o.Schedule
 	ans.Tags = util.StrToMem(o.Tags)
 	if o.NegateSource != nil {
-		*ans.NegateSource = util.YesNo(*o.NegateSource)
+		ans.NegateSource = util.String(util.YesNo(*o.NegateSource))
 	}
 	if o.NegateDestination != nil {
-		*ans.NegateDestination = util.YesNo(*o.NegateDestination)
+		ans.NegateDestination = util.String(util.YesNo(*o.NegateDestination))
 	}
 	if o.Disabled != nil {
-		*ans.Disabled = util.YesNo(*o.Disabled)
+		ans.Disabled = util.String(util.YesNo(*o.Disabled))
 	}
 	ans.Description = o.Description
 	ans.GroupTag = o.GroupTag
 	ans.Action = o.Action
 	if o.IcmpUnreachable != nil {
-		*ans.IcmpUnreachable = util.YesNo(*o.IcmpUnreachable)
+		ans.IcmpUnreachable = util.String(util.YesNo(*o.IcmpUnreachable))
 	}
 	ans.Type = o.Type
 	if o.DisableServerResponseInspection != nil {
 		ans.Options = &secOptions{Misc: o.Misc["secOptions"]}
-		*ans.Options.DisableServerResponseInspection = util.YesNo(*o.DisableServerResponseInspection)
+		ans.Options.DisableServerResponseInspection = util.String(util.YesNo(*o.DisableServerResponseInspection))
 	}
 	ans.LogSetting = o.LogSetting
 	if o.LogStart != nil {
-		*ans.LogStart = util.YesNo(*o.LogStart)
+		ans.LogStart = util.String(util.YesNo(*o.LogStart))
 	}
 	if o.LogEnd != nil {
-		*ans.LogEnd = util.YesNo(*o.LogEnd)
+		ans.LogEnd = util.String(util.YesNo(*o.LogEnd))
 	}
 	if o.ProfileSettings != nil {
 		ans.ProfileSettings = &profileSettings{Misc: o.Misc["profileSettings"]}
@@ -418,6 +418,8 @@ func (c *Entry1Container) Normalize() ([]Entry, error) {
 		var1.Uuid = var0.Uuid
 		var1.SourceZones = util.MemToStr(var0.SourceZones)
 		var1.SourceUsers = util.MemToStr(var0.SourceUsers)
+		var1.SourceAddresses = util.MemToStr(var0.SourceAddresses)
+		var1.DestinationZones = util.MemToStr(var0.DestinationZones)
 		var1.DestinationAddresses = util.MemToStr(var0.DestinationAddresses)
 		var1.Services = util.MemToStr(var0.Services)
 		var1.Categories = util.MemToStr(var0.Categories)
