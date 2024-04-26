@@ -9,12 +9,12 @@ import (
 )
 
 func Parse(s string, quote string) (*Group, error) {
-	if len(quote) != 1 {
+	if s == "" {
+		return nil, nil
+	} else if len(quote) != 1 {
 		return nil, fmt.Errorf("quote character should be one character")
 	} else if quote == "&" || quote == "|" || quote == "(" || quote == ")" || quote == " " || quote == `\` || quote == "!" || quote == "." || quote == "<" || quote == ">" || quote == "=" || quote == "-" || quote == "_" {
 		return nil, fmt.Errorf("quote character cannot be a reserved character")
-	} else if s == "" {
-		return nil, nil
 	}
 
 	var ch rune

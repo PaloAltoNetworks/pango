@@ -8,7 +8,11 @@ import (
 	"fmt"
 	"regexp"
 	"strings"
+
+	"github.com/PaloAltoNetworks/pango/version"
 )
+
+var FixedPanosVersionForMultiConfigMove = version.Number{99, 99, 99, ""}
 
 // VsysEntryType defines an entry config node with vsys entries underneath.
 type VsysEntryType struct {
@@ -110,7 +114,7 @@ func AsEntryXpath(vals []string) string {
 
 // AsUuidXpath returns an xpath segment as a UUID location.
 func AsUuidXpath(v string) string {
-    return fmt.Sprintf("entry[@uuid='%s']", v)
+	return fmt.Sprintf("entry[@uuid='%s']", v)
 }
 
 // AsMemberXpath returns the given values as a member xpath segment.

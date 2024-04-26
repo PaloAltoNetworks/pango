@@ -1,4 +1,4 @@
-package address
+package service
 
 import (
 	"context"

@@ -19,6 +19,7 @@ type PangoClient interface {
 	GetTarget() string
 	IsPanorama() (bool, error)
 	IsFirewall() (bool, error)
+	Clock(context.Context) (time.Time, error)
 
 	// Local inspection mode functions.
 	ReadFromConfig(context.Context, []string, bool, any) ([]byte, error)
