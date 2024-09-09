@@ -2,9 +2,9 @@ Palo Alto Networks pango
 ========================
 
 [![GoDoc](https://godoc.org/github.com/PaloAltoNetworks/pango?status.svg)](https://godoc.org/github.com/PaloAltoNetworks/pango)
-[![Build](https://github.com/PaloAltoNetworks/pango/workflows/Sanity%20Check/badge.svg?branch=master)](https://github.com/PaloAltoNetworks/pango/actions?query=workflow%3A%22Sanity+Check%22)
+[![Build](https://github.com/PaloAltoNetworks/pango/workflows/Sanity%20Check/badge.svg?branch=develop)](https://github.com/PaloAltoNetworks/pango/actions?query=workflow%3A%22Sanity+Check%22)
 
-Package pango is a golang cross version mechanism for interacting with Palo Alto Networks devices (including physical and virtualized Next-generation Firewalls and Panorama).  Versioning support is in place for PANOS 6.1 to 10.0.
+Package pango is a golang cross version mechanism for interacting with Palo Alto Networks devices (including physical and virtualized Next-generation Firewalls and Panorama).  Versioning support is in place for PANOS 10.1 and above.
 
 Please refer to the godoc reference documentation above to get started.
 
@@ -24,17 +24,24 @@ import (
 func main() {
     var err error
 
-    c := &pango.Firewall{Client: pango.Client{
+    con = &sdk.Client{
         Hostname: "127.0.0.1",
         Username: "admin",
         Password: "admin",
-        Logging: pango.LogAction | pango.LogOp,
-    }}
-    if err = c.Initialize(); err != nil {
+    }
+
+    if err := con.Setup(); err != nil {
+        log.Printf("Failed to setup client: %s", err)
+        return
+    }
+
+    if err := con.Initialize(ctx); err != nil {
         log.Printf("Failed to initialize client: %s", err)
         return
     }
+
     log.Printf("Initialize ok")
+
 }
 ```
 
