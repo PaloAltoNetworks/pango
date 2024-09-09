@@ -5,8 +5,6 @@ import (
 	stderr "errors"
 	"fmt"
 	"strings"
-
-	"github.com/PaloAltoNetworks/pango/util"
 )
 
 var InvalidFilterError = stderr.New("filter is improperly formatted")
@@ -33,6 +31,15 @@ func (e Panos) Error() string {
 // ObjectNotFound returns true if this is an object not found error.
 func (e Panos) ObjectNotFound() bool {
 	return e.Code == 7
+}
+
+func IsObjectNotFound(e error) bool {
+	e2, ok := e.(Panos)
+	if ok && e2.ObjectNotFound() {
+		return true
+	}
+
+	return false
 }
 
 // ObjectNotFound returns an object not found error.
@@ -67,8 +74,12 @@ type errorCheck struct {
 }
 
 type errorCheckMsg struct {
-	Line    []util.CdataText `xml:"line"`
-	Message string           `xml:",chardata"`
+	Line    []errLine `xml:"line"`
+	Message string    `xml:",chardata"`
+}
+
+type errLine struct {
+	Text string `xml:",cdata"`
 }
 
 func (e *errorCheck) Failed() bool {

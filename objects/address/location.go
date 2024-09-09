@@ -8,41 +8,88 @@ import (
 	"github.com/PaloAltoNetworks/pango/version"
 )
 
+type ImportLocation interface {
+	XpathForLocation(version.Number, util.ILocation) ([]string, error)
+	MarshalPangoXML([]string) (string, error)
+	UnmarshalPangoXML([]byte) ([]string, error)
+}
+
 type Location struct {
-	Shared       bool                 `json:"shared"`
-	Vsys         *VsysLocation        `json:"vsys,omitempty"`
-	DeviceGroup  *DeviceGroupLocation `json:"device_group,omitempty"`
-	FromPanorama bool                 `json:"from_panorama"`
+	DeviceGroup        *DeviceGroupLocation      `json:"device_group,omitempty"`
+	FromPanoramaShared bool                      `json:"from_panorama_shared"`
+	FromPanoramaVsys   *FromPanoramaVsysLocation `json:"from_panorama_vsys,omitempty"`
+	Shared             bool                      `json:"shared"`
+	Vsys               *VsysLocation             `json:"vsys,omitempty"`
+}
+
+type DeviceGroupLocation struct {
+	DeviceGroup    string `json:"device_group"`
+	PanoramaDevice string `json:"panorama_device"`
+}
+
+type FromPanoramaVsysLocation struct {
+	Vsys string `json:"vsys"`
+}
+
+type VsysLocation struct {
+	NgfwDevice string `json:"ngfw_device"`
+	Vsys       string `json:"vsys"`
+}
+
+func NewDeviceGroupLocation() *Location {
+	return &Location{DeviceGroup: &DeviceGroupLocation{
+		DeviceGroup:    "",
+		PanoramaDevice: "localhost.localdomain",
+	},
+	}
+}
+func NewFromPanoramaVsysLocation() *Location {
+	return &Location{FromPanoramaVsys: &FromPanoramaVsysLocation{
+		Vsys: "vsys1",
+	},
+	}
+}
+func NewSharedLocation() *Location {
+	return &Location{
+		Shared: true,
+	}
+}
+func NewVsysLocation() *Location {
+	return &Location{Vsys: &VsysLocation{
+		NgfwDevice: "localhost.localdomain",
+		Vsys:       "vsys1",
+	},
+	}
 }
 
 func (o Location) IsValid() error {
 	count := 0
 
-	if o.Shared {
-		count++
-	}
-
-	if o.Vsys != nil {
-		if o.Vsys.Name == "" {
-			return fmt.Errorf("vsys.name is unspecified")
-		}
-		if o.Vsys.NgfwDevice == "" {
-			return fmt.Errorf("vsys.ngfw_device is unspecified")
-		}
-		count++
-	}
-
-	if o.DeviceGroup != nil {
-		if o.DeviceGroup.Name == "" {
-			return fmt.Errorf("device_group.name is unspecified")
+	switch {
+	case o.DeviceGroup != nil:
+		if o.DeviceGroup.DeviceGroup == "" {
+			return fmt.Errorf("DeviceGroup is unspecified")
 		}
 		if o.DeviceGroup.PanoramaDevice == "" {
-			return fmt.Errorf("device_group.panorama_device is unspecified")
+			return fmt.Errorf("PanoramaDevice is unspecified")
 		}
 		count++
-	}
-
-	if o.FromPanorama {
+	case o.FromPanoramaShared:
+		count++
+	case o.FromPanoramaVsys != nil:
+		if o.FromPanoramaVsys.Vsys == "" {
+			return fmt.Errorf("Vsys is unspecified")
+		}
+		count++
+	case o.Shared:
+		count++
+	case o.Vsys != nil:
+		if o.Vsys.NgfwDevice == "" {
+			return fmt.Errorf("NgfwDevice is unspecified")
+		}
+		if o.Vsys.Vsys == "" {
+			return fmt.Errorf("Vsys is unspecified")
+		}
 		count++
 	}
 
@@ -57,10 +104,41 @@ func (o Location) IsValid() error {
 	return nil
 }
 
-func (o Location) Xpath(vn version.Number, name string) ([]string, error) {
+func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
+
 	var ans []string
 
 	switch {
+	case o.DeviceGroup != nil:
+		if o.DeviceGroup.DeviceGroup == "" {
+			return nil, fmt.Errorf("DeviceGroup is unspecified")
+		}
+		if o.DeviceGroup.PanoramaDevice == "" {
+			return nil, fmt.Errorf("PanoramaDevice is unspecified")
+		}
+		ans = []string{
+			"config",
+			"devices",
+			util.AsEntryXpath([]string{o.DeviceGroup.PanoramaDevice}),
+			"device-group",
+			util.AsEntryXpath([]string{o.DeviceGroup.DeviceGroup}),
+		}
+	case o.FromPanoramaShared:
+		ans = []string{
+			"config",
+			"panorama",
+			"shared",
+		}
+	case o.FromPanoramaVsys != nil:
+		if o.FromPanoramaVsys.Vsys == "" {
+			return nil, fmt.Errorf("Vsys is unspecified")
+		}
+		ans = []string{
+			"config",
+			"panorama",
+			"vsys",
+			util.AsEntryXpath([]string{o.FromPanoramaVsys.Vsys}),
+		}
 	case o.Shared:
 		ans = []string{
 			"config",
@@ -70,48 +148,41 @@ func (o Location) Xpath(vn version.Number, name string) ([]string, error) {
 		if o.Vsys.NgfwDevice == "" {
 			return nil, fmt.Errorf("NgfwDevice is unspecified")
 		}
-		if o.Vsys.Name == "" {
-			return nil, fmt.Errorf("Name is unspecified")
+		if o.Vsys.Vsys == "" {
+			return nil, fmt.Errorf("Vsys is unspecified")
 		}
 		ans = []string{
 			"config",
 			"devices",
 			util.AsEntryXpath([]string{o.Vsys.NgfwDevice}),
 			"vsys",
-			util.AsEntryXpath([]string{o.Vsys.Name}),
+			util.AsEntryXpath([]string{o.Vsys.Vsys}),
 		}
-	case o.DeviceGroup != nil:
-		if o.DeviceGroup.PanoramaDevice == "" {
-			return nil, fmt.Errorf("PanoramaDevice is unspecified")
-		}
-		if o.DeviceGroup.Name == "" {
-			return nil, fmt.Errorf("Name is unspecified")
-		}
-		ans = []string{
-			"config",
-			"devices",
-			util.AsEntryXpath([]string{o.DeviceGroup.PanoramaDevice}),
-			"device-group",
-			util.AsEntryXpath([]string{o.DeviceGroup.Name}),
-		}
-	case o.FromPanorama:
-		ans = []string{"config", "panorama"}
 	default:
 		return nil, errors.NoLocationSpecifiedError
 	}
 
+	return ans, nil
+}
+func (o Location) XpathWithEntryName(vn version.Number, name string) ([]string, error) {
+
+	ans, err := o.XpathPrefix(vn)
+	if err != nil {
+		return nil, err
+	}
 	ans = append(ans, Suffix...)
 	ans = append(ans, util.AsEntryXpath([]string{name}))
 
 	return ans, nil
 }
+func (o Location) XpathWithUuid(vn version.Number, uuid string) ([]string, error) {
 
-type VsysLocation struct {
-	NgfwDevice string `json:"ngfw_device"`
-	Name       string `json:"name"`
-}
+	ans, err := o.XpathPrefix(vn)
+	if err != nil {
+		return nil, err
+	}
+	ans = append(ans, Suffix...)
+	ans = append(ans, util.AsUuidXpath(uuid))
 
-type DeviceGroupLocation struct {
-	PanoramaDevice string `json:"panorama_device"`
-	Name           string `json:"name"`
+	return ans, nil
 }

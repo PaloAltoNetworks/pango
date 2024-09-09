@@ -932,6 +932,7 @@ func TestParseReturnsError(t *testing.T) {
 		"foobar",
 		"(",
 		")",
+		"",
 	}
 
 	for _, s := range checks {
@@ -963,14 +964,5 @@ func TestParseWithInvalidQuoteReturnsError(t *testing.T) {
 		if _, err := Parse(okstr, quote); err == nil {
 			t.Fatalf("invalid quote was ok: %q", quote)
 		}
-	}
-}
-
-func TestParseEmptyString(t *testing.T) {
-	resp, err := Parse("", `"`)
-	if err != nil {
-		t.Fatalf("parse empty string error: %s", err)
-	} else if resp != nil {
-		t.Fatalf("parse empty string has non-nil group")
 	}
 }
