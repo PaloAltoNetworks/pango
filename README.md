@@ -8,8 +8,8 @@ Palo Alto Networks pango
 > This software is currently in alpha development stage. It is strongly recommended not to use this package in production environments. If you choose to use it for experimental or developmental purposes, please do so with caution.
 
 
-[![GoDoc](https://godoc.org/github.com/PaloAltoNetworks/pango?status.svg)](https://godoc.org/github.com/PaloAltoNetworks/pango)
-[![Build](https://github.com/PaloAltoNetworks/pango/workflows/Sanity%20Check/badge.svg?branch=main)](https://github.com/PaloAltoNetworks/pango/actions?query=workflow%3A%22Sanity+Check%22)
+<!-- [![GoDoc](https://godoc.org/github.com/PaloAltoNetworks/pango?status.svg)](https://godoc.org/github.com/PaloAltoNetworks/pango) -->
+<!-- [![Build](https://github.com/PaloAltoNetworks/pango/workflows/Sanity%20Check/badge.svg?branch=main)](https://github.com/PaloAltoNetworks/pango/actions?query=workflow%3A%22Sanity+Check%22) -->
 
 Package pango is a golang cross version mechanism for interacting with Palo Alto Networks devices (including physical and virtualized Next-generation Firewalls and Panorama).  Versioning support is in place for PANOS 10.1 and above.
 
