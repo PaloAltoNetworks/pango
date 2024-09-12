@@ -1,39 +1,40 @@
 package generic
 
 import (
-    "encoding/xml"
-    "strings"
+	"encoding/xml"
+	"strings"
 )
 
 // Xml is a generic catch-all for parsing XML returned from PAN-OS.
 type Xml struct {
-    XMLName xml.Name
-    Name *string `xml:"name,attr,omitempty"`
-    Uuid *string `xml:"uuid,attr,omitempty"`
-    Text []byte `xml:",chardata"`
-    Nodes []Xml `xml:",any"`
+	XMLName         xml.Name
+	Name            *string `xml:"name,attr,omitempty"`
+	Uuid            *string `xml:"uuid,attr,omitempty"`
+	DetailedVersion *string `xml:"detail-version,attr,omitempty"`
+	Text            []byte  `xml:",chardata"`
+	Nodes           []Xml   `xml:",any"`
 
-    // TrimmedText contains the trimmed value of Text.  Note that since this could
-    // very well be trimming legitimate spacing that the text field would otherwise
-    // contain, refering to this field for anything other than debugging purposes is
-    // probably not a good idea.
-    TrimmedText *string `xml:"-"`
+	// TrimmedText contains the trimmed value of Text.  Note that since this could
+	// very well be trimming legitimate spacing that the text field would otherwise
+	// contain, refering to this field for anything other than debugging purposes is
+	// probably not a good idea.
+	TrimmedText *string `xml:"-"`
 }
 
-func (e *Xml) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
-    type local Xml
-    var ans local
-    if err := d.DecodeElement(&ans, &start); err != nil {
-        return err
-    }
+func (x *Xml) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
+	type local Xml
+	var ans local
+	if err := d.DecodeElement(&ans, &start); err != nil {
+		return err
+	}
 
-    if len(ans.Text) != 0 {
-        v := strings.TrimSpace(string(ans.Text))
-        if v != "" {
-            ans.TrimmedText = &v
-        }
-    }
+	if len(ans.Text) != 0 {
+		v := strings.TrimSpace(string(ans.Text))
+		if v != "" {
+			ans.TrimmedText = &v
+		}
+	}
 
-    *e = Xml(ans)
-    return nil
+	*x = Xml(ans)
+	return nil
 }

@@ -1,130 +1,156 @@
 package address
 
 import (
-    "fmt"
-    "encoding/xml"
+	"encoding/xml"
+	"fmt"
 
-    "github.com/PaloAltoNetworks/pango/generic"
-    "github.com/PaloAltoNetworks/pango/util"
-    "github.com/PaloAltoNetworks/pango/version"
+	"github.com/PaloAltoNetworks/pango/filtering"
+	"github.com/PaloAltoNetworks/pango/generic"
+	"github.com/PaloAltoNetworks/pango/util"
+	"github.com/PaloAltoNetworks/pango/version"
 )
 
 var (
-    Suffix = []string{"address"}
+	_ filtering.Fielder = &Entry{}
+)
+
+var (
+	Suffix = []string{"address"}
 )
 
 type Entry struct {
-    Name string
-    Description *string
-    Tags []string // ordered
-    IpNetmask *string
-    IpRange *string
-    Fqdn *string
-    IpWildcard *string // PAN-OS 9.0
+	Name        string
+	Description *string
+	Tags        []string
+	Fqdn        *string
+	IpNetmask   *string
+	IpRange     *string
+	IpWildcard  *string
 
-    Misc map[string] []generic.Xml
+	Misc map[string][]generic.Xml
 }
 
-func (e *Entry) CopyMiscFrom(v *Entry) {
-    if v == nil || len(v.Misc) == 0 {
-        return
-    }
+type entryXmlContainer struct {
+	Answer []entryXml `xml:"entry"`
+}
 
-    e.Misc = make(map[string] []generic.Xml)
-    for key := range v.Misc {
-        e.Misc[key] = append([]generic.Xml(nil), v.Misc[key]...)
-    }
+type entryXml struct {
+	XMLName     xml.Name         `xml:"entry"`
+	Name        string           `xml:"name,attr"`
+	Description *string          `xml:"description,omitempty"`
+	Tags        *util.MemberType `xml:"tag,omitempty"`
+	Fqdn        *string          `xml:"fqdn,omitempty"`
+	IpNetmask   *string          `xml:"ip-netmask,omitempty"`
+	IpRange     *string          `xml:"ip-range,omitempty"`
+	IpWildcard  *string          `xml:"ip-wildcard,omitempty"`
+
+	Misc []generic.Xml `xml:",any"`
+}
+
+func (e *Entry) Field(v string) (any, error) {
+	if v == "name" || v == "Name" {
+		return e.Name, nil
+	}
+	if v == "description" || v == "Description" {
+		return e.Description, nil
+	}
+	if v == "tags" || v == "Tags" {
+		return e.Tags, nil
+	}
+	if v == "tags|LENGTH" || v == "Tags|LENGTH" {
+		return int64(len(e.Tags)), nil
+	}
+	if v == "fqdn" || v == "Fqdn" {
+		return e.Fqdn, nil
+	}
+	if v == "ip_netmask" || v == "IpNetmask" {
+		return e.IpNetmask, nil
+	}
+	if v == "ip_range" || v == "IpRange" {
+		return e.IpRange, nil
+	}
+	if v == "ip_wildcard" || v == "IpWildcard" {
+		return e.IpWildcard, nil
+	}
+
+	return nil, fmt.Errorf("unknown field")
 }
 
 func Versioning(vn version.Number) (Specifier, Normalizer, error) {
-    return Entry1Specify, &Entry1Container{}, nil
+	return specifyEntry, &entryXmlContainer{}, nil
 }
 
-func Entry1Specify(o Entry) (any, error) {
-    ans := Entry1{}
-    ans.Name = o.Name
-    ans.Description = o.Description
-    ans.Tags = util.StrToMem(o.Tags)
-    ans.IpNetmask = o.IpNetmask
-    ans.IpRange = o.IpRange
-    ans.Fqdn = o.Fqdn
-    ans.IpWildcard = o.IpWildcard
+func specifyEntry(o *Entry) (any, error) {
+	entry := entryXml{}
 
-    ans.Misc = o.Misc[fmt.Sprintf("%s\n%s", "Entry", o.Name)]
+	entry.Name = o.Name
+	entry.Description = o.Description
+	entry.Tags = util.StrToMem(o.Tags)
+	entry.Fqdn = o.Fqdn
+	entry.IpNetmask = o.IpNetmask
+	entry.IpRange = o.IpRange
+	entry.IpWildcard = o.IpWildcard
 
-    return ans, nil
+	entry.Misc = o.Misc["Entry"]
+
+	return entry, nil
 }
+func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
+	entryList := make([]*Entry, 0, len(c.Answer))
+	for _, o := range c.Answer {
+		entry := &Entry{
+			Misc: make(map[string][]generic.Xml),
+		}
+		entry.Name = o.Name
+		entry.Description = o.Description
+		entry.Tags = util.MemToStr(o.Tags)
+		entry.Fqdn = o.Fqdn
+		entry.IpNetmask = o.IpNetmask
+		entry.IpRange = o.IpRange
+		entry.IpWildcard = o.IpWildcard
 
-type Entry1Container struct {
-    Answer []Entry1 `xml:"entry"`
-}
+		entry.Misc["Entry"] = o.Misc
 
-func (c *Entry1Container) Normalize() ([]Entry, error) {
-    ans := make([]Entry, 0, len(c.Answer))
-    for _, var0 := range c.Answer {
-        var1 := Entry{
-            Misc: make(map[string] []generic.Xml),
-        }
-        var1.Name = var0.Name
-        var1.Description = var0.Description
-        var1.IpNetmask = var0.IpNetmask
-        var1.IpRange = var0.IpRange
-        var1.Fqdn = var0.Fqdn
-        var1.IpWildcard = var0.IpWildcard
+		entryList = append(entryList, entry)
+	}
 
-        var1.Misc[fmt.Sprintf("%s\n%s", "Entry", var0.Name)] = var0.Misc
-
-        ans = append(ans, var1)
-    }
-
-    return ans, nil
-}
-
-type Entry1 struct {
-    XMLName xml.Name `xml:"entry"`
-    Name string `xml:"name,attr"`
-    IpNetmask *string `xml:"ip-netmask"`
-    IpRange *string `xml:"ip-range"`
-    Fqdn *string `xml:"fqdn"`
-    IpWildcard *string `xml:"ip-wildcard"`
-    Description *string `xml:"description,omitempty"`
-    Tags *util.MemberType `xml:"tag"`
-
-    Misc []generic.Xml `xml:",any"`
+	return entryList, nil
 }
 
 func SpecMatches(a, b *Entry) bool {
-    if a == nil && b != nil || a != nil && b == nil {
-        return false
-    } else if a == nil && b == nil {
-        return true
-    }
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
 
-    // Don't compare Name.
+	// Don't compare Name.
+	if !util.StringsMatch(a.Description, b.Description) {
+		return false
+	}
+	if !util.OrderedListsMatch(a.Tags, b.Tags) {
+		return false
+	}
+	if !util.StringsMatch(a.Fqdn, b.Fqdn) {
+		return false
+	}
+	if !util.StringsMatch(a.IpNetmask, b.IpNetmask) {
+		return false
+	}
+	if !util.StringsMatch(a.IpRange, b.IpRange) {
+		return false
+	}
+	if !util.StringsMatch(a.IpWildcard, b.IpWildcard) {
+		return false
+	}
 
-    if !util.OptionalStringsMatch(a.Description, b.Description) {
-        return false
-    }
+	return true
+}
 
-    if !util.OrderedListsMatch(a.Tags, b.Tags) {
-        return false
-    }
+func (o *Entry) EntryName() string {
+	return o.Name
+}
 
-    if !util.OptionalStringsMatch(a.IpNetmask, b.IpNetmask) {
-        return false
-    }
-
-    if !util.OptionalStringsMatch(a.IpRange, b.IpRange) {
-        return false
-    }
-
-    if !util.OptionalStringsMatch(a.Fqdn, b.Fqdn) {
-        return false
-    }
-
-    if !util.OptionalStringsMatch(a.IpWildcard, b.IpWildcard) {
-        return false
-    }
-
-    return true
+func (o *Entry) SetEntryName(name string) {
+	o.Name = name
 }

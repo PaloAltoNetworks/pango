@@ -8,7 +8,11 @@ import (
 	"fmt"
 	"regexp"
 	"strings"
+
+	"github.com/PaloAltoNetworks/pango/version"
 )
+
+var FixedPanosVersionForMultiConfigMove = version.Number{99, 99, 99, ""}
 
 // VsysEntryType defines an entry config node with vsys entries underneath.
 type VsysEntryType struct {
@@ -59,19 +63,37 @@ func MapToVsysEnt(e map[string][]string) *VsysEntryType {
 }
 
 // YesNo returns "yes" on true, "no" on false.
-func YesNo(v bool) string {
-	if v {
-		return "yes"
+func YesNo(val *bool, defaultVal *bool) *string {
+	if val == nil && defaultVal == nil {
+		return nil
 	}
-	return "no"
+
+	result := "no"
+	if val != nil {
+		if *val {
+			result = "yes"
+		}
+	} else if *defaultVal {
+		result = "yes"
+	}
+	return &result
 }
 
 // AsBool returns true on yes, else false.
-func AsBool(val string) bool {
-	if val == "yes" {
-		return true
+func AsBool(val *string, defaultVal *string) *bool {
+	if val == nil && defaultVal == nil {
+		return nil
 	}
-	return false
+
+	result := false
+	if val != nil {
+		if *val == "yes" {
+			result = true
+		}
+	} else if *defaultVal == "yes" {
+		result = true
+	}
+	return &result
 }
 
 // AsXpath makes an xpath out of the given interface.
@@ -106,6 +128,11 @@ func AsEntryXpath(vals []string) string {
 	buf.WriteString("]")
 
 	return buf.String()
+}
+
+// AsUuidXpath returns an xpath segment as a UUID location.
+func AsUuidXpath(v string) string {
+	return fmt.Sprintf("entry[@uuid='%s']", v)
 }
 
 // AsMemberXpath returns the given values as a member xpath segment.
