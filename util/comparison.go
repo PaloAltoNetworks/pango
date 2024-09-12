@@ -61,16 +61,68 @@ func TargetsMatch(a, b map[string][]string) bool {
 	return true
 }
 
-func OptionalStringsMatch(a, b *string) bool {
-    if a == nil && b == nil {
-        return true
-    } else if a == nil || b == nil {
-        return false
-    }
+func StringsMatch(a, b *string) bool {
+	if a == nil && b == nil {
+		return true
+	} else if a == nil || b == nil {
+		return false
+	}
 
-    return *a == *b
+	return *a == *b
 }
 
-func StringsMatch(a, b string) bool {
-    return a == b
+func StringsEqual(a, b string) bool {
+	return a == b
+}
+
+func BoolsMatch(a, b *bool) bool {
+	if a == nil && b == nil {
+		return true
+	} else if a == nil || b == nil {
+		return false
+	}
+
+	return *a == *b
+}
+
+func FloatsMatch(a, b *float64) bool {
+	if a == nil && b == nil {
+		return true
+	} else if a == nil || b == nil {
+		return false
+	}
+
+	return *a == *b
+}
+
+func IntsMatch(a, b *int) bool {
+	if a == nil && b == nil {
+		return true
+	} else if a == nil || b == nil {
+		return false
+	}
+
+	return *a == *b
+}
+
+func Ints64Match(a, b *int64) bool {
+	if a == nil && b == nil {
+		return true
+	} else if a == nil || b == nil {
+		return false
+	}
+
+	return *a == *b
+}
+
+func AnysMatch(a, b any) bool {
+	if a == nil && b == nil {
+		return true
+	}
+
+	if a == nil || b == nil {
+		return false
+	}
+
+	return true
 }

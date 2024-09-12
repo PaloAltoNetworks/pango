@@ -1,18 +1,19 @@
 package errors
 
 import (
-    stderr "errors"
 	"encoding/xml"
+	stderr "errors"
 	"fmt"
 	"strings"
-
-	"github.com/PaloAltoNetworks/pango/util"
 )
 
-
-var NoLocationSpecifiedError = stderr.New("no location specified")
+var InvalidFilterError = stderr.New("filter is improperly formatted")
 var NameNotSpecifiedError = stderr.New("name is not specified")
-
+var NoLocationSpecifiedError = stderr.New("no location specified")
+var RelativePositionWithRemoveEverythingElseError = stderr.New("cannot do relative positioning when removing all other rules")
+var UnrecognizedOperatorError = stderr.New("unsupported filter operator")
+var UnsupportedFilterTypeError = stderr.New("unsupported type for filtering")
+var UuidNotSpecifiedError = stderr.New("uuid is not specified")
 
 // Panos is an error returned from PAN-OS.
 //
@@ -30,6 +31,15 @@ func (e Panos) Error() string {
 // ObjectNotFound returns true if this is an object not found error.
 func (e Panos) ObjectNotFound() bool {
 	return e.Code == 7
+}
+
+func IsObjectNotFound(e error) bool {
+	e2, ok := e.(Panos)
+	if ok && e2.ObjectNotFound() {
+		return true
+	}
+
+	return false
 }
 
 // ObjectNotFound returns an object not found error.
@@ -64,8 +74,12 @@ type errorCheck struct {
 }
 
 type errorCheckMsg struct {
-	Line    []util.CdataText `xml:"line"`
-	Message string           `xml:",chardata"`
+	Line    []errLine `xml:"line"`
+	Message string    `xml:",chardata"`
+}
+
+type errLine struct {
+	Text string `xml:",cdata"`
 }
 
 func (e *errorCheck) Failed() bool {
