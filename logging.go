@@ -34,7 +34,7 @@ const (
 	LogCategoryAll = LogCategoryPango | LogCategoryOp | LogCategorySend |
 		LogCategoryReceive | LogCategoryCurl
 	// Make sure that LogCategorySensitive is always last, explicitly set to 1 << 32
-	LogCategorySensitive LogCategory
+	LogCategorySensitive LogCategory = 1 << 16
 )
 
 var logCategoryToString = map[LogCategory]string{
