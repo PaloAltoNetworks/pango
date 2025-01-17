@@ -15,10 +15,9 @@ type ImportLocation interface {
 }
 
 type Location struct {
-	DeviceGroup      *DeviceGroupLocation      `json:"device_group,omitempty"`
-	FromPanoramaVsys *FromPanoramaVsysLocation `json:"from_panorama_vsys,omitempty"`
-	Shared           *SharedLocation           `json:"shared,omitempty"`
-	Vsys             *VsysLocation             `json:"vsys,omitempty"`
+	DeviceGroup *DeviceGroupLocation `json:"device_group,omitempty"`
+	Shared      *SharedLocation      `json:"shared,omitempty"`
+	Vsys        *VsysLocation        `json:"vsys,omitempty"`
 }
 
 type DeviceGroupLocation struct {
@@ -27,17 +26,12 @@ type DeviceGroupLocation struct {
 	Rulebase       string `json:"rulebase"`
 }
 
-type FromPanoramaVsysLocation struct {
-	Vsys string `json:"vsys"`
-}
-
 type SharedLocation struct {
 	Rulebase string `json:"rulebase"`
 }
 
 type VsysLocation struct {
 	NgfwDevice string `json:"ngfw_device"`
-	Rulebase   string `json:"rulebase"`
 	Vsys       string `json:"vsys"`
 }
 
@@ -46,12 +40,6 @@ func NewDeviceGroupLocation() *Location {
 		DeviceGroup:    "",
 		PanoramaDevice: "localhost.localdomain",
 		Rulebase:       "pre-rulebase",
-	},
-	}
-}
-func NewFromPanoramaVsysLocation() *Location {
-	return &Location{FromPanoramaVsys: &FromPanoramaVsysLocation{
-		Vsys: "vsys1",
 	},
 	}
 }
@@ -64,7 +52,6 @@ func NewSharedLocation() *Location {
 func NewVsysLocation() *Location {
 	return &Location{Vsys: &VsysLocation{
 		NgfwDevice: "localhost.localdomain",
-		Rulebase:   "pre-rulebase",
 		Vsys:       "vsys1",
 	},
 	}
@@ -85,11 +72,6 @@ func (o Location) IsValid() error {
 			return fmt.Errorf("Rulebase is unspecified")
 		}
 		count++
-	case o.FromPanoramaVsys != nil:
-		if o.FromPanoramaVsys.Vsys == "" {
-			return fmt.Errorf("Vsys is unspecified")
-		}
-		count++
 	case o.Shared != nil:
 		if o.Shared.Rulebase == "" {
 			return fmt.Errorf("Rulebase is unspecified")
@@ -98,9 +80,6 @@ func (o Location) IsValid() error {
 	case o.Vsys != nil:
 		if o.Vsys.NgfwDevice == "" {
 			return fmt.Errorf("NgfwDevice is unspecified")
-		}
-		if o.Vsys.Rulebase == "" {
-			return fmt.Errorf("Rulebase is unspecified")
 		}
 		if o.Vsys.Vsys == "" {
 			return fmt.Errorf("Vsys is unspecified")
@@ -142,17 +121,6 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 			util.AsEntryXpath([]string{o.DeviceGroup.DeviceGroup}),
 			o.DeviceGroup.Rulebase,
 		}
-	case o.FromPanoramaVsys != nil:
-		if o.FromPanoramaVsys.Vsys == "" {
-			return nil, fmt.Errorf("Vsys is unspecified")
-		}
-		ans = []string{
-			"config",
-			"panorama",
-			"vsys",
-			util.AsEntryXpath([]string{o.FromPanoramaVsys.Vsys}),
-			"rulebase",
-		}
 	case o.Shared != nil:
 		if o.Shared.Rulebase == "" {
 			return nil, fmt.Errorf("Rulebase is unspecified")
@@ -165,9 +133,6 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 	case o.Vsys != nil:
 		if o.Vsys.NgfwDevice == "" {
 			return nil, fmt.Errorf("NgfwDevice is unspecified")
-		}
-		if o.Vsys.Rulebase == "" {
-			return nil, fmt.Errorf("Rulebase is unspecified")
 		}
 		if o.Vsys.Vsys == "" {
 			return nil, fmt.Errorf("Vsys is unspecified")

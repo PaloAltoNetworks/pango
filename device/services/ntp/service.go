@@ -155,7 +155,6 @@ func (s *Service) delete(ctx context.Context, loc Location, config *Config) erro
 		return err
 	}
 	deleteSuffixes := []string{}
-	deleteSuffixes = append(deleteSuffixes, "ntp-servers")
 
 	for _, suffix := range deleteSuffixes {
 		cmd := &xmlapi.Config{

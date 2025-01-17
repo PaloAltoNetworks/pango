@@ -33,7 +33,7 @@ const (
 	LogCategoryCurl
 	LogCategoryAll = LogCategoryPango | LogCategoryOp | LogCategorySend |
 		LogCategoryReceive | LogCategoryCurl
-	// Make sure that LogCategorySensitive is always last, explicitly set to 1 << 32
+	// Make sure that LogCategorySensitive is always last, explicitly set to 1 << 16
 	LogCategorySensitive LogCategory = 1 << 16
 )
 
@@ -80,7 +80,6 @@ func LogCategoryFromStrings(symbols []string) (LogCategory, error) {
 		}
 
 		logCategoriesMask |= category
-		slog.Info("logCategoriesMask", "equal", logCategoriesMask)
 	}
 	return logCategoriesMask, nil
 }

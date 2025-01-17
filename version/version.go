@@ -28,6 +28,19 @@ func (v Number) Gte(o Number) bool {
 	return v.Patch >= o.Patch
 }
 
+// Lt tests if this version number is lesser than to the argument.
+func (v Number) Lt(o Number) bool {
+	if v.Major != o.Major {
+		return v.Major < o.Major
+	}
+
+	if v.Minor != o.Minor {
+		return v.Minor < o.Minor
+	}
+
+	return v.Patch < o.Patch
+}
+
 // String returns the version number as a string.
 func (v Number) String() string {
 	if v.Suffix == "" {

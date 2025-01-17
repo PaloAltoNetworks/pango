@@ -23,7 +23,7 @@ type Entry struct {
 	Http                    *bool
 	HttpOcsp                *bool
 	Https                   *bool
-	PermittedIps            []string
+	PermittedIp             []PermittedIp
 	Ping                    *bool
 	ResponsePages           *bool
 	Snmp                    *bool
@@ -36,25 +36,35 @@ type Entry struct {
 	Misc map[string][]generic.Xml
 }
 
+type PermittedIp struct {
+	Name string
+}
+
 type entryXmlContainer struct {
 	Answer []entryXml `xml:"entry"`
 }
 
 type entryXml struct {
-	XMLName                 xml.Name        `xml:"entry"`
-	Name                    string          `xml:"name,attr"`
-	Http                    *string         `xml:"http,omitempty"`
-	HttpOcsp                *string         `xml:"http-ocsp,omitempty"`
-	Https                   *string         `xml:"https,omitempty"`
-	PermittedIps            *util.EntryType `xml:"permitted-ip,omitempty"`
-	Ping                    *string         `xml:"ping,omitempty"`
-	ResponsePages           *string         `xml:"response-pages,omitempty"`
-	Snmp                    *string         `xml:"snmp,omitempty"`
-	Ssh                     *string         `xml:"ssh,omitempty"`
-	Telnet                  *string         `xml:"telnet,omitempty"`
-	UseridService           *string         `xml:"userid-service,omitempty"`
-	UseridSyslogListenerSsl *string         `xml:"userid-syslog-listener-ssl,omitempty"`
-	UseridSyslogListenerUdp *string         `xml:"userid-syslog-listener-udp,omitempty"`
+	XMLName                 xml.Name         `xml:"entry"`
+	Name                    string           `xml:"name,attr"`
+	Http                    *string          `xml:"http,omitempty"`
+	HttpOcsp                *string          `xml:"http-ocsp,omitempty"`
+	Https                   *string          `xml:"https,omitempty"`
+	PermittedIp             []PermittedIpXml `xml:"permitted-ip>entry,omitempty"`
+	Ping                    *string          `xml:"ping,omitempty"`
+	ResponsePages           *string          `xml:"response-pages,omitempty"`
+	Snmp                    *string          `xml:"snmp,omitempty"`
+	Ssh                     *string          `xml:"ssh,omitempty"`
+	Telnet                  *string          `xml:"telnet,omitempty"`
+	UseridService           *string          `xml:"userid-service,omitempty"`
+	UseridSyslogListenerSsl *string          `xml:"userid-syslog-listener-ssl,omitempty"`
+	UseridSyslogListenerUdp *string          `xml:"userid-syslog-listener-udp,omitempty"`
+
+	Misc []generic.Xml `xml:",any"`
+}
+type PermittedIpXml struct {
+	XMLName xml.Name `xml:"entry"`
+	Name    string   `xml:"name,attr"`
 
 	Misc []generic.Xml `xml:",any"`
 }
@@ -72,11 +82,11 @@ func (e *Entry) Field(v string) (any, error) {
 	if v == "https" || v == "Https" {
 		return e.Https, nil
 	}
-	if v == "permitted_ips" || v == "PermittedIps" {
-		return e.PermittedIps, nil
+	if v == "permitted_ip" || v == "PermittedIp" {
+		return e.PermittedIp, nil
 	}
-	if v == "permitted_ips|LENGTH" || v == "PermittedIps|LENGTH" {
-		return int64(len(e.PermittedIps)), nil
+	if v == "permitted_ip|LENGTH" || v == "PermittedIp|LENGTH" {
+		return int64(len(e.PermittedIp)), nil
 	}
 	if v == "ping" || v == "Ping" {
 		return e.Ping, nil
@@ -107,17 +117,31 @@ func (e *Entry) Field(v string) (any, error) {
 }
 
 func Versioning(vn version.Number) (Specifier, Normalizer, error) {
+
 	return specifyEntry, &entryXmlContainer{}, nil
 }
-
 func specifyEntry(o *Entry) (any, error) {
 	entry := entryXml{}
-
 	entry.Name = o.Name
 	entry.Http = util.YesNo(o.Http, nil)
 	entry.HttpOcsp = util.YesNo(o.HttpOcsp, nil)
 	entry.Https = util.YesNo(o.Https, nil)
-	entry.PermittedIps = util.StrToEnt(o.PermittedIps)
+	var nestedPermittedIpCol []PermittedIpXml
+	if o.PermittedIp != nil {
+		nestedPermittedIpCol = []PermittedIpXml{}
+		for _, oPermittedIp := range o.PermittedIp {
+			nestedPermittedIp := PermittedIpXml{}
+			if _, ok := o.Misc["PermittedIp"]; ok {
+				nestedPermittedIp.Misc = o.Misc["PermittedIp"]
+			}
+			if oPermittedIp.Name != "" {
+				nestedPermittedIp.Name = oPermittedIp.Name
+			}
+			nestedPermittedIpCol = append(nestedPermittedIpCol, nestedPermittedIp)
+		}
+		entry.PermittedIp = nestedPermittedIpCol
+	}
+
 	entry.Ping = util.YesNo(o.Ping, nil)
 	entry.ResponsePages = util.YesNo(o.ResponsePages, nil)
 	entry.Snmp = util.YesNo(o.Snmp, nil)
@@ -131,6 +155,7 @@ func specifyEntry(o *Entry) (any, error) {
 
 	return entry, nil
 }
+
 func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 	entryList := make([]*Entry, 0, len(c.Answer))
 	for _, o := range c.Answer {
@@ -141,7 +166,22 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 		entry.Http = util.AsBool(o.Http, nil)
 		entry.HttpOcsp = util.AsBool(o.HttpOcsp, nil)
 		entry.Https = util.AsBool(o.Https, nil)
-		entry.PermittedIps = util.EntToStr(o.PermittedIps)
+		var nestedPermittedIpCol []PermittedIp
+		if o.PermittedIp != nil {
+			nestedPermittedIpCol = []PermittedIp{}
+			for _, oPermittedIp := range o.PermittedIp {
+				nestedPermittedIp := PermittedIp{}
+				if oPermittedIp.Misc != nil {
+					entry.Misc["PermittedIp"] = oPermittedIp.Misc
+				}
+				if oPermittedIp.Name != "" {
+					nestedPermittedIp.Name = oPermittedIp.Name
+				}
+				nestedPermittedIpCol = append(nestedPermittedIpCol, nestedPermittedIp)
+			}
+			entry.PermittedIp = nestedPermittedIpCol
+		}
+
 		entry.Ping = util.AsBool(o.Ping, nil)
 		entry.ResponsePages = util.AsBool(o.ResponsePages, nil)
 		entry.Snmp = util.AsBool(o.Snmp, nil)
@@ -176,7 +216,7 @@ func SpecMatches(a, b *Entry) bool {
 	if !util.BoolsMatch(a.Https, b.Https) {
 		return false
 	}
-	if !util.OrderedListsMatch(a.PermittedIps, b.PermittedIps) {
+	if !matchPermittedIp(a.PermittedIp, b.PermittedIp) {
 		return false
 	}
 	if !util.BoolsMatch(a.Ping, b.Ping) {
@@ -204,6 +244,22 @@ func SpecMatches(a, b *Entry) bool {
 		return false
 	}
 
+	return true
+}
+
+func matchPermittedIp(a []PermittedIp, b []PermittedIp) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	for _, a := range a {
+		for _, b := range b {
+			if !util.StringsEqual(a.Name, b.Name) {
+				return false
+			}
+		}
+	}
 	return true
 }
 

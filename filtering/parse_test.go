@@ -932,13 +932,21 @@ func TestParseReturnsError(t *testing.T) {
 		"foobar",
 		"(",
 		")",
-		"",
 	}
 
 	for _, s := range checks {
 		if _, err := Parse(s, `"`); err == nil {
 			t.Fatalf("invalid filter string was ok: %q", s)
 		}
+	}
+}
+
+func TestParseEmptyString(t *testing.T) {
+	resp, err := Parse("", `"`)
+	if err != nil {
+		t.Fatalf("parse empty string error: %s", err)
+	} else if resp != nil {
+		t.Fatalf("parse empty string has non-nil group")
 	}
 }
 

@@ -15,7 +15,7 @@ import (
 type PangoClient interface {
 	// Basics.
 	Versioning() version.Number
-	Plugins() []plugin.Info
+	Plugins(context.Context) ([]plugin.Info, error)
 	GetTarget() string
 	IsPanorama() (bool, error)
 	IsFirewall() (bool, error)

@@ -60,8 +60,8 @@ type Client struct {
 
 	// Variables determined at runtime.
 	Version    version.Number    `json:"-"`
-	SystemInfo map[string]string `json:"-"`
-	Plugin     []plugin.Info     `json:"-"`
+	systemInfo map[string]string `json:"-"`
+	plugins    []plugin.Info     `json:"-"`
 
 	// Internal variables.
 	con        *http.Client
@@ -81,9 +81,24 @@ func (c *Client) Versioning() version.Number {
 	return c.Version
 }
 
-// Plugins returns the list of plugins.
-func (c *Client) Plugins() []plugin.Info {
-	return c.Plugin
+func (c *Client) SystemInfo(ctx context.Context) (map[string]string, error) {
+	if c.systemInfo == nil {
+		if err := c.RetrieveSystemInfo(ctx); err != nil {
+			return nil, err
+		}
+	}
+
+	return c.systemInfo, nil
+}
+
+func (c *Client) Plugins(ctx context.Context) ([]plugin.Info, error) {
+	if c.plugins == nil {
+		if err := c.RetrievePlugins(ctx); err != nil {
+			return nil, err
+		}
+	}
+
+	return c.plugins, nil
 }
 
 // GetTarget returns the Target param, used in certain API calls.
@@ -93,11 +108,11 @@ func (c *Client) GetTarget() string {
 
 // IsPanorama returns true if this is Panorama.
 func (c *Client) IsPanorama() (bool, error) {
-	if len(c.SystemInfo) == 0 {
+	if len(c.systemInfo) == 0 {
 		return false, fmt.Errorf("SystemInfo is nil")
 	}
 
-	model, ok := c.SystemInfo["model"]
+	model, ok := c.systemInfo["model"]
 	if !ok {
 		return false, fmt.Errorf("model not present in SystemInfo")
 	}
@@ -314,14 +329,6 @@ func (c *Client) Initialize(ctx context.Context) error {
 		}
 	}
 
-	if err = c.RetrieveSystemInfo(ctx); err != nil {
-		return err
-	}
-
-	if err = c.RetrievePlugins(ctx); err != nil {
-		return err
-	}
-
 	return nil
 }
 
@@ -352,12 +359,12 @@ func (c *Client) RetrieveSystemInfo(ctx context.Context) error {
 		return err
 	}
 
-	c.SystemInfo = make(map[string]string, len(ans.System.Tags))
+	c.systemInfo = make(map[string]string, len(ans.System.Tags))
 	for _, t := range ans.System.Tags {
 		if t.TrimmedText == nil {
 			continue
 		}
-		c.SystemInfo[t.XMLName.Local] = *t.TrimmedText
+		c.systemInfo[t.XMLName.Local] = *t.TrimmedText
 		if t.XMLName.Local == "sw-version" {
 			c.Version, err = version.New(*t.TrimmedText)
 			if err != nil {
@@ -453,7 +460,7 @@ func (c *Client) RetrievePlugins(ctx context.Context) error {
 		return err
 	}
 
-	c.Plugin = ans.Listing()
+	c.plugins = ans.Listing()
 
 	return nil
 }
@@ -1006,8 +1013,19 @@ func (c *Client) GetTechSupportFile(ctx context.Context) (string, []byte, error)
 func (c *Client) setupLogging(logging LoggingInfo) error {
 	var logger *slog.Logger
 
+	var logLevel slog.Level
+	var levelStr string
+	if levelStr = os.Getenv("PANOS_LOG_LEVEL"); c.CheckEnvironment && levelStr != "" {
+		err := logLevel.UnmarshalText([]byte(levelStr))
+		if err != nil {
+			return err
+		}
+	} else {
+		logLevel = slog.LevelInfo
+	}
+
 	if logging.SLogHandler == nil {
-		logger = slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: logging.LogLevel}))
+		logger = slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: logLevel}))
 		logger.Info("No slog handler provided, creating default os.Stderr handler.", "LogLevel", logging.LogLevel.Level())
 	} else {
 		logger = slog.New(logging.SLogHandler)
@@ -1019,7 +1037,7 @@ func (c *Client) setupLogging(logging LoggingInfo) error {
 	// 1. logging.LogCategories has the highest priority
 	// 2. If logging.LogCategories is not set, we check logging.LogSymbols
 	// 3. If logging.LogSymbols is empty and c.CheckEnvironment is true we consult
-	//    PANOS_LOGGING environment variable.
+	//    PANOS_LOG_CATEGORIES environment variable.
 	// 4. If no logging categories have been selected, default to basic library logging
 	//    (i.e. "pango" category)
 	logMask := logging.LogCategories
@@ -1031,7 +1049,7 @@ func (c *Client) setupLogging(logging LoggingInfo) error {
 		}
 
 		if logMask == 0 {
-			if val := os.Getenv("PANOS_LOGGING"); c.CheckEnvironment && val != "" {
+			if val := os.Getenv("PANOS_LOG_CATEGORIES"); c.CheckEnvironment && val != "" {
 				symbols := strings.Split(val, ",")
 				logMask, err = LogCategoryFromStrings(symbols)
 				if err != nil {

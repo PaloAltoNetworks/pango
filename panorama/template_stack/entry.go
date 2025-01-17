@@ -48,7 +48,6 @@ type entryXml struct {
 
 	Misc []generic.Xml `xml:",any"`
 }
-
 type UserGroupSourceXml struct {
 	MasterDevice *string `xml:"master-device,omitempty"`
 
@@ -85,12 +84,11 @@ func (e *Entry) Field(v string) (any, error) {
 }
 
 func Versioning(vn version.Number) (Specifier, Normalizer, error) {
+
 	return specifyEntry, &entryXmlContainer{}, nil
 }
-
 func specifyEntry(o *Entry) (any, error) {
 	entry := entryXml{}
-
 	entry.Name = o.Name
 	entry.DefaultVsys = o.DefaultVsys
 	entry.Description = o.Description
@@ -112,6 +110,7 @@ func specifyEntry(o *Entry) (any, error) {
 
 	return entry, nil
 }
+
 func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 	entryList := make([]*Entry, 0, len(c.Answer))
 	for _, o := range c.Answer {

@@ -58,7 +58,6 @@ type entryXml struct {
 
 	Misc []generic.Xml `xml:",any"`
 }
-
 type ConfigXml struct {
 	Devices []ConfigDevicesXml `xml:"devices>entry,omitempty"`
 
@@ -107,12 +106,11 @@ func (e *Entry) Field(v string) (any, error) {
 }
 
 func Versioning(vn version.Number) (Specifier, Normalizer, error) {
+
 	return specifyEntry, &entryXmlContainer{}, nil
 }
-
 func specifyEntry(o *Entry) (any, error) {
 	entry := entryXml{}
-
 	entry.Name = o.Name
 	var nestedConfig *ConfigXml
 	if o.Config != nil {
@@ -126,9 +124,6 @@ func specifyEntry(o *Entry) (any, error) {
 				nestedConfigDevices := ConfigDevicesXml{}
 				if _, ok := o.Misc["ConfigDevices"]; ok {
 					nestedConfigDevices.Misc = o.Misc["ConfigDevices"]
-				}
-				if oConfigDevices.Name != "" {
-					nestedConfigDevices.Name = oConfigDevices.Name
 				}
 				if oConfigDevices.Vsys != nil {
 					nestedConfigDevices.Vsys = []ConfigDevicesVsysXml{}
@@ -158,6 +153,9 @@ func specifyEntry(o *Entry) (any, error) {
 						nestedConfigDevices.Vsys = append(nestedConfigDevices.Vsys, nestedConfigDevicesVsys)
 					}
 				}
+				if oConfigDevices.Name != "" {
+					nestedConfigDevices.Name = oConfigDevices.Name
+				}
 				nestedConfig.Devices = append(nestedConfig.Devices, nestedConfigDevices)
 			}
 		}
@@ -171,6 +169,7 @@ func specifyEntry(o *Entry) (any, error) {
 
 	return entry, nil
 }
+
 func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 	entryList := make([]*Entry, 0, len(c.Answer))
 	for _, o := range c.Answer {
@@ -198,9 +197,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 							if oConfigDevicesVsys.Misc != nil {
 								entry.Misc["ConfigDevicesVsys"] = oConfigDevicesVsys.Misc
 							}
-							if oConfigDevicesVsys.Name != "" {
-								nestedConfigDevicesVsys.Name = oConfigDevicesVsys.Name
-							}
 							if oConfigDevicesVsys.Import != nil {
 								nestedConfigDevicesVsys.Import = &ConfigDevicesVsysImport{}
 								if oConfigDevicesVsys.Import.Misc != nil {
@@ -215,6 +211,9 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 										nestedConfigDevicesVsys.Import.Network.Interfaces = util.MemToStr(oConfigDevicesVsys.Import.Network.Interfaces)
 									}
 								}
+							}
+							if oConfigDevicesVsys.Name != "" {
+								nestedConfigDevicesVsys.Name = oConfigDevicesVsys.Name
 							}
 							nestedConfigDevices.Vsys = append(nestedConfigDevices.Vsys, nestedConfigDevicesVsys)
 						}
@@ -290,10 +289,10 @@ func matchConfigDevicesVsys(a []ConfigDevicesVsys, b []ConfigDevicesVsys) bool {
 	}
 	for _, a := range a {
 		for _, b := range b {
-			if !util.StringsEqual(a.Name, b.Name) {
+			if !matchConfigDevicesVsysImport(a.Import, b.Import) {
 				return false
 			}
-			if !matchConfigDevicesVsysImport(a.Import, b.Import) {
+			if !util.StringsEqual(a.Name, b.Name) {
 				return false
 			}
 		}

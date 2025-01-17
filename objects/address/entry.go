@@ -19,13 +19,14 @@ var (
 )
 
 type Entry struct {
-	Name        string
-	Description *string
-	Tags        []string
-	Fqdn        *string
-	IpNetmask   *string
-	IpRange     *string
-	IpWildcard  *string
+	Name            string
+	Description     *string
+	DisableOverride *string
+	Tag             []string
+	Fqdn            *string
+	IpNetmask       *string
+	IpRange         *string
+	IpWildcard      *string
 
 	Misc map[string][]generic.Xml
 }
@@ -35,14 +36,15 @@ type entryXmlContainer struct {
 }
 
 type entryXml struct {
-	XMLName     xml.Name         `xml:"entry"`
-	Name        string           `xml:"name,attr"`
-	Description *string          `xml:"description,omitempty"`
-	Tags        *util.MemberType `xml:"tag,omitempty"`
-	Fqdn        *string          `xml:"fqdn,omitempty"`
-	IpNetmask   *string          `xml:"ip-netmask,omitempty"`
-	IpRange     *string          `xml:"ip-range,omitempty"`
-	IpWildcard  *string          `xml:"ip-wildcard,omitempty"`
+	XMLName         xml.Name         `xml:"entry"`
+	Name            string           `xml:"name,attr"`
+	Description     *string          `xml:"description,omitempty"`
+	DisableOverride *string          `xml:"disable-override,omitempty"`
+	Tag             *util.MemberType `xml:"tag,omitempty"`
+	Fqdn            *string          `xml:"fqdn,omitempty"`
+	IpNetmask       *string          `xml:"ip-netmask,omitempty"`
+	IpRange         *string          `xml:"ip-range,omitempty"`
+	IpWildcard      *string          `xml:"ip-wildcard,omitempty"`
 
 	Misc []generic.Xml `xml:",any"`
 }
@@ -54,11 +56,14 @@ func (e *Entry) Field(v string) (any, error) {
 	if v == "description" || v == "Description" {
 		return e.Description, nil
 	}
-	if v == "tags" || v == "Tags" {
-		return e.Tags, nil
+	if v == "disable_override" || v == "DisableOverride" {
+		return e.DisableOverride, nil
 	}
-	if v == "tags|LENGTH" || v == "Tags|LENGTH" {
-		return int64(len(e.Tags)), nil
+	if v == "tag" || v == "Tag" {
+		return e.Tag, nil
+	}
+	if v == "tag|LENGTH" || v == "Tag|LENGTH" {
+		return int64(len(e.Tag)), nil
 	}
 	if v == "fqdn" || v == "Fqdn" {
 		return e.Fqdn, nil
@@ -77,15 +82,15 @@ func (e *Entry) Field(v string) (any, error) {
 }
 
 func Versioning(vn version.Number) (Specifier, Normalizer, error) {
+
 	return specifyEntry, &entryXmlContainer{}, nil
 }
-
 func specifyEntry(o *Entry) (any, error) {
 	entry := entryXml{}
-
 	entry.Name = o.Name
 	entry.Description = o.Description
-	entry.Tags = util.StrToMem(o.Tags)
+	entry.DisableOverride = o.DisableOverride
+	entry.Tag = util.StrToMem(o.Tag)
 	entry.Fqdn = o.Fqdn
 	entry.IpNetmask = o.IpNetmask
 	entry.IpRange = o.IpRange
@@ -95,6 +100,7 @@ func specifyEntry(o *Entry) (any, error) {
 
 	return entry, nil
 }
+
 func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 	entryList := make([]*Entry, 0, len(c.Answer))
 	for _, o := range c.Answer {
@@ -103,7 +109,8 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 		}
 		entry.Name = o.Name
 		entry.Description = o.Description
-		entry.Tags = util.MemToStr(o.Tags)
+		entry.DisableOverride = o.DisableOverride
+		entry.Tag = util.MemToStr(o.Tag)
 		entry.Fqdn = o.Fqdn
 		entry.IpNetmask = o.IpNetmask
 		entry.IpRange = o.IpRange
@@ -128,7 +135,10 @@ func SpecMatches(a, b *Entry) bool {
 	if !util.StringsMatch(a.Description, b.Description) {
 		return false
 	}
-	if !util.OrderedListsMatch(a.Tags, b.Tags) {
+	if !util.StringsMatch(a.DisableOverride, b.DisableOverride) {
+		return false
+	}
+	if !util.OrderedListsMatch(a.Tag, b.Tag) {
 		return false
 	}
 	if !util.StringsMatch(a.Fqdn, b.Fqdn) {

@@ -15,20 +15,14 @@ type ImportLocation interface {
 }
 
 type Location struct {
-	DeviceGroup        *DeviceGroupLocation      `json:"device_group,omitempty"`
-	FromPanoramaShared bool                      `json:"from_panorama_shared"`
-	FromPanoramaVsys   *FromPanoramaVsysLocation `json:"from_panorama_vsys,omitempty"`
-	Shared             bool                      `json:"shared"`
-	Vsys               *VsysLocation             `json:"vsys,omitempty"`
+	DeviceGroup *DeviceGroupLocation `json:"device_group,omitempty"`
+	Shared      bool                 `json:"shared"`
+	Vsys        *VsysLocation        `json:"vsys,omitempty"`
 }
 
 type DeviceGroupLocation struct {
 	DeviceGroup    string `json:"device_group"`
 	PanoramaDevice string `json:"panorama_device"`
-}
-
-type FromPanoramaVsysLocation struct {
-	Vsys string `json:"vsys"`
 }
 
 type VsysLocation struct {
@@ -40,12 +34,6 @@ func NewDeviceGroupLocation() *Location {
 	return &Location{DeviceGroup: &DeviceGroupLocation{
 		DeviceGroup:    "",
 		PanoramaDevice: "localhost.localdomain",
-	},
-	}
-}
-func NewFromPanoramaVsysLocation() *Location {
-	return &Location{FromPanoramaVsys: &FromPanoramaVsysLocation{
-		Vsys: "vsys1",
 	},
 	}
 }
@@ -72,13 +60,6 @@ func (o Location) IsValid() error {
 		}
 		if o.DeviceGroup.PanoramaDevice == "" {
 			return fmt.Errorf("PanoramaDevice is unspecified")
-		}
-		count++
-	case o.FromPanoramaShared:
-		count++
-	case o.FromPanoramaVsys != nil:
-		if o.FromPanoramaVsys.Vsys == "" {
-			return fmt.Errorf("Vsys is unspecified")
 		}
 		count++
 	case o.Shared:
@@ -122,22 +103,6 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 			util.AsEntryXpath([]string{o.DeviceGroup.PanoramaDevice}),
 			"device-group",
 			util.AsEntryXpath([]string{o.DeviceGroup.DeviceGroup}),
-		}
-	case o.FromPanoramaShared:
-		ans = []string{
-			"config",
-			"panorama",
-			"shared",
-		}
-	case o.FromPanoramaVsys != nil:
-		if o.FromPanoramaVsys.Vsys == "" {
-			return nil, fmt.Errorf("Vsys is unspecified")
-		}
-		ans = []string{
-			"config",
-			"panorama",
-			"vsys",
-			util.AsEntryXpath([]string{o.FromPanoramaVsys.Vsys}),
 		}
 	case o.Shared:
 		ans = []string{

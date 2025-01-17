@@ -93,11 +93,11 @@ func (c *configXmlContainer) Normalize() ([]*Config, error) {
 				if o.DnsSetting.Servers.Misc != nil {
 					config.Misc["DnsSettingServers"] = o.DnsSetting.Servers.Misc
 				}
-				if o.DnsSetting.Servers.Secondary != nil {
-					nestedDnsSetting.Servers.Secondary = o.DnsSetting.Servers.Secondary
-				}
 				if o.DnsSetting.Servers.Primary != nil {
 					nestedDnsSetting.Servers.Primary = o.DnsSetting.Servers.Primary
+				}
+				if o.DnsSetting.Servers.Secondary != nil {
+					nestedDnsSetting.Servers.Secondary = o.DnsSetting.Servers.Secondary
 				}
 			}
 		}

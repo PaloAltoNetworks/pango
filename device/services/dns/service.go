@@ -155,8 +155,6 @@ func (s *Service) delete(ctx context.Context, loc Location, config *Config) erro
 		return err
 	}
 	deleteSuffixes := []string{}
-	deleteSuffixes = append(deleteSuffixes, "dns-setting")
-	deleteSuffixes = append(deleteSuffixes, "fqdn-refresh-time")
 
 	for _, suffix := range deleteSuffixes {
 		cmd := &xmlapi.Config{

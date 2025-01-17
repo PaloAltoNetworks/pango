@@ -3,12 +3,33 @@ package ethernet
 import (
 	"context"
 	"fmt"
+	"sync"
 
 	"github.com/PaloAltoNetworks/pango/errors"
 	"github.com/PaloAltoNetworks/pango/filtering"
 	"github.com/PaloAltoNetworks/pango/util"
 	"github.com/PaloAltoNetworks/pango/xmlapi"
 )
+
+var (
+	importsMutexMap     = make(map[string]*sync.Mutex)
+	importsMutexMapLock = sync.Mutex{}
+)
+
+func (s *Service) getImportMutex(xpath string) *sync.Mutex {
+	importsMutexMapLock.Lock()
+	defer importsMutexMapLock.Unlock()
+
+	var importMutex *sync.Mutex
+	var ok bool
+	importMutex, ok = importsMutexMap[xpath]
+	if !ok {
+		importMutex = &sync.Mutex{}
+		importsMutexMap[xpath] = importMutex
+	}
+
+	return importMutex
+}
 
 type Service struct {
 	client util.PangoClient
@@ -60,8 +81,16 @@ func (s *Service) Create(ctx context.Context, loc Location, importLocations []Im
 
 func (s *Service) importToLocations(ctx context.Context, loc Location, importLocations []ImportLocation, entryName string) error {
 	vn := s.client.Versioning()
-	for _, elt := range importLocations {
-		xpath, err := elt.XpathForLocation(vn, loc)
+
+	importToLocation := func(il ImportLocation) error {
+		xpath, err := il.XpathForLocation(vn, loc)
+		if err != nil {
+			return err
+		}
+
+		mutex := s.getImportMutex(util.AsXpath(xpath))
+		mutex.Lock()
+		defer mutex.Unlock()
 
 		cmd := &xmlapi.Config{
 			Action: "get",
@@ -73,7 +102,7 @@ func (s *Service) importToLocations(ctx context.Context, loc Location, importLoc
 			return err
 		}
 
-		existing, err := elt.UnmarshalPangoXML(bytes)
+		existing, err := il.UnmarshalPangoXML(bytes)
 		if err != nil {
 			return err
 		}
@@ -86,7 +115,7 @@ func (s *Service) importToLocations(ctx context.Context, loc Location, importLoc
 
 		existing = append(existing, entryName)
 
-		element, err := elt.MarshalPangoXML(existing)
+		element, err := il.MarshalPangoXML(existing)
 		if err != nil {
 			return err
 		}
@@ -101,19 +130,36 @@ func (s *Service) importToLocations(ctx context.Context, loc Location, importLoc
 		if err != nil {
 			return err
 		}
+
+		return err
+	}
+
+	for _, elt := range importLocations {
+		err := importToLocation(elt)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
 }
 
-func (s *Service) unimportFromLocations(ctx context.Context, updates *xmlapi.MultiConfig, loc Location, importLocations []ImportLocation, values []string) error {
+func (s *Service) unimportFromLocations(ctx context.Context, loc Location, importLocations []ImportLocation, values []string) error {
 	vn := s.client.Versioning()
 	valuesByName := make(map[string]bool)
 	for _, elt := range values {
 		valuesByName[elt] = true
 	}
-	for _, elt := range importLocations {
-		xpath, err := elt.XpathForLocation(vn, loc)
+
+	unimportFromLocation := func(il ImportLocation) error {
+		xpath, err := il.XpathForLocation(vn, loc)
+		if err != nil {
+			return err
+		}
+
+		mutex := s.getImportMutex(util.AsXpath(xpath))
+		mutex.Lock()
+		defer mutex.Unlock()
 
 		cmd := &xmlapi.Config{
 			Action: "get",
@@ -125,7 +171,7 @@ func (s *Service) unimportFromLocations(ctx context.Context, updates *xmlapi.Mul
 			return err
 		}
 
-		existing, err := elt.UnmarshalPangoXML(bytes)
+		existing, err := il.UnmarshalPangoXML(bytes)
 		if err != nil {
 			return err
 		}
@@ -137,7 +183,7 @@ func (s *Service) unimportFromLocations(ctx context.Context, updates *xmlapi.Mul
 			}
 		}
 
-		element, err := elt.MarshalPangoXML(filtered)
+		element, err := il.MarshalPangoXML(filtered)
 		if err != nil {
 			return err
 		}
@@ -149,6 +195,15 @@ func (s *Service) unimportFromLocations(ctx context.Context, updates *xmlapi.Mul
 		}
 
 		_, _, err = s.client.Communicate(ctx, cmd, false, nil)
+		if err != nil {
+			return err
+		}
+
+		return err
+	}
+
+	for _, elt := range importLocations {
+		err := unimportFromLocation(elt)
 		if err != nil {
 			return err
 		}
@@ -291,7 +346,7 @@ func (s *Service) delete(ctx context.Context, loc Location, importLocations []Im
 	vn := s.client.Versioning()
 	var err error
 	deletes := xmlapi.NewMultiConfig(len(values))
-	err = s.unimportFromLocations(ctx, deletes, loc, importLocations, values)
+	err = s.unimportFromLocations(ctx, loc, importLocations, values)
 	if err != nil {
 		return err
 	}
