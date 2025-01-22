@@ -153,14 +153,14 @@ func specifyEntry(o *Entry) (any, error) {
 		if _, ok := o.Misc["AdjustTcpMss"]; ok {
 			nestedAdjustTcpMss.Misc = o.Misc["AdjustTcpMss"]
 		}
-		if o.AdjustTcpMss.Enable != nil {
-			nestedAdjustTcpMss.Enable = util.YesNo(o.AdjustTcpMss.Enable, nil)
-		}
 		if o.AdjustTcpMss.Ipv4MssAdjustment != nil {
 			nestedAdjustTcpMss.Ipv4MssAdjustment = o.AdjustTcpMss.Ipv4MssAdjustment
 		}
 		if o.AdjustTcpMss.Ipv6MssAdjustment != nil {
 			nestedAdjustTcpMss.Ipv6MssAdjustment = o.AdjustTcpMss.Ipv6MssAdjustment
+		}
+		if o.AdjustTcpMss.Enable != nil {
+			nestedAdjustTcpMss.Enable = util.YesNo(o.AdjustTcpMss.Enable, nil)
 		}
 	}
 	entry.AdjustTcpMss = nestedAdjustTcpMss
@@ -189,24 +189,12 @@ func specifyEntry(o *Entry) (any, error) {
 		if _, ok := o.Misc["Ipv6"]; ok {
 			nestedIpv6.Misc = o.Misc["Ipv6"]
 		}
-		if o.Ipv6.InterfaceId != nil {
-			nestedIpv6.InterfaceId = o.Ipv6.InterfaceId
-		}
 		if o.Ipv6.Address != nil {
 			nestedIpv6.Address = []Ipv6AddressXml{}
 			for _, oIpv6Address := range o.Ipv6.Address {
 				nestedIpv6Address := Ipv6AddressXml{}
 				if _, ok := o.Misc["Ipv6Address"]; ok {
 					nestedIpv6Address.Misc = o.Misc["Ipv6Address"]
-				}
-				if oIpv6Address.Anycast != nil {
-					nestedIpv6Address.Anycast = &Ipv6AddressAnycastXml{}
-					if _, ok := o.Misc["Ipv6AddressAnycast"]; ok {
-						nestedIpv6Address.Anycast.Misc = o.Misc["Ipv6AddressAnycast"]
-					}
-				}
-				if oIpv6Address.Name != "" {
-					nestedIpv6Address.Name = oIpv6Address.Name
 				}
 				if oIpv6Address.EnableOnInterface != nil {
 					nestedIpv6Address.EnableOnInterface = util.YesNo(oIpv6Address.EnableOnInterface, nil)
@@ -217,11 +205,23 @@ func specifyEntry(o *Entry) (any, error) {
 						nestedIpv6Address.Prefix.Misc = o.Misc["Ipv6AddressPrefix"]
 					}
 				}
+				if oIpv6Address.Anycast != nil {
+					nestedIpv6Address.Anycast = &Ipv6AddressAnycastXml{}
+					if _, ok := o.Misc["Ipv6AddressAnycast"]; ok {
+						nestedIpv6Address.Anycast.Misc = o.Misc["Ipv6AddressAnycast"]
+					}
+				}
+				if oIpv6Address.Name != "" {
+					nestedIpv6Address.Name = oIpv6Address.Name
+				}
 				nestedIpv6.Address = append(nestedIpv6.Address, nestedIpv6Address)
 			}
 		}
 		if o.Ipv6.Enabled != nil {
 			nestedIpv6.Enabled = util.YesNo(o.Ipv6.Enabled, nil)
+		}
+		if o.Ipv6.InterfaceId != nil {
+			nestedIpv6.InterfaceId = o.Ipv6.InterfaceId
 		}
 	}
 	entry.Ipv6 = nestedIpv6
@@ -370,13 +370,13 @@ func matchAdjustTcpMss(a *AdjustTcpMss, b *AdjustTcpMss) bool {
 	} else if a == nil && b == nil {
 		return true
 	}
-	if !util.Ints64Match(a.Ipv4MssAdjustment, b.Ipv4MssAdjustment) {
-		return false
-	}
 	if !util.Ints64Match(a.Ipv6MssAdjustment, b.Ipv6MssAdjustment) {
 		return false
 	}
 	if !util.BoolsMatch(a.Enable, b.Enable) {
+		return false
+	}
+	if !util.Ints64Match(a.Ipv4MssAdjustment, b.Ipv4MssAdjustment) {
 		return false
 	}
 	return true
@@ -420,16 +420,16 @@ func matchIpv6Address(a []Ipv6Address, b []Ipv6Address) bool {
 	}
 	for _, a := range a {
 		for _, b := range b {
-			if !util.BoolsMatch(a.EnableOnInterface, b.EnableOnInterface) {
-				return false
-			}
-			if !matchIpv6AddressPrefix(a.Prefix, b.Prefix) {
-				return false
-			}
 			if !matchIpv6AddressAnycast(a.Anycast, b.Anycast) {
 				return false
 			}
 			if !util.StringsEqual(a.Name, b.Name) {
+				return false
+			}
+			if !util.BoolsMatch(a.EnableOnInterface, b.EnableOnInterface) {
+				return false
+			}
+			if !matchIpv6AddressPrefix(a.Prefix, b.Prefix) {
 				return false
 			}
 		}

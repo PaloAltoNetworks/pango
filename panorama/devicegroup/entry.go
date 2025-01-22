@@ -98,11 +98,11 @@ func specifyEntry(o *Entry) (any, error) {
 			if _, ok := o.Misc["Devices"]; ok {
 				nestedDevices.Misc = o.Misc["Devices"]
 			}
-			if oDevices.Vsys != nil {
-				nestedDevices.Vsys = util.StrToMem(oDevices.Vsys)
-			}
 			if oDevices.Name != "" {
 				nestedDevices.Name = oDevices.Name
+			}
+			if oDevices.Vsys != nil {
+				nestedDevices.Vsys = util.StrToMem(oDevices.Vsys)
 			}
 			nestedDevicesCol = append(nestedDevicesCol, nestedDevices)
 		}
@@ -133,11 +133,11 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				if oDevices.Misc != nil {
 					entry.Misc["Devices"] = oDevices.Misc
 				}
-				if oDevices.Vsys != nil {
-					nestedDevices.Vsys = util.MemToStr(oDevices.Vsys)
-				}
 				if oDevices.Name != "" {
 					nestedDevices.Name = oDevices.Name
+				}
+				if oDevices.Vsys != nil {
+					nestedDevices.Vsys = util.MemToStr(oDevices.Vsys)
 				}
 				nestedDevicesCol = append(nestedDevicesCol, nestedDevices)
 			}

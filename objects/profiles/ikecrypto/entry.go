@@ -146,9 +146,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 			if o.Lifetime.Misc != nil {
 				entry.Misc["Lifetime"] = o.Lifetime.Misc
 			}
-			if o.Lifetime.Days != nil {
-				nestedLifetime.Days = o.Lifetime.Days
-			}
 			if o.Lifetime.Hours != nil {
 				nestedLifetime.Hours = o.Lifetime.Hours
 			}
@@ -157,6 +154,9 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 			}
 			if o.Lifetime.Seconds != nil {
 				nestedLifetime.Seconds = o.Lifetime.Seconds
+			}
+			if o.Lifetime.Days != nil {
+				nestedLifetime.Days = o.Lifetime.Days
 			}
 		}
 		entry.Lifetime = nestedLifetime

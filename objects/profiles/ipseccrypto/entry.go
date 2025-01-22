@@ -129,17 +129,17 @@ func specifyEntry(o *Entry) (any, error) {
 		if _, ok := o.Misc["Lifesize"]; ok {
 			nestedLifesize.Misc = o.Misc["Lifesize"]
 		}
-		if o.Lifesize.Mb != nil {
-			nestedLifesize.Mb = o.Lifesize.Mb
-		}
-		if o.Lifesize.Tb != nil {
-			nestedLifesize.Tb = o.Lifesize.Tb
-		}
 		if o.Lifesize.Gb != nil {
 			nestedLifesize.Gb = o.Lifesize.Gb
 		}
 		if o.Lifesize.Kb != nil {
 			nestedLifesize.Kb = o.Lifesize.Kb
+		}
+		if o.Lifesize.Mb != nil {
+			nestedLifesize.Mb = o.Lifesize.Mb
+		}
+		if o.Lifesize.Tb != nil {
+			nestedLifesize.Tb = o.Lifesize.Tb
 		}
 	}
 	entry.Lifesize = nestedLifesize
@@ -150,17 +150,17 @@ func specifyEntry(o *Entry) (any, error) {
 		if _, ok := o.Misc["Lifetime"]; ok {
 			nestedLifetime.Misc = o.Misc["Lifetime"]
 		}
-		if o.Lifetime.Days != nil {
-			nestedLifetime.Days = o.Lifetime.Days
-		}
-		if o.Lifetime.Hours != nil {
-			nestedLifetime.Hours = o.Lifetime.Hours
-		}
 		if o.Lifetime.Minutes != nil {
 			nestedLifetime.Minutes = o.Lifetime.Minutes
 		}
 		if o.Lifetime.Seconds != nil {
 			nestedLifetime.Seconds = o.Lifetime.Seconds
+		}
+		if o.Lifetime.Days != nil {
+			nestedLifetime.Days = o.Lifetime.Days
+		}
+		if o.Lifetime.Hours != nil {
+			nestedLifetime.Hours = o.Lifetime.Hours
 		}
 	}
 	entry.Lifetime = nestedLifetime
@@ -232,17 +232,17 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 			if o.Lifetime.Misc != nil {
 				entry.Misc["Lifetime"] = o.Lifetime.Misc
 			}
-			if o.Lifetime.Days != nil {
-				nestedLifetime.Days = o.Lifetime.Days
-			}
-			if o.Lifetime.Hours != nil {
-				nestedLifetime.Hours = o.Lifetime.Hours
-			}
 			if o.Lifetime.Minutes != nil {
 				nestedLifetime.Minutes = o.Lifetime.Minutes
 			}
 			if o.Lifetime.Seconds != nil {
 				nestedLifetime.Seconds = o.Lifetime.Seconds
+			}
+			if o.Lifetime.Days != nil {
+				nestedLifetime.Days = o.Lifetime.Days
+			}
+			if o.Lifetime.Hours != nil {
+				nestedLifetime.Hours = o.Lifetime.Hours
 			}
 		}
 		entry.Lifetime = nestedLifetime
@@ -309,26 +309,6 @@ func SpecMatches(a, b *Entry) bool {
 	return true
 }
 
-func matchLifesize(a *Lifesize, b *Lifesize) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !util.Ints64Match(a.Mb, b.Mb) {
-		return false
-	}
-	if !util.Ints64Match(a.Tb, b.Tb) {
-		return false
-	}
-	if !util.Ints64Match(a.Gb, b.Gb) {
-		return false
-	}
-	if !util.Ints64Match(a.Kb, b.Kb) {
-		return false
-	}
-	return true
-}
 func matchLifetime(a *Lifetime, b *Lifetime) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
@@ -349,13 +329,22 @@ func matchLifetime(a *Lifetime, b *Lifetime) bool {
 	}
 	return true
 }
-func matchAh(a *Ah, b *Ah) bool {
+func matchLifesize(a *Lifesize, b *Lifesize) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
 	} else if a == nil && b == nil {
 		return true
 	}
-	if !util.OrderedListsMatch(a.Authentication, b.Authentication) {
+	if !util.Ints64Match(a.Gb, b.Gb) {
+		return false
+	}
+	if !util.Ints64Match(a.Kb, b.Kb) {
+		return false
+	}
+	if !util.Ints64Match(a.Mb, b.Mb) {
+		return false
+	}
+	if !util.Ints64Match(a.Tb, b.Tb) {
 		return false
 	}
 	return true
@@ -370,6 +359,17 @@ func matchEsp(a *Esp, b *Esp) bool {
 		return false
 	}
 	if !util.OrderedListsMatch(a.Encryption, b.Encryption) {
+		return false
+	}
+	return true
+}
+func matchAh(a *Ah, b *Ah) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !util.OrderedListsMatch(a.Authentication, b.Authentication) {
 		return false
 	}
 	return true

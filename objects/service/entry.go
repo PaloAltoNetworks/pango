@@ -294,40 +294,6 @@ func SpecMatches(a, b *Entry) bool {
 	return true
 }
 
-func matchProtocolTcpOverride(a *ProtocolTcpOverride, b *ProtocolTcpOverride) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !util.Ints64Match(a.HalfcloseTimeout, b.HalfcloseTimeout) {
-		return false
-	}
-	if !util.Ints64Match(a.Timeout, b.Timeout) {
-		return false
-	}
-	if !util.Ints64Match(a.TimewaitTimeout, b.TimewaitTimeout) {
-		return false
-	}
-	return true
-}
-func matchProtocolTcp(a *ProtocolTcp, b *ProtocolTcp) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !matchProtocolTcpOverride(a.Override, b.Override) {
-		return false
-	}
-	if !util.StringsMatch(a.Port, b.Port) {
-		return false
-	}
-	if !util.StringsMatch(a.SourcePort, b.SourcePort) {
-		return false
-	}
-	return true
-}
 func matchProtocolUdpOverride(a *ProtocolUdpOverride, b *ProtocolUdpOverride) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
@@ -356,16 +322,50 @@ func matchProtocolUdp(a *ProtocolUdp, b *ProtocolUdp) bool {
 	}
 	return true
 }
+func matchProtocolTcpOverride(a *ProtocolTcpOverride, b *ProtocolTcpOverride) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !util.Ints64Match(a.HalfcloseTimeout, b.HalfcloseTimeout) {
+		return false
+	}
+	if !util.Ints64Match(a.Timeout, b.Timeout) {
+		return false
+	}
+	if !util.Ints64Match(a.TimewaitTimeout, b.TimewaitTimeout) {
+		return false
+	}
+	return true
+}
+func matchProtocolTcp(a *ProtocolTcp, b *ProtocolTcp) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !util.StringsMatch(a.Port, b.Port) {
+		return false
+	}
+	if !util.StringsMatch(a.SourcePort, b.SourcePort) {
+		return false
+	}
+	if !matchProtocolTcpOverride(a.Override, b.Override) {
+		return false
+	}
+	return true
+}
 func matchProtocol(a *Protocol, b *Protocol) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
 	} else if a == nil && b == nil {
 		return true
 	}
-	if !matchProtocolTcp(a.Tcp, b.Tcp) {
+	if !matchProtocolUdp(a.Udp, b.Udp) {
 		return false
 	}
-	if !matchProtocolUdp(a.Udp, b.Udp) {
+	if !matchProtocolTcp(a.Tcp, b.Tcp) {
 		return false
 	}
 	return true

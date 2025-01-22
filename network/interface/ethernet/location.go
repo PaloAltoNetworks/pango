@@ -33,19 +33,19 @@ type Layer3TemplateImportLocation struct {
 
 type Layer3TemplateVirtualRouterImportLocation struct {
 	xpath  []string
-	router string
 	vsys   string
+	router string
 }
 
 type Layer3TemplateVirtualRouterImportLocationSpec struct {
-	Router string
 	Vsys   string
+	Router string
 }
 
 func NewLayer3TemplateVirtualRouterImportLocation(spec Layer3TemplateVirtualRouterImportLocationSpec) *Layer3TemplateImportLocation {
 	location := &Layer3TemplateVirtualRouterImportLocation{
-		router: spec.Router,
 		vsys:   spec.Vsys,
+		router: spec.Router,
 	}
 
 	return &Layer3TemplateImportLocation{

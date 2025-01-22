@@ -243,14 +243,14 @@ func specifyEntry(o *Entry) (any, error) {
 			if _, ok := o.Misc["MlavException"]; ok {
 				nestedMlavException.Misc = o.Misc["MlavException"]
 			}
-			if oMlavException.Filename != nil {
-				nestedMlavException.Filename = oMlavException.Filename
-			}
 			if oMlavException.Description != nil {
 				nestedMlavException.Description = oMlavException.Description
 			}
 			if oMlavException.Name != "" {
 				nestedMlavException.Name = oMlavException.Name
+			}
+			if oMlavException.Filename != nil {
+				nestedMlavException.Filename = oMlavException.Filename
 			}
 			nestedMlavExceptionCol = append(nestedMlavExceptionCol, nestedMlavException)
 		}
@@ -315,6 +315,9 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				if oDecoder.Misc != nil {
 					entry.Misc["Decoder"] = oDecoder.Misc
 				}
+				if oDecoder.Name != "" {
+					nestedDecoder.Name = oDecoder.Name
+				}
 				if oDecoder.Action != nil {
 					nestedDecoder.Action = oDecoder.Action
 				}
@@ -323,9 +326,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				}
 				if oDecoder.MlavAction != nil {
 					nestedDecoder.MlavAction = oDecoder.MlavAction
-				}
-				if oDecoder.Name != "" {
-					nestedDecoder.Name = oDecoder.Name
 				}
 				nestedDecoderCol = append(nestedDecoderCol, nestedDecoder)
 			}
@@ -361,14 +361,14 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				if oMlavException.Misc != nil {
 					entry.Misc["MlavException"] = oMlavException.Misc
 				}
+				if oMlavException.Name != "" {
+					nestedMlavException.Name = oMlavException.Name
+				}
 				if oMlavException.Filename != nil {
 					nestedMlavException.Filename = oMlavException.Filename
 				}
 				if oMlavException.Description != nil {
 					nestedMlavException.Description = oMlavException.Description
-				}
-				if oMlavException.Name != "" {
-					nestedMlavException.Name = oMlavException.Name
 				}
 				nestedMlavExceptionCol = append(nestedMlavExceptionCol, nestedMlavException)
 			}
@@ -449,10 +449,34 @@ func matchApplication(a []Application, b []Application) bool {
 	}
 	for _, a := range a {
 		for _, b := range b {
+			if !util.StringsMatch(a.Action, b.Action) {
+				return false
+			}
 			if !util.StringsEqual(a.Name, b.Name) {
 				return false
 			}
+		}
+	}
+	return true
+}
+func matchDecoder(a []Decoder, b []Decoder) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	for _, a := range a {
+		for _, b := range b {
 			if !util.StringsMatch(a.Action, b.Action) {
+				return false
+			}
+			if !util.StringsMatch(a.WildfireAction, b.WildfireAction) {
+				return false
+			}
+			if !util.StringsMatch(a.MlavAction, b.MlavAction) {
+				return false
+			}
+			if !util.StringsEqual(a.Name, b.Name) {
 				return false
 			}
 		}
@@ -471,30 +495,6 @@ func matchMlavEngineFilebasedEnabled(a []MlavEngineFilebasedEnabled, b []MlavEng
 				return false
 			}
 			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-		}
-	}
-	return true
-}
-func matchDecoder(a []Decoder, b []Decoder) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	for _, a := range a {
-		for _, b := range b {
-			if !util.StringsMatch(a.WildfireAction, b.WildfireAction) {
-				return false
-			}
-			if !util.StringsMatch(a.MlavAction, b.MlavAction) {
-				return false
-			}
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-			if !util.StringsMatch(a.Action, b.Action) {
 				return false
 			}
 		}
