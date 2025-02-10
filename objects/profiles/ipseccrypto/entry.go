@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{"network", "ike", "crypto-profiles", "ipsec-crypto-profiles"}
+	Suffix = []string{}
 )
 
 type Entry struct {
@@ -150,17 +150,17 @@ func specifyEntry(o *Entry) (any, error) {
 		if _, ok := o.Misc["Lifetime"]; ok {
 			nestedLifetime.Misc = o.Misc["Lifetime"]
 		}
-		if o.Lifetime.Minutes != nil {
-			nestedLifetime.Minutes = o.Lifetime.Minutes
-		}
-		if o.Lifetime.Seconds != nil {
-			nestedLifetime.Seconds = o.Lifetime.Seconds
-		}
 		if o.Lifetime.Days != nil {
 			nestedLifetime.Days = o.Lifetime.Days
 		}
 		if o.Lifetime.Hours != nil {
 			nestedLifetime.Hours = o.Lifetime.Hours
+		}
+		if o.Lifetime.Minutes != nil {
+			nestedLifetime.Minutes = o.Lifetime.Minutes
+		}
+		if o.Lifetime.Seconds != nil {
+			nestedLifetime.Seconds = o.Lifetime.Seconds
 		}
 	}
 	entry.Lifetime = nestedLifetime
@@ -309,26 +309,6 @@ func SpecMatches(a, b *Entry) bool {
 	return true
 }
 
-func matchLifetime(a *Lifetime, b *Lifetime) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !util.Ints64Match(a.Days, b.Days) {
-		return false
-	}
-	if !util.Ints64Match(a.Hours, b.Hours) {
-		return false
-	}
-	if !util.Ints64Match(a.Minutes, b.Minutes) {
-		return false
-	}
-	if !util.Ints64Match(a.Seconds, b.Seconds) {
-		return false
-	}
-	return true
-}
 func matchLifesize(a *Lifesize, b *Lifesize) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
@@ -349,16 +329,22 @@ func matchLifesize(a *Lifesize, b *Lifesize) bool {
 	}
 	return true
 }
-func matchEsp(a *Esp, b *Esp) bool {
+func matchLifetime(a *Lifetime, b *Lifetime) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
 	} else if a == nil && b == nil {
 		return true
 	}
-	if !util.OrderedListsMatch(a.Authentication, b.Authentication) {
+	if !util.Ints64Match(a.Hours, b.Hours) {
 		return false
 	}
-	if !util.OrderedListsMatch(a.Encryption, b.Encryption) {
+	if !util.Ints64Match(a.Minutes, b.Minutes) {
+		return false
+	}
+	if !util.Ints64Match(a.Seconds, b.Seconds) {
+		return false
+	}
+	if !util.Ints64Match(a.Days, b.Days) {
 		return false
 	}
 	return true
@@ -370,6 +356,20 @@ func matchAh(a *Ah, b *Ah) bool {
 		return true
 	}
 	if !util.OrderedListsMatch(a.Authentication, b.Authentication) {
+		return false
+	}
+	return true
+}
+func matchEsp(a *Esp, b *Esp) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !util.OrderedListsMatch(a.Authentication, b.Authentication) {
+		return false
+	}
+	if !util.OrderedListsMatch(a.Encryption, b.Encryption) {
 		return false
 	}
 	return true

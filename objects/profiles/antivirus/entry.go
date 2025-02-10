@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{"virus"}
+	Suffix = []string{}
 )
 
 type Entry struct {
@@ -197,17 +197,17 @@ func specifyEntry(o *Entry) (any, error) {
 			if _, ok := o.Misc["Decoder"]; ok {
 				nestedDecoder.Misc = o.Misc["Decoder"]
 			}
-			if oDecoder.Action != nil {
-				nestedDecoder.Action = oDecoder.Action
-			}
-			if oDecoder.WildfireAction != nil {
-				nestedDecoder.WildfireAction = oDecoder.WildfireAction
-			}
 			if oDecoder.MlavAction != nil {
 				nestedDecoder.MlavAction = oDecoder.MlavAction
 			}
 			if oDecoder.Name != "" {
 				nestedDecoder.Name = oDecoder.Name
+			}
+			if oDecoder.Action != nil {
+				nestedDecoder.Action = oDecoder.Action
+			}
+			if oDecoder.WildfireAction != nil {
+				nestedDecoder.WildfireAction = oDecoder.WildfireAction
 			}
 			nestedDecoderCol = append(nestedDecoderCol, nestedDecoder)
 		}
@@ -243,14 +243,14 @@ func specifyEntry(o *Entry) (any, error) {
 			if _, ok := o.Misc["MlavException"]; ok {
 				nestedMlavException.Misc = o.Misc["MlavException"]
 			}
+			if oMlavException.Filename != nil {
+				nestedMlavException.Filename = oMlavException.Filename
+			}
 			if oMlavException.Description != nil {
 				nestedMlavException.Description = oMlavException.Description
 			}
 			if oMlavException.Name != "" {
 				nestedMlavException.Name = oMlavException.Name
-			}
-			if oMlavException.Filename != nil {
-				nestedMlavException.Filename = oMlavException.Filename
 			}
 			nestedMlavExceptionCol = append(nestedMlavExceptionCol, nestedMlavException)
 		}
@@ -296,11 +296,11 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				if oApplication.Misc != nil {
 					entry.Misc["Application"] = oApplication.Misc
 				}
-				if oApplication.Action != nil {
-					nestedApplication.Action = oApplication.Action
-				}
 				if oApplication.Name != "" {
 					nestedApplication.Name = oApplication.Name
+				}
+				if oApplication.Action != nil {
+					nestedApplication.Action = oApplication.Action
 				}
 				nestedApplicationCol = append(nestedApplicationCol, nestedApplication)
 			}

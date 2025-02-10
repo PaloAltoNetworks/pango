@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{"decryption", "rules"}
+	Suffix = []string{}
 )
 
 type Entry struct {
@@ -296,6 +296,9 @@ func specifyEntry(o *Entry) (any, error) {
 				if _, ok := o.Misc["TargetDevices"]; ok {
 					nestedTargetDevices.Misc = o.Misc["TargetDevices"]
 				}
+				if oTargetDevices.Name != "" {
+					nestedTargetDevices.Name = oTargetDevices.Name
+				}
 				if oTargetDevices.Vsys != nil {
 					nestedTargetDevices.Vsys = []TargetDevicesVsysXml{}
 					for _, oTargetDevicesVsys := range oTargetDevices.Vsys {
@@ -308,9 +311,6 @@ func specifyEntry(o *Entry) (any, error) {
 						}
 						nestedTargetDevices.Vsys = append(nestedTargetDevices.Vsys, nestedTargetDevicesVsys)
 					}
-				}
-				if oTargetDevices.Name != "" {
-					nestedTargetDevices.Name = oTargetDevices.Name
 				}
 				nestedTarget.Devices = append(nestedTarget.Devices, nestedTargetDevices)
 			}
@@ -331,6 +331,15 @@ func specifyEntry(o *Entry) (any, error) {
 		if _, ok := o.Misc["Type"]; ok {
 			nestedType.Misc = o.Misc["Type"]
 		}
+		if o.Type.SslInboundInspection != nil {
+			nestedType.SslInboundInspection = &TypeSslInboundInspectionXml{}
+			if _, ok := o.Misc["TypeSslInboundInspection"]; ok {
+				nestedType.SslInboundInspection.Misc = o.Misc["TypeSslInboundInspection"]
+			}
+			if o.Type.SslInboundInspection.Certificates != nil {
+				nestedType.SslInboundInspection.Certificates = util.StrToMem(o.Type.SslInboundInspection.Certificates)
+			}
+		}
 		if o.Type.SshProxy != nil {
 			nestedType.SshProxy = &TypeSshProxyXml{}
 			if _, ok := o.Misc["TypeSshProxy"]; ok {
@@ -341,15 +350,6 @@ func specifyEntry(o *Entry) (any, error) {
 			nestedType.SslForwardProxy = &TypeSslForwardProxyXml{}
 			if _, ok := o.Misc["TypeSslForwardProxy"]; ok {
 				nestedType.SslForwardProxy.Misc = o.Misc["TypeSslForwardProxy"]
-			}
-		}
-		if o.Type.SslInboundInspection != nil {
-			nestedType.SslInboundInspection = &TypeSslInboundInspectionXml{}
-			if _, ok := o.Misc["TypeSslInboundInspection"]; ok {
-				nestedType.SslInboundInspection.Misc = o.Misc["TypeSslInboundInspection"]
-			}
-			if o.Type.SslInboundInspection.Certificates != nil {
-				nestedType.SslInboundInspection.Certificates = util.StrToMem(o.Type.SslInboundInspection.Certificates)
 			}
 		}
 	}
@@ -395,15 +395,18 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 			if o.Target.Misc != nil {
 				entry.Misc["Target"] = o.Target.Misc
 			}
+			if o.Target.Negate != nil {
+				nestedTarget.Negate = util.AsBool(o.Target.Negate, nil)
+			}
+			if o.Target.Tags != nil {
+				nestedTarget.Tags = util.MemToStr(o.Target.Tags)
+			}
 			if o.Target.Devices != nil {
 				nestedTarget.Devices = []TargetDevices{}
 				for _, oTargetDevices := range o.Target.Devices {
 					nestedTargetDevices := TargetDevices{}
 					if oTargetDevices.Misc != nil {
 						entry.Misc["TargetDevices"] = oTargetDevices.Misc
-					}
-					if oTargetDevices.Name != "" {
-						nestedTargetDevices.Name = oTargetDevices.Name
 					}
 					if oTargetDevices.Vsys != nil {
 						nestedTargetDevices.Vsys = []TargetDevicesVsys{}
@@ -418,14 +421,11 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 							nestedTargetDevices.Vsys = append(nestedTargetDevices.Vsys, nestedTargetDevicesVsys)
 						}
 					}
+					if oTargetDevices.Name != "" {
+						nestedTargetDevices.Name = oTargetDevices.Name
+					}
 					nestedTarget.Devices = append(nestedTarget.Devices, nestedTargetDevices)
 				}
-			}
-			if o.Target.Negate != nil {
-				nestedTarget.Negate = util.AsBool(o.Target.Negate, nil)
-			}
-			if o.Target.Tags != nil {
-				nestedTarget.Tags = util.MemToStr(o.Target.Tags)
 			}
 		}
 		entry.Target = nestedTarget
@@ -594,13 +594,13 @@ func matchTarget(a *Target, b *Target) bool {
 	} else if a == nil && b == nil {
 		return true
 	}
-	if !matchTargetDevices(a.Devices, b.Devices) {
-		return false
-	}
 	if !util.BoolsMatch(a.Negate, b.Negate) {
 		return false
 	}
 	if !util.OrderedListsMatch(a.Tags, b.Tags) {
+		return false
+	}
+	if !matchTargetDevices(a.Devices, b.Devices) {
 		return false
 	}
 	return true
@@ -638,13 +638,13 @@ func matchType(a *Type, b *Type) bool {
 	} else if a == nil && b == nil {
 		return true
 	}
-	if !matchTypeSslForwardProxy(a.SslForwardProxy, b.SslForwardProxy) {
-		return false
-	}
 	if !matchTypeSslInboundInspection(a.SslInboundInspection, b.SslInboundInspection) {
 		return false
 	}
 	if !matchTypeSshProxy(a.SshProxy, b.SshProxy) {
+		return false
+	}
+	if !matchTypeSslForwardProxy(a.SslForwardProxy, b.SslForwardProxy) {
 		return false
 	}
 	return true

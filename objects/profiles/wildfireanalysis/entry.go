@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{"profiles", "wildfire-analysis"}
+	Suffix = []string{}
 )
 
 type Entry struct {
@@ -96,9 +96,6 @@ func specifyEntry(o *Entry) (any, error) {
 			if _, ok := o.Misc["Rules"]; ok {
 				nestedRules.Misc = o.Misc["Rules"]
 			}
-			if oRules.Name != "" {
-				nestedRules.Name = oRules.Name
-			}
 			if oRules.Application != nil {
 				nestedRules.Application = util.StrToMem(oRules.Application)
 			}
@@ -110,6 +107,9 @@ func specifyEntry(o *Entry) (any, error) {
 			}
 			if oRules.Analysis != nil {
 				nestedRules.Analysis = oRules.Analysis
+			}
+			if oRules.Name != "" {
+				nestedRules.Name = oRules.Name
 			}
 			nestedRulesCol = append(nestedRulesCol, nestedRules)
 		}
@@ -195,6 +195,12 @@ func matchRules(a []Rules, b []Rules) bool {
 	}
 	for _, a := range a {
 		for _, b := range b {
+			if !util.OrderedListsMatch(a.Application, b.Application) {
+				return false
+			}
+			if !util.OrderedListsMatch(a.FileType, b.FileType) {
+				return false
+			}
 			if !util.StringsMatch(a.Direction, b.Direction) {
 				return false
 			}
@@ -202,12 +208,6 @@ func matchRules(a []Rules, b []Rules) bool {
 				return false
 			}
 			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-			if !util.OrderedListsMatch(a.Application, b.Application) {
-				return false
-			}
-			if !util.OrderedListsMatch(a.FileType, b.FileType) {
 				return false
 			}
 		}

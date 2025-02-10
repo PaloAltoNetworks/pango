@@ -33,94 +33,71 @@ func (s *Service) Create(ctx context.Context, loc Location, entry *Entry) (*Entr
 	}
 
 	vn := s.client.Versioning()
-
-	specifier, _, err := Versioning(vn)
-	if err != nil {
-		return nil, err
-	}
 	path, err := loc.XpathWithEntryName(vn, entry.Name)
 	if err != nil {
 		return nil, err
 	}
-	createSpec, err := specifier(entry)
+	err = s.CreateWithXpath(ctx, util.AsXpath(path[:len(path)-1]), entry)
 	if err != nil {
 		return nil, err
 	}
 
+	return s.ReadWithXpath(ctx, util.AsXpath(path), "get")
+}
+
+func (s *Service) CreateWithXpath(ctx context.Context, xpath string, entry *Entry) error {
+	vn := s.client.Versioning()
+	specifier, _, err := Versioning(vn)
+	if err != nil {
+		return err
+	}
+	createSpec, err := specifier(entry)
+	if err != nil {
+		return err
+	}
+
 	cmd := &xmlapi.Config{
 		Action:  "set",
-		Xpath:   util.AsXpath(path[:len(path)-1]),
+		Xpath:   xpath,
 		Element: createSpec,
 		Target:  s.client.GetTarget(),
 	}
 
 	if _, _, err = s.client.Communicate(ctx, cmd, false, nil); err != nil {
-		return nil, err
+		return err
 	}
-	return s.Read(ctx, loc, entry.Name, "get")
+
+	return nil
 }
 
 // Read returns the given config object, using the specified action ("get" or "show").
 func (s *Service) Read(ctx context.Context, loc Location, name, action string) (*Entry, error) {
-	return s.read(ctx, loc, name, action, true, false)
+	return s.read(ctx, loc, name, action, true)
 }
 
 // ReadById returns the given config object with specified ID, using the specified action ("get" or "show").
 func (s *Service) ReadById(ctx context.Context, loc Location, uuid, action string) (*Entry, error) {
-	return s.read(ctx, loc, uuid, action, false, false)
+	return s.read(ctx, loc, uuid, action, false)
 }
 
-// ReadFromConfig returns the given config object from the loaded XML config.
-// Requires that client.LoadPanosConfig() has been invoked.
-func (s *Service) ReadFromConfig(ctx context.Context, loc Location, name string) (*Entry, error) {
-	return s.read(ctx, loc, name, "", true, true)
-}
-
-// ReadFromConfigById returns the given config object with specified ID from the loaded XML config.
-// Requires that client.LoadPanosConfig() has been invoked.
-func (s *Service) ReadFromConfigById(ctx context.Context, loc Location, uuid string) (*Entry, error) {
-	return s.read(ctx, loc, uuid, "", false, true)
-}
-
-func (s *Service) read(ctx context.Context, loc Location, value, action string, byName, usePanosConfig bool) (*Entry, error) {
-	if byName && value == "" {
-		return nil, errors.NameNotSpecifiedError
-	}
-	if !byName && value == "" {
-		return nil, errors.UuidNotSpecifiedError
-	}
+func (s *Service) ReadWithXpath(ctx context.Context, xpath string, action string) (*Entry, error) {
 	vn := s.client.Versioning()
 	_, normalizer, err := Versioning(vn)
 	if err != nil {
 		return nil, err
 	}
-	var path []string
-	if byName {
-		path, err = loc.XpathWithEntryName(vn, value)
-	} else {
-		path, err = loc.XpathWithUuid(vn, value)
+
+	cmd := &xmlapi.Config{
+		Action: action,
+		Xpath:  xpath,
+		Target: s.client.GetTarget(),
 	}
-	if err != nil {
+
+	if _, _, err = s.client.Communicate(ctx, cmd, true, normalizer); err != nil {
+		if err.Error() == "No such node" && action == "show" {
+			return nil, errors.ObjectNotFound()
+		}
 		return nil, err
-	}
-
-	if usePanosConfig {
-		if _, err = s.client.ReadFromConfig(ctx, path, true, normalizer); err != nil {
-			return nil, err
-		}
-	} else {
-		cmd := &xmlapi.Config{
-			Action: action,
-			Xpath:  util.AsXpath(path),
-			Target: s.client.GetTarget(),
-		}
-
-		if _, _, err = s.client.Communicate(ctx, cmd, true, normalizer); err != nil {
-			if err.Error() == "No such node" && action == "show" {
-				return nil, errors.ObjectNotFound()
-			}
-			return nil, err
-		}
 	}
 
 	list, err := normalizer.Normalize()
@@ -131,6 +108,29 @@ func (s *Service) read(ctx context.Context, loc Location, value, action string, 
 	}
 
 	return list[0], nil
+}
+
+func (s *Service) read(ctx context.Context, loc Location, value, action string, byName bool) (*Entry, error) {
+	if byName && value == "" {
+		return nil, errors.NameNotSpecifiedError
+	}
+
+	if !byName && value == "" {
+		return nil, errors.UuidNotSpecifiedError
+	}
+	vn := s.client.Versioning()
+	var path []string
+	var err error
+	if byName {
+		path, err = loc.XpathWithEntryName(vn, value)
+	} else {
+		path, err = loc.XpathWithUuid(vn, value)
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	return s.ReadWithXpath(ctx, util.AsXpath(path), action)
 }
 
 // Update updates the given config object, then returns the result.

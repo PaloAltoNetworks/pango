@@ -17,11 +17,17 @@ type ImportLocation interface {
 type Location struct {
 	DeviceGroup *DeviceGroupLocation `json:"device_group,omitempty"`
 	Shared      bool                 `json:"shared"`
+	Vsys        *VsysLocation        `json:"vsys,omitempty"`
 }
 
 type DeviceGroupLocation struct {
 	DeviceGroup    string `json:"device_group"`
 	PanoramaDevice string `json:"panorama_device"`
+}
+
+type VsysLocation struct {
+	NgfwDevice string `json:"ngfw_device"`
+	Vsys       string `json:"vsys"`
 }
 
 func NewDeviceGroupLocation() *Location {
@@ -34,6 +40,13 @@ func NewDeviceGroupLocation() *Location {
 func NewSharedLocation() *Location {
 	return &Location{
 		Shared: true,
+	}
+}
+func NewVsysLocation() *Location {
+	return &Location{Vsys: &VsysLocation{
+		NgfwDevice: "localhost.localdomain",
+		Vsys:       "vsys1",
+	},
 	}
 }
 
@@ -50,6 +63,14 @@ func (o Location) IsValid() error {
 		}
 		count++
 	case o.Shared:
+		count++
+	case o.Vsys != nil:
+		if o.Vsys.NgfwDevice == "" {
+			return fmt.Errorf("NgfwDevice is unspecified")
+		}
+		if o.Vsys.Vsys == "" {
+			return fmt.Errorf("Vsys is unspecified")
+		}
 		count++
 	}
 
@@ -88,9 +109,38 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 			"config",
 			"shared",
 		}
+	case o.Vsys != nil:
+		if o.Vsys.NgfwDevice == "" {
+			return nil, fmt.Errorf("NgfwDevice is unspecified")
+		}
+		if o.Vsys.Vsys == "" {
+			return nil, fmt.Errorf("Vsys is unspecified")
+		}
+		ans = []string{
+			"config",
+			"devices",
+			util.AsEntryXpath([]string{o.Vsys.NgfwDevice}),
+			"vsys",
+			util.AsEntryXpath([]string{o.Vsys.Vsys}),
+		}
 	default:
 		return nil, errors.NoLocationSpecifiedError
 	}
+
+	return ans, nil
+}
+
+func (o Location) XpathWithComponents(vn version.Number, components ...string) ([]string, error) {
+	if len(components) != 1 {
+		return nil, fmt.Errorf("invalid number of arguments for Xpath() call")
+	}
+
+	ans, err := o.XpathPrefix(vn)
+	if err != nil {
+		return nil, err
+	}
+
+	ans = append(ans, components[0])
 
 	return ans, nil
 }

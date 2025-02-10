@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{"network", "ike", "gateway"}
+	Suffix = []string{}
 )
 
 type Entry struct {
@@ -308,6 +308,9 @@ func specifyEntry(o *Entry) (any, error) {
 			if _, ok := o.Misc["AuthenticationCertificate"]; ok {
 				nestedAuthentication.Certificate.Misc = o.Misc["AuthenticationCertificate"]
 			}
+			if o.Authentication.Certificate.AllowIdPayloadMismatch != nil {
+				nestedAuthentication.Certificate.AllowIdPayloadMismatch = util.YesNo(o.Authentication.Certificate.AllowIdPayloadMismatch, nil)
+			}
 			if o.Authentication.Certificate.CertificateProfile != nil {
 				nestedAuthentication.Certificate.CertificateProfile = o.Authentication.Certificate.CertificateProfile
 			}
@@ -337,9 +340,6 @@ func specifyEntry(o *Entry) (any, error) {
 			}
 			if o.Authentication.Certificate.UseManagementAsSource != nil {
 				nestedAuthentication.Certificate.UseManagementAsSource = util.YesNo(o.Authentication.Certificate.UseManagementAsSource, nil)
-			}
-			if o.Authentication.Certificate.AllowIdPayloadMismatch != nil {
-				nestedAuthentication.Certificate.AllowIdPayloadMismatch = util.YesNo(o.Authentication.Certificate.AllowIdPayloadMismatch, nil)
 			}
 		}
 		if o.Authentication.PreSharedKey != nil {
@@ -440,13 +440,13 @@ func specifyEntry(o *Entry) (any, error) {
 			if _, ok := o.Misc["ProtocolIkev1"]; ok {
 				nestedProtocol.Ikev1.Misc = o.Misc["ProtocolIkev1"]
 			}
-			if o.Protocol.Ikev1.IkeCryptoProfile != nil {
-				nestedProtocol.Ikev1.IkeCryptoProfile = o.Protocol.Ikev1.IkeCryptoProfile
-			}
 			if o.Protocol.Ikev1.Dpd != nil {
 				nestedProtocol.Ikev1.Dpd = &ProtocolIkev1DpdXml{}
 				if _, ok := o.Misc["ProtocolIkev1Dpd"]; ok {
 					nestedProtocol.Ikev1.Dpd.Misc = o.Misc["ProtocolIkev1Dpd"]
+				}
+				if o.Protocol.Ikev1.Dpd.Enable != nil {
+					nestedProtocol.Ikev1.Dpd.Enable = util.YesNo(o.Protocol.Ikev1.Dpd.Enable, nil)
 				}
 				if o.Protocol.Ikev1.Dpd.Interval != nil {
 					nestedProtocol.Ikev1.Dpd.Interval = o.Protocol.Ikev1.Dpd.Interval
@@ -454,24 +454,18 @@ func specifyEntry(o *Entry) (any, error) {
 				if o.Protocol.Ikev1.Dpd.Retry != nil {
 					nestedProtocol.Ikev1.Dpd.Retry = o.Protocol.Ikev1.Dpd.Retry
 				}
-				if o.Protocol.Ikev1.Dpd.Enable != nil {
-					nestedProtocol.Ikev1.Dpd.Enable = util.YesNo(o.Protocol.Ikev1.Dpd.Enable, nil)
-				}
 			}
 			if o.Protocol.Ikev1.ExchangeMode != nil {
 				nestedProtocol.Ikev1.ExchangeMode = o.Protocol.Ikev1.ExchangeMode
+			}
+			if o.Protocol.Ikev1.IkeCryptoProfile != nil {
+				nestedProtocol.Ikev1.IkeCryptoProfile = o.Protocol.Ikev1.IkeCryptoProfile
 			}
 		}
 		if o.Protocol.Ikev2 != nil {
 			nestedProtocol.Ikev2 = &ProtocolIkev2Xml{}
 			if _, ok := o.Misc["ProtocolIkev2"]; ok {
 				nestedProtocol.Ikev2.Misc = o.Misc["ProtocolIkev2"]
-			}
-			if o.Protocol.Ikev2.IkeCryptoProfile != nil {
-				nestedProtocol.Ikev2.IkeCryptoProfile = o.Protocol.Ikev2.IkeCryptoProfile
-			}
-			if o.Protocol.Ikev2.RequireCookie != nil {
-				nestedProtocol.Ikev2.RequireCookie = util.YesNo(o.Protocol.Ikev2.RequireCookie, nil)
 			}
 			if o.Protocol.Ikev2.Dpd != nil {
 				nestedProtocol.Ikev2.Dpd = &ProtocolIkev2DpdXml{}
@@ -485,6 +479,12 @@ func specifyEntry(o *Entry) (any, error) {
 					nestedProtocol.Ikev2.Dpd.Interval = o.Protocol.Ikev2.Dpd.Interval
 				}
 			}
+			if o.Protocol.Ikev2.IkeCryptoProfile != nil {
+				nestedProtocol.Ikev2.IkeCryptoProfile = o.Protocol.Ikev2.IkeCryptoProfile
+			}
+			if o.Protocol.Ikev2.RequireCookie != nil {
+				nestedProtocol.Ikev2.RequireCookie = util.YesNo(o.Protocol.Ikev2.RequireCookie, nil)
+			}
 		}
 		if o.Protocol.Version != nil {
 			nestedProtocol.Version = o.Protocol.Version
@@ -497,6 +497,9 @@ func specifyEntry(o *Entry) (any, error) {
 		nestedProtocolCommon = &ProtocolCommonXml{}
 		if _, ok := o.Misc["ProtocolCommon"]; ok {
 			nestedProtocolCommon.Misc = o.Misc["ProtocolCommon"]
+		}
+		if o.ProtocolCommon.PassiveMode != nil {
+			nestedProtocolCommon.PassiveMode = util.YesNo(o.ProtocolCommon.PassiveMode, nil)
 		}
 		if o.ProtocolCommon.Fragmentation != nil {
 			nestedProtocolCommon.Fragmentation = &ProtocolCommonFragmentationXml{}
@@ -521,9 +524,6 @@ func specifyEntry(o *Entry) (any, error) {
 			if o.ProtocolCommon.NatTraversal.UdpChecksumEnable != nil {
 				nestedProtocolCommon.NatTraversal.UdpChecksumEnable = util.YesNo(o.ProtocolCommon.NatTraversal.UdpChecksumEnable, nil)
 			}
-		}
-		if o.ProtocolCommon.PassiveMode != nil {
-			nestedProtocolCommon.PassiveMode = util.YesNo(o.ProtocolCommon.PassiveMode, nil)
 		}
 	}
 	entry.ProtocolCommon = nestedProtocolCommon
@@ -551,6 +551,15 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				if o.Authentication.Certificate.Misc != nil {
 					entry.Misc["AuthenticationCertificate"] = o.Authentication.Certificate.Misc
 				}
+				if o.Authentication.Certificate.StrictValidationRevocation != nil {
+					nestedAuthentication.Certificate.StrictValidationRevocation = util.AsBool(o.Authentication.Certificate.StrictValidationRevocation, nil)
+				}
+				if o.Authentication.Certificate.UseManagementAsSource != nil {
+					nestedAuthentication.Certificate.UseManagementAsSource = util.AsBool(o.Authentication.Certificate.UseManagementAsSource, nil)
+				}
+				if o.Authentication.Certificate.AllowIdPayloadMismatch != nil {
+					nestedAuthentication.Certificate.AllowIdPayloadMismatch = util.AsBool(o.Authentication.Certificate.AllowIdPayloadMismatch, nil)
+				}
 				if o.Authentication.Certificate.CertificateProfile != nil {
 					nestedAuthentication.Certificate.CertificateProfile = o.Authentication.Certificate.CertificateProfile
 				}
@@ -574,15 +583,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 					if o.Authentication.Certificate.LocalCertificate.Name != nil {
 						nestedAuthentication.Certificate.LocalCertificate.Name = o.Authentication.Certificate.LocalCertificate.Name
 					}
-				}
-				if o.Authentication.Certificate.StrictValidationRevocation != nil {
-					nestedAuthentication.Certificate.StrictValidationRevocation = util.AsBool(o.Authentication.Certificate.StrictValidationRevocation, nil)
-				}
-				if o.Authentication.Certificate.UseManagementAsSource != nil {
-					nestedAuthentication.Certificate.UseManagementAsSource = util.AsBool(o.Authentication.Certificate.UseManagementAsSource, nil)
-				}
-				if o.Authentication.Certificate.AllowIdPayloadMismatch != nil {
-					nestedAuthentication.Certificate.AllowIdPayloadMismatch = util.AsBool(o.Authentication.Certificate.AllowIdPayloadMismatch, nil)
 				}
 			}
 			if o.Authentication.PreSharedKey != nil {
@@ -624,11 +624,11 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 			if o.LocalId.Misc != nil {
 				entry.Misc["LocalId"] = o.LocalId.Misc
 			}
-			if o.LocalId.Id != nil {
-				nestedLocalId.Id = o.LocalId.Id
-			}
 			if o.LocalId.Type != nil {
 				nestedLocalId.Type = o.LocalId.Type
+			}
+			if o.LocalId.Id != nil {
+				nestedLocalId.Id = o.LocalId.Id
 			}
 		}
 		entry.LocalId = nestedLocalId
@@ -639,17 +639,17 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 			if o.PeerAddress.Misc != nil {
 				entry.Misc["PeerAddress"] = o.PeerAddress.Misc
 			}
-			if o.PeerAddress.Fqdn != nil {
-				nestedPeerAddress.Fqdn = o.PeerAddress.Fqdn
-			}
-			if o.PeerAddress.Ip != nil {
-				nestedPeerAddress.Ip = o.PeerAddress.Ip
-			}
 			if o.PeerAddress.Dynamic != nil {
 				nestedPeerAddress.Dynamic = &PeerAddressDynamic{}
 				if o.PeerAddress.Dynamic.Misc != nil {
 					entry.Misc["PeerAddressDynamic"] = o.PeerAddress.Dynamic.Misc
 				}
+			}
+			if o.PeerAddress.Fqdn != nil {
+				nestedPeerAddress.Fqdn = o.PeerAddress.Fqdn
+			}
+			if o.PeerAddress.Ip != nil {
+				nestedPeerAddress.Ip = o.PeerAddress.Ip
 			}
 		}
 		entry.PeerAddress = nestedPeerAddress
@@ -678,36 +678,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 			if o.Protocol.Misc != nil {
 				entry.Misc["Protocol"] = o.Protocol.Misc
 			}
-			if o.Protocol.Version != nil {
-				nestedProtocol.Version = o.Protocol.Version
-			}
-			if o.Protocol.Ikev1 != nil {
-				nestedProtocol.Ikev1 = &ProtocolIkev1{}
-				if o.Protocol.Ikev1.Misc != nil {
-					entry.Misc["ProtocolIkev1"] = o.Protocol.Ikev1.Misc
-				}
-				if o.Protocol.Ikev1.ExchangeMode != nil {
-					nestedProtocol.Ikev1.ExchangeMode = o.Protocol.Ikev1.ExchangeMode
-				}
-				if o.Protocol.Ikev1.IkeCryptoProfile != nil {
-					nestedProtocol.Ikev1.IkeCryptoProfile = o.Protocol.Ikev1.IkeCryptoProfile
-				}
-				if o.Protocol.Ikev1.Dpd != nil {
-					nestedProtocol.Ikev1.Dpd = &ProtocolIkev1Dpd{}
-					if o.Protocol.Ikev1.Dpd.Misc != nil {
-						entry.Misc["ProtocolIkev1Dpd"] = o.Protocol.Ikev1.Dpd.Misc
-					}
-					if o.Protocol.Ikev1.Dpd.Enable != nil {
-						nestedProtocol.Ikev1.Dpd.Enable = util.AsBool(o.Protocol.Ikev1.Dpd.Enable, nil)
-					}
-					if o.Protocol.Ikev1.Dpd.Interval != nil {
-						nestedProtocol.Ikev1.Dpd.Interval = o.Protocol.Ikev1.Dpd.Interval
-					}
-					if o.Protocol.Ikev1.Dpd.Retry != nil {
-						nestedProtocol.Ikev1.Dpd.Retry = o.Protocol.Ikev1.Dpd.Retry
-					}
-				}
-			}
 			if o.Protocol.Ikev2 != nil {
 				nestedProtocol.Ikev2 = &ProtocolIkev2{}
 				if o.Protocol.Ikev2.Misc != nil {
@@ -732,6 +702,36 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 					nestedProtocol.Ikev2.RequireCookie = util.AsBool(o.Protocol.Ikev2.RequireCookie, nil)
 				}
 			}
+			if o.Protocol.Version != nil {
+				nestedProtocol.Version = o.Protocol.Version
+			}
+			if o.Protocol.Ikev1 != nil {
+				nestedProtocol.Ikev1 = &ProtocolIkev1{}
+				if o.Protocol.Ikev1.Misc != nil {
+					entry.Misc["ProtocolIkev1"] = o.Protocol.Ikev1.Misc
+				}
+				if o.Protocol.Ikev1.Dpd != nil {
+					nestedProtocol.Ikev1.Dpd = &ProtocolIkev1Dpd{}
+					if o.Protocol.Ikev1.Dpd.Misc != nil {
+						entry.Misc["ProtocolIkev1Dpd"] = o.Protocol.Ikev1.Dpd.Misc
+					}
+					if o.Protocol.Ikev1.Dpd.Enable != nil {
+						nestedProtocol.Ikev1.Dpd.Enable = util.AsBool(o.Protocol.Ikev1.Dpd.Enable, nil)
+					}
+					if o.Protocol.Ikev1.Dpd.Interval != nil {
+						nestedProtocol.Ikev1.Dpd.Interval = o.Protocol.Ikev1.Dpd.Interval
+					}
+					if o.Protocol.Ikev1.Dpd.Retry != nil {
+						nestedProtocol.Ikev1.Dpd.Retry = o.Protocol.Ikev1.Dpd.Retry
+					}
+				}
+				if o.Protocol.Ikev1.ExchangeMode != nil {
+					nestedProtocol.Ikev1.ExchangeMode = o.Protocol.Ikev1.ExchangeMode
+				}
+				if o.Protocol.Ikev1.IkeCryptoProfile != nil {
+					nestedProtocol.Ikev1.IkeCryptoProfile = o.Protocol.Ikev1.IkeCryptoProfile
+				}
+			}
 		}
 		entry.Protocol = nestedProtocol
 
@@ -740,9 +740,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 			nestedProtocolCommon = &ProtocolCommon{}
 			if o.ProtocolCommon.Misc != nil {
 				entry.Misc["ProtocolCommon"] = o.ProtocolCommon.Misc
-			}
-			if o.ProtocolCommon.PassiveMode != nil {
-				nestedProtocolCommon.PassiveMode = util.AsBool(o.ProtocolCommon.PassiveMode, nil)
 			}
 			if o.ProtocolCommon.Fragmentation != nil {
 				nestedProtocolCommon.Fragmentation = &ProtocolCommonFragmentation{}
@@ -767,6 +764,9 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				if o.ProtocolCommon.NatTraversal.UdpChecksumEnable != nil {
 					nestedProtocolCommon.NatTraversal.UdpChecksumEnable = util.AsBool(o.ProtocolCommon.NatTraversal.UdpChecksumEnable, nil)
 				}
+			}
+			if o.ProtocolCommon.PassiveMode != nil {
+				nestedProtocolCommon.PassiveMode = util.AsBool(o.ProtocolCommon.PassiveMode, nil)
 			}
 		}
 		entry.ProtocolCommon = nestedProtocolCommon
@@ -821,40 +821,6 @@ func SpecMatches(a, b *Entry) bool {
 	return true
 }
 
-func matchPeerId(a *PeerId, b *PeerId) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !util.StringsMatch(a.Id, b.Id) {
-		return false
-	}
-	if !util.StringsMatch(a.Matching, b.Matching) {
-		return false
-	}
-	if !util.StringsMatch(a.Type, b.Type) {
-		return false
-	}
-	return true
-}
-func matchLocalAddress(a *LocalAddress, b *LocalAddress) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !util.StringsMatch(a.Interface, b.Interface) {
-		return false
-	}
-	if !util.StringsMatch(a.FloatingIp, b.FloatingIp) {
-		return false
-	}
-	if !util.StringsMatch(a.Ip, b.Ip) {
-		return false
-	}
-	return true
-}
 func matchPeerAddressDynamic(a *PeerAddressDynamic, b *PeerAddressDynamic) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
@@ -869,61 +835,13 @@ func matchPeerAddress(a *PeerAddress, b *PeerAddress) bool {
 	} else if a == nil && b == nil {
 		return true
 	}
+	if !util.StringsMatch(a.Ip, b.Ip) {
+		return false
+	}
 	if !matchPeerAddressDynamic(a.Dynamic, b.Dynamic) {
 		return false
 	}
 	if !util.StringsMatch(a.Fqdn, b.Fqdn) {
-		return false
-	}
-	if !util.StringsMatch(a.Ip, b.Ip) {
-		return false
-	}
-	return true
-}
-func matchLocalId(a *LocalId, b *LocalId) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !util.StringsMatch(a.Id, b.Id) {
-		return false
-	}
-	if !util.StringsMatch(a.Type, b.Type) {
-		return false
-	}
-	return true
-}
-func matchProtocolIkev1Dpd(a *ProtocolIkev1Dpd, b *ProtocolIkev1Dpd) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !util.BoolsMatch(a.Enable, b.Enable) {
-		return false
-	}
-	if !util.Ints64Match(a.Interval, b.Interval) {
-		return false
-	}
-	if !util.Ints64Match(a.Retry, b.Retry) {
-		return false
-	}
-	return true
-}
-func matchProtocolIkev1(a *ProtocolIkev1, b *ProtocolIkev1) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !matchProtocolIkev1Dpd(a.Dpd, b.Dpd) {
-		return false
-	}
-	if !util.StringsMatch(a.ExchangeMode, b.ExchangeMode) {
-		return false
-	}
-	if !util.StringsMatch(a.IkeCryptoProfile, b.IkeCryptoProfile) {
 		return false
 	}
 	return true
@@ -948,13 +866,47 @@ func matchProtocolIkev2(a *ProtocolIkev2, b *ProtocolIkev2) bool {
 	} else if a == nil && b == nil {
 		return true
 	}
+	if !matchProtocolIkev2Dpd(a.Dpd, b.Dpd) {
+		return false
+	}
 	if !util.StringsMatch(a.IkeCryptoProfile, b.IkeCryptoProfile) {
 		return false
 	}
 	if !util.BoolsMatch(a.RequireCookie, b.RequireCookie) {
 		return false
 	}
-	if !matchProtocolIkev2Dpd(a.Dpd, b.Dpd) {
+	return true
+}
+func matchProtocolIkev1Dpd(a *ProtocolIkev1Dpd, b *ProtocolIkev1Dpd) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !util.Ints64Match(a.Retry, b.Retry) {
+		return false
+	}
+	if !util.BoolsMatch(a.Enable, b.Enable) {
+		return false
+	}
+	if !util.Ints64Match(a.Interval, b.Interval) {
+		return false
+	}
+	return true
+}
+func matchProtocolIkev1(a *ProtocolIkev1, b *ProtocolIkev1) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !util.StringsMatch(a.ExchangeMode, b.ExchangeMode) {
+		return false
+	}
+	if !util.StringsMatch(a.IkeCryptoProfile, b.IkeCryptoProfile) {
+		return false
+	}
+	if !matchProtocolIkev1Dpd(a.Dpd, b.Dpd) {
 		return false
 	}
 	return true
@@ -965,13 +917,13 @@ func matchProtocol(a *Protocol, b *Protocol) bool {
 	} else if a == nil && b == nil {
 		return true
 	}
+	if !matchProtocolIkev1(a.Ikev1, b.Ikev1) {
+		return false
+	}
 	if !matchProtocolIkev2(a.Ikev2, b.Ikev2) {
 		return false
 	}
 	if !util.StringsMatch(a.Version, b.Version) {
-		return false
-	}
-	if !matchProtocolIkev1(a.Ikev1, b.Ikev1) {
 		return false
 	}
 	return true
@@ -1021,17 +973,6 @@ func matchProtocolCommon(a *ProtocolCommon, b *ProtocolCommon) bool {
 	}
 	return true
 }
-func matchAuthenticationPreSharedKey(a *AuthenticationPreSharedKey, b *AuthenticationPreSharedKey) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !util.StringsMatch(a.Key, b.Key) {
-		return false
-	}
-	return true
-}
 func matchAuthenticationCertificateLocalCertificateHashAndUrl(a *AuthenticationCertificateLocalCertificateHashAndUrl, b *AuthenticationCertificateLocalCertificateHashAndUrl) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
@@ -1052,10 +993,10 @@ func matchAuthenticationCertificateLocalCertificate(a *AuthenticationCertificate
 	} else if a == nil && b == nil {
 		return true
 	}
-	if !matchAuthenticationCertificateLocalCertificateHashAndUrl(a.HashAndUrl, b.HashAndUrl) {
+	if !util.StringsMatch(a.Name, b.Name) {
 		return false
 	}
-	if !util.StringsMatch(a.Name, b.Name) {
+	if !matchAuthenticationCertificateLocalCertificateHashAndUrl(a.HashAndUrl, b.HashAndUrl) {
 		return false
 	}
 	return true
@@ -1065,6 +1006,9 @@ func matchAuthenticationCertificate(a *AuthenticationCertificate, b *Authenticat
 		return false
 	} else if a == nil && b == nil {
 		return true
+	}
+	if !matchAuthenticationCertificateLocalCertificate(a.LocalCertificate, b.LocalCertificate) {
+		return false
 	}
 	if !util.BoolsMatch(a.StrictValidationRevocation, b.StrictValidationRevocation) {
 		return false
@@ -1078,7 +1022,15 @@ func matchAuthenticationCertificate(a *AuthenticationCertificate, b *Authenticat
 	if !util.StringsMatch(a.CertificateProfile, b.CertificateProfile) {
 		return false
 	}
-	if !matchAuthenticationCertificateLocalCertificate(a.LocalCertificate, b.LocalCertificate) {
+	return true
+}
+func matchAuthenticationPreSharedKey(a *AuthenticationPreSharedKey, b *AuthenticationPreSharedKey) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !util.StringsMatch(a.Key, b.Key) {
 		return false
 	}
 	return true
@@ -1089,10 +1041,58 @@ func matchAuthentication(a *Authentication, b *Authentication) bool {
 	} else if a == nil && b == nil {
 		return true
 	}
+	if !matchAuthenticationPreSharedKey(a.PreSharedKey, b.PreSharedKey) {
+		return false
+	}
 	if !matchAuthenticationCertificate(a.Certificate, b.Certificate) {
 		return false
 	}
-	if !matchAuthenticationPreSharedKey(a.PreSharedKey, b.PreSharedKey) {
+	return true
+}
+func matchLocalAddress(a *LocalAddress, b *LocalAddress) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !util.StringsMatch(a.Interface, b.Interface) {
+		return false
+	}
+	if !util.StringsMatch(a.FloatingIp, b.FloatingIp) {
+		return false
+	}
+	if !util.StringsMatch(a.Ip, b.Ip) {
+		return false
+	}
+	return true
+}
+func matchLocalId(a *LocalId, b *LocalId) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !util.StringsMatch(a.Id, b.Id) {
+		return false
+	}
+	if !util.StringsMatch(a.Type, b.Type) {
+		return false
+	}
+	return true
+}
+func matchPeerId(a *PeerId, b *PeerId) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !util.StringsMatch(a.Id, b.Id) {
+		return false
+	}
+	if !util.StringsMatch(a.Matching, b.Matching) {
+		return false
+	}
+	if !util.StringsMatch(a.Type, b.Type) {
 		return false
 	}
 	return true

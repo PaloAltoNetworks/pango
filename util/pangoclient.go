@@ -38,6 +38,7 @@ type PangoClient interface {
 	ExportFile(context.Context, *xmlapi.Export, any) (string, []byte, *http.Response, error)
 
 	// Operational functions in use by one or more resources / data sources / namespaces.
+	GenerateApiKey(context.Context, string, string) (string, error)
 	RequestPasswordHash(context.Context, string) (string, error)
 	GetTechSupportFile(context.Context) (string, []byte, error)
 }

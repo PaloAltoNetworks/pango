@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{"device-group"}
+	Suffix = []string{}
 )
 
 type Entry struct {
@@ -133,11 +133,11 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				if oDevices.Misc != nil {
 					entry.Misc["Devices"] = oDevices.Misc
 				}
-				if oDevices.Name != "" {
-					nestedDevices.Name = oDevices.Name
-				}
 				if oDevices.Vsys != nil {
 					nestedDevices.Vsys = util.MemToStr(oDevices.Vsys)
+				}
+				if oDevices.Name != "" {
+					nestedDevices.Name = oDevices.Name
 				}
 				nestedDevicesCol = append(nestedDevicesCol, nestedDevices)
 			}

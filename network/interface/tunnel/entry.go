@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{"network", "interface", "tunnel", "units"}
+	Suffix = []string{}
 )
 
 type Entry struct {
@@ -163,14 +163,14 @@ func specifyEntry(o *Entry) (any, error) {
 		if _, ok := o.Misc["Bonjour"]; ok {
 			nestedBonjour.Misc = o.Misc["Bonjour"]
 		}
+		if o.Bonjour.Enable != nil {
+			nestedBonjour.Enable = util.YesNo(o.Bonjour.Enable, nil)
+		}
 		if o.Bonjour.GroupId != nil {
 			nestedBonjour.GroupId = o.Bonjour.GroupId
 		}
 		if o.Bonjour.TtlCheck != nil {
 			nestedBonjour.TtlCheck = util.YesNo(o.Bonjour.TtlCheck, nil)
-		}
-		if o.Bonjour.Enable != nil {
-			nestedBonjour.Enable = util.YesNo(o.Bonjour.Enable, nil)
 		}
 	}
 	entry.Bonjour = nestedBonjour
@@ -200,21 +200,12 @@ func specifyEntry(o *Entry) (any, error) {
 		if _, ok := o.Misc["Ipv6"]; ok {
 			nestedIpv6.Misc = o.Misc["Ipv6"]
 		}
-		if o.Ipv6.InterfaceId != nil {
-			nestedIpv6.InterfaceId = o.Ipv6.InterfaceId
-		}
 		if o.Ipv6.Address != nil {
 			nestedIpv6.Address = []Ipv6AddressXml{}
 			for _, oIpv6Address := range o.Ipv6.Address {
 				nestedIpv6Address := Ipv6AddressXml{}
 				if _, ok := o.Misc["Ipv6Address"]; ok {
 					nestedIpv6Address.Misc = o.Misc["Ipv6Address"]
-				}
-				if oIpv6Address.Anycast != nil {
-					nestedIpv6Address.Anycast = &Ipv6AddressAnycastXml{}
-					if _, ok := o.Misc["Ipv6AddressAnycast"]; ok {
-						nestedIpv6Address.Anycast.Misc = o.Misc["Ipv6AddressAnycast"]
-					}
 				}
 				if oIpv6Address.Name != "" {
 					nestedIpv6Address.Name = oIpv6Address.Name
@@ -228,11 +219,20 @@ func specifyEntry(o *Entry) (any, error) {
 						nestedIpv6Address.Prefix.Misc = o.Misc["Ipv6AddressPrefix"]
 					}
 				}
+				if oIpv6Address.Anycast != nil {
+					nestedIpv6Address.Anycast = &Ipv6AddressAnycastXml{}
+					if _, ok := o.Misc["Ipv6AddressAnycast"]; ok {
+						nestedIpv6Address.Anycast.Misc = o.Misc["Ipv6AddressAnycast"]
+					}
+				}
 				nestedIpv6.Address = append(nestedIpv6.Address, nestedIpv6Address)
 			}
 		}
 		if o.Ipv6.Enabled != nil {
 			nestedIpv6.Enabled = util.YesNo(o.Ipv6.Enabled, nil)
+		}
+		if o.Ipv6.InterfaceId != nil {
+			nestedIpv6.InterfaceId = o.Ipv6.InterfaceId
 		}
 	}
 	entry.Ipv6 = nestedIpv6
@@ -303,9 +303,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 					if oIpv6Address.Misc != nil {
 						entry.Misc["Ipv6Address"] = oIpv6Address.Misc
 					}
-					if oIpv6Address.EnableOnInterface != nil {
-						nestedIpv6Address.EnableOnInterface = util.AsBool(oIpv6Address.EnableOnInterface, nil)
-					}
 					if oIpv6Address.Prefix != nil {
 						nestedIpv6Address.Prefix = &Ipv6AddressPrefix{}
 						if oIpv6Address.Prefix.Misc != nil {
@@ -320,6 +317,9 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 					}
 					if oIpv6Address.Name != "" {
 						nestedIpv6Address.Name = oIpv6Address.Name
+					}
+					if oIpv6Address.EnableOnInterface != nil {
+						nestedIpv6Address.EnableOnInterface = util.AsBool(oIpv6Address.EnableOnInterface, nil)
 					}
 					nestedIpv6.Address = append(nestedIpv6.Address, nestedIpv6Address)
 				}
@@ -384,21 +384,6 @@ func SpecMatches(a, b *Entry) bool {
 	return true
 }
 
-func matchIp(a []Ip, b []Ip) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	for _, a := range a {
-		for _, b := range b {
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-		}
-	}
-	return true
-}
 func matchIpv6AddressPrefix(a *Ipv6AddressPrefix, b *Ipv6AddressPrefix) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
@@ -423,16 +408,16 @@ func matchIpv6Address(a []Ipv6Address, b []Ipv6Address) bool {
 	}
 	for _, a := range a {
 		for _, b := range b {
-			if !util.BoolsMatch(a.EnableOnInterface, b.EnableOnInterface) {
-				return false
-			}
-			if !matchIpv6AddressPrefix(a.Prefix, b.Prefix) {
-				return false
-			}
 			if !matchIpv6AddressAnycast(a.Anycast, b.Anycast) {
 				return false
 			}
 			if !util.StringsEqual(a.Name, b.Name) {
+				return false
+			}
+			if !util.BoolsMatch(a.EnableOnInterface, b.EnableOnInterface) {
+				return false
+			}
+			if !matchIpv6AddressPrefix(a.Prefix, b.Prefix) {
 				return false
 			}
 		}
@@ -470,6 +455,21 @@ func matchBonjour(a *Bonjour, b *Bonjour) bool {
 	}
 	if !util.BoolsMatch(a.TtlCheck, b.TtlCheck) {
 		return false
+	}
+	return true
+}
+func matchIp(a []Ip, b []Ip) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	for _, a := range a {
+		for _, b := range b {
+			if !util.StringsEqual(a.Name, b.Name) {
+				return false
+			}
+		}
 	}
 	return true
 }

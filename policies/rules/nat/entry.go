@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{"nat", "rules"}
+	Suffix = []string{}
 )
 
 type Entry struct {
@@ -324,11 +324,11 @@ func specifyEntry(o *Entry) (any, error) {
 					if o.SourceTranslation.DynamicIp.Fallback.InterfaceAddress.Interface != nil {
 						nestedSourceTranslation.DynamicIp.Fallback.InterfaceAddress.Interface = o.SourceTranslation.DynamicIp.Fallback.InterfaceAddress.Interface
 					}
-					if o.SourceTranslation.DynamicIp.Fallback.InterfaceAddress.Ip != nil {
-						nestedSourceTranslation.DynamicIp.Fallback.InterfaceAddress.Ip = o.SourceTranslation.DynamicIp.Fallback.InterfaceAddress.Ip
-					}
 					if o.SourceTranslation.DynamicIp.Fallback.InterfaceAddress.FloatingIp != nil {
 						nestedSourceTranslation.DynamicIp.Fallback.InterfaceAddress.FloatingIp = o.SourceTranslation.DynamicIp.Fallback.InterfaceAddress.FloatingIp
+					}
+					if o.SourceTranslation.DynamicIp.Fallback.InterfaceAddress.Ip != nil {
+						nestedSourceTranslation.DynamicIp.Fallback.InterfaceAddress.Ip = o.SourceTranslation.DynamicIp.Fallback.InterfaceAddress.Ip
 					}
 				}
 				if o.SourceTranslation.DynamicIp.Fallback.TranslatedAddress != nil {
@@ -368,11 +368,11 @@ func specifyEntry(o *Entry) (any, error) {
 			if _, ok := o.Misc["SourceTranslationStaticIp"]; ok {
 				nestedSourceTranslation.StaticIp.Misc = o.Misc["SourceTranslationStaticIp"]
 			}
-			if o.SourceTranslation.StaticIp.BiDirectional != nil {
-				nestedSourceTranslation.StaticIp.BiDirectional = o.SourceTranslation.StaticIp.BiDirectional
-			}
 			if o.SourceTranslation.StaticIp.TranslatedAddress != nil {
 				nestedSourceTranslation.StaticIp.TranslatedAddress = o.SourceTranslation.StaticIp.TranslatedAddress
+			}
+			if o.SourceTranslation.StaticIp.BiDirectional != nil {
+				nestedSourceTranslation.StaticIp.BiDirectional = o.SourceTranslation.StaticIp.BiDirectional
 			}
 		}
 	}
@@ -429,9 +429,6 @@ func specifyEntry(o *Entry) (any, error) {
 		if _, ok := o.Misc["DestinationTranslation"]; ok {
 			nestedDestinationTranslation.Misc = o.Misc["DestinationTranslation"]
 		}
-		if o.DestinationTranslation.TranslatedAddress != nil {
-			nestedDestinationTranslation.TranslatedAddress = o.DestinationTranslation.TranslatedAddress
-		}
 		if o.DestinationTranslation.TranslatedPort != nil {
 			nestedDestinationTranslation.TranslatedPort = o.DestinationTranslation.TranslatedPort
 		}
@@ -444,6 +441,9 @@ func specifyEntry(o *Entry) (any, error) {
 				nestedDestinationTranslation.DnsRewrite.Direction = o.DestinationTranslation.DnsRewrite.Direction
 			}
 		}
+		if o.DestinationTranslation.TranslatedAddress != nil {
+			nestedDestinationTranslation.TranslatedAddress = o.DestinationTranslation.TranslatedAddress
+		}
 	}
 	entry.DestinationTranslation = nestedDestinationTranslation
 
@@ -453,14 +453,14 @@ func specifyEntry(o *Entry) (any, error) {
 		if _, ok := o.Misc["DynamicDestinationTranslation"]; ok {
 			nestedDynamicDestinationTranslation.Misc = o.Misc["DynamicDestinationTranslation"]
 		}
+		if o.DynamicDestinationTranslation.TranslatedAddress != nil {
+			nestedDynamicDestinationTranslation.TranslatedAddress = o.DynamicDestinationTranslation.TranslatedAddress
+		}
 		if o.DynamicDestinationTranslation.TranslatedPort != nil {
 			nestedDynamicDestinationTranslation.TranslatedPort = o.DynamicDestinationTranslation.TranslatedPort
 		}
 		if o.DynamicDestinationTranslation.Distribution != nil {
 			nestedDynamicDestinationTranslation.Distribution = o.DynamicDestinationTranslation.Distribution
-		}
-		if o.DynamicDestinationTranslation.TranslatedAddress != nil {
-			nestedDynamicDestinationTranslation.TranslatedAddress = o.DynamicDestinationTranslation.TranslatedAddress
 		}
 	}
 	entry.DynamicDestinationTranslation = nestedDynamicDestinationTranslation
@@ -491,18 +491,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 			nestedSourceTranslation = &SourceTranslation{}
 			if o.SourceTranslation.Misc != nil {
 				entry.Misc["SourceTranslation"] = o.SourceTranslation.Misc
-			}
-			if o.SourceTranslation.StaticIp != nil {
-				nestedSourceTranslation.StaticIp = &SourceTranslationStaticIp{}
-				if o.SourceTranslation.StaticIp.Misc != nil {
-					entry.Misc["SourceTranslationStaticIp"] = o.SourceTranslation.StaticIp.Misc
-				}
-				if o.SourceTranslation.StaticIp.BiDirectional != nil {
-					nestedSourceTranslation.StaticIp.BiDirectional = o.SourceTranslation.StaticIp.BiDirectional
-				}
-				if o.SourceTranslation.StaticIp.TranslatedAddress != nil {
-					nestedSourceTranslation.StaticIp.TranslatedAddress = o.SourceTranslation.StaticIp.TranslatedAddress
-				}
 			}
 			if o.SourceTranslation.DynamicIp != nil {
 				nestedSourceTranslation.DynamicIp = &SourceTranslationDynamicIp{}
@@ -561,6 +549,18 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 					nestedSourceTranslation.DynamicIpAndPort.TranslatedAddress = util.MemToStr(o.SourceTranslation.DynamicIpAndPort.TranslatedAddress)
 				}
 			}
+			if o.SourceTranslation.StaticIp != nil {
+				nestedSourceTranslation.StaticIp = &SourceTranslationStaticIp{}
+				if o.SourceTranslation.StaticIp.Misc != nil {
+					entry.Misc["SourceTranslationStaticIp"] = o.SourceTranslation.StaticIp.Misc
+				}
+				if o.SourceTranslation.StaticIp.BiDirectional != nil {
+					nestedSourceTranslation.StaticIp.BiDirectional = o.SourceTranslation.StaticIp.BiDirectional
+				}
+				if o.SourceTranslation.StaticIp.TranslatedAddress != nil {
+					nestedSourceTranslation.StaticIp.TranslatedAddress = o.SourceTranslation.StaticIp.TranslatedAddress
+				}
+			}
 		}
 		entry.SourceTranslation = nestedSourceTranslation
 
@@ -615,9 +615,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 			if o.DestinationTranslation.Misc != nil {
 				entry.Misc["DestinationTranslation"] = o.DestinationTranslation.Misc
 			}
-			if o.DestinationTranslation.TranslatedAddress != nil {
-				nestedDestinationTranslation.TranslatedAddress = o.DestinationTranslation.TranslatedAddress
-			}
 			if o.DestinationTranslation.TranslatedPort != nil {
 				nestedDestinationTranslation.TranslatedPort = o.DestinationTranslation.TranslatedPort
 			}
@@ -629,6 +626,9 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				if o.DestinationTranslation.DnsRewrite.Direction != nil {
 					nestedDestinationTranslation.DnsRewrite.Direction = o.DestinationTranslation.DnsRewrite.Direction
 				}
+			}
+			if o.DestinationTranslation.TranslatedAddress != nil {
+				nestedDestinationTranslation.TranslatedAddress = o.DestinationTranslation.TranslatedAddress
 			}
 		}
 		entry.DestinationTranslation = nestedDestinationTranslation
@@ -722,6 +722,56 @@ func SpecMatches(a, b *Entry) bool {
 	return true
 }
 
+func matchTargetDevicesVsys(a []TargetDevicesVsys, b []TargetDevicesVsys) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	for _, a := range a {
+		for _, b := range b {
+			if !util.StringsEqual(a.Name, b.Name) {
+				return false
+			}
+		}
+	}
+	return true
+}
+func matchTargetDevices(a []TargetDevices, b []TargetDevices) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	for _, a := range a {
+		for _, b := range b {
+			if !matchTargetDevicesVsys(a.Vsys, b.Vsys) {
+				return false
+			}
+			if !util.StringsEqual(a.Name, b.Name) {
+				return false
+			}
+		}
+	}
+	return true
+}
+func matchTarget(a *Target, b *Target) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !matchTargetDevices(a.Devices, b.Devices) {
+		return false
+	}
+	if !util.BoolsMatch(a.Negate, b.Negate) {
+		return false
+	}
+	if !util.OrderedListsMatch(a.Tags, b.Tags) {
+		return false
+	}
+	return true
+}
 func matchSourceTranslationDynamicIpFallbackInterfaceAddress(a *SourceTranslationDynamicIpFallbackInterfaceAddress, b *SourceTranslationDynamicIpFallbackInterfaceAddress) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
@@ -776,10 +826,10 @@ func matchSourceTranslationDynamicIpAndPortInterfaceAddress(a *SourceTranslation
 	if !util.StringsMatch(a.Interface, b.Interface) {
 		return false
 	}
-	if !util.StringsMatch(a.Ip, b.Ip) {
+	if !util.StringsMatch(a.FloatingIp, b.FloatingIp) {
 		return false
 	}
-	if !util.StringsMatch(a.FloatingIp, b.FloatingIp) {
+	if !util.StringsMatch(a.Ip, b.Ip) {
 		return false
 	}
 	return true
@@ -818,63 +868,13 @@ func matchSourceTranslation(a *SourceTranslation, b *SourceTranslation) bool {
 	} else if a == nil && b == nil {
 		return true
 	}
+	if !matchSourceTranslationDynamicIp(a.DynamicIp, b.DynamicIp) {
+		return false
+	}
 	if !matchSourceTranslationDynamicIpAndPort(a.DynamicIpAndPort, b.DynamicIpAndPort) {
 		return false
 	}
 	if !matchSourceTranslationStaticIp(a.StaticIp, b.StaticIp) {
-		return false
-	}
-	if !matchSourceTranslationDynamicIp(a.DynamicIp, b.DynamicIp) {
-		return false
-	}
-	return true
-}
-func matchTargetDevicesVsys(a []TargetDevicesVsys, b []TargetDevicesVsys) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	for _, a := range a {
-		for _, b := range b {
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-		}
-	}
-	return true
-}
-func matchTargetDevices(a []TargetDevices, b []TargetDevices) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	for _, a := range a {
-		for _, b := range b {
-			if !matchTargetDevicesVsys(a.Vsys, b.Vsys) {
-				return false
-			}
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-		}
-	}
-	return true
-}
-func matchTarget(a *Target, b *Target) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !matchTargetDevices(a.Devices, b.Devices) {
-		return false
-	}
-	if !util.BoolsMatch(a.Negate, b.Negate) {
-		return false
-	}
-	if !util.OrderedListsMatch(a.Tags, b.Tags) {
 		return false
 	}
 	return true

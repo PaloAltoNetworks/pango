@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{"template-stack"}
+	Suffix = []string{}
 )
 
 type Entry struct {

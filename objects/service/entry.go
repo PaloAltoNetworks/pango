@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{"service"}
+	Suffix = []string{}
 )
 
 type Entry struct {
@@ -241,6 +241,12 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				if o.Protocol.Udp.Misc != nil {
 					entry.Misc["ProtocolUdp"] = o.Protocol.Udp.Misc
 				}
+				if o.Protocol.Udp.Port != nil {
+					nestedProtocol.Udp.Port = o.Protocol.Udp.Port
+				}
+				if o.Protocol.Udp.SourcePort != nil {
+					nestedProtocol.Udp.SourcePort = o.Protocol.Udp.SourcePort
+				}
 				if o.Protocol.Udp.Override != nil {
 					nestedProtocol.Udp.Override = &ProtocolUdpOverride{}
 					if o.Protocol.Udp.Override.Misc != nil {
@@ -249,12 +255,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 					if o.Protocol.Udp.Override.Timeout != nil {
 						nestedProtocol.Udp.Override.Timeout = o.Protocol.Udp.Override.Timeout
 					}
-				}
-				if o.Protocol.Udp.Port != nil {
-					nestedProtocol.Udp.Port = o.Protocol.Udp.Port
-				}
-				if o.Protocol.Udp.SourcePort != nil {
-					nestedProtocol.Udp.SourcePort = o.Protocol.Udp.SourcePort
 				}
 			}
 		}
@@ -294,34 +294,6 @@ func SpecMatches(a, b *Entry) bool {
 	return true
 }
 
-func matchProtocolUdpOverride(a *ProtocolUdpOverride, b *ProtocolUdpOverride) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !util.Ints64Match(a.Timeout, b.Timeout) {
-		return false
-	}
-	return true
-}
-func matchProtocolUdp(a *ProtocolUdp, b *ProtocolUdp) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !matchProtocolUdpOverride(a.Override, b.Override) {
-		return false
-	}
-	if !util.StringsMatch(a.Port, b.Port) {
-		return false
-	}
-	if !util.StringsMatch(a.SourcePort, b.SourcePort) {
-		return false
-	}
-	return true
-}
 func matchProtocolTcpOverride(a *ProtocolTcpOverride, b *ProtocolTcpOverride) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
@@ -345,13 +317,41 @@ func matchProtocolTcp(a *ProtocolTcp, b *ProtocolTcp) bool {
 	} else if a == nil && b == nil {
 		return true
 	}
+	if !matchProtocolTcpOverride(a.Override, b.Override) {
+		return false
+	}
 	if !util.StringsMatch(a.Port, b.Port) {
 		return false
 	}
 	if !util.StringsMatch(a.SourcePort, b.SourcePort) {
 		return false
 	}
-	if !matchProtocolTcpOverride(a.Override, b.Override) {
+	return true
+}
+func matchProtocolUdpOverride(a *ProtocolUdpOverride, b *ProtocolUdpOverride) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !util.Ints64Match(a.Timeout, b.Timeout) {
+		return false
+	}
+	return true
+}
+func matchProtocolUdp(a *ProtocolUdp, b *ProtocolUdp) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !util.StringsMatch(a.Port, b.Port) {
+		return false
+	}
+	if !util.StringsMatch(a.SourcePort, b.SourcePort) {
+		return false
+	}
+	if !matchProtocolUdpOverride(a.Override, b.Override) {
 		return false
 	}
 	return true
@@ -362,10 +362,10 @@ func matchProtocol(a *Protocol, b *Protocol) bool {
 	} else if a == nil && b == nil {
 		return true
 	}
-	if !matchProtocolUdp(a.Udp, b.Udp) {
+	if !matchProtocolTcp(a.Tcp, b.Tcp) {
 		return false
 	}
-	if !matchProtocolTcp(a.Tcp, b.Tcp) {
+	if !matchProtocolUdp(a.Udp, b.Udp) {
 		return false
 	}
 	return true

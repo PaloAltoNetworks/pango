@@ -654,6 +654,58 @@ func (c *Client) RequestPasswordHash(ctx context.Context, v string) (string, err
 	return ans.Hash, nil
 }
 
+// Generate API Key for the provided username/password pair.
+//
+// Generation of the API Key will also invalidate the existing key for the given user.
+func (c *Client) GenerateApiKey(ctx context.Context, username string, password string) (string, error) {
+	if username == "" || password == "" {
+		return "", fmt.Errorf("username and password cannot be empty")
+	}
+
+	data := url.Values{}
+	data.Set("user", username)
+	data.Set("password", password)
+
+	url := fmt.Sprintf("%s/?type=keygen", c.api_url)
+	request, err := http.NewRequestWithContext(ctx, "POST", url, strings.NewReader(data.Encode()))
+	if err != nil {
+		return "", err
+	}
+
+	request.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+
+	resp, err := c.con.Do(request)
+	if err != nil {
+		return "", err
+	}
+
+	defer resp.Body.Close()
+
+	bodyBytes, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return "", err
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		err := fmt.Errorf("server returned an error when generating API Key: %s", string(bodyBytes))
+		return "", err
+	}
+
+	type xmlResponse struct {
+		XMLName xml.Name `xml:"response"`
+		Key     string   `xml:"result>key"`
+	}
+
+	response := &xmlResponse{}
+	err = xml.Unmarshal(bodyBytes, &response)
+	if err != nil {
+		return "", err
+	}
+
+	return response.Key, nil
+
+}
+
 // ValidateConfig performs a commit config validation check.
 //
 // Use WaitForJob and the uint returned from this function to get the
