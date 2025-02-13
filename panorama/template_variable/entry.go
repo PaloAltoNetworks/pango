@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{}
+	Suffix = []string{"variable"}
 )
 
 type Entry struct {
@@ -96,8 +96,29 @@ func specifyEntry(o *Entry) (any, error) {
 		if _, ok := o.Misc["Type"]; ok {
 			nestedType.Misc = o.Misc["Type"]
 		}
-		if o.Type.IpNetmask != nil {
-			nestedType.IpNetmask = o.Type.IpNetmask
+		if o.Type.Fqdn != nil {
+			nestedType.Fqdn = o.Type.Fqdn
+		}
+		if o.Type.GroupId != nil {
+			nestedType.GroupId = o.Type.GroupId
+		}
+		if o.Type.DeviceId != nil {
+			nestedType.DeviceId = o.Type.DeviceId
+		}
+		if o.Type.QosProfile != nil {
+			nestedType.QosProfile = o.Type.QosProfile
+		}
+		if o.Type.LinkTag != nil {
+			nestedType.LinkTag = o.Type.LinkTag
+		}
+		if o.Type.IpRange != nil {
+			nestedType.IpRange = o.Type.IpRange
+		}
+		if o.Type.DevicePriority != nil {
+			nestedType.DevicePriority = o.Type.DevicePriority
+		}
+		if o.Type.Interface != nil {
+			nestedType.Interface = o.Type.Interface
 		}
 		if o.Type.AsNumber != nil {
 			nestedType.AsNumber = o.Type.AsNumber
@@ -105,29 +126,8 @@ func specifyEntry(o *Entry) (any, error) {
 		if o.Type.EgressMax != nil {
 			nestedType.EgressMax = o.Type.EgressMax
 		}
-		if o.Type.IpRange != nil {
-			nestedType.IpRange = o.Type.IpRange
-		}
-		if o.Type.Fqdn != nil {
-			nestedType.Fqdn = o.Type.Fqdn
-		}
-		if o.Type.GroupId != nil {
-			nestedType.GroupId = o.Type.GroupId
-		}
-		if o.Type.DevicePriority != nil {
-			nestedType.DevicePriority = o.Type.DevicePriority
-		}
-		if o.Type.DeviceId != nil {
-			nestedType.DeviceId = o.Type.DeviceId
-		}
-		if o.Type.Interface != nil {
-			nestedType.Interface = o.Type.Interface
-		}
-		if o.Type.QosProfile != nil {
-			nestedType.QosProfile = o.Type.QosProfile
-		}
-		if o.Type.LinkTag != nil {
-			nestedType.LinkTag = o.Type.LinkTag
+		if o.Type.IpNetmask != nil {
+			nestedType.IpNetmask = o.Type.IpNetmask
 		}
 	}
 	entry.Type = nestedType
@@ -154,20 +154,14 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 			if o.Type.IpNetmask != nil {
 				nestedType.IpNetmask = o.Type.IpNetmask
 			}
-			if o.Type.AsNumber != nil {
-				nestedType.AsNumber = o.Type.AsNumber
-			}
 			if o.Type.DevicePriority != nil {
 				nestedType.DevicePriority = o.Type.DevicePriority
-			}
-			if o.Type.DeviceId != nil {
-				nestedType.DeviceId = o.Type.DeviceId
 			}
 			if o.Type.Interface != nil {
 				nestedType.Interface = o.Type.Interface
 			}
-			if o.Type.QosProfile != nil {
-				nestedType.QosProfile = o.Type.QosProfile
+			if o.Type.AsNumber != nil {
+				nestedType.AsNumber = o.Type.AsNumber
 			}
 			if o.Type.EgressMax != nil {
 				nestedType.EgressMax = o.Type.EgressMax
@@ -180,6 +174,12 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 			}
 			if o.Type.GroupId != nil {
 				nestedType.GroupId = o.Type.GroupId
+			}
+			if o.Type.DeviceId != nil {
+				nestedType.DeviceId = o.Type.DeviceId
+			}
+			if o.Type.QosProfile != nil {
+				nestedType.QosProfile = o.Type.QosProfile
 			}
 			if o.Type.LinkTag != nil {
 				nestedType.LinkTag = o.Type.LinkTag
@@ -219,13 +219,19 @@ func matchType(a *Type, b *Type) bool {
 	} else if a == nil && b == nil {
 		return true
 	}
-	if !util.StringsMatch(a.IpNetmask, b.IpNetmask) {
+	if !util.StringsMatch(a.DevicePriority, b.DevicePriority) {
+		return false
+	}
+	if !util.StringsMatch(a.Interface, b.Interface) {
 		return false
 	}
 	if !util.StringsMatch(a.AsNumber, b.AsNumber) {
 		return false
 	}
-	if !util.StringsMatch(a.IpRange, b.IpRange) {
+	if !util.StringsMatch(a.EgressMax, b.EgressMax) {
+		return false
+	}
+	if !util.StringsMatch(a.IpNetmask, b.IpNetmask) {
 		return false
 	}
 	if !util.StringsMatch(a.Fqdn, b.Fqdn) {
@@ -234,22 +240,16 @@ func matchType(a *Type, b *Type) bool {
 	if !util.StringsMatch(a.GroupId, b.GroupId) {
 		return false
 	}
-	if !util.StringsMatch(a.DevicePriority, b.DevicePriority) {
-		return false
-	}
 	if !util.StringsMatch(a.DeviceId, b.DeviceId) {
-		return false
-	}
-	if !util.StringsMatch(a.Interface, b.Interface) {
 		return false
 	}
 	if !util.StringsMatch(a.QosProfile, b.QosProfile) {
 		return false
 	}
-	if !util.StringsMatch(a.EgressMax, b.EgressMax) {
+	if !util.StringsMatch(a.LinkTag, b.LinkTag) {
 		return false
 	}
-	if !util.StringsMatch(a.LinkTag, b.LinkTag) {
+	if !util.StringsMatch(a.IpRange, b.IpRange) {
 		return false
 	}
 	return true

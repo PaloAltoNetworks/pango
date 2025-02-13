@@ -186,16 +186,13 @@ func specifyConfig(o *Config) (any, error) {
 			if _, ok := o.Misc["NtpServersPrimaryNtpServer"]; ok {
 				nestedNtpServers.PrimaryNtpServer.Misc = o.Misc["NtpServersPrimaryNtpServer"]
 			}
+			if o.NtpServers.PrimaryNtpServer.NtpServerAddress != nil {
+				nestedNtpServers.PrimaryNtpServer.NtpServerAddress = o.NtpServers.PrimaryNtpServer.NtpServerAddress
+			}
 			if o.NtpServers.PrimaryNtpServer.AuthenticationType != nil {
 				nestedNtpServers.PrimaryNtpServer.AuthenticationType = &NtpServersPrimaryNtpServerAuthenticationTypeXml{}
 				if _, ok := o.Misc["NtpServersPrimaryNtpServerAuthenticationType"]; ok {
 					nestedNtpServers.PrimaryNtpServer.AuthenticationType.Misc = o.Misc["NtpServersPrimaryNtpServerAuthenticationType"]
-				}
-				if o.NtpServers.PrimaryNtpServer.AuthenticationType.Autokey != nil {
-					nestedNtpServers.PrimaryNtpServer.AuthenticationType.Autokey = &NtpServersPrimaryNtpServerAuthenticationTypeAutokeyXml{}
-					if _, ok := o.Misc["NtpServersPrimaryNtpServerAuthenticationTypeAutokey"]; ok {
-						nestedNtpServers.PrimaryNtpServer.AuthenticationType.Autokey.Misc = o.Misc["NtpServersPrimaryNtpServerAuthenticationTypeAutokey"]
-					}
 				}
 				if o.NtpServers.PrimaryNtpServer.AuthenticationType.None != nil {
 					nestedNtpServers.PrimaryNtpServer.AuthenticationType.None = &NtpServersPrimaryNtpServerAuthenticationTypeNoneXml{}
@@ -236,9 +233,12 @@ func specifyConfig(o *Config) (any, error) {
 						nestedNtpServers.PrimaryNtpServer.AuthenticationType.SymmetricKey.KeyId = o.NtpServers.PrimaryNtpServer.AuthenticationType.SymmetricKey.KeyId
 					}
 				}
-			}
-			if o.NtpServers.PrimaryNtpServer.NtpServerAddress != nil {
-				nestedNtpServers.PrimaryNtpServer.NtpServerAddress = o.NtpServers.PrimaryNtpServer.NtpServerAddress
+				if o.NtpServers.PrimaryNtpServer.AuthenticationType.Autokey != nil {
+					nestedNtpServers.PrimaryNtpServer.AuthenticationType.Autokey = &NtpServersPrimaryNtpServerAuthenticationTypeAutokeyXml{}
+					if _, ok := o.Misc["NtpServersPrimaryNtpServerAuthenticationTypeAutokey"]; ok {
+						nestedNtpServers.PrimaryNtpServer.AuthenticationType.Autokey.Misc = o.Misc["NtpServersPrimaryNtpServerAuthenticationTypeAutokey"]
+					}
+				}
 			}
 		}
 		if o.NtpServers.SecondaryNtpServer != nil {
@@ -251,25 +251,10 @@ func specifyConfig(o *Config) (any, error) {
 				if _, ok := o.Misc["NtpServersSecondaryNtpServerAuthenticationType"]; ok {
 					nestedNtpServers.SecondaryNtpServer.AuthenticationType.Misc = o.Misc["NtpServersSecondaryNtpServerAuthenticationType"]
 				}
-				if o.NtpServers.SecondaryNtpServer.AuthenticationType.Autokey != nil {
-					nestedNtpServers.SecondaryNtpServer.AuthenticationType.Autokey = &NtpServersSecondaryNtpServerAuthenticationTypeAutokeyXml{}
-					if _, ok := o.Misc["NtpServersSecondaryNtpServerAuthenticationTypeAutokey"]; ok {
-						nestedNtpServers.SecondaryNtpServer.AuthenticationType.Autokey.Misc = o.Misc["NtpServersSecondaryNtpServerAuthenticationTypeAutokey"]
-					}
-				}
-				if o.NtpServers.SecondaryNtpServer.AuthenticationType.None != nil {
-					nestedNtpServers.SecondaryNtpServer.AuthenticationType.None = &NtpServersSecondaryNtpServerAuthenticationTypeNoneXml{}
-					if _, ok := o.Misc["NtpServersSecondaryNtpServerAuthenticationTypeNone"]; ok {
-						nestedNtpServers.SecondaryNtpServer.AuthenticationType.None.Misc = o.Misc["NtpServersSecondaryNtpServerAuthenticationTypeNone"]
-					}
-				}
 				if o.NtpServers.SecondaryNtpServer.AuthenticationType.SymmetricKey != nil {
 					nestedNtpServers.SecondaryNtpServer.AuthenticationType.SymmetricKey = &NtpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyXml{}
 					if _, ok := o.Misc["NtpServersSecondaryNtpServerAuthenticationTypeSymmetricKey"]; ok {
 						nestedNtpServers.SecondaryNtpServer.AuthenticationType.SymmetricKey.Misc = o.Misc["NtpServersSecondaryNtpServerAuthenticationTypeSymmetricKey"]
-					}
-					if o.NtpServers.SecondaryNtpServer.AuthenticationType.SymmetricKey.KeyId != nil {
-						nestedNtpServers.SecondaryNtpServer.AuthenticationType.SymmetricKey.KeyId = o.NtpServers.SecondaryNtpServer.AuthenticationType.SymmetricKey.KeyId
 					}
 					if o.NtpServers.SecondaryNtpServer.AuthenticationType.SymmetricKey.Algorithm != nil {
 						nestedNtpServers.SecondaryNtpServer.AuthenticationType.SymmetricKey.Algorithm = &NtpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmXml{}
@@ -294,6 +279,21 @@ func specifyConfig(o *Config) (any, error) {
 								nestedNtpServers.SecondaryNtpServer.AuthenticationType.SymmetricKey.Algorithm.Sha1.AuthenticationKey = o.NtpServers.SecondaryNtpServer.AuthenticationType.SymmetricKey.Algorithm.Sha1.AuthenticationKey
 							}
 						}
+					}
+					if o.NtpServers.SecondaryNtpServer.AuthenticationType.SymmetricKey.KeyId != nil {
+						nestedNtpServers.SecondaryNtpServer.AuthenticationType.SymmetricKey.KeyId = o.NtpServers.SecondaryNtpServer.AuthenticationType.SymmetricKey.KeyId
+					}
+				}
+				if o.NtpServers.SecondaryNtpServer.AuthenticationType.Autokey != nil {
+					nestedNtpServers.SecondaryNtpServer.AuthenticationType.Autokey = &NtpServersSecondaryNtpServerAuthenticationTypeAutokeyXml{}
+					if _, ok := o.Misc["NtpServersSecondaryNtpServerAuthenticationTypeAutokey"]; ok {
+						nestedNtpServers.SecondaryNtpServer.AuthenticationType.Autokey.Misc = o.Misc["NtpServersSecondaryNtpServerAuthenticationTypeAutokey"]
+					}
+				}
+				if o.NtpServers.SecondaryNtpServer.AuthenticationType.None != nil {
+					nestedNtpServers.SecondaryNtpServer.AuthenticationType.None = &NtpServersSecondaryNtpServerAuthenticationTypeNoneXml{}
+					if _, ok := o.Misc["NtpServersSecondaryNtpServerAuthenticationTypeNone"]; ok {
+						nestedNtpServers.SecondaryNtpServer.AuthenticationType.None.Misc = o.Misc["NtpServersSecondaryNtpServerAuthenticationTypeNone"]
 					}
 				}
 			}
@@ -330,6 +330,18 @@ func (c *configXmlContainer) Normalize() ([]*Config, error) {
 					if o.NtpServers.PrimaryNtpServer.AuthenticationType.Misc != nil {
 						config.Misc["NtpServersPrimaryNtpServerAuthenticationType"] = o.NtpServers.PrimaryNtpServer.AuthenticationType.Misc
 					}
+					if o.NtpServers.PrimaryNtpServer.AuthenticationType.Autokey != nil {
+						nestedNtpServers.PrimaryNtpServer.AuthenticationType.Autokey = &NtpServersPrimaryNtpServerAuthenticationTypeAutokey{}
+						if o.NtpServers.PrimaryNtpServer.AuthenticationType.Autokey.Misc != nil {
+							config.Misc["NtpServersPrimaryNtpServerAuthenticationTypeAutokey"] = o.NtpServers.PrimaryNtpServer.AuthenticationType.Autokey.Misc
+						}
+					}
+					if o.NtpServers.PrimaryNtpServer.AuthenticationType.None != nil {
+						nestedNtpServers.PrimaryNtpServer.AuthenticationType.None = &NtpServersPrimaryNtpServerAuthenticationTypeNone{}
+						if o.NtpServers.PrimaryNtpServer.AuthenticationType.None.Misc != nil {
+							config.Misc["NtpServersPrimaryNtpServerAuthenticationTypeNone"] = o.NtpServers.PrimaryNtpServer.AuthenticationType.None.Misc
+						}
+					}
 					if o.NtpServers.PrimaryNtpServer.AuthenticationType.SymmetricKey != nil {
 						nestedNtpServers.PrimaryNtpServer.AuthenticationType.SymmetricKey = &NtpServersPrimaryNtpServerAuthenticationTypeSymmetricKey{}
 						if o.NtpServers.PrimaryNtpServer.AuthenticationType.SymmetricKey.Misc != nil {
@@ -361,18 +373,6 @@ func (c *configXmlContainer) Normalize() ([]*Config, error) {
 						}
 						if o.NtpServers.PrimaryNtpServer.AuthenticationType.SymmetricKey.KeyId != nil {
 							nestedNtpServers.PrimaryNtpServer.AuthenticationType.SymmetricKey.KeyId = o.NtpServers.PrimaryNtpServer.AuthenticationType.SymmetricKey.KeyId
-						}
-					}
-					if o.NtpServers.PrimaryNtpServer.AuthenticationType.Autokey != nil {
-						nestedNtpServers.PrimaryNtpServer.AuthenticationType.Autokey = &NtpServersPrimaryNtpServerAuthenticationTypeAutokey{}
-						if o.NtpServers.PrimaryNtpServer.AuthenticationType.Autokey.Misc != nil {
-							config.Misc["NtpServersPrimaryNtpServerAuthenticationTypeAutokey"] = o.NtpServers.PrimaryNtpServer.AuthenticationType.Autokey.Misc
-						}
-					}
-					if o.NtpServers.PrimaryNtpServer.AuthenticationType.None != nil {
-						nestedNtpServers.PrimaryNtpServer.AuthenticationType.None = &NtpServersPrimaryNtpServerAuthenticationTypeNone{}
-						if o.NtpServers.PrimaryNtpServer.AuthenticationType.None.Misc != nil {
-							config.Misc["NtpServersPrimaryNtpServerAuthenticationTypeNone"] = o.NtpServers.PrimaryNtpServer.AuthenticationType.None.Misc
 						}
 					}
 				}
@@ -412,15 +412,6 @@ func (c *configXmlContainer) Normalize() ([]*Config, error) {
 							if o.NtpServers.SecondaryNtpServer.AuthenticationType.SymmetricKey.Algorithm.Misc != nil {
 								config.Misc["NtpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyAlgorithm"] = o.NtpServers.SecondaryNtpServer.AuthenticationType.SymmetricKey.Algorithm.Misc
 							}
-							if o.NtpServers.SecondaryNtpServer.AuthenticationType.SymmetricKey.Algorithm.Md5 != nil {
-								nestedNtpServers.SecondaryNtpServer.AuthenticationType.SymmetricKey.Algorithm.Md5 = &NtpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmMd5{}
-								if o.NtpServers.SecondaryNtpServer.AuthenticationType.SymmetricKey.Algorithm.Md5.Misc != nil {
-									config.Misc["NtpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmMd5"] = o.NtpServers.SecondaryNtpServer.AuthenticationType.SymmetricKey.Algorithm.Md5.Misc
-								}
-								if o.NtpServers.SecondaryNtpServer.AuthenticationType.SymmetricKey.Algorithm.Md5.AuthenticationKey != nil {
-									nestedNtpServers.SecondaryNtpServer.AuthenticationType.SymmetricKey.Algorithm.Md5.AuthenticationKey = o.NtpServers.SecondaryNtpServer.AuthenticationType.SymmetricKey.Algorithm.Md5.AuthenticationKey
-								}
-							}
 							if o.NtpServers.SecondaryNtpServer.AuthenticationType.SymmetricKey.Algorithm.Sha1 != nil {
 								nestedNtpServers.SecondaryNtpServer.AuthenticationType.SymmetricKey.Algorithm.Sha1 = &NtpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmSha1{}
 								if o.NtpServers.SecondaryNtpServer.AuthenticationType.SymmetricKey.Algorithm.Sha1.Misc != nil {
@@ -428,6 +419,15 @@ func (c *configXmlContainer) Normalize() ([]*Config, error) {
 								}
 								if o.NtpServers.SecondaryNtpServer.AuthenticationType.SymmetricKey.Algorithm.Sha1.AuthenticationKey != nil {
 									nestedNtpServers.SecondaryNtpServer.AuthenticationType.SymmetricKey.Algorithm.Sha1.AuthenticationKey = o.NtpServers.SecondaryNtpServer.AuthenticationType.SymmetricKey.Algorithm.Sha1.AuthenticationKey
+								}
+							}
+							if o.NtpServers.SecondaryNtpServer.AuthenticationType.SymmetricKey.Algorithm.Md5 != nil {
+								nestedNtpServers.SecondaryNtpServer.AuthenticationType.SymmetricKey.Algorithm.Md5 = &NtpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmMd5{}
+								if o.NtpServers.SecondaryNtpServer.AuthenticationType.SymmetricKey.Algorithm.Md5.Misc != nil {
+									config.Misc["NtpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmMd5"] = o.NtpServers.SecondaryNtpServer.AuthenticationType.SymmetricKey.Algorithm.Md5.Misc
+								}
+								if o.NtpServers.SecondaryNtpServer.AuthenticationType.SymmetricKey.Algorithm.Md5.AuthenticationKey != nil {
+									nestedNtpServers.SecondaryNtpServer.AuthenticationType.SymmetricKey.Algorithm.Md5.AuthenticationKey = o.NtpServers.SecondaryNtpServer.AuthenticationType.SymmetricKey.Algorithm.Md5.AuthenticationKey
 								}
 							}
 						}
@@ -621,10 +621,10 @@ func matchNtpServersSecondaryNtpServerAuthenticationTypeSymmetricKey(a *NtpServe
 	} else if a == nil && b == nil {
 		return true
 	}
-	if !matchNtpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyAlgorithm(a.Algorithm, b.Algorithm) {
+	if !util.Ints64Match(a.KeyId, b.KeyId) {
 		return false
 	}
-	if !util.Ints64Match(a.KeyId, b.KeyId) {
+	if !matchNtpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyAlgorithm(a.Algorithm, b.Algorithm) {
 		return false
 	}
 	return true

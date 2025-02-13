@@ -156,6 +156,9 @@ func specifyEntry(o *Entry) (any, error) {
 			if _, ok := o.Misc["Certificate"]; ok {
 				nestedCertificate.Misc = o.Misc["Certificate"]
 			}
+			if oCertificate.Name != "" {
+				nestedCertificate.Name = oCertificate.Name
+			}
 			if oCertificate.DefaultOcspUrl != nil {
 				nestedCertificate.DefaultOcspUrl = oCertificate.DefaultOcspUrl
 			}
@@ -164,9 +167,6 @@ func specifyEntry(o *Entry) (any, error) {
 			}
 			if oCertificate.TemplateName != nil {
 				nestedCertificate.TemplateName = oCertificate.TemplateName
-			}
-			if oCertificate.Name != "" {
-				nestedCertificate.Name = oCertificate.Name
 			}
 			nestedCertificateCol = append(nestedCertificateCol, nestedCertificate)
 		}
@@ -186,11 +186,11 @@ func specifyEntry(o *Entry) (any, error) {
 		if _, ok := o.Misc["UsernameField"]; ok {
 			nestedUsernameField.Misc = o.Misc["UsernameField"]
 		}
-		if o.UsernameField.Subject != nil {
-			nestedUsernameField.Subject = o.UsernameField.Subject
-		}
 		if o.UsernameField.SubjectAlt != nil {
 			nestedUsernameField.SubjectAlt = o.UsernameField.SubjectAlt
+		}
+		if o.UsernameField.Subject != nil {
+			nestedUsernameField.Subject = o.UsernameField.Subject
 		}
 	}
 	entry.UsernameField = nestedUsernameField
@@ -317,6 +317,30 @@ func SpecMatches(a, b *Entry) bool {
 	return true
 }
 
+func matchCertificate(a []Certificate, b []Certificate) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	for _, a := range a {
+		for _, b := range b {
+			if !util.StringsMatch(a.TemplateName, b.TemplateName) {
+				return false
+			}
+			if !util.StringsEqual(a.Name, b.Name) {
+				return false
+			}
+			if !util.StringsMatch(a.DefaultOcspUrl, b.DefaultOcspUrl) {
+				return false
+			}
+			if !util.StringsMatch(a.OcspVerifyCertificate, b.OcspVerifyCertificate) {
+				return false
+			}
+		}
+	}
+	return true
+}
 func matchUsernameField(a *UsernameField, b *UsernameField) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
@@ -328,30 +352,6 @@ func matchUsernameField(a *UsernameField, b *UsernameField) bool {
 	}
 	if !util.StringsMatch(a.SubjectAlt, b.SubjectAlt) {
 		return false
-	}
-	return true
-}
-func matchCertificate(a []Certificate, b []Certificate) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	for _, a := range a {
-		for _, b := range b {
-			if !util.StringsMatch(a.DefaultOcspUrl, b.DefaultOcspUrl) {
-				return false
-			}
-			if !util.StringsMatch(a.OcspVerifyCertificate, b.OcspVerifyCertificate) {
-				return false
-			}
-			if !util.StringsMatch(a.TemplateName, b.TemplateName) {
-				return false
-			}
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-		}
 	}
 	return true
 }

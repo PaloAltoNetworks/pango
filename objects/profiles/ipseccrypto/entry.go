@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{}
+	Suffix = []string{"network", "ike", "crypto-profiles", "ipsec-crypto-profiles"}
 )
 
 type Entry struct {
@@ -129,6 +129,9 @@ func specifyEntry(o *Entry) (any, error) {
 		if _, ok := o.Misc["Lifesize"]; ok {
 			nestedLifesize.Misc = o.Misc["Lifesize"]
 		}
+		if o.Lifesize.Tb != nil {
+			nestedLifesize.Tb = o.Lifesize.Tb
+		}
 		if o.Lifesize.Gb != nil {
 			nestedLifesize.Gb = o.Lifesize.Gb
 		}
@@ -137,9 +140,6 @@ func specifyEntry(o *Entry) (any, error) {
 		}
 		if o.Lifesize.Mb != nil {
 			nestedLifesize.Mb = o.Lifesize.Mb
-		}
-		if o.Lifesize.Tb != nil {
-			nestedLifesize.Tb = o.Lifesize.Tb
 		}
 	}
 	entry.Lifesize = nestedLifesize
@@ -150,9 +150,6 @@ func specifyEntry(o *Entry) (any, error) {
 		if _, ok := o.Misc["Lifetime"]; ok {
 			nestedLifetime.Misc = o.Misc["Lifetime"]
 		}
-		if o.Lifetime.Days != nil {
-			nestedLifetime.Days = o.Lifetime.Days
-		}
 		if o.Lifetime.Hours != nil {
 			nestedLifetime.Hours = o.Lifetime.Hours
 		}
@@ -161,6 +158,9 @@ func specifyEntry(o *Entry) (any, error) {
 		}
 		if o.Lifetime.Seconds != nil {
 			nestedLifetime.Seconds = o.Lifetime.Seconds
+		}
+		if o.Lifetime.Days != nil {
+			nestedLifetime.Days = o.Lifetime.Days
 		}
 	}
 	entry.Lifetime = nestedLifetime
@@ -232,17 +232,17 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 			if o.Lifetime.Misc != nil {
 				entry.Misc["Lifetime"] = o.Lifetime.Misc
 			}
-			if o.Lifetime.Minutes != nil {
-				nestedLifetime.Minutes = o.Lifetime.Minutes
-			}
-			if o.Lifetime.Seconds != nil {
-				nestedLifetime.Seconds = o.Lifetime.Seconds
-			}
 			if o.Lifetime.Days != nil {
 				nestedLifetime.Days = o.Lifetime.Days
 			}
 			if o.Lifetime.Hours != nil {
 				nestedLifetime.Hours = o.Lifetime.Hours
+			}
+			if o.Lifetime.Minutes != nil {
+				nestedLifetime.Minutes = o.Lifetime.Minutes
+			}
+			if o.Lifetime.Seconds != nil {
+				nestedLifetime.Seconds = o.Lifetime.Seconds
 			}
 		}
 		entry.Lifetime = nestedLifetime
@@ -335,6 +335,9 @@ func matchLifetime(a *Lifetime, b *Lifetime) bool {
 	} else if a == nil && b == nil {
 		return true
 	}
+	if !util.Ints64Match(a.Days, b.Days) {
+		return false
+	}
 	if !util.Ints64Match(a.Hours, b.Hours) {
 		return false
 	}
@@ -342,9 +345,6 @@ func matchLifetime(a *Lifetime, b *Lifetime) bool {
 		return false
 	}
 	if !util.Ints64Match(a.Seconds, b.Seconds) {
-		return false
-	}
-	if !util.Ints64Match(a.Days, b.Days) {
 		return false
 	}
 	return true

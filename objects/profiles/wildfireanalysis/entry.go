@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{}
+	Suffix = []string{"profiles", "wildfire-analysis"}
 )
 
 type Entry struct {
@@ -138,6 +138,12 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				if oRules.Misc != nil {
 					entry.Misc["Rules"] = oRules.Misc
 				}
+				if oRules.Analysis != nil {
+					nestedRules.Analysis = oRules.Analysis
+				}
+				if oRules.Name != "" {
+					nestedRules.Name = oRules.Name
+				}
 				if oRules.Application != nil {
 					nestedRules.Application = util.MemToStr(oRules.Application)
 				}
@@ -146,12 +152,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				}
 				if oRules.Direction != nil {
 					nestedRules.Direction = oRules.Direction
-				}
-				if oRules.Analysis != nil {
-					nestedRules.Analysis = oRules.Analysis
-				}
-				if oRules.Name != "" {
-					nestedRules.Name = oRules.Name
 				}
 				nestedRulesCol = append(nestedRulesCol, nestedRules)
 			}

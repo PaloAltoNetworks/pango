@@ -27,66 +27,76 @@ func (s *Service) Create(ctx context.Context, loc Location, entry *Entry) (*Entr
 	}
 
 	vn := s.client.Versioning()
+
+	specifier, _, err := Versioning(vn)
+	if err != nil {
+		return nil, err
+	}
 	path, err := loc.XpathWithEntryName(vn, entry.Name)
 	if err != nil {
 		return nil, err
 	}
-	err = s.CreateWithXpath(ctx, util.AsXpath(path[:len(path)-1]), entry)
+	createSpec, err := specifier(entry)
 	if err != nil {
 		return nil, err
 	}
 
-	return s.ReadWithXpath(ctx, util.AsXpath(path), "get")
-}
-
-func (s *Service) CreateWithXpath(ctx context.Context, xpath string, entry *Entry) error {
-	vn := s.client.Versioning()
-	specifier, _, err := Versioning(vn)
-	if err != nil {
-		return err
-	}
-	createSpec, err := specifier(entry)
-	if err != nil {
-		return err
-	}
-
 	cmd := &xmlapi.Config{
 		Action:  "set",
-		Xpath:   xpath,
+		Xpath:   util.AsXpath(path[:len(path)-1]),
 		Element: createSpec,
 		Target:  s.client.GetTarget(),
 	}
 
 	if _, _, err = s.client.Communicate(ctx, cmd, false, nil); err != nil {
-		return err
+		return nil, err
 	}
-
-	return nil
+	return s.Read(ctx, loc, entry.Name, "get")
 }
 
 // Read returns the given config object, using the specified action ("get" or "show").
 func (s *Service) Read(ctx context.Context, loc Location, name, action string) (*Entry, error) {
-	return s.read(ctx, loc, name, action)
+	return s.read(ctx, loc, name, action, false)
 }
 
-func (s *Service) ReadWithXpath(ctx context.Context, xpath string, action string) (*Entry, error) {
+// ReadFromConfig returns the given config object from the loaded XML config.
+// Requires that client.LoadPanosConfig() has been invoked.
+func (s *Service) ReadFromConfig(ctx context.Context, loc Location, name string) (*Entry, error) {
+	return s.read(ctx, loc, name, "", true)
+}
+
+func (s *Service) read(ctx context.Context, loc Location, value, action string, usePanosConfig bool) (*Entry, error) {
+	if value == "" {
+		return nil, errors.NameNotSpecifiedError
+	}
 	vn := s.client.Versioning()
 	_, normalizer, err := Versioning(vn)
 	if err != nil {
 		return nil, err
 	}
-
-	cmd := &xmlapi.Config{
-		Action: action,
-		Xpath:  xpath,
-		Target: s.client.GetTarget(),
+	var path []string
+	path, err = loc.XpathWithEntryName(vn, value)
+	if err != nil {
+		return nil, err
 	}
 
-	if _, _, err = s.client.Communicate(ctx, cmd, true, normalizer); err != nil {
-		if err.Error() == "No such node" && action == "show" {
-			return nil, errors.ObjectNotFound()
+	if usePanosConfig {
+		if _, err = s.client.ReadFromConfig(ctx, path, true, normalizer); err != nil {
+			return nil, err
 		}
-		return nil, err
+	} else {
+		cmd := &xmlapi.Config{
+			Action: action,
+			Xpath:  util.AsXpath(path),
+			Target: s.client.GetTarget(),
+		}
+
+		if _, _, err = s.client.Communicate(ctx, cmd, true, normalizer); err != nil {
+			if err.Error() == "No such node" && action == "show" {
+				return nil, errors.ObjectNotFound()
+			}
+			return nil, err
+		}
 	}
 
 	list, err := normalizer.Normalize()
@@ -97,21 +107,6 @@ func (s *Service) ReadWithXpath(ctx context.Context, xpath string, action string
 	}
 
 	return list[0], nil
-}
-
-func (s *Service) read(ctx context.Context, loc Location, value, action string) (*Entry, error) {
-	if value == "" {
-		return nil, errors.NameNotSpecifiedError
-	}
-	vn := s.client.Versioning()
-	var path []string
-	var err error
-	path, err = loc.XpathWithEntryName(vn, value)
-	if err != nil {
-		return nil, err
-	}
-
-	return s.ReadWithXpath(ctx, util.AsXpath(path), action)
 }
 
 // Update updates the given config object, then returns the result.

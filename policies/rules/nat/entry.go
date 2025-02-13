@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{}
+	Suffix = []string{"nat", "rules"}
 )
 
 type Entry struct {
@@ -429,6 +429,9 @@ func specifyEntry(o *Entry) (any, error) {
 		if _, ok := o.Misc["DestinationTranslation"]; ok {
 			nestedDestinationTranslation.Misc = o.Misc["DestinationTranslation"]
 		}
+		if o.DestinationTranslation.TranslatedAddress != nil {
+			nestedDestinationTranslation.TranslatedAddress = o.DestinationTranslation.TranslatedAddress
+		}
 		if o.DestinationTranslation.TranslatedPort != nil {
 			nestedDestinationTranslation.TranslatedPort = o.DestinationTranslation.TranslatedPort
 		}
@@ -440,9 +443,6 @@ func specifyEntry(o *Entry) (any, error) {
 			if o.DestinationTranslation.DnsRewrite.Direction != nil {
 				nestedDestinationTranslation.DnsRewrite.Direction = o.DestinationTranslation.DnsRewrite.Direction
 			}
-		}
-		if o.DestinationTranslation.TranslatedAddress != nil {
-			nestedDestinationTranslation.TranslatedAddress = o.DestinationTranslation.TranslatedAddress
 		}
 	}
 	entry.DestinationTranslation = nestedDestinationTranslation
@@ -510,11 +510,11 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 						if o.SourceTranslation.DynamicIp.Fallback.InterfaceAddress.Interface != nil {
 							nestedSourceTranslation.DynamicIp.Fallback.InterfaceAddress.Interface = o.SourceTranslation.DynamicIp.Fallback.InterfaceAddress.Interface
 						}
-						if o.SourceTranslation.DynamicIp.Fallback.InterfaceAddress.FloatingIp != nil {
-							nestedSourceTranslation.DynamicIp.Fallback.InterfaceAddress.FloatingIp = o.SourceTranslation.DynamicIp.Fallback.InterfaceAddress.FloatingIp
-						}
 						if o.SourceTranslation.DynamicIp.Fallback.InterfaceAddress.Ip != nil {
 							nestedSourceTranslation.DynamicIp.Fallback.InterfaceAddress.Ip = o.SourceTranslation.DynamicIp.Fallback.InterfaceAddress.Ip
+						}
+						if o.SourceTranslation.DynamicIp.Fallback.InterfaceAddress.FloatingIp != nil {
+							nestedSourceTranslation.DynamicIp.Fallback.InterfaceAddress.FloatingIp = o.SourceTranslation.DynamicIp.Fallback.InterfaceAddress.FloatingIp
 						}
 					}
 					if o.SourceTranslation.DynamicIp.Fallback.TranslatedAddress != nil {
@@ -615,6 +615,9 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 			if o.DestinationTranslation.Misc != nil {
 				entry.Misc["DestinationTranslation"] = o.DestinationTranslation.Misc
 			}
+			if o.DestinationTranslation.TranslatedAddress != nil {
+				nestedDestinationTranslation.TranslatedAddress = o.DestinationTranslation.TranslatedAddress
+			}
 			if o.DestinationTranslation.TranslatedPort != nil {
 				nestedDestinationTranslation.TranslatedPort = o.DestinationTranslation.TranslatedPort
 			}
@@ -626,9 +629,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				if o.DestinationTranslation.DnsRewrite.Direction != nil {
 					nestedDestinationTranslation.DnsRewrite.Direction = o.DestinationTranslation.DnsRewrite.Direction
 				}
-			}
-			if o.DestinationTranslation.TranslatedAddress != nil {
-				nestedDestinationTranslation.TranslatedAddress = o.DestinationTranslation.TranslatedAddress
 			}
 		}
 		entry.DestinationTranslation = nestedDestinationTranslation
@@ -826,10 +826,10 @@ func matchSourceTranslationDynamicIpAndPortInterfaceAddress(a *SourceTranslation
 	if !util.StringsMatch(a.Interface, b.Interface) {
 		return false
 	}
-	if !util.StringsMatch(a.FloatingIp, b.FloatingIp) {
+	if !util.StringsMatch(a.Ip, b.Ip) {
 		return false
 	}
-	if !util.StringsMatch(a.Ip, b.Ip) {
+	if !util.StringsMatch(a.FloatingIp, b.FloatingIp) {
 		return false
 	}
 	return true

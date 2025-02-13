@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{}
+	Suffix = []string{"template"}
 )
 
 type Entry struct {
@@ -132,9 +132,6 @@ func specifyEntry(o *Entry) (any, error) {
 						if _, ok := o.Misc["ConfigDevicesVsys"]; ok {
 							nestedConfigDevicesVsys.Misc = o.Misc["ConfigDevicesVsys"]
 						}
-						if oConfigDevicesVsys.Name != "" {
-							nestedConfigDevicesVsys.Name = oConfigDevicesVsys.Name
-						}
 						if oConfigDevicesVsys.Import != nil {
 							nestedConfigDevicesVsys.Import = &ConfigDevicesVsysImportXml{}
 							if _, ok := o.Misc["ConfigDevicesVsysImport"]; ok {
@@ -149,6 +146,9 @@ func specifyEntry(o *Entry) (any, error) {
 									nestedConfigDevicesVsys.Import.Network.Interfaces = util.StrToMem(oConfigDevicesVsys.Import.Network.Interfaces)
 								}
 							}
+						}
+						if oConfigDevicesVsys.Name != "" {
+							nestedConfigDevicesVsys.Name = oConfigDevicesVsys.Name
 						}
 						nestedConfigDevices.Vsys = append(nestedConfigDevices.Vsys, nestedConfigDevicesVsys)
 					}
@@ -190,9 +190,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 					if oConfigDevices.Misc != nil {
 						entry.Misc["ConfigDevices"] = oConfigDevices.Misc
 					}
-					if oConfigDevices.Name != "" {
-						nestedConfigDevices.Name = oConfigDevices.Name
-					}
 					if oConfigDevices.Vsys != nil {
 						nestedConfigDevices.Vsys = []ConfigDevicesVsys{}
 						for _, oConfigDevicesVsys := range oConfigDevices.Vsys {
@@ -220,6 +217,9 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 							}
 							nestedConfigDevices.Vsys = append(nestedConfigDevices.Vsys, nestedConfigDevicesVsys)
 						}
+					}
+					if oConfigDevices.Name != "" {
+						nestedConfigDevices.Name = oConfigDevices.Name
 					}
 					nestedConfig.Devices = append(nestedConfig.Devices, nestedConfigDevices)
 				}
@@ -289,10 +289,10 @@ func matchConfigDevicesVsys(a []ConfigDevicesVsys, b []ConfigDevicesVsys) bool {
 	}
 	for _, a := range a {
 		for _, b := range b {
-			if !matchConfigDevicesVsysImport(a.Import, b.Import) {
+			if !util.StringsEqual(a.Name, b.Name) {
 				return false
 			}
-			if !util.StringsEqual(a.Name, b.Name) {
+			if !matchConfigDevicesVsysImport(a.Import, b.Import) {
 				return false
 			}
 		}

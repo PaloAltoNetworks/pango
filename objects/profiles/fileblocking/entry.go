@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{}
+	Suffix = []string{"profiles", "file-blocking"}
 )
 
 type Entry struct {
@@ -96,6 +96,12 @@ func specifyEntry(o *Entry) (any, error) {
 			if _, ok := o.Misc["Rules"]; ok {
 				nestedRules.Misc = o.Misc["Rules"]
 			}
+			if oRules.Name != "" {
+				nestedRules.Name = oRules.Name
+			}
+			if oRules.Application != nil {
+				nestedRules.Application = util.StrToMem(oRules.Application)
+			}
 			if oRules.FileType != nil {
 				nestedRules.FileType = util.StrToMem(oRules.FileType)
 			}
@@ -104,12 +110,6 @@ func specifyEntry(o *Entry) (any, error) {
 			}
 			if oRules.Action != nil {
 				nestedRules.Action = oRules.Action
-			}
-			if oRules.Name != "" {
-				nestedRules.Name = oRules.Name
-			}
-			if oRules.Application != nil {
-				nestedRules.Application = util.StrToMem(oRules.Application)
 			}
 			nestedRulesCol = append(nestedRulesCol, nestedRules)
 		}
@@ -138,9 +138,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				if oRules.Misc != nil {
 					entry.Misc["Rules"] = oRules.Misc
 				}
-				if oRules.Application != nil {
-					nestedRules.Application = util.MemToStr(oRules.Application)
-				}
 				if oRules.FileType != nil {
 					nestedRules.FileType = util.MemToStr(oRules.FileType)
 				}
@@ -152,6 +149,9 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				}
 				if oRules.Name != "" {
 					nestedRules.Name = oRules.Name
+				}
+				if oRules.Application != nil {
+					nestedRules.Application = util.MemToStr(oRules.Application)
 				}
 				nestedRulesCol = append(nestedRulesCol, nestedRules)
 			}

@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{}
+	Suffix = []string{"device-group"}
 )
 
 type Entry struct {
@@ -98,11 +98,11 @@ func specifyEntry(o *Entry) (any, error) {
 			if _, ok := o.Misc["Devices"]; ok {
 				nestedDevices.Misc = o.Misc["Devices"]
 			}
-			if oDevices.Name != "" {
-				nestedDevices.Name = oDevices.Name
-			}
 			if oDevices.Vsys != nil {
 				nestedDevices.Vsys = util.StrToMem(oDevices.Vsys)
+			}
+			if oDevices.Name != "" {
+				nestedDevices.Name = oDevices.Name
 			}
 			nestedDevicesCol = append(nestedDevicesCol, nestedDevices)
 		}

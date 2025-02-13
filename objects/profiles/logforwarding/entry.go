@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{}
+	Suffix = []string{"log-settings", "profiles"}
 )
 
 type Entry struct {
@@ -189,29 +189,14 @@ func specifyEntry(o *Entry) (any, error) {
 			if _, ok := o.Misc["MatchList"]; ok {
 				nestedMatchList.Misc = o.Misc["MatchList"]
 			}
-			if oMatchList.Filter != nil {
-				nestedMatchList.Filter = oMatchList.Filter
-			}
-			if oMatchList.SendToPanorama != nil {
-				nestedMatchList.SendToPanorama = util.YesNo(oMatchList.SendToPanorama, nil)
-			}
-			if oMatchList.SendSnmptrap != nil {
-				nestedMatchList.SendSnmptrap = util.StrToMem(oMatchList.SendSnmptrap)
-			}
-			if oMatchList.SendHttp != nil {
-				nestedMatchList.SendHttp = util.StrToMem(oMatchList.SendHttp)
-			}
-			if oMatchList.LogType != nil {
-				nestedMatchList.LogType = oMatchList.LogType
-			}
 			if oMatchList.Quarantine != nil {
 				nestedMatchList.Quarantine = util.YesNo(oMatchList.Quarantine, nil)
 			}
 			if oMatchList.SendEmail != nil {
 				nestedMatchList.SendEmail = util.StrToMem(oMatchList.SendEmail)
 			}
-			if oMatchList.SendSyslog != nil {
-				nestedMatchList.SendSyslog = util.StrToMem(oMatchList.SendSyslog)
+			if oMatchList.SendHttp != nil {
+				nestedMatchList.SendHttp = util.StrToMem(oMatchList.SendHttp)
 			}
 			if oMatchList.Actions != nil {
 				nestedMatchList.Actions = []MatchListActionsXml{}
@@ -253,6 +238,12 @@ func specifyEntry(o *Entry) (any, error) {
 								if _, ok := o.Misc["MatchListActionsTypeTaggingRegistration"]; ok {
 									nestedMatchListActions.Type.Tagging.Registration.Misc = o.Misc["MatchListActionsTypeTaggingRegistration"]
 								}
+								if oMatchListActions.Type.Tagging.Registration.Localhost != nil {
+									nestedMatchListActions.Type.Tagging.Registration.Localhost = &MatchListActionsTypeTaggingRegistrationLocalhostXml{}
+									if _, ok := o.Misc["MatchListActionsTypeTaggingRegistrationLocalhost"]; ok {
+										nestedMatchListActions.Type.Tagging.Registration.Localhost.Misc = o.Misc["MatchListActionsTypeTaggingRegistrationLocalhost"]
+									}
+								}
 								if oMatchListActions.Type.Tagging.Registration.Panorama != nil {
 									nestedMatchListActions.Type.Tagging.Registration.Panorama = &MatchListActionsTypeTaggingRegistrationPanoramaXml{}
 									if _, ok := o.Misc["MatchListActionsTypeTaggingRegistrationPanorama"]; ok {
@@ -268,12 +259,6 @@ func specifyEntry(o *Entry) (any, error) {
 										nestedMatchListActions.Type.Tagging.Registration.Remote.HttpProfile = oMatchListActions.Type.Tagging.Registration.Remote.HttpProfile
 									}
 								}
-								if oMatchListActions.Type.Tagging.Registration.Localhost != nil {
-									nestedMatchListActions.Type.Tagging.Registration.Localhost = &MatchListActionsTypeTaggingRegistrationLocalhostXml{}
-									if _, ok := o.Misc["MatchListActionsTypeTaggingRegistrationLocalhost"]; ok {
-										nestedMatchListActions.Type.Tagging.Registration.Localhost.Misc = o.Misc["MatchListActionsTypeTaggingRegistrationLocalhost"]
-									}
-								}
 							}
 							if oMatchListActions.Type.Tagging.Tags != nil {
 								nestedMatchListActions.Type.Tagging.Tags = util.StrToMem(oMatchListActions.Type.Tagging.Tags)
@@ -286,11 +271,26 @@ func specifyEntry(o *Entry) (any, error) {
 					nestedMatchList.Actions = append(nestedMatchList.Actions, nestedMatchListActions)
 				}
 			}
+			if oMatchList.ActionDesc != nil {
+				nestedMatchList.ActionDesc = oMatchList.ActionDesc
+			}
+			if oMatchList.Filter != nil {
+				nestedMatchList.Filter = oMatchList.Filter
+			}
+			if oMatchList.SendSnmptrap != nil {
+				nestedMatchList.SendSnmptrap = util.StrToMem(oMatchList.SendSnmptrap)
+			}
+			if oMatchList.SendSyslog != nil {
+				nestedMatchList.SendSyslog = util.StrToMem(oMatchList.SendSyslog)
+			}
 			if oMatchList.Name != "" {
 				nestedMatchList.Name = oMatchList.Name
 			}
-			if oMatchList.ActionDesc != nil {
-				nestedMatchList.ActionDesc = oMatchList.ActionDesc
+			if oMatchList.LogType != nil {
+				nestedMatchList.LogType = oMatchList.LogType
+			}
+			if oMatchList.SendToPanorama != nil {
+				nestedMatchList.SendToPanorama = util.YesNo(oMatchList.SendToPanorama, nil)
 			}
 			nestedMatchListCol = append(nestedMatchListCol, nestedMatchList)
 		}
@@ -323,20 +323,23 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				if oMatchList.LogType != nil {
 					nestedMatchList.LogType = oMatchList.LogType
 				}
-				if oMatchList.Filter != nil {
-					nestedMatchList.Filter = oMatchList.Filter
-				}
 				if oMatchList.SendToPanorama != nil {
 					nestedMatchList.SendToPanorama = util.AsBool(oMatchList.SendToPanorama, nil)
 				}
 				if oMatchList.SendSnmptrap != nil {
 					nestedMatchList.SendSnmptrap = util.MemToStr(oMatchList.SendSnmptrap)
 				}
-				if oMatchList.SendHttp != nil {
-					nestedMatchList.SendHttp = util.MemToStr(oMatchList.SendHttp)
+				if oMatchList.SendSyslog != nil {
+					nestedMatchList.SendSyslog = util.MemToStr(oMatchList.SendSyslog)
+				}
+				if oMatchList.Name != "" {
+					nestedMatchList.Name = oMatchList.Name
 				}
 				if oMatchList.ActionDesc != nil {
 					nestedMatchList.ActionDesc = oMatchList.ActionDesc
+				}
+				if oMatchList.Filter != nil {
+					nestedMatchList.Filter = oMatchList.Filter
 				}
 				if oMatchList.Quarantine != nil {
 					nestedMatchList.Quarantine = util.AsBool(oMatchList.Quarantine, nil)
@@ -344,8 +347,8 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				if oMatchList.SendEmail != nil {
 					nestedMatchList.SendEmail = util.MemToStr(oMatchList.SendEmail)
 				}
-				if oMatchList.SendSyslog != nil {
-					nestedMatchList.SendSyslog = util.MemToStr(oMatchList.SendSyslog)
+				if oMatchList.SendHttp != nil {
+					nestedMatchList.SendHttp = util.MemToStr(oMatchList.SendHttp)
 				}
 				if oMatchList.Actions != nil {
 					nestedMatchList.Actions = []MatchListActions{}
@@ -420,9 +423,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 						nestedMatchList.Actions = append(nestedMatchList.Actions, nestedMatchListActions)
 					}
 				}
-				if oMatchList.Name != "" {
-					nestedMatchList.Name = oMatchList.Name
-				}
 				nestedMatchListCol = append(nestedMatchListCol, nestedMatchList)
 			}
 			entry.MatchList = nestedMatchListCol
@@ -471,14 +471,6 @@ func matchMatchListActionsTypeIntegration(a *MatchListActionsTypeIntegration, b 
 	}
 	return true
 }
-func matchMatchListActionsTypeTaggingRegistrationLocalhost(a *MatchListActionsTypeTaggingRegistrationLocalhost, b *MatchListActionsTypeTaggingRegistrationLocalhost) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	return true
-}
 func matchMatchListActionsTypeTaggingRegistrationPanorama(a *MatchListActionsTypeTaggingRegistrationPanorama, b *MatchListActionsTypeTaggingRegistrationPanorama) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
@@ -498,19 +490,27 @@ func matchMatchListActionsTypeTaggingRegistrationRemote(a *MatchListActionsTypeT
 	}
 	return true
 }
+func matchMatchListActionsTypeTaggingRegistrationLocalhost(a *MatchListActionsTypeTaggingRegistrationLocalhost, b *MatchListActionsTypeTaggingRegistrationLocalhost) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	return true
+}
 func matchMatchListActionsTypeTaggingRegistration(a *MatchListActionsTypeTaggingRegistration, b *MatchListActionsTypeTaggingRegistration) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
 	} else if a == nil && b == nil {
 		return true
 	}
+	if !matchMatchListActionsTypeTaggingRegistrationRemote(a.Remote, b.Remote) {
+		return false
+	}
 	if !matchMatchListActionsTypeTaggingRegistrationLocalhost(a.Localhost, b.Localhost) {
 		return false
 	}
 	if !matchMatchListActionsTypeTaggingRegistrationPanorama(a.Panorama, b.Panorama) {
-		return false
-	}
-	if !matchMatchListActionsTypeTaggingRegistrationRemote(a.Remote, b.Remote) {
 		return false
 	}
 	return true
@@ -520,9 +520,6 @@ func matchMatchListActionsTypeTagging(a *MatchListActionsTypeTagging, b *MatchLi
 		return false
 	} else if a == nil && b == nil {
 		return true
-	}
-	if !util.StringsMatch(a.Target, b.Target) {
-		return false
 	}
 	if !util.StringsMatch(a.Action, b.Action) {
 		return false
@@ -534,6 +531,9 @@ func matchMatchListActionsTypeTagging(a *MatchListActionsTypeTagging, b *MatchLi
 		return false
 	}
 	if !util.OrderedListsMatch(a.Tags, b.Tags) {
+		return false
+	}
+	if !util.StringsMatch(a.Target, b.Target) {
 		return false
 	}
 	return true
@@ -578,28 +578,16 @@ func matchMatchList(a []MatchList, b []MatchList) bool {
 	}
 	for _, a := range a {
 		for _, b := range b {
+			if !util.StringsMatch(a.LogType, b.LogType) {
+				return false
+			}
 			if !util.BoolsMatch(a.SendToPanorama, b.SendToPanorama) {
 				return false
 			}
 			if !util.OrderedListsMatch(a.SendSnmptrap, b.SendSnmptrap) {
 				return false
 			}
-			if !util.OrderedListsMatch(a.SendHttp, b.SendHttp) {
-				return false
-			}
-			if !util.StringsMatch(a.LogType, b.LogType) {
-				return false
-			}
-			if !util.StringsMatch(a.Filter, b.Filter) {
-				return false
-			}
-			if !util.OrderedListsMatch(a.SendEmail, b.SendEmail) {
-				return false
-			}
 			if !util.OrderedListsMatch(a.SendSyslog, b.SendSyslog) {
-				return false
-			}
-			if !matchMatchListActions(a.Actions, b.Actions) {
 				return false
 			}
 			if !util.StringsEqual(a.Name, b.Name) {
@@ -608,7 +596,19 @@ func matchMatchList(a []MatchList, b []MatchList) bool {
 			if !util.StringsMatch(a.ActionDesc, b.ActionDesc) {
 				return false
 			}
+			if !util.StringsMatch(a.Filter, b.Filter) {
+				return false
+			}
 			if !util.BoolsMatch(a.Quarantine, b.Quarantine) {
+				return false
+			}
+			if !util.OrderedListsMatch(a.SendEmail, b.SendEmail) {
+				return false
+			}
+			if !util.OrderedListsMatch(a.SendHttp, b.SendHttp) {
+				return false
+			}
+			if !matchMatchListActions(a.Actions, b.Actions) {
 				return false
 			}
 		}

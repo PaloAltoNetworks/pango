@@ -60,11 +60,11 @@ func specifyConfig(o *Config) (any, error) {
 			if _, ok := o.Misc["DnsSettingServers"]; ok {
 				nestedDnsSetting.Servers.Misc = o.Misc["DnsSettingServers"]
 			}
-			if o.DnsSetting.Servers.Primary != nil {
-				nestedDnsSetting.Servers.Primary = o.DnsSetting.Servers.Primary
-			}
 			if o.DnsSetting.Servers.Secondary != nil {
 				nestedDnsSetting.Servers.Secondary = o.DnsSetting.Servers.Secondary
+			}
+			if o.DnsSetting.Servers.Primary != nil {
+				nestedDnsSetting.Servers.Primary = o.DnsSetting.Servers.Primary
 			}
 		}
 	}
@@ -137,10 +137,10 @@ func matchDnsSettingServers(a *DnsSettingServers, b *DnsSettingServers) bool {
 	} else if a == nil && b == nil {
 		return true
 	}
-	if !util.StringsMatch(a.Primary, b.Primary) {
+	if !util.StringsMatch(a.Secondary, b.Secondary) {
 		return false
 	}
-	if !util.StringsMatch(a.Secondary, b.Secondary) {
+	if !util.StringsMatch(a.Primary, b.Primary) {
 		return false
 	}
 	return true

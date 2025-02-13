@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{}
+	Suffix = []string{"network", "interface", "vlan", "units"}
 )
 
 type Entry struct {
@@ -957,6 +957,12 @@ func specifyEntry(o *Entry) (any, error) {
 		if _, ok := o.Misc["DdnsConfig"]; ok {
 			nestedDdnsConfig.Misc = o.Misc["DdnsConfig"]
 		}
+		if o.DdnsConfig.DdnsEnabled != nil {
+			nestedDdnsConfig.DdnsEnabled = util.YesNo(o.DdnsConfig.DdnsEnabled, nil)
+		}
+		if o.DdnsConfig.DdnsHostname != nil {
+			nestedDdnsConfig.DdnsHostname = o.DdnsConfig.DdnsHostname
+		}
 		if o.DdnsConfig.DdnsIp != nil {
 			nestedDdnsConfig.DdnsIp = util.StrToMem(o.DdnsConfig.DdnsIp)
 		}
@@ -988,12 +994,6 @@ func specifyEntry(o *Entry) (any, error) {
 		if o.DdnsConfig.DdnsCertProfile != nil {
 			nestedDdnsConfig.DdnsCertProfile = o.DdnsConfig.DdnsCertProfile
 		}
-		if o.DdnsConfig.DdnsEnabled != nil {
-			nestedDdnsConfig.DdnsEnabled = util.YesNo(o.DdnsConfig.DdnsEnabled, nil)
-		}
-		if o.DdnsConfig.DdnsHostname != nil {
-			nestedDdnsConfig.DdnsHostname = o.DdnsConfig.DdnsHostname
-		}
 	}
 	entry.DdnsConfig = nestedDdnsConfig
 
@@ -1003,12 +1003,6 @@ func specifyEntry(o *Entry) (any, error) {
 		nestedDhcpClient = &DhcpClientXml{}
 		if _, ok := o.Misc["DhcpClient"]; ok {
 			nestedDhcpClient.Misc = o.Misc["DhcpClient"]
-		}
-		if o.DhcpClient.CreateDefaultRoute != nil {
-			nestedDhcpClient.CreateDefaultRoute = util.YesNo(o.DhcpClient.CreateDefaultRoute, nil)
-		}
-		if o.DhcpClient.DefaultRouteMetric != nil {
-			nestedDhcpClient.DefaultRouteMetric = o.DhcpClient.DefaultRouteMetric
 		}
 		if o.DhcpClient.Enable != nil {
 			nestedDhcpClient.Enable = util.YesNo(o.DhcpClient.Enable, nil)
@@ -1024,6 +1018,12 @@ func specifyEntry(o *Entry) (any, error) {
 			if o.DhcpClient.SendHostname.Hostname != nil {
 				nestedDhcpClient.SendHostname.Hostname = o.DhcpClient.SendHostname.Hostname
 			}
+		}
+		if o.DhcpClient.CreateDefaultRoute != nil {
+			nestedDhcpClient.CreateDefaultRoute = util.YesNo(o.DhcpClient.CreateDefaultRoute, nil)
+		}
+		if o.DhcpClient.DefaultRouteMetric != nil {
+			nestedDhcpClient.DefaultRouteMetric = o.DhcpClient.DefaultRouteMetric
 		}
 	}
 	entry.DhcpClient = nestedDhcpClient
@@ -1051,13 +1051,65 @@ func specifyEntry(o *Entry) (any, error) {
 		if _, ok := o.Misc["Ipv6"]; ok {
 			nestedIpv6.Misc = o.Misc["Ipv6"]
 		}
+		if o.Ipv6.Address != nil {
+			nestedIpv6.Address = []Ipv6AddressXml{}
+			for _, oIpv6Address := range o.Ipv6.Address {
+				nestedIpv6Address := Ipv6AddressXml{}
+				if _, ok := o.Misc["Ipv6Address"]; ok {
+					nestedIpv6Address.Misc = o.Misc["Ipv6Address"]
+				}
+				if oIpv6Address.EnableOnInterface != nil {
+					nestedIpv6Address.EnableOnInterface = util.YesNo(oIpv6Address.EnableOnInterface, nil)
+				}
+				if oIpv6Address.Prefix != nil {
+					nestedIpv6Address.Prefix = &Ipv6AddressPrefixXml{}
+					if _, ok := o.Misc["Ipv6AddressPrefix"]; ok {
+						nestedIpv6Address.Prefix.Misc = o.Misc["Ipv6AddressPrefix"]
+					}
+				}
+				if oIpv6Address.Anycast != nil {
+					nestedIpv6Address.Anycast = &Ipv6AddressAnycastXml{}
+					if _, ok := o.Misc["Ipv6AddressAnycast"]; ok {
+						nestedIpv6Address.Anycast.Misc = o.Misc["Ipv6AddressAnycast"]
+					}
+				}
+				if oIpv6Address.Advertise != nil {
+					nestedIpv6Address.Advertise = &Ipv6AddressAdvertiseXml{}
+					if _, ok := o.Misc["Ipv6AddressAdvertise"]; ok {
+						nestedIpv6Address.Advertise.Misc = o.Misc["Ipv6AddressAdvertise"]
+					}
+					if oIpv6Address.Advertise.Enable != nil {
+						nestedIpv6Address.Advertise.Enable = util.YesNo(oIpv6Address.Advertise.Enable, nil)
+					}
+					if oIpv6Address.Advertise.ValidLifetime != nil {
+						nestedIpv6Address.Advertise.ValidLifetime = oIpv6Address.Advertise.ValidLifetime
+					}
+					if oIpv6Address.Advertise.PreferredLifetime != nil {
+						nestedIpv6Address.Advertise.PreferredLifetime = oIpv6Address.Advertise.PreferredLifetime
+					}
+					if oIpv6Address.Advertise.OnlinkFlag != nil {
+						nestedIpv6Address.Advertise.OnlinkFlag = util.YesNo(oIpv6Address.Advertise.OnlinkFlag, nil)
+					}
+					if oIpv6Address.Advertise.AutoConfigFlag != nil {
+						nestedIpv6Address.Advertise.AutoConfigFlag = util.YesNo(oIpv6Address.Advertise.AutoConfigFlag, nil)
+					}
+				}
+				if oIpv6Address.Name != "" {
+					nestedIpv6Address.Name = oIpv6Address.Name
+				}
+				nestedIpv6.Address = append(nestedIpv6.Address, nestedIpv6Address)
+			}
+		}
+		if o.Ipv6.Enabled != nil {
+			nestedIpv6.Enabled = util.YesNo(o.Ipv6.Enabled, nil)
+		}
+		if o.Ipv6.InterfaceId != nil {
+			nestedIpv6.InterfaceId = o.Ipv6.InterfaceId
+		}
 		if o.Ipv6.NeighborDiscovery != nil {
 			nestedIpv6.NeighborDiscovery = &Ipv6NeighborDiscoveryXml{}
 			if _, ok := o.Misc["Ipv6NeighborDiscovery"]; ok {
 				nestedIpv6.NeighborDiscovery.Misc = o.Misc["Ipv6NeighborDiscovery"]
-			}
-			if o.Ipv6.NeighborDiscovery.EnableNdpMonitor != nil {
-				nestedIpv6.NeighborDiscovery.EnableNdpMonitor = util.YesNo(o.Ipv6.NeighborDiscovery.EnableNdpMonitor, nil)
 			}
 			if o.Ipv6.NeighborDiscovery.Neighbor != nil {
 				nestedIpv6.NeighborDiscovery.Neighbor = []Ipv6NeighborDiscoveryNeighborXml{}
@@ -1066,11 +1118,11 @@ func specifyEntry(o *Entry) (any, error) {
 					if _, ok := o.Misc["Ipv6NeighborDiscoveryNeighbor"]; ok {
 						nestedIpv6NeighborDiscoveryNeighbor.Misc = o.Misc["Ipv6NeighborDiscoveryNeighbor"]
 					}
-					if oIpv6NeighborDiscoveryNeighbor.HwAddress != nil {
-						nestedIpv6NeighborDiscoveryNeighbor.HwAddress = oIpv6NeighborDiscoveryNeighbor.HwAddress
-					}
 					if oIpv6NeighborDiscoveryNeighbor.Name != "" {
 						nestedIpv6NeighborDiscoveryNeighbor.Name = oIpv6NeighborDiscoveryNeighbor.Name
+					}
+					if oIpv6NeighborDiscoveryNeighbor.HwAddress != nil {
+						nestedIpv6NeighborDiscoveryNeighbor.HwAddress = oIpv6NeighborDiscoveryNeighbor.HwAddress
 					}
 					nestedIpv6.NeighborDiscovery.Neighbor = append(nestedIpv6.NeighborDiscovery.Neighbor, nestedIpv6NeighborDiscoveryNeighbor)
 				}
@@ -1086,47 +1138,16 @@ func specifyEntry(o *Entry) (any, error) {
 				if _, ok := o.Misc["Ipv6NeighborDiscoveryRouterAdvertisement"]; ok {
 					nestedIpv6.NeighborDiscovery.RouterAdvertisement.Misc = o.Misc["Ipv6NeighborDiscoveryRouterAdvertisement"]
 				}
-				if o.Ipv6.NeighborDiscovery.RouterAdvertisement.HopLimit != nil {
-					nestedIpv6.NeighborDiscovery.RouterAdvertisement.HopLimit = o.Ipv6.NeighborDiscovery.RouterAdvertisement.HopLimit
+				if o.Ipv6.NeighborDiscovery.RouterAdvertisement.ManagedFlag != nil {
+					nestedIpv6.NeighborDiscovery.RouterAdvertisement.ManagedFlag = util.YesNo(o.Ipv6.NeighborDiscovery.RouterAdvertisement.ManagedFlag, nil)
 				}
-				if o.Ipv6.NeighborDiscovery.RouterAdvertisement.Lifetime != nil {
-					nestedIpv6.NeighborDiscovery.RouterAdvertisement.Lifetime = o.Ipv6.NeighborDiscovery.RouterAdvertisement.Lifetime
-				}
-				if o.Ipv6.NeighborDiscovery.RouterAdvertisement.LinkMtu != nil {
-					nestedIpv6.NeighborDiscovery.RouterAdvertisement.LinkMtu = o.Ipv6.NeighborDiscovery.RouterAdvertisement.LinkMtu
-				}
-				if o.Ipv6.NeighborDiscovery.RouterAdvertisement.MaxInterval != nil {
-					nestedIpv6.NeighborDiscovery.RouterAdvertisement.MaxInterval = o.Ipv6.NeighborDiscovery.RouterAdvertisement.MaxInterval
-				}
-				if o.Ipv6.NeighborDiscovery.RouterAdvertisement.MinInterval != nil {
-					nestedIpv6.NeighborDiscovery.RouterAdvertisement.MinInterval = o.Ipv6.NeighborDiscovery.RouterAdvertisement.MinInterval
-				}
-				if o.Ipv6.NeighborDiscovery.RouterAdvertisement.RetransmissionTimer != nil {
-					nestedIpv6.NeighborDiscovery.RouterAdvertisement.RetransmissionTimer = o.Ipv6.NeighborDiscovery.RouterAdvertisement.RetransmissionTimer
-				}
-				if o.Ipv6.NeighborDiscovery.RouterAdvertisement.RouterPreference != nil {
-					nestedIpv6.NeighborDiscovery.RouterAdvertisement.RouterPreference = o.Ipv6.NeighborDiscovery.RouterAdvertisement.RouterPreference
+				if o.Ipv6.NeighborDiscovery.RouterAdvertisement.ReachableTime != nil {
+					nestedIpv6.NeighborDiscovery.RouterAdvertisement.ReachableTime = o.Ipv6.NeighborDiscovery.RouterAdvertisement.ReachableTime
 				}
 				if o.Ipv6.NeighborDiscovery.RouterAdvertisement.DnsSupport != nil {
 					nestedIpv6.NeighborDiscovery.RouterAdvertisement.DnsSupport = &Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportXml{}
 					if _, ok := o.Misc["Ipv6NeighborDiscoveryRouterAdvertisementDnsSupport"]; ok {
 						nestedIpv6.NeighborDiscovery.RouterAdvertisement.DnsSupport.Misc = o.Misc["Ipv6NeighborDiscoveryRouterAdvertisementDnsSupport"]
-					}
-					if o.Ipv6.NeighborDiscovery.RouterAdvertisement.DnsSupport.Server != nil {
-						nestedIpv6.NeighborDiscovery.RouterAdvertisement.DnsSupport.Server = []Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServerXml{}
-						for _, oIpv6NeighborDiscoveryRouterAdvertisementDnsSupportServer := range o.Ipv6.NeighborDiscovery.RouterAdvertisement.DnsSupport.Server {
-							nestedIpv6NeighborDiscoveryRouterAdvertisementDnsSupportServer := Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServerXml{}
-							if _, ok := o.Misc["Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServer"]; ok {
-								nestedIpv6NeighborDiscoveryRouterAdvertisementDnsSupportServer.Misc = o.Misc["Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServer"]
-							}
-							if oIpv6NeighborDiscoveryRouterAdvertisementDnsSupportServer.Lifetime != nil {
-								nestedIpv6NeighborDiscoveryRouterAdvertisementDnsSupportServer.Lifetime = oIpv6NeighborDiscoveryRouterAdvertisementDnsSupportServer.Lifetime
-							}
-							if oIpv6NeighborDiscoveryRouterAdvertisementDnsSupportServer.Name != "" {
-								nestedIpv6NeighborDiscoveryRouterAdvertisementDnsSupportServer.Name = oIpv6NeighborDiscoveryRouterAdvertisementDnsSupportServer.Name
-							}
-							nestedIpv6.NeighborDiscovery.RouterAdvertisement.DnsSupport.Server = append(nestedIpv6.NeighborDiscovery.RouterAdvertisement.DnsSupport.Server, nestedIpv6NeighborDiscoveryRouterAdvertisementDnsSupportServer)
-						}
 					}
 					if o.Ipv6.NeighborDiscovery.RouterAdvertisement.DnsSupport.Suffix != nil {
 						nestedIpv6.NeighborDiscovery.RouterAdvertisement.DnsSupport.Suffix = []Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffixXml{}
@@ -1147,21 +1168,52 @@ func specifyEntry(o *Entry) (any, error) {
 					if o.Ipv6.NeighborDiscovery.RouterAdvertisement.DnsSupport.Enable != nil {
 						nestedIpv6.NeighborDiscovery.RouterAdvertisement.DnsSupport.Enable = util.YesNo(o.Ipv6.NeighborDiscovery.RouterAdvertisement.DnsSupport.Enable, nil)
 					}
-				}
-				if o.Ipv6.NeighborDiscovery.RouterAdvertisement.Enable != nil {
-					nestedIpv6.NeighborDiscovery.RouterAdvertisement.Enable = util.YesNo(o.Ipv6.NeighborDiscovery.RouterAdvertisement.Enable, nil)
+					if o.Ipv6.NeighborDiscovery.RouterAdvertisement.DnsSupport.Server != nil {
+						nestedIpv6.NeighborDiscovery.RouterAdvertisement.DnsSupport.Server = []Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServerXml{}
+						for _, oIpv6NeighborDiscoveryRouterAdvertisementDnsSupportServer := range o.Ipv6.NeighborDiscovery.RouterAdvertisement.DnsSupport.Server {
+							nestedIpv6NeighborDiscoveryRouterAdvertisementDnsSupportServer := Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServerXml{}
+							if _, ok := o.Misc["Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServer"]; ok {
+								nestedIpv6NeighborDiscoveryRouterAdvertisementDnsSupportServer.Misc = o.Misc["Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServer"]
+							}
+							if oIpv6NeighborDiscoveryRouterAdvertisementDnsSupportServer.Lifetime != nil {
+								nestedIpv6NeighborDiscoveryRouterAdvertisementDnsSupportServer.Lifetime = oIpv6NeighborDiscoveryRouterAdvertisementDnsSupportServer.Lifetime
+							}
+							if oIpv6NeighborDiscoveryRouterAdvertisementDnsSupportServer.Name != "" {
+								nestedIpv6NeighborDiscoveryRouterAdvertisementDnsSupportServer.Name = oIpv6NeighborDiscoveryRouterAdvertisementDnsSupportServer.Name
+							}
+							nestedIpv6.NeighborDiscovery.RouterAdvertisement.DnsSupport.Server = append(nestedIpv6.NeighborDiscovery.RouterAdvertisement.DnsSupport.Server, nestedIpv6NeighborDiscoveryRouterAdvertisementDnsSupportServer)
+						}
+					}
 				}
 				if o.Ipv6.NeighborDiscovery.RouterAdvertisement.EnableConsistencyCheck != nil {
 					nestedIpv6.NeighborDiscovery.RouterAdvertisement.EnableConsistencyCheck = util.YesNo(o.Ipv6.NeighborDiscovery.RouterAdvertisement.EnableConsistencyCheck, nil)
 				}
-				if o.Ipv6.NeighborDiscovery.RouterAdvertisement.ManagedFlag != nil {
-					nestedIpv6.NeighborDiscovery.RouterAdvertisement.ManagedFlag = util.YesNo(o.Ipv6.NeighborDiscovery.RouterAdvertisement.ManagedFlag, nil)
+				if o.Ipv6.NeighborDiscovery.RouterAdvertisement.HopLimit != nil {
+					nestedIpv6.NeighborDiscovery.RouterAdvertisement.HopLimit = o.Ipv6.NeighborDiscovery.RouterAdvertisement.HopLimit
+				}
+				if o.Ipv6.NeighborDiscovery.RouterAdvertisement.LinkMtu != nil {
+					nestedIpv6.NeighborDiscovery.RouterAdvertisement.LinkMtu = o.Ipv6.NeighborDiscovery.RouterAdvertisement.LinkMtu
 				}
 				if o.Ipv6.NeighborDiscovery.RouterAdvertisement.OtherFlag != nil {
 					nestedIpv6.NeighborDiscovery.RouterAdvertisement.OtherFlag = util.YesNo(o.Ipv6.NeighborDiscovery.RouterAdvertisement.OtherFlag, nil)
 				}
-				if o.Ipv6.NeighborDiscovery.RouterAdvertisement.ReachableTime != nil {
-					nestedIpv6.NeighborDiscovery.RouterAdvertisement.ReachableTime = o.Ipv6.NeighborDiscovery.RouterAdvertisement.ReachableTime
+				if o.Ipv6.NeighborDiscovery.RouterAdvertisement.RetransmissionTimer != nil {
+					nestedIpv6.NeighborDiscovery.RouterAdvertisement.RetransmissionTimer = o.Ipv6.NeighborDiscovery.RouterAdvertisement.RetransmissionTimer
+				}
+				if o.Ipv6.NeighborDiscovery.RouterAdvertisement.RouterPreference != nil {
+					nestedIpv6.NeighborDiscovery.RouterAdvertisement.RouterPreference = o.Ipv6.NeighborDiscovery.RouterAdvertisement.RouterPreference
+				}
+				if o.Ipv6.NeighborDiscovery.RouterAdvertisement.Enable != nil {
+					nestedIpv6.NeighborDiscovery.RouterAdvertisement.Enable = util.YesNo(o.Ipv6.NeighborDiscovery.RouterAdvertisement.Enable, nil)
+				}
+				if o.Ipv6.NeighborDiscovery.RouterAdvertisement.Lifetime != nil {
+					nestedIpv6.NeighborDiscovery.RouterAdvertisement.Lifetime = o.Ipv6.NeighborDiscovery.RouterAdvertisement.Lifetime
+				}
+				if o.Ipv6.NeighborDiscovery.RouterAdvertisement.MaxInterval != nil {
+					nestedIpv6.NeighborDiscovery.RouterAdvertisement.MaxInterval = o.Ipv6.NeighborDiscovery.RouterAdvertisement.MaxInterval
+				}
+				if o.Ipv6.NeighborDiscovery.RouterAdvertisement.MinInterval != nil {
+					nestedIpv6.NeighborDiscovery.RouterAdvertisement.MinInterval = o.Ipv6.NeighborDiscovery.RouterAdvertisement.MinInterval
 				}
 			}
 			if o.Ipv6.NeighborDiscovery.DadAttempts != nil {
@@ -1170,11 +1222,92 @@ func specifyEntry(o *Entry) (any, error) {
 			if o.Ipv6.NeighborDiscovery.EnableDad != nil {
 				nestedIpv6.NeighborDiscovery.EnableDad = util.YesNo(o.Ipv6.NeighborDiscovery.EnableDad, nil)
 			}
+			if o.Ipv6.NeighborDiscovery.EnableNdpMonitor != nil {
+				nestedIpv6.NeighborDiscovery.EnableNdpMonitor = util.YesNo(o.Ipv6.NeighborDiscovery.EnableNdpMonitor, nil)
+			}
 		}
 		if o.Ipv6.DhcpClient != nil {
 			nestedIpv6.DhcpClient = &Ipv6DhcpClientXml{}
 			if _, ok := o.Misc["Ipv6DhcpClient"]; ok {
 				nestedIpv6.DhcpClient.Misc = o.Misc["Ipv6DhcpClient"]
+			}
+			if o.Ipv6.DhcpClient.Preference != nil {
+				nestedIpv6.DhcpClient.Preference = o.Ipv6.DhcpClient.Preference
+			}
+			if o.Ipv6.DhcpClient.PrefixDelegation != nil {
+				nestedIpv6.DhcpClient.PrefixDelegation = &Ipv6DhcpClientPrefixDelegationXml{}
+				if _, ok := o.Misc["Ipv6DhcpClientPrefixDelegation"]; ok {
+					nestedIpv6.DhcpClient.PrefixDelegation.Misc = o.Misc["Ipv6DhcpClientPrefixDelegation"]
+				}
+				if o.Ipv6.DhcpClient.PrefixDelegation.Enable != nil {
+					nestedIpv6.DhcpClient.PrefixDelegation.Enable = &Ipv6DhcpClientPrefixDelegationEnableXml{}
+					if _, ok := o.Misc["Ipv6DhcpClientPrefixDelegationEnable"]; ok {
+						nestedIpv6.DhcpClient.PrefixDelegation.Enable.Misc = o.Misc["Ipv6DhcpClientPrefixDelegationEnable"]
+					}
+					if o.Ipv6.DhcpClient.PrefixDelegation.Enable.No != nil {
+						nestedIpv6.DhcpClient.PrefixDelegation.Enable.No = &Ipv6DhcpClientPrefixDelegationEnableNoXml{}
+						if _, ok := o.Misc["Ipv6DhcpClientPrefixDelegationEnableNo"]; ok {
+							nestedIpv6.DhcpClient.PrefixDelegation.Enable.No.Misc = o.Misc["Ipv6DhcpClientPrefixDelegationEnableNo"]
+						}
+					}
+					if o.Ipv6.DhcpClient.PrefixDelegation.Enable.Yes != nil {
+						nestedIpv6.DhcpClient.PrefixDelegation.Enable.Yes = &Ipv6DhcpClientPrefixDelegationEnableYesXml{}
+						if _, ok := o.Misc["Ipv6DhcpClientPrefixDelegationEnableYes"]; ok {
+							nestedIpv6.DhcpClient.PrefixDelegation.Enable.Yes.Misc = o.Misc["Ipv6DhcpClientPrefixDelegationEnableYes"]
+						}
+						if o.Ipv6.DhcpClient.PrefixDelegation.Enable.Yes.PrefixLen != nil {
+							nestedIpv6.DhcpClient.PrefixDelegation.Enable.Yes.PrefixLen = o.Ipv6.DhcpClient.PrefixDelegation.Enable.Yes.PrefixLen
+						}
+						if o.Ipv6.DhcpClient.PrefixDelegation.Enable.Yes.PrefixLenHint != nil {
+							nestedIpv6.DhcpClient.PrefixDelegation.Enable.Yes.PrefixLenHint = util.YesNo(o.Ipv6.DhcpClient.PrefixDelegation.Enable.Yes.PrefixLenHint, nil)
+						}
+						if o.Ipv6.DhcpClient.PrefixDelegation.Enable.Yes.PfxPoolName != nil {
+							nestedIpv6.DhcpClient.PrefixDelegation.Enable.Yes.PfxPoolName = o.Ipv6.DhcpClient.PrefixDelegation.Enable.Yes.PfxPoolName
+						}
+					}
+				}
+			}
+			if o.Ipv6.DhcpClient.V6Options != nil {
+				nestedIpv6.DhcpClient.V6Options = &Ipv6DhcpClientV6OptionsXml{}
+				if _, ok := o.Misc["Ipv6DhcpClientV6Options"]; ok {
+					nestedIpv6.DhcpClient.V6Options.Misc = o.Misc["Ipv6DhcpClientV6Options"]
+				}
+				if o.Ipv6.DhcpClient.V6Options.RapidCommit != nil {
+					nestedIpv6.DhcpClient.V6Options.RapidCommit = util.YesNo(o.Ipv6.DhcpClient.V6Options.RapidCommit, nil)
+				}
+				if o.Ipv6.DhcpClient.V6Options.SupportSrvrReconfig != nil {
+					nestedIpv6.DhcpClient.V6Options.SupportSrvrReconfig = util.YesNo(o.Ipv6.DhcpClient.V6Options.SupportSrvrReconfig, nil)
+				}
+				if o.Ipv6.DhcpClient.V6Options.DuidType != nil {
+					nestedIpv6.DhcpClient.V6Options.DuidType = o.Ipv6.DhcpClient.V6Options.DuidType
+				}
+				if o.Ipv6.DhcpClient.V6Options.Enable != nil {
+					nestedIpv6.DhcpClient.V6Options.Enable = &Ipv6DhcpClientV6OptionsEnableXml{}
+					if _, ok := o.Misc["Ipv6DhcpClientV6OptionsEnable"]; ok {
+						nestedIpv6.DhcpClient.V6Options.Enable.Misc = o.Misc["Ipv6DhcpClientV6OptionsEnable"]
+					}
+					if o.Ipv6.DhcpClient.V6Options.Enable.No != nil {
+						nestedIpv6.DhcpClient.V6Options.Enable.No = &Ipv6DhcpClientV6OptionsEnableNoXml{}
+						if _, ok := o.Misc["Ipv6DhcpClientV6OptionsEnableNo"]; ok {
+							nestedIpv6.DhcpClient.V6Options.Enable.No.Misc = o.Misc["Ipv6DhcpClientV6OptionsEnableNo"]
+						}
+					}
+					if o.Ipv6.DhcpClient.V6Options.Enable.Yes != nil {
+						nestedIpv6.DhcpClient.V6Options.Enable.Yes = &Ipv6DhcpClientV6OptionsEnableYesXml{}
+						if _, ok := o.Misc["Ipv6DhcpClientV6OptionsEnableYes"]; ok {
+							nestedIpv6.DhcpClient.V6Options.Enable.Yes.Misc = o.Misc["Ipv6DhcpClientV6OptionsEnableYes"]
+						}
+						if o.Ipv6.DhcpClient.V6Options.Enable.Yes.NonTempAddr != nil {
+							nestedIpv6.DhcpClient.V6Options.Enable.Yes.NonTempAddr = util.YesNo(o.Ipv6.DhcpClient.V6Options.Enable.Yes.NonTempAddr, nil)
+						}
+						if o.Ipv6.DhcpClient.V6Options.Enable.Yes.TempAddr != nil {
+							nestedIpv6.DhcpClient.V6Options.Enable.Yes.TempAddr = util.YesNo(o.Ipv6.DhcpClient.V6Options.Enable.Yes.TempAddr, nil)
+						}
+					}
+				}
+			}
+			if o.Ipv6.DhcpClient.AcceptRaRoute != nil {
+				nestedIpv6.DhcpClient.AcceptRaRoute = util.YesNo(o.Ipv6.DhcpClient.AcceptRaRoute, nil)
 			}
 			if o.Ipv6.DhcpClient.DefaultRouteMetric != nil {
 				nestedIpv6.DhcpClient.DefaultRouteMetric = o.Ipv6.DhcpClient.DefaultRouteMetric
@@ -1186,6 +1319,28 @@ func specifyEntry(o *Entry) (any, error) {
 				nestedIpv6.DhcpClient.NeighborDiscovery = &Ipv6DhcpClientNeighborDiscoveryXml{}
 				if _, ok := o.Misc["Ipv6DhcpClientNeighborDiscovery"]; ok {
 					nestedIpv6.DhcpClient.NeighborDiscovery.Misc = o.Misc["Ipv6DhcpClientNeighborDiscovery"]
+				}
+				if o.Ipv6.DhcpClient.NeighborDiscovery.EnableNdpMonitor != nil {
+					nestedIpv6.DhcpClient.NeighborDiscovery.EnableNdpMonitor = util.YesNo(o.Ipv6.DhcpClient.NeighborDiscovery.EnableNdpMonitor, nil)
+				}
+				if o.Ipv6.DhcpClient.NeighborDiscovery.Neighbor != nil {
+					nestedIpv6.DhcpClient.NeighborDiscovery.Neighbor = []Ipv6DhcpClientNeighborDiscoveryNeighborXml{}
+					for _, oIpv6DhcpClientNeighborDiscoveryNeighbor := range o.Ipv6.DhcpClient.NeighborDiscovery.Neighbor {
+						nestedIpv6DhcpClientNeighborDiscoveryNeighbor := Ipv6DhcpClientNeighborDiscoveryNeighborXml{}
+						if _, ok := o.Misc["Ipv6DhcpClientNeighborDiscoveryNeighbor"]; ok {
+							nestedIpv6DhcpClientNeighborDiscoveryNeighbor.Misc = o.Misc["Ipv6DhcpClientNeighborDiscoveryNeighbor"]
+						}
+						if oIpv6DhcpClientNeighborDiscoveryNeighbor.HwAddress != nil {
+							nestedIpv6DhcpClientNeighborDiscoveryNeighbor.HwAddress = oIpv6DhcpClientNeighborDiscoveryNeighbor.HwAddress
+						}
+						if oIpv6DhcpClientNeighborDiscoveryNeighbor.Name != "" {
+							nestedIpv6DhcpClientNeighborDiscoveryNeighbor.Name = oIpv6DhcpClientNeighborDiscoveryNeighbor.Name
+						}
+						nestedIpv6.DhcpClient.NeighborDiscovery.Neighbor = append(nestedIpv6.DhcpClient.NeighborDiscovery.Neighbor, nestedIpv6DhcpClientNeighborDiscoveryNeighbor)
+					}
+				}
+				if o.Ipv6.DhcpClient.NeighborDiscovery.NsInterval != nil {
+					nestedIpv6.DhcpClient.NeighborDiscovery.NsInterval = o.Ipv6.DhcpClient.NeighborDiscovery.NsInterval
 				}
 				if o.Ipv6.DhcpClient.NeighborDiscovery.ReachableTime != nil {
 					nestedIpv6.DhcpClient.NeighborDiscovery.ReachableTime = o.Ipv6.DhcpClient.NeighborDiscovery.ReachableTime
@@ -1205,6 +1360,12 @@ func specifyEntry(o *Entry) (any, error) {
 						nestedIpv6.DhcpClient.NeighborDiscovery.DnsServer.Source = &Ipv6DhcpClientNeighborDiscoveryDnsServerSourceXml{}
 						if _, ok := o.Misc["Ipv6DhcpClientNeighborDiscoveryDnsServerSource"]; ok {
 							nestedIpv6.DhcpClient.NeighborDiscovery.DnsServer.Source.Misc = o.Misc["Ipv6DhcpClientNeighborDiscoveryDnsServerSource"]
+						}
+						if o.Ipv6.DhcpClient.NeighborDiscovery.DnsServer.Source.Dhcpv6 != nil {
+							nestedIpv6.DhcpClient.NeighborDiscovery.DnsServer.Source.Dhcpv6 = &Ipv6DhcpClientNeighborDiscoveryDnsServerSourceDhcpv6Xml{}
+							if _, ok := o.Misc["Ipv6DhcpClientNeighborDiscoveryDnsServerSourceDhcpv6"]; ok {
+								nestedIpv6.DhcpClient.NeighborDiscovery.DnsServer.Source.Dhcpv6.Misc = o.Misc["Ipv6DhcpClientNeighborDiscoveryDnsServerSourceDhcpv6"]
+							}
 						}
 						if o.Ipv6.DhcpClient.NeighborDiscovery.DnsServer.Source.Manual != nil {
 							nestedIpv6.DhcpClient.NeighborDiscovery.DnsServer.Source.Manual = &Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualXml{}
@@ -1226,12 +1387,6 @@ func specifyEntry(o *Entry) (any, error) {
 									}
 									nestedIpv6.DhcpClient.NeighborDiscovery.DnsServer.Source.Manual.Server = append(nestedIpv6.DhcpClient.NeighborDiscovery.DnsServer.Source.Manual.Server, nestedIpv6DhcpClientNeighborDiscoveryDnsServerSourceManualServer)
 								}
-							}
-						}
-						if o.Ipv6.DhcpClient.NeighborDiscovery.DnsServer.Source.Dhcpv6 != nil {
-							nestedIpv6.DhcpClient.NeighborDiscovery.DnsServer.Source.Dhcpv6 = &Ipv6DhcpClientNeighborDiscoveryDnsServerSourceDhcpv6Xml{}
-							if _, ok := o.Misc["Ipv6DhcpClientNeighborDiscoveryDnsServerSourceDhcpv6"]; ok {
-								nestedIpv6.DhcpClient.NeighborDiscovery.DnsServer.Source.Dhcpv6.Misc = o.Misc["Ipv6DhcpClientNeighborDiscoveryDnsServerSourceDhcpv6"]
 							}
 						}
 					}
@@ -1282,106 +1437,6 @@ func specifyEntry(o *Entry) (any, error) {
 				if o.Ipv6.DhcpClient.NeighborDiscovery.EnableDad != nil {
 					nestedIpv6.DhcpClient.NeighborDiscovery.EnableDad = util.YesNo(o.Ipv6.DhcpClient.NeighborDiscovery.EnableDad, nil)
 				}
-				if o.Ipv6.DhcpClient.NeighborDiscovery.EnableNdpMonitor != nil {
-					nestedIpv6.DhcpClient.NeighborDiscovery.EnableNdpMonitor = util.YesNo(o.Ipv6.DhcpClient.NeighborDiscovery.EnableNdpMonitor, nil)
-				}
-				if o.Ipv6.DhcpClient.NeighborDiscovery.Neighbor != nil {
-					nestedIpv6.DhcpClient.NeighborDiscovery.Neighbor = []Ipv6DhcpClientNeighborDiscoveryNeighborXml{}
-					for _, oIpv6DhcpClientNeighborDiscoveryNeighbor := range o.Ipv6.DhcpClient.NeighborDiscovery.Neighbor {
-						nestedIpv6DhcpClientNeighborDiscoveryNeighbor := Ipv6DhcpClientNeighborDiscoveryNeighborXml{}
-						if _, ok := o.Misc["Ipv6DhcpClientNeighborDiscoveryNeighbor"]; ok {
-							nestedIpv6DhcpClientNeighborDiscoveryNeighbor.Misc = o.Misc["Ipv6DhcpClientNeighborDiscoveryNeighbor"]
-						}
-						if oIpv6DhcpClientNeighborDiscoveryNeighbor.HwAddress != nil {
-							nestedIpv6DhcpClientNeighborDiscoveryNeighbor.HwAddress = oIpv6DhcpClientNeighborDiscoveryNeighbor.HwAddress
-						}
-						if oIpv6DhcpClientNeighborDiscoveryNeighbor.Name != "" {
-							nestedIpv6DhcpClientNeighborDiscoveryNeighbor.Name = oIpv6DhcpClientNeighborDiscoveryNeighbor.Name
-						}
-						nestedIpv6.DhcpClient.NeighborDiscovery.Neighbor = append(nestedIpv6.DhcpClient.NeighborDiscovery.Neighbor, nestedIpv6DhcpClientNeighborDiscoveryNeighbor)
-					}
-				}
-				if o.Ipv6.DhcpClient.NeighborDiscovery.NsInterval != nil {
-					nestedIpv6.DhcpClient.NeighborDiscovery.NsInterval = o.Ipv6.DhcpClient.NeighborDiscovery.NsInterval
-				}
-			}
-			if o.Ipv6.DhcpClient.Preference != nil {
-				nestedIpv6.DhcpClient.Preference = o.Ipv6.DhcpClient.Preference
-			}
-			if o.Ipv6.DhcpClient.PrefixDelegation != nil {
-				nestedIpv6.DhcpClient.PrefixDelegation = &Ipv6DhcpClientPrefixDelegationXml{}
-				if _, ok := o.Misc["Ipv6DhcpClientPrefixDelegation"]; ok {
-					nestedIpv6.DhcpClient.PrefixDelegation.Misc = o.Misc["Ipv6DhcpClientPrefixDelegation"]
-				}
-				if o.Ipv6.DhcpClient.PrefixDelegation.Enable != nil {
-					nestedIpv6.DhcpClient.PrefixDelegation.Enable = &Ipv6DhcpClientPrefixDelegationEnableXml{}
-					if _, ok := o.Misc["Ipv6DhcpClientPrefixDelegationEnable"]; ok {
-						nestedIpv6.DhcpClient.PrefixDelegation.Enable.Misc = o.Misc["Ipv6DhcpClientPrefixDelegationEnable"]
-					}
-					if o.Ipv6.DhcpClient.PrefixDelegation.Enable.Yes != nil {
-						nestedIpv6.DhcpClient.PrefixDelegation.Enable.Yes = &Ipv6DhcpClientPrefixDelegationEnableYesXml{}
-						if _, ok := o.Misc["Ipv6DhcpClientPrefixDelegationEnableYes"]; ok {
-							nestedIpv6.DhcpClient.PrefixDelegation.Enable.Yes.Misc = o.Misc["Ipv6DhcpClientPrefixDelegationEnableYes"]
-						}
-						if o.Ipv6.DhcpClient.PrefixDelegation.Enable.Yes.PfxPoolName != nil {
-							nestedIpv6.DhcpClient.PrefixDelegation.Enable.Yes.PfxPoolName = o.Ipv6.DhcpClient.PrefixDelegation.Enable.Yes.PfxPoolName
-						}
-						if o.Ipv6.DhcpClient.PrefixDelegation.Enable.Yes.PrefixLen != nil {
-							nestedIpv6.DhcpClient.PrefixDelegation.Enable.Yes.PrefixLen = o.Ipv6.DhcpClient.PrefixDelegation.Enable.Yes.PrefixLen
-						}
-						if o.Ipv6.DhcpClient.PrefixDelegation.Enable.Yes.PrefixLenHint != nil {
-							nestedIpv6.DhcpClient.PrefixDelegation.Enable.Yes.PrefixLenHint = util.YesNo(o.Ipv6.DhcpClient.PrefixDelegation.Enable.Yes.PrefixLenHint, nil)
-						}
-					}
-					if o.Ipv6.DhcpClient.PrefixDelegation.Enable.No != nil {
-						nestedIpv6.DhcpClient.PrefixDelegation.Enable.No = &Ipv6DhcpClientPrefixDelegationEnableNoXml{}
-						if _, ok := o.Misc["Ipv6DhcpClientPrefixDelegationEnableNo"]; ok {
-							nestedIpv6.DhcpClient.PrefixDelegation.Enable.No.Misc = o.Misc["Ipv6DhcpClientPrefixDelegationEnableNo"]
-						}
-					}
-				}
-			}
-			if o.Ipv6.DhcpClient.V6Options != nil {
-				nestedIpv6.DhcpClient.V6Options = &Ipv6DhcpClientV6OptionsXml{}
-				if _, ok := o.Misc["Ipv6DhcpClientV6Options"]; ok {
-					nestedIpv6.DhcpClient.V6Options.Misc = o.Misc["Ipv6DhcpClientV6Options"]
-				}
-				if o.Ipv6.DhcpClient.V6Options.DuidType != nil {
-					nestedIpv6.DhcpClient.V6Options.DuidType = o.Ipv6.DhcpClient.V6Options.DuidType
-				}
-				if o.Ipv6.DhcpClient.V6Options.Enable != nil {
-					nestedIpv6.DhcpClient.V6Options.Enable = &Ipv6DhcpClientV6OptionsEnableXml{}
-					if _, ok := o.Misc["Ipv6DhcpClientV6OptionsEnable"]; ok {
-						nestedIpv6.DhcpClient.V6Options.Enable.Misc = o.Misc["Ipv6DhcpClientV6OptionsEnable"]
-					}
-					if o.Ipv6.DhcpClient.V6Options.Enable.No != nil {
-						nestedIpv6.DhcpClient.V6Options.Enable.No = &Ipv6DhcpClientV6OptionsEnableNoXml{}
-						if _, ok := o.Misc["Ipv6DhcpClientV6OptionsEnableNo"]; ok {
-							nestedIpv6.DhcpClient.V6Options.Enable.No.Misc = o.Misc["Ipv6DhcpClientV6OptionsEnableNo"]
-						}
-					}
-					if o.Ipv6.DhcpClient.V6Options.Enable.Yes != nil {
-						nestedIpv6.DhcpClient.V6Options.Enable.Yes = &Ipv6DhcpClientV6OptionsEnableYesXml{}
-						if _, ok := o.Misc["Ipv6DhcpClientV6OptionsEnableYes"]; ok {
-							nestedIpv6.DhcpClient.V6Options.Enable.Yes.Misc = o.Misc["Ipv6DhcpClientV6OptionsEnableYes"]
-						}
-						if o.Ipv6.DhcpClient.V6Options.Enable.Yes.NonTempAddr != nil {
-							nestedIpv6.DhcpClient.V6Options.Enable.Yes.NonTempAddr = util.YesNo(o.Ipv6.DhcpClient.V6Options.Enable.Yes.NonTempAddr, nil)
-						}
-						if o.Ipv6.DhcpClient.V6Options.Enable.Yes.TempAddr != nil {
-							nestedIpv6.DhcpClient.V6Options.Enable.Yes.TempAddr = util.YesNo(o.Ipv6.DhcpClient.V6Options.Enable.Yes.TempAddr, nil)
-						}
-					}
-				}
-				if o.Ipv6.DhcpClient.V6Options.RapidCommit != nil {
-					nestedIpv6.DhcpClient.V6Options.RapidCommit = util.YesNo(o.Ipv6.DhcpClient.V6Options.RapidCommit, nil)
-				}
-				if o.Ipv6.DhcpClient.V6Options.SupportSrvrReconfig != nil {
-					nestedIpv6.DhcpClient.V6Options.SupportSrvrReconfig = util.YesNo(o.Ipv6.DhcpClient.V6Options.SupportSrvrReconfig, nil)
-				}
-			}
-			if o.Ipv6.DhcpClient.AcceptRaRoute != nil {
-				nestedIpv6.DhcpClient.AcceptRaRoute = util.YesNo(o.Ipv6.DhcpClient.AcceptRaRoute, nil)
 			}
 		}
 		if o.Ipv6.Inherited != nil {
@@ -1438,14 +1493,14 @@ func specifyEntry(o *Entry) (any, error) {
 								if _, ok := o.Misc["Ipv6InheritedAssignAddrTypeGuaAdvertise"]; ok {
 									nestedIpv6InheritedAssignAddr.Type.Gua.Advertise.Misc = o.Misc["Ipv6InheritedAssignAddrTypeGuaAdvertise"]
 								}
+								if oIpv6InheritedAssignAddr.Type.Gua.Advertise.Enable != nil {
+									nestedIpv6InheritedAssignAddr.Type.Gua.Advertise.Enable = util.YesNo(oIpv6InheritedAssignAddr.Type.Gua.Advertise.Enable, nil)
+								}
 								if oIpv6InheritedAssignAddr.Type.Gua.Advertise.OnlinkFlag != nil {
 									nestedIpv6InheritedAssignAddr.Type.Gua.Advertise.OnlinkFlag = util.YesNo(oIpv6InheritedAssignAddr.Type.Gua.Advertise.OnlinkFlag, nil)
 								}
 								if oIpv6InheritedAssignAddr.Type.Gua.Advertise.AutoConfigFlag != nil {
 									nestedIpv6InheritedAssignAddr.Type.Gua.Advertise.AutoConfigFlag = util.YesNo(oIpv6InheritedAssignAddr.Type.Gua.Advertise.AutoConfigFlag, nil)
-								}
-								if oIpv6InheritedAssignAddr.Type.Gua.Advertise.Enable != nil {
-									nestedIpv6InheritedAssignAddr.Type.Gua.Advertise.Enable = util.YesNo(oIpv6InheritedAssignAddr.Type.Gua.Advertise.Enable, nil)
 								}
 							}
 						}
@@ -1453,6 +1508,9 @@ func specifyEntry(o *Entry) (any, error) {
 							nestedIpv6InheritedAssignAddr.Type.Ula = &Ipv6InheritedAssignAddrTypeUlaXml{}
 							if _, ok := o.Misc["Ipv6InheritedAssignAddrTypeUla"]; ok {
 								nestedIpv6InheritedAssignAddr.Type.Ula.Misc = o.Misc["Ipv6InheritedAssignAddrTypeUla"]
+							}
+							if oIpv6InheritedAssignAddr.Type.Ula.EnableOnInterface != nil {
+								nestedIpv6InheritedAssignAddr.Type.Ula.EnableOnInterface = util.YesNo(oIpv6InheritedAssignAddr.Type.Ula.EnableOnInterface, nil)
 							}
 							if oIpv6InheritedAssignAddr.Type.Ula.Address != nil {
 								nestedIpv6InheritedAssignAddr.Type.Ula.Address = oIpv6InheritedAssignAddr.Type.Ula.Address
@@ -1468,6 +1526,9 @@ func specifyEntry(o *Entry) (any, error) {
 								if _, ok := o.Misc["Ipv6InheritedAssignAddrTypeUlaAdvertise"]; ok {
 									nestedIpv6InheritedAssignAddr.Type.Ula.Advertise.Misc = o.Misc["Ipv6InheritedAssignAddrTypeUlaAdvertise"]
 								}
+								if oIpv6InheritedAssignAddr.Type.Ula.Advertise.Enable != nil {
+									nestedIpv6InheritedAssignAddr.Type.Ula.Advertise.Enable = util.YesNo(oIpv6InheritedAssignAddr.Type.Ula.Advertise.Enable, nil)
+								}
 								if oIpv6InheritedAssignAddr.Type.Ula.Advertise.ValidLifetime != nil {
 									nestedIpv6InheritedAssignAddr.Type.Ula.Advertise.ValidLifetime = oIpv6InheritedAssignAddr.Type.Ula.Advertise.ValidLifetime
 								}
@@ -1480,12 +1541,6 @@ func specifyEntry(o *Entry) (any, error) {
 								if oIpv6InheritedAssignAddr.Type.Ula.Advertise.AutoConfigFlag != nil {
 									nestedIpv6InheritedAssignAddr.Type.Ula.Advertise.AutoConfigFlag = util.YesNo(oIpv6InheritedAssignAddr.Type.Ula.Advertise.AutoConfigFlag, nil)
 								}
-								if oIpv6InheritedAssignAddr.Type.Ula.Advertise.Enable != nil {
-									nestedIpv6InheritedAssignAddr.Type.Ula.Advertise.Enable = util.YesNo(oIpv6InheritedAssignAddr.Type.Ula.Advertise.Enable, nil)
-								}
-							}
-							if oIpv6InheritedAssignAddr.Type.Ula.EnableOnInterface != nil {
-								nestedIpv6InheritedAssignAddr.Type.Ula.EnableOnInterface = util.YesNo(oIpv6InheritedAssignAddr.Type.Ula.EnableOnInterface, nil)
 							}
 						}
 					}
@@ -1503,16 +1558,16 @@ func specifyEntry(o *Entry) (any, error) {
 				if _, ok := o.Misc["Ipv6InheritedNeighborDiscovery"]; ok {
 					nestedIpv6.Inherited.NeighborDiscovery.Misc = o.Misc["Ipv6InheritedNeighborDiscovery"]
 				}
-				if o.Ipv6.Inherited.NeighborDiscovery.ReachableTime != nil {
-					nestedIpv6.Inherited.NeighborDiscovery.ReachableTime = o.Ipv6.Inherited.NeighborDiscovery.ReachableTime
-				}
-				if o.Ipv6.Inherited.NeighborDiscovery.NsInterval != nil {
-					nestedIpv6.Inherited.NeighborDiscovery.NsInterval = o.Ipv6.Inherited.NeighborDiscovery.NsInterval
+				if o.Ipv6.Inherited.NeighborDiscovery.DadAttempts != nil {
+					nestedIpv6.Inherited.NeighborDiscovery.DadAttempts = o.Ipv6.Inherited.NeighborDiscovery.DadAttempts
 				}
 				if o.Ipv6.Inherited.NeighborDiscovery.DnsServer != nil {
 					nestedIpv6.Inherited.NeighborDiscovery.DnsServer = &Ipv6InheritedNeighborDiscoveryDnsServerXml{}
 					if _, ok := o.Misc["Ipv6InheritedNeighborDiscoveryDnsServer"]; ok {
 						nestedIpv6.Inherited.NeighborDiscovery.DnsServer.Misc = o.Misc["Ipv6InheritedNeighborDiscoveryDnsServer"]
+					}
+					if o.Ipv6.Inherited.NeighborDiscovery.DnsServer.Enable != nil {
+						nestedIpv6.Inherited.NeighborDiscovery.DnsServer.Enable = util.YesNo(o.Ipv6.Inherited.NeighborDiscovery.DnsServer.Enable, nil)
 					}
 					if o.Ipv6.Inherited.NeighborDiscovery.DnsServer.Source != nil {
 						nestedIpv6.Inherited.NeighborDiscovery.DnsServer.Source = &Ipv6InheritedNeighborDiscoveryDnsServerSourceXml{}
@@ -1551,8 +1606,69 @@ func specifyEntry(o *Entry) (any, error) {
 							}
 						}
 					}
-					if o.Ipv6.Inherited.NeighborDiscovery.DnsServer.Enable != nil {
-						nestedIpv6.Inherited.NeighborDiscovery.DnsServer.Enable = util.YesNo(o.Ipv6.Inherited.NeighborDiscovery.DnsServer.Enable, nil)
+				}
+				if o.Ipv6.Inherited.NeighborDiscovery.EnableDad != nil {
+					nestedIpv6.Inherited.NeighborDiscovery.EnableDad = util.YesNo(o.Ipv6.Inherited.NeighborDiscovery.EnableDad, nil)
+				}
+				if o.Ipv6.Inherited.NeighborDiscovery.Neighbor != nil {
+					nestedIpv6.Inherited.NeighborDiscovery.Neighbor = []Ipv6InheritedNeighborDiscoveryNeighborXml{}
+					for _, oIpv6InheritedNeighborDiscoveryNeighbor := range o.Ipv6.Inherited.NeighborDiscovery.Neighbor {
+						nestedIpv6InheritedNeighborDiscoveryNeighbor := Ipv6InheritedNeighborDiscoveryNeighborXml{}
+						if _, ok := o.Misc["Ipv6InheritedNeighborDiscoveryNeighbor"]; ok {
+							nestedIpv6InheritedNeighborDiscoveryNeighbor.Misc = o.Misc["Ipv6InheritedNeighborDiscoveryNeighbor"]
+						}
+						if oIpv6InheritedNeighborDiscoveryNeighbor.HwAddress != nil {
+							nestedIpv6InheritedNeighborDiscoveryNeighbor.HwAddress = oIpv6InheritedNeighborDiscoveryNeighbor.HwAddress
+						}
+						if oIpv6InheritedNeighborDiscoveryNeighbor.Name != "" {
+							nestedIpv6InheritedNeighborDiscoveryNeighbor.Name = oIpv6InheritedNeighborDiscoveryNeighbor.Name
+						}
+						nestedIpv6.Inherited.NeighborDiscovery.Neighbor = append(nestedIpv6.Inherited.NeighborDiscovery.Neighbor, nestedIpv6InheritedNeighborDiscoveryNeighbor)
+					}
+				}
+				if o.Ipv6.Inherited.NeighborDiscovery.NsInterval != nil {
+					nestedIpv6.Inherited.NeighborDiscovery.NsInterval = o.Ipv6.Inherited.NeighborDiscovery.NsInterval
+				}
+				if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement != nil {
+					nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement = &Ipv6InheritedNeighborDiscoveryRouterAdvertisementXml{}
+					if _, ok := o.Misc["Ipv6InheritedNeighborDiscoveryRouterAdvertisement"]; ok {
+						nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.Misc = o.Misc["Ipv6InheritedNeighborDiscoveryRouterAdvertisement"]
+					}
+					if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.RetransmissionTimer != nil {
+						nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.RetransmissionTimer = o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.RetransmissionTimer
+					}
+					if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.RouterPreference != nil {
+						nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.RouterPreference = o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.RouterPreference
+					}
+					if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.HopLimit != nil {
+						nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.HopLimit = o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.HopLimit
+					}
+					if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.LinkMtu != nil {
+						nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.LinkMtu = o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.LinkMtu
+					}
+					if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.MaxInterval != nil {
+						nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.MaxInterval = o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.MaxInterval
+					}
+					if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.ManagedFlag != nil {
+						nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.ManagedFlag = util.YesNo(o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.ManagedFlag, nil)
+					}
+					if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.MinInterval != nil {
+						nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.MinInterval = o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.MinInterval
+					}
+					if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.OtherFlag != nil {
+						nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.OtherFlag = util.YesNo(o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.OtherFlag, nil)
+					}
+					if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.ReachableTime != nil {
+						nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.ReachableTime = o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.ReachableTime
+					}
+					if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.Enable != nil {
+						nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.Enable = util.YesNo(o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.Enable, nil)
+					}
+					if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.EnableConsistencyCheck != nil {
+						nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.EnableConsistencyCheck = util.YesNo(o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.EnableConsistencyCheck, nil)
+					}
+					if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.Lifetime != nil {
+						nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.Lifetime = o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.Lifetime
 					}
 				}
 				if o.Ipv6.Inherited.NeighborDiscovery.DnsSuffix != nil {
@@ -1601,129 +1717,13 @@ func specifyEntry(o *Entry) (any, error) {
 						}
 					}
 				}
-				if o.Ipv6.Inherited.NeighborDiscovery.EnableDad != nil {
-					nestedIpv6.Inherited.NeighborDiscovery.EnableDad = util.YesNo(o.Ipv6.Inherited.NeighborDiscovery.EnableDad, nil)
-				}
 				if o.Ipv6.Inherited.NeighborDiscovery.EnableNdpMonitor != nil {
 					nestedIpv6.Inherited.NeighborDiscovery.EnableNdpMonitor = util.YesNo(o.Ipv6.Inherited.NeighborDiscovery.EnableNdpMonitor, nil)
 				}
-				if o.Ipv6.Inherited.NeighborDiscovery.Neighbor != nil {
-					nestedIpv6.Inherited.NeighborDiscovery.Neighbor = []Ipv6InheritedNeighborDiscoveryNeighborXml{}
-					for _, oIpv6InheritedNeighborDiscoveryNeighbor := range o.Ipv6.Inherited.NeighborDiscovery.Neighbor {
-						nestedIpv6InheritedNeighborDiscoveryNeighbor := Ipv6InheritedNeighborDiscoveryNeighborXml{}
-						if _, ok := o.Misc["Ipv6InheritedNeighborDiscoveryNeighbor"]; ok {
-							nestedIpv6InheritedNeighborDiscoveryNeighbor.Misc = o.Misc["Ipv6InheritedNeighborDiscoveryNeighbor"]
-						}
-						if oIpv6InheritedNeighborDiscoveryNeighbor.HwAddress != nil {
-							nestedIpv6InheritedNeighborDiscoveryNeighbor.HwAddress = oIpv6InheritedNeighborDiscoveryNeighbor.HwAddress
-						}
-						if oIpv6InheritedNeighborDiscoveryNeighbor.Name != "" {
-							nestedIpv6InheritedNeighborDiscoveryNeighbor.Name = oIpv6InheritedNeighborDiscoveryNeighbor.Name
-						}
-						nestedIpv6.Inherited.NeighborDiscovery.Neighbor = append(nestedIpv6.Inherited.NeighborDiscovery.Neighbor, nestedIpv6InheritedNeighborDiscoveryNeighbor)
-					}
-				}
-				if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement != nil {
-					nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement = &Ipv6InheritedNeighborDiscoveryRouterAdvertisementXml{}
-					if _, ok := o.Misc["Ipv6InheritedNeighborDiscoveryRouterAdvertisement"]; ok {
-						nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.Misc = o.Misc["Ipv6InheritedNeighborDiscoveryRouterAdvertisement"]
-					}
-					if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.EnableConsistencyCheck != nil {
-						nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.EnableConsistencyCheck = util.YesNo(o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.EnableConsistencyCheck, nil)
-					}
-					if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.HopLimit != nil {
-						nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.HopLimit = o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.HopLimit
-					}
-					if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.Lifetime != nil {
-						nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.Lifetime = o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.Lifetime
-					}
-					if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.LinkMtu != nil {
-						nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.LinkMtu = o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.LinkMtu
-					}
-					if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.ManagedFlag != nil {
-						nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.ManagedFlag = util.YesNo(o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.ManagedFlag, nil)
-					}
-					if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.RetransmissionTimer != nil {
-						nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.RetransmissionTimer = o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.RetransmissionTimer
-					}
-					if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.Enable != nil {
-						nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.Enable = util.YesNo(o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.Enable, nil)
-					}
-					if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.MaxInterval != nil {
-						nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.MaxInterval = o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.MaxInterval
-					}
-					if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.MinInterval != nil {
-						nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.MinInterval = o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.MinInterval
-					}
-					if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.OtherFlag != nil {
-						nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.OtherFlag = util.YesNo(o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.OtherFlag, nil)
-					}
-					if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.ReachableTime != nil {
-						nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.ReachableTime = o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.ReachableTime
-					}
-					if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.RouterPreference != nil {
-						nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.RouterPreference = o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.RouterPreference
-					}
-				}
-				if o.Ipv6.Inherited.NeighborDiscovery.DadAttempts != nil {
-					nestedIpv6.Inherited.NeighborDiscovery.DadAttempts = o.Ipv6.Inherited.NeighborDiscovery.DadAttempts
+				if o.Ipv6.Inherited.NeighborDiscovery.ReachableTime != nil {
+					nestedIpv6.Inherited.NeighborDiscovery.ReachableTime = o.Ipv6.Inherited.NeighborDiscovery.ReachableTime
 				}
 			}
-		}
-		if o.Ipv6.Address != nil {
-			nestedIpv6.Address = []Ipv6AddressXml{}
-			for _, oIpv6Address := range o.Ipv6.Address {
-				nestedIpv6Address := Ipv6AddressXml{}
-				if _, ok := o.Misc["Ipv6Address"]; ok {
-					nestedIpv6Address.Misc = o.Misc["Ipv6Address"]
-				}
-				if oIpv6Address.Name != "" {
-					nestedIpv6Address.Name = oIpv6Address.Name
-				}
-				if oIpv6Address.EnableOnInterface != nil {
-					nestedIpv6Address.EnableOnInterface = util.YesNo(oIpv6Address.EnableOnInterface, nil)
-				}
-				if oIpv6Address.Prefix != nil {
-					nestedIpv6Address.Prefix = &Ipv6AddressPrefixXml{}
-					if _, ok := o.Misc["Ipv6AddressPrefix"]; ok {
-						nestedIpv6Address.Prefix.Misc = o.Misc["Ipv6AddressPrefix"]
-					}
-				}
-				if oIpv6Address.Anycast != nil {
-					nestedIpv6Address.Anycast = &Ipv6AddressAnycastXml{}
-					if _, ok := o.Misc["Ipv6AddressAnycast"]; ok {
-						nestedIpv6Address.Anycast.Misc = o.Misc["Ipv6AddressAnycast"]
-					}
-				}
-				if oIpv6Address.Advertise != nil {
-					nestedIpv6Address.Advertise = &Ipv6AddressAdvertiseXml{}
-					if _, ok := o.Misc["Ipv6AddressAdvertise"]; ok {
-						nestedIpv6Address.Advertise.Misc = o.Misc["Ipv6AddressAdvertise"]
-					}
-					if oIpv6Address.Advertise.PreferredLifetime != nil {
-						nestedIpv6Address.Advertise.PreferredLifetime = oIpv6Address.Advertise.PreferredLifetime
-					}
-					if oIpv6Address.Advertise.OnlinkFlag != nil {
-						nestedIpv6Address.Advertise.OnlinkFlag = util.YesNo(oIpv6Address.Advertise.OnlinkFlag, nil)
-					}
-					if oIpv6Address.Advertise.AutoConfigFlag != nil {
-						nestedIpv6Address.Advertise.AutoConfigFlag = util.YesNo(oIpv6Address.Advertise.AutoConfigFlag, nil)
-					}
-					if oIpv6Address.Advertise.Enable != nil {
-						nestedIpv6Address.Advertise.Enable = util.YesNo(oIpv6Address.Advertise.Enable, nil)
-					}
-					if oIpv6Address.Advertise.ValidLifetime != nil {
-						nestedIpv6Address.Advertise.ValidLifetime = oIpv6Address.Advertise.ValidLifetime
-					}
-				}
-				nestedIpv6.Address = append(nestedIpv6.Address, nestedIpv6Address)
-			}
-		}
-		if o.Ipv6.Enabled != nil {
-			nestedIpv6.Enabled = util.YesNo(o.Ipv6.Enabled, nil)
-		}
-		if o.Ipv6.InterfaceId != nil {
-			nestedIpv6.InterfaceId = o.Ipv6.InterfaceId
 		}
 	}
 	entry.Ipv6 = nestedIpv6
@@ -1734,9 +1734,6 @@ func specifyEntry(o *Entry) (any, error) {
 		nestedNdpProxy = &NdpProxyXml{}
 		if _, ok := o.Misc["NdpProxy"]; ok {
 			nestedNdpProxy.Misc = o.Misc["NdpProxy"]
-		}
-		if o.NdpProxy.Enabled != nil {
-			nestedNdpProxy.Enabled = util.YesNo(o.NdpProxy.Enabled, nil)
 		}
 		if o.NdpProxy.Address != nil {
 			nestedNdpProxy.Address = []NdpProxyAddressXml{}
@@ -1753,6 +1750,9 @@ func specifyEntry(o *Entry) (any, error) {
 				}
 				nestedNdpProxy.Address = append(nestedNdpProxy.Address, nestedNdpProxyAddress)
 			}
+		}
+		if o.NdpProxy.Enabled != nil {
+			nestedNdpProxy.Enabled = util.YesNo(o.NdpProxy.Enabled, nil)
 		}
 	}
 	entry.NdpProxy = nestedNdpProxy
@@ -1797,14 +1797,14 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				if oArp.Misc != nil {
 					entry.Misc["Arp"] = oArp.Misc
 				}
+				if oArp.Name != "" {
+					nestedArp.Name = oArp.Name
+				}
 				if oArp.HwAddress != nil {
 					nestedArp.HwAddress = oArp.HwAddress
 				}
 				if oArp.Interface != nil {
 					nestedArp.Interface = oArp.Interface
-				}
-				if oArp.Name != "" {
-					nestedArp.Name = oArp.Name
 				}
 				nestedArpCol = append(nestedArpCol, nestedArp)
 			}
@@ -1836,12 +1836,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 			if o.DdnsConfig.Misc != nil {
 				entry.Misc["DdnsConfig"] = o.DdnsConfig.Misc
 			}
-			if o.DdnsConfig.DdnsCertProfile != nil {
-				nestedDdnsConfig.DdnsCertProfile = o.DdnsConfig.DdnsCertProfile
-			}
-			if o.DdnsConfig.DdnsEnabled != nil {
-				nestedDdnsConfig.DdnsEnabled = util.AsBool(o.DdnsConfig.DdnsEnabled, nil)
-			}
 			if o.DdnsConfig.DdnsHostname != nil {
 				nestedDdnsConfig.DdnsHostname = o.DdnsConfig.DdnsHostname
 			}
@@ -1872,6 +1866,12 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 					}
 					nestedDdnsConfig.DdnsVendorConfig = append(nestedDdnsConfig.DdnsVendorConfig, nestedDdnsConfigDdnsVendorConfig)
 				}
+			}
+			if o.DdnsConfig.DdnsCertProfile != nil {
+				nestedDdnsConfig.DdnsCertProfile = o.DdnsConfig.DdnsCertProfile
+			}
+			if o.DdnsConfig.DdnsEnabled != nil {
+				nestedDdnsConfig.DdnsEnabled = util.AsBool(o.DdnsConfig.DdnsEnabled, nil)
 			}
 		}
 		entry.DdnsConfig = nestedDdnsConfig
@@ -1930,9 +1930,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 			if o.Ipv6.Misc != nil {
 				entry.Misc["Ipv6"] = o.Ipv6.Misc
 			}
-			if o.Ipv6.Enabled != nil {
-				nestedIpv6.Enabled = util.AsBool(o.Ipv6.Enabled, nil)
-			}
 			if o.Ipv6.InterfaceId != nil {
 				nestedIpv6.InterfaceId = o.Ipv6.InterfaceId
 			}
@@ -1940,6 +1937,12 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				nestedIpv6.NeighborDiscovery = &Ipv6NeighborDiscovery{}
 				if o.Ipv6.NeighborDiscovery.Misc != nil {
 					entry.Misc["Ipv6NeighborDiscovery"] = o.Ipv6.NeighborDiscovery.Misc
+				}
+				if o.Ipv6.NeighborDiscovery.EnableDad != nil {
+					nestedIpv6.NeighborDiscovery.EnableDad = util.AsBool(o.Ipv6.NeighborDiscovery.EnableDad, nil)
+				}
+				if o.Ipv6.NeighborDiscovery.EnableNdpMonitor != nil {
+					nestedIpv6.NeighborDiscovery.EnableNdpMonitor = util.AsBool(o.Ipv6.NeighborDiscovery.EnableNdpMonitor, nil)
 				}
 				if o.Ipv6.NeighborDiscovery.Neighbor != nil {
 					nestedIpv6.NeighborDiscovery.Neighbor = []Ipv6NeighborDiscoveryNeighbor{}
@@ -1968,17 +1971,11 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 					if o.Ipv6.NeighborDiscovery.RouterAdvertisement.Misc != nil {
 						entry.Misc["Ipv6NeighborDiscoveryRouterAdvertisement"] = o.Ipv6.NeighborDiscovery.RouterAdvertisement.Misc
 					}
-					if o.Ipv6.NeighborDiscovery.RouterAdvertisement.Lifetime != nil {
-						nestedIpv6.NeighborDiscovery.RouterAdvertisement.Lifetime = o.Ipv6.NeighborDiscovery.RouterAdvertisement.Lifetime
-					}
-					if o.Ipv6.NeighborDiscovery.RouterAdvertisement.LinkMtu != nil {
-						nestedIpv6.NeighborDiscovery.RouterAdvertisement.LinkMtu = o.Ipv6.NeighborDiscovery.RouterAdvertisement.LinkMtu
-					}
-					if o.Ipv6.NeighborDiscovery.RouterAdvertisement.MaxInterval != nil {
-						nestedIpv6.NeighborDiscovery.RouterAdvertisement.MaxInterval = o.Ipv6.NeighborDiscovery.RouterAdvertisement.MaxInterval
-					}
 					if o.Ipv6.NeighborDiscovery.RouterAdvertisement.MinInterval != nil {
 						nestedIpv6.NeighborDiscovery.RouterAdvertisement.MinInterval = o.Ipv6.NeighborDiscovery.RouterAdvertisement.MinInterval
+					}
+					if o.Ipv6.NeighborDiscovery.RouterAdvertisement.OtherFlag != nil {
+						nestedIpv6.NeighborDiscovery.RouterAdvertisement.OtherFlag = util.AsBool(o.Ipv6.NeighborDiscovery.RouterAdvertisement.OtherFlag, nil)
 					}
 					if o.Ipv6.NeighborDiscovery.RouterAdvertisement.RetransmissionTimer != nil {
 						nestedIpv6.NeighborDiscovery.RouterAdvertisement.RetransmissionTimer = o.Ipv6.NeighborDiscovery.RouterAdvertisement.RetransmissionTimer
@@ -1986,20 +1983,20 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 					if o.Ipv6.NeighborDiscovery.RouterAdvertisement.RouterPreference != nil {
 						nestedIpv6.NeighborDiscovery.RouterAdvertisement.RouterPreference = o.Ipv6.NeighborDiscovery.RouterAdvertisement.RouterPreference
 					}
-					if o.Ipv6.NeighborDiscovery.RouterAdvertisement.HopLimit != nil {
-						nestedIpv6.NeighborDiscovery.RouterAdvertisement.HopLimit = o.Ipv6.NeighborDiscovery.RouterAdvertisement.HopLimit
-					}
 					if o.Ipv6.NeighborDiscovery.RouterAdvertisement.Enable != nil {
 						nestedIpv6.NeighborDiscovery.RouterAdvertisement.Enable = util.AsBool(o.Ipv6.NeighborDiscovery.RouterAdvertisement.Enable, nil)
 					}
-					if o.Ipv6.NeighborDiscovery.RouterAdvertisement.EnableConsistencyCheck != nil {
-						nestedIpv6.NeighborDiscovery.RouterAdvertisement.EnableConsistencyCheck = util.AsBool(o.Ipv6.NeighborDiscovery.RouterAdvertisement.EnableConsistencyCheck, nil)
+					if o.Ipv6.NeighborDiscovery.RouterAdvertisement.Lifetime != nil {
+						nestedIpv6.NeighborDiscovery.RouterAdvertisement.Lifetime = o.Ipv6.NeighborDiscovery.RouterAdvertisement.Lifetime
+					}
+					if o.Ipv6.NeighborDiscovery.RouterAdvertisement.MaxInterval != nil {
+						nestedIpv6.NeighborDiscovery.RouterAdvertisement.MaxInterval = o.Ipv6.NeighborDiscovery.RouterAdvertisement.MaxInterval
+					}
+					if o.Ipv6.NeighborDiscovery.RouterAdvertisement.LinkMtu != nil {
+						nestedIpv6.NeighborDiscovery.RouterAdvertisement.LinkMtu = o.Ipv6.NeighborDiscovery.RouterAdvertisement.LinkMtu
 					}
 					if o.Ipv6.NeighborDiscovery.RouterAdvertisement.ManagedFlag != nil {
 						nestedIpv6.NeighborDiscovery.RouterAdvertisement.ManagedFlag = util.AsBool(o.Ipv6.NeighborDiscovery.RouterAdvertisement.ManagedFlag, nil)
-					}
-					if o.Ipv6.NeighborDiscovery.RouterAdvertisement.OtherFlag != nil {
-						nestedIpv6.NeighborDiscovery.RouterAdvertisement.OtherFlag = util.AsBool(o.Ipv6.NeighborDiscovery.RouterAdvertisement.OtherFlag, nil)
 					}
 					if o.Ipv6.NeighborDiscovery.RouterAdvertisement.ReachableTime != nil {
 						nestedIpv6.NeighborDiscovery.RouterAdvertisement.ReachableTime = o.Ipv6.NeighborDiscovery.RouterAdvertisement.ReachableTime
@@ -2045,24 +2042,21 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 							}
 						}
 					}
+					if o.Ipv6.NeighborDiscovery.RouterAdvertisement.EnableConsistencyCheck != nil {
+						nestedIpv6.NeighborDiscovery.RouterAdvertisement.EnableConsistencyCheck = util.AsBool(o.Ipv6.NeighborDiscovery.RouterAdvertisement.EnableConsistencyCheck, nil)
+					}
+					if o.Ipv6.NeighborDiscovery.RouterAdvertisement.HopLimit != nil {
+						nestedIpv6.NeighborDiscovery.RouterAdvertisement.HopLimit = o.Ipv6.NeighborDiscovery.RouterAdvertisement.HopLimit
+					}
 				}
 				if o.Ipv6.NeighborDiscovery.DadAttempts != nil {
 					nestedIpv6.NeighborDiscovery.DadAttempts = o.Ipv6.NeighborDiscovery.DadAttempts
-				}
-				if o.Ipv6.NeighborDiscovery.EnableDad != nil {
-					nestedIpv6.NeighborDiscovery.EnableDad = util.AsBool(o.Ipv6.NeighborDiscovery.EnableDad, nil)
-				}
-				if o.Ipv6.NeighborDiscovery.EnableNdpMonitor != nil {
-					nestedIpv6.NeighborDiscovery.EnableNdpMonitor = util.AsBool(o.Ipv6.NeighborDiscovery.EnableNdpMonitor, nil)
 				}
 			}
 			if o.Ipv6.DhcpClient != nil {
 				nestedIpv6.DhcpClient = &Ipv6DhcpClient{}
 				if o.Ipv6.DhcpClient.Misc != nil {
 					entry.Misc["Ipv6DhcpClient"] = o.Ipv6.DhcpClient.Misc
-				}
-				if o.Ipv6.DhcpClient.Enable != nil {
-					nestedIpv6.DhcpClient.Enable = util.AsBool(o.Ipv6.DhcpClient.Enable, nil)
 				}
 				if o.Ipv6.DhcpClient.NeighborDiscovery != nil {
 					nestedIpv6.DhcpClient.NeighborDiscovery = &Ipv6DhcpClientNeighborDiscovery{}
@@ -2109,11 +2103,11 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 										if oIpv6DhcpClientNeighborDiscoveryDnsServerSourceManualServer.Misc != nil {
 											entry.Misc["Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualServer"] = oIpv6DhcpClientNeighborDiscoveryDnsServerSourceManualServer.Misc
 										}
-										if oIpv6DhcpClientNeighborDiscoveryDnsServerSourceManualServer.Name != "" {
-											nestedIpv6DhcpClientNeighborDiscoveryDnsServerSourceManualServer.Name = oIpv6DhcpClientNeighborDiscoveryDnsServerSourceManualServer.Name
-										}
 										if oIpv6DhcpClientNeighborDiscoveryDnsServerSourceManualServer.Lifetime != nil {
 											nestedIpv6DhcpClientNeighborDiscoveryDnsServerSourceManualServer.Lifetime = oIpv6DhcpClientNeighborDiscoveryDnsServerSourceManualServer.Lifetime
+										}
+										if oIpv6DhcpClientNeighborDiscoveryDnsServerSourceManualServer.Name != "" {
+											nestedIpv6DhcpClientNeighborDiscoveryDnsServerSourceManualServer.Name = oIpv6DhcpClientNeighborDiscoveryDnsServerSourceManualServer.Name
 										}
 										nestedIpv6.DhcpClient.NeighborDiscovery.DnsServer.Source.Manual.Server = append(nestedIpv6.DhcpClient.NeighborDiscovery.DnsServer.Source.Manual.Server, nestedIpv6DhcpClientNeighborDiscoveryDnsServerSourceManualServer)
 									}
@@ -2125,9 +2119,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 						nestedIpv6.DhcpClient.NeighborDiscovery.DnsSuffix = &Ipv6DhcpClientNeighborDiscoveryDnsSuffix{}
 						if o.Ipv6.DhcpClient.NeighborDiscovery.DnsSuffix.Misc != nil {
 							entry.Misc["Ipv6DhcpClientNeighborDiscoveryDnsSuffix"] = o.Ipv6.DhcpClient.NeighborDiscovery.DnsSuffix.Misc
-						}
-						if o.Ipv6.DhcpClient.NeighborDiscovery.DnsSuffix.Enable != nil {
-							nestedIpv6.DhcpClient.NeighborDiscovery.DnsSuffix.Enable = util.AsBool(o.Ipv6.DhcpClient.NeighborDiscovery.DnsSuffix.Enable, nil)
 						}
 						if o.Ipv6.DhcpClient.NeighborDiscovery.DnsSuffix.Source != nil {
 							nestedIpv6.DhcpClient.NeighborDiscovery.DnsSuffix.Source = &Ipv6DhcpClientNeighborDiscoveryDnsSuffixSource{}
@@ -2152,16 +2143,19 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 										if oIpv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffix.Misc != nil {
 											entry.Misc["Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffix"] = oIpv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffix.Misc
 										}
-										if oIpv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffix.Name != "" {
-											nestedIpv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffix.Name = oIpv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffix.Name
-										}
 										if oIpv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffix.Lifetime != nil {
 											nestedIpv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffix.Lifetime = oIpv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffix.Lifetime
+										}
+										if oIpv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffix.Name != "" {
+											nestedIpv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffix.Name = oIpv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffix.Name
 										}
 										nestedIpv6.DhcpClient.NeighborDiscovery.DnsSuffix.Source.Manual.Suffix = append(nestedIpv6.DhcpClient.NeighborDiscovery.DnsSuffix.Source.Manual.Suffix, nestedIpv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffix)
 									}
 								}
 							}
+						}
+						if o.Ipv6.DhcpClient.NeighborDiscovery.DnsSuffix.Enable != nil {
+							nestedIpv6.DhcpClient.NeighborDiscovery.DnsSuffix.Enable = util.AsBool(o.Ipv6.DhcpClient.NeighborDiscovery.DnsSuffix.Enable, nil)
 						}
 					}
 					if o.Ipv6.DhcpClient.NeighborDiscovery.EnableDad != nil {
@@ -2268,185 +2262,14 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				if o.Ipv6.DhcpClient.DefaultRouteMetric != nil {
 					nestedIpv6.DhcpClient.DefaultRouteMetric = o.Ipv6.DhcpClient.DefaultRouteMetric
 				}
+				if o.Ipv6.DhcpClient.Enable != nil {
+					nestedIpv6.DhcpClient.Enable = util.AsBool(o.Ipv6.DhcpClient.Enable, nil)
+				}
 			}
 			if o.Ipv6.Inherited != nil {
 				nestedIpv6.Inherited = &Ipv6Inherited{}
 				if o.Ipv6.Inherited.Misc != nil {
 					entry.Misc["Ipv6Inherited"] = o.Ipv6.Inherited.Misc
-				}
-				if o.Ipv6.Inherited.Enable != nil {
-					nestedIpv6.Inherited.Enable = util.AsBool(o.Ipv6.Inherited.Enable, nil)
-				}
-				if o.Ipv6.Inherited.NeighborDiscovery != nil {
-					nestedIpv6.Inherited.NeighborDiscovery = &Ipv6InheritedNeighborDiscovery{}
-					if o.Ipv6.Inherited.NeighborDiscovery.Misc != nil {
-						entry.Misc["Ipv6InheritedNeighborDiscovery"] = o.Ipv6.Inherited.NeighborDiscovery.Misc
-					}
-					if o.Ipv6.Inherited.NeighborDiscovery.ReachableTime != nil {
-						nestedIpv6.Inherited.NeighborDiscovery.ReachableTime = o.Ipv6.Inherited.NeighborDiscovery.ReachableTime
-					}
-					if o.Ipv6.Inherited.NeighborDiscovery.NsInterval != nil {
-						nestedIpv6.Inherited.NeighborDiscovery.NsInterval = o.Ipv6.Inherited.NeighborDiscovery.NsInterval
-					}
-					if o.Ipv6.Inherited.NeighborDiscovery.DnsServer != nil {
-						nestedIpv6.Inherited.NeighborDiscovery.DnsServer = &Ipv6InheritedNeighborDiscoveryDnsServer{}
-						if o.Ipv6.Inherited.NeighborDiscovery.DnsServer.Misc != nil {
-							entry.Misc["Ipv6InheritedNeighborDiscoveryDnsServer"] = o.Ipv6.Inherited.NeighborDiscovery.DnsServer.Misc
-						}
-						if o.Ipv6.Inherited.NeighborDiscovery.DnsServer.Enable != nil {
-							nestedIpv6.Inherited.NeighborDiscovery.DnsServer.Enable = util.AsBool(o.Ipv6.Inherited.NeighborDiscovery.DnsServer.Enable, nil)
-						}
-						if o.Ipv6.Inherited.NeighborDiscovery.DnsServer.Source != nil {
-							nestedIpv6.Inherited.NeighborDiscovery.DnsServer.Source = &Ipv6InheritedNeighborDiscoveryDnsServerSource{}
-							if o.Ipv6.Inherited.NeighborDiscovery.DnsServer.Source.Misc != nil {
-								entry.Misc["Ipv6InheritedNeighborDiscoveryDnsServerSource"] = o.Ipv6.Inherited.NeighborDiscovery.DnsServer.Source.Misc
-							}
-							if o.Ipv6.Inherited.NeighborDiscovery.DnsServer.Source.Dhcpv6 != nil {
-								nestedIpv6.Inherited.NeighborDiscovery.DnsServer.Source.Dhcpv6 = &Ipv6InheritedNeighborDiscoveryDnsServerSourceDhcpv6{}
-								if o.Ipv6.Inherited.NeighborDiscovery.DnsServer.Source.Dhcpv6.Misc != nil {
-									entry.Misc["Ipv6InheritedNeighborDiscoveryDnsServerSourceDhcpv6"] = o.Ipv6.Inherited.NeighborDiscovery.DnsServer.Source.Dhcpv6.Misc
-								}
-								if o.Ipv6.Inherited.NeighborDiscovery.DnsServer.Source.Dhcpv6.PrefixPool != nil {
-									nestedIpv6.Inherited.NeighborDiscovery.DnsServer.Source.Dhcpv6.PrefixPool = o.Ipv6.Inherited.NeighborDiscovery.DnsServer.Source.Dhcpv6.PrefixPool
-								}
-							}
-							if o.Ipv6.Inherited.NeighborDiscovery.DnsServer.Source.Manual != nil {
-								nestedIpv6.Inherited.NeighborDiscovery.DnsServer.Source.Manual = &Ipv6InheritedNeighborDiscoveryDnsServerSourceManual{}
-								if o.Ipv6.Inherited.NeighborDiscovery.DnsServer.Source.Manual.Misc != nil {
-									entry.Misc["Ipv6InheritedNeighborDiscoveryDnsServerSourceManual"] = o.Ipv6.Inherited.NeighborDiscovery.DnsServer.Source.Manual.Misc
-								}
-								if o.Ipv6.Inherited.NeighborDiscovery.DnsServer.Source.Manual.Server != nil {
-									nestedIpv6.Inherited.NeighborDiscovery.DnsServer.Source.Manual.Server = []Ipv6InheritedNeighborDiscoveryDnsServerSourceManualServer{}
-									for _, oIpv6InheritedNeighborDiscoveryDnsServerSourceManualServer := range o.Ipv6.Inherited.NeighborDiscovery.DnsServer.Source.Manual.Server {
-										nestedIpv6InheritedNeighborDiscoveryDnsServerSourceManualServer := Ipv6InheritedNeighborDiscoveryDnsServerSourceManualServer{}
-										if oIpv6InheritedNeighborDiscoveryDnsServerSourceManualServer.Misc != nil {
-											entry.Misc["Ipv6InheritedNeighborDiscoveryDnsServerSourceManualServer"] = oIpv6InheritedNeighborDiscoveryDnsServerSourceManualServer.Misc
-										}
-										if oIpv6InheritedNeighborDiscoveryDnsServerSourceManualServer.Lifetime != nil {
-											nestedIpv6InheritedNeighborDiscoveryDnsServerSourceManualServer.Lifetime = oIpv6InheritedNeighborDiscoveryDnsServerSourceManualServer.Lifetime
-										}
-										if oIpv6InheritedNeighborDiscoveryDnsServerSourceManualServer.Name != "" {
-											nestedIpv6InheritedNeighborDiscoveryDnsServerSourceManualServer.Name = oIpv6InheritedNeighborDiscoveryDnsServerSourceManualServer.Name
-										}
-										nestedIpv6.Inherited.NeighborDiscovery.DnsServer.Source.Manual.Server = append(nestedIpv6.Inherited.NeighborDiscovery.DnsServer.Source.Manual.Server, nestedIpv6InheritedNeighborDiscoveryDnsServerSourceManualServer)
-									}
-								}
-							}
-						}
-					}
-					if o.Ipv6.Inherited.NeighborDiscovery.DnsSuffix != nil {
-						nestedIpv6.Inherited.NeighborDiscovery.DnsSuffix = &Ipv6InheritedNeighborDiscoveryDnsSuffix{}
-						if o.Ipv6.Inherited.NeighborDiscovery.DnsSuffix.Misc != nil {
-							entry.Misc["Ipv6InheritedNeighborDiscoveryDnsSuffix"] = o.Ipv6.Inherited.NeighborDiscovery.DnsSuffix.Misc
-						}
-						if o.Ipv6.Inherited.NeighborDiscovery.DnsSuffix.Enable != nil {
-							nestedIpv6.Inherited.NeighborDiscovery.DnsSuffix.Enable = util.AsBool(o.Ipv6.Inherited.NeighborDiscovery.DnsSuffix.Enable, nil)
-						}
-						if o.Ipv6.Inherited.NeighborDiscovery.DnsSuffix.Source != nil {
-							nestedIpv6.Inherited.NeighborDiscovery.DnsSuffix.Source = &Ipv6InheritedNeighborDiscoveryDnsSuffixSource{}
-							if o.Ipv6.Inherited.NeighborDiscovery.DnsSuffix.Source.Misc != nil {
-								entry.Misc["Ipv6InheritedNeighborDiscoveryDnsSuffixSource"] = o.Ipv6.Inherited.NeighborDiscovery.DnsSuffix.Source.Misc
-							}
-							if o.Ipv6.Inherited.NeighborDiscovery.DnsSuffix.Source.Dhcpv6 != nil {
-								nestedIpv6.Inherited.NeighborDiscovery.DnsSuffix.Source.Dhcpv6 = &Ipv6InheritedNeighborDiscoveryDnsSuffixSourceDhcpv6{}
-								if o.Ipv6.Inherited.NeighborDiscovery.DnsSuffix.Source.Dhcpv6.Misc != nil {
-									entry.Misc["Ipv6InheritedNeighborDiscoveryDnsSuffixSourceDhcpv6"] = o.Ipv6.Inherited.NeighborDiscovery.DnsSuffix.Source.Dhcpv6.Misc
-								}
-								if o.Ipv6.Inherited.NeighborDiscovery.DnsSuffix.Source.Dhcpv6.PrefixPool != nil {
-									nestedIpv6.Inherited.NeighborDiscovery.DnsSuffix.Source.Dhcpv6.PrefixPool = o.Ipv6.Inherited.NeighborDiscovery.DnsSuffix.Source.Dhcpv6.PrefixPool
-								}
-							}
-							if o.Ipv6.Inherited.NeighborDiscovery.DnsSuffix.Source.Manual != nil {
-								nestedIpv6.Inherited.NeighborDiscovery.DnsSuffix.Source.Manual = &Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManual{}
-								if o.Ipv6.Inherited.NeighborDiscovery.DnsSuffix.Source.Manual.Misc != nil {
-									entry.Misc["Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManual"] = o.Ipv6.Inherited.NeighborDiscovery.DnsSuffix.Source.Manual.Misc
-								}
-								if o.Ipv6.Inherited.NeighborDiscovery.DnsSuffix.Source.Manual.Suffix != nil {
-									nestedIpv6.Inherited.NeighborDiscovery.DnsSuffix.Source.Manual.Suffix = []Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffix{}
-									for _, oIpv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffix := range o.Ipv6.Inherited.NeighborDiscovery.DnsSuffix.Source.Manual.Suffix {
-										nestedIpv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffix := Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffix{}
-										if oIpv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffix.Misc != nil {
-											entry.Misc["Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffix"] = oIpv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffix.Misc
-										}
-										if oIpv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffix.Lifetime != nil {
-											nestedIpv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffix.Lifetime = oIpv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffix.Lifetime
-										}
-										if oIpv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffix.Name != "" {
-											nestedIpv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffix.Name = oIpv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffix.Name
-										}
-										nestedIpv6.Inherited.NeighborDiscovery.DnsSuffix.Source.Manual.Suffix = append(nestedIpv6.Inherited.NeighborDiscovery.DnsSuffix.Source.Manual.Suffix, nestedIpv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffix)
-									}
-								}
-							}
-						}
-					}
-					if o.Ipv6.Inherited.NeighborDiscovery.EnableDad != nil {
-						nestedIpv6.Inherited.NeighborDiscovery.EnableDad = util.AsBool(o.Ipv6.Inherited.NeighborDiscovery.EnableDad, nil)
-					}
-					if o.Ipv6.Inherited.NeighborDiscovery.EnableNdpMonitor != nil {
-						nestedIpv6.Inherited.NeighborDiscovery.EnableNdpMonitor = util.AsBool(o.Ipv6.Inherited.NeighborDiscovery.EnableNdpMonitor, nil)
-					}
-					if o.Ipv6.Inherited.NeighborDiscovery.Neighbor != nil {
-						nestedIpv6.Inherited.NeighborDiscovery.Neighbor = []Ipv6InheritedNeighborDiscoveryNeighbor{}
-						for _, oIpv6InheritedNeighborDiscoveryNeighbor := range o.Ipv6.Inherited.NeighborDiscovery.Neighbor {
-							nestedIpv6InheritedNeighborDiscoveryNeighbor := Ipv6InheritedNeighborDiscoveryNeighbor{}
-							if oIpv6InheritedNeighborDiscoveryNeighbor.Misc != nil {
-								entry.Misc["Ipv6InheritedNeighborDiscoveryNeighbor"] = oIpv6InheritedNeighborDiscoveryNeighbor.Misc
-							}
-							if oIpv6InheritedNeighborDiscoveryNeighbor.HwAddress != nil {
-								nestedIpv6InheritedNeighborDiscoveryNeighbor.HwAddress = oIpv6InheritedNeighborDiscoveryNeighbor.HwAddress
-							}
-							if oIpv6InheritedNeighborDiscoveryNeighbor.Name != "" {
-								nestedIpv6InheritedNeighborDiscoveryNeighbor.Name = oIpv6InheritedNeighborDiscoveryNeighbor.Name
-							}
-							nestedIpv6.Inherited.NeighborDiscovery.Neighbor = append(nestedIpv6.Inherited.NeighborDiscovery.Neighbor, nestedIpv6InheritedNeighborDiscoveryNeighbor)
-						}
-					}
-					if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement != nil {
-						nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement = &Ipv6InheritedNeighborDiscoveryRouterAdvertisement{}
-						if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.Misc != nil {
-							entry.Misc["Ipv6InheritedNeighborDiscoveryRouterAdvertisement"] = o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.Misc
-						}
-						if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.Enable != nil {
-							nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.Enable = util.AsBool(o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.Enable, nil)
-						}
-						if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.MaxInterval != nil {
-							nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.MaxInterval = o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.MaxInterval
-						}
-						if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.MinInterval != nil {
-							nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.MinInterval = o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.MinInterval
-						}
-						if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.OtherFlag != nil {
-							nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.OtherFlag = util.AsBool(o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.OtherFlag, nil)
-						}
-						if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.ReachableTime != nil {
-							nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.ReachableTime = o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.ReachableTime
-						}
-						if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.RouterPreference != nil {
-							nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.RouterPreference = o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.RouterPreference
-						}
-						if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.EnableConsistencyCheck != nil {
-							nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.EnableConsistencyCheck = util.AsBool(o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.EnableConsistencyCheck, nil)
-						}
-						if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.HopLimit != nil {
-							nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.HopLimit = o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.HopLimit
-						}
-						if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.Lifetime != nil {
-							nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.Lifetime = o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.Lifetime
-						}
-						if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.LinkMtu != nil {
-							nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.LinkMtu = o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.LinkMtu
-						}
-						if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.ManagedFlag != nil {
-							nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.ManagedFlag = util.AsBool(o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.ManagedFlag, nil)
-						}
-						if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.RetransmissionTimer != nil {
-							nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.RetransmissionTimer = o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.RetransmissionTimer
-						}
-					}
-					if o.Ipv6.Inherited.NeighborDiscovery.DadAttempts != nil {
-						nestedIpv6.Inherited.NeighborDiscovery.DadAttempts = o.Ipv6.Inherited.NeighborDiscovery.DadAttempts
-					}
 				}
 				if o.Ipv6.Inherited.AssignAddr != nil {
 					nestedIpv6.Inherited.AssignAddr = []Ipv6InheritedAssignAddr{}
@@ -2530,9 +2353,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 									if oIpv6InheritedAssignAddr.Type.Ula.Advertise.Misc != nil {
 										entry.Misc["Ipv6InheritedAssignAddrTypeUlaAdvertise"] = oIpv6InheritedAssignAddr.Type.Ula.Advertise.Misc
 									}
-									if oIpv6InheritedAssignAddr.Type.Ula.Advertise.Enable != nil {
-										nestedIpv6InheritedAssignAddr.Type.Ula.Advertise.Enable = util.AsBool(oIpv6InheritedAssignAddr.Type.Ula.Advertise.Enable, nil)
-									}
 									if oIpv6InheritedAssignAddr.Type.Ula.Advertise.ValidLifetime != nil {
 										nestedIpv6InheritedAssignAddr.Type.Ula.Advertise.ValidLifetime = oIpv6InheritedAssignAddr.Type.Ula.Advertise.ValidLifetime
 									}
@@ -2545,6 +2365,9 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 									if oIpv6InheritedAssignAddr.Type.Ula.Advertise.AutoConfigFlag != nil {
 										nestedIpv6InheritedAssignAddr.Type.Ula.Advertise.AutoConfigFlag = util.AsBool(oIpv6InheritedAssignAddr.Type.Ula.Advertise.AutoConfigFlag, nil)
 									}
+									if oIpv6InheritedAssignAddr.Type.Ula.Advertise.Enable != nil {
+										nestedIpv6InheritedAssignAddr.Type.Ula.Advertise.Enable = util.AsBool(oIpv6InheritedAssignAddr.Type.Ula.Advertise.Enable, nil)
+									}
 								}
 							}
 						}
@@ -2554,6 +2377,180 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 						nestedIpv6.Inherited.AssignAddr = append(nestedIpv6.Inherited.AssignAddr, nestedIpv6InheritedAssignAddr)
 					}
 				}
+				if o.Ipv6.Inherited.Enable != nil {
+					nestedIpv6.Inherited.Enable = util.AsBool(o.Ipv6.Inherited.Enable, nil)
+				}
+				if o.Ipv6.Inherited.NeighborDiscovery != nil {
+					nestedIpv6.Inherited.NeighborDiscovery = &Ipv6InheritedNeighborDiscovery{}
+					if o.Ipv6.Inherited.NeighborDiscovery.Misc != nil {
+						entry.Misc["Ipv6InheritedNeighborDiscovery"] = o.Ipv6.Inherited.NeighborDiscovery.Misc
+					}
+					if o.Ipv6.Inherited.NeighborDiscovery.DadAttempts != nil {
+						nestedIpv6.Inherited.NeighborDiscovery.DadAttempts = o.Ipv6.Inherited.NeighborDiscovery.DadAttempts
+					}
+					if o.Ipv6.Inherited.NeighborDiscovery.DnsServer != nil {
+						nestedIpv6.Inherited.NeighborDiscovery.DnsServer = &Ipv6InheritedNeighborDiscoveryDnsServer{}
+						if o.Ipv6.Inherited.NeighborDiscovery.DnsServer.Misc != nil {
+							entry.Misc["Ipv6InheritedNeighborDiscoveryDnsServer"] = o.Ipv6.Inherited.NeighborDiscovery.DnsServer.Misc
+						}
+						if o.Ipv6.Inherited.NeighborDiscovery.DnsServer.Enable != nil {
+							nestedIpv6.Inherited.NeighborDiscovery.DnsServer.Enable = util.AsBool(o.Ipv6.Inherited.NeighborDiscovery.DnsServer.Enable, nil)
+						}
+						if o.Ipv6.Inherited.NeighborDiscovery.DnsServer.Source != nil {
+							nestedIpv6.Inherited.NeighborDiscovery.DnsServer.Source = &Ipv6InheritedNeighborDiscoveryDnsServerSource{}
+							if o.Ipv6.Inherited.NeighborDiscovery.DnsServer.Source.Misc != nil {
+								entry.Misc["Ipv6InheritedNeighborDiscoveryDnsServerSource"] = o.Ipv6.Inherited.NeighborDiscovery.DnsServer.Source.Misc
+							}
+							if o.Ipv6.Inherited.NeighborDiscovery.DnsServer.Source.Dhcpv6 != nil {
+								nestedIpv6.Inherited.NeighborDiscovery.DnsServer.Source.Dhcpv6 = &Ipv6InheritedNeighborDiscoveryDnsServerSourceDhcpv6{}
+								if o.Ipv6.Inherited.NeighborDiscovery.DnsServer.Source.Dhcpv6.Misc != nil {
+									entry.Misc["Ipv6InheritedNeighborDiscoveryDnsServerSourceDhcpv6"] = o.Ipv6.Inherited.NeighborDiscovery.DnsServer.Source.Dhcpv6.Misc
+								}
+								if o.Ipv6.Inherited.NeighborDiscovery.DnsServer.Source.Dhcpv6.PrefixPool != nil {
+									nestedIpv6.Inherited.NeighborDiscovery.DnsServer.Source.Dhcpv6.PrefixPool = o.Ipv6.Inherited.NeighborDiscovery.DnsServer.Source.Dhcpv6.PrefixPool
+								}
+							}
+							if o.Ipv6.Inherited.NeighborDiscovery.DnsServer.Source.Manual != nil {
+								nestedIpv6.Inherited.NeighborDiscovery.DnsServer.Source.Manual = &Ipv6InheritedNeighborDiscoveryDnsServerSourceManual{}
+								if o.Ipv6.Inherited.NeighborDiscovery.DnsServer.Source.Manual.Misc != nil {
+									entry.Misc["Ipv6InheritedNeighborDiscoveryDnsServerSourceManual"] = o.Ipv6.Inherited.NeighborDiscovery.DnsServer.Source.Manual.Misc
+								}
+								if o.Ipv6.Inherited.NeighborDiscovery.DnsServer.Source.Manual.Server != nil {
+									nestedIpv6.Inherited.NeighborDiscovery.DnsServer.Source.Manual.Server = []Ipv6InheritedNeighborDiscoveryDnsServerSourceManualServer{}
+									for _, oIpv6InheritedNeighborDiscoveryDnsServerSourceManualServer := range o.Ipv6.Inherited.NeighborDiscovery.DnsServer.Source.Manual.Server {
+										nestedIpv6InheritedNeighborDiscoveryDnsServerSourceManualServer := Ipv6InheritedNeighborDiscoveryDnsServerSourceManualServer{}
+										if oIpv6InheritedNeighborDiscoveryDnsServerSourceManualServer.Misc != nil {
+											entry.Misc["Ipv6InheritedNeighborDiscoveryDnsServerSourceManualServer"] = oIpv6InheritedNeighborDiscoveryDnsServerSourceManualServer.Misc
+										}
+										if oIpv6InheritedNeighborDiscoveryDnsServerSourceManualServer.Lifetime != nil {
+											nestedIpv6InheritedNeighborDiscoveryDnsServerSourceManualServer.Lifetime = oIpv6InheritedNeighborDiscoveryDnsServerSourceManualServer.Lifetime
+										}
+										if oIpv6InheritedNeighborDiscoveryDnsServerSourceManualServer.Name != "" {
+											nestedIpv6InheritedNeighborDiscoveryDnsServerSourceManualServer.Name = oIpv6InheritedNeighborDiscoveryDnsServerSourceManualServer.Name
+										}
+										nestedIpv6.Inherited.NeighborDiscovery.DnsServer.Source.Manual.Server = append(nestedIpv6.Inherited.NeighborDiscovery.DnsServer.Source.Manual.Server, nestedIpv6InheritedNeighborDiscoveryDnsServerSourceManualServer)
+									}
+								}
+							}
+						}
+					}
+					if o.Ipv6.Inherited.NeighborDiscovery.EnableDad != nil {
+						nestedIpv6.Inherited.NeighborDiscovery.EnableDad = util.AsBool(o.Ipv6.Inherited.NeighborDiscovery.EnableDad, nil)
+					}
+					if o.Ipv6.Inherited.NeighborDiscovery.Neighbor != nil {
+						nestedIpv6.Inherited.NeighborDiscovery.Neighbor = []Ipv6InheritedNeighborDiscoveryNeighbor{}
+						for _, oIpv6InheritedNeighborDiscoveryNeighbor := range o.Ipv6.Inherited.NeighborDiscovery.Neighbor {
+							nestedIpv6InheritedNeighborDiscoveryNeighbor := Ipv6InheritedNeighborDiscoveryNeighbor{}
+							if oIpv6InheritedNeighborDiscoveryNeighbor.Misc != nil {
+								entry.Misc["Ipv6InheritedNeighborDiscoveryNeighbor"] = oIpv6InheritedNeighborDiscoveryNeighbor.Misc
+							}
+							if oIpv6InheritedNeighborDiscoveryNeighbor.Name != "" {
+								nestedIpv6InheritedNeighborDiscoveryNeighbor.Name = oIpv6InheritedNeighborDiscoveryNeighbor.Name
+							}
+							if oIpv6InheritedNeighborDiscoveryNeighbor.HwAddress != nil {
+								nestedIpv6InheritedNeighborDiscoveryNeighbor.HwAddress = oIpv6InheritedNeighborDiscoveryNeighbor.HwAddress
+							}
+							nestedIpv6.Inherited.NeighborDiscovery.Neighbor = append(nestedIpv6.Inherited.NeighborDiscovery.Neighbor, nestedIpv6InheritedNeighborDiscoveryNeighbor)
+						}
+					}
+					if o.Ipv6.Inherited.NeighborDiscovery.NsInterval != nil {
+						nestedIpv6.Inherited.NeighborDiscovery.NsInterval = o.Ipv6.Inherited.NeighborDiscovery.NsInterval
+					}
+					if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement != nil {
+						nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement = &Ipv6InheritedNeighborDiscoveryRouterAdvertisement{}
+						if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.Misc != nil {
+							entry.Misc["Ipv6InheritedNeighborDiscoveryRouterAdvertisement"] = o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.Misc
+						}
+						if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.HopLimit != nil {
+							nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.HopLimit = o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.HopLimit
+						}
+						if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.LinkMtu != nil {
+							nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.LinkMtu = o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.LinkMtu
+						}
+						if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.MaxInterval != nil {
+							nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.MaxInterval = o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.MaxInterval
+						}
+						if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.RetransmissionTimer != nil {
+							nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.RetransmissionTimer = o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.RetransmissionTimer
+						}
+						if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.RouterPreference != nil {
+							nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.RouterPreference = o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.RouterPreference
+						}
+						if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.Enable != nil {
+							nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.Enable = util.AsBool(o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.Enable, nil)
+						}
+						if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.EnableConsistencyCheck != nil {
+							nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.EnableConsistencyCheck = util.AsBool(o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.EnableConsistencyCheck, nil)
+						}
+						if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.Lifetime != nil {
+							nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.Lifetime = o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.Lifetime
+						}
+						if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.ManagedFlag != nil {
+							nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.ManagedFlag = util.AsBool(o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.ManagedFlag, nil)
+						}
+						if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.MinInterval != nil {
+							nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.MinInterval = o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.MinInterval
+						}
+						if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.OtherFlag != nil {
+							nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.OtherFlag = util.AsBool(o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.OtherFlag, nil)
+						}
+						if o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.ReachableTime != nil {
+							nestedIpv6.Inherited.NeighborDiscovery.RouterAdvertisement.ReachableTime = o.Ipv6.Inherited.NeighborDiscovery.RouterAdvertisement.ReachableTime
+						}
+					}
+					if o.Ipv6.Inherited.NeighborDiscovery.DnsSuffix != nil {
+						nestedIpv6.Inherited.NeighborDiscovery.DnsSuffix = &Ipv6InheritedNeighborDiscoveryDnsSuffix{}
+						if o.Ipv6.Inherited.NeighborDiscovery.DnsSuffix.Misc != nil {
+							entry.Misc["Ipv6InheritedNeighborDiscoveryDnsSuffix"] = o.Ipv6.Inherited.NeighborDiscovery.DnsSuffix.Misc
+						}
+						if o.Ipv6.Inherited.NeighborDiscovery.DnsSuffix.Enable != nil {
+							nestedIpv6.Inherited.NeighborDiscovery.DnsSuffix.Enable = util.AsBool(o.Ipv6.Inherited.NeighborDiscovery.DnsSuffix.Enable, nil)
+						}
+						if o.Ipv6.Inherited.NeighborDiscovery.DnsSuffix.Source != nil {
+							nestedIpv6.Inherited.NeighborDiscovery.DnsSuffix.Source = &Ipv6InheritedNeighborDiscoveryDnsSuffixSource{}
+							if o.Ipv6.Inherited.NeighborDiscovery.DnsSuffix.Source.Misc != nil {
+								entry.Misc["Ipv6InheritedNeighborDiscoveryDnsSuffixSource"] = o.Ipv6.Inherited.NeighborDiscovery.DnsSuffix.Source.Misc
+							}
+							if o.Ipv6.Inherited.NeighborDiscovery.DnsSuffix.Source.Dhcpv6 != nil {
+								nestedIpv6.Inherited.NeighborDiscovery.DnsSuffix.Source.Dhcpv6 = &Ipv6InheritedNeighborDiscoveryDnsSuffixSourceDhcpv6{}
+								if o.Ipv6.Inherited.NeighborDiscovery.DnsSuffix.Source.Dhcpv6.Misc != nil {
+									entry.Misc["Ipv6InheritedNeighborDiscoveryDnsSuffixSourceDhcpv6"] = o.Ipv6.Inherited.NeighborDiscovery.DnsSuffix.Source.Dhcpv6.Misc
+								}
+								if o.Ipv6.Inherited.NeighborDiscovery.DnsSuffix.Source.Dhcpv6.PrefixPool != nil {
+									nestedIpv6.Inherited.NeighborDiscovery.DnsSuffix.Source.Dhcpv6.PrefixPool = o.Ipv6.Inherited.NeighborDiscovery.DnsSuffix.Source.Dhcpv6.PrefixPool
+								}
+							}
+							if o.Ipv6.Inherited.NeighborDiscovery.DnsSuffix.Source.Manual != nil {
+								nestedIpv6.Inherited.NeighborDiscovery.DnsSuffix.Source.Manual = &Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManual{}
+								if o.Ipv6.Inherited.NeighborDiscovery.DnsSuffix.Source.Manual.Misc != nil {
+									entry.Misc["Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManual"] = o.Ipv6.Inherited.NeighborDiscovery.DnsSuffix.Source.Manual.Misc
+								}
+								if o.Ipv6.Inherited.NeighborDiscovery.DnsSuffix.Source.Manual.Suffix != nil {
+									nestedIpv6.Inherited.NeighborDiscovery.DnsSuffix.Source.Manual.Suffix = []Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffix{}
+									for _, oIpv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffix := range o.Ipv6.Inherited.NeighborDiscovery.DnsSuffix.Source.Manual.Suffix {
+										nestedIpv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffix := Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffix{}
+										if oIpv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffix.Misc != nil {
+											entry.Misc["Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffix"] = oIpv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffix.Misc
+										}
+										if oIpv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffix.Lifetime != nil {
+											nestedIpv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffix.Lifetime = oIpv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffix.Lifetime
+										}
+										if oIpv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffix.Name != "" {
+											nestedIpv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffix.Name = oIpv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffix.Name
+										}
+										nestedIpv6.Inherited.NeighborDiscovery.DnsSuffix.Source.Manual.Suffix = append(nestedIpv6.Inherited.NeighborDiscovery.DnsSuffix.Source.Manual.Suffix, nestedIpv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffix)
+									}
+								}
+							}
+						}
+					}
+					if o.Ipv6.Inherited.NeighborDiscovery.EnableNdpMonitor != nil {
+						nestedIpv6.Inherited.NeighborDiscovery.EnableNdpMonitor = util.AsBool(o.Ipv6.Inherited.NeighborDiscovery.EnableNdpMonitor, nil)
+					}
+					if o.Ipv6.Inherited.NeighborDiscovery.ReachableTime != nil {
+						nestedIpv6.Inherited.NeighborDiscovery.ReachableTime = o.Ipv6.Inherited.NeighborDiscovery.ReachableTime
+					}
+				}
 			}
 			if o.Ipv6.Address != nil {
 				nestedIpv6.Address = []Ipv6Address{}
@@ -2561,6 +2558,15 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 					nestedIpv6Address := Ipv6Address{}
 					if oIpv6Address.Misc != nil {
 						entry.Misc["Ipv6Address"] = oIpv6Address.Misc
+					}
+					if oIpv6Address.EnableOnInterface != nil {
+						nestedIpv6Address.EnableOnInterface = util.AsBool(oIpv6Address.EnableOnInterface, nil)
+					}
+					if oIpv6Address.Prefix != nil {
+						nestedIpv6Address.Prefix = &Ipv6AddressPrefix{}
+						if oIpv6Address.Prefix.Misc != nil {
+							entry.Misc["Ipv6AddressPrefix"] = oIpv6Address.Prefix.Misc
+						}
 					}
 					if oIpv6Address.Anycast != nil {
 						nestedIpv6Address.Anycast = &Ipv6AddressAnycast{}
@@ -2573,12 +2579,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 						if oIpv6Address.Advertise.Misc != nil {
 							entry.Misc["Ipv6AddressAdvertise"] = oIpv6Address.Advertise.Misc
 						}
-						if oIpv6Address.Advertise.OnlinkFlag != nil {
-							nestedIpv6Address.Advertise.OnlinkFlag = util.AsBool(oIpv6Address.Advertise.OnlinkFlag, nil)
-						}
-						if oIpv6Address.Advertise.AutoConfigFlag != nil {
-							nestedIpv6Address.Advertise.AutoConfigFlag = util.AsBool(oIpv6Address.Advertise.AutoConfigFlag, nil)
-						}
 						if oIpv6Address.Advertise.Enable != nil {
 							nestedIpv6Address.Advertise.Enable = util.AsBool(oIpv6Address.Advertise.Enable, nil)
 						}
@@ -2588,21 +2588,21 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 						if oIpv6Address.Advertise.PreferredLifetime != nil {
 							nestedIpv6Address.Advertise.PreferredLifetime = oIpv6Address.Advertise.PreferredLifetime
 						}
+						if oIpv6Address.Advertise.OnlinkFlag != nil {
+							nestedIpv6Address.Advertise.OnlinkFlag = util.AsBool(oIpv6Address.Advertise.OnlinkFlag, nil)
+						}
+						if oIpv6Address.Advertise.AutoConfigFlag != nil {
+							nestedIpv6Address.Advertise.AutoConfigFlag = util.AsBool(oIpv6Address.Advertise.AutoConfigFlag, nil)
+						}
 					}
 					if oIpv6Address.Name != "" {
 						nestedIpv6Address.Name = oIpv6Address.Name
 					}
-					if oIpv6Address.EnableOnInterface != nil {
-						nestedIpv6Address.EnableOnInterface = util.AsBool(oIpv6Address.EnableOnInterface, nil)
-					}
-					if oIpv6Address.Prefix != nil {
-						nestedIpv6Address.Prefix = &Ipv6AddressPrefix{}
-						if oIpv6Address.Prefix.Misc != nil {
-							entry.Misc["Ipv6AddressPrefix"] = oIpv6Address.Prefix.Misc
-						}
-					}
 					nestedIpv6.Address = append(nestedIpv6.Address, nestedIpv6Address)
 				}
+			}
+			if o.Ipv6.Enabled != nil {
+				nestedIpv6.Enabled = util.AsBool(o.Ipv6.Enabled, nil)
 			}
 		}
 		entry.Ipv6 = nestedIpv6
@@ -2697,6 +2697,158 @@ func SpecMatches(a, b *Entry) bool {
 	return true
 }
 
+func matchAdjustTcpMss(a *AdjustTcpMss, b *AdjustTcpMss) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !util.BoolsMatch(a.Enable, b.Enable) {
+		return false
+	}
+	if !util.Ints64Match(a.Ipv4MssAdjustment, b.Ipv4MssAdjustment) {
+		return false
+	}
+	if !util.Ints64Match(a.Ipv6MssAdjustment, b.Ipv6MssAdjustment) {
+		return false
+	}
+	return true
+}
+func matchArp(a []Arp, b []Arp) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	for _, a := range a {
+		for _, b := range b {
+			if !util.StringsMatch(a.HwAddress, b.HwAddress) {
+				return false
+			}
+			if !util.StringsMatch(a.Interface, b.Interface) {
+				return false
+			}
+			if !util.StringsEqual(a.Name, b.Name) {
+				return false
+			}
+		}
+	}
+	return true
+}
+func matchBonjour(a *Bonjour, b *Bonjour) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !util.BoolsMatch(a.Enable, b.Enable) {
+		return false
+	}
+	if !util.Ints64Match(a.GroupId, b.GroupId) {
+		return false
+	}
+	if !util.BoolsMatch(a.TtlCheck, b.TtlCheck) {
+		return false
+	}
+	return true
+}
+func matchDdnsConfigDdnsVendorConfig(a []DdnsConfigDdnsVendorConfig, b []DdnsConfigDdnsVendorConfig) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	for _, a := range a {
+		for _, b := range b {
+			if !util.StringsMatch(a.Value, b.Value) {
+				return false
+			}
+			if !util.StringsEqual(a.Name, b.Name) {
+				return false
+			}
+		}
+	}
+	return true
+}
+func matchDdnsConfig(a *DdnsConfig, b *DdnsConfig) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !util.StringsMatch(a.DdnsVendor, b.DdnsVendor) {
+		return false
+	}
+	if !matchDdnsConfigDdnsVendorConfig(a.DdnsVendorConfig, b.DdnsVendorConfig) {
+		return false
+	}
+	if !util.StringsMatch(a.DdnsCertProfile, b.DdnsCertProfile) {
+		return false
+	}
+	if !util.BoolsMatch(a.DdnsEnabled, b.DdnsEnabled) {
+		return false
+	}
+	if !util.StringsMatch(a.DdnsHostname, b.DdnsHostname) {
+		return false
+	}
+	if !util.OrderedListsMatch(a.DdnsIp, b.DdnsIp) {
+		return false
+	}
+	if !util.OrderedListsMatch(a.DdnsIpv6, b.DdnsIpv6) {
+		return false
+	}
+	if !util.Ints64Match(a.DdnsUpdateInterval, b.DdnsUpdateInterval) {
+		return false
+	}
+	return true
+}
+func matchIp(a []Ip, b []Ip) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	for _, a := range a {
+		for _, b := range b {
+			if !util.StringsEqual(a.Name, b.Name) {
+				return false
+			}
+		}
+	}
+	return true
+}
+func matchNdpProxyAddress(a []NdpProxyAddress, b []NdpProxyAddress) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	for _, a := range a {
+		for _, b := range b {
+			if !util.BoolsMatch(a.Negate, b.Negate) {
+				return false
+			}
+			if !util.StringsEqual(a.Name, b.Name) {
+				return false
+			}
+		}
+	}
+	return true
+}
+func matchNdpProxy(a *NdpProxy, b *NdpProxy) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !matchNdpProxyAddress(a.Address, b.Address) {
+		return false
+	}
+	if !util.BoolsMatch(a.Enabled, b.Enabled) {
+		return false
+	}
+	return true
+}
 func matchDhcpClientSendHostname(a *DhcpClientSendHostname, b *DhcpClientSendHostname) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
@@ -2749,24 +2901,6 @@ func matchIpv6NeighborDiscoveryNeighbor(a []Ipv6NeighborDiscoveryNeighbor, b []I
 	}
 	return true
 }
-func matchIpv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffix(a []Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffix, b []Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffix) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	for _, a := range a {
-		for _, b := range b {
-			if !util.Ints64Match(a.Lifetime, b.Lifetime) {
-				return false
-			}
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-		}
-	}
-	return true
-}
 func matchIpv6NeighborDiscoveryRouterAdvertisementDnsSupportServer(a []Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServer, b []Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServer) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
@@ -2779,6 +2913,24 @@ func matchIpv6NeighborDiscoveryRouterAdvertisementDnsSupportServer(a []Ipv6Neigh
 				return false
 			}
 			if !util.Ints64Match(a.Lifetime, b.Lifetime) {
+				return false
+			}
+		}
+	}
+	return true
+}
+func matchIpv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffix(a []Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffix, b []Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffix) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	for _, a := range a {
+		for _, b := range b {
+			if !util.Ints64Match(a.Lifetime, b.Lifetime) {
+				return false
+			}
+			if !util.StringsEqual(a.Name, b.Name) {
 				return false
 			}
 		}
@@ -2808,43 +2960,43 @@ func matchIpv6NeighborDiscoveryRouterAdvertisement(a *Ipv6NeighborDiscoveryRoute
 	} else if a == nil && b == nil {
 		return true
 	}
-	if !util.Ints64Match(a.MinInterval, b.MinInterval) {
-		return false
-	}
-	if !util.StringsMatch(a.RetransmissionTimer, b.RetransmissionTimer) {
-		return false
-	}
 	if !util.StringsMatch(a.RouterPreference, b.RouterPreference) {
-		return false
-	}
-	if !util.StringsMatch(a.HopLimit, b.HopLimit) {
-		return false
-	}
-	if !util.Ints64Match(a.Lifetime, b.Lifetime) {
-		return false
-	}
-	if !util.StringsMatch(a.LinkMtu, b.LinkMtu) {
-		return false
-	}
-	if !util.Ints64Match(a.MaxInterval, b.MaxInterval) {
-		return false
-	}
-	if !util.BoolsMatch(a.OtherFlag, b.OtherFlag) {
-		return false
-	}
-	if !util.StringsMatch(a.ReachableTime, b.ReachableTime) {
-		return false
-	}
-	if !matchIpv6NeighborDiscoveryRouterAdvertisementDnsSupport(a.DnsSupport, b.DnsSupport) {
 		return false
 	}
 	if !util.BoolsMatch(a.Enable, b.Enable) {
 		return false
 	}
+	if !util.Ints64Match(a.Lifetime, b.Lifetime) {
+		return false
+	}
+	if !util.Ints64Match(a.MaxInterval, b.MaxInterval) {
+		return false
+	}
+	if !util.Ints64Match(a.MinInterval, b.MinInterval) {
+		return false
+	}
+	if !util.BoolsMatch(a.OtherFlag, b.OtherFlag) {
+		return false
+	}
+	if !util.StringsMatch(a.RetransmissionTimer, b.RetransmissionTimer) {
+		return false
+	}
+	if !matchIpv6NeighborDiscoveryRouterAdvertisementDnsSupport(a.DnsSupport, b.DnsSupport) {
+		return false
+	}
 	if !util.BoolsMatch(a.EnableConsistencyCheck, b.EnableConsistencyCheck) {
 		return false
 	}
+	if !util.StringsMatch(a.HopLimit, b.HopLimit) {
+		return false
+	}
+	if !util.StringsMatch(a.LinkMtu, b.LinkMtu) {
+		return false
+	}
 	if !util.BoolsMatch(a.ManagedFlag, b.ManagedFlag) {
+		return false
+	}
+	if !util.StringsMatch(a.ReachableTime, b.ReachableTime) {
 		return false
 	}
 	return true
@@ -2854,6 +3006,9 @@ func matchIpv6NeighborDiscovery(a *Ipv6NeighborDiscovery, b *Ipv6NeighborDiscove
 		return false
 	} else if a == nil && b == nil {
 		return true
+	}
+	if !matchIpv6NeighborDiscoveryNeighbor(a.Neighbor, b.Neighbor) {
+		return false
 	}
 	if !util.Ints64Match(a.NsInterval, b.NsInterval) {
 		return false
@@ -2873,17 +3028,6 @@ func matchIpv6NeighborDiscovery(a *Ipv6NeighborDiscovery, b *Ipv6NeighborDiscove
 	if !util.BoolsMatch(a.EnableNdpMonitor, b.EnableNdpMonitor) {
 		return false
 	}
-	if !matchIpv6NeighborDiscoveryNeighbor(a.Neighbor, b.Neighbor) {
-		return false
-	}
-	return true
-}
-func matchIpv6DhcpClientV6OptionsEnableNo(a *Ipv6DhcpClientV6OptionsEnableNo, b *Ipv6DhcpClientV6OptionsEnableNo) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
 	return true
 }
 func matchIpv6DhcpClientV6OptionsEnableYes(a *Ipv6DhcpClientV6OptionsEnableYes, b *Ipv6DhcpClientV6OptionsEnableYes) bool {
@@ -2897,6 +3041,14 @@ func matchIpv6DhcpClientV6OptionsEnableYes(a *Ipv6DhcpClientV6OptionsEnableYes, 
 	}
 	if !util.BoolsMatch(a.TempAddr, b.TempAddr) {
 		return false
+	}
+	return true
+}
+func matchIpv6DhcpClientV6OptionsEnableNo(a *Ipv6DhcpClientV6OptionsEnableNo, b *Ipv6DhcpClientV6OptionsEnableNo) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
 	}
 	return true
 }
@@ -2920,9 +3072,6 @@ func matchIpv6DhcpClientV6Options(a *Ipv6DhcpClientV6Options, b *Ipv6DhcpClientV
 	} else if a == nil && b == nil {
 		return true
 	}
-	if !util.BoolsMatch(a.SupportSrvrReconfig, b.SupportSrvrReconfig) {
-		return false
-	}
 	if !util.StringsMatch(a.DuidType, b.DuidType) {
 		return false
 	}
@@ -2930,6 +3079,9 @@ func matchIpv6DhcpClientV6Options(a *Ipv6DhcpClientV6Options, b *Ipv6DhcpClientV
 		return false
 	}
 	if !util.BoolsMatch(a.RapidCommit, b.RapidCommit) {
+		return false
+	}
+	if !util.BoolsMatch(a.SupportSrvrReconfig, b.SupportSrvrReconfig) {
 		return false
 	}
 	return true
@@ -2991,10 +3143,10 @@ func matchIpv6DhcpClientNeighborDiscoveryDnsServer(a *Ipv6DhcpClientNeighborDisc
 	} else if a == nil && b == nil {
 		return true
 	}
-	if !util.BoolsMatch(a.Enable, b.Enable) {
+	if !matchIpv6DhcpClientNeighborDiscoveryDnsServerSource(a.Source, b.Source) {
 		return false
 	}
-	if !matchIpv6DhcpClientNeighborDiscoveryDnsServerSource(a.Source, b.Source) {
+	if !util.BoolsMatch(a.Enable, b.Enable) {
 		return false
 	}
 	return true
@@ -3015,10 +3167,10 @@ func matchIpv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffix(a []Ipv6Dhc
 	}
 	for _, a := range a {
 		for _, b := range b {
-			if !util.Ints64Match(a.Lifetime, b.Lifetime) {
+			if !util.StringsEqual(a.Name, b.Name) {
 				return false
 			}
-			if !util.StringsEqual(a.Name, b.Name) {
+			if !util.Ints64Match(a.Lifetime, b.Lifetime) {
 				return false
 			}
 		}
@@ -3072,10 +3224,10 @@ func matchIpv6DhcpClientNeighborDiscoveryNeighbor(a []Ipv6DhcpClientNeighborDisc
 	}
 	for _, a := range a {
 		for _, b := range b {
-			if !util.StringsMatch(a.HwAddress, b.HwAddress) {
+			if !util.StringsEqual(a.Name, b.Name) {
 				return false
 			}
-			if !util.StringsEqual(a.Name, b.Name) {
+			if !util.StringsMatch(a.HwAddress, b.HwAddress) {
 				return false
 			}
 		}
@@ -3087,6 +3239,9 @@ func matchIpv6DhcpClientNeighborDiscovery(a *Ipv6DhcpClientNeighborDiscovery, b 
 		return false
 	} else if a == nil && b == nil {
 		return true
+	}
+	if !util.Ints64Match(a.ReachableTime, b.ReachableTime) {
+		return false
 	}
 	if !util.Ints64Match(a.DadAttempts, b.DadAttempts) {
 		return false
@@ -3109,9 +3264,6 @@ func matchIpv6DhcpClientNeighborDiscovery(a *Ipv6DhcpClientNeighborDiscovery, b 
 	if !util.Ints64Match(a.NsInterval, b.NsInterval) {
 		return false
 	}
-	if !util.Ints64Match(a.ReachableTime, b.ReachableTime) {
-		return false
-	}
 	return true
 }
 func matchIpv6DhcpClientPrefixDelegationEnableNo(a *Ipv6DhcpClientPrefixDelegationEnableNo, b *Ipv6DhcpClientPrefixDelegationEnableNo) bool {
@@ -3128,13 +3280,13 @@ func matchIpv6DhcpClientPrefixDelegationEnableYes(a *Ipv6DhcpClientPrefixDelegat
 	} else if a == nil && b == nil {
 		return true
 	}
-	if !util.StringsMatch(a.PfxPoolName, b.PfxPoolName) {
-		return false
-	}
 	if !util.Ints64Match(a.PrefixLen, b.PrefixLen) {
 		return false
 	}
 	if !util.BoolsMatch(a.PrefixLenHint, b.PrefixLenHint) {
+		return false
+	}
+	if !util.StringsMatch(a.PfxPoolName, b.PfxPoolName) {
 		return false
 	}
 	return true
@@ -3170,12 +3322,6 @@ func matchIpv6DhcpClient(a *Ipv6DhcpClient, b *Ipv6DhcpClient) bool {
 	} else if a == nil && b == nil {
 		return true
 	}
-	if !util.BoolsMatch(a.Enable, b.Enable) {
-		return false
-	}
-	if !matchIpv6DhcpClientNeighborDiscovery(a.NeighborDiscovery, b.NeighborDiscovery) {
-		return false
-	}
 	if !util.StringsMatch(a.Preference, b.Preference) {
 		return false
 	}
@@ -3191,214 +3337,10 @@ func matchIpv6DhcpClient(a *Ipv6DhcpClient, b *Ipv6DhcpClient) bool {
 	if !util.Ints64Match(a.DefaultRouteMetric, b.DefaultRouteMetric) {
 		return false
 	}
-	return true
-}
-func matchIpv6InheritedAssignAddrTypeGuaPoolTypeDynamic(a *Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamic, b *Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamic) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	return true
-}
-func matchIpv6InheritedAssignAddrTypeGuaPoolTypeDynamicId(a *Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicId, b *Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicId) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !util.Ints64Match(a.Identifier, b.Identifier) {
-		return false
-	}
-	return true
-}
-func matchIpv6InheritedAssignAddrTypeGuaPoolType(a *Ipv6InheritedAssignAddrTypeGuaPoolType, b *Ipv6InheritedAssignAddrTypeGuaPoolType) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !matchIpv6InheritedAssignAddrTypeGuaPoolTypeDynamic(a.Dynamic, b.Dynamic) {
-		return false
-	}
-	if !matchIpv6InheritedAssignAddrTypeGuaPoolTypeDynamicId(a.DynamicId, b.DynamicId) {
-		return false
-	}
-	return true
-}
-func matchIpv6InheritedAssignAddrTypeGuaAdvertise(a *Ipv6InheritedAssignAddrTypeGuaAdvertise, b *Ipv6InheritedAssignAddrTypeGuaAdvertise) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
 	if !util.BoolsMatch(a.Enable, b.Enable) {
 		return false
 	}
-	if !util.BoolsMatch(a.OnlinkFlag, b.OnlinkFlag) {
-		return false
-	}
-	if !util.BoolsMatch(a.AutoConfigFlag, b.AutoConfigFlag) {
-		return false
-	}
-	return true
-}
-func matchIpv6InheritedAssignAddrTypeGua(a *Ipv6InheritedAssignAddrTypeGua, b *Ipv6InheritedAssignAddrTypeGua) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !util.StringsMatch(a.PrefixPool, b.PrefixPool) {
-		return false
-	}
-	if !matchIpv6InheritedAssignAddrTypeGuaPoolType(a.PoolType, b.PoolType) {
-		return false
-	}
-	if !matchIpv6InheritedAssignAddrTypeGuaAdvertise(a.Advertise, b.Advertise) {
-		return false
-	}
-	if !util.BoolsMatch(a.EnableOnInterface, b.EnableOnInterface) {
-		return false
-	}
-	return true
-}
-func matchIpv6InheritedAssignAddrTypeUlaAdvertise(a *Ipv6InheritedAssignAddrTypeUlaAdvertise, b *Ipv6InheritedAssignAddrTypeUlaAdvertise) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !util.StringsMatch(a.ValidLifetime, b.ValidLifetime) {
-		return false
-	}
-	if !util.StringsMatch(a.PreferredLifetime, b.PreferredLifetime) {
-		return false
-	}
-	if !util.BoolsMatch(a.OnlinkFlag, b.OnlinkFlag) {
-		return false
-	}
-	if !util.BoolsMatch(a.AutoConfigFlag, b.AutoConfigFlag) {
-		return false
-	}
-	if !util.BoolsMatch(a.Enable, b.Enable) {
-		return false
-	}
-	return true
-}
-func matchIpv6InheritedAssignAddrTypeUla(a *Ipv6InheritedAssignAddrTypeUla, b *Ipv6InheritedAssignAddrTypeUla) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !util.BoolsMatch(a.Anycast, b.Anycast) {
-		return false
-	}
-	if !matchIpv6InheritedAssignAddrTypeUlaAdvertise(a.Advertise, b.Advertise) {
-		return false
-	}
-	if !util.BoolsMatch(a.EnableOnInterface, b.EnableOnInterface) {
-		return false
-	}
-	if !util.StringsMatch(a.Address, b.Address) {
-		return false
-	}
-	if !util.BoolsMatch(a.Prefix, b.Prefix) {
-		return false
-	}
-	return true
-}
-func matchIpv6InheritedAssignAddrType(a *Ipv6InheritedAssignAddrType, b *Ipv6InheritedAssignAddrType) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !matchIpv6InheritedAssignAddrTypeGua(a.Gua, b.Gua) {
-		return false
-	}
-	if !matchIpv6InheritedAssignAddrTypeUla(a.Ula, b.Ula) {
-		return false
-	}
-	return true
-}
-func matchIpv6InheritedAssignAddr(a []Ipv6InheritedAssignAddr, b []Ipv6InheritedAssignAddr) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	for _, a := range a {
-		for _, b := range b {
-			if !matchIpv6InheritedAssignAddrType(a.Type, b.Type) {
-				return false
-			}
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-		}
-	}
-	return true
-}
-func matchIpv6InheritedNeighborDiscoveryNeighbor(a []Ipv6InheritedNeighborDiscoveryNeighbor, b []Ipv6InheritedNeighborDiscoveryNeighbor) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	for _, a := range a {
-		for _, b := range b {
-			if !util.StringsMatch(a.HwAddress, b.HwAddress) {
-				return false
-			}
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-		}
-	}
-	return true
-}
-func matchIpv6InheritedNeighborDiscoveryRouterAdvertisement(a *Ipv6InheritedNeighborDiscoveryRouterAdvertisement, b *Ipv6InheritedNeighborDiscoveryRouterAdvertisement) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !util.StringsMatch(a.HopLimit, b.HopLimit) {
-		return false
-	}
-	if !util.Ints64Match(a.Lifetime, b.Lifetime) {
-		return false
-	}
-	if !util.StringsMatch(a.LinkMtu, b.LinkMtu) {
-		return false
-	}
-	if !util.BoolsMatch(a.ManagedFlag, b.ManagedFlag) {
-		return false
-	}
-	if !util.StringsMatch(a.RetransmissionTimer, b.RetransmissionTimer) {
-		return false
-	}
-	if !util.BoolsMatch(a.EnableConsistencyCheck, b.EnableConsistencyCheck) {
-		return false
-	}
-	if !util.Ints64Match(a.MaxInterval, b.MaxInterval) {
-		return false
-	}
-	if !util.Ints64Match(a.MinInterval, b.MinInterval) {
-		return false
-	}
-	if !util.BoolsMatch(a.OtherFlag, b.OtherFlag) {
-		return false
-	}
-	if !util.StringsMatch(a.ReachableTime, b.ReachableTime) {
-		return false
-	}
-	if !util.StringsMatch(a.RouterPreference, b.RouterPreference) {
-		return false
-	}
-	if !util.BoolsMatch(a.Enable, b.Enable) {
+	if !matchIpv6DhcpClientNeighborDiscovery(a.NeighborDiscovery, b.NeighborDiscovery) {
 		return false
 	}
 	return true
@@ -3422,10 +3364,10 @@ func matchIpv6InheritedNeighborDiscoveryDnsServerSourceManualServer(a []Ipv6Inhe
 	}
 	for _, a := range a {
 		for _, b := range b {
-			if !util.StringsEqual(a.Name, b.Name) {
+			if !util.Ints64Match(a.Lifetime, b.Lifetime) {
 				return false
 			}
-			if !util.Ints64Match(a.Lifetime, b.Lifetime) {
+			if !util.StringsEqual(a.Name, b.Name) {
 				return false
 			}
 		}
@@ -3467,6 +3409,68 @@ func matchIpv6InheritedNeighborDiscoveryDnsServer(a *Ipv6InheritedNeighborDiscov
 		return false
 	}
 	if !util.BoolsMatch(a.Enable, b.Enable) {
+		return false
+	}
+	return true
+}
+func matchIpv6InheritedNeighborDiscoveryNeighbor(a []Ipv6InheritedNeighborDiscoveryNeighbor, b []Ipv6InheritedNeighborDiscoveryNeighbor) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	for _, a := range a {
+		for _, b := range b {
+			if !util.StringsMatch(a.HwAddress, b.HwAddress) {
+				return false
+			}
+			if !util.StringsEqual(a.Name, b.Name) {
+				return false
+			}
+		}
+	}
+	return true
+}
+func matchIpv6InheritedNeighborDiscoveryRouterAdvertisement(a *Ipv6InheritedNeighborDiscoveryRouterAdvertisement, b *Ipv6InheritedNeighborDiscoveryRouterAdvertisement) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !util.StringsMatch(a.HopLimit, b.HopLimit) {
+		return false
+	}
+	if !util.StringsMatch(a.LinkMtu, b.LinkMtu) {
+		return false
+	}
+	if !util.Ints64Match(a.MaxInterval, b.MaxInterval) {
+		return false
+	}
+	if !util.StringsMatch(a.RetransmissionTimer, b.RetransmissionTimer) {
+		return false
+	}
+	if !util.StringsMatch(a.RouterPreference, b.RouterPreference) {
+		return false
+	}
+	if !util.StringsMatch(a.ReachableTime, b.ReachableTime) {
+		return false
+	}
+	if !util.BoolsMatch(a.Enable, b.Enable) {
+		return false
+	}
+	if !util.BoolsMatch(a.EnableConsistencyCheck, b.EnableConsistencyCheck) {
+		return false
+	}
+	if !util.Ints64Match(a.Lifetime, b.Lifetime) {
+		return false
+	}
+	if !util.BoolsMatch(a.ManagedFlag, b.ManagedFlag) {
+		return false
+	}
+	if !util.Ints64Match(a.MinInterval, b.MinInterval) {
+		return false
+	}
+	if !util.BoolsMatch(a.OtherFlag, b.OtherFlag) {
 		return false
 	}
 	return true
@@ -3545,22 +3549,13 @@ func matchIpv6InheritedNeighborDiscovery(a *Ipv6InheritedNeighborDiscovery, b *I
 	} else if a == nil && b == nil {
 		return true
 	}
-	if !util.Ints64Match(a.NsInterval, b.NsInterval) {
-		return false
-	}
-	if !util.Ints64Match(a.ReachableTime, b.ReachableTime) {
-		return false
-	}
-	if !matchIpv6InheritedNeighborDiscoveryDnsSuffix(a.DnsSuffix, b.DnsSuffix) {
-		return false
-	}
 	if !util.BoolsMatch(a.EnableDad, b.EnableDad) {
 		return false
 	}
-	if !util.BoolsMatch(a.EnableNdpMonitor, b.EnableNdpMonitor) {
+	if !matchIpv6InheritedNeighborDiscoveryNeighbor(a.Neighbor, b.Neighbor) {
 		return false
 	}
-	if !matchIpv6InheritedNeighborDiscoveryNeighbor(a.Neighbor, b.Neighbor) {
+	if !util.Ints64Match(a.NsInterval, b.NsInterval) {
 		return false
 	}
 	if !matchIpv6InheritedNeighborDiscoveryRouterAdvertisement(a.RouterAdvertisement, b.RouterAdvertisement) {
@@ -3572,42 +3567,88 @@ func matchIpv6InheritedNeighborDiscovery(a *Ipv6InheritedNeighborDiscovery, b *I
 	if !matchIpv6InheritedNeighborDiscoveryDnsServer(a.DnsServer, b.DnsServer) {
 		return false
 	}
+	if !util.Ints64Match(a.ReachableTime, b.ReachableTime) {
+		return false
+	}
+	if !matchIpv6InheritedNeighborDiscoveryDnsSuffix(a.DnsSuffix, b.DnsSuffix) {
+		return false
+	}
+	if !util.BoolsMatch(a.EnableNdpMonitor, b.EnableNdpMonitor) {
+		return false
+	}
 	return true
 }
-func matchIpv6Inherited(a *Ipv6Inherited, b *Ipv6Inherited) bool {
+func matchIpv6InheritedAssignAddrTypeGuaPoolTypeDynamic(a *Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamic, b *Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamic) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
 	} else if a == nil && b == nil {
 		return true
 	}
-	if !matchIpv6InheritedAssignAddr(a.AssignAddr, b.AssignAddr) {
+	return true
+}
+func matchIpv6InheritedAssignAddrTypeGuaPoolTypeDynamicId(a *Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicId, b *Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicId) bool {
+	if a == nil && b != nil || a != nil && b == nil {
 		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !util.Ints64Match(a.Identifier, b.Identifier) {
+		return false
+	}
+	return true
+}
+func matchIpv6InheritedAssignAddrTypeGuaPoolType(a *Ipv6InheritedAssignAddrTypeGuaPoolType, b *Ipv6InheritedAssignAddrTypeGuaPoolType) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !matchIpv6InheritedAssignAddrTypeGuaPoolTypeDynamic(a.Dynamic, b.Dynamic) {
+		return false
+	}
+	if !matchIpv6InheritedAssignAddrTypeGuaPoolTypeDynamicId(a.DynamicId, b.DynamicId) {
+		return false
+	}
+	return true
+}
+func matchIpv6InheritedAssignAddrTypeGuaAdvertise(a *Ipv6InheritedAssignAddrTypeGuaAdvertise, b *Ipv6InheritedAssignAddrTypeGuaAdvertise) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
 	}
 	if !util.BoolsMatch(a.Enable, b.Enable) {
 		return false
 	}
-	if !matchIpv6InheritedNeighborDiscovery(a.NeighborDiscovery, b.NeighborDiscovery) {
+	if !util.BoolsMatch(a.OnlinkFlag, b.OnlinkFlag) {
+		return false
+	}
+	if !util.BoolsMatch(a.AutoConfigFlag, b.AutoConfigFlag) {
 		return false
 	}
 	return true
 }
-func matchIpv6AddressPrefix(a *Ipv6AddressPrefix, b *Ipv6AddressPrefix) bool {
+func matchIpv6InheritedAssignAddrTypeGua(a *Ipv6InheritedAssignAddrTypeGua, b *Ipv6InheritedAssignAddrTypeGua) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
 	} else if a == nil && b == nil {
 		return true
 	}
-	return true
-}
-func matchIpv6AddressAnycast(a *Ipv6AddressAnycast, b *Ipv6AddressAnycast) bool {
-	if a == nil && b != nil || a != nil && b == nil {
+	if !util.BoolsMatch(a.EnableOnInterface, b.EnableOnInterface) {
 		return false
-	} else if a == nil && b == nil {
-		return true
+	}
+	if !util.StringsMatch(a.PrefixPool, b.PrefixPool) {
+		return false
+	}
+	if !matchIpv6InheritedAssignAddrTypeGuaPoolType(a.PoolType, b.PoolType) {
+		return false
+	}
+	if !matchIpv6InheritedAssignAddrTypeGuaAdvertise(a.Advertise, b.Advertise) {
+		return false
 	}
 	return true
 }
-func matchIpv6AddressAdvertise(a *Ipv6AddressAdvertise, b *Ipv6AddressAdvertise) bool {
+func matchIpv6InheritedAssignAddrTypeUlaAdvertise(a *Ipv6InheritedAssignAddrTypeUlaAdvertise, b *Ipv6InheritedAssignAddrTypeUlaAdvertise) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
 	} else if a == nil && b == nil {
@@ -3630,6 +3671,117 @@ func matchIpv6AddressAdvertise(a *Ipv6AddressAdvertise, b *Ipv6AddressAdvertise)
 	}
 	return true
 }
+func matchIpv6InheritedAssignAddrTypeUla(a *Ipv6InheritedAssignAddrTypeUla, b *Ipv6InheritedAssignAddrTypeUla) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !util.BoolsMatch(a.EnableOnInterface, b.EnableOnInterface) {
+		return false
+	}
+	if !util.StringsMatch(a.Address, b.Address) {
+		return false
+	}
+	if !util.BoolsMatch(a.Prefix, b.Prefix) {
+		return false
+	}
+	if !util.BoolsMatch(a.Anycast, b.Anycast) {
+		return false
+	}
+	if !matchIpv6InheritedAssignAddrTypeUlaAdvertise(a.Advertise, b.Advertise) {
+		return false
+	}
+	return true
+}
+func matchIpv6InheritedAssignAddrType(a *Ipv6InheritedAssignAddrType, b *Ipv6InheritedAssignAddrType) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !matchIpv6InheritedAssignAddrTypeUla(a.Ula, b.Ula) {
+		return false
+	}
+	if !matchIpv6InheritedAssignAddrTypeGua(a.Gua, b.Gua) {
+		return false
+	}
+	return true
+}
+func matchIpv6InheritedAssignAddr(a []Ipv6InheritedAssignAddr, b []Ipv6InheritedAssignAddr) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	for _, a := range a {
+		for _, b := range b {
+			if !matchIpv6InheritedAssignAddrType(a.Type, b.Type) {
+				return false
+			}
+			if !util.StringsEqual(a.Name, b.Name) {
+				return false
+			}
+		}
+	}
+	return true
+}
+func matchIpv6Inherited(a *Ipv6Inherited, b *Ipv6Inherited) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !util.BoolsMatch(a.Enable, b.Enable) {
+		return false
+	}
+	if !matchIpv6InheritedNeighborDiscovery(a.NeighborDiscovery, b.NeighborDiscovery) {
+		return false
+	}
+	if !matchIpv6InheritedAssignAddr(a.AssignAddr, b.AssignAddr) {
+		return false
+	}
+	return true
+}
+func matchIpv6AddressAnycast(a *Ipv6AddressAnycast, b *Ipv6AddressAnycast) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	return true
+}
+func matchIpv6AddressAdvertise(a *Ipv6AddressAdvertise, b *Ipv6AddressAdvertise) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !util.StringsMatch(a.PreferredLifetime, b.PreferredLifetime) {
+		return false
+	}
+	if !util.BoolsMatch(a.OnlinkFlag, b.OnlinkFlag) {
+		return false
+	}
+	if !util.BoolsMatch(a.AutoConfigFlag, b.AutoConfigFlag) {
+		return false
+	}
+	if !util.BoolsMatch(a.Enable, b.Enable) {
+		return false
+	}
+	if !util.StringsMatch(a.ValidLifetime, b.ValidLifetime) {
+		return false
+	}
+	return true
+}
+func matchIpv6AddressPrefix(a *Ipv6AddressPrefix, b *Ipv6AddressPrefix) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	return true
+}
 func matchIpv6Address(a []Ipv6Address, b []Ipv6Address) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
@@ -3638,6 +3790,12 @@ func matchIpv6Address(a []Ipv6Address, b []Ipv6Address) bool {
 	}
 	for _, a := range a {
 		for _, b := range b {
+			if !matchIpv6AddressAdvertise(a.Advertise, b.Advertise) {
+				return false
+			}
+			if !util.StringsEqual(a.Name, b.Name) {
+				return false
+			}
 			if !util.BoolsMatch(a.EnableOnInterface, b.EnableOnInterface) {
 				return false
 			}
@@ -3645,12 +3803,6 @@ func matchIpv6Address(a []Ipv6Address, b []Ipv6Address) bool {
 				return false
 			}
 			if !matchIpv6AddressAnycast(a.Anycast, b.Anycast) {
-				return false
-			}
-			if !matchIpv6AddressAdvertise(a.Advertise, b.Advertise) {
-				return false
-			}
-			if !util.StringsEqual(a.Name, b.Name) {
 				return false
 			}
 		}
@@ -3663,15 +3815,6 @@ func matchIpv6(a *Ipv6, b *Ipv6) bool {
 	} else if a == nil && b == nil {
 		return true
 	}
-	if !matchIpv6NeighborDiscovery(a.NeighborDiscovery, b.NeighborDiscovery) {
-		return false
-	}
-	if !matchIpv6DhcpClient(a.DhcpClient, b.DhcpClient) {
-		return false
-	}
-	if !matchIpv6Inherited(a.Inherited, b.Inherited) {
-		return false
-	}
 	if !matchIpv6Address(a.Address, b.Address) {
 		return false
 	}
@@ -3681,156 +3824,13 @@ func matchIpv6(a *Ipv6, b *Ipv6) bool {
 	if !util.StringsMatch(a.InterfaceId, b.InterfaceId) {
 		return false
 	}
-	return true
-}
-func matchNdpProxyAddress(a []NdpProxyAddress, b []NdpProxyAddress) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	for _, a := range a {
-		for _, b := range b {
-			if !util.BoolsMatch(a.Negate, b.Negate) {
-				return false
-			}
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-		}
-	}
-	return true
-}
-func matchNdpProxy(a *NdpProxy, b *NdpProxy) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !matchNdpProxyAddress(a.Address, b.Address) {
+	if !matchIpv6NeighborDiscovery(a.NeighborDiscovery, b.NeighborDiscovery) {
 		return false
 	}
-	if !util.BoolsMatch(a.Enabled, b.Enabled) {
+	if !matchIpv6DhcpClient(a.DhcpClient, b.DhcpClient) {
 		return false
 	}
-	return true
-}
-func matchArp(a []Arp, b []Arp) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	for _, a := range a {
-		for _, b := range b {
-			if !util.StringsMatch(a.HwAddress, b.HwAddress) {
-				return false
-			}
-			if !util.StringsMatch(a.Interface, b.Interface) {
-				return false
-			}
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-		}
-	}
-	return true
-}
-func matchDdnsConfigDdnsVendorConfig(a []DdnsConfigDdnsVendorConfig, b []DdnsConfigDdnsVendorConfig) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	for _, a := range a {
-		for _, b := range b {
-			if !util.StringsMatch(a.Value, b.Value) {
-				return false
-			}
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-		}
-	}
-	return true
-}
-func matchDdnsConfig(a *DdnsConfig, b *DdnsConfig) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !util.OrderedListsMatch(a.DdnsIpv6, b.DdnsIpv6) {
-		return false
-	}
-	if !util.Ints64Match(a.DdnsUpdateInterval, b.DdnsUpdateInterval) {
-		return false
-	}
-	if !util.StringsMatch(a.DdnsVendor, b.DdnsVendor) {
-		return false
-	}
-	if !matchDdnsConfigDdnsVendorConfig(a.DdnsVendorConfig, b.DdnsVendorConfig) {
-		return false
-	}
-	if !util.StringsMatch(a.DdnsCertProfile, b.DdnsCertProfile) {
-		return false
-	}
-	if !util.BoolsMatch(a.DdnsEnabled, b.DdnsEnabled) {
-		return false
-	}
-	if !util.StringsMatch(a.DdnsHostname, b.DdnsHostname) {
-		return false
-	}
-	if !util.OrderedListsMatch(a.DdnsIp, b.DdnsIp) {
-		return false
-	}
-	return true
-}
-func matchIp(a []Ip, b []Ip) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	for _, a := range a {
-		for _, b := range b {
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-		}
-	}
-	return true
-}
-func matchAdjustTcpMss(a *AdjustTcpMss, b *AdjustTcpMss) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !util.BoolsMatch(a.Enable, b.Enable) {
-		return false
-	}
-	if !util.Ints64Match(a.Ipv4MssAdjustment, b.Ipv4MssAdjustment) {
-		return false
-	}
-	if !util.Ints64Match(a.Ipv6MssAdjustment, b.Ipv6MssAdjustment) {
-		return false
-	}
-	return true
-}
-func matchBonjour(a *Bonjour, b *Bonjour) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !util.BoolsMatch(a.Enable, b.Enable) {
-		return false
-	}
-	if !util.Ints64Match(a.GroupId, b.GroupId) {
-		return false
-	}
-	if !util.BoolsMatch(a.TtlCheck, b.TtlCheck) {
+	if !matchIpv6Inherited(a.Inherited, b.Inherited) {
 		return false
 	}
 	return true
