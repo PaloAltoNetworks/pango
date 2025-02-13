@@ -121,22 +121,22 @@ func (o *Layer3TemplateVirtualRouterImportLocation) UnmarshalPangoXML(bytes []by
 
 type Layer3TemplateLogicalRouterImportLocation struct {
 	xpath  []string
-	router string
 	vrf    string
 	vsys   string
+	router string
 }
 
 type Layer3TemplateLogicalRouterImportLocationSpec struct {
-	Router string
 	Vrf    string
 	Vsys   string
+	Router string
 }
 
 func NewLayer3TemplateLogicalRouterImportLocation(spec Layer3TemplateLogicalRouterImportLocationSpec) *Layer3TemplateImportLocation {
 	location := &Layer3TemplateLogicalRouterImportLocation{
-		router: spec.Router,
 		vrf:    spec.Vrf,
 		vsys:   spec.Vsys,
+		router: spec.Router,
 	}
 
 	return &Layer3TemplateImportLocation{
@@ -592,6 +592,21 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 	default:
 		return nil, errors.NoLocationSpecifiedError
 	}
+
+	return ans, nil
+}
+
+func (o Location) XpathWithComponents(vn version.Number, components ...string) ([]string, error) {
+	if len(components) != 1 {
+		return nil, fmt.Errorf("invalid number of arguments for Xpath() call")
+	}
+
+	ans, err := o.XpathPrefix(vn)
+	if err != nil {
+		return nil, err
+	}
+
+	ans = append(ans, components[0])
 
 	return ans, nil
 }

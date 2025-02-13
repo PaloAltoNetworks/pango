@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{"virus"}
+	Suffix = []string{}
 )
 
 type Entry struct {
@@ -178,11 +178,11 @@ func specifyEntry(o *Entry) (any, error) {
 			if _, ok := o.Misc["Application"]; ok {
 				nestedApplication.Misc = o.Misc["Application"]
 			}
-			if oApplication.Action != nil {
-				nestedApplication.Action = oApplication.Action
-			}
 			if oApplication.Name != "" {
 				nestedApplication.Name = oApplication.Name
+			}
+			if oApplication.Action != nil {
+				nestedApplication.Action = oApplication.Action
 			}
 			nestedApplicationCol = append(nestedApplicationCol, nestedApplication)
 		}
@@ -197,9 +197,6 @@ func specifyEntry(o *Entry) (any, error) {
 			if _, ok := o.Misc["Decoder"]; ok {
 				nestedDecoder.Misc = o.Misc["Decoder"]
 			}
-			if oDecoder.Name != "" {
-				nestedDecoder.Name = oDecoder.Name
-			}
 			if oDecoder.Action != nil {
 				nestedDecoder.Action = oDecoder.Action
 			}
@@ -208,6 +205,9 @@ func specifyEntry(o *Entry) (any, error) {
 			}
 			if oDecoder.MlavAction != nil {
 				nestedDecoder.MlavAction = oDecoder.MlavAction
+			}
+			if oDecoder.Name != "" {
+				nestedDecoder.Name = oDecoder.Name
 			}
 			nestedDecoderCol = append(nestedDecoderCol, nestedDecoder)
 		}
@@ -315,6 +315,9 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				if oDecoder.Misc != nil {
 					entry.Misc["Decoder"] = oDecoder.Misc
 				}
+				if oDecoder.Name != "" {
+					nestedDecoder.Name = oDecoder.Name
+				}
 				if oDecoder.Action != nil {
 					nestedDecoder.Action = oDecoder.Action
 				}
@@ -323,9 +326,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				}
 				if oDecoder.MlavAction != nil {
 					nestedDecoder.MlavAction = oDecoder.MlavAction
-				}
-				if oDecoder.Name != "" {
-					nestedDecoder.Name = oDecoder.Name
 				}
 				nestedDecoderCol = append(nestedDecoderCol, nestedDecoder)
 			}
@@ -441,6 +441,27 @@ func SpecMatches(a, b *Entry) bool {
 	return true
 }
 
+func matchMlavException(a []MlavException, b []MlavException) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	for _, a := range a {
+		for _, b := range b {
+			if !util.StringsMatch(a.Filename, b.Filename) {
+				return false
+			}
+			if !util.StringsMatch(a.Description, b.Description) {
+				return false
+			}
+			if !util.StringsEqual(a.Name, b.Name) {
+				return false
+			}
+		}
+	}
+	return true
+}
 func matchMlavEngineFilebasedEnabled(a []MlavEngineFilebasedEnabled, b []MlavEngineFilebasedEnabled) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
@@ -459,7 +480,7 @@ func matchMlavEngineFilebasedEnabled(a []MlavEngineFilebasedEnabled, b []MlavEng
 	}
 	return true
 }
-func matchMlavException(a []MlavException, b []MlavException) bool {
+func matchThreatException(a []ThreatException, b []ThreatException) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
 	} else if a == nil && b == nil {
@@ -467,12 +488,6 @@ func matchMlavException(a []MlavException, b []MlavException) bool {
 	}
 	for _, a := range a {
 		for _, b := range b {
-			if !util.StringsMatch(a.Filename, b.Filename) {
-				return false
-			}
-			if !util.StringsMatch(a.Description, b.Description) {
-				return false
-			}
 			if !util.StringsEqual(a.Name, b.Name) {
 				return false
 			}
@@ -506,30 +521,15 @@ func matchDecoder(a []Decoder, b []Decoder) bool {
 	}
 	for _, a := range a {
 		for _, b := range b {
-			if !util.StringsMatch(a.MlavAction, b.MlavAction) {
-				return false
-			}
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
 			if !util.StringsMatch(a.Action, b.Action) {
 				return false
 			}
 			if !util.StringsMatch(a.WildfireAction, b.WildfireAction) {
 				return false
 			}
-		}
-	}
-	return true
-}
-func matchThreatException(a []ThreatException, b []ThreatException) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	for _, a := range a {
-		for _, b := range b {
+			if !util.StringsMatch(a.MlavAction, b.MlavAction) {
+				return false
+			}
 			if !util.StringsEqual(a.Name, b.Name) {
 				return false
 			}

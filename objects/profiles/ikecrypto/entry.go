@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{"network", "ike", "crypto-profiles", "ike-crypto-profiles"}
+	Suffix = []string{}
 )
 
 type Entry struct {
@@ -202,9 +202,6 @@ func matchLifetime(a *Lifetime, b *Lifetime) bool {
 	} else if a == nil && b == nil {
 		return true
 	}
-	if !util.Ints64Match(a.Days, b.Days) {
-		return false
-	}
 	if !util.Ints64Match(a.Hours, b.Hours) {
 		return false
 	}
@@ -212,6 +209,9 @@ func matchLifetime(a *Lifetime, b *Lifetime) bool {
 		return false
 	}
 	if !util.Ints64Match(a.Seconds, b.Seconds) {
+		return false
+	}
+	if !util.Ints64Match(a.Days, b.Days) {
 		return false
 	}
 	return true

@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{"zone"}
+	Suffix = []string{}
 )
 
 type Entry struct {
@@ -181,11 +181,11 @@ func specifyEntry(o *Entry) (any, error) {
 		if _, ok := o.Misc["DeviceAcl"]; ok {
 			nestedDeviceAcl.Misc = o.Misc["DeviceAcl"]
 		}
-		if o.DeviceAcl.IncludeList != nil {
-			nestedDeviceAcl.IncludeList = util.StrToMem(o.DeviceAcl.IncludeList)
-		}
 		if o.DeviceAcl.ExcludeList != nil {
 			nestedDeviceAcl.ExcludeList = util.StrToMem(o.DeviceAcl.ExcludeList)
+		}
+		if o.DeviceAcl.IncludeList != nil {
+			nestedDeviceAcl.IncludeList = util.StrToMem(o.DeviceAcl.IncludeList)
 		}
 	}
 	entry.DeviceAcl = nestedDeviceAcl
@@ -210,12 +210,6 @@ func specifyEntry(o *Entry) (any, error) {
 		if o.Network.NetInspection != nil {
 			nestedNetwork.NetInspection = util.YesNo(o.Network.NetInspection, nil)
 		}
-		if o.Network.External != nil {
-			nestedNetwork.External = util.StrToMem(o.Network.External)
-		}
-		if o.Network.Layer2 != nil {
-			nestedNetwork.Layer2 = util.StrToMem(o.Network.Layer2)
-		}
 		if o.Network.Layer3 != nil {
 			nestedNetwork.Layer3 = util.StrToMem(o.Network.Layer3)
 		}
@@ -230,6 +224,12 @@ func specifyEntry(o *Entry) (any, error) {
 		}
 		if o.Network.VirtualWire != nil {
 			nestedNetwork.VirtualWire = util.StrToMem(o.Network.VirtualWire)
+		}
+		if o.Network.External != nil {
+			nestedNetwork.External = util.StrToMem(o.Network.External)
+		}
+		if o.Network.Layer2 != nil {
+			nestedNetwork.Layer2 = util.StrToMem(o.Network.Layer2)
 		}
 	}
 	entry.Network = nestedNetwork
@@ -280,17 +280,17 @@ func specifyEntry_11_0_2(o *Entry) (any, error) {
 		if _, ok := o.Misc["Network"]; ok {
 			nestedNetwork.Misc = o.Misc["Network"]
 		}
-		if o.Network.EnablePacketBufferProtection != nil {
-			nestedNetwork.EnablePacketBufferProtection = util.YesNo(o.Network.EnablePacketBufferProtection, nil)
-		}
-		if o.Network.LogSetting != nil {
-			nestedNetwork.LogSetting = o.Network.LogSetting
-		}
 		if o.Network.ZoneProtectionProfile != nil {
 			nestedNetwork.ZoneProtectionProfile = o.Network.ZoneProtectionProfile
 		}
 		if o.Network.NetInspection != nil {
 			nestedNetwork.NetInspection = util.YesNo(o.Network.NetInspection, nil)
+		}
+		if o.Network.EnablePacketBufferProtection != nil {
+			nestedNetwork.EnablePacketBufferProtection = util.YesNo(o.Network.EnablePacketBufferProtection, nil)
+		}
+		if o.Network.LogSetting != nil {
+			nestedNetwork.LogSetting = o.Network.LogSetting
 		}
 		if o.Network.External != nil {
 			nestedNetwork.External = util.StrToMem(o.Network.External)
@@ -377,9 +377,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 			if o.Network.NetInspection != nil {
 				nestedNetwork.NetInspection = util.AsBool(o.Network.NetInspection, nil)
 			}
-			if o.Network.VirtualWire != nil {
-				nestedNetwork.VirtualWire = util.MemToStr(o.Network.VirtualWire)
-			}
 			if o.Network.External != nil {
 				nestedNetwork.External = util.MemToStr(o.Network.External)
 			}
@@ -397,6 +394,9 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				if o.Network.Tunnel.Misc != nil {
 					entry.Misc["NetworkTunnel"] = o.Network.Tunnel.Misc
 				}
+			}
+			if o.Network.VirtualWire != nil {
+				nestedNetwork.VirtualWire = util.MemToStr(o.Network.VirtualWire)
 			}
 		}
 		entry.Network = nestedNetwork
@@ -453,9 +453,6 @@ func (c *entryXmlContainer_11_0_2) Normalize() ([]*Entry, error) {
 			if o.Network.Misc != nil {
 				entry.Misc["Network"] = o.Network.Misc
 			}
-			if o.Network.NetInspection != nil {
-				nestedNetwork.NetInspection = util.AsBool(o.Network.NetInspection, nil)
-			}
 			if o.Network.EnablePacketBufferProtection != nil {
 				nestedNetwork.EnablePacketBufferProtection = util.AsBool(o.Network.EnablePacketBufferProtection, nil)
 			}
@@ -464,6 +461,12 @@ func (c *entryXmlContainer_11_0_2) Normalize() ([]*Entry, error) {
 			}
 			if o.Network.ZoneProtectionProfile != nil {
 				nestedNetwork.ZoneProtectionProfile = o.Network.ZoneProtectionProfile
+			}
+			if o.Network.NetInspection != nil {
+				nestedNetwork.NetInspection = util.AsBool(o.Network.NetInspection, nil)
+			}
+			if o.Network.Tap != nil {
+				nestedNetwork.Tap = util.MemToStr(o.Network.Tap)
 			}
 			if o.Network.Tunnel != nil {
 				nestedNetwork.Tunnel = &NetworkTunnel{}
@@ -482,9 +485,6 @@ func (c *entryXmlContainer_11_0_2) Normalize() ([]*Entry, error) {
 			}
 			if o.Network.Layer3 != nil {
 				nestedNetwork.Layer3 = util.MemToStr(o.Network.Layer3)
-			}
-			if o.Network.Tap != nil {
-				nestedNetwork.Tap = util.MemToStr(o.Network.Tap)
 			}
 		}
 		entry.Network = nestedNetwork
@@ -567,22 +567,16 @@ func matchNetwork(a *Network, b *Network) bool {
 	} else if a == nil && b == nil {
 		return true
 	}
-	if !util.StringsMatch(a.ZoneProtectionProfile, b.ZoneProtectionProfile) {
-		return false
-	}
-	if !util.BoolsMatch(a.NetInspection, b.NetInspection) {
-		return false
-	}
 	if !util.BoolsMatch(a.EnablePacketBufferProtection, b.EnablePacketBufferProtection) {
 		return false
 	}
 	if !util.StringsMatch(a.LogSetting, b.LogSetting) {
 		return false
 	}
-	if !util.OrderedListsMatch(a.Layer2, b.Layer2) {
+	if !util.StringsMatch(a.ZoneProtectionProfile, b.ZoneProtectionProfile) {
 		return false
 	}
-	if !util.OrderedListsMatch(a.Layer3, b.Layer3) {
+	if !util.BoolsMatch(a.NetInspection, b.NetInspection) {
 		return false
 	}
 	if !util.OrderedListsMatch(a.Tap, b.Tap) {
@@ -595,6 +589,12 @@ func matchNetwork(a *Network, b *Network) bool {
 		return false
 	}
 	if !util.OrderedListsMatch(a.External, b.External) {
+		return false
+	}
+	if !util.OrderedListsMatch(a.Layer2, b.Layer2) {
+		return false
+	}
+	if !util.OrderedListsMatch(a.Layer3, b.Layer3) {
 		return false
 	}
 	return true

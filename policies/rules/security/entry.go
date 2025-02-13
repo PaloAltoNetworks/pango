@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{"security", "rules"}
+	Suffix = []string{}
 )
 
 type Entry struct {
@@ -378,14 +378,20 @@ func specifyEntry(o *Entry) (any, error) {
 			if o.ProfileSetting.Profiles.DataFiltering != nil {
 				nestedProfileSetting.Profiles.DataFiltering = util.StrToMem(o.ProfileSetting.Profiles.DataFiltering)
 			}
+			if o.ProfileSetting.Profiles.Sctp != nil {
+				nestedProfileSetting.Profiles.Sctp = util.StrToMem(o.ProfileSetting.Profiles.Sctp)
+			}
 			if o.ProfileSetting.Profiles.Spyware != nil {
 				nestedProfileSetting.Profiles.Spyware = util.StrToMem(o.ProfileSetting.Profiles.Spyware)
 			}
-			if o.ProfileSetting.Profiles.UrlFiltering != nil {
-				nestedProfileSetting.Profiles.UrlFiltering = util.StrToMem(o.ProfileSetting.Profiles.UrlFiltering)
+			if o.ProfileSetting.Profiles.Virus != nil {
+				nestedProfileSetting.Profiles.Virus = util.StrToMem(o.ProfileSetting.Profiles.Virus)
 			}
 			if o.ProfileSetting.Profiles.Vulnerability != nil {
 				nestedProfileSetting.Profiles.Vulnerability = util.StrToMem(o.ProfileSetting.Profiles.Vulnerability)
+			}
+			if o.ProfileSetting.Profiles.WildfireAnalysis != nil {
+				nestedProfileSetting.Profiles.WildfireAnalysis = util.StrToMem(o.ProfileSetting.Profiles.WildfireAnalysis)
 			}
 			if o.ProfileSetting.Profiles.FileBlocking != nil {
 				nestedProfileSetting.Profiles.FileBlocking = util.StrToMem(o.ProfileSetting.Profiles.FileBlocking)
@@ -393,14 +399,8 @@ func specifyEntry(o *Entry) (any, error) {
 			if o.ProfileSetting.Profiles.Gtp != nil {
 				nestedProfileSetting.Profiles.Gtp = util.StrToMem(o.ProfileSetting.Profiles.Gtp)
 			}
-			if o.ProfileSetting.Profiles.Sctp != nil {
-				nestedProfileSetting.Profiles.Sctp = util.StrToMem(o.ProfileSetting.Profiles.Sctp)
-			}
-			if o.ProfileSetting.Profiles.Virus != nil {
-				nestedProfileSetting.Profiles.Virus = util.StrToMem(o.ProfileSetting.Profiles.Virus)
-			}
-			if o.ProfileSetting.Profiles.WildfireAnalysis != nil {
-				nestedProfileSetting.Profiles.WildfireAnalysis = util.StrToMem(o.ProfileSetting.Profiles.WildfireAnalysis)
+			if o.ProfileSetting.Profiles.UrlFiltering != nil {
+				nestedProfileSetting.Profiles.UrlFiltering = util.StrToMem(o.ProfileSetting.Profiles.UrlFiltering)
 			}
 		}
 	}
@@ -417,6 +417,9 @@ func specifyEntry(o *Entry) (any, error) {
 			if _, ok := o.Misc["QosMarking"]; ok {
 				nestedQos.Marking.Misc = o.Misc["QosMarking"]
 			}
+			if o.Qos.Marking.IpPrecedence != nil {
+				nestedQos.Marking.IpPrecedence = o.Qos.Marking.IpPrecedence
+			}
 			if o.Qos.Marking.FollowC2sFlow != nil {
 				nestedQos.Marking.FollowC2sFlow = &QosMarkingFollowC2sFlowXml{}
 				if _, ok := o.Misc["QosMarkingFollowC2sFlow"]; ok {
@@ -425,9 +428,6 @@ func specifyEntry(o *Entry) (any, error) {
 			}
 			if o.Qos.Marking.IpDscp != nil {
 				nestedQos.Marking.IpDscp = o.Qos.Marking.IpDscp
-			}
-			if o.Qos.Marking.IpPrecedence != nil {
-				nestedQos.Marking.IpPrecedence = o.Qos.Marking.IpPrecedence
 			}
 		}
 	}
@@ -448,6 +448,9 @@ func specifyEntry(o *Entry) (any, error) {
 		nestedTarget = &TargetXml{}
 		if _, ok := o.Misc["Target"]; ok {
 			nestedTarget.Misc = o.Misc["Target"]
+		}
+		if o.Target.Tags != nil {
+			nestedTarget.Tags = util.StrToMem(o.Target.Tags)
 		}
 		if o.Target.Devices != nil {
 			nestedTarget.Devices = []TargetDevicesXml{}
@@ -477,9 +480,6 @@ func specifyEntry(o *Entry) (any, error) {
 		}
 		if o.Target.Negate != nil {
 			nestedTarget.Negate = util.YesNo(o.Target.Negate, nil)
-		}
-		if o.Target.Tags != nil {
-			nestedTarget.Tags = util.StrToMem(o.Target.Tags)
 		}
 	}
 	entry.Target = nestedTarget
@@ -530,15 +530,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				if o.ProfileSetting.Profiles.Misc != nil {
 					entry.Misc["ProfileSettingProfiles"] = o.ProfileSetting.Profiles.Misc
 				}
-				if o.ProfileSetting.Profiles.Sctp != nil {
-					nestedProfileSetting.Profiles.Sctp = util.MemToStr(o.ProfileSetting.Profiles.Sctp)
-				}
-				if o.ProfileSetting.Profiles.Virus != nil {
-					nestedProfileSetting.Profiles.Virus = util.MemToStr(o.ProfileSetting.Profiles.Virus)
-				}
-				if o.ProfileSetting.Profiles.WildfireAnalysis != nil {
-					nestedProfileSetting.Profiles.WildfireAnalysis = util.MemToStr(o.ProfileSetting.Profiles.WildfireAnalysis)
-				}
 				if o.ProfileSetting.Profiles.FileBlocking != nil {
 					nestedProfileSetting.Profiles.FileBlocking = util.MemToStr(o.ProfileSetting.Profiles.FileBlocking)
 				}
@@ -548,14 +539,23 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				if o.ProfileSetting.Profiles.UrlFiltering != nil {
 					nestedProfileSetting.Profiles.UrlFiltering = util.MemToStr(o.ProfileSetting.Profiles.UrlFiltering)
 				}
-				if o.ProfileSetting.Profiles.Vulnerability != nil {
-					nestedProfileSetting.Profiles.Vulnerability = util.MemToStr(o.ProfileSetting.Profiles.Vulnerability)
-				}
 				if o.ProfileSetting.Profiles.DataFiltering != nil {
 					nestedProfileSetting.Profiles.DataFiltering = util.MemToStr(o.ProfileSetting.Profiles.DataFiltering)
 				}
+				if o.ProfileSetting.Profiles.Sctp != nil {
+					nestedProfileSetting.Profiles.Sctp = util.MemToStr(o.ProfileSetting.Profiles.Sctp)
+				}
 				if o.ProfileSetting.Profiles.Spyware != nil {
 					nestedProfileSetting.Profiles.Spyware = util.MemToStr(o.ProfileSetting.Profiles.Spyware)
+				}
+				if o.ProfileSetting.Profiles.Virus != nil {
+					nestedProfileSetting.Profiles.Virus = util.MemToStr(o.ProfileSetting.Profiles.Virus)
+				}
+				if o.ProfileSetting.Profiles.Vulnerability != nil {
+					nestedProfileSetting.Profiles.Vulnerability = util.MemToStr(o.ProfileSetting.Profiles.Vulnerability)
+				}
+				if o.ProfileSetting.Profiles.WildfireAnalysis != nil {
+					nestedProfileSetting.Profiles.WildfireAnalysis = util.MemToStr(o.ProfileSetting.Profiles.WildfireAnalysis)
 				}
 			}
 		}
@@ -572,17 +572,17 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				if o.Qos.Marking.Misc != nil {
 					entry.Misc["QosMarking"] = o.Qos.Marking.Misc
 				}
-				if o.Qos.Marking.FollowC2sFlow != nil {
-					nestedQos.Marking.FollowC2sFlow = &QosMarkingFollowC2sFlow{}
-					if o.Qos.Marking.FollowC2sFlow.Misc != nil {
-						entry.Misc["QosMarkingFollowC2sFlow"] = o.Qos.Marking.FollowC2sFlow.Misc
-					}
-				}
 				if o.Qos.Marking.IpDscp != nil {
 					nestedQos.Marking.IpDscp = o.Qos.Marking.IpDscp
 				}
 				if o.Qos.Marking.IpPrecedence != nil {
 					nestedQos.Marking.IpPrecedence = o.Qos.Marking.IpPrecedence
+				}
+				if o.Qos.Marking.FollowC2sFlow != nil {
+					nestedQos.Marking.FollowC2sFlow = &QosMarkingFollowC2sFlow{}
+					if o.Qos.Marking.FollowC2sFlow.Misc != nil {
+						entry.Misc["QosMarkingFollowC2sFlow"] = o.Qos.Marking.FollowC2sFlow.Misc
+					}
 				}
 			}
 		}
@@ -611,6 +611,9 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 					if oTargetDevices.Misc != nil {
 						entry.Misc["TargetDevices"] = oTargetDevices.Misc
 					}
+					if oTargetDevices.Name != "" {
+						nestedTargetDevices.Name = oTargetDevices.Name
+					}
 					if oTargetDevices.Vsys != nil {
 						nestedTargetDevices.Vsys = []TargetDevicesVsys{}
 						for _, oTargetDevicesVsys := range oTargetDevices.Vsys {
@@ -623,9 +626,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 							}
 							nestedTargetDevices.Vsys = append(nestedTargetDevices.Vsys, nestedTargetDevicesVsys)
 						}
-					}
-					if oTargetDevices.Name != "" {
-						nestedTargetDevices.Name = oTargetDevices.Name
 					}
 					nestedTarget.Devices = append(nestedTarget.Devices, nestedTargetDevices)
 				}
@@ -781,10 +781,10 @@ func matchTargetDevices(a []TargetDevices, b []TargetDevices) bool {
 	}
 	for _, a := range a {
 		for _, b := range b {
-			if !util.StringsEqual(a.Name, b.Name) {
+			if !matchTargetDevicesVsys(a.Vsys, b.Vsys) {
 				return false
 			}
-			if !matchTargetDevicesVsys(a.Vsys, b.Vsys) {
+			if !util.StringsEqual(a.Name, b.Name) {
 				return false
 			}
 		}
@@ -797,13 +797,62 @@ func matchTarget(a *Target, b *Target) bool {
 	} else if a == nil && b == nil {
 		return true
 	}
-	if !matchTargetDevices(a.Devices, b.Devices) {
-		return false
-	}
 	if !util.BoolsMatch(a.Negate, b.Negate) {
 		return false
 	}
 	if !util.OrderedListsMatch(a.Tags, b.Tags) {
+		return false
+	}
+	if !matchTargetDevices(a.Devices, b.Devices) {
+		return false
+	}
+	return true
+}
+func matchProfileSettingProfiles(a *ProfileSettingProfiles, b *ProfileSettingProfiles) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !util.OrderedListsMatch(a.FileBlocking, b.FileBlocking) {
+		return false
+	}
+	if !util.OrderedListsMatch(a.Gtp, b.Gtp) {
+		return false
+	}
+	if !util.OrderedListsMatch(a.UrlFiltering, b.UrlFiltering) {
+		return false
+	}
+	if !util.OrderedListsMatch(a.Virus, b.Virus) {
+		return false
+	}
+	if !util.OrderedListsMatch(a.Vulnerability, b.Vulnerability) {
+		return false
+	}
+	if !util.OrderedListsMatch(a.WildfireAnalysis, b.WildfireAnalysis) {
+		return false
+	}
+	if !util.OrderedListsMatch(a.DataFiltering, b.DataFiltering) {
+		return false
+	}
+	if !util.OrderedListsMatch(a.Sctp, b.Sctp) {
+		return false
+	}
+	if !util.OrderedListsMatch(a.Spyware, b.Spyware) {
+		return false
+	}
+	return true
+}
+func matchProfileSetting(a *ProfileSetting, b *ProfileSetting) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !util.OrderedListsMatch(a.Group, b.Group) {
+		return false
+	}
+	if !matchProfileSettingProfiles(a.Profiles, b.Profiles) {
 		return false
 	}
 	return true
@@ -822,13 +871,13 @@ func matchQosMarking(a *QosMarking, b *QosMarking) bool {
 	} else if a == nil && b == nil {
 		return true
 	}
-	if !util.StringsMatch(a.IpPrecedence, b.IpPrecedence) {
-		return false
-	}
 	if !matchQosMarkingFollowC2sFlow(a.FollowC2sFlow, b.FollowC2sFlow) {
 		return false
 	}
 	if !util.StringsMatch(a.IpDscp, b.IpDscp) {
+		return false
+	}
+	if !util.StringsMatch(a.IpPrecedence, b.IpPrecedence) {
 		return false
 	}
 	return true
@@ -840,55 +889,6 @@ func matchQos(a *Qos, b *Qos) bool {
 		return true
 	}
 	if !matchQosMarking(a.Marking, b.Marking) {
-		return false
-	}
-	return true
-}
-func matchProfileSettingProfiles(a *ProfileSettingProfiles, b *ProfileSettingProfiles) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !util.OrderedListsMatch(a.Gtp, b.Gtp) {
-		return false
-	}
-	if !util.OrderedListsMatch(a.Sctp, b.Sctp) {
-		return false
-	}
-	if !util.OrderedListsMatch(a.Virus, b.Virus) {
-		return false
-	}
-	if !util.OrderedListsMatch(a.WildfireAnalysis, b.WildfireAnalysis) {
-		return false
-	}
-	if !util.OrderedListsMatch(a.FileBlocking, b.FileBlocking) {
-		return false
-	}
-	if !util.OrderedListsMatch(a.Spyware, b.Spyware) {
-		return false
-	}
-	if !util.OrderedListsMatch(a.UrlFiltering, b.UrlFiltering) {
-		return false
-	}
-	if !util.OrderedListsMatch(a.Vulnerability, b.Vulnerability) {
-		return false
-	}
-	if !util.OrderedListsMatch(a.DataFiltering, b.DataFiltering) {
-		return false
-	}
-	return true
-}
-func matchProfileSetting(a *ProfileSetting, b *ProfileSetting) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !util.OrderedListsMatch(a.Group, b.Group) {
-		return false
-	}
-	if !matchProfileSettingProfiles(a.Profiles, b.Profiles) {
 		return false
 	}
 	return true

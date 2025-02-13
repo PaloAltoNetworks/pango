@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{"profiles", "file-blocking"}
+	Suffix = []string{}
 )
 
 type Entry struct {
@@ -138,6 +138,9 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				if oRules.Misc != nil {
 					entry.Misc["Rules"] = oRules.Misc
 				}
+				if oRules.Application != nil {
+					nestedRules.Application = util.MemToStr(oRules.Application)
+				}
 				if oRules.FileType != nil {
 					nestedRules.FileType = util.MemToStr(oRules.FileType)
 				}
@@ -149,9 +152,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				}
 				if oRules.Name != "" {
 					nestedRules.Name = oRules.Name
-				}
-				if oRules.Application != nil {
-					nestedRules.Application = util.MemToStr(oRules.Application)
 				}
 				nestedRulesCol = append(nestedRulesCol, nestedRules)
 			}
@@ -195,9 +195,6 @@ func matchRules(a []Rules, b []Rules) bool {
 	}
 	for _, a := range a {
 		for _, b := range b {
-			if !util.OrderedListsMatch(a.Application, b.Application) {
-				return false
-			}
 			if !util.OrderedListsMatch(a.FileType, b.FileType) {
 				return false
 			}
@@ -208,6 +205,9 @@ func matchRules(a []Rules, b []Rules) bool {
 				return false
 			}
 			if !util.StringsEqual(a.Name, b.Name) {
+				return false
+			}
+			if !util.OrderedListsMatch(a.Application, b.Application) {
 				return false
 			}
 		}

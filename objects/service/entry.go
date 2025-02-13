@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{"service"}
+	Suffix = []string{}
 )
 
 type Entry struct {
@@ -214,6 +214,9 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				if o.Protocol.Tcp.Misc != nil {
 					entry.Misc["ProtocolTcp"] = o.Protocol.Tcp.Misc
 				}
+				if o.Protocol.Tcp.SourcePort != nil {
+					nestedProtocol.Tcp.SourcePort = o.Protocol.Tcp.SourcePort
+				}
 				if o.Protocol.Tcp.Override != nil {
 					nestedProtocol.Tcp.Override = &ProtocolTcpOverride{}
 					if o.Protocol.Tcp.Override.Misc != nil {
@@ -231,9 +234,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				}
 				if o.Protocol.Tcp.Port != nil {
 					nestedProtocol.Tcp.Port = o.Protocol.Tcp.Port
-				}
-				if o.Protocol.Tcp.SourcePort != nil {
-					nestedProtocol.Tcp.SourcePort = o.Protocol.Tcp.SourcePort
 				}
 			}
 			if o.Protocol.Udp != nil {
@@ -300,13 +300,13 @@ func matchProtocolTcpOverride(a *ProtocolTcpOverride, b *ProtocolTcpOverride) bo
 	} else if a == nil && b == nil {
 		return true
 	}
-	if !util.Ints64Match(a.TimewaitTimeout, b.TimewaitTimeout) {
-		return false
-	}
 	if !util.Ints64Match(a.HalfcloseTimeout, b.HalfcloseTimeout) {
 		return false
 	}
 	if !util.Ints64Match(a.Timeout, b.Timeout) {
+		return false
+	}
+	if !util.Ints64Match(a.TimewaitTimeout, b.TimewaitTimeout) {
 		return false
 	}
 	return true

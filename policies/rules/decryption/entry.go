@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{"decryption", "rules"}
+	Suffix = []string{}
 )
 
 type Entry struct {
@@ -296,9 +296,6 @@ func specifyEntry(o *Entry) (any, error) {
 				if _, ok := o.Misc["TargetDevices"]; ok {
 					nestedTargetDevices.Misc = o.Misc["TargetDevices"]
 				}
-				if oTargetDevices.Name != "" {
-					nestedTargetDevices.Name = oTargetDevices.Name
-				}
 				if oTargetDevices.Vsys != nil {
 					nestedTargetDevices.Vsys = []TargetDevicesVsysXml{}
 					for _, oTargetDevicesVsys := range oTargetDevices.Vsys {
@@ -311,6 +308,9 @@ func specifyEntry(o *Entry) (any, error) {
 						}
 						nestedTargetDevices.Vsys = append(nestedTargetDevices.Vsys, nestedTargetDevicesVsys)
 					}
+				}
+				if oTargetDevices.Name != "" {
+					nestedTargetDevices.Name = oTargetDevices.Name
 				}
 				nestedTarget.Devices = append(nestedTarget.Devices, nestedTargetDevices)
 			}
@@ -331,6 +331,15 @@ func specifyEntry(o *Entry) (any, error) {
 		if _, ok := o.Misc["Type"]; ok {
 			nestedType.Misc = o.Misc["Type"]
 		}
+		if o.Type.SslInboundInspection != nil {
+			nestedType.SslInboundInspection = &TypeSslInboundInspectionXml{}
+			if _, ok := o.Misc["TypeSslInboundInspection"]; ok {
+				nestedType.SslInboundInspection.Misc = o.Misc["TypeSslInboundInspection"]
+			}
+			if o.Type.SslInboundInspection.Certificates != nil {
+				nestedType.SslInboundInspection.Certificates = util.StrToMem(o.Type.SslInboundInspection.Certificates)
+			}
+		}
 		if o.Type.SshProxy != nil {
 			nestedType.SshProxy = &TypeSshProxyXml{}
 			if _, ok := o.Misc["TypeSshProxy"]; ok {
@@ -341,15 +350,6 @@ func specifyEntry(o *Entry) (any, error) {
 			nestedType.SslForwardProxy = &TypeSslForwardProxyXml{}
 			if _, ok := o.Misc["TypeSslForwardProxy"]; ok {
 				nestedType.SslForwardProxy.Misc = o.Misc["TypeSslForwardProxy"]
-			}
-		}
-		if o.Type.SslInboundInspection != nil {
-			nestedType.SslInboundInspection = &TypeSslInboundInspectionXml{}
-			if _, ok := o.Misc["TypeSslInboundInspection"]; ok {
-				nestedType.SslInboundInspection.Misc = o.Misc["TypeSslInboundInspection"]
-			}
-			if o.Type.SslInboundInspection.Certificates != nil {
-				nestedType.SslInboundInspection.Certificates = util.StrToMem(o.Type.SslInboundInspection.Certificates)
 			}
 		}
 	}
@@ -437,6 +437,15 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 			if o.Type.Misc != nil {
 				entry.Misc["Type"] = o.Type.Misc
 			}
+			if o.Type.SslInboundInspection != nil {
+				nestedType.SslInboundInspection = &TypeSslInboundInspection{}
+				if o.Type.SslInboundInspection.Misc != nil {
+					entry.Misc["TypeSslInboundInspection"] = o.Type.SslInboundInspection.Misc
+				}
+				if o.Type.SslInboundInspection.Certificates != nil {
+					nestedType.SslInboundInspection.Certificates = util.MemToStr(o.Type.SslInboundInspection.Certificates)
+				}
+			}
 			if o.Type.SshProxy != nil {
 				nestedType.SshProxy = &TypeSshProxy{}
 				if o.Type.SshProxy.Misc != nil {
@@ -447,15 +456,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				nestedType.SslForwardProxy = &TypeSslForwardProxy{}
 				if o.Type.SslForwardProxy.Misc != nil {
 					entry.Misc["TypeSslForwardProxy"] = o.Type.SslForwardProxy.Misc
-				}
-			}
-			if o.Type.SslInboundInspection != nil {
-				nestedType.SslInboundInspection = &TypeSslInboundInspection{}
-				if o.Type.SslInboundInspection.Misc != nil {
-					entry.Misc["TypeSslInboundInspection"] = o.Type.SslInboundInspection.Misc
-				}
-				if o.Type.SslInboundInspection.Certificates != nil {
-					nestedType.SslInboundInspection.Certificates = util.MemToStr(o.Type.SslInboundInspection.Certificates)
 				}
 			}
 		}
@@ -555,6 +555,50 @@ func SpecMatches(a, b *Entry) bool {
 	return true
 }
 
+func matchTypeSslInboundInspection(a *TypeSslInboundInspection, b *TypeSslInboundInspection) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !util.OrderedListsMatch(a.Certificates, b.Certificates) {
+		return false
+	}
+	return true
+}
+func matchTypeSshProxy(a *TypeSshProxy, b *TypeSshProxy) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	return true
+}
+func matchTypeSslForwardProxy(a *TypeSslForwardProxy, b *TypeSslForwardProxy) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	return true
+}
+func matchType(a *Type, b *Type) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !matchTypeSshProxy(a.SshProxy, b.SshProxy) {
+		return false
+	}
+	if !matchTypeSslForwardProxy(a.SslForwardProxy, b.SslForwardProxy) {
+		return false
+	}
+	if !matchTypeSslInboundInspection(a.SslInboundInspection, b.SslInboundInspection) {
+		return false
+	}
+	return true
+}
 func matchTargetDevicesVsys(a []TargetDevicesVsys, b []TargetDevicesVsys) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
@@ -601,50 +645,6 @@ func matchTarget(a *Target, b *Target) bool {
 		return false
 	}
 	if !util.OrderedListsMatch(a.Tags, b.Tags) {
-		return false
-	}
-	return true
-}
-func matchTypeSslInboundInspection(a *TypeSslInboundInspection, b *TypeSslInboundInspection) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !util.OrderedListsMatch(a.Certificates, b.Certificates) {
-		return false
-	}
-	return true
-}
-func matchTypeSshProxy(a *TypeSshProxy, b *TypeSshProxy) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	return true
-}
-func matchTypeSslForwardProxy(a *TypeSslForwardProxy, b *TypeSslForwardProxy) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	return true
-}
-func matchType(a *Type, b *Type) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !matchTypeSshProxy(a.SshProxy, b.SshProxy) {
-		return false
-	}
-	if !matchTypeSslForwardProxy(a.SslForwardProxy, b.SslForwardProxy) {
-		return false
-	}
-	if !matchTypeSslInboundInspection(a.SslInboundInspection, b.SslInboundInspection) {
 		return false
 	}
 	return true

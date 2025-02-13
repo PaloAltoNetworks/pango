@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{"tag"}
+	Suffix = []string{}
 )
 
 type Entry struct {

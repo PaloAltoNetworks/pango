@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{"profiles", "spyware"}
+	Suffix = []string{}
 )
 
 type Entry struct {
@@ -634,62 +634,6 @@ func specifyEntry(o *Entry) (any, error) {
 		if _, ok := o.Misc["BotnetDomains"]; ok {
 			nestedBotnetDomains.Misc = o.Misc["BotnetDomains"]
 		}
-		if o.BotnetDomains.Sinkhole != nil {
-			nestedBotnetDomains.Sinkhole = &BotnetDomainsSinkholeXml{}
-			if _, ok := o.Misc["BotnetDomainsSinkhole"]; ok {
-				nestedBotnetDomains.Sinkhole.Misc = o.Misc["BotnetDomainsSinkhole"]
-			}
-			if o.BotnetDomains.Sinkhole.Ipv4Address != nil {
-				nestedBotnetDomains.Sinkhole.Ipv4Address = o.BotnetDomains.Sinkhole.Ipv4Address
-			}
-			if o.BotnetDomains.Sinkhole.Ipv6Address != nil {
-				nestedBotnetDomains.Sinkhole.Ipv6Address = o.BotnetDomains.Sinkhole.Ipv6Address
-			}
-		}
-		if o.BotnetDomains.ThreatException != nil {
-			nestedBotnetDomains.ThreatException = []BotnetDomainsThreatExceptionXml{}
-			for _, oBotnetDomainsThreatException := range o.BotnetDomains.ThreatException {
-				nestedBotnetDomainsThreatException := BotnetDomainsThreatExceptionXml{}
-				if _, ok := o.Misc["BotnetDomainsThreatException"]; ok {
-					nestedBotnetDomainsThreatException.Misc = o.Misc["BotnetDomainsThreatException"]
-				}
-				if oBotnetDomainsThreatException.Name != "" {
-					nestedBotnetDomainsThreatException.Name = oBotnetDomainsThreatException.Name
-				}
-				nestedBotnetDomains.ThreatException = append(nestedBotnetDomains.ThreatException, nestedBotnetDomainsThreatException)
-			}
-		}
-		if o.BotnetDomains.Whitelist != nil {
-			nestedBotnetDomains.Whitelist = []BotnetDomainsWhitelistXml{}
-			for _, oBotnetDomainsWhitelist := range o.BotnetDomains.Whitelist {
-				nestedBotnetDomainsWhitelist := BotnetDomainsWhitelistXml{}
-				if _, ok := o.Misc["BotnetDomainsWhitelist"]; ok {
-					nestedBotnetDomainsWhitelist.Misc = o.Misc["BotnetDomainsWhitelist"]
-				}
-				if oBotnetDomainsWhitelist.Description != nil {
-					nestedBotnetDomainsWhitelist.Description = oBotnetDomainsWhitelist.Description
-				}
-				if oBotnetDomainsWhitelist.Name != "" {
-					nestedBotnetDomainsWhitelist.Name = oBotnetDomainsWhitelist.Name
-				}
-				nestedBotnetDomains.Whitelist = append(nestedBotnetDomains.Whitelist, nestedBotnetDomainsWhitelist)
-			}
-		}
-		if o.BotnetDomains.RtypeAction != nil {
-			nestedBotnetDomains.RtypeAction = &BotnetDomainsRtypeActionXml{}
-			if _, ok := o.Misc["BotnetDomainsRtypeAction"]; ok {
-				nestedBotnetDomains.RtypeAction.Misc = o.Misc["BotnetDomainsRtypeAction"]
-			}
-			if o.BotnetDomains.RtypeAction.Any != nil {
-				nestedBotnetDomains.RtypeAction.Any = o.BotnetDomains.RtypeAction.Any
-			}
-			if o.BotnetDomains.RtypeAction.Https != nil {
-				nestedBotnetDomains.RtypeAction.Https = o.BotnetDomains.RtypeAction.Https
-			}
-			if o.BotnetDomains.RtypeAction.Svcb != nil {
-				nestedBotnetDomains.RtypeAction.Svcb = o.BotnetDomains.RtypeAction.Svcb
-			}
-		}
 		if o.BotnetDomains.DnsSecurityCategories != nil {
 			nestedBotnetDomains.DnsSecurityCategories = []BotnetDomainsDnsSecurityCategoriesXml{}
 			for _, oBotnetDomainsDnsSecurityCategories := range o.BotnetDomains.DnsSecurityCategories {
@@ -758,6 +702,62 @@ func specifyEntry(o *Entry) (any, error) {
 				nestedBotnetDomains.Lists = append(nestedBotnetDomains.Lists, nestedBotnetDomainsLists)
 			}
 		}
+		if o.BotnetDomains.Sinkhole != nil {
+			nestedBotnetDomains.Sinkhole = &BotnetDomainsSinkholeXml{}
+			if _, ok := o.Misc["BotnetDomainsSinkhole"]; ok {
+				nestedBotnetDomains.Sinkhole.Misc = o.Misc["BotnetDomainsSinkhole"]
+			}
+			if o.BotnetDomains.Sinkhole.Ipv4Address != nil {
+				nestedBotnetDomains.Sinkhole.Ipv4Address = o.BotnetDomains.Sinkhole.Ipv4Address
+			}
+			if o.BotnetDomains.Sinkhole.Ipv6Address != nil {
+				nestedBotnetDomains.Sinkhole.Ipv6Address = o.BotnetDomains.Sinkhole.Ipv6Address
+			}
+		}
+		if o.BotnetDomains.ThreatException != nil {
+			nestedBotnetDomains.ThreatException = []BotnetDomainsThreatExceptionXml{}
+			for _, oBotnetDomainsThreatException := range o.BotnetDomains.ThreatException {
+				nestedBotnetDomainsThreatException := BotnetDomainsThreatExceptionXml{}
+				if _, ok := o.Misc["BotnetDomainsThreatException"]; ok {
+					nestedBotnetDomainsThreatException.Misc = o.Misc["BotnetDomainsThreatException"]
+				}
+				if oBotnetDomainsThreatException.Name != "" {
+					nestedBotnetDomainsThreatException.Name = oBotnetDomainsThreatException.Name
+				}
+				nestedBotnetDomains.ThreatException = append(nestedBotnetDomains.ThreatException, nestedBotnetDomainsThreatException)
+			}
+		}
+		if o.BotnetDomains.Whitelist != nil {
+			nestedBotnetDomains.Whitelist = []BotnetDomainsWhitelistXml{}
+			for _, oBotnetDomainsWhitelist := range o.BotnetDomains.Whitelist {
+				nestedBotnetDomainsWhitelist := BotnetDomainsWhitelistXml{}
+				if _, ok := o.Misc["BotnetDomainsWhitelist"]; ok {
+					nestedBotnetDomainsWhitelist.Misc = o.Misc["BotnetDomainsWhitelist"]
+				}
+				if oBotnetDomainsWhitelist.Description != nil {
+					nestedBotnetDomainsWhitelist.Description = oBotnetDomainsWhitelist.Description
+				}
+				if oBotnetDomainsWhitelist.Name != "" {
+					nestedBotnetDomainsWhitelist.Name = oBotnetDomainsWhitelist.Name
+				}
+				nestedBotnetDomains.Whitelist = append(nestedBotnetDomains.Whitelist, nestedBotnetDomainsWhitelist)
+			}
+		}
+		if o.BotnetDomains.RtypeAction != nil {
+			nestedBotnetDomains.RtypeAction = &BotnetDomainsRtypeActionXml{}
+			if _, ok := o.Misc["BotnetDomainsRtypeAction"]; ok {
+				nestedBotnetDomains.RtypeAction.Misc = o.Misc["BotnetDomainsRtypeAction"]
+			}
+			if o.BotnetDomains.RtypeAction.Svcb != nil {
+				nestedBotnetDomains.RtypeAction.Svcb = o.BotnetDomains.RtypeAction.Svcb
+			}
+			if o.BotnetDomains.RtypeAction.Any != nil {
+				nestedBotnetDomains.RtypeAction.Any = o.BotnetDomains.RtypeAction.Any
+			}
+			if o.BotnetDomains.RtypeAction.Https != nil {
+				nestedBotnetDomains.RtypeAction.Https = o.BotnetDomains.RtypeAction.Https
+			}
+		}
 	}
 	entry.BotnetDomains = nestedBotnetDomains
 
@@ -792,12 +792,6 @@ func specifyEntry(o *Entry) (any, error) {
 			nestedRules := RulesXml{}
 			if _, ok := o.Misc["Rules"]; ok {
 				nestedRules.Misc = o.Misc["Rules"]
-			}
-			if oRules.Name != "" {
-				nestedRules.Name = oRules.Name
-			}
-			if oRules.ThreatName != nil {
-				nestedRules.ThreatName = oRules.ThreatName
 			}
 			if oRules.Category != nil {
 				nestedRules.Category = oRules.Category
@@ -868,6 +862,12 @@ func specifyEntry(o *Entry) (any, error) {
 					}
 				}
 			}
+			if oRules.Name != "" {
+				nestedRules.Name = oRules.Name
+			}
+			if oRules.ThreatName != nil {
+				nestedRules.ThreatName = oRules.ThreatName
+			}
 			nestedRulesCol = append(nestedRulesCol, nestedRules)
 		}
 		entry.Rules = nestedRulesCol
@@ -881,37 +881,10 @@ func specifyEntry(o *Entry) (any, error) {
 			if _, ok := o.Misc["ThreatException"]; ok {
 				nestedThreatException.Misc = o.Misc["ThreatException"]
 			}
-			if oThreatException.PacketCapture != nil {
-				nestedThreatException.PacketCapture = oThreatException.PacketCapture
-			}
 			if oThreatException.Action != nil {
 				nestedThreatException.Action = &ThreatExceptionActionXml{}
 				if _, ok := o.Misc["ThreatExceptionAction"]; ok {
 					nestedThreatException.Action.Misc = o.Misc["ThreatExceptionAction"]
-				}
-				if oThreatException.Action.Allow != nil {
-					nestedThreatException.Action.Allow = &ThreatExceptionActionAllowXml{}
-					if _, ok := o.Misc["ThreatExceptionActionAllow"]; ok {
-						nestedThreatException.Action.Allow.Misc = o.Misc["ThreatExceptionActionAllow"]
-					}
-				}
-				if oThreatException.Action.Alert != nil {
-					nestedThreatException.Action.Alert = &ThreatExceptionActionAlertXml{}
-					if _, ok := o.Misc["ThreatExceptionActionAlert"]; ok {
-						nestedThreatException.Action.Alert.Misc = o.Misc["ThreatExceptionActionAlert"]
-					}
-				}
-				if oThreatException.Action.Drop != nil {
-					nestedThreatException.Action.Drop = &ThreatExceptionActionDropXml{}
-					if _, ok := o.Misc["ThreatExceptionActionDrop"]; ok {
-						nestedThreatException.Action.Drop.Misc = o.Misc["ThreatExceptionActionDrop"]
-					}
-				}
-				if oThreatException.Action.ResetBoth != nil {
-					nestedThreatException.Action.ResetBoth = &ThreatExceptionActionResetBothXml{}
-					if _, ok := o.Misc["ThreatExceptionActionResetBoth"]; ok {
-						nestedThreatException.Action.ResetBoth.Misc = o.Misc["ThreatExceptionActionResetBoth"]
-					}
 				}
 				if oThreatException.Action.ResetClient != nil {
 					nestedThreatException.Action.ResetClient = &ThreatExceptionActionResetClientXml{}
@@ -943,6 +916,30 @@ func specifyEntry(o *Entry) (any, error) {
 						nestedThreatException.Action.Default.Misc = o.Misc["ThreatExceptionActionDefault"]
 					}
 				}
+				if oThreatException.Action.Allow != nil {
+					nestedThreatException.Action.Allow = &ThreatExceptionActionAllowXml{}
+					if _, ok := o.Misc["ThreatExceptionActionAllow"]; ok {
+						nestedThreatException.Action.Allow.Misc = o.Misc["ThreatExceptionActionAllow"]
+					}
+				}
+				if oThreatException.Action.Alert != nil {
+					nestedThreatException.Action.Alert = &ThreatExceptionActionAlertXml{}
+					if _, ok := o.Misc["ThreatExceptionActionAlert"]; ok {
+						nestedThreatException.Action.Alert.Misc = o.Misc["ThreatExceptionActionAlert"]
+					}
+				}
+				if oThreatException.Action.Drop != nil {
+					nestedThreatException.Action.Drop = &ThreatExceptionActionDropXml{}
+					if _, ok := o.Misc["ThreatExceptionActionDrop"]; ok {
+						nestedThreatException.Action.Drop.Misc = o.Misc["ThreatExceptionActionDrop"]
+					}
+				}
+				if oThreatException.Action.ResetBoth != nil {
+					nestedThreatException.Action.ResetBoth = &ThreatExceptionActionResetBothXml{}
+					if _, ok := o.Misc["ThreatExceptionActionResetBoth"]; ok {
+						nestedThreatException.Action.ResetBoth.Misc = o.Misc["ThreatExceptionActionResetBoth"]
+					}
+				}
 			}
 			if oThreatException.ExemptIp != nil {
 				nestedThreatException.ExemptIp = []ThreatExceptionExemptIpXml{}
@@ -959,6 +956,9 @@ func specifyEntry(o *Entry) (any, error) {
 			}
 			if oThreatException.Name != "" {
 				nestedThreatException.Name = oThreatException.Name
+			}
+			if oThreatException.PacketCapture != nil {
+				nestedThreatException.PacketCapture = oThreatException.PacketCapture
 			}
 			nestedThreatExceptionCol = append(nestedThreatExceptionCol, nestedThreatException)
 		}
@@ -979,6 +979,50 @@ func specifyEntry_11_0_2(o *Entry) (any, error) {
 		if _, ok := o.Misc["BotnetDomains"]; ok {
 			nestedBotnetDomains.Misc = o.Misc["BotnetDomains"]
 		}
+		if o.BotnetDomains.ThreatException != nil {
+			nestedBotnetDomains.ThreatException = []BotnetDomainsThreatExceptionXml_11_0_2{}
+			for _, oBotnetDomainsThreatException := range o.BotnetDomains.ThreatException {
+				nestedBotnetDomainsThreatException := BotnetDomainsThreatExceptionXml_11_0_2{}
+				if _, ok := o.Misc["BotnetDomainsThreatException"]; ok {
+					nestedBotnetDomainsThreatException.Misc = o.Misc["BotnetDomainsThreatException"]
+				}
+				if oBotnetDomainsThreatException.Name != "" {
+					nestedBotnetDomainsThreatException.Name = oBotnetDomainsThreatException.Name
+				}
+				nestedBotnetDomains.ThreatException = append(nestedBotnetDomains.ThreatException, nestedBotnetDomainsThreatException)
+			}
+		}
+		if o.BotnetDomains.Whitelist != nil {
+			nestedBotnetDomains.Whitelist = []BotnetDomainsWhitelistXml_11_0_2{}
+			for _, oBotnetDomainsWhitelist := range o.BotnetDomains.Whitelist {
+				nestedBotnetDomainsWhitelist := BotnetDomainsWhitelistXml_11_0_2{}
+				if _, ok := o.Misc["BotnetDomainsWhitelist"]; ok {
+					nestedBotnetDomainsWhitelist.Misc = o.Misc["BotnetDomainsWhitelist"]
+				}
+				if oBotnetDomainsWhitelist.Description != nil {
+					nestedBotnetDomainsWhitelist.Description = oBotnetDomainsWhitelist.Description
+				}
+				if oBotnetDomainsWhitelist.Name != "" {
+					nestedBotnetDomainsWhitelist.Name = oBotnetDomainsWhitelist.Name
+				}
+				nestedBotnetDomains.Whitelist = append(nestedBotnetDomains.Whitelist, nestedBotnetDomainsWhitelist)
+			}
+		}
+		if o.BotnetDomains.RtypeAction != nil {
+			nestedBotnetDomains.RtypeAction = &BotnetDomainsRtypeActionXml_11_0_2{}
+			if _, ok := o.Misc["BotnetDomainsRtypeAction"]; ok {
+				nestedBotnetDomains.RtypeAction.Misc = o.Misc["BotnetDomainsRtypeAction"]
+			}
+			if o.BotnetDomains.RtypeAction.Https != nil {
+				nestedBotnetDomains.RtypeAction.Https = o.BotnetDomains.RtypeAction.Https
+			}
+			if o.BotnetDomains.RtypeAction.Svcb != nil {
+				nestedBotnetDomains.RtypeAction.Svcb = o.BotnetDomains.RtypeAction.Svcb
+			}
+			if o.BotnetDomains.RtypeAction.Any != nil {
+				nestedBotnetDomains.RtypeAction.Any = o.BotnetDomains.RtypeAction.Any
+			}
+		}
 		if o.BotnetDomains.DnsSecurityCategories != nil {
 			nestedBotnetDomains.DnsSecurityCategories = []BotnetDomainsDnsSecurityCategoriesXml_11_0_2{}
 			for _, oBotnetDomainsDnsSecurityCategories := range o.BotnetDomains.DnsSecurityCategories {
@@ -986,17 +1030,17 @@ func specifyEntry_11_0_2(o *Entry) (any, error) {
 				if _, ok := o.Misc["BotnetDomainsDnsSecurityCategories"]; ok {
 					nestedBotnetDomainsDnsSecurityCategories.Misc = o.Misc["BotnetDomainsDnsSecurityCategories"]
 				}
-				if oBotnetDomainsDnsSecurityCategories.Name != "" {
-					nestedBotnetDomainsDnsSecurityCategories.Name = oBotnetDomainsDnsSecurityCategories.Name
-				}
-				if oBotnetDomainsDnsSecurityCategories.Action != nil {
-					nestedBotnetDomainsDnsSecurityCategories.Action = oBotnetDomainsDnsSecurityCategories.Action
-				}
 				if oBotnetDomainsDnsSecurityCategories.LogLevel != nil {
 					nestedBotnetDomainsDnsSecurityCategories.LogLevel = oBotnetDomainsDnsSecurityCategories.LogLevel
 				}
 				if oBotnetDomainsDnsSecurityCategories.PacketCapture != nil {
 					nestedBotnetDomainsDnsSecurityCategories.PacketCapture = oBotnetDomainsDnsSecurityCategories.PacketCapture
+				}
+				if oBotnetDomainsDnsSecurityCategories.Name != "" {
+					nestedBotnetDomainsDnsSecurityCategories.Name = oBotnetDomainsDnsSecurityCategories.Name
+				}
+				if oBotnetDomainsDnsSecurityCategories.Action != nil {
+					nestedBotnetDomainsDnsSecurityCategories.Action = oBotnetDomainsDnsSecurityCategories.Action
 				}
 				nestedBotnetDomains.DnsSecurityCategories = append(nestedBotnetDomains.DnsSecurityCategories, nestedBotnetDomainsDnsSecurityCategories)
 			}
@@ -1059,50 +1103,6 @@ func specifyEntry_11_0_2(o *Entry) (any, error) {
 				nestedBotnetDomains.Sinkhole.Ipv6Address = o.BotnetDomains.Sinkhole.Ipv6Address
 			}
 		}
-		if o.BotnetDomains.ThreatException != nil {
-			nestedBotnetDomains.ThreatException = []BotnetDomainsThreatExceptionXml_11_0_2{}
-			for _, oBotnetDomainsThreatException := range o.BotnetDomains.ThreatException {
-				nestedBotnetDomainsThreatException := BotnetDomainsThreatExceptionXml_11_0_2{}
-				if _, ok := o.Misc["BotnetDomainsThreatException"]; ok {
-					nestedBotnetDomainsThreatException.Misc = o.Misc["BotnetDomainsThreatException"]
-				}
-				if oBotnetDomainsThreatException.Name != "" {
-					nestedBotnetDomainsThreatException.Name = oBotnetDomainsThreatException.Name
-				}
-				nestedBotnetDomains.ThreatException = append(nestedBotnetDomains.ThreatException, nestedBotnetDomainsThreatException)
-			}
-		}
-		if o.BotnetDomains.Whitelist != nil {
-			nestedBotnetDomains.Whitelist = []BotnetDomainsWhitelistXml_11_0_2{}
-			for _, oBotnetDomainsWhitelist := range o.BotnetDomains.Whitelist {
-				nestedBotnetDomainsWhitelist := BotnetDomainsWhitelistXml_11_0_2{}
-				if _, ok := o.Misc["BotnetDomainsWhitelist"]; ok {
-					nestedBotnetDomainsWhitelist.Misc = o.Misc["BotnetDomainsWhitelist"]
-				}
-				if oBotnetDomainsWhitelist.Description != nil {
-					nestedBotnetDomainsWhitelist.Description = oBotnetDomainsWhitelist.Description
-				}
-				if oBotnetDomainsWhitelist.Name != "" {
-					nestedBotnetDomainsWhitelist.Name = oBotnetDomainsWhitelist.Name
-				}
-				nestedBotnetDomains.Whitelist = append(nestedBotnetDomains.Whitelist, nestedBotnetDomainsWhitelist)
-			}
-		}
-		if o.BotnetDomains.RtypeAction != nil {
-			nestedBotnetDomains.RtypeAction = &BotnetDomainsRtypeActionXml_11_0_2{}
-			if _, ok := o.Misc["BotnetDomainsRtypeAction"]; ok {
-				nestedBotnetDomains.RtypeAction.Misc = o.Misc["BotnetDomainsRtypeAction"]
-			}
-			if o.BotnetDomains.RtypeAction.Any != nil {
-				nestedBotnetDomains.RtypeAction.Any = o.BotnetDomains.RtypeAction.Any
-			}
-			if o.BotnetDomains.RtypeAction.Https != nil {
-				nestedBotnetDomains.RtypeAction.Https = o.BotnetDomains.RtypeAction.Https
-			}
-			if o.BotnetDomains.RtypeAction.Svcb != nil {
-				nestedBotnetDomains.RtypeAction.Svcb = o.BotnetDomains.RtypeAction.Svcb
-			}
-		}
 	}
 	entry.BotnetDomains = nestedBotnetDomains
 
@@ -1138,22 +1138,10 @@ func specifyEntry_11_0_2(o *Entry) (any, error) {
 			if _, ok := o.Misc["Rules"]; ok {
 				nestedRules.Misc = o.Misc["Rules"]
 			}
-			if oRules.PacketCapture != nil {
-				nestedRules.PacketCapture = oRules.PacketCapture
-			}
-			if oRules.Severity != nil {
-				nestedRules.Severity = util.StrToMem(oRules.Severity)
-			}
 			if oRules.Action != nil {
 				nestedRules.Action = &RulesActionXml_11_0_2{}
 				if _, ok := o.Misc["RulesAction"]; ok {
 					nestedRules.Action.Misc = o.Misc["RulesAction"]
-				}
-				if oRules.Action.Alert != nil {
-					nestedRules.Action.Alert = &RulesActionAlertXml_11_0_2{}
-					if _, ok := o.Misc["RulesActionAlert"]; ok {
-						nestedRules.Action.Alert.Misc = o.Misc["RulesActionAlert"]
-					}
 				}
 				if oRules.Action.Drop != nil {
 					nestedRules.Action.Drop = &RulesActionDropXml_11_0_2{}
@@ -1203,6 +1191,12 @@ func specifyEntry_11_0_2(o *Entry) (any, error) {
 						nestedRules.Action.Allow.Misc = o.Misc["RulesActionAllow"]
 					}
 				}
+				if oRules.Action.Alert != nil {
+					nestedRules.Action.Alert = &RulesActionAlertXml_11_0_2{}
+					if _, ok := o.Misc["RulesActionAlert"]; ok {
+						nestedRules.Action.Alert.Misc = o.Misc["RulesActionAlert"]
+					}
+				}
 			}
 			if oRules.Name != "" {
 				nestedRules.Name = oRules.Name
@@ -1212,6 +1206,12 @@ func specifyEntry_11_0_2(o *Entry) (any, error) {
 			}
 			if oRules.Category != nil {
 				nestedRules.Category = oRules.Category
+			}
+			if oRules.PacketCapture != nil {
+				nestedRules.PacketCapture = oRules.PacketCapture
+			}
+			if oRules.Severity != nil {
+				nestedRules.Severity = util.StrToMem(oRules.Severity)
 			}
 			nestedRulesCol = append(nestedRulesCol, nestedRules)
 		}
@@ -1250,6 +1250,24 @@ func specifyEntry_11_0_2(o *Entry) (any, error) {
 				if _, ok := o.Misc["ThreatExceptionAction"]; ok {
 					nestedThreatException.Action.Misc = o.Misc["ThreatExceptionAction"]
 				}
+				if oThreatException.Action.ResetBoth != nil {
+					nestedThreatException.Action.ResetBoth = &ThreatExceptionActionResetBothXml_11_0_2{}
+					if _, ok := o.Misc["ThreatExceptionActionResetBoth"]; ok {
+						nestedThreatException.Action.ResetBoth.Misc = o.Misc["ThreatExceptionActionResetBoth"]
+					}
+				}
+				if oThreatException.Action.ResetClient != nil {
+					nestedThreatException.Action.ResetClient = &ThreatExceptionActionResetClientXml_11_0_2{}
+					if _, ok := o.Misc["ThreatExceptionActionResetClient"]; ok {
+						nestedThreatException.Action.ResetClient.Misc = o.Misc["ThreatExceptionActionResetClient"]
+					}
+				}
+				if oThreatException.Action.ResetServer != nil {
+					nestedThreatException.Action.ResetServer = &ThreatExceptionActionResetServerXml_11_0_2{}
+					if _, ok := o.Misc["ThreatExceptionActionResetServer"]; ok {
+						nestedThreatException.Action.ResetServer.Misc = o.Misc["ThreatExceptionActionResetServer"]
+					}
+				}
 				if oThreatException.Action.BlockIp != nil {
 					nestedThreatException.Action.BlockIp = &ThreatExceptionActionBlockIpXml_11_0_2{}
 					if _, ok := o.Misc["ThreatExceptionActionBlockIp"]; ok {
@@ -1286,24 +1304,6 @@ func specifyEntry_11_0_2(o *Entry) (any, error) {
 						nestedThreatException.Action.Drop.Misc = o.Misc["ThreatExceptionActionDrop"]
 					}
 				}
-				if oThreatException.Action.ResetBoth != nil {
-					nestedThreatException.Action.ResetBoth = &ThreatExceptionActionResetBothXml_11_0_2{}
-					if _, ok := o.Misc["ThreatExceptionActionResetBoth"]; ok {
-						nestedThreatException.Action.ResetBoth.Misc = o.Misc["ThreatExceptionActionResetBoth"]
-					}
-				}
-				if oThreatException.Action.ResetClient != nil {
-					nestedThreatException.Action.ResetClient = &ThreatExceptionActionResetClientXml_11_0_2{}
-					if _, ok := o.Misc["ThreatExceptionActionResetClient"]; ok {
-						nestedThreatException.Action.ResetClient.Misc = o.Misc["ThreatExceptionActionResetClient"]
-					}
-				}
-				if oThreatException.Action.ResetServer != nil {
-					nestedThreatException.Action.ResetServer = &ThreatExceptionActionResetServerXml_11_0_2{}
-					if _, ok := o.Misc["ThreatExceptionActionResetServer"]; ok {
-						nestedThreatException.Action.ResetServer.Misc = o.Misc["ThreatExceptionActionResetServer"]
-					}
-				}
 			}
 			nestedThreatExceptionCol = append(nestedThreatExceptionCol, nestedThreatException)
 		}
@@ -1327,15 +1327,34 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 			if o.BotnetDomains.Misc != nil {
 				entry.Misc["BotnetDomains"] = o.BotnetDomains.Misc
 			}
+			if o.BotnetDomains.DnsSecurityCategories != nil {
+				nestedBotnetDomains.DnsSecurityCategories = []BotnetDomainsDnsSecurityCategories{}
+				for _, oBotnetDomainsDnsSecurityCategories := range o.BotnetDomains.DnsSecurityCategories {
+					nestedBotnetDomainsDnsSecurityCategories := BotnetDomainsDnsSecurityCategories{}
+					if oBotnetDomainsDnsSecurityCategories.Misc != nil {
+						entry.Misc["BotnetDomainsDnsSecurityCategories"] = oBotnetDomainsDnsSecurityCategories.Misc
+					}
+					if oBotnetDomainsDnsSecurityCategories.Action != nil {
+						nestedBotnetDomainsDnsSecurityCategories.Action = oBotnetDomainsDnsSecurityCategories.Action
+					}
+					if oBotnetDomainsDnsSecurityCategories.LogLevel != nil {
+						nestedBotnetDomainsDnsSecurityCategories.LogLevel = oBotnetDomainsDnsSecurityCategories.LogLevel
+					}
+					if oBotnetDomainsDnsSecurityCategories.PacketCapture != nil {
+						nestedBotnetDomainsDnsSecurityCategories.PacketCapture = oBotnetDomainsDnsSecurityCategories.PacketCapture
+					}
+					if oBotnetDomainsDnsSecurityCategories.Name != "" {
+						nestedBotnetDomainsDnsSecurityCategories.Name = oBotnetDomainsDnsSecurityCategories.Name
+					}
+					nestedBotnetDomains.DnsSecurityCategories = append(nestedBotnetDomains.DnsSecurityCategories, nestedBotnetDomainsDnsSecurityCategories)
+				}
+			}
 			if o.BotnetDomains.Lists != nil {
 				nestedBotnetDomains.Lists = []BotnetDomainsLists{}
 				for _, oBotnetDomainsLists := range o.BotnetDomains.Lists {
 					nestedBotnetDomainsLists := BotnetDomainsLists{}
 					if oBotnetDomainsLists.Misc != nil {
 						entry.Misc["BotnetDomainsLists"] = oBotnetDomainsLists.Misc
-					}
-					if oBotnetDomainsLists.Name != "" {
-						nestedBotnetDomainsLists.Name = oBotnetDomainsLists.Name
 					}
 					if oBotnetDomainsLists.Action != nil {
 						nestedBotnetDomainsLists.Action = &BotnetDomainsListsAction{}
@@ -1369,6 +1388,9 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 					}
 					if oBotnetDomainsLists.PacketCapture != nil {
 						nestedBotnetDomainsLists.PacketCapture = oBotnetDomainsLists.PacketCapture
+					}
+					if oBotnetDomainsLists.Name != "" {
+						nestedBotnetDomainsLists.Name = oBotnetDomainsLists.Name
 					}
 					nestedBotnetDomains.Lists = append(nestedBotnetDomains.Lists, nestedBotnetDomainsLists)
 				}
@@ -1419,36 +1441,14 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				if o.BotnetDomains.RtypeAction.Misc != nil {
 					entry.Misc["BotnetDomainsRtypeAction"] = o.BotnetDomains.RtypeAction.Misc
 				}
-				if o.BotnetDomains.RtypeAction.Https != nil {
-					nestedBotnetDomains.RtypeAction.Https = o.BotnetDomains.RtypeAction.Https
-				}
 				if o.BotnetDomains.RtypeAction.Svcb != nil {
 					nestedBotnetDomains.RtypeAction.Svcb = o.BotnetDomains.RtypeAction.Svcb
 				}
 				if o.BotnetDomains.RtypeAction.Any != nil {
 					nestedBotnetDomains.RtypeAction.Any = o.BotnetDomains.RtypeAction.Any
 				}
-			}
-			if o.BotnetDomains.DnsSecurityCategories != nil {
-				nestedBotnetDomains.DnsSecurityCategories = []BotnetDomainsDnsSecurityCategories{}
-				for _, oBotnetDomainsDnsSecurityCategories := range o.BotnetDomains.DnsSecurityCategories {
-					nestedBotnetDomainsDnsSecurityCategories := BotnetDomainsDnsSecurityCategories{}
-					if oBotnetDomainsDnsSecurityCategories.Misc != nil {
-						entry.Misc["BotnetDomainsDnsSecurityCategories"] = oBotnetDomainsDnsSecurityCategories.Misc
-					}
-					if oBotnetDomainsDnsSecurityCategories.LogLevel != nil {
-						nestedBotnetDomainsDnsSecurityCategories.LogLevel = oBotnetDomainsDnsSecurityCategories.LogLevel
-					}
-					if oBotnetDomainsDnsSecurityCategories.PacketCapture != nil {
-						nestedBotnetDomainsDnsSecurityCategories.PacketCapture = oBotnetDomainsDnsSecurityCategories.PacketCapture
-					}
-					if oBotnetDomainsDnsSecurityCategories.Name != "" {
-						nestedBotnetDomainsDnsSecurityCategories.Name = oBotnetDomainsDnsSecurityCategories.Name
-					}
-					if oBotnetDomainsDnsSecurityCategories.Action != nil {
-						nestedBotnetDomainsDnsSecurityCategories.Action = oBotnetDomainsDnsSecurityCategories.Action
-					}
-					nestedBotnetDomains.DnsSecurityCategories = append(nestedBotnetDomains.DnsSecurityCategories, nestedBotnetDomainsDnsSecurityCategories)
+				if o.BotnetDomains.RtypeAction.Https != nil {
+					nestedBotnetDomains.RtypeAction.Https = o.BotnetDomains.RtypeAction.Https
 				}
 			}
 		}
@@ -1486,6 +1486,9 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				if oRules.Misc != nil {
 					entry.Misc["Rules"] = oRules.Misc
 				}
+				if oRules.ThreatName != nil {
+					nestedRules.ThreatName = oRules.ThreatName
+				}
 				if oRules.Category != nil {
 					nestedRules.Category = oRules.Category
 				}
@@ -1499,18 +1502,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 					nestedRules.Action = &RulesAction{}
 					if oRules.Action.Misc != nil {
 						entry.Misc["RulesAction"] = oRules.Action.Misc
-					}
-					if oRules.Action.Allow != nil {
-						nestedRules.Action.Allow = &RulesActionAllow{}
-						if oRules.Action.Allow.Misc != nil {
-							entry.Misc["RulesActionAllow"] = oRules.Action.Allow.Misc
-						}
-					}
-					if oRules.Action.Alert != nil {
-						nestedRules.Action.Alert = &RulesActionAlert{}
-						if oRules.Action.Alert.Misc != nil {
-							entry.Misc["RulesActionAlert"] = oRules.Action.Alert.Misc
-						}
 					}
 					if oRules.Action.Drop != nil {
 						nestedRules.Action.Drop = &RulesActionDrop{}
@@ -1554,12 +1545,21 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 							entry.Misc["RulesActionDefault"] = oRules.Action.Default.Misc
 						}
 					}
+					if oRules.Action.Allow != nil {
+						nestedRules.Action.Allow = &RulesActionAllow{}
+						if oRules.Action.Allow.Misc != nil {
+							entry.Misc["RulesActionAllow"] = oRules.Action.Allow.Misc
+						}
+					}
+					if oRules.Action.Alert != nil {
+						nestedRules.Action.Alert = &RulesActionAlert{}
+						if oRules.Action.Alert.Misc != nil {
+							entry.Misc["RulesActionAlert"] = oRules.Action.Alert.Misc
+						}
+					}
 				}
 				if oRules.Name != "" {
 					nestedRules.Name = oRules.Name
-				}
-				if oRules.ThreatName != nil {
-					nestedRules.ThreatName = oRules.ThreatName
 				}
 				nestedRulesCol = append(nestedRulesCol, nestedRules)
 			}
@@ -1574,10 +1574,19 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				if oThreatException.Misc != nil {
 					entry.Misc["ThreatException"] = oThreatException.Misc
 				}
+				if oThreatException.PacketCapture != nil {
+					nestedThreatException.PacketCapture = oThreatException.PacketCapture
+				}
 				if oThreatException.Action != nil {
 					nestedThreatException.Action = &ThreatExceptionAction{}
 					if oThreatException.Action.Misc != nil {
 						entry.Misc["ThreatExceptionAction"] = oThreatException.Action.Misc
+					}
+					if oThreatException.Action.ResetServer != nil {
+						nestedThreatException.Action.ResetServer = &ThreatExceptionActionResetServer{}
+						if oThreatException.Action.ResetServer.Misc != nil {
+							entry.Misc["ThreatExceptionActionResetServer"] = oThreatException.Action.ResetServer.Misc
+						}
 					}
 					if oThreatException.Action.BlockIp != nil {
 						nestedThreatException.Action.BlockIp = &ThreatExceptionActionBlockIp{}
@@ -1627,12 +1636,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 							entry.Misc["ThreatExceptionActionResetClient"] = oThreatException.Action.ResetClient.Misc
 						}
 					}
-					if oThreatException.Action.ResetServer != nil {
-						nestedThreatException.Action.ResetServer = &ThreatExceptionActionResetServer{}
-						if oThreatException.Action.ResetServer.Misc != nil {
-							entry.Misc["ThreatExceptionActionResetServer"] = oThreatException.Action.ResetServer.Misc
-						}
-					}
 				}
 				if oThreatException.ExemptIp != nil {
 					nestedThreatException.ExemptIp = []ThreatExceptionExemptIp{}
@@ -1649,9 +1652,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				}
 				if oThreatException.Name != "" {
 					nestedThreatException.Name = oThreatException.Name
-				}
-				if oThreatException.PacketCapture != nil {
-					nestedThreatException.PacketCapture = oThreatException.PacketCapture
 				}
 				nestedThreatExceptionCol = append(nestedThreatExceptionCol, nestedThreatException)
 			}
@@ -1712,18 +1712,6 @@ func (c *entryXmlContainer_11_0_2) Normalize() ([]*Entry, error) {
 						if oBotnetDomainsLists.Action.Misc != nil {
 							entry.Misc["BotnetDomainsListsAction"] = oBotnetDomainsLists.Action.Misc
 						}
-						if oBotnetDomainsLists.Action.Sinkhole != nil {
-							nestedBotnetDomainsLists.Action.Sinkhole = &BotnetDomainsListsActionSinkhole{}
-							if oBotnetDomainsLists.Action.Sinkhole.Misc != nil {
-								entry.Misc["BotnetDomainsListsActionSinkhole"] = oBotnetDomainsLists.Action.Sinkhole.Misc
-							}
-						}
-						if oBotnetDomainsLists.Action.Alert != nil {
-							nestedBotnetDomainsLists.Action.Alert = &BotnetDomainsListsActionAlert{}
-							if oBotnetDomainsLists.Action.Alert.Misc != nil {
-								entry.Misc["BotnetDomainsListsActionAlert"] = oBotnetDomainsLists.Action.Alert.Misc
-							}
-						}
 						if oBotnetDomainsLists.Action.Allow != nil {
 							nestedBotnetDomainsLists.Action.Allow = &BotnetDomainsListsActionAllow{}
 							if oBotnetDomainsLists.Action.Allow.Misc != nil {
@@ -1734,6 +1722,18 @@ func (c *entryXmlContainer_11_0_2) Normalize() ([]*Entry, error) {
 							nestedBotnetDomainsLists.Action.Block = &BotnetDomainsListsActionBlock{}
 							if oBotnetDomainsLists.Action.Block.Misc != nil {
 								entry.Misc["BotnetDomainsListsActionBlock"] = oBotnetDomainsLists.Action.Block.Misc
+							}
+						}
+						if oBotnetDomainsLists.Action.Sinkhole != nil {
+							nestedBotnetDomainsLists.Action.Sinkhole = &BotnetDomainsListsActionSinkhole{}
+							if oBotnetDomainsLists.Action.Sinkhole.Misc != nil {
+								entry.Misc["BotnetDomainsListsActionSinkhole"] = oBotnetDomainsLists.Action.Sinkhole.Misc
+							}
+						}
+						if oBotnetDomainsLists.Action.Alert != nil {
+							nestedBotnetDomainsLists.Action.Alert = &BotnetDomainsListsActionAlert{}
+							if oBotnetDomainsLists.Action.Alert.Misc != nil {
+								entry.Misc["BotnetDomainsListsActionAlert"] = oBotnetDomainsLists.Action.Alert.Misc
 							}
 						}
 					}
@@ -1792,14 +1792,14 @@ func (c *entryXmlContainer_11_0_2) Normalize() ([]*Entry, error) {
 				if o.BotnetDomains.RtypeAction.Misc != nil {
 					entry.Misc["BotnetDomainsRtypeAction"] = o.BotnetDomains.RtypeAction.Misc
 				}
+				if o.BotnetDomains.RtypeAction.Any != nil {
+					nestedBotnetDomains.RtypeAction.Any = o.BotnetDomains.RtypeAction.Any
+				}
 				if o.BotnetDomains.RtypeAction.Https != nil {
 					nestedBotnetDomains.RtypeAction.Https = o.BotnetDomains.RtypeAction.Https
 				}
 				if o.BotnetDomains.RtypeAction.Svcb != nil {
 					nestedBotnetDomains.RtypeAction.Svcb = o.BotnetDomains.RtypeAction.Svcb
-				}
-				if o.BotnetDomains.RtypeAction.Any != nil {
-					nestedBotnetDomains.RtypeAction.Any = o.BotnetDomains.RtypeAction.Any
 				}
 			}
 		}
@@ -1818,11 +1818,11 @@ func (c *entryXmlContainer_11_0_2) Normalize() ([]*Entry, error) {
 				if oMicaEngineSpywareEnabled.Misc != nil {
 					entry.Misc["MicaEngineSpywareEnabled"] = oMicaEngineSpywareEnabled.Misc
 				}
-				if oMicaEngineSpywareEnabled.Name != "" {
-					nestedMicaEngineSpywareEnabled.Name = oMicaEngineSpywareEnabled.Name
-				}
 				if oMicaEngineSpywareEnabled.InlinePolicyAction != nil {
 					nestedMicaEngineSpywareEnabled.InlinePolicyAction = oMicaEngineSpywareEnabled.InlinePolicyAction
+				}
+				if oMicaEngineSpywareEnabled.Name != "" {
+					nestedMicaEngineSpywareEnabled.Name = oMicaEngineSpywareEnabled.Name
 				}
 				nestedMicaEngineSpywareEnabledCol = append(nestedMicaEngineSpywareEnabledCol, nestedMicaEngineSpywareEnabled)
 			}
@@ -1837,12 +1837,6 @@ func (c *entryXmlContainer_11_0_2) Normalize() ([]*Entry, error) {
 				if oRules.Misc != nil {
 					entry.Misc["Rules"] = oRules.Misc
 				}
-				if oRules.ThreatName != nil {
-					nestedRules.ThreatName = oRules.ThreatName
-				}
-				if oRules.Category != nil {
-					nestedRules.Category = oRules.Category
-				}
 				if oRules.PacketCapture != nil {
 					nestedRules.PacketCapture = oRules.PacketCapture
 				}
@@ -1853,18 +1847,6 @@ func (c *entryXmlContainer_11_0_2) Normalize() ([]*Entry, error) {
 					nestedRules.Action = &RulesAction{}
 					if oRules.Action.Misc != nil {
 						entry.Misc["RulesAction"] = oRules.Action.Misc
-					}
-					if oRules.Action.Default != nil {
-						nestedRules.Action.Default = &RulesActionDefault{}
-						if oRules.Action.Default.Misc != nil {
-							entry.Misc["RulesActionDefault"] = oRules.Action.Default.Misc
-						}
-					}
-					if oRules.Action.Allow != nil {
-						nestedRules.Action.Allow = &RulesActionAllow{}
-						if oRules.Action.Allow.Misc != nil {
-							entry.Misc["RulesActionAllow"] = oRules.Action.Allow.Misc
-						}
 					}
 					if oRules.Action.Alert != nil {
 						nestedRules.Action.Alert = &RulesActionAlert{}
@@ -1901,16 +1883,34 @@ func (c *entryXmlContainer_11_0_2) Normalize() ([]*Entry, error) {
 						if oRules.Action.BlockIp.Misc != nil {
 							entry.Misc["RulesActionBlockIp"] = oRules.Action.BlockIp.Misc
 						}
+						if oRules.Action.BlockIp.TrackBy != nil {
+							nestedRules.Action.BlockIp.TrackBy = oRules.Action.BlockIp.TrackBy
+						}
 						if oRules.Action.BlockIp.Duration != nil {
 							nestedRules.Action.BlockIp.Duration = oRules.Action.BlockIp.Duration
 						}
-						if oRules.Action.BlockIp.TrackBy != nil {
-							nestedRules.Action.BlockIp.TrackBy = oRules.Action.BlockIp.TrackBy
+					}
+					if oRules.Action.Default != nil {
+						nestedRules.Action.Default = &RulesActionDefault{}
+						if oRules.Action.Default.Misc != nil {
+							entry.Misc["RulesActionDefault"] = oRules.Action.Default.Misc
+						}
+					}
+					if oRules.Action.Allow != nil {
+						nestedRules.Action.Allow = &RulesActionAllow{}
+						if oRules.Action.Allow.Misc != nil {
+							entry.Misc["RulesActionAllow"] = oRules.Action.Allow.Misc
 						}
 					}
 				}
 				if oRules.Name != "" {
 					nestedRules.Name = oRules.Name
+				}
+				if oRules.ThreatName != nil {
+					nestedRules.ThreatName = oRules.ThreatName
+				}
+				if oRules.Category != nil {
+					nestedRules.Category = oRules.Category
 				}
 				nestedRulesCol = append(nestedRulesCol, nestedRules)
 			}
@@ -1925,47 +1925,10 @@ func (c *entryXmlContainer_11_0_2) Normalize() ([]*Entry, error) {
 				if oThreatException.Misc != nil {
 					entry.Misc["ThreatException"] = oThreatException.Misc
 				}
-				if oThreatException.ExemptIp != nil {
-					nestedThreatException.ExemptIp = []ThreatExceptionExemptIp{}
-					for _, oThreatExceptionExemptIp := range oThreatException.ExemptIp {
-						nestedThreatExceptionExemptIp := ThreatExceptionExemptIp{}
-						if oThreatExceptionExemptIp.Misc != nil {
-							entry.Misc["ThreatExceptionExemptIp"] = oThreatExceptionExemptIp.Misc
-						}
-						if oThreatExceptionExemptIp.Name != "" {
-							nestedThreatExceptionExemptIp.Name = oThreatExceptionExemptIp.Name
-						}
-						nestedThreatException.ExemptIp = append(nestedThreatException.ExemptIp, nestedThreatExceptionExemptIp)
-					}
-				}
-				if oThreatException.Name != "" {
-					nestedThreatException.Name = oThreatException.Name
-				}
-				if oThreatException.PacketCapture != nil {
-					nestedThreatException.PacketCapture = oThreatException.PacketCapture
-				}
 				if oThreatException.Action != nil {
 					nestedThreatException.Action = &ThreatExceptionAction{}
 					if oThreatException.Action.Misc != nil {
 						entry.Misc["ThreatExceptionAction"] = oThreatException.Action.Misc
-					}
-					if oThreatException.Action.Drop != nil {
-						nestedThreatException.Action.Drop = &ThreatExceptionActionDrop{}
-						if oThreatException.Action.Drop.Misc != nil {
-							entry.Misc["ThreatExceptionActionDrop"] = oThreatException.Action.Drop.Misc
-						}
-					}
-					if oThreatException.Action.ResetBoth != nil {
-						nestedThreatException.Action.ResetBoth = &ThreatExceptionActionResetBoth{}
-						if oThreatException.Action.ResetBoth.Misc != nil {
-							entry.Misc["ThreatExceptionActionResetBoth"] = oThreatException.Action.ResetBoth.Misc
-						}
-					}
-					if oThreatException.Action.ResetClient != nil {
-						nestedThreatException.Action.ResetClient = &ThreatExceptionActionResetClient{}
-						if oThreatException.Action.ResetClient.Misc != nil {
-							entry.Misc["ThreatExceptionActionResetClient"] = oThreatException.Action.ResetClient.Misc
-						}
 					}
 					if oThreatException.Action.ResetServer != nil {
 						nestedThreatException.Action.ResetServer = &ThreatExceptionActionResetServer{}
@@ -2003,6 +1966,43 @@ func (c *entryXmlContainer_11_0_2) Normalize() ([]*Entry, error) {
 							entry.Misc["ThreatExceptionActionAlert"] = oThreatException.Action.Alert.Misc
 						}
 					}
+					if oThreatException.Action.Drop != nil {
+						nestedThreatException.Action.Drop = &ThreatExceptionActionDrop{}
+						if oThreatException.Action.Drop.Misc != nil {
+							entry.Misc["ThreatExceptionActionDrop"] = oThreatException.Action.Drop.Misc
+						}
+					}
+					if oThreatException.Action.ResetBoth != nil {
+						nestedThreatException.Action.ResetBoth = &ThreatExceptionActionResetBoth{}
+						if oThreatException.Action.ResetBoth.Misc != nil {
+							entry.Misc["ThreatExceptionActionResetBoth"] = oThreatException.Action.ResetBoth.Misc
+						}
+					}
+					if oThreatException.Action.ResetClient != nil {
+						nestedThreatException.Action.ResetClient = &ThreatExceptionActionResetClient{}
+						if oThreatException.Action.ResetClient.Misc != nil {
+							entry.Misc["ThreatExceptionActionResetClient"] = oThreatException.Action.ResetClient.Misc
+						}
+					}
+				}
+				if oThreatException.ExemptIp != nil {
+					nestedThreatException.ExemptIp = []ThreatExceptionExemptIp{}
+					for _, oThreatExceptionExemptIp := range oThreatException.ExemptIp {
+						nestedThreatExceptionExemptIp := ThreatExceptionExemptIp{}
+						if oThreatExceptionExemptIp.Misc != nil {
+							entry.Misc["ThreatExceptionExemptIp"] = oThreatExceptionExemptIp.Misc
+						}
+						if oThreatExceptionExemptIp.Name != "" {
+							nestedThreatExceptionExemptIp.Name = oThreatExceptionExemptIp.Name
+						}
+						nestedThreatException.ExemptIp = append(nestedThreatException.ExemptIp, nestedThreatExceptionExemptIp)
+					}
+				}
+				if oThreatException.Name != "" {
+					nestedThreatException.Name = oThreatException.Name
+				}
+				if oThreatException.PacketCapture != nil {
+					nestedThreatException.PacketCapture = oThreatException.PacketCapture
 				}
 				nestedThreatExceptionCol = append(nestedThreatExceptionCol, nestedThreatException)
 			}
@@ -2056,6 +2056,347 @@ func SpecMatches(a, b *Entry) bool {
 	return true
 }
 
+func matchMicaEngineSpywareEnabled(a []MicaEngineSpywareEnabled, b []MicaEngineSpywareEnabled) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	for _, a := range a {
+		for _, b := range b {
+			if !util.StringsEqual(a.Name, b.Name) {
+				return false
+			}
+			if !util.StringsMatch(a.InlinePolicyAction, b.InlinePolicyAction) {
+				return false
+			}
+		}
+	}
+	return true
+}
+func matchRulesActionResetClient(a *RulesActionResetClient, b *RulesActionResetClient) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	return true
+}
+func matchRulesActionResetServer(a *RulesActionResetServer, b *RulesActionResetServer) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	return true
+}
+func matchRulesActionResetBoth(a *RulesActionResetBoth, b *RulesActionResetBoth) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	return true
+}
+func matchRulesActionBlockIp(a *RulesActionBlockIp, b *RulesActionBlockIp) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !util.StringsMatch(a.TrackBy, b.TrackBy) {
+		return false
+	}
+	if !util.Ints64Match(a.Duration, b.Duration) {
+		return false
+	}
+	return true
+}
+func matchRulesActionDefault(a *RulesActionDefault, b *RulesActionDefault) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	return true
+}
+func matchRulesActionAllow(a *RulesActionAllow, b *RulesActionAllow) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	return true
+}
+func matchRulesActionAlert(a *RulesActionAlert, b *RulesActionAlert) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	return true
+}
+func matchRulesActionDrop(a *RulesActionDrop, b *RulesActionDrop) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	return true
+}
+func matchRulesAction(a *RulesAction, b *RulesAction) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !matchRulesActionAlert(a.Alert, b.Alert) {
+		return false
+	}
+	if !matchRulesActionDrop(a.Drop, b.Drop) {
+		return false
+	}
+	if !matchRulesActionResetClient(a.ResetClient, b.ResetClient) {
+		return false
+	}
+	if !matchRulesActionResetServer(a.ResetServer, b.ResetServer) {
+		return false
+	}
+	if !matchRulesActionResetBoth(a.ResetBoth, b.ResetBoth) {
+		return false
+	}
+	if !matchRulesActionBlockIp(a.BlockIp, b.BlockIp) {
+		return false
+	}
+	if !matchRulesActionDefault(a.Default, b.Default) {
+		return false
+	}
+	if !matchRulesActionAllow(a.Allow, b.Allow) {
+		return false
+	}
+	return true
+}
+func matchRules(a []Rules, b []Rules) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	for _, a := range a {
+		for _, b := range b {
+			if !util.StringsMatch(a.ThreatName, b.ThreatName) {
+				return false
+			}
+			if !util.StringsMatch(a.Category, b.Category) {
+				return false
+			}
+			if !util.StringsMatch(a.PacketCapture, b.PacketCapture) {
+				return false
+			}
+			if !util.OrderedListsMatch(a.Severity, b.Severity) {
+				return false
+			}
+			if !matchRulesAction(a.Action, b.Action) {
+				return false
+			}
+			if !util.StringsEqual(a.Name, b.Name) {
+				return false
+			}
+		}
+	}
+	return true
+}
+func matchThreatExceptionActionDrop(a *ThreatExceptionActionDrop, b *ThreatExceptionActionDrop) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	return true
+}
+func matchThreatExceptionActionResetBoth(a *ThreatExceptionActionResetBoth, b *ThreatExceptionActionResetBoth) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	return true
+}
+func matchThreatExceptionActionResetClient(a *ThreatExceptionActionResetClient, b *ThreatExceptionActionResetClient) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	return true
+}
+func matchThreatExceptionActionResetServer(a *ThreatExceptionActionResetServer, b *ThreatExceptionActionResetServer) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	return true
+}
+func matchThreatExceptionActionBlockIp(a *ThreatExceptionActionBlockIp, b *ThreatExceptionActionBlockIp) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !util.StringsMatch(a.TrackBy, b.TrackBy) {
+		return false
+	}
+	if !util.Ints64Match(a.Duration, b.Duration) {
+		return false
+	}
+	return true
+}
+func matchThreatExceptionActionDefault(a *ThreatExceptionActionDefault, b *ThreatExceptionActionDefault) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	return true
+}
+func matchThreatExceptionActionAllow(a *ThreatExceptionActionAllow, b *ThreatExceptionActionAllow) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	return true
+}
+func matchThreatExceptionActionAlert(a *ThreatExceptionActionAlert, b *ThreatExceptionActionAlert) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	return true
+}
+func matchThreatExceptionAction(a *ThreatExceptionAction, b *ThreatExceptionAction) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !matchThreatExceptionActionDefault(a.Default, b.Default) {
+		return false
+	}
+	if !matchThreatExceptionActionAllow(a.Allow, b.Allow) {
+		return false
+	}
+	if !matchThreatExceptionActionAlert(a.Alert, b.Alert) {
+		return false
+	}
+	if !matchThreatExceptionActionDrop(a.Drop, b.Drop) {
+		return false
+	}
+	if !matchThreatExceptionActionResetBoth(a.ResetBoth, b.ResetBoth) {
+		return false
+	}
+	if !matchThreatExceptionActionResetClient(a.ResetClient, b.ResetClient) {
+		return false
+	}
+	if !matchThreatExceptionActionResetServer(a.ResetServer, b.ResetServer) {
+		return false
+	}
+	if !matchThreatExceptionActionBlockIp(a.BlockIp, b.BlockIp) {
+		return false
+	}
+	return true
+}
+func matchThreatExceptionExemptIp(a []ThreatExceptionExemptIp, b []ThreatExceptionExemptIp) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	for _, a := range a {
+		for _, b := range b {
+			if !util.StringsEqual(a.Name, b.Name) {
+				return false
+			}
+		}
+	}
+	return true
+}
+func matchThreatException(a []ThreatException, b []ThreatException) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	for _, a := range a {
+		for _, b := range b {
+			if !util.StringsEqual(a.Name, b.Name) {
+				return false
+			}
+			if !util.StringsMatch(a.PacketCapture, b.PacketCapture) {
+				return false
+			}
+			if !matchThreatExceptionAction(a.Action, b.Action) {
+				return false
+			}
+			if !matchThreatExceptionExemptIp(a.ExemptIp, b.ExemptIp) {
+				return false
+			}
+		}
+	}
+	return true
+}
+func matchBotnetDomainsThreatException(a []BotnetDomainsThreatException, b []BotnetDomainsThreatException) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	for _, a := range a {
+		for _, b := range b {
+			if !util.StringsEqual(a.Name, b.Name) {
+				return false
+			}
+		}
+	}
+	return true
+}
+func matchBotnetDomainsWhitelist(a []BotnetDomainsWhitelist, b []BotnetDomainsWhitelist) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	for _, a := range a {
+		for _, b := range b {
+			if !util.StringsMatch(a.Description, b.Description) {
+				return false
+			}
+			if !util.StringsEqual(a.Name, b.Name) {
+				return false
+			}
+		}
+	}
+	return true
+}
+func matchBotnetDomainsRtypeAction(a *BotnetDomainsRtypeAction, b *BotnetDomainsRtypeAction) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !util.StringsMatch(a.Any, b.Any) {
+		return false
+	}
+	if !util.StringsMatch(a.Https, b.Https) {
+		return false
+	}
+	if !util.StringsMatch(a.Svcb, b.Svcb) {
+		return false
+	}
+	return true
+}
 func matchBotnetDomainsDnsSecurityCategories(a []BotnetDomainsDnsSecurityCategories, b []BotnetDomainsDnsSecurityCategories) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
@@ -2118,9 +2459,6 @@ func matchBotnetDomainsListsAction(a *BotnetDomainsListsAction, b *BotnetDomains
 	} else if a == nil && b == nil {
 		return true
 	}
-	if !matchBotnetDomainsListsActionSinkhole(a.Sinkhole, b.Sinkhole) {
-		return false
-	}
 	if !matchBotnetDomainsListsActionAlert(a.Alert, b.Alert) {
 		return false
 	}
@@ -2128,6 +2466,9 @@ func matchBotnetDomainsListsAction(a *BotnetDomainsListsAction, b *BotnetDomains
 		return false
 	}
 	if !matchBotnetDomainsListsActionBlock(a.Block, b.Block) {
+		return false
+	}
+	if !matchBotnetDomainsListsActionSinkhole(a.Sinkhole, b.Sinkhole) {
 		return false
 	}
 	return true
@@ -2167,70 +2508,11 @@ func matchBotnetDomainsSinkhole(a *BotnetDomainsSinkhole, b *BotnetDomainsSinkho
 	}
 	return true
 }
-func matchBotnetDomainsThreatException(a []BotnetDomainsThreatException, b []BotnetDomainsThreatException) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	for _, a := range a {
-		for _, b := range b {
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-		}
-	}
-	return true
-}
-func matchBotnetDomainsWhitelist(a []BotnetDomainsWhitelist, b []BotnetDomainsWhitelist) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	for _, a := range a {
-		for _, b := range b {
-			if !util.StringsMatch(a.Description, b.Description) {
-				return false
-			}
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-		}
-	}
-	return true
-}
-func matchBotnetDomainsRtypeAction(a *BotnetDomainsRtypeAction, b *BotnetDomainsRtypeAction) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !util.StringsMatch(a.Any, b.Any) {
-		return false
-	}
-	if !util.StringsMatch(a.Https, b.Https) {
-		return false
-	}
-	if !util.StringsMatch(a.Svcb, b.Svcb) {
-		return false
-	}
-	return true
-}
 func matchBotnetDomains(a *BotnetDomains, b *BotnetDomains) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
 	} else if a == nil && b == nil {
 		return true
-	}
-	if !matchBotnetDomainsSinkhole(a.Sinkhole, b.Sinkhole) {
-		return false
-	}
-	if !matchBotnetDomainsThreatException(a.ThreatException, b.ThreatException) {
-		return false
-	}
-	if !matchBotnetDomainsWhitelist(a.Whitelist, b.Whitelist) {
-		return false
 	}
 	if !matchBotnetDomainsRtypeAction(a.RtypeAction, b.RtypeAction) {
 		return false
@@ -2241,296 +2523,14 @@ func matchBotnetDomains(a *BotnetDomains, b *BotnetDomains) bool {
 	if !matchBotnetDomainsLists(a.Lists, b.Lists) {
 		return false
 	}
-	return true
-}
-func matchThreatExceptionExemptIp(a []ThreatExceptionExemptIp, b []ThreatExceptionExemptIp) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	for _, a := range a {
-		for _, b := range b {
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-		}
-	}
-	return true
-}
-func matchThreatExceptionActionDefault(a *ThreatExceptionActionDefault, b *ThreatExceptionActionDefault) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	return true
-}
-func matchThreatExceptionActionAllow(a *ThreatExceptionActionAllow, b *ThreatExceptionActionAllow) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	return true
-}
-func matchThreatExceptionActionAlert(a *ThreatExceptionActionAlert, b *ThreatExceptionActionAlert) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	return true
-}
-func matchThreatExceptionActionDrop(a *ThreatExceptionActionDrop, b *ThreatExceptionActionDrop) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	return true
-}
-func matchThreatExceptionActionResetBoth(a *ThreatExceptionActionResetBoth, b *ThreatExceptionActionResetBoth) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	return true
-}
-func matchThreatExceptionActionResetClient(a *ThreatExceptionActionResetClient, b *ThreatExceptionActionResetClient) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	return true
-}
-func matchThreatExceptionActionResetServer(a *ThreatExceptionActionResetServer, b *ThreatExceptionActionResetServer) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	return true
-}
-func matchThreatExceptionActionBlockIp(a *ThreatExceptionActionBlockIp, b *ThreatExceptionActionBlockIp) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !util.StringsMatch(a.TrackBy, b.TrackBy) {
+	if !matchBotnetDomainsSinkhole(a.Sinkhole, b.Sinkhole) {
 		return false
 	}
-	if !util.Ints64Match(a.Duration, b.Duration) {
+	if !matchBotnetDomainsThreatException(a.ThreatException, b.ThreatException) {
 		return false
 	}
-	return true
-}
-func matchThreatExceptionAction(a *ThreatExceptionAction, b *ThreatExceptionAction) bool {
-	if a == nil && b != nil || a != nil && b == nil {
+	if !matchBotnetDomainsWhitelist(a.Whitelist, b.Whitelist) {
 		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !matchThreatExceptionActionDefault(a.Default, b.Default) {
-		return false
-	}
-	if !matchThreatExceptionActionAllow(a.Allow, b.Allow) {
-		return false
-	}
-	if !matchThreatExceptionActionAlert(a.Alert, b.Alert) {
-		return false
-	}
-	if !matchThreatExceptionActionDrop(a.Drop, b.Drop) {
-		return false
-	}
-	if !matchThreatExceptionActionResetBoth(a.ResetBoth, b.ResetBoth) {
-		return false
-	}
-	if !matchThreatExceptionActionResetClient(a.ResetClient, b.ResetClient) {
-		return false
-	}
-	if !matchThreatExceptionActionResetServer(a.ResetServer, b.ResetServer) {
-		return false
-	}
-	if !matchThreatExceptionActionBlockIp(a.BlockIp, b.BlockIp) {
-		return false
-	}
-	return true
-}
-func matchThreatException(a []ThreatException, b []ThreatException) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	for _, a := range a {
-		for _, b := range b {
-			if !util.StringsMatch(a.PacketCapture, b.PacketCapture) {
-				return false
-			}
-			if !matchThreatExceptionAction(a.Action, b.Action) {
-				return false
-			}
-			if !matchThreatExceptionExemptIp(a.ExemptIp, b.ExemptIp) {
-				return false
-			}
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-		}
-	}
-	return true
-}
-func matchMicaEngineSpywareEnabled(a []MicaEngineSpywareEnabled, b []MicaEngineSpywareEnabled) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	for _, a := range a {
-		for _, b := range b {
-			if !util.StringsMatch(a.InlinePolicyAction, b.InlinePolicyAction) {
-				return false
-			}
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-		}
-	}
-	return true
-}
-func matchRulesActionBlockIp(a *RulesActionBlockIp, b *RulesActionBlockIp) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !util.StringsMatch(a.TrackBy, b.TrackBy) {
-		return false
-	}
-	if !util.Ints64Match(a.Duration, b.Duration) {
-		return false
-	}
-	return true
-}
-func matchRulesActionDefault(a *RulesActionDefault, b *RulesActionDefault) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	return true
-}
-func matchRulesActionAllow(a *RulesActionAllow, b *RulesActionAllow) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	return true
-}
-func matchRulesActionAlert(a *RulesActionAlert, b *RulesActionAlert) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	return true
-}
-func matchRulesActionDrop(a *RulesActionDrop, b *RulesActionDrop) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	return true
-}
-func matchRulesActionResetClient(a *RulesActionResetClient, b *RulesActionResetClient) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	return true
-}
-func matchRulesActionResetServer(a *RulesActionResetServer, b *RulesActionResetServer) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	return true
-}
-func matchRulesActionResetBoth(a *RulesActionResetBoth, b *RulesActionResetBoth) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	return true
-}
-func matchRulesAction(a *RulesAction, b *RulesAction) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !matchRulesActionDrop(a.Drop, b.Drop) {
-		return false
-	}
-	if !matchRulesActionResetClient(a.ResetClient, b.ResetClient) {
-		return false
-	}
-	if !matchRulesActionResetServer(a.ResetServer, b.ResetServer) {
-		return false
-	}
-	if !matchRulesActionResetBoth(a.ResetBoth, b.ResetBoth) {
-		return false
-	}
-	if !matchRulesActionBlockIp(a.BlockIp, b.BlockIp) {
-		return false
-	}
-	if !matchRulesActionDefault(a.Default, b.Default) {
-		return false
-	}
-	if !matchRulesActionAllow(a.Allow, b.Allow) {
-		return false
-	}
-	if !matchRulesActionAlert(a.Alert, b.Alert) {
-		return false
-	}
-	return true
-}
-func matchRules(a []Rules, b []Rules) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	for _, a := range a {
-		for _, b := range b {
-			if !util.StringsMatch(a.Category, b.Category) {
-				return false
-			}
-			if !util.StringsMatch(a.PacketCapture, b.PacketCapture) {
-				return false
-			}
-			if !util.OrderedListsMatch(a.Severity, b.Severity) {
-				return false
-			}
-			if !matchRulesAction(a.Action, b.Action) {
-				return false
-			}
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-			if !util.StringsMatch(a.ThreatName, b.ThreatName) {
-				return false
-			}
-		}
 	}
 	return true
 }

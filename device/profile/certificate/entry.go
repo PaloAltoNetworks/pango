@@ -186,11 +186,11 @@ func specifyEntry(o *Entry) (any, error) {
 		if _, ok := o.Misc["UsernameField"]; ok {
 			nestedUsernameField.Misc = o.Misc["UsernameField"]
 		}
-		if o.UsernameField.SubjectAlt != nil {
-			nestedUsernameField.SubjectAlt = o.UsernameField.SubjectAlt
-		}
 		if o.UsernameField.Subject != nil {
 			nestedUsernameField.Subject = o.UsernameField.Subject
+		}
+		if o.UsernameField.SubjectAlt != nil {
+			nestedUsernameField.SubjectAlt = o.UsernameField.SubjectAlt
 		}
 	}
 	entry.UsernameField = nestedUsernameField
@@ -325,16 +325,16 @@ func matchCertificate(a []Certificate, b []Certificate) bool {
 	}
 	for _, a := range a {
 		for _, b := range b {
-			if !util.StringsMatch(a.TemplateName, b.TemplateName) {
-				return false
-			}
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
 			if !util.StringsMatch(a.DefaultOcspUrl, b.DefaultOcspUrl) {
 				return false
 			}
 			if !util.StringsMatch(a.OcspVerifyCertificate, b.OcspVerifyCertificate) {
+				return false
+			}
+			if !util.StringsMatch(a.TemplateName, b.TemplateName) {
+				return false
+			}
+			if !util.StringsEqual(a.Name, b.Name) {
 				return false
 			}
 		}

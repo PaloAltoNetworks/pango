@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{"template"}
+	Suffix = []string{}
 )
 
 type Entry struct {
@@ -289,10 +289,10 @@ func matchConfigDevicesVsys(a []ConfigDevicesVsys, b []ConfigDevicesVsys) bool {
 	}
 	for _, a := range a {
 		for _, b := range b {
-			if !util.StringsEqual(a.Name, b.Name) {
+			if !matchConfigDevicesVsysImport(a.Import, b.Import) {
 				return false
 			}
-			if !matchConfigDevicesVsysImport(a.Import, b.Import) {
+			if !util.StringsEqual(a.Name, b.Name) {
 				return false
 			}
 		}

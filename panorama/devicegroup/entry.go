@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{"device-group"}
+	Suffix = []string{}
 )
 
 type Entry struct {

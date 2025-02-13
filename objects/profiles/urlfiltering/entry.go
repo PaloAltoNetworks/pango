@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{"profiles", "url-filtering"}
+	Suffix = []string{}
 )
 
 type Entry struct {
@@ -261,9 +261,6 @@ func specifyEntry(o *Entry) (any, error) {
 		if _, ok := o.Misc["CredentialEnforcement"]; ok {
 			nestedCredentialEnforcement.Misc = o.Misc["CredentialEnforcement"]
 		}
-		if o.CredentialEnforcement.LogSeverity != nil {
-			nestedCredentialEnforcement.LogSeverity = o.CredentialEnforcement.LogSeverity
-		}
 		if o.CredentialEnforcement.Mode != nil {
 			nestedCredentialEnforcement.Mode = &CredentialEnforcementModeXml{}
 			if _, ok := o.Misc["CredentialEnforcementMode"]; ok {
@@ -303,6 +300,9 @@ func specifyEntry(o *Entry) (any, error) {
 		if o.CredentialEnforcement.Continue != nil {
 			nestedCredentialEnforcement.Continue = util.StrToMem(o.CredentialEnforcement.Continue)
 		}
+		if o.CredentialEnforcement.LogSeverity != nil {
+			nestedCredentialEnforcement.LogSeverity = o.CredentialEnforcement.LogSeverity
+		}
 	}
 	entry.CredentialEnforcement = nestedCredentialEnforcement
 
@@ -327,6 +327,12 @@ func specifyEntry(o *Entry) (any, error) {
 					if _, ok := o.Misc["HttpHeaderInsertionType"]; ok {
 						nestedHttpHeaderInsertionType.Misc = o.Misc["HttpHeaderInsertionType"]
 					}
+					if oHttpHeaderInsertionType.Domains != nil {
+						nestedHttpHeaderInsertionType.Domains = util.StrToMem(oHttpHeaderInsertionType.Domains)
+					}
+					if oHttpHeaderInsertionType.Name != "" {
+						nestedHttpHeaderInsertionType.Name = oHttpHeaderInsertionType.Name
+					}
 					if oHttpHeaderInsertionType.Headers != nil {
 						nestedHttpHeaderInsertionType.Headers = []HttpHeaderInsertionTypeHeadersXml{}
 						for _, oHttpHeaderInsertionTypeHeaders := range oHttpHeaderInsertionType.Headers {
@@ -348,12 +354,6 @@ func specifyEntry(o *Entry) (any, error) {
 							}
 							nestedHttpHeaderInsertionType.Headers = append(nestedHttpHeaderInsertionType.Headers, nestedHttpHeaderInsertionTypeHeaders)
 						}
-					}
-					if oHttpHeaderInsertionType.Domains != nil {
-						nestedHttpHeaderInsertionType.Domains = util.StrToMem(oHttpHeaderInsertionType.Domains)
-					}
-					if oHttpHeaderInsertionType.Name != "" {
-						nestedHttpHeaderInsertionType.Name = oHttpHeaderInsertionType.Name
 					}
 					nestedHttpHeaderInsertion.Type = append(nestedHttpHeaderInsertion.Type, nestedHttpHeaderInsertionType)
 				}
@@ -398,12 +398,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 			if o.CredentialEnforcement.Misc != nil {
 				entry.Misc["CredentialEnforcement"] = o.CredentialEnforcement.Misc
 			}
-			if o.CredentialEnforcement.Alert != nil {
-				nestedCredentialEnforcement.Alert = util.MemToStr(o.CredentialEnforcement.Alert)
-			}
-			if o.CredentialEnforcement.Allow != nil {
-				nestedCredentialEnforcement.Allow = util.MemToStr(o.CredentialEnforcement.Allow)
-			}
 			if o.CredentialEnforcement.Block != nil {
 				nestedCredentialEnforcement.Block = util.MemToStr(o.CredentialEnforcement.Block)
 			}
@@ -440,6 +434,12 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 					}
 				}
 			}
+			if o.CredentialEnforcement.Alert != nil {
+				nestedCredentialEnforcement.Alert = util.MemToStr(o.CredentialEnforcement.Alert)
+			}
+			if o.CredentialEnforcement.Allow != nil {
+				nestedCredentialEnforcement.Allow = util.MemToStr(o.CredentialEnforcement.Allow)
+			}
 		}
 		entry.CredentialEnforcement = nestedCredentialEnforcement
 
@@ -453,9 +453,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				nestedHttpHeaderInsertion := HttpHeaderInsertion{}
 				if oHttpHeaderInsertion.Misc != nil {
 					entry.Misc["HttpHeaderInsertion"] = oHttpHeaderInsertion.Misc
-				}
-				if oHttpHeaderInsertion.DisableOverride != nil {
-					nestedHttpHeaderInsertion.DisableOverride = oHttpHeaderInsertion.DisableOverride
 				}
 				if oHttpHeaderInsertion.Type != nil {
 					nestedHttpHeaderInsertion.Type = []HttpHeaderInsertionType{}
@@ -471,6 +468,9 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 								if oHttpHeaderInsertionTypeHeaders.Misc != nil {
 									entry.Misc["HttpHeaderInsertionTypeHeaders"] = oHttpHeaderInsertionTypeHeaders.Misc
 								}
+								if oHttpHeaderInsertionTypeHeaders.Name != "" {
+									nestedHttpHeaderInsertionTypeHeaders.Name = oHttpHeaderInsertionTypeHeaders.Name
+								}
 								if oHttpHeaderInsertionTypeHeaders.Header != nil {
 									nestedHttpHeaderInsertionTypeHeaders.Header = oHttpHeaderInsertionTypeHeaders.Header
 								}
@@ -479,9 +479,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 								}
 								if oHttpHeaderInsertionTypeHeaders.Log != nil {
 									nestedHttpHeaderInsertionTypeHeaders.Log = util.AsBool(oHttpHeaderInsertionTypeHeaders.Log, nil)
-								}
-								if oHttpHeaderInsertionTypeHeaders.Name != "" {
-									nestedHttpHeaderInsertionTypeHeaders.Name = oHttpHeaderInsertionTypeHeaders.Name
 								}
 								nestedHttpHeaderInsertionType.Headers = append(nestedHttpHeaderInsertionType.Headers, nestedHttpHeaderInsertionTypeHeaders)
 							}
@@ -497,6 +494,9 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				}
 				if oHttpHeaderInsertion.Name != "" {
 					nestedHttpHeaderInsertion.Name = oHttpHeaderInsertion.Name
+				}
+				if oHttpHeaderInsertion.DisableOverride != nil {
+					nestedHttpHeaderInsertion.DisableOverride = oHttpHeaderInsertion.DisableOverride
 				}
 				nestedHttpHeaderInsertionCol = append(nestedHttpHeaderInsertionCol, nestedHttpHeaderInsertion)
 			}
@@ -594,9 +594,6 @@ func matchHttpHeaderInsertionTypeHeaders(a []HttpHeaderInsertionTypeHeaders, b [
 	}
 	for _, a := range a {
 		for _, b := range b {
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
 			if !util.StringsMatch(a.Header, b.Header) {
 				return false
 			}
@@ -604,6 +601,9 @@ func matchHttpHeaderInsertionTypeHeaders(a []HttpHeaderInsertionTypeHeaders, b [
 				return false
 			}
 			if !util.BoolsMatch(a.Log, b.Log) {
+				return false
+			}
+			if !util.StringsEqual(a.Name, b.Name) {
 				return false
 			}
 		}
@@ -618,13 +618,13 @@ func matchHttpHeaderInsertionType(a []HttpHeaderInsertionType, b []HttpHeaderIns
 	}
 	for _, a := range a {
 		for _, b := range b {
+			if !util.StringsEqual(a.Name, b.Name) {
+				return false
+			}
 			if !matchHttpHeaderInsertionTypeHeaders(a.Headers, b.Headers) {
 				return false
 			}
 			if !util.OrderedListsMatch(a.Domains, b.Domains) {
-				return false
-			}
-			if !util.StringsEqual(a.Name, b.Name) {
 				return false
 			}
 		}
@@ -639,24 +639,16 @@ func matchHttpHeaderInsertion(a []HttpHeaderInsertion, b []HttpHeaderInsertion) 
 	}
 	for _, a := range a {
 		for _, b := range b {
+			if !util.StringsEqual(a.Name, b.Name) {
+				return false
+			}
 			if !util.StringsMatch(a.DisableOverride, b.DisableOverride) {
 				return false
 			}
 			if !matchHttpHeaderInsertionType(a.Type, b.Type) {
 				return false
 			}
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
 		}
-	}
-	return true
-}
-func matchCredentialEnforcementModeDomainCredentials(a *CredentialEnforcementModeDomainCredentials, b *CredentialEnforcementModeDomainCredentials) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
 	}
 	return true
 }
@@ -669,6 +661,14 @@ func matchCredentialEnforcementModeIpUser(a *CredentialEnforcementModeIpUser, b 
 	return true
 }
 func matchCredentialEnforcementModeDisabled(a *CredentialEnforcementModeDisabled, b *CredentialEnforcementModeDisabled) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	return true
+}
+func matchCredentialEnforcementModeDomainCredentials(a *CredentialEnforcementModeDomainCredentials, b *CredentialEnforcementModeDomainCredentials) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
 	} else if a == nil && b == nil {
@@ -702,6 +702,9 @@ func matchCredentialEnforcement(a *CredentialEnforcement, b *CredentialEnforceme
 	} else if a == nil && b == nil {
 		return true
 	}
+	if !matchCredentialEnforcementMode(a.Mode, b.Mode) {
+		return false
+	}
 	if !util.OrderedListsMatch(a.Alert, b.Alert) {
 		return false
 	}
@@ -715,9 +718,6 @@ func matchCredentialEnforcement(a *CredentialEnforcement, b *CredentialEnforceme
 		return false
 	}
 	if !util.StringsMatch(a.LogSeverity, b.LogSeverity) {
-		return false
-	}
-	if !matchCredentialEnforcementMode(a.Mode, b.Mode) {
 		return false
 	}
 	return true
