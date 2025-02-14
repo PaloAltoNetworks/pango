@@ -96,9 +96,6 @@ func specifyEntry(o *Entry) (any, error) {
 			if _, ok := o.Misc["Rules"]; ok {
 				nestedRules.Misc = o.Misc["Rules"]
 			}
-			if oRules.Name != "" {
-				nestedRules.Name = oRules.Name
-			}
 			if oRules.Application != nil {
 				nestedRules.Application = util.StrToMem(oRules.Application)
 			}
@@ -110,6 +107,9 @@ func specifyEntry(o *Entry) (any, error) {
 			}
 			if oRules.Action != nil {
 				nestedRules.Action = oRules.Action
+			}
+			if oRules.Name != "" {
+				nestedRules.Name = oRules.Name
 			}
 			nestedRulesCol = append(nestedRulesCol, nestedRules)
 		}
@@ -138,6 +138,12 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				if oRules.Misc != nil {
 					entry.Misc["Rules"] = oRules.Misc
 				}
+				if oRules.Action != nil {
+					nestedRules.Action = oRules.Action
+				}
+				if oRules.Name != "" {
+					nestedRules.Name = oRules.Name
+				}
 				if oRules.Application != nil {
 					nestedRules.Application = util.MemToStr(oRules.Application)
 				}
@@ -146,12 +152,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				}
 				if oRules.Direction != nil {
 					nestedRules.Direction = oRules.Direction
-				}
-				if oRules.Action != nil {
-					nestedRules.Action = oRules.Action
-				}
-				if oRules.Name != "" {
-					nestedRules.Name = oRules.Name
 				}
 				nestedRulesCol = append(nestedRulesCol, nestedRules)
 			}
@@ -195,6 +195,9 @@ func matchRules(a []Rules, b []Rules) bool {
 	}
 	for _, a := range a {
 		for _, b := range b {
+			if !util.OrderedListsMatch(a.Application, b.Application) {
+				return false
+			}
 			if !util.OrderedListsMatch(a.FileType, b.FileType) {
 				return false
 			}
@@ -205,9 +208,6 @@ func matchRules(a []Rules, b []Rules) bool {
 				return false
 			}
 			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-			if !util.OrderedListsMatch(a.Application, b.Application) {
 				return false
 			}
 		}

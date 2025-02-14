@@ -178,11 +178,11 @@ func specifyEntry(o *Entry) (any, error) {
 			if _, ok := o.Misc["Application"]; ok {
 				nestedApplication.Misc = o.Misc["Application"]
 			}
-			if oApplication.Name != "" {
-				nestedApplication.Name = oApplication.Name
-			}
 			if oApplication.Action != nil {
 				nestedApplication.Action = oApplication.Action
+			}
+			if oApplication.Name != "" {
+				nestedApplication.Name = oApplication.Name
 			}
 			nestedApplicationCol = append(nestedApplicationCol, nestedApplication)
 		}
@@ -224,11 +224,11 @@ func specifyEntry(o *Entry) (any, error) {
 			if _, ok := o.Misc["MlavEngineFilebasedEnabled"]; ok {
 				nestedMlavEngineFilebasedEnabled.Misc = o.Misc["MlavEngineFilebasedEnabled"]
 			}
-			if oMlavEngineFilebasedEnabled.MlavPolicyAction != nil {
-				nestedMlavEngineFilebasedEnabled.MlavPolicyAction = oMlavEngineFilebasedEnabled.MlavPolicyAction
-			}
 			if oMlavEngineFilebasedEnabled.Name != "" {
 				nestedMlavEngineFilebasedEnabled.Name = oMlavEngineFilebasedEnabled.Name
+			}
+			if oMlavEngineFilebasedEnabled.MlavPolicyAction != nil {
+				nestedMlavEngineFilebasedEnabled.MlavPolicyAction = oMlavEngineFilebasedEnabled.MlavPolicyAction
 			}
 			nestedMlavEngineFilebasedEnabledCol = append(nestedMlavEngineFilebasedEnabledCol, nestedMlavEngineFilebasedEnabled)
 		}
@@ -315,9 +315,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				if oDecoder.Misc != nil {
 					entry.Misc["Decoder"] = oDecoder.Misc
 				}
-				if oDecoder.Name != "" {
-					nestedDecoder.Name = oDecoder.Name
-				}
 				if oDecoder.Action != nil {
 					nestedDecoder.Action = oDecoder.Action
 				}
@@ -326,6 +323,9 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				}
 				if oDecoder.MlavAction != nil {
 					nestedDecoder.MlavAction = oDecoder.MlavAction
+				}
+				if oDecoder.Name != "" {
+					nestedDecoder.Name = oDecoder.Name
 				}
 				nestedDecoderCol = append(nestedDecoderCol, nestedDecoder)
 			}
@@ -441,45 +441,6 @@ func SpecMatches(a, b *Entry) bool {
 	return true
 }
 
-func matchMlavException(a []MlavException, b []MlavException) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	for _, a := range a {
-		for _, b := range b {
-			if !util.StringsMatch(a.Filename, b.Filename) {
-				return false
-			}
-			if !util.StringsMatch(a.Description, b.Description) {
-				return false
-			}
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-		}
-	}
-	return true
-}
-func matchMlavEngineFilebasedEnabled(a []MlavEngineFilebasedEnabled, b []MlavEngineFilebasedEnabled) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	for _, a := range a {
-		for _, b := range b {
-			if !util.StringsMatch(a.MlavPolicyAction, b.MlavPolicyAction) {
-				return false
-			}
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-		}
-	}
-	return true
-}
 func matchThreatException(a []ThreatException, b []ThreatException) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
@@ -528,6 +489,45 @@ func matchDecoder(a []Decoder, b []Decoder) bool {
 				return false
 			}
 			if !util.StringsMatch(a.MlavAction, b.MlavAction) {
+				return false
+			}
+			if !util.StringsEqual(a.Name, b.Name) {
+				return false
+			}
+		}
+	}
+	return true
+}
+func matchMlavEngineFilebasedEnabled(a []MlavEngineFilebasedEnabled, b []MlavEngineFilebasedEnabled) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	for _, a := range a {
+		for _, b := range b {
+			if !util.StringsMatch(a.MlavPolicyAction, b.MlavPolicyAction) {
+				return false
+			}
+			if !util.StringsEqual(a.Name, b.Name) {
+				return false
+			}
+		}
+	}
+	return true
+}
+func matchMlavException(a []MlavException, b []MlavException) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	for _, a := range a {
+		for _, b := range b {
+			if !util.StringsMatch(a.Filename, b.Filename) {
+				return false
+			}
+			if !util.StringsMatch(a.Description, b.Description) {
 				return false
 			}
 			if !util.StringsEqual(a.Name, b.Name) {

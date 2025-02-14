@@ -125,6 +125,9 @@ func specifyEntry(o *Entry) (any, error) {
 				if _, ok := o.Misc["ConfigDevices"]; ok {
 					nestedConfigDevices.Misc = o.Misc["ConfigDevices"]
 				}
+				if oConfigDevices.Name != "" {
+					nestedConfigDevices.Name = oConfigDevices.Name
+				}
 				if oConfigDevices.Vsys != nil {
 					nestedConfigDevices.Vsys = []ConfigDevicesVsysXml{}
 					for _, oConfigDevicesVsys := range oConfigDevices.Vsys {
@@ -152,9 +155,6 @@ func specifyEntry(o *Entry) (any, error) {
 						}
 						nestedConfigDevices.Vsys = append(nestedConfigDevices.Vsys, nestedConfigDevicesVsys)
 					}
-				}
-				if oConfigDevices.Name != "" {
-					nestedConfigDevices.Name = oConfigDevices.Name
 				}
 				nestedConfig.Devices = append(nestedConfig.Devices, nestedConfigDevices)
 			}
@@ -197,6 +197,9 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 							if oConfigDevicesVsys.Misc != nil {
 								entry.Misc["ConfigDevicesVsys"] = oConfigDevicesVsys.Misc
 							}
+							if oConfigDevicesVsys.Name != "" {
+								nestedConfigDevicesVsys.Name = oConfigDevicesVsys.Name
+							}
 							if oConfigDevicesVsys.Import != nil {
 								nestedConfigDevicesVsys.Import = &ConfigDevicesVsysImport{}
 								if oConfigDevicesVsys.Import.Misc != nil {
@@ -211,9 +214,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 										nestedConfigDevicesVsys.Import.Network.Interfaces = util.MemToStr(oConfigDevicesVsys.Import.Network.Interfaces)
 									}
 								}
-							}
-							if oConfigDevicesVsys.Name != "" {
-								nestedConfigDevicesVsys.Name = oConfigDevicesVsys.Name
 							}
 							nestedConfigDevices.Vsys = append(nestedConfigDevices.Vsys, nestedConfigDevicesVsys)
 						}

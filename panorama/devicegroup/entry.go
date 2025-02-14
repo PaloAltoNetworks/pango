@@ -133,11 +133,11 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				if oDevices.Misc != nil {
 					entry.Misc["Devices"] = oDevices.Misc
 				}
-				if oDevices.Vsys != nil {
-					nestedDevices.Vsys = util.MemToStr(oDevices.Vsys)
-				}
 				if oDevices.Name != "" {
 					nestedDevices.Name = oDevices.Name
+				}
+				if oDevices.Vsys != nil {
+					nestedDevices.Vsys = util.MemToStr(oDevices.Vsys)
 				}
 				nestedDevicesCol = append(nestedDevicesCol, nestedDevices)
 			}

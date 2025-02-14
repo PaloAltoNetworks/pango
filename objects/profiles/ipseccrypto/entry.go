@@ -183,11 +183,11 @@ func specifyEntry(o *Entry) (any, error) {
 		if _, ok := o.Misc["Esp"]; ok {
 			nestedEsp.Misc = o.Misc["Esp"]
 		}
-		if o.Esp.Authentication != nil {
-			nestedEsp.Authentication = util.StrToMem(o.Esp.Authentication)
-		}
 		if o.Esp.Encryption != nil {
 			nestedEsp.Encryption = util.StrToMem(o.Esp.Encryption)
+		}
+		if o.Esp.Authentication != nil {
+			nestedEsp.Authentication = util.StrToMem(o.Esp.Authentication)
 		}
 	}
 	entry.Esp = nestedEsp
@@ -211,17 +211,17 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 			if o.Lifesize.Misc != nil {
 				entry.Misc["Lifesize"] = o.Lifesize.Misc
 			}
-			if o.Lifesize.Mb != nil {
-				nestedLifesize.Mb = o.Lifesize.Mb
-			}
-			if o.Lifesize.Tb != nil {
-				nestedLifesize.Tb = o.Lifesize.Tb
-			}
 			if o.Lifesize.Gb != nil {
 				nestedLifesize.Gb = o.Lifesize.Gb
 			}
 			if o.Lifesize.Kb != nil {
 				nestedLifesize.Kb = o.Lifesize.Kb
+			}
+			if o.Lifesize.Mb != nil {
+				nestedLifesize.Mb = o.Lifesize.Mb
+			}
+			if o.Lifesize.Tb != nil {
+				nestedLifesize.Tb = o.Lifesize.Tb
 			}
 		}
 		entry.Lifesize = nestedLifesize
@@ -335,16 +335,27 @@ func matchLifetime(a *Lifetime, b *Lifetime) bool {
 	} else if a == nil && b == nil {
 		return true
 	}
+	if !util.Ints64Match(a.Days, b.Days) {
+		return false
+	}
+	if !util.Ints64Match(a.Hours, b.Hours) {
+		return false
+	}
 	if !util.Ints64Match(a.Minutes, b.Minutes) {
 		return false
 	}
 	if !util.Ints64Match(a.Seconds, b.Seconds) {
 		return false
 	}
-	if !util.Ints64Match(a.Days, b.Days) {
+	return true
+}
+func matchAh(a *Ah, b *Ah) bool {
+	if a == nil && b != nil || a != nil && b == nil {
 		return false
+	} else if a == nil && b == nil {
+		return true
 	}
-	if !util.Ints64Match(a.Hours, b.Hours) {
+	if !util.OrderedListsMatch(a.Authentication, b.Authentication) {
 		return false
 	}
 	return true
@@ -359,17 +370,6 @@ func matchEsp(a *Esp, b *Esp) bool {
 		return false
 	}
 	if !util.OrderedListsMatch(a.Encryption, b.Encryption) {
-		return false
-	}
-	return true
-}
-func matchAh(a *Ah, b *Ah) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !util.OrderedListsMatch(a.Authentication, b.Authentication) {
 		return false
 	}
 	return true

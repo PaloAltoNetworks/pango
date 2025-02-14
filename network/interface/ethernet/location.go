@@ -17,126 +17,38 @@ type ImportLocation interface {
 type Layer3TemplateType int
 
 const (
-	layer3TemplateVirtualRouter Layer3TemplateType = iota
 	layer3TemplateLogicalRouter Layer3TemplateType = iota
 	layer3TemplateVsys          Layer3TemplateType = iota
 	layer3TemplateZone          Layer3TemplateType = iota
+	layer3TemplateVirtualRouter Layer3TemplateType = iota
 )
 
 type Layer3TemplateImportLocation struct {
 	typ           Layer3TemplateType
-	virtualRouter *Layer3TemplateVirtualRouterImportLocation
 	logicalRouter *Layer3TemplateLogicalRouterImportLocation
 	vsys          *Layer3TemplateVsysImportLocation
 	zone          *Layer3TemplateZoneImportLocation
-}
-
-type Layer3TemplateVirtualRouterImportLocation struct {
-	xpath  []string
-	vsys   string
-	router string
-}
-
-type Layer3TemplateVirtualRouterImportLocationSpec struct {
-	Vsys   string
-	Router string
-}
-
-func NewLayer3TemplateVirtualRouterImportLocation(spec Layer3TemplateVirtualRouterImportLocationSpec) *Layer3TemplateImportLocation {
-	location := &Layer3TemplateVirtualRouterImportLocation{
-		vsys:   spec.Vsys,
-		router: spec.Router,
-	}
-
-	return &Layer3TemplateImportLocation{
-		typ:           layer3TemplateVirtualRouter,
-		virtualRouter: location,
-	}
-}
-
-func (o *Layer3TemplateVirtualRouterImportLocation) XpathForLocation(vn version.Number, loc util.ILocation) ([]string, error) {
-	ans, err := loc.XpathPrefix(vn)
-	if err != nil {
-		return nil, err
-	}
-
-	importAns := []string{
-		"network",
-		"virtual-router",
-		util.AsEntryXpath([]string{o.router}),
-		"interface",
-	}
-
-	return append(ans, importAns...), nil
-}
-
-func (o *Layer3TemplateVirtualRouterImportLocation) MarshalPangoXML(interfaces []string) (string, error) {
-	type member struct {
-		Name string `xml:",chardata"`
-	}
-
-	type request struct {
-		XMLName xml.Name `xml:"interface"`
-		Members []member `xml:"member"`
-	}
-
-	var members []member
-	for _, elt := range interfaces {
-		members = append(members, member{Name: elt})
-	}
-
-	expected := request{
-		Members: members,
-	}
-	bytes, err := xml.Marshal(expected)
-	if err != nil {
-		return "", err
-	}
-
-	return string(bytes), nil
-}
-
-func (o *Layer3TemplateVirtualRouterImportLocation) UnmarshalPangoXML(bytes []byte) ([]string, error) {
-	type member struct {
-		Name string `xml:",chardata"`
-	}
-
-	type response struct {
-		Members []member `xml:"result>interface>member"`
-	}
-
-	var existing response
-	err := xml.Unmarshal(bytes, &existing)
-	if err != nil {
-		return nil, err
-	}
-
-	var interfaces []string
-	for _, elt := range existing.Members {
-		interfaces = append(interfaces, elt.Name)
-	}
-
-	return interfaces, nil
+	virtualRouter *Layer3TemplateVirtualRouterImportLocation
 }
 
 type Layer3TemplateLogicalRouterImportLocation struct {
 	xpath  []string
-	vrf    string
 	vsys   string
 	router string
+	vrf    string
 }
 
 type Layer3TemplateLogicalRouterImportLocationSpec struct {
-	Vrf    string
 	Vsys   string
 	Router string
+	Vrf    string
 }
 
 func NewLayer3TemplateLogicalRouterImportLocation(spec Layer3TemplateLogicalRouterImportLocationSpec) *Layer3TemplateImportLocation {
 	location := &Layer3TemplateLogicalRouterImportLocation{
-		vrf:    spec.Vrf,
 		vsys:   spec.Vsys,
 		router: spec.Router,
+		vrf:    spec.Vrf,
 	}
 
 	return &Layer3TemplateImportLocation{
@@ -388,16 +300,104 @@ func (o *Layer3TemplateZoneImportLocation) UnmarshalPangoXML(bytes []byte) ([]st
 	return interfaces, nil
 }
 
+type Layer3TemplateVirtualRouterImportLocation struct {
+	xpath  []string
+	vsys   string
+	router string
+}
+
+type Layer3TemplateVirtualRouterImportLocationSpec struct {
+	Vsys   string
+	Router string
+}
+
+func NewLayer3TemplateVirtualRouterImportLocation(spec Layer3TemplateVirtualRouterImportLocationSpec) *Layer3TemplateImportLocation {
+	location := &Layer3TemplateVirtualRouterImportLocation{
+		vsys:   spec.Vsys,
+		router: spec.Router,
+	}
+
+	return &Layer3TemplateImportLocation{
+		typ:           layer3TemplateVirtualRouter,
+		virtualRouter: location,
+	}
+}
+
+func (o *Layer3TemplateVirtualRouterImportLocation) XpathForLocation(vn version.Number, loc util.ILocation) ([]string, error) {
+	ans, err := loc.XpathPrefix(vn)
+	if err != nil {
+		return nil, err
+	}
+
+	importAns := []string{
+		"network",
+		"virtual-router",
+		util.AsEntryXpath([]string{o.router}),
+		"interface",
+	}
+
+	return append(ans, importAns...), nil
+}
+
+func (o *Layer3TemplateVirtualRouterImportLocation) MarshalPangoXML(interfaces []string) (string, error) {
+	type member struct {
+		Name string `xml:",chardata"`
+	}
+
+	type request struct {
+		XMLName xml.Name `xml:"interface"`
+		Members []member `xml:"member"`
+	}
+
+	var members []member
+	for _, elt := range interfaces {
+		members = append(members, member{Name: elt})
+	}
+
+	expected := request{
+		Members: members,
+	}
+	bytes, err := xml.Marshal(expected)
+	if err != nil {
+		return "", err
+	}
+
+	return string(bytes), nil
+}
+
+func (o *Layer3TemplateVirtualRouterImportLocation) UnmarshalPangoXML(bytes []byte) ([]string, error) {
+	type member struct {
+		Name string `xml:",chardata"`
+	}
+
+	type response struct {
+		Members []member `xml:"result>interface>member"`
+	}
+
+	var existing response
+	err := xml.Unmarshal(bytes, &existing)
+	if err != nil {
+		return nil, err
+	}
+
+	var interfaces []string
+	for _, elt := range existing.Members {
+		interfaces = append(interfaces, elt.Name)
+	}
+
+	return interfaces, nil
+}
+
 func (o *Layer3TemplateImportLocation) MarshalPangoXML(interfaces []string) (string, error) {
 	switch o.typ {
-	case layer3TemplateVirtualRouter:
-		return o.virtualRouter.MarshalPangoXML(interfaces)
 	case layer3TemplateLogicalRouter:
 		return o.logicalRouter.MarshalPangoXML(interfaces)
 	case layer3TemplateVsys:
 		return o.vsys.MarshalPangoXML(interfaces)
 	case layer3TemplateZone:
 		return o.zone.MarshalPangoXML(interfaces)
+	case layer3TemplateVirtualRouter:
+		return o.virtualRouter.MarshalPangoXML(interfaces)
 	default:
 		return "", fmt.Errorf("invalid import location")
 	}
@@ -405,14 +405,14 @@ func (o *Layer3TemplateImportLocation) MarshalPangoXML(interfaces []string) (str
 
 func (o *Layer3TemplateImportLocation) UnmarshalPangoXML(bytes []byte) ([]string, error) {
 	switch o.typ {
-	case layer3TemplateVirtualRouter:
-		return o.virtualRouter.UnmarshalPangoXML(bytes)
 	case layer3TemplateLogicalRouter:
 		return o.logicalRouter.UnmarshalPangoXML(bytes)
 	case layer3TemplateVsys:
 		return o.vsys.UnmarshalPangoXML(bytes)
 	case layer3TemplateZone:
 		return o.zone.UnmarshalPangoXML(bytes)
+	case layer3TemplateVirtualRouter:
+		return o.virtualRouter.UnmarshalPangoXML(bytes)
 	default:
 		return nil, fmt.Errorf("invalid import location")
 	}
@@ -420,14 +420,14 @@ func (o *Layer3TemplateImportLocation) UnmarshalPangoXML(bytes []byte) ([]string
 
 func (o *Layer3TemplateImportLocation) XpathForLocation(vn version.Number, loc util.ILocation) ([]string, error) {
 	switch o.typ {
-	case layer3TemplateVirtualRouter:
-		return o.virtualRouter.XpathForLocation(vn, loc)
 	case layer3TemplateLogicalRouter:
 		return o.logicalRouter.XpathForLocation(vn, loc)
 	case layer3TemplateVsys:
 		return o.vsys.XpathForLocation(vn, loc)
 	case layer3TemplateZone:
 		return o.zone.XpathForLocation(vn, loc)
+	case layer3TemplateVirtualRouter:
+		return o.virtualRouter.XpathForLocation(vn, loc)
 	default:
 		return nil, fmt.Errorf("invalid import location")
 	}

@@ -375,9 +375,6 @@ func specifyEntry(o *Entry) (any, error) {
 		if _, ok := o.Misc["Default"]; ok {
 			nestedDefault.Misc = o.Misc["Default"]
 		}
-		if o.Default.Port != nil {
-			nestedDefault.Port = util.StrToMem(o.Default.Port)
-		}
 		if o.Default.IdentByIcmpType != nil {
 			nestedDefault.IdentByIcmpType = &DefaultIdentByIcmpTypeXml{}
 			if _, ok := o.Misc["DefaultIdentByIcmpType"]; ok {
@@ -404,6 +401,9 @@ func specifyEntry(o *Entry) (any, error) {
 		}
 		if o.Default.IdentByIpProtocol != nil {
 			nestedDefault.IdentByIpProtocol = o.Default.IdentByIpProtocol
+		}
+		if o.Default.Port != nil {
+			nestedDefault.Port = util.StrToMem(o.Default.Port)
 		}
 	}
 	entry.Default = nestedDefault
@@ -459,12 +459,6 @@ func specifyEntry(o *Entry) (any, error) {
 									if _, ok := o.Misc["SignatureAndConditionOrConditionOperatorPatternMatch"]; ok {
 										nestedSignatureAndConditionOrCondition.Operator.PatternMatch.Misc = o.Misc["SignatureAndConditionOrConditionOperatorPatternMatch"]
 									}
-									if oSignatureAndConditionOrCondition.Operator.PatternMatch.Context != nil {
-										nestedSignatureAndConditionOrCondition.Operator.PatternMatch.Context = oSignatureAndConditionOrCondition.Operator.PatternMatch.Context
-									}
-									if oSignatureAndConditionOrCondition.Operator.PatternMatch.Pattern != nil {
-										nestedSignatureAndConditionOrCondition.Operator.PatternMatch.Pattern = oSignatureAndConditionOrCondition.Operator.PatternMatch.Pattern
-									}
 									if oSignatureAndConditionOrCondition.Operator.PatternMatch.Qualifier != nil {
 										nestedSignatureAndConditionOrCondition.Operator.PatternMatch.Qualifier = []SignatureAndConditionOrConditionOperatorPatternMatchQualifierXml{}
 										for _, oSignatureAndConditionOrConditionOperatorPatternMatchQualifier := range oSignatureAndConditionOrCondition.Operator.PatternMatch.Qualifier {
@@ -480,6 +474,12 @@ func specifyEntry(o *Entry) (any, error) {
 											}
 											nestedSignatureAndConditionOrCondition.Operator.PatternMatch.Qualifier = append(nestedSignatureAndConditionOrCondition.Operator.PatternMatch.Qualifier, nestedSignatureAndConditionOrConditionOperatorPatternMatchQualifier)
 										}
+									}
+									if oSignatureAndConditionOrCondition.Operator.PatternMatch.Context != nil {
+										nestedSignatureAndConditionOrCondition.Operator.PatternMatch.Context = oSignatureAndConditionOrCondition.Operator.PatternMatch.Context
+									}
+									if oSignatureAndConditionOrCondition.Operator.PatternMatch.Pattern != nil {
+										nestedSignatureAndConditionOrCondition.Operator.PatternMatch.Pattern = oSignatureAndConditionOrCondition.Operator.PatternMatch.Pattern
 									}
 								}
 								if oSignatureAndConditionOrCondition.Operator.GreaterThan != nil {
@@ -543,6 +543,9 @@ func specifyEntry(o *Entry) (any, error) {
 									if _, ok := o.Misc["SignatureAndConditionOrConditionOperatorEqualTo"]; ok {
 										nestedSignatureAndConditionOrCondition.Operator.EqualTo.Misc = o.Misc["SignatureAndConditionOrConditionOperatorEqualTo"]
 									}
+									if oSignatureAndConditionOrCondition.Operator.EqualTo.Context != nil {
+										nestedSignatureAndConditionOrCondition.Operator.EqualTo.Context = oSignatureAndConditionOrCondition.Operator.EqualTo.Context
+									}
 									if oSignatureAndConditionOrCondition.Operator.EqualTo.Position != nil {
 										nestedSignatureAndConditionOrCondition.Operator.EqualTo.Position = oSignatureAndConditionOrCondition.Operator.EqualTo.Position
 									}
@@ -551,9 +554,6 @@ func specifyEntry(o *Entry) (any, error) {
 									}
 									if oSignatureAndConditionOrCondition.Operator.EqualTo.Value != nil {
 										nestedSignatureAndConditionOrCondition.Operator.EqualTo.Value = oSignatureAndConditionOrCondition.Operator.EqualTo.Value
-									}
-									if oSignatureAndConditionOrCondition.Operator.EqualTo.Context != nil {
-										nestedSignatureAndConditionOrCondition.Operator.EqualTo.Context = oSignatureAndConditionOrCondition.Operator.EqualTo.Context
 									}
 								}
 							}
@@ -612,6 +612,18 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 			if o.Default.Misc != nil {
 				entry.Misc["Default"] = o.Default.Misc
 			}
+			if o.Default.IdentByIcmpType != nil {
+				nestedDefault.IdentByIcmpType = &DefaultIdentByIcmpType{}
+				if o.Default.IdentByIcmpType.Misc != nil {
+					entry.Misc["DefaultIdentByIcmpType"] = o.Default.IdentByIcmpType.Misc
+				}
+				if o.Default.IdentByIcmpType.Type != nil {
+					nestedDefault.IdentByIcmpType.Type = o.Default.IdentByIcmpType.Type
+				}
+				if o.Default.IdentByIcmpType.Code != nil {
+					nestedDefault.IdentByIcmpType.Code = o.Default.IdentByIcmpType.Code
+				}
+			}
 			if o.Default.IdentByIcmp6Type != nil {
 				nestedDefault.IdentByIcmp6Type = &DefaultIdentByIcmp6Type{}
 				if o.Default.IdentByIcmp6Type.Misc != nil {
@@ -629,18 +641,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 			}
 			if o.Default.Port != nil {
 				nestedDefault.Port = util.MemToStr(o.Default.Port)
-			}
-			if o.Default.IdentByIcmpType != nil {
-				nestedDefault.IdentByIcmpType = &DefaultIdentByIcmpType{}
-				if o.Default.IdentByIcmpType.Misc != nil {
-					entry.Misc["DefaultIdentByIcmpType"] = o.Default.IdentByIcmpType.Misc
-				}
-				if o.Default.IdentByIcmpType.Code != nil {
-					nestedDefault.IdentByIcmpType.Code = o.Default.IdentByIcmpType.Code
-				}
-				if o.Default.IdentByIcmpType.Type != nil {
-					nestedDefault.IdentByIcmpType.Type = o.Default.IdentByIcmpType.Type
-				}
 			}
 		}
 		entry.Default = nestedDefault
@@ -662,9 +662,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				nestedSignature := Signature{}
 				if oSignature.Misc != nil {
 					entry.Misc["Signature"] = oSignature.Misc
-				}
-				if oSignature.Name != "" {
-					nestedSignature.Name = oSignature.Name
 				}
 				if oSignature.Comment != nil {
 					nestedSignature.Comment = oSignature.Comment
@@ -727,6 +724,12 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 										if oSignatureAndConditionOrCondition.Operator.GreaterThan.Misc != nil {
 											entry.Misc["SignatureAndConditionOrConditionOperatorGreaterThan"] = oSignatureAndConditionOrCondition.Operator.GreaterThan.Misc
 										}
+										if oSignatureAndConditionOrCondition.Operator.GreaterThan.Context != nil {
+											nestedSignatureAndConditionOrCondition.Operator.GreaterThan.Context = oSignatureAndConditionOrCondition.Operator.GreaterThan.Context
+										}
+										if oSignatureAndConditionOrCondition.Operator.GreaterThan.Value != nil {
+											nestedSignatureAndConditionOrCondition.Operator.GreaterThan.Value = oSignatureAndConditionOrCondition.Operator.GreaterThan.Value
+										}
 										if oSignatureAndConditionOrCondition.Operator.GreaterThan.Qualifier != nil {
 											nestedSignatureAndConditionOrCondition.Operator.GreaterThan.Qualifier = []SignatureAndConditionOrConditionOperatorGreaterThanQualifier{}
 											for _, oSignatureAndConditionOrConditionOperatorGreaterThanQualifier := range oSignatureAndConditionOrCondition.Operator.GreaterThan.Qualifier {
@@ -742,12 +745,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 												}
 												nestedSignatureAndConditionOrCondition.Operator.GreaterThan.Qualifier = append(nestedSignatureAndConditionOrCondition.Operator.GreaterThan.Qualifier, nestedSignatureAndConditionOrConditionOperatorGreaterThanQualifier)
 											}
-										}
-										if oSignatureAndConditionOrCondition.Operator.GreaterThan.Context != nil {
-											nestedSignatureAndConditionOrCondition.Operator.GreaterThan.Context = oSignatureAndConditionOrCondition.Operator.GreaterThan.Context
-										}
-										if oSignatureAndConditionOrCondition.Operator.GreaterThan.Value != nil {
-											nestedSignatureAndConditionOrCondition.Operator.GreaterThan.Value = oSignatureAndConditionOrCondition.Operator.GreaterThan.Value
 										}
 									}
 									if oSignatureAndConditionOrCondition.Operator.LessThan != nil {
@@ -768,11 +765,11 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 												if oSignatureAndConditionOrConditionOperatorLessThanQualifier.Misc != nil {
 													entry.Misc["SignatureAndConditionOrConditionOperatorLessThanQualifier"] = oSignatureAndConditionOrConditionOperatorLessThanQualifier.Misc
 												}
-												if oSignatureAndConditionOrConditionOperatorLessThanQualifier.Name != "" {
-													nestedSignatureAndConditionOrConditionOperatorLessThanQualifier.Name = oSignatureAndConditionOrConditionOperatorLessThanQualifier.Name
-												}
 												if oSignatureAndConditionOrConditionOperatorLessThanQualifier.Value != nil {
 													nestedSignatureAndConditionOrConditionOperatorLessThanQualifier.Value = oSignatureAndConditionOrConditionOperatorLessThanQualifier.Value
+												}
+												if oSignatureAndConditionOrConditionOperatorLessThanQualifier.Name != "" {
+													nestedSignatureAndConditionOrConditionOperatorLessThanQualifier.Name = oSignatureAndConditionOrConditionOperatorLessThanQualifier.Name
 												}
 												nestedSignatureAndConditionOrCondition.Operator.LessThan.Qualifier = append(nestedSignatureAndConditionOrCondition.Operator.LessThan.Qualifier, nestedSignatureAndConditionOrConditionOperatorLessThanQualifier)
 											}
@@ -808,6 +805,9 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 						}
 						nestedSignature.AndCondition = append(nestedSignature.AndCondition, nestedSignatureAndCondition)
 					}
+				}
+				if oSignature.Name != "" {
+					nestedSignature.Name = oSignature.Name
 				}
 				nestedSignatureCol = append(nestedSignatureCol, nestedSignature)
 			}
@@ -978,26 +978,6 @@ func matchDefault(a *Default, b *Default) bool {
 	}
 	return true
 }
-func matchSignatureAndConditionOrConditionOperatorEqualTo(a *SignatureAndConditionOrConditionOperatorEqualTo, b *SignatureAndConditionOrConditionOperatorEqualTo) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !util.StringsMatch(a.Context, b.Context) {
-		return false
-	}
-	if !util.StringsMatch(a.Position, b.Position) {
-		return false
-	}
-	if !util.StringsMatch(a.Mask, b.Mask) {
-		return false
-	}
-	if !util.StringsMatch(a.Value, b.Value) {
-		return false
-	}
-	return true
-}
 func matchSignatureAndConditionOrConditionOperatorPatternMatchQualifier(a []SignatureAndConditionOrConditionOperatorPatternMatchQualifier, b []SignatureAndConditionOrConditionOperatorPatternMatchQualifier) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
@@ -1006,10 +986,10 @@ func matchSignatureAndConditionOrConditionOperatorPatternMatchQualifier(a []Sign
 	}
 	for _, a := range a {
 		for _, b := range b {
-			if !util.StringsEqual(a.Name, b.Name) {
+			if !util.StringsMatch(a.Value, b.Value) {
 				return false
 			}
-			if !util.StringsMatch(a.Value, b.Value) {
+			if !util.StringsEqual(a.Name, b.Name) {
 				return false
 			}
 		}
@@ -1103,14 +1083,31 @@ func matchSignatureAndConditionOrConditionOperatorLessThan(a *SignatureAndCondit
 	}
 	return true
 }
-func matchSignatureAndConditionOrConditionOperator(a *SignatureAndConditionOrConditionOperator, b *SignatureAndConditionOrConditionOperator) bool {
+func matchSignatureAndConditionOrConditionOperatorEqualTo(a *SignatureAndConditionOrConditionOperatorEqualTo, b *SignatureAndConditionOrConditionOperatorEqualTo) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
 	} else if a == nil && b == nil {
 		return true
 	}
-	if !matchSignatureAndConditionOrConditionOperatorEqualTo(a.EqualTo, b.EqualTo) {
+	if !util.StringsMatch(a.Position, b.Position) {
 		return false
+	}
+	if !util.StringsMatch(a.Mask, b.Mask) {
+		return false
+	}
+	if !util.StringsMatch(a.Value, b.Value) {
+		return false
+	}
+	if !util.StringsMatch(a.Context, b.Context) {
+		return false
+	}
+	return true
+}
+func matchSignatureAndConditionOrConditionOperator(a *SignatureAndConditionOrConditionOperator, b *SignatureAndConditionOrConditionOperator) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
 	}
 	if !matchSignatureAndConditionOrConditionOperatorPatternMatch(a.PatternMatch, b.PatternMatch) {
 		return false
@@ -1119,6 +1116,9 @@ func matchSignatureAndConditionOrConditionOperator(a *SignatureAndConditionOrCon
 		return false
 	}
 	if !matchSignatureAndConditionOrConditionOperatorLessThan(a.LessThan, b.LessThan) {
+		return false
+	}
+	if !matchSignatureAndConditionOrConditionOperatorEqualTo(a.EqualTo, b.EqualTo) {
 		return false
 	}
 	return true
@@ -1167,12 +1167,6 @@ func matchSignature(a []Signature, b []Signature) bool {
 	}
 	for _, a := range a {
 		for _, b := range b {
-			if !util.StringsMatch(a.Comment, b.Comment) {
-				return false
-			}
-			if !util.StringsMatch(a.Scope, b.Scope) {
-				return false
-			}
 			if !util.BoolsMatch(a.OrderFree, b.OrderFree) {
 				return false
 			}
@@ -1180,6 +1174,12 @@ func matchSignature(a []Signature, b []Signature) bool {
 				return false
 			}
 			if !util.StringsEqual(a.Name, b.Name) {
+				return false
+			}
+			if !util.StringsMatch(a.Comment, b.Comment) {
+				return false
+			}
+			if !util.StringsMatch(a.Scope, b.Scope) {
 				return false
 			}
 		}

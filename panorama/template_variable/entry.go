@@ -96,26 +96,11 @@ func specifyEntry(o *Entry) (any, error) {
 		if _, ok := o.Misc["Type"]; ok {
 			nestedType.Misc = o.Misc["Type"]
 		}
-		if o.Type.DevicePriority != nil {
-			nestedType.DevicePriority = o.Type.DevicePriority
-		}
-		if o.Type.DeviceId != nil {
-			nestedType.DeviceId = o.Type.DeviceId
-		}
-		if o.Type.LinkTag != nil {
-			nestedType.LinkTag = o.Type.LinkTag
-		}
-		if o.Type.IpRange != nil {
-			nestedType.IpRange = o.Type.IpRange
-		}
-		if o.Type.Fqdn != nil {
-			nestedType.Fqdn = o.Type.Fqdn
-		}
 		if o.Type.GroupId != nil {
 			nestedType.GroupId = o.Type.GroupId
 		}
-		if o.Type.Interface != nil {
-			nestedType.Interface = o.Type.Interface
+		if o.Type.DevicePriority != nil {
+			nestedType.DevicePriority = o.Type.DevicePriority
 		}
 		if o.Type.AsNumber != nil {
 			nestedType.AsNumber = o.Type.AsNumber
@@ -128,6 +113,21 @@ func specifyEntry(o *Entry) (any, error) {
 		}
 		if o.Type.IpNetmask != nil {
 			nestedType.IpNetmask = o.Type.IpNetmask
+		}
+		if o.Type.IpRange != nil {
+			nestedType.IpRange = o.Type.IpRange
+		}
+		if o.Type.Fqdn != nil {
+			nestedType.Fqdn = o.Type.Fqdn
+		}
+		if o.Type.DeviceId != nil {
+			nestedType.DeviceId = o.Type.DeviceId
+		}
+		if o.Type.Interface != nil {
+			nestedType.Interface = o.Type.Interface
+		}
+		if o.Type.LinkTag != nil {
+			nestedType.LinkTag = o.Type.LinkTag
 		}
 	}
 	entry.Type = nestedType
@@ -151,6 +151,12 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 			if o.Type.Misc != nil {
 				entry.Misc["Type"] = o.Type.Misc
 			}
+			if o.Type.GroupId != nil {
+				nestedType.GroupId = o.Type.GroupId
+			}
+			if o.Type.DevicePriority != nil {
+				nestedType.DevicePriority = o.Type.DevicePriority
+			}
 			if o.Type.AsNumber != nil {
 				nestedType.AsNumber = o.Type.AsNumber
 			}
@@ -163,23 +169,17 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 			if o.Type.IpNetmask != nil {
 				nestedType.IpNetmask = o.Type.IpNetmask
 			}
-			if o.Type.Fqdn != nil {
-				nestedType.Fqdn = o.Type.Fqdn
-			}
-			if o.Type.GroupId != nil {
-				nestedType.GroupId = o.Type.GroupId
-			}
-			if o.Type.Interface != nil {
-				nestedType.Interface = o.Type.Interface
-			}
 			if o.Type.IpRange != nil {
 				nestedType.IpRange = o.Type.IpRange
 			}
-			if o.Type.DevicePriority != nil {
-				nestedType.DevicePriority = o.Type.DevicePriority
+			if o.Type.Fqdn != nil {
+				nestedType.Fqdn = o.Type.Fqdn
 			}
 			if o.Type.DeviceId != nil {
 				nestedType.DeviceId = o.Type.DeviceId
+			}
+			if o.Type.Interface != nil {
+				nestedType.Interface = o.Type.Interface
 			}
 			if o.Type.LinkTag != nil {
 				nestedType.LinkTag = o.Type.LinkTag
@@ -219,37 +219,37 @@ func matchType(a *Type, b *Type) bool {
 	} else if a == nil && b == nil {
 		return true
 	}
-	if !util.StringsMatch(a.IpRange, b.IpRange) {
-		return false
-	}
-	if !util.StringsMatch(a.DevicePriority, b.DevicePriority) {
-		return false
-	}
-	if !util.StringsMatch(a.DeviceId, b.DeviceId) {
-		return false
-	}
-	if !util.StringsMatch(a.LinkTag, b.LinkTag) {
-		return false
-	}
-	if !util.StringsMatch(a.EgressMax, b.EgressMax) {
-		return false
-	}
 	if !util.StringsMatch(a.IpNetmask, b.IpNetmask) {
+		return false
+	}
+	if !util.StringsMatch(a.IpRange, b.IpRange) {
 		return false
 	}
 	if !util.StringsMatch(a.Fqdn, b.Fqdn) {
 		return false
 	}
-	if !util.StringsMatch(a.GroupId, b.GroupId) {
+	if !util.StringsMatch(a.DeviceId, b.DeviceId) {
 		return false
 	}
 	if !util.StringsMatch(a.Interface, b.Interface) {
+		return false
+	}
+	if !util.StringsMatch(a.LinkTag, b.LinkTag) {
+		return false
+	}
+	if !util.StringsMatch(a.GroupId, b.GroupId) {
+		return false
+	}
+	if !util.StringsMatch(a.DevicePriority, b.DevicePriority) {
 		return false
 	}
 	if !util.StringsMatch(a.AsNumber, b.AsNumber) {
 		return false
 	}
 	if !util.StringsMatch(a.QosProfile, b.QosProfile) {
+		return false
+	}
+	if !util.StringsMatch(a.EgressMax, b.EgressMax) {
 		return false
 	}
 	return true

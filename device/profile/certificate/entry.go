@@ -317,6 +317,20 @@ func SpecMatches(a, b *Entry) bool {
 	return true
 }
 
+func matchUsernameField(a *UsernameField, b *UsernameField) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !util.StringsMatch(a.Subject, b.Subject) {
+		return false
+	}
+	if !util.StringsMatch(a.SubjectAlt, b.SubjectAlt) {
+		return false
+	}
+	return true
+}
 func matchCertificate(a []Certificate, b []Certificate) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
@@ -338,20 +352,6 @@ func matchCertificate(a []Certificate, b []Certificate) bool {
 				return false
 			}
 		}
-	}
-	return true
-}
-func matchUsernameField(a *UsernameField, b *UsernameField) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !util.StringsMatch(a.Subject, b.Subject) {
-		return false
-	}
-	if !util.StringsMatch(a.SubjectAlt, b.SubjectAlt) {
-		return false
 	}
 	return true
 }
