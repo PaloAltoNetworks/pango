@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{}
+	Suffix = []string{"profiles", "custom-url-category"}
 )
 
 type Entry struct {

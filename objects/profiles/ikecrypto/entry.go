@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{}
+	Suffix = []string{"network", "ike", "crypto-profiles", "ike-crypto-profiles"}
 )
 
 type Entry struct {
@@ -109,17 +109,17 @@ func specifyEntry(o *Entry) (any, error) {
 		if _, ok := o.Misc["Lifetime"]; ok {
 			nestedLifetime.Misc = o.Misc["Lifetime"]
 		}
-		if o.Lifetime.Days != nil {
-			nestedLifetime.Days = o.Lifetime.Days
-		}
-		if o.Lifetime.Hours != nil {
-			nestedLifetime.Hours = o.Lifetime.Hours
-		}
 		if o.Lifetime.Minutes != nil {
 			nestedLifetime.Minutes = o.Lifetime.Minutes
 		}
 		if o.Lifetime.Seconds != nil {
 			nestedLifetime.Seconds = o.Lifetime.Seconds
+		}
+		if o.Lifetime.Days != nil {
+			nestedLifetime.Days = o.Lifetime.Days
+		}
+		if o.Lifetime.Hours != nil {
+			nestedLifetime.Hours = o.Lifetime.Hours
 		}
 	}
 	entry.Lifetime = nestedLifetime
@@ -202,16 +202,16 @@ func matchLifetime(a *Lifetime, b *Lifetime) bool {
 	} else if a == nil && b == nil {
 		return true
 	}
-	if !util.Ints64Match(a.Minutes, b.Minutes) {
-		return false
-	}
-	if !util.Ints64Match(a.Seconds, b.Seconds) {
-		return false
-	}
 	if !util.Ints64Match(a.Days, b.Days) {
 		return false
 	}
 	if !util.Ints64Match(a.Hours, b.Hours) {
+		return false
+	}
+	if !util.Ints64Match(a.Minutes, b.Minutes) {
+		return false
+	}
+	if !util.Ints64Match(a.Seconds, b.Seconds) {
 		return false
 	}
 	return true

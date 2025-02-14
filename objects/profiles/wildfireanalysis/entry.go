@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{}
+	Suffix = []string{"profiles", "wildfire-analysis"}
 )
 
 type Entry struct {
@@ -96,12 +96,6 @@ func specifyEntry(o *Entry) (any, error) {
 			if _, ok := o.Misc["Rules"]; ok {
 				nestedRules.Misc = o.Misc["Rules"]
 			}
-			if oRules.Application != nil {
-				nestedRules.Application = util.StrToMem(oRules.Application)
-			}
-			if oRules.FileType != nil {
-				nestedRules.FileType = util.StrToMem(oRules.FileType)
-			}
 			if oRules.Direction != nil {
 				nestedRules.Direction = oRules.Direction
 			}
@@ -110,6 +104,12 @@ func specifyEntry(o *Entry) (any, error) {
 			}
 			if oRules.Name != "" {
 				nestedRules.Name = oRules.Name
+			}
+			if oRules.Application != nil {
+				nestedRules.Application = util.StrToMem(oRules.Application)
+			}
+			if oRules.FileType != nil {
+				nestedRules.FileType = util.StrToMem(oRules.FileType)
 			}
 			nestedRulesCol = append(nestedRulesCol, nestedRules)
 		}
@@ -138,9 +138,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				if oRules.Misc != nil {
 					entry.Misc["Rules"] = oRules.Misc
 				}
-				if oRules.Application != nil {
-					nestedRules.Application = util.MemToStr(oRules.Application)
-				}
 				if oRules.FileType != nil {
 					nestedRules.FileType = util.MemToStr(oRules.FileType)
 				}
@@ -152,6 +149,9 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				}
 				if oRules.Name != "" {
 					nestedRules.Name = oRules.Name
+				}
+				if oRules.Application != nil {
+					nestedRules.Application = util.MemToStr(oRules.Application)
 				}
 				nestedRulesCol = append(nestedRulesCol, nestedRules)
 			}
@@ -195,6 +195,9 @@ func matchRules(a []Rules, b []Rules) bool {
 	}
 	for _, a := range a {
 		for _, b := range b {
+			if !util.StringsEqual(a.Name, b.Name) {
+				return false
+			}
 			if !util.OrderedListsMatch(a.Application, b.Application) {
 				return false
 			}
@@ -205,9 +208,6 @@ func matchRules(a []Rules, b []Rules) bool {
 				return false
 			}
 			if !util.StringsMatch(a.Analysis, b.Analysis) {
-				return false
-			}
-			if !util.StringsEqual(a.Name, b.Name) {
 				return false
 			}
 		}

@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{}
+	Suffix = []string{"network", "tunnel", "ipsec"}
 )
 
 type Entry struct {
@@ -831,9 +831,6 @@ func specifyEntry(o *Entry) (any, error) {
 				if _, ok := o.Misc["AutoKeyProxyId"]; ok {
 					nestedAutoKeyProxyId.Misc = o.Misc["AutoKeyProxyId"]
 				}
-				if oAutoKeyProxyId.Local != nil {
-					nestedAutoKeyProxyId.Local = oAutoKeyProxyId.Local
-				}
 				if oAutoKeyProxyId.Remote != nil {
 					nestedAutoKeyProxyId.Remote = oAutoKeyProxyId.Remote
 				}
@@ -879,6 +876,9 @@ func specifyEntry(o *Entry) (any, error) {
 				if oAutoKeyProxyId.Name != "" {
 					nestedAutoKeyProxyId.Name = oAutoKeyProxyId.Name
 				}
+				if oAutoKeyProxyId.Local != nil {
+					nestedAutoKeyProxyId.Local = oAutoKeyProxyId.Local
+				}
 				nestedAutoKey.ProxyId = append(nestedAutoKey.ProxyId, nestedAutoKeyProxyId)
 			}
 		}
@@ -888,12 +888,6 @@ func specifyEntry(o *Entry) (any, error) {
 				nestedAutoKeyProxyIdV6 := AutoKeyProxyIdV6Xml{}
 				if _, ok := o.Misc["AutoKeyProxyIdV6"]; ok {
 					nestedAutoKeyProxyIdV6.Misc = o.Misc["AutoKeyProxyIdV6"]
-				}
-				if oAutoKeyProxyIdV6.Local != nil {
-					nestedAutoKeyProxyIdV6.Local = oAutoKeyProxyIdV6.Local
-				}
-				if oAutoKeyProxyIdV6.Remote != nil {
-					nestedAutoKeyProxyIdV6.Remote = oAutoKeyProxyIdV6.Remote
 				}
 				if oAutoKeyProxyIdV6.Protocol != nil {
 					nestedAutoKeyProxyIdV6.Protocol = &AutoKeyProxyIdV6ProtocolXml{}
@@ -937,6 +931,12 @@ func specifyEntry(o *Entry) (any, error) {
 				if oAutoKeyProxyIdV6.Name != "" {
 					nestedAutoKeyProxyIdV6.Name = oAutoKeyProxyIdV6.Name
 				}
+				if oAutoKeyProxyIdV6.Local != nil {
+					nestedAutoKeyProxyIdV6.Local = oAutoKeyProxyIdV6.Local
+				}
+				if oAutoKeyProxyIdV6.Remote != nil {
+					nestedAutoKeyProxyIdV6.Remote = oAutoKeyProxyIdV6.Remote
+				}
 				nestedAutoKey.ProxyIdV6 = append(nestedAutoKey.ProxyIdV6, nestedAutoKeyProxyIdV6)
 			}
 		}
@@ -948,6 +948,21 @@ func specifyEntry(o *Entry) (any, error) {
 		nestedGlobalProtectSatellite = &GlobalProtectSatelliteXml{}
 		if _, ok := o.Misc["GlobalProtectSatellite"]; ok {
 			nestedGlobalProtectSatellite.Misc = o.Misc["GlobalProtectSatellite"]
+		}
+		if o.GlobalProtectSatellite.ExternalCa != nil {
+			nestedGlobalProtectSatellite.ExternalCa = &GlobalProtectSatelliteExternalCaXml{}
+			if _, ok := o.Misc["GlobalProtectSatelliteExternalCa"]; ok {
+				nestedGlobalProtectSatellite.ExternalCa.Misc = o.Misc["GlobalProtectSatelliteExternalCa"]
+			}
+			if o.GlobalProtectSatellite.ExternalCa.CertificateProfile != nil {
+				nestedGlobalProtectSatellite.ExternalCa.CertificateProfile = o.GlobalProtectSatellite.ExternalCa.CertificateProfile
+			}
+			if o.GlobalProtectSatellite.ExternalCa.LocalCertificate != nil {
+				nestedGlobalProtectSatellite.ExternalCa.LocalCertificate = o.GlobalProtectSatellite.ExternalCa.LocalCertificate
+			}
+		}
+		if o.GlobalProtectSatellite.Ipv6Preferred != nil {
+			nestedGlobalProtectSatellite.Ipv6Preferred = util.YesNo(o.GlobalProtectSatellite.Ipv6Preferred, nil)
 		}
 		if o.GlobalProtectSatellite.LocalAddress != nil {
 			nestedGlobalProtectSatellite.LocalAddress = &GlobalProtectSatelliteLocalAddressXml{}
@@ -997,21 +1012,6 @@ func specifyEntry(o *Entry) (any, error) {
 		if o.GlobalProtectSatellite.PublishRoutes != nil {
 			nestedGlobalProtectSatellite.PublishRoutes = util.StrToMem(o.GlobalProtectSatellite.PublishRoutes)
 		}
-		if o.GlobalProtectSatellite.ExternalCa != nil {
-			nestedGlobalProtectSatellite.ExternalCa = &GlobalProtectSatelliteExternalCaXml{}
-			if _, ok := o.Misc["GlobalProtectSatelliteExternalCa"]; ok {
-				nestedGlobalProtectSatellite.ExternalCa.Misc = o.Misc["GlobalProtectSatelliteExternalCa"]
-			}
-			if o.GlobalProtectSatellite.ExternalCa.CertificateProfile != nil {
-				nestedGlobalProtectSatellite.ExternalCa.CertificateProfile = o.GlobalProtectSatellite.ExternalCa.CertificateProfile
-			}
-			if o.GlobalProtectSatellite.ExternalCa.LocalCertificate != nil {
-				nestedGlobalProtectSatellite.ExternalCa.LocalCertificate = o.GlobalProtectSatellite.ExternalCa.LocalCertificate
-			}
-		}
-		if o.GlobalProtectSatellite.Ipv6Preferred != nil {
-			nestedGlobalProtectSatellite.Ipv6Preferred = util.YesNo(o.GlobalProtectSatellite.Ipv6Preferred, nil)
-		}
 	}
 	entry.GlobalProtectSatellite = nestedGlobalProtectSatellite
 
@@ -1020,9 +1020,6 @@ func specifyEntry(o *Entry) (any, error) {
 		nestedManualKey = &ManualKeyXml{}
 		if _, ok := o.Misc["ManualKey"]; ok {
 			nestedManualKey.Misc = o.Misc["ManualKey"]
-		}
-		if o.ManualKey.RemoteSpi != nil {
-			nestedManualKey.RemoteSpi = o.ManualKey.RemoteSpi
 		}
 		if o.ManualKey.LocalAddress != nil {
 			nestedManualKey.LocalAddress = &ManualKeyLocalAddressXml{}
@@ -1051,94 +1048,13 @@ func specifyEntry(o *Entry) (any, error) {
 				nestedManualKey.PeerAddress.Ip = o.ManualKey.PeerAddress.Ip
 			}
 		}
-		if o.ManualKey.Esp != nil {
-			nestedManualKey.Esp = &ManualKeyEspXml{}
-			if _, ok := o.Misc["ManualKeyEsp"]; ok {
-				nestedManualKey.Esp.Misc = o.Misc["ManualKeyEsp"]
-			}
-			if o.ManualKey.Esp.Authentication != nil {
-				nestedManualKey.Esp.Authentication = &ManualKeyEspAuthenticationXml{}
-				if _, ok := o.Misc["ManualKeyEspAuthentication"]; ok {
-					nestedManualKey.Esp.Authentication.Misc = o.Misc["ManualKeyEspAuthentication"]
-				}
-				if o.ManualKey.Esp.Authentication.Md5 != nil {
-					nestedManualKey.Esp.Authentication.Md5 = &ManualKeyEspAuthenticationMd5Xml{}
-					if _, ok := o.Misc["ManualKeyEspAuthenticationMd5"]; ok {
-						nestedManualKey.Esp.Authentication.Md5.Misc = o.Misc["ManualKeyEspAuthenticationMd5"]
-					}
-					if o.ManualKey.Esp.Authentication.Md5.Key != nil {
-						nestedManualKey.Esp.Authentication.Md5.Key = o.ManualKey.Esp.Authentication.Md5.Key
-					}
-				}
-				if o.ManualKey.Esp.Authentication.None != nil {
-					nestedManualKey.Esp.Authentication.None = &ManualKeyEspAuthenticationNoneXml{}
-					if _, ok := o.Misc["ManualKeyEspAuthenticationNone"]; ok {
-						nestedManualKey.Esp.Authentication.None.Misc = o.Misc["ManualKeyEspAuthenticationNone"]
-					}
-				}
-				if o.ManualKey.Esp.Authentication.Sha1 != nil {
-					nestedManualKey.Esp.Authentication.Sha1 = &ManualKeyEspAuthenticationSha1Xml{}
-					if _, ok := o.Misc["ManualKeyEspAuthenticationSha1"]; ok {
-						nestedManualKey.Esp.Authentication.Sha1.Misc = o.Misc["ManualKeyEspAuthenticationSha1"]
-					}
-					if o.ManualKey.Esp.Authentication.Sha1.Key != nil {
-						nestedManualKey.Esp.Authentication.Sha1.Key = o.ManualKey.Esp.Authentication.Sha1.Key
-					}
-				}
-				if o.ManualKey.Esp.Authentication.Sha256 != nil {
-					nestedManualKey.Esp.Authentication.Sha256 = &ManualKeyEspAuthenticationSha256Xml{}
-					if _, ok := o.Misc["ManualKeyEspAuthenticationSha256"]; ok {
-						nestedManualKey.Esp.Authentication.Sha256.Misc = o.Misc["ManualKeyEspAuthenticationSha256"]
-					}
-					if o.ManualKey.Esp.Authentication.Sha256.Key != nil {
-						nestedManualKey.Esp.Authentication.Sha256.Key = o.ManualKey.Esp.Authentication.Sha256.Key
-					}
-				}
-				if o.ManualKey.Esp.Authentication.Sha384 != nil {
-					nestedManualKey.Esp.Authentication.Sha384 = &ManualKeyEspAuthenticationSha384Xml{}
-					if _, ok := o.Misc["ManualKeyEspAuthenticationSha384"]; ok {
-						nestedManualKey.Esp.Authentication.Sha384.Misc = o.Misc["ManualKeyEspAuthenticationSha384"]
-					}
-					if o.ManualKey.Esp.Authentication.Sha384.Key != nil {
-						nestedManualKey.Esp.Authentication.Sha384.Key = o.ManualKey.Esp.Authentication.Sha384.Key
-					}
-				}
-				if o.ManualKey.Esp.Authentication.Sha512 != nil {
-					nestedManualKey.Esp.Authentication.Sha512 = &ManualKeyEspAuthenticationSha512Xml{}
-					if _, ok := o.Misc["ManualKeyEspAuthenticationSha512"]; ok {
-						nestedManualKey.Esp.Authentication.Sha512.Misc = o.Misc["ManualKeyEspAuthenticationSha512"]
-					}
-					if o.ManualKey.Esp.Authentication.Sha512.Key != nil {
-						nestedManualKey.Esp.Authentication.Sha512.Key = o.ManualKey.Esp.Authentication.Sha512.Key
-					}
-				}
-			}
-			if o.ManualKey.Esp.Encryption != nil {
-				nestedManualKey.Esp.Encryption = &ManualKeyEspEncryptionXml{}
-				if _, ok := o.Misc["ManualKeyEspEncryption"]; ok {
-					nestedManualKey.Esp.Encryption.Misc = o.Misc["ManualKeyEspEncryption"]
-				}
-				if o.ManualKey.Esp.Encryption.Algorithm != nil {
-					nestedManualKey.Esp.Encryption.Algorithm = o.ManualKey.Esp.Encryption.Algorithm
-				}
-				if o.ManualKey.Esp.Encryption.Key != nil {
-					nestedManualKey.Esp.Encryption.Key = o.ManualKey.Esp.Encryption.Key
-				}
-			}
+		if o.ManualKey.RemoteSpi != nil {
+			nestedManualKey.RemoteSpi = o.ManualKey.RemoteSpi
 		}
 		if o.ManualKey.Ah != nil {
 			nestedManualKey.Ah = &ManualKeyAhXml{}
 			if _, ok := o.Misc["ManualKeyAh"]; ok {
 				nestedManualKey.Ah.Misc = o.Misc["ManualKeyAh"]
-			}
-			if o.ManualKey.Ah.Sha1 != nil {
-				nestedManualKey.Ah.Sha1 = &ManualKeyAhSha1Xml{}
-				if _, ok := o.Misc["ManualKeyAhSha1"]; ok {
-					nestedManualKey.Ah.Sha1.Misc = o.Misc["ManualKeyAhSha1"]
-				}
-				if o.ManualKey.Ah.Sha1.Key != nil {
-					nestedManualKey.Ah.Sha1.Key = o.ManualKey.Ah.Sha1.Key
-				}
 			}
 			if o.ManualKey.Ah.Sha256 != nil {
 				nestedManualKey.Ah.Sha256 = &ManualKeyAhSha256Xml{}
@@ -1176,6 +1092,90 @@ func specifyEntry(o *Entry) (any, error) {
 					nestedManualKey.Ah.Md5.Key = o.ManualKey.Ah.Md5.Key
 				}
 			}
+			if o.ManualKey.Ah.Sha1 != nil {
+				nestedManualKey.Ah.Sha1 = &ManualKeyAhSha1Xml{}
+				if _, ok := o.Misc["ManualKeyAhSha1"]; ok {
+					nestedManualKey.Ah.Sha1.Misc = o.Misc["ManualKeyAhSha1"]
+				}
+				if o.ManualKey.Ah.Sha1.Key != nil {
+					nestedManualKey.Ah.Sha1.Key = o.ManualKey.Ah.Sha1.Key
+				}
+			}
+		}
+		if o.ManualKey.Esp != nil {
+			nestedManualKey.Esp = &ManualKeyEspXml{}
+			if _, ok := o.Misc["ManualKeyEsp"]; ok {
+				nestedManualKey.Esp.Misc = o.Misc["ManualKeyEsp"]
+			}
+			if o.ManualKey.Esp.Authentication != nil {
+				nestedManualKey.Esp.Authentication = &ManualKeyEspAuthenticationXml{}
+				if _, ok := o.Misc["ManualKeyEspAuthentication"]; ok {
+					nestedManualKey.Esp.Authentication.Misc = o.Misc["ManualKeyEspAuthentication"]
+				}
+				if o.ManualKey.Esp.Authentication.Sha256 != nil {
+					nestedManualKey.Esp.Authentication.Sha256 = &ManualKeyEspAuthenticationSha256Xml{}
+					if _, ok := o.Misc["ManualKeyEspAuthenticationSha256"]; ok {
+						nestedManualKey.Esp.Authentication.Sha256.Misc = o.Misc["ManualKeyEspAuthenticationSha256"]
+					}
+					if o.ManualKey.Esp.Authentication.Sha256.Key != nil {
+						nestedManualKey.Esp.Authentication.Sha256.Key = o.ManualKey.Esp.Authentication.Sha256.Key
+					}
+				}
+				if o.ManualKey.Esp.Authentication.Sha384 != nil {
+					nestedManualKey.Esp.Authentication.Sha384 = &ManualKeyEspAuthenticationSha384Xml{}
+					if _, ok := o.Misc["ManualKeyEspAuthenticationSha384"]; ok {
+						nestedManualKey.Esp.Authentication.Sha384.Misc = o.Misc["ManualKeyEspAuthenticationSha384"]
+					}
+					if o.ManualKey.Esp.Authentication.Sha384.Key != nil {
+						nestedManualKey.Esp.Authentication.Sha384.Key = o.ManualKey.Esp.Authentication.Sha384.Key
+					}
+				}
+				if o.ManualKey.Esp.Authentication.Sha512 != nil {
+					nestedManualKey.Esp.Authentication.Sha512 = &ManualKeyEspAuthenticationSha512Xml{}
+					if _, ok := o.Misc["ManualKeyEspAuthenticationSha512"]; ok {
+						nestedManualKey.Esp.Authentication.Sha512.Misc = o.Misc["ManualKeyEspAuthenticationSha512"]
+					}
+					if o.ManualKey.Esp.Authentication.Sha512.Key != nil {
+						nestedManualKey.Esp.Authentication.Sha512.Key = o.ManualKey.Esp.Authentication.Sha512.Key
+					}
+				}
+				if o.ManualKey.Esp.Authentication.Md5 != nil {
+					nestedManualKey.Esp.Authentication.Md5 = &ManualKeyEspAuthenticationMd5Xml{}
+					if _, ok := o.Misc["ManualKeyEspAuthenticationMd5"]; ok {
+						nestedManualKey.Esp.Authentication.Md5.Misc = o.Misc["ManualKeyEspAuthenticationMd5"]
+					}
+					if o.ManualKey.Esp.Authentication.Md5.Key != nil {
+						nestedManualKey.Esp.Authentication.Md5.Key = o.ManualKey.Esp.Authentication.Md5.Key
+					}
+				}
+				if o.ManualKey.Esp.Authentication.None != nil {
+					nestedManualKey.Esp.Authentication.None = &ManualKeyEspAuthenticationNoneXml{}
+					if _, ok := o.Misc["ManualKeyEspAuthenticationNone"]; ok {
+						nestedManualKey.Esp.Authentication.None.Misc = o.Misc["ManualKeyEspAuthenticationNone"]
+					}
+				}
+				if o.ManualKey.Esp.Authentication.Sha1 != nil {
+					nestedManualKey.Esp.Authentication.Sha1 = &ManualKeyEspAuthenticationSha1Xml{}
+					if _, ok := o.Misc["ManualKeyEspAuthenticationSha1"]; ok {
+						nestedManualKey.Esp.Authentication.Sha1.Misc = o.Misc["ManualKeyEspAuthenticationSha1"]
+					}
+					if o.ManualKey.Esp.Authentication.Sha1.Key != nil {
+						nestedManualKey.Esp.Authentication.Sha1.Key = o.ManualKey.Esp.Authentication.Sha1.Key
+					}
+				}
+			}
+			if o.ManualKey.Esp.Encryption != nil {
+				nestedManualKey.Esp.Encryption = &ManualKeyEspEncryptionXml{}
+				if _, ok := o.Misc["ManualKeyEspEncryption"]; ok {
+					nestedManualKey.Esp.Encryption.Misc = o.Misc["ManualKeyEspEncryption"]
+				}
+				if o.ManualKey.Esp.Encryption.Algorithm != nil {
+					nestedManualKey.Esp.Encryption.Algorithm = o.ManualKey.Esp.Encryption.Algorithm
+				}
+				if o.ManualKey.Esp.Encryption.Key != nil {
+					nestedManualKey.Esp.Encryption.Key = o.ManualKey.Esp.Encryption.Key
+				}
+			}
 		}
 	}
 	entry.ManualKey = nestedManualKey
@@ -1204,6 +1204,9 @@ func specifyEntry_11_0_2(o *Entry) (any, error) {
 		if _, ok := o.Misc["TunnelMonitor"]; ok {
 			nestedTunnelMonitor.Misc = o.Misc["TunnelMonitor"]
 		}
+		if o.TunnelMonitor.DestinationIp != nil {
+			nestedTunnelMonitor.DestinationIp = o.TunnelMonitor.DestinationIp
+		}
 		if o.TunnelMonitor.Enable != nil {
 			nestedTunnelMonitor.Enable = util.YesNo(o.TunnelMonitor.Enable, nil)
 		}
@@ -1212,9 +1215,6 @@ func specifyEntry_11_0_2(o *Entry) (any, error) {
 		}
 		if o.TunnelMonitor.TunnelMonitorProfile != nil {
 			nestedTunnelMonitor.TunnelMonitorProfile = o.TunnelMonitor.TunnelMonitorProfile
-		}
-		if o.TunnelMonitor.DestinationIp != nil {
-			nestedTunnelMonitor.DestinationIp = o.TunnelMonitor.DestinationIp
 		}
 	}
 	entry.TunnelMonitor = nestedTunnelMonitor
@@ -1259,18 +1259,6 @@ func specifyEntry_11_0_2(o *Entry) (any, error) {
 					if _, ok := o.Misc["AutoKeyProxyIdProtocol"]; ok {
 						nestedAutoKeyProxyId.Protocol.Misc = o.Misc["AutoKeyProxyIdProtocol"]
 					}
-					if oAutoKeyProxyId.Protocol.Udp != nil {
-						nestedAutoKeyProxyId.Protocol.Udp = &AutoKeyProxyIdProtocolUdpXml_11_0_2{}
-						if _, ok := o.Misc["AutoKeyProxyIdProtocolUdp"]; ok {
-							nestedAutoKeyProxyId.Protocol.Udp.Misc = o.Misc["AutoKeyProxyIdProtocolUdp"]
-						}
-						if oAutoKeyProxyId.Protocol.Udp.RemotePort != nil {
-							nestedAutoKeyProxyId.Protocol.Udp.RemotePort = oAutoKeyProxyId.Protocol.Udp.RemotePort
-						}
-						if oAutoKeyProxyId.Protocol.Udp.LocalPort != nil {
-							nestedAutoKeyProxyId.Protocol.Udp.LocalPort = oAutoKeyProxyId.Protocol.Udp.LocalPort
-						}
-					}
 					if oAutoKeyProxyId.Protocol.Number != nil {
 						nestedAutoKeyProxyId.Protocol.Number = oAutoKeyProxyId.Protocol.Number
 					}
@@ -1285,11 +1273,23 @@ func specifyEntry_11_0_2(o *Entry) (any, error) {
 						if _, ok := o.Misc["AutoKeyProxyIdProtocolTcp"]; ok {
 							nestedAutoKeyProxyId.Protocol.Tcp.Misc = o.Misc["AutoKeyProxyIdProtocolTcp"]
 						}
+						if oAutoKeyProxyId.Protocol.Tcp.LocalPort != nil {
+							nestedAutoKeyProxyId.Protocol.Tcp.LocalPort = oAutoKeyProxyId.Protocol.Tcp.LocalPort
+						}
 						if oAutoKeyProxyId.Protocol.Tcp.RemotePort != nil {
 							nestedAutoKeyProxyId.Protocol.Tcp.RemotePort = oAutoKeyProxyId.Protocol.Tcp.RemotePort
 						}
-						if oAutoKeyProxyId.Protocol.Tcp.LocalPort != nil {
-							nestedAutoKeyProxyId.Protocol.Tcp.LocalPort = oAutoKeyProxyId.Protocol.Tcp.LocalPort
+					}
+					if oAutoKeyProxyId.Protocol.Udp != nil {
+						nestedAutoKeyProxyId.Protocol.Udp = &AutoKeyProxyIdProtocolUdpXml_11_0_2{}
+						if _, ok := o.Misc["AutoKeyProxyIdProtocolUdp"]; ok {
+							nestedAutoKeyProxyId.Protocol.Udp.Misc = o.Misc["AutoKeyProxyIdProtocolUdp"]
+						}
+						if oAutoKeyProxyId.Protocol.Udp.LocalPort != nil {
+							nestedAutoKeyProxyId.Protocol.Udp.LocalPort = oAutoKeyProxyId.Protocol.Udp.LocalPort
+						}
+						if oAutoKeyProxyId.Protocol.Udp.RemotePort != nil {
+							nestedAutoKeyProxyId.Protocol.Udp.RemotePort = oAutoKeyProxyId.Protocol.Udp.RemotePort
 						}
 					}
 				}
@@ -1306,10 +1306,28 @@ func specifyEntry_11_0_2(o *Entry) (any, error) {
 				if _, ok := o.Misc["AutoKeyProxyIdV6"]; ok {
 					nestedAutoKeyProxyIdV6.Misc = o.Misc["AutoKeyProxyIdV6"]
 				}
+				if oAutoKeyProxyIdV6.Local != nil {
+					nestedAutoKeyProxyIdV6.Local = oAutoKeyProxyIdV6.Local
+				}
+				if oAutoKeyProxyIdV6.Remote != nil {
+					nestedAutoKeyProxyIdV6.Remote = oAutoKeyProxyIdV6.Remote
+				}
 				if oAutoKeyProxyIdV6.Protocol != nil {
 					nestedAutoKeyProxyIdV6.Protocol = &AutoKeyProxyIdV6ProtocolXml_11_0_2{}
 					if _, ok := o.Misc["AutoKeyProxyIdV6Protocol"]; ok {
 						nestedAutoKeyProxyIdV6.Protocol.Misc = o.Misc["AutoKeyProxyIdV6Protocol"]
+					}
+					if oAutoKeyProxyIdV6.Protocol.Udp != nil {
+						nestedAutoKeyProxyIdV6.Protocol.Udp = &AutoKeyProxyIdV6ProtocolUdpXml_11_0_2{}
+						if _, ok := o.Misc["AutoKeyProxyIdV6ProtocolUdp"]; ok {
+							nestedAutoKeyProxyIdV6.Protocol.Udp.Misc = o.Misc["AutoKeyProxyIdV6ProtocolUdp"]
+						}
+						if oAutoKeyProxyIdV6.Protocol.Udp.LocalPort != nil {
+							nestedAutoKeyProxyIdV6.Protocol.Udp.LocalPort = oAutoKeyProxyIdV6.Protocol.Udp.LocalPort
+						}
+						if oAutoKeyProxyIdV6.Protocol.Udp.RemotePort != nil {
+							nestedAutoKeyProxyIdV6.Protocol.Udp.RemotePort = oAutoKeyProxyIdV6.Protocol.Udp.RemotePort
+						}
 					}
 					if oAutoKeyProxyIdV6.Protocol.Number != nil {
 						nestedAutoKeyProxyIdV6.Protocol.Number = oAutoKeyProxyIdV6.Protocol.Number
@@ -1325,34 +1343,16 @@ func specifyEntry_11_0_2(o *Entry) (any, error) {
 						if _, ok := o.Misc["AutoKeyProxyIdV6ProtocolTcp"]; ok {
 							nestedAutoKeyProxyIdV6.Protocol.Tcp.Misc = o.Misc["AutoKeyProxyIdV6ProtocolTcp"]
 						}
-						if oAutoKeyProxyIdV6.Protocol.Tcp.RemotePort != nil {
-							nestedAutoKeyProxyIdV6.Protocol.Tcp.RemotePort = oAutoKeyProxyIdV6.Protocol.Tcp.RemotePort
-						}
 						if oAutoKeyProxyIdV6.Protocol.Tcp.LocalPort != nil {
 							nestedAutoKeyProxyIdV6.Protocol.Tcp.LocalPort = oAutoKeyProxyIdV6.Protocol.Tcp.LocalPort
 						}
-					}
-					if oAutoKeyProxyIdV6.Protocol.Udp != nil {
-						nestedAutoKeyProxyIdV6.Protocol.Udp = &AutoKeyProxyIdV6ProtocolUdpXml_11_0_2{}
-						if _, ok := o.Misc["AutoKeyProxyIdV6ProtocolUdp"]; ok {
-							nestedAutoKeyProxyIdV6.Protocol.Udp.Misc = o.Misc["AutoKeyProxyIdV6ProtocolUdp"]
-						}
-						if oAutoKeyProxyIdV6.Protocol.Udp.LocalPort != nil {
-							nestedAutoKeyProxyIdV6.Protocol.Udp.LocalPort = oAutoKeyProxyIdV6.Protocol.Udp.LocalPort
-						}
-						if oAutoKeyProxyIdV6.Protocol.Udp.RemotePort != nil {
-							nestedAutoKeyProxyIdV6.Protocol.Udp.RemotePort = oAutoKeyProxyIdV6.Protocol.Udp.RemotePort
+						if oAutoKeyProxyIdV6.Protocol.Tcp.RemotePort != nil {
+							nestedAutoKeyProxyIdV6.Protocol.Tcp.RemotePort = oAutoKeyProxyIdV6.Protocol.Tcp.RemotePort
 						}
 					}
 				}
 				if oAutoKeyProxyIdV6.Name != "" {
 					nestedAutoKeyProxyIdV6.Name = oAutoKeyProxyIdV6.Name
-				}
-				if oAutoKeyProxyIdV6.Local != nil {
-					nestedAutoKeyProxyIdV6.Local = oAutoKeyProxyIdV6.Local
-				}
-				if oAutoKeyProxyIdV6.Remote != nil {
-					nestedAutoKeyProxyIdV6.Remote = oAutoKeyProxyIdV6.Remote
 				}
 				nestedAutoKey.ProxyIdV6 = append(nestedAutoKey.ProxyIdV6, nestedAutoKeyProxyIdV6)
 			}
@@ -1401,18 +1401,6 @@ func specifyEntry_11_0_2(o *Entry) (any, error) {
 			if o.GlobalProtectSatellite.LocalAddress.Interface != nil {
 				nestedGlobalProtectSatellite.LocalAddress.Interface = o.GlobalProtectSatellite.LocalAddress.Interface
 			}
-			if o.GlobalProtectSatellite.LocalAddress.FloatingIp != nil {
-				nestedGlobalProtectSatellite.LocalAddress.FloatingIp = &GlobalProtectSatelliteLocalAddressFloatingIpXml_11_0_2{}
-				if _, ok := o.Misc["GlobalProtectSatelliteLocalAddressFloatingIp"]; ok {
-					nestedGlobalProtectSatellite.LocalAddress.FloatingIp.Misc = o.Misc["GlobalProtectSatelliteLocalAddressFloatingIp"]
-				}
-				if o.GlobalProtectSatellite.LocalAddress.FloatingIp.Ipv4 != nil {
-					nestedGlobalProtectSatellite.LocalAddress.FloatingIp.Ipv4 = o.GlobalProtectSatellite.LocalAddress.FloatingIp.Ipv4
-				}
-				if o.GlobalProtectSatellite.LocalAddress.FloatingIp.Ipv6 != nil {
-					nestedGlobalProtectSatellite.LocalAddress.FloatingIp.Ipv6 = o.GlobalProtectSatellite.LocalAddress.FloatingIp.Ipv6
-				}
-			}
 			if o.GlobalProtectSatellite.LocalAddress.Ip != nil {
 				nestedGlobalProtectSatellite.LocalAddress.Ip = &GlobalProtectSatelliteLocalAddressIpXml_11_0_2{}
 				if _, ok := o.Misc["GlobalProtectSatelliteLocalAddressIp"]; ok {
@@ -1423,6 +1411,18 @@ func specifyEntry_11_0_2(o *Entry) (any, error) {
 				}
 				if o.GlobalProtectSatellite.LocalAddress.Ip.Ipv6 != nil {
 					nestedGlobalProtectSatellite.LocalAddress.Ip.Ipv6 = o.GlobalProtectSatellite.LocalAddress.Ip.Ipv6
+				}
+			}
+			if o.GlobalProtectSatellite.LocalAddress.FloatingIp != nil {
+				nestedGlobalProtectSatellite.LocalAddress.FloatingIp = &GlobalProtectSatelliteLocalAddressFloatingIpXml_11_0_2{}
+				if _, ok := o.Misc["GlobalProtectSatelliteLocalAddressFloatingIp"]; ok {
+					nestedGlobalProtectSatellite.LocalAddress.FloatingIp.Misc = o.Misc["GlobalProtectSatelliteLocalAddressFloatingIp"]
+				}
+				if o.GlobalProtectSatellite.LocalAddress.FloatingIp.Ipv4 != nil {
+					nestedGlobalProtectSatellite.LocalAddress.FloatingIp.Ipv4 = o.GlobalProtectSatellite.LocalAddress.FloatingIp.Ipv4
+				}
+				if o.GlobalProtectSatellite.LocalAddress.FloatingIp.Ipv6 != nil {
+					nestedGlobalProtectSatellite.LocalAddress.FloatingIp.Ipv6 = o.GlobalProtectSatellite.LocalAddress.FloatingIp.Ipv6
 				}
 			}
 		}
@@ -1446,11 +1446,11 @@ func specifyEntry_11_0_2(o *Entry) (any, error) {
 			if o.ManualKey.LocalAddress.Interface != nil {
 				nestedManualKey.LocalAddress.Interface = o.ManualKey.LocalAddress.Interface
 			}
-			if o.ManualKey.LocalAddress.Ip != nil {
-				nestedManualKey.LocalAddress.Ip = o.ManualKey.LocalAddress.Ip
-			}
 			if o.ManualKey.LocalAddress.FloatingIp != nil {
 				nestedManualKey.LocalAddress.FloatingIp = o.ManualKey.LocalAddress.FloatingIp
+			}
+			if o.ManualKey.LocalAddress.Ip != nil {
+				nestedManualKey.LocalAddress.Ip = o.ManualKey.LocalAddress.Ip
 			}
 		}
 		if o.ManualKey.LocalSpi != nil {
@@ -1472,15 +1472,6 @@ func specifyEntry_11_0_2(o *Entry) (any, error) {
 			nestedManualKey.Ah = &ManualKeyAhXml_11_0_2{}
 			if _, ok := o.Misc["ManualKeyAh"]; ok {
 				nestedManualKey.Ah.Misc = o.Misc["ManualKeyAh"]
-			}
-			if o.ManualKey.Ah.Sha512 != nil {
-				nestedManualKey.Ah.Sha512 = &ManualKeyAhSha512Xml_11_0_2{}
-				if _, ok := o.Misc["ManualKeyAhSha512"]; ok {
-					nestedManualKey.Ah.Sha512.Misc = o.Misc["ManualKeyAhSha512"]
-				}
-				if o.ManualKey.Ah.Sha512.Key != nil {
-					nestedManualKey.Ah.Sha512.Key = o.ManualKey.Ah.Sha512.Key
-				}
 			}
 			if o.ManualKey.Ah.Md5 != nil {
 				nestedManualKey.Ah.Md5 = &ManualKeyAhMd5Xml_11_0_2{}
@@ -1518,37 +1509,25 @@ func specifyEntry_11_0_2(o *Entry) (any, error) {
 					nestedManualKey.Ah.Sha384.Key = o.ManualKey.Ah.Sha384.Key
 				}
 			}
+			if o.ManualKey.Ah.Sha512 != nil {
+				nestedManualKey.Ah.Sha512 = &ManualKeyAhSha512Xml_11_0_2{}
+				if _, ok := o.Misc["ManualKeyAhSha512"]; ok {
+					nestedManualKey.Ah.Sha512.Misc = o.Misc["ManualKeyAhSha512"]
+				}
+				if o.ManualKey.Ah.Sha512.Key != nil {
+					nestedManualKey.Ah.Sha512.Key = o.ManualKey.Ah.Sha512.Key
+				}
+			}
 		}
 		if o.ManualKey.Esp != nil {
 			nestedManualKey.Esp = &ManualKeyEspXml_11_0_2{}
 			if _, ok := o.Misc["ManualKeyEsp"]; ok {
 				nestedManualKey.Esp.Misc = o.Misc["ManualKeyEsp"]
 			}
-			if o.ManualKey.Esp.Encryption != nil {
-				nestedManualKey.Esp.Encryption = &ManualKeyEspEncryptionXml_11_0_2{}
-				if _, ok := o.Misc["ManualKeyEspEncryption"]; ok {
-					nestedManualKey.Esp.Encryption.Misc = o.Misc["ManualKeyEspEncryption"]
-				}
-				if o.ManualKey.Esp.Encryption.Algorithm != nil {
-					nestedManualKey.Esp.Encryption.Algorithm = o.ManualKey.Esp.Encryption.Algorithm
-				}
-				if o.ManualKey.Esp.Encryption.Key != nil {
-					nestedManualKey.Esp.Encryption.Key = o.ManualKey.Esp.Encryption.Key
-				}
-			}
 			if o.ManualKey.Esp.Authentication != nil {
 				nestedManualKey.Esp.Authentication = &ManualKeyEspAuthenticationXml_11_0_2{}
 				if _, ok := o.Misc["ManualKeyEspAuthentication"]; ok {
 					nestedManualKey.Esp.Authentication.Misc = o.Misc["ManualKeyEspAuthentication"]
-				}
-				if o.ManualKey.Esp.Authentication.Md5 != nil {
-					nestedManualKey.Esp.Authentication.Md5 = &ManualKeyEspAuthenticationMd5Xml_11_0_2{}
-					if _, ok := o.Misc["ManualKeyEspAuthenticationMd5"]; ok {
-						nestedManualKey.Esp.Authentication.Md5.Misc = o.Misc["ManualKeyEspAuthenticationMd5"]
-					}
-					if o.ManualKey.Esp.Authentication.Md5.Key != nil {
-						nestedManualKey.Esp.Authentication.Md5.Key = o.ManualKey.Esp.Authentication.Md5.Key
-					}
 				}
 				if o.ManualKey.Esp.Authentication.None != nil {
 					nestedManualKey.Esp.Authentication.None = &ManualKeyEspAuthenticationNoneXml_11_0_2{}
@@ -1591,6 +1570,27 @@ func specifyEntry_11_0_2(o *Entry) (any, error) {
 					if o.ManualKey.Esp.Authentication.Sha512.Key != nil {
 						nestedManualKey.Esp.Authentication.Sha512.Key = o.ManualKey.Esp.Authentication.Sha512.Key
 					}
+				}
+				if o.ManualKey.Esp.Authentication.Md5 != nil {
+					nestedManualKey.Esp.Authentication.Md5 = &ManualKeyEspAuthenticationMd5Xml_11_0_2{}
+					if _, ok := o.Misc["ManualKeyEspAuthenticationMd5"]; ok {
+						nestedManualKey.Esp.Authentication.Md5.Misc = o.Misc["ManualKeyEspAuthenticationMd5"]
+					}
+					if o.ManualKey.Esp.Authentication.Md5.Key != nil {
+						nestedManualKey.Esp.Authentication.Md5.Key = o.ManualKey.Esp.Authentication.Md5.Key
+					}
+				}
+			}
+			if o.ManualKey.Esp.Encryption != nil {
+				nestedManualKey.Esp.Encryption = &ManualKeyEspEncryptionXml_11_0_2{}
+				if _, ok := o.Misc["ManualKeyEspEncryption"]; ok {
+					nestedManualKey.Esp.Encryption.Misc = o.Misc["ManualKeyEspEncryption"]
+				}
+				if o.ManualKey.Esp.Encryption.Algorithm != nil {
+					nestedManualKey.Esp.Encryption.Algorithm = o.ManualKey.Esp.Encryption.Algorithm
+				}
+				if o.ManualKey.Esp.Encryption.Key != nil {
+					nestedManualKey.Esp.Encryption.Key = o.ManualKey.Esp.Encryption.Key
 				}
 			}
 		}
@@ -1668,6 +1668,9 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 					if oAutoKeyProxyId.Misc != nil {
 						entry.Misc["AutoKeyProxyId"] = oAutoKeyProxyId.Misc
 					}
+					if oAutoKeyProxyId.Name != "" {
+						nestedAutoKeyProxyId.Name = oAutoKeyProxyId.Name
+					}
 					if oAutoKeyProxyId.Local != nil {
 						nestedAutoKeyProxyId.Local = oAutoKeyProxyId.Local
 					}
@@ -1713,9 +1716,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 							}
 						}
 					}
-					if oAutoKeyProxyId.Name != "" {
-						nestedAutoKeyProxyId.Name = oAutoKeyProxyId.Name
-					}
 					nestedAutoKey.ProxyId = append(nestedAutoKey.ProxyId, nestedAutoKeyProxyId)
 				}
 			}
@@ -1725,9 +1725,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 					nestedAutoKeyProxyIdV6 := AutoKeyProxyIdV6{}
 					if oAutoKeyProxyIdV6.Misc != nil {
 						entry.Misc["AutoKeyProxyIdV6"] = oAutoKeyProxyIdV6.Misc
-					}
-					if oAutoKeyProxyIdV6.Local != nil {
-						nestedAutoKeyProxyIdV6.Local = oAutoKeyProxyIdV6.Local
 					}
 					if oAutoKeyProxyIdV6.Remote != nil {
 						nestedAutoKeyProxyIdV6.Remote = oAutoKeyProxyIdV6.Remote
@@ -1774,6 +1771,9 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 					if oAutoKeyProxyIdV6.Name != "" {
 						nestedAutoKeyProxyIdV6.Name = oAutoKeyProxyIdV6.Name
 					}
+					if oAutoKeyProxyIdV6.Local != nil {
+						nestedAutoKeyProxyIdV6.Local = oAutoKeyProxyIdV6.Local
+					}
 					nestedAutoKey.ProxyIdV6 = append(nestedAutoKey.ProxyIdV6, nestedAutoKeyProxyIdV6)
 				}
 			}
@@ -1785,6 +1785,21 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 			nestedGlobalProtectSatellite = &GlobalProtectSatellite{}
 			if o.GlobalProtectSatellite.Misc != nil {
 				entry.Misc["GlobalProtectSatellite"] = o.GlobalProtectSatellite.Misc
+			}
+			if o.GlobalProtectSatellite.ExternalCa != nil {
+				nestedGlobalProtectSatellite.ExternalCa = &GlobalProtectSatelliteExternalCa{}
+				if o.GlobalProtectSatellite.ExternalCa.Misc != nil {
+					entry.Misc["GlobalProtectSatelliteExternalCa"] = o.GlobalProtectSatellite.ExternalCa.Misc
+				}
+				if o.GlobalProtectSatellite.ExternalCa.CertificateProfile != nil {
+					nestedGlobalProtectSatellite.ExternalCa.CertificateProfile = o.GlobalProtectSatellite.ExternalCa.CertificateProfile
+				}
+				if o.GlobalProtectSatellite.ExternalCa.LocalCertificate != nil {
+					nestedGlobalProtectSatellite.ExternalCa.LocalCertificate = o.GlobalProtectSatellite.ExternalCa.LocalCertificate
+				}
+			}
+			if o.GlobalProtectSatellite.Ipv6Preferred != nil {
+				nestedGlobalProtectSatellite.Ipv6Preferred = util.AsBool(o.GlobalProtectSatellite.Ipv6Preferred, nil)
 			}
 			if o.GlobalProtectSatellite.LocalAddress != nil {
 				nestedGlobalProtectSatellite.LocalAddress = &GlobalProtectSatelliteLocalAddress{}
@@ -1811,11 +1826,11 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 					if o.GlobalProtectSatellite.LocalAddress.Ip.Misc != nil {
 						entry.Misc["GlobalProtectSatelliteLocalAddressIp"] = o.GlobalProtectSatellite.LocalAddress.Ip.Misc
 					}
-					if o.GlobalProtectSatellite.LocalAddress.Ip.Ipv4 != nil {
-						nestedGlobalProtectSatellite.LocalAddress.Ip.Ipv4 = o.GlobalProtectSatellite.LocalAddress.Ip.Ipv4
-					}
 					if o.GlobalProtectSatellite.LocalAddress.Ip.Ipv6 != nil {
 						nestedGlobalProtectSatellite.LocalAddress.Ip.Ipv6 = o.GlobalProtectSatellite.LocalAddress.Ip.Ipv6
+					}
+					if o.GlobalProtectSatellite.LocalAddress.Ip.Ipv4 != nil {
+						nestedGlobalProtectSatellite.LocalAddress.Ip.Ipv4 = o.GlobalProtectSatellite.LocalAddress.Ip.Ipv4
 					}
 				}
 			}
@@ -1834,21 +1849,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 			if o.GlobalProtectSatellite.PublishRoutes != nil {
 				nestedGlobalProtectSatellite.PublishRoutes = util.MemToStr(o.GlobalProtectSatellite.PublishRoutes)
 			}
-			if o.GlobalProtectSatellite.ExternalCa != nil {
-				nestedGlobalProtectSatellite.ExternalCa = &GlobalProtectSatelliteExternalCa{}
-				if o.GlobalProtectSatellite.ExternalCa.Misc != nil {
-					entry.Misc["GlobalProtectSatelliteExternalCa"] = o.GlobalProtectSatellite.ExternalCa.Misc
-				}
-				if o.GlobalProtectSatellite.ExternalCa.CertificateProfile != nil {
-					nestedGlobalProtectSatellite.ExternalCa.CertificateProfile = o.GlobalProtectSatellite.ExternalCa.CertificateProfile
-				}
-				if o.GlobalProtectSatellite.ExternalCa.LocalCertificate != nil {
-					nestedGlobalProtectSatellite.ExternalCa.LocalCertificate = o.GlobalProtectSatellite.ExternalCa.LocalCertificate
-				}
-			}
-			if o.GlobalProtectSatellite.Ipv6Preferred != nil {
-				nestedGlobalProtectSatellite.Ipv6Preferred = util.AsBool(o.GlobalProtectSatellite.Ipv6Preferred, nil)
-			}
 		}
 		entry.GlobalProtectSatellite = nestedGlobalProtectSatellite
 
@@ -1857,18 +1857,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 			nestedManualKey = &ManualKey{}
 			if o.ManualKey.Misc != nil {
 				entry.Misc["ManualKey"] = o.ManualKey.Misc
-			}
-			if o.ManualKey.PeerAddress != nil {
-				nestedManualKey.PeerAddress = &ManualKeyPeerAddress{}
-				if o.ManualKey.PeerAddress.Misc != nil {
-					entry.Misc["ManualKeyPeerAddress"] = o.ManualKey.PeerAddress.Misc
-				}
-				if o.ManualKey.PeerAddress.Ip != nil {
-					nestedManualKey.PeerAddress.Ip = o.ManualKey.PeerAddress.Ip
-				}
-			}
-			if o.ManualKey.RemoteSpi != nil {
-				nestedManualKey.RemoteSpi = o.ManualKey.RemoteSpi
 			}
 			if o.ManualKey.LocalAddress != nil {
 				nestedManualKey.LocalAddress = &ManualKeyLocalAddress{}
@@ -1887,6 +1875,18 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 			}
 			if o.ManualKey.LocalSpi != nil {
 				nestedManualKey.LocalSpi = o.ManualKey.LocalSpi
+			}
+			if o.ManualKey.PeerAddress != nil {
+				nestedManualKey.PeerAddress = &ManualKeyPeerAddress{}
+				if o.ManualKey.PeerAddress.Misc != nil {
+					entry.Misc["ManualKeyPeerAddress"] = o.ManualKey.PeerAddress.Misc
+				}
+				if o.ManualKey.PeerAddress.Ip != nil {
+					nestedManualKey.PeerAddress.Ip = o.ManualKey.PeerAddress.Ip
+				}
+			}
+			if o.ManualKey.RemoteSpi != nil {
+				nestedManualKey.RemoteSpi = o.ManualKey.RemoteSpi
 			}
 			if o.ManualKey.Ah != nil {
 				nestedManualKey.Ah = &ManualKeyAh{}
@@ -1961,6 +1961,12 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 					if o.ManualKey.Esp.Authentication.Misc != nil {
 						entry.Misc["ManualKeyEspAuthentication"] = o.ManualKey.Esp.Authentication.Misc
 					}
+					if o.ManualKey.Esp.Authentication.None != nil {
+						nestedManualKey.Esp.Authentication.None = &ManualKeyEspAuthenticationNone{}
+						if o.ManualKey.Esp.Authentication.None.Misc != nil {
+							entry.Misc["ManualKeyEspAuthenticationNone"] = o.ManualKey.Esp.Authentication.None.Misc
+						}
+					}
 					if o.ManualKey.Esp.Authentication.Sha1 != nil {
 						nestedManualKey.Esp.Authentication.Sha1 = &ManualKeyEspAuthenticationSha1{}
 						if o.ManualKey.Esp.Authentication.Sha1.Misc != nil {
@@ -2004,12 +2010,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 						}
 						if o.ManualKey.Esp.Authentication.Md5.Key != nil {
 							nestedManualKey.Esp.Authentication.Md5.Key = o.ManualKey.Esp.Authentication.Md5.Key
-						}
-					}
-					if o.ManualKey.Esp.Authentication.None != nil {
-						nestedManualKey.Esp.Authentication.None = &ManualKeyEspAuthenticationNone{}
-						if o.ManualKey.Esp.Authentication.None.Misc != nil {
-							entry.Misc["ManualKeyEspAuthenticationNone"] = o.ManualKey.Esp.Authentication.None.Misc
 						}
 					}
 				}
@@ -2047,17 +2047,17 @@ func (c *entryXmlContainer_11_0_2) Normalize() ([]*Entry, error) {
 			if o.TunnelMonitor.Misc != nil {
 				entry.Misc["TunnelMonitor"] = o.TunnelMonitor.Misc
 			}
-			if o.TunnelMonitor.DestinationIp != nil {
-				nestedTunnelMonitor.DestinationIp = o.TunnelMonitor.DestinationIp
-			}
-			if o.TunnelMonitor.Enable != nil {
-				nestedTunnelMonitor.Enable = util.AsBool(o.TunnelMonitor.Enable, nil)
-			}
 			if o.TunnelMonitor.ProxyId != nil {
 				nestedTunnelMonitor.ProxyId = o.TunnelMonitor.ProxyId
 			}
 			if o.TunnelMonitor.TunnelMonitorProfile != nil {
 				nestedTunnelMonitor.TunnelMonitorProfile = o.TunnelMonitor.TunnelMonitorProfile
+			}
+			if o.TunnelMonitor.DestinationIp != nil {
+				nestedTunnelMonitor.DestinationIp = o.TunnelMonitor.DestinationIp
+			}
+			if o.TunnelMonitor.Enable != nil {
+				nestedTunnelMonitor.Enable = util.AsBool(o.TunnelMonitor.Enable, nil)
 			}
 		}
 		entry.TunnelMonitor = nestedTunnelMonitor
@@ -2067,19 +2067,6 @@ func (c *entryXmlContainer_11_0_2) Normalize() ([]*Entry, error) {
 			nestedAutoKey = &AutoKey{}
 			if o.AutoKey.Misc != nil {
 				entry.Misc["AutoKey"] = o.AutoKey.Misc
-			}
-			if o.AutoKey.IkeGateway != nil {
-				nestedAutoKey.IkeGateway = []AutoKeyIkeGateway{}
-				for _, oAutoKeyIkeGateway := range o.AutoKey.IkeGateway {
-					nestedAutoKeyIkeGateway := AutoKeyIkeGateway{}
-					if oAutoKeyIkeGateway.Misc != nil {
-						entry.Misc["AutoKeyIkeGateway"] = oAutoKeyIkeGateway.Misc
-					}
-					if oAutoKeyIkeGateway.Name != "" {
-						nestedAutoKeyIkeGateway.Name = oAutoKeyIkeGateway.Name
-					}
-					nestedAutoKey.IkeGateway = append(nestedAutoKey.IkeGateway, nestedAutoKeyIkeGateway)
-				}
 			}
 			if o.AutoKey.IpsecCryptoProfile != nil {
 				nestedAutoKey.IpsecCryptoProfile = o.AutoKey.IpsecCryptoProfile
@@ -2091,9 +2078,6 @@ func (c *entryXmlContainer_11_0_2) Normalize() ([]*Entry, error) {
 					if oAutoKeyProxyId.Misc != nil {
 						entry.Misc["AutoKeyProxyId"] = oAutoKeyProxyId.Misc
 					}
-					if oAutoKeyProxyId.Local != nil {
-						nestedAutoKeyProxyId.Local = oAutoKeyProxyId.Local
-					}
 					if oAutoKeyProxyId.Remote != nil {
 						nestedAutoKeyProxyId.Remote = oAutoKeyProxyId.Remote
 					}
@@ -2101,9 +2085,6 @@ func (c *entryXmlContainer_11_0_2) Normalize() ([]*Entry, error) {
 						nestedAutoKeyProxyId.Protocol = &AutoKeyProxyIdProtocol{}
 						if oAutoKeyProxyId.Protocol.Misc != nil {
 							entry.Misc["AutoKeyProxyIdProtocol"] = oAutoKeyProxyId.Protocol.Misc
-						}
-						if oAutoKeyProxyId.Protocol.Number != nil {
-							nestedAutoKeyProxyId.Protocol.Number = oAutoKeyProxyId.Protocol.Number
 						}
 						if oAutoKeyProxyId.Protocol.Any != nil {
 							nestedAutoKeyProxyId.Protocol.Any = &AutoKeyProxyIdProtocolAny{}
@@ -2135,9 +2116,15 @@ func (c *entryXmlContainer_11_0_2) Normalize() ([]*Entry, error) {
 								nestedAutoKeyProxyId.Protocol.Udp.RemotePort = oAutoKeyProxyId.Protocol.Udp.RemotePort
 							}
 						}
+						if oAutoKeyProxyId.Protocol.Number != nil {
+							nestedAutoKeyProxyId.Protocol.Number = oAutoKeyProxyId.Protocol.Number
+						}
 					}
 					if oAutoKeyProxyId.Name != "" {
 						nestedAutoKeyProxyId.Name = oAutoKeyProxyId.Name
+					}
+					if oAutoKeyProxyId.Local != nil {
+						nestedAutoKeyProxyId.Local = oAutoKeyProxyId.Local
 					}
 					nestedAutoKey.ProxyId = append(nestedAutoKey.ProxyId, nestedAutoKeyProxyId)
 				}
@@ -2159,15 +2146,6 @@ func (c *entryXmlContainer_11_0_2) Normalize() ([]*Entry, error) {
 						nestedAutoKeyProxyIdV6.Protocol = &AutoKeyProxyIdV6Protocol{}
 						if oAutoKeyProxyIdV6.Protocol.Misc != nil {
 							entry.Misc["AutoKeyProxyIdV6Protocol"] = oAutoKeyProxyIdV6.Protocol.Misc
-						}
-						if oAutoKeyProxyIdV6.Protocol.Number != nil {
-							nestedAutoKeyProxyIdV6.Protocol.Number = oAutoKeyProxyIdV6.Protocol.Number
-						}
-						if oAutoKeyProxyIdV6.Protocol.Any != nil {
-							nestedAutoKeyProxyIdV6.Protocol.Any = &AutoKeyProxyIdV6ProtocolAny{}
-							if oAutoKeyProxyIdV6.Protocol.Any.Misc != nil {
-								entry.Misc["AutoKeyProxyIdV6ProtocolAny"] = oAutoKeyProxyIdV6.Protocol.Any.Misc
-							}
 						}
 						if oAutoKeyProxyIdV6.Protocol.Tcp != nil {
 							nestedAutoKeyProxyIdV6.Protocol.Tcp = &AutoKeyProxyIdV6ProtocolTcp{}
@@ -2193,11 +2171,33 @@ func (c *entryXmlContainer_11_0_2) Normalize() ([]*Entry, error) {
 								nestedAutoKeyProxyIdV6.Protocol.Udp.RemotePort = oAutoKeyProxyIdV6.Protocol.Udp.RemotePort
 							}
 						}
+						if oAutoKeyProxyIdV6.Protocol.Number != nil {
+							nestedAutoKeyProxyIdV6.Protocol.Number = oAutoKeyProxyIdV6.Protocol.Number
+						}
+						if oAutoKeyProxyIdV6.Protocol.Any != nil {
+							nestedAutoKeyProxyIdV6.Protocol.Any = &AutoKeyProxyIdV6ProtocolAny{}
+							if oAutoKeyProxyIdV6.Protocol.Any.Misc != nil {
+								entry.Misc["AutoKeyProxyIdV6ProtocolAny"] = oAutoKeyProxyIdV6.Protocol.Any.Misc
+							}
+						}
 					}
 					if oAutoKeyProxyIdV6.Name != "" {
 						nestedAutoKeyProxyIdV6.Name = oAutoKeyProxyIdV6.Name
 					}
 					nestedAutoKey.ProxyIdV6 = append(nestedAutoKey.ProxyIdV6, nestedAutoKeyProxyIdV6)
+				}
+			}
+			if o.AutoKey.IkeGateway != nil {
+				nestedAutoKey.IkeGateway = []AutoKeyIkeGateway{}
+				for _, oAutoKeyIkeGateway := range o.AutoKey.IkeGateway {
+					nestedAutoKeyIkeGateway := AutoKeyIkeGateway{}
+					if oAutoKeyIkeGateway.Misc != nil {
+						entry.Misc["AutoKeyIkeGateway"] = oAutoKeyIkeGateway.Misc
+					}
+					if oAutoKeyIkeGateway.Name != "" {
+						nestedAutoKeyIkeGateway.Name = oAutoKeyIkeGateway.Name
+					}
+					nestedAutoKey.IkeGateway = append(nestedAutoKey.IkeGateway, nestedAutoKeyIkeGateway)
 				}
 			}
 		}
@@ -2208,39 +2208,6 @@ func (c *entryXmlContainer_11_0_2) Normalize() ([]*Entry, error) {
 			nestedGlobalProtectSatellite = &GlobalProtectSatellite{}
 			if o.GlobalProtectSatellite.Misc != nil {
 				entry.Misc["GlobalProtectSatellite"] = o.GlobalProtectSatellite.Misc
-			}
-			if o.GlobalProtectSatellite.LocalAddress != nil {
-				nestedGlobalProtectSatellite.LocalAddress = &GlobalProtectSatelliteLocalAddress{}
-				if o.GlobalProtectSatellite.LocalAddress.Misc != nil {
-					entry.Misc["GlobalProtectSatelliteLocalAddress"] = o.GlobalProtectSatellite.LocalAddress.Misc
-				}
-				if o.GlobalProtectSatellite.LocalAddress.Interface != nil {
-					nestedGlobalProtectSatellite.LocalAddress.Interface = o.GlobalProtectSatellite.LocalAddress.Interface
-				}
-				if o.GlobalProtectSatellite.LocalAddress.Ip != nil {
-					nestedGlobalProtectSatellite.LocalAddress.Ip = &GlobalProtectSatelliteLocalAddressIp{}
-					if o.GlobalProtectSatellite.LocalAddress.Ip.Misc != nil {
-						entry.Misc["GlobalProtectSatelliteLocalAddressIp"] = o.GlobalProtectSatellite.LocalAddress.Ip.Misc
-					}
-					if o.GlobalProtectSatellite.LocalAddress.Ip.Ipv4 != nil {
-						nestedGlobalProtectSatellite.LocalAddress.Ip.Ipv4 = o.GlobalProtectSatellite.LocalAddress.Ip.Ipv4
-					}
-					if o.GlobalProtectSatellite.LocalAddress.Ip.Ipv6 != nil {
-						nestedGlobalProtectSatellite.LocalAddress.Ip.Ipv6 = o.GlobalProtectSatellite.LocalAddress.Ip.Ipv6
-					}
-				}
-				if o.GlobalProtectSatellite.LocalAddress.FloatingIp != nil {
-					nestedGlobalProtectSatellite.LocalAddress.FloatingIp = &GlobalProtectSatelliteLocalAddressFloatingIp{}
-					if o.GlobalProtectSatellite.LocalAddress.FloatingIp.Misc != nil {
-						entry.Misc["GlobalProtectSatelliteLocalAddressFloatingIp"] = o.GlobalProtectSatellite.LocalAddress.FloatingIp.Misc
-					}
-					if o.GlobalProtectSatellite.LocalAddress.FloatingIp.Ipv4 != nil {
-						nestedGlobalProtectSatellite.LocalAddress.FloatingIp.Ipv4 = o.GlobalProtectSatellite.LocalAddress.FloatingIp.Ipv4
-					}
-					if o.GlobalProtectSatellite.LocalAddress.FloatingIp.Ipv6 != nil {
-						nestedGlobalProtectSatellite.LocalAddress.FloatingIp.Ipv6 = o.GlobalProtectSatellite.LocalAddress.FloatingIp.Ipv6
-					}
-				}
 			}
 			if o.GlobalProtectSatellite.PortalAddress != nil {
 				nestedGlobalProtectSatellite.PortalAddress = o.GlobalProtectSatellite.PortalAddress
@@ -2271,6 +2238,39 @@ func (c *entryXmlContainer_11_0_2) Normalize() ([]*Entry, error) {
 			}
 			if o.GlobalProtectSatellite.Ipv6Preferred != nil {
 				nestedGlobalProtectSatellite.Ipv6Preferred = util.AsBool(o.GlobalProtectSatellite.Ipv6Preferred, nil)
+			}
+			if o.GlobalProtectSatellite.LocalAddress != nil {
+				nestedGlobalProtectSatellite.LocalAddress = &GlobalProtectSatelliteLocalAddress{}
+				if o.GlobalProtectSatellite.LocalAddress.Misc != nil {
+					entry.Misc["GlobalProtectSatelliteLocalAddress"] = o.GlobalProtectSatellite.LocalAddress.Misc
+				}
+				if o.GlobalProtectSatellite.LocalAddress.Interface != nil {
+					nestedGlobalProtectSatellite.LocalAddress.Interface = o.GlobalProtectSatellite.LocalAddress.Interface
+				}
+				if o.GlobalProtectSatellite.LocalAddress.FloatingIp != nil {
+					nestedGlobalProtectSatellite.LocalAddress.FloatingIp = &GlobalProtectSatelliteLocalAddressFloatingIp{}
+					if o.GlobalProtectSatellite.LocalAddress.FloatingIp.Misc != nil {
+						entry.Misc["GlobalProtectSatelliteLocalAddressFloatingIp"] = o.GlobalProtectSatellite.LocalAddress.FloatingIp.Misc
+					}
+					if o.GlobalProtectSatellite.LocalAddress.FloatingIp.Ipv4 != nil {
+						nestedGlobalProtectSatellite.LocalAddress.FloatingIp.Ipv4 = o.GlobalProtectSatellite.LocalAddress.FloatingIp.Ipv4
+					}
+					if o.GlobalProtectSatellite.LocalAddress.FloatingIp.Ipv6 != nil {
+						nestedGlobalProtectSatellite.LocalAddress.FloatingIp.Ipv6 = o.GlobalProtectSatellite.LocalAddress.FloatingIp.Ipv6
+					}
+				}
+				if o.GlobalProtectSatellite.LocalAddress.Ip != nil {
+					nestedGlobalProtectSatellite.LocalAddress.Ip = &GlobalProtectSatelliteLocalAddressIp{}
+					if o.GlobalProtectSatellite.LocalAddress.Ip.Misc != nil {
+						entry.Misc["GlobalProtectSatelliteLocalAddressIp"] = o.GlobalProtectSatellite.LocalAddress.Ip.Misc
+					}
+					if o.GlobalProtectSatellite.LocalAddress.Ip.Ipv6 != nil {
+						nestedGlobalProtectSatellite.LocalAddress.Ip.Ipv6 = o.GlobalProtectSatellite.LocalAddress.Ip.Ipv6
+					}
+					if o.GlobalProtectSatellite.LocalAddress.Ip.Ipv4 != nil {
+						nestedGlobalProtectSatellite.LocalAddress.Ip.Ipv4 = o.GlobalProtectSatellite.LocalAddress.Ip.Ipv4
+					}
+				}
 			}
 		}
 		entry.GlobalProtectSatellite = nestedGlobalProtectSatellite
@@ -2311,61 +2311,22 @@ func (c *entryXmlContainer_11_0_2) Normalize() ([]*Entry, error) {
 			if o.ManualKey.RemoteSpi != nil {
 				nestedManualKey.RemoteSpi = o.ManualKey.RemoteSpi
 			}
-			if o.ManualKey.Ah != nil {
-				nestedManualKey.Ah = &ManualKeyAh{}
-				if o.ManualKey.Ah.Misc != nil {
-					entry.Misc["ManualKeyAh"] = o.ManualKey.Ah.Misc
-				}
-				if o.ManualKey.Ah.Md5 != nil {
-					nestedManualKey.Ah.Md5 = &ManualKeyAhMd5{}
-					if o.ManualKey.Ah.Md5.Misc != nil {
-						entry.Misc["ManualKeyAhMd5"] = o.ManualKey.Ah.Md5.Misc
-					}
-					if o.ManualKey.Ah.Md5.Key != nil {
-						nestedManualKey.Ah.Md5.Key = o.ManualKey.Ah.Md5.Key
-					}
-				}
-				if o.ManualKey.Ah.Sha1 != nil {
-					nestedManualKey.Ah.Sha1 = &ManualKeyAhSha1{}
-					if o.ManualKey.Ah.Sha1.Misc != nil {
-						entry.Misc["ManualKeyAhSha1"] = o.ManualKey.Ah.Sha1.Misc
-					}
-					if o.ManualKey.Ah.Sha1.Key != nil {
-						nestedManualKey.Ah.Sha1.Key = o.ManualKey.Ah.Sha1.Key
-					}
-				}
-				if o.ManualKey.Ah.Sha256 != nil {
-					nestedManualKey.Ah.Sha256 = &ManualKeyAhSha256{}
-					if o.ManualKey.Ah.Sha256.Misc != nil {
-						entry.Misc["ManualKeyAhSha256"] = o.ManualKey.Ah.Sha256.Misc
-					}
-					if o.ManualKey.Ah.Sha256.Key != nil {
-						nestedManualKey.Ah.Sha256.Key = o.ManualKey.Ah.Sha256.Key
-					}
-				}
-				if o.ManualKey.Ah.Sha384 != nil {
-					nestedManualKey.Ah.Sha384 = &ManualKeyAhSha384{}
-					if o.ManualKey.Ah.Sha384.Misc != nil {
-						entry.Misc["ManualKeyAhSha384"] = o.ManualKey.Ah.Sha384.Misc
-					}
-					if o.ManualKey.Ah.Sha384.Key != nil {
-						nestedManualKey.Ah.Sha384.Key = o.ManualKey.Ah.Sha384.Key
-					}
-				}
-				if o.ManualKey.Ah.Sha512 != nil {
-					nestedManualKey.Ah.Sha512 = &ManualKeyAhSha512{}
-					if o.ManualKey.Ah.Sha512.Misc != nil {
-						entry.Misc["ManualKeyAhSha512"] = o.ManualKey.Ah.Sha512.Misc
-					}
-					if o.ManualKey.Ah.Sha512.Key != nil {
-						nestedManualKey.Ah.Sha512.Key = o.ManualKey.Ah.Sha512.Key
-					}
-				}
-			}
 			if o.ManualKey.Esp != nil {
 				nestedManualKey.Esp = &ManualKeyEsp{}
 				if o.ManualKey.Esp.Misc != nil {
 					entry.Misc["ManualKeyEsp"] = o.ManualKey.Esp.Misc
+				}
+				if o.ManualKey.Esp.Encryption != nil {
+					nestedManualKey.Esp.Encryption = &ManualKeyEspEncryption{}
+					if o.ManualKey.Esp.Encryption.Misc != nil {
+						entry.Misc["ManualKeyEspEncryption"] = o.ManualKey.Esp.Encryption.Misc
+					}
+					if o.ManualKey.Esp.Encryption.Algorithm != nil {
+						nestedManualKey.Esp.Encryption.Algorithm = o.ManualKey.Esp.Encryption.Algorithm
+					}
+					if o.ManualKey.Esp.Encryption.Key != nil {
+						nestedManualKey.Esp.Encryption.Key = o.ManualKey.Esp.Encryption.Key
+					}
 				}
 				if o.ManualKey.Esp.Authentication != nil {
 					nestedManualKey.Esp.Authentication = &ManualKeyEspAuthentication{}
@@ -2424,16 +2385,55 @@ func (c *entryXmlContainer_11_0_2) Normalize() ([]*Entry, error) {
 						}
 					}
 				}
-				if o.ManualKey.Esp.Encryption != nil {
-					nestedManualKey.Esp.Encryption = &ManualKeyEspEncryption{}
-					if o.ManualKey.Esp.Encryption.Misc != nil {
-						entry.Misc["ManualKeyEspEncryption"] = o.ManualKey.Esp.Encryption.Misc
+			}
+			if o.ManualKey.Ah != nil {
+				nestedManualKey.Ah = &ManualKeyAh{}
+				if o.ManualKey.Ah.Misc != nil {
+					entry.Misc["ManualKeyAh"] = o.ManualKey.Ah.Misc
+				}
+				if o.ManualKey.Ah.Md5 != nil {
+					nestedManualKey.Ah.Md5 = &ManualKeyAhMd5{}
+					if o.ManualKey.Ah.Md5.Misc != nil {
+						entry.Misc["ManualKeyAhMd5"] = o.ManualKey.Ah.Md5.Misc
 					}
-					if o.ManualKey.Esp.Encryption.Algorithm != nil {
-						nestedManualKey.Esp.Encryption.Algorithm = o.ManualKey.Esp.Encryption.Algorithm
+					if o.ManualKey.Ah.Md5.Key != nil {
+						nestedManualKey.Ah.Md5.Key = o.ManualKey.Ah.Md5.Key
 					}
-					if o.ManualKey.Esp.Encryption.Key != nil {
-						nestedManualKey.Esp.Encryption.Key = o.ManualKey.Esp.Encryption.Key
+				}
+				if o.ManualKey.Ah.Sha1 != nil {
+					nestedManualKey.Ah.Sha1 = &ManualKeyAhSha1{}
+					if o.ManualKey.Ah.Sha1.Misc != nil {
+						entry.Misc["ManualKeyAhSha1"] = o.ManualKey.Ah.Sha1.Misc
+					}
+					if o.ManualKey.Ah.Sha1.Key != nil {
+						nestedManualKey.Ah.Sha1.Key = o.ManualKey.Ah.Sha1.Key
+					}
+				}
+				if o.ManualKey.Ah.Sha256 != nil {
+					nestedManualKey.Ah.Sha256 = &ManualKeyAhSha256{}
+					if o.ManualKey.Ah.Sha256.Misc != nil {
+						entry.Misc["ManualKeyAhSha256"] = o.ManualKey.Ah.Sha256.Misc
+					}
+					if o.ManualKey.Ah.Sha256.Key != nil {
+						nestedManualKey.Ah.Sha256.Key = o.ManualKey.Ah.Sha256.Key
+					}
+				}
+				if o.ManualKey.Ah.Sha384 != nil {
+					nestedManualKey.Ah.Sha384 = &ManualKeyAhSha384{}
+					if o.ManualKey.Ah.Sha384.Misc != nil {
+						entry.Misc["ManualKeyAhSha384"] = o.ManualKey.Ah.Sha384.Misc
+					}
+					if o.ManualKey.Ah.Sha384.Key != nil {
+						nestedManualKey.Ah.Sha384.Key = o.ManualKey.Ah.Sha384.Key
+					}
+				}
+				if o.ManualKey.Ah.Sha512 != nil {
+					nestedManualKey.Ah.Sha512 = &ManualKeyAhSha512{}
+					if o.ManualKey.Ah.Sha512.Misc != nil {
+						entry.Misc["ManualKeyAhSha512"] = o.ManualKey.Ah.Sha512.Misc
+					}
+					if o.ManualKey.Ah.Sha512.Key != nil {
+						nestedManualKey.Ah.Sha512.Key = o.ManualKey.Ah.Sha512.Key
 					}
 				}
 			}
@@ -2508,32 +2508,17 @@ func matchTunnelMonitor(a *TunnelMonitor, b *TunnelMonitor) bool {
 	} else if a == nil && b == nil {
 		return true
 	}
-	if !util.StringsMatch(a.ProxyId, b.ProxyId) {
-		return false
-	}
-	if !util.StringsMatch(a.TunnelMonitorProfile, b.TunnelMonitorProfile) {
-		return false
-	}
 	if !util.StringsMatch(a.DestinationIp, b.DestinationIp) {
 		return false
 	}
 	if !util.BoolsMatch(a.Enable, b.Enable) {
 		return false
 	}
-	return true
-}
-func matchAutoKeyIkeGateway(a []AutoKeyIkeGateway, b []AutoKeyIkeGateway) bool {
-	if a == nil && b != nil || a != nil && b == nil {
+	if !util.StringsMatch(a.ProxyId, b.ProxyId) {
 		return false
-	} else if a == nil && b == nil {
-		return true
 	}
-	for _, a := range a {
-		for _, b := range b {
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-		}
+	if !util.StringsMatch(a.TunnelMonitorProfile, b.TunnelMonitorProfile) {
+		return false
 	}
 	return true
 }
@@ -2579,16 +2564,16 @@ func matchAutoKeyProxyIdProtocol(a *AutoKeyProxyIdProtocol, b *AutoKeyProxyIdPro
 	} else if a == nil && b == nil {
 		return true
 	}
-	if !util.Ints64Match(a.Number, b.Number) {
-		return false
-	}
-	if !matchAutoKeyProxyIdProtocolAny(a.Any, b.Any) {
-		return false
-	}
 	if !matchAutoKeyProxyIdProtocolTcp(a.Tcp, b.Tcp) {
 		return false
 	}
 	if !matchAutoKeyProxyIdProtocolUdp(a.Udp, b.Udp) {
+		return false
+	}
+	if !util.Ints64Match(a.Number, b.Number) {
+		return false
+	}
+	if !matchAutoKeyProxyIdProtocolAny(a.Any, b.Any) {
 		return false
 	}
 	return true
@@ -2681,6 +2666,9 @@ func matchAutoKeyProxyIdV6(a []AutoKeyProxyIdV6, b []AutoKeyProxyIdV6) bool {
 	}
 	for _, a := range a {
 		for _, b := range b {
+			if !util.StringsEqual(a.Name, b.Name) {
+				return false
+			}
 			if !util.StringsMatch(a.Local, b.Local) {
 				return false
 			}
@@ -2690,6 +2678,18 @@ func matchAutoKeyProxyIdV6(a []AutoKeyProxyIdV6, b []AutoKeyProxyIdV6) bool {
 			if !matchAutoKeyProxyIdV6Protocol(a.Protocol, b.Protocol) {
 				return false
 			}
+		}
+	}
+	return true
+}
+func matchAutoKeyIkeGateway(a []AutoKeyIkeGateway, b []AutoKeyIkeGateway) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	for _, a := range a {
+		for _, b := range b {
 			if !util.StringsEqual(a.Name, b.Name) {
 				return false
 			}
@@ -2703,6 +2703,9 @@ func matchAutoKey(a *AutoKey, b *AutoKey) bool {
 	} else if a == nil && b == nil {
 		return true
 	}
+	if !matchAutoKeyProxyIdV6(a.ProxyIdV6, b.ProxyIdV6) {
+		return false
+	}
 	if !matchAutoKeyIkeGateway(a.IkeGateway, b.IkeGateway) {
 		return false
 	}
@@ -2712,7 +2715,18 @@ func matchAutoKey(a *AutoKey, b *AutoKey) bool {
 	if !matchAutoKeyProxyId(a.ProxyId, b.ProxyId) {
 		return false
 	}
-	if !matchAutoKeyProxyIdV6(a.ProxyIdV6, b.ProxyIdV6) {
+	return true
+}
+func matchGlobalProtectSatelliteExternalCa(a *GlobalProtectSatelliteExternalCa, b *GlobalProtectSatelliteExternalCa) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !util.StringsMatch(a.CertificateProfile, b.CertificateProfile) {
+		return false
+	}
+	if !util.StringsMatch(a.LocalCertificate, b.LocalCertificate) {
 		return false
 	}
 	return true
@@ -2773,34 +2787,11 @@ func matchGlobalProtectSatellitePublishConnectedRoutes(a *GlobalProtectSatellite
 	}
 	return true
 }
-func matchGlobalProtectSatelliteExternalCa(a *GlobalProtectSatelliteExternalCa, b *GlobalProtectSatelliteExternalCa) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !util.StringsMatch(a.CertificateProfile, b.CertificateProfile) {
-		return false
-	}
-	if !util.StringsMatch(a.LocalCertificate, b.LocalCertificate) {
-		return false
-	}
-	return true
-}
 func matchGlobalProtectSatellite(a *GlobalProtectSatellite, b *GlobalProtectSatellite) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
 	} else if a == nil && b == nil {
 		return true
-	}
-	if !matchGlobalProtectSatelliteExternalCa(a.ExternalCa, b.ExternalCa) {
-		return false
-	}
-	if !util.BoolsMatch(a.Ipv6Preferred, b.Ipv6Preferred) {
-		return false
-	}
-	if !matchGlobalProtectSatelliteLocalAddress(a.LocalAddress, b.LocalAddress) {
-		return false
 	}
 	if !util.StringsMatch(a.PortalAddress, b.PortalAddress) {
 		return false
@@ -2809,6 +2800,15 @@ func matchGlobalProtectSatellite(a *GlobalProtectSatellite, b *GlobalProtectSate
 		return false
 	}
 	if !util.OrderedListsMatch(a.PublishRoutes, b.PublishRoutes) {
+		return false
+	}
+	if !matchGlobalProtectSatelliteExternalCa(a.ExternalCa, b.ExternalCa) {
+		return false
+	}
+	if !util.BoolsMatch(a.Ipv6Preferred, b.Ipv6Preferred) {
+		return false
+	}
+	if !matchGlobalProtectSatelliteLocalAddress(a.LocalAddress, b.LocalAddress) {
 		return false
 	}
 	return true
@@ -2837,28 +2837,6 @@ func matchManualKeyPeerAddress(a *ManualKeyPeerAddress, b *ManualKeyPeerAddress)
 		return true
 	}
 	if !util.StringsMatch(a.Ip, b.Ip) {
-		return false
-	}
-	return true
-}
-func matchManualKeyAhSha256(a *ManualKeyAhSha256, b *ManualKeyAhSha256) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !util.StringsMatch(a.Key, b.Key) {
-		return false
-	}
-	return true
-}
-func matchManualKeyAhSha384(a *ManualKeyAhSha384, b *ManualKeyAhSha384) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !util.StringsMatch(a.Key, b.Key) {
 		return false
 	}
 	return true
@@ -2896,30 +2874,7 @@ func matchManualKeyAhSha1(a *ManualKeyAhSha1, b *ManualKeyAhSha1) bool {
 	}
 	return true
 }
-func matchManualKeyAh(a *ManualKeyAh, b *ManualKeyAh) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !matchManualKeyAhMd5(a.Md5, b.Md5) {
-		return false
-	}
-	if !matchManualKeyAhSha1(a.Sha1, b.Sha1) {
-		return false
-	}
-	if !matchManualKeyAhSha256(a.Sha256, b.Sha256) {
-		return false
-	}
-	if !matchManualKeyAhSha384(a.Sha384, b.Sha384) {
-		return false
-	}
-	if !matchManualKeyAhSha512(a.Sha512, b.Sha512) {
-		return false
-	}
-	return true
-}
-func matchManualKeyEspAuthenticationMd5(a *ManualKeyEspAuthenticationMd5, b *ManualKeyEspAuthenticationMd5) bool {
+func matchManualKeyAhSha256(a *ManualKeyAhSha256, b *ManualKeyAhSha256) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
 	} else if a == nil && b == nil {
@@ -2930,11 +2885,37 @@ func matchManualKeyEspAuthenticationMd5(a *ManualKeyEspAuthenticationMd5, b *Man
 	}
 	return true
 }
-func matchManualKeyEspAuthenticationNone(a *ManualKeyEspAuthenticationNone, b *ManualKeyEspAuthenticationNone) bool {
+func matchManualKeyAhSha384(a *ManualKeyAhSha384, b *ManualKeyAhSha384) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
 	} else if a == nil && b == nil {
 		return true
+	}
+	if !util.StringsMatch(a.Key, b.Key) {
+		return false
+	}
+	return true
+}
+func matchManualKeyAh(a *ManualKeyAh, b *ManualKeyAh) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !matchManualKeyAhSha256(a.Sha256, b.Sha256) {
+		return false
+	}
+	if !matchManualKeyAhSha384(a.Sha384, b.Sha384) {
+		return false
+	}
+	if !matchManualKeyAhSha512(a.Sha512, b.Sha512) {
+		return false
+	}
+	if !matchManualKeyAhMd5(a.Md5, b.Md5) {
+		return false
+	}
+	if !matchManualKeyAhSha1(a.Sha1, b.Sha1) {
+		return false
 	}
 	return true
 }
@@ -2982,11 +2963,33 @@ func matchManualKeyEspAuthenticationSha512(a *ManualKeyEspAuthenticationSha512, 
 	}
 	return true
 }
+func matchManualKeyEspAuthenticationMd5(a *ManualKeyEspAuthenticationMd5, b *ManualKeyEspAuthenticationMd5) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !util.StringsMatch(a.Key, b.Key) {
+		return false
+	}
+	return true
+}
+func matchManualKeyEspAuthenticationNone(a *ManualKeyEspAuthenticationNone, b *ManualKeyEspAuthenticationNone) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	return true
+}
 func matchManualKeyEspAuthentication(a *ManualKeyEspAuthentication, b *ManualKeyEspAuthentication) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
 	} else if a == nil && b == nil {
 		return true
+	}
+	if !matchManualKeyEspAuthenticationSha512(a.Sha512, b.Sha512) {
+		return false
 	}
 	if !matchManualKeyEspAuthenticationMd5(a.Md5, b.Md5) {
 		return false
@@ -3003,9 +3006,6 @@ func matchManualKeyEspAuthentication(a *ManualKeyEspAuthentication, b *ManualKey
 	if !matchManualKeyEspAuthenticationSha384(a.Sha384, b.Sha384) {
 		return false
 	}
-	if !matchManualKeyEspAuthenticationSha512(a.Sha512, b.Sha512) {
-		return false
-	}
 	return true
 }
 func matchManualKeyEspEncryption(a *ManualKeyEspEncryption, b *ManualKeyEspEncryption) bool {
@@ -3014,10 +3014,10 @@ func matchManualKeyEspEncryption(a *ManualKeyEspEncryption, b *ManualKeyEspEncry
 	} else if a == nil && b == nil {
 		return true
 	}
-	if !util.StringsMatch(a.Algorithm, b.Algorithm) {
+	if !util.StringsMatch(a.Key, b.Key) {
 		return false
 	}
-	if !util.StringsMatch(a.Key, b.Key) {
+	if !util.StringsMatch(a.Algorithm, b.Algorithm) {
 		return false
 	}
 	return true

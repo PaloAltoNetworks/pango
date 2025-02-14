@@ -156,9 +156,6 @@ func specifyEntry(o *Entry) (any, error) {
 			if _, ok := o.Misc["Certificate"]; ok {
 				nestedCertificate.Misc = o.Misc["Certificate"]
 			}
-			if oCertificate.Name != "" {
-				nestedCertificate.Name = oCertificate.Name
-			}
 			if oCertificate.DefaultOcspUrl != nil {
 				nestedCertificate.DefaultOcspUrl = oCertificate.DefaultOcspUrl
 			}
@@ -167,6 +164,9 @@ func specifyEntry(o *Entry) (any, error) {
 			}
 			if oCertificate.TemplateName != nil {
 				nestedCertificate.TemplateName = oCertificate.TemplateName
+			}
+			if oCertificate.Name != "" {
+				nestedCertificate.Name = oCertificate.Name
 			}
 			nestedCertificateCol = append(nestedCertificateCol, nestedCertificate)
 		}
@@ -186,11 +186,11 @@ func specifyEntry(o *Entry) (any, error) {
 		if _, ok := o.Misc["UsernameField"]; ok {
 			nestedUsernameField.Misc = o.Misc["UsernameField"]
 		}
-		if o.UsernameField.Subject != nil {
-			nestedUsernameField.Subject = o.UsernameField.Subject
-		}
 		if o.UsernameField.SubjectAlt != nil {
 			nestedUsernameField.SubjectAlt = o.UsernameField.SubjectAlt
+		}
+		if o.UsernameField.Subject != nil {
+			nestedUsernameField.Subject = o.UsernameField.Subject
 		}
 	}
 	entry.UsernameField = nestedUsernameField
@@ -249,11 +249,11 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 			if o.UsernameField.Misc != nil {
 				entry.Misc["UsernameField"] = o.UsernameField.Misc
 			}
-			if o.UsernameField.Subject != nil {
-				nestedUsernameField.Subject = o.UsernameField.Subject
-			}
 			if o.UsernameField.SubjectAlt != nil {
 				nestedUsernameField.SubjectAlt = o.UsernameField.SubjectAlt
+			}
+			if o.UsernameField.Subject != nil {
+				nestedUsernameField.Subject = o.UsernameField.Subject
 			}
 		}
 		entry.UsernameField = nestedUsernameField

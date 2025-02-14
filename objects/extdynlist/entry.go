@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{}
+	Suffix = []string{"address"}
 )
 
 type Entry struct {
@@ -529,10 +529,46 @@ func specifyEntry(o *Entry) (any, error) {
 			if _, ok := o.Misc["TypeImsi"]; ok {
 				nestedType.Imsi.Misc = o.Misc["TypeImsi"]
 			}
+			if o.Type.Imsi.Auth != nil {
+				nestedType.Imsi.Auth = &TypeImsiAuthXml{}
+				if _, ok := o.Misc["TypeImsiAuth"]; ok {
+					nestedType.Imsi.Auth.Misc = o.Misc["TypeImsiAuth"]
+				}
+				if o.Type.Imsi.Auth.Password != nil {
+					nestedType.Imsi.Auth.Password = o.Type.Imsi.Auth.Password
+				}
+				if o.Type.Imsi.Auth.Username != nil {
+					nestedType.Imsi.Auth.Username = o.Type.Imsi.Auth.Username
+				}
+			}
+			if o.Type.Imsi.CertificateProfile != nil {
+				nestedType.Imsi.CertificateProfile = o.Type.Imsi.CertificateProfile
+			}
+			if o.Type.Imsi.Description != nil {
+				nestedType.Imsi.Description = o.Type.Imsi.Description
+			}
+			if o.Type.Imsi.ExceptionList != nil {
+				nestedType.Imsi.ExceptionList = util.StrToMem(o.Type.Imsi.ExceptionList)
+			}
 			if o.Type.Imsi.Recurring != nil {
 				nestedType.Imsi.Recurring = &TypeImsiRecurringXml{}
 				if _, ok := o.Misc["TypeImsiRecurring"]; ok {
 					nestedType.Imsi.Recurring.Misc = o.Misc["TypeImsiRecurring"]
+				}
+				if o.Type.Imsi.Recurring.Daily != nil {
+					nestedType.Imsi.Recurring.Daily = &TypeImsiRecurringDailyXml{}
+					if _, ok := o.Misc["TypeImsiRecurringDaily"]; ok {
+						nestedType.Imsi.Recurring.Daily.Misc = o.Misc["TypeImsiRecurringDaily"]
+					}
+					if o.Type.Imsi.Recurring.Daily.At != nil {
+						nestedType.Imsi.Recurring.Daily.At = o.Type.Imsi.Recurring.Daily.At
+					}
+				}
+				if o.Type.Imsi.Recurring.FiveMinute != nil {
+					nestedType.Imsi.Recurring.FiveMinute = &TypeImsiRecurringFiveMinuteXml{}
+					if _, ok := o.Misc["TypeImsiRecurringFiveMinute"]; ok {
+						nestedType.Imsi.Recurring.FiveMinute.Misc = o.Misc["TypeImsiRecurringFiveMinute"]
+					}
 				}
 				if o.Type.Imsi.Recurring.Hourly != nil {
 					nestedType.Imsi.Recurring.Hourly = &TypeImsiRecurringHourlyXml{}
@@ -564,66 +600,15 @@ func specifyEntry(o *Entry) (any, error) {
 						nestedType.Imsi.Recurring.Weekly.DayOfWeek = o.Type.Imsi.Recurring.Weekly.DayOfWeek
 					}
 				}
-				if o.Type.Imsi.Recurring.Daily != nil {
-					nestedType.Imsi.Recurring.Daily = &TypeImsiRecurringDailyXml{}
-					if _, ok := o.Misc["TypeImsiRecurringDaily"]; ok {
-						nestedType.Imsi.Recurring.Daily.Misc = o.Misc["TypeImsiRecurringDaily"]
-					}
-					if o.Type.Imsi.Recurring.Daily.At != nil {
-						nestedType.Imsi.Recurring.Daily.At = o.Type.Imsi.Recurring.Daily.At
-					}
-				}
-				if o.Type.Imsi.Recurring.FiveMinute != nil {
-					nestedType.Imsi.Recurring.FiveMinute = &TypeImsiRecurringFiveMinuteXml{}
-					if _, ok := o.Misc["TypeImsiRecurringFiveMinute"]; ok {
-						nestedType.Imsi.Recurring.FiveMinute.Misc = o.Misc["TypeImsiRecurringFiveMinute"]
-					}
-				}
 			}
 			if o.Type.Imsi.Url != nil {
 				nestedType.Imsi.Url = o.Type.Imsi.Url
-			}
-			if o.Type.Imsi.Auth != nil {
-				nestedType.Imsi.Auth = &TypeImsiAuthXml{}
-				if _, ok := o.Misc["TypeImsiAuth"]; ok {
-					nestedType.Imsi.Auth.Misc = o.Misc["TypeImsiAuth"]
-				}
-				if o.Type.Imsi.Auth.Username != nil {
-					nestedType.Imsi.Auth.Username = o.Type.Imsi.Auth.Username
-				}
-				if o.Type.Imsi.Auth.Password != nil {
-					nestedType.Imsi.Auth.Password = o.Type.Imsi.Auth.Password
-				}
-			}
-			if o.Type.Imsi.CertificateProfile != nil {
-				nestedType.Imsi.CertificateProfile = o.Type.Imsi.CertificateProfile
-			}
-			if o.Type.Imsi.Description != nil {
-				nestedType.Imsi.Description = o.Type.Imsi.Description
-			}
-			if o.Type.Imsi.ExceptionList != nil {
-				nestedType.Imsi.ExceptionList = util.StrToMem(o.Type.Imsi.ExceptionList)
 			}
 		}
 		if o.Type.Ip != nil {
 			nestedType.Ip = &TypeIpXml{}
 			if _, ok := o.Misc["TypeIp"]; ok {
 				nestedType.Ip.Misc = o.Misc["TypeIp"]
-			}
-			if o.Type.Ip.Url != nil {
-				nestedType.Ip.Url = o.Type.Ip.Url
-			}
-			if o.Type.Ip.Auth != nil {
-				nestedType.Ip.Auth = &TypeIpAuthXml{}
-				if _, ok := o.Misc["TypeIpAuth"]; ok {
-					nestedType.Ip.Auth.Misc = o.Misc["TypeIpAuth"]
-				}
-				if o.Type.Ip.Auth.Password != nil {
-					nestedType.Ip.Auth.Password = o.Type.Ip.Auth.Password
-				}
-				if o.Type.Ip.Auth.Username != nil {
-					nestedType.Ip.Auth.Username = o.Type.Ip.Auth.Username
-				}
 			}
 			if o.Type.Ip.CertificateProfile != nil {
 				nestedType.Ip.CertificateProfile = o.Type.Ip.CertificateProfile
@@ -638,21 +623,6 @@ func specifyEntry(o *Entry) (any, error) {
 				nestedType.Ip.Recurring = &TypeIpRecurringXml{}
 				if _, ok := o.Misc["TypeIpRecurring"]; ok {
 					nestedType.Ip.Recurring.Misc = o.Misc["TypeIpRecurring"]
-				}
-				if o.Type.Ip.Recurring.Daily != nil {
-					nestedType.Ip.Recurring.Daily = &TypeIpRecurringDailyXml{}
-					if _, ok := o.Misc["TypeIpRecurringDaily"]; ok {
-						nestedType.Ip.Recurring.Daily.Misc = o.Misc["TypeIpRecurringDaily"]
-					}
-					if o.Type.Ip.Recurring.Daily.At != nil {
-						nestedType.Ip.Recurring.Daily.At = o.Type.Ip.Recurring.Daily.At
-					}
-				}
-				if o.Type.Ip.Recurring.FiveMinute != nil {
-					nestedType.Ip.Recurring.FiveMinute = &TypeIpRecurringFiveMinuteXml{}
-					if _, ok := o.Misc["TypeIpRecurringFiveMinute"]; ok {
-						nestedType.Ip.Recurring.FiveMinute.Misc = o.Misc["TypeIpRecurringFiveMinute"]
-					}
 				}
 				if o.Type.Ip.Recurring.Hourly != nil {
 					nestedType.Ip.Recurring.Hourly = &TypeIpRecurringHourlyXml{}
@@ -683,6 +653,36 @@ func specifyEntry(o *Entry) (any, error) {
 					if o.Type.Ip.Recurring.Weekly.DayOfWeek != nil {
 						nestedType.Ip.Recurring.Weekly.DayOfWeek = o.Type.Ip.Recurring.Weekly.DayOfWeek
 					}
+				}
+				if o.Type.Ip.Recurring.Daily != nil {
+					nestedType.Ip.Recurring.Daily = &TypeIpRecurringDailyXml{}
+					if _, ok := o.Misc["TypeIpRecurringDaily"]; ok {
+						nestedType.Ip.Recurring.Daily.Misc = o.Misc["TypeIpRecurringDaily"]
+					}
+					if o.Type.Ip.Recurring.Daily.At != nil {
+						nestedType.Ip.Recurring.Daily.At = o.Type.Ip.Recurring.Daily.At
+					}
+				}
+				if o.Type.Ip.Recurring.FiveMinute != nil {
+					nestedType.Ip.Recurring.FiveMinute = &TypeIpRecurringFiveMinuteXml{}
+					if _, ok := o.Misc["TypeIpRecurringFiveMinute"]; ok {
+						nestedType.Ip.Recurring.FiveMinute.Misc = o.Misc["TypeIpRecurringFiveMinute"]
+					}
+				}
+			}
+			if o.Type.Ip.Url != nil {
+				nestedType.Ip.Url = o.Type.Ip.Url
+			}
+			if o.Type.Ip.Auth != nil {
+				nestedType.Ip.Auth = &TypeIpAuthXml{}
+				if _, ok := o.Misc["TypeIpAuth"]; ok {
+					nestedType.Ip.Auth.Misc = o.Misc["TypeIpAuth"]
+				}
+				if o.Type.Ip.Auth.Password != nil {
+					nestedType.Ip.Auth.Password = o.Type.Ip.Auth.Password
+				}
+				if o.Type.Ip.Auth.Username != nil {
+					nestedType.Ip.Auth.Username = o.Type.Ip.Auth.Username
 				}
 			}
 		}
@@ -721,9 +721,6 @@ func specifyEntry(o *Entry) (any, error) {
 			if _, ok := o.Misc["TypeUrl"]; ok {
 				nestedType.Url.Misc = o.Misc["TypeUrl"]
 			}
-			if o.Type.Url.Url != nil {
-				nestedType.Url.Url = o.Type.Url.Url
-			}
 			if o.Type.Url.Auth != nil {
 				nestedType.Url.Auth = &TypeUrlAuthXml{}
 				if _, ok := o.Misc["TypeUrlAuth"]; ok {
@@ -749,6 +746,18 @@ func specifyEntry(o *Entry) (any, error) {
 				nestedType.Url.Recurring = &TypeUrlRecurringXml{}
 				if _, ok := o.Misc["TypeUrlRecurring"]; ok {
 					nestedType.Url.Recurring.Misc = o.Misc["TypeUrlRecurring"]
+				}
+				if o.Type.Url.Recurring.Weekly != nil {
+					nestedType.Url.Recurring.Weekly = &TypeUrlRecurringWeeklyXml{}
+					if _, ok := o.Misc["TypeUrlRecurringWeekly"]; ok {
+						nestedType.Url.Recurring.Weekly.Misc = o.Misc["TypeUrlRecurringWeekly"]
+					}
+					if o.Type.Url.Recurring.Weekly.At != nil {
+						nestedType.Url.Recurring.Weekly.At = o.Type.Url.Recurring.Weekly.At
+					}
+					if o.Type.Url.Recurring.Weekly.DayOfWeek != nil {
+						nestedType.Url.Recurring.Weekly.DayOfWeek = o.Type.Url.Recurring.Weekly.DayOfWeek
+					}
 				}
 				if o.Type.Url.Recurring.Daily != nil {
 					nestedType.Url.Recurring.Daily = &TypeUrlRecurringDailyXml{}
@@ -783,24 +792,36 @@ func specifyEntry(o *Entry) (any, error) {
 						nestedType.Url.Recurring.Monthly.DayOfMonth = o.Type.Url.Recurring.Monthly.DayOfMonth
 					}
 				}
-				if o.Type.Url.Recurring.Weekly != nil {
-					nestedType.Url.Recurring.Weekly = &TypeUrlRecurringWeeklyXml{}
-					if _, ok := o.Misc["TypeUrlRecurringWeekly"]; ok {
-						nestedType.Url.Recurring.Weekly.Misc = o.Misc["TypeUrlRecurringWeekly"]
-					}
-					if o.Type.Url.Recurring.Weekly.At != nil {
-						nestedType.Url.Recurring.Weekly.At = o.Type.Url.Recurring.Weekly.At
-					}
-					if o.Type.Url.Recurring.Weekly.DayOfWeek != nil {
-						nestedType.Url.Recurring.Weekly.DayOfWeek = o.Type.Url.Recurring.Weekly.DayOfWeek
-					}
-				}
+			}
+			if o.Type.Url.Url != nil {
+				nestedType.Url.Url = o.Type.Url.Url
 			}
 		}
 		if o.Type.Domain != nil {
 			nestedType.Domain = &TypeDomainXml{}
 			if _, ok := o.Misc["TypeDomain"]; ok {
 				nestedType.Domain.Misc = o.Misc["TypeDomain"]
+			}
+			if o.Type.Domain.Auth != nil {
+				nestedType.Domain.Auth = &TypeDomainAuthXml{}
+				if _, ok := o.Misc["TypeDomainAuth"]; ok {
+					nestedType.Domain.Auth.Misc = o.Misc["TypeDomainAuth"]
+				}
+				if o.Type.Domain.Auth.Password != nil {
+					nestedType.Domain.Auth.Password = o.Type.Domain.Auth.Password
+				}
+				if o.Type.Domain.Auth.Username != nil {
+					nestedType.Domain.Auth.Username = o.Type.Domain.Auth.Username
+				}
+			}
+			if o.Type.Domain.CertificateProfile != nil {
+				nestedType.Domain.CertificateProfile = o.Type.Domain.CertificateProfile
+			}
+			if o.Type.Domain.Description != nil {
+				nestedType.Domain.Description = o.Type.Domain.Description
+			}
+			if o.Type.Domain.ExceptionList != nil {
+				nestedType.Domain.ExceptionList = util.StrToMem(o.Type.Domain.ExceptionList)
 			}
 			if o.Type.Domain.ExpandDomain != nil {
 				nestedType.Domain.ExpandDomain = util.YesNo(o.Type.Domain.ExpandDomain, nil)
@@ -809,6 +830,27 @@ func specifyEntry(o *Entry) (any, error) {
 				nestedType.Domain.Recurring = &TypeDomainRecurringXml{}
 				if _, ok := o.Misc["TypeDomainRecurring"]; ok {
 					nestedType.Domain.Recurring.Misc = o.Misc["TypeDomainRecurring"]
+				}
+				if o.Type.Domain.Recurring.Weekly != nil {
+					nestedType.Domain.Recurring.Weekly = &TypeDomainRecurringWeeklyXml{}
+					if _, ok := o.Misc["TypeDomainRecurringWeekly"]; ok {
+						nestedType.Domain.Recurring.Weekly.Misc = o.Misc["TypeDomainRecurringWeekly"]
+					}
+					if o.Type.Domain.Recurring.Weekly.At != nil {
+						nestedType.Domain.Recurring.Weekly.At = o.Type.Domain.Recurring.Weekly.At
+					}
+					if o.Type.Domain.Recurring.Weekly.DayOfWeek != nil {
+						nestedType.Domain.Recurring.Weekly.DayOfWeek = o.Type.Domain.Recurring.Weekly.DayOfWeek
+					}
+				}
+				if o.Type.Domain.Recurring.Daily != nil {
+					nestedType.Domain.Recurring.Daily = &TypeDomainRecurringDailyXml{}
+					if _, ok := o.Misc["TypeDomainRecurringDaily"]; ok {
+						nestedType.Domain.Recurring.Daily.Misc = o.Misc["TypeDomainRecurringDaily"]
+					}
+					if o.Type.Domain.Recurring.Daily.At != nil {
+						nestedType.Domain.Recurring.Daily.At = o.Type.Domain.Recurring.Daily.At
+					}
 				}
 				if o.Type.Domain.Recurring.FiveMinute != nil {
 					nestedType.Domain.Recurring.FiveMinute = &TypeDomainRecurringFiveMinuteXml{}
@@ -834,51 +876,9 @@ func specifyEntry(o *Entry) (any, error) {
 						nestedType.Domain.Recurring.Monthly.DayOfMonth = o.Type.Domain.Recurring.Monthly.DayOfMonth
 					}
 				}
-				if o.Type.Domain.Recurring.Weekly != nil {
-					nestedType.Domain.Recurring.Weekly = &TypeDomainRecurringWeeklyXml{}
-					if _, ok := o.Misc["TypeDomainRecurringWeekly"]; ok {
-						nestedType.Domain.Recurring.Weekly.Misc = o.Misc["TypeDomainRecurringWeekly"]
-					}
-					if o.Type.Domain.Recurring.Weekly.At != nil {
-						nestedType.Domain.Recurring.Weekly.At = o.Type.Domain.Recurring.Weekly.At
-					}
-					if o.Type.Domain.Recurring.Weekly.DayOfWeek != nil {
-						nestedType.Domain.Recurring.Weekly.DayOfWeek = o.Type.Domain.Recurring.Weekly.DayOfWeek
-					}
-				}
-				if o.Type.Domain.Recurring.Daily != nil {
-					nestedType.Domain.Recurring.Daily = &TypeDomainRecurringDailyXml{}
-					if _, ok := o.Misc["TypeDomainRecurringDaily"]; ok {
-						nestedType.Domain.Recurring.Daily.Misc = o.Misc["TypeDomainRecurringDaily"]
-					}
-					if o.Type.Domain.Recurring.Daily.At != nil {
-						nestedType.Domain.Recurring.Daily.At = o.Type.Domain.Recurring.Daily.At
-					}
-				}
 			}
 			if o.Type.Domain.Url != nil {
 				nestedType.Domain.Url = o.Type.Domain.Url
-			}
-			if o.Type.Domain.Auth != nil {
-				nestedType.Domain.Auth = &TypeDomainAuthXml{}
-				if _, ok := o.Misc["TypeDomainAuth"]; ok {
-					nestedType.Domain.Auth.Misc = o.Misc["TypeDomainAuth"]
-				}
-				if o.Type.Domain.Auth.Username != nil {
-					nestedType.Domain.Auth.Username = o.Type.Domain.Auth.Username
-				}
-				if o.Type.Domain.Auth.Password != nil {
-					nestedType.Domain.Auth.Password = o.Type.Domain.Auth.Password
-				}
-			}
-			if o.Type.Domain.CertificateProfile != nil {
-				nestedType.Domain.CertificateProfile = o.Type.Domain.CertificateProfile
-			}
-			if o.Type.Domain.Description != nil {
-				nestedType.Domain.Description = o.Type.Domain.Description
-			}
-			if o.Type.Domain.ExceptionList != nil {
-				nestedType.Domain.ExceptionList = util.StrToMem(o.Type.Domain.ExceptionList)
 			}
 		}
 		if o.Type.Imei != nil {
@@ -984,10 +984,28 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 			if o.Type.Misc != nil {
 				entry.Misc["Type"] = o.Type.Misc
 			}
+			if o.Type.PredefinedIp != nil {
+				nestedType.PredefinedIp = &TypePredefinedIp{}
+				if o.Type.PredefinedIp.Misc != nil {
+					entry.Misc["TypePredefinedIp"] = o.Type.PredefinedIp.Misc
+				}
+				if o.Type.PredefinedIp.Url != nil {
+					nestedType.PredefinedIp.Url = o.Type.PredefinedIp.Url
+				}
+				if o.Type.PredefinedIp.Description != nil {
+					nestedType.PredefinedIp.Description = o.Type.PredefinedIp.Description
+				}
+				if o.Type.PredefinedIp.ExceptionList != nil {
+					nestedType.PredefinedIp.ExceptionList = util.MemToStr(o.Type.PredefinedIp.ExceptionList)
+				}
+			}
 			if o.Type.PredefinedUrl != nil {
 				nestedType.PredefinedUrl = &TypePredefinedUrl{}
 				if o.Type.PredefinedUrl.Misc != nil {
 					entry.Misc["TypePredefinedUrl"] = o.Type.PredefinedUrl.Misc
+				}
+				if o.Type.PredefinedUrl.Url != nil {
+					nestedType.PredefinedUrl.Url = o.Type.PredefinedUrl.Url
 				}
 				if o.Type.PredefinedUrl.Description != nil {
 					nestedType.PredefinedUrl.Description = o.Type.PredefinedUrl.Description
@@ -995,14 +1013,32 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				if o.Type.PredefinedUrl.ExceptionList != nil {
 					nestedType.PredefinedUrl.ExceptionList = util.MemToStr(o.Type.PredefinedUrl.ExceptionList)
 				}
-				if o.Type.PredefinedUrl.Url != nil {
-					nestedType.PredefinedUrl.Url = o.Type.PredefinedUrl.Url
-				}
 			}
 			if o.Type.Url != nil {
 				nestedType.Url = &TypeUrl{}
 				if o.Type.Url.Misc != nil {
 					entry.Misc["TypeUrl"] = o.Type.Url.Misc
+				}
+				if o.Type.Url.Auth != nil {
+					nestedType.Url.Auth = &TypeUrlAuth{}
+					if o.Type.Url.Auth.Misc != nil {
+						entry.Misc["TypeUrlAuth"] = o.Type.Url.Auth.Misc
+					}
+					if o.Type.Url.Auth.Password != nil {
+						nestedType.Url.Auth.Password = o.Type.Url.Auth.Password
+					}
+					if o.Type.Url.Auth.Username != nil {
+						nestedType.Url.Auth.Username = o.Type.Url.Auth.Username
+					}
+				}
+				if o.Type.Url.CertificateProfile != nil {
+					nestedType.Url.CertificateProfile = o.Type.Url.CertificateProfile
+				}
+				if o.Type.Url.Description != nil {
+					nestedType.Url.Description = o.Type.Url.Description
+				}
+				if o.Type.Url.ExceptionList != nil {
+					nestedType.Url.ExceptionList = util.MemToStr(o.Type.Url.ExceptionList)
 				}
 				if o.Type.Url.Recurring != nil {
 					nestedType.Url.Recurring = &TypeUrlRecurring{}
@@ -1058,47 +1094,11 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				if o.Type.Url.Url != nil {
 					nestedType.Url.Url = o.Type.Url.Url
 				}
-				if o.Type.Url.Auth != nil {
-					nestedType.Url.Auth = &TypeUrlAuth{}
-					if o.Type.Url.Auth.Misc != nil {
-						entry.Misc["TypeUrlAuth"] = o.Type.Url.Auth.Misc
-					}
-					if o.Type.Url.Auth.Password != nil {
-						nestedType.Url.Auth.Password = o.Type.Url.Auth.Password
-					}
-					if o.Type.Url.Auth.Username != nil {
-						nestedType.Url.Auth.Username = o.Type.Url.Auth.Username
-					}
-				}
-				if o.Type.Url.CertificateProfile != nil {
-					nestedType.Url.CertificateProfile = o.Type.Url.CertificateProfile
-				}
-				if o.Type.Url.Description != nil {
-					nestedType.Url.Description = o.Type.Url.Description
-				}
-				if o.Type.Url.ExceptionList != nil {
-					nestedType.Url.ExceptionList = util.MemToStr(o.Type.Url.ExceptionList)
-				}
 			}
 			if o.Type.Domain != nil {
 				nestedType.Domain = &TypeDomain{}
 				if o.Type.Domain.Misc != nil {
 					entry.Misc["TypeDomain"] = o.Type.Domain.Misc
-				}
-				if o.Type.Domain.Auth != nil {
-					nestedType.Domain.Auth = &TypeDomainAuth{}
-					if o.Type.Domain.Auth.Misc != nil {
-						entry.Misc["TypeDomainAuth"] = o.Type.Domain.Auth.Misc
-					}
-					if o.Type.Domain.Auth.Password != nil {
-						nestedType.Domain.Auth.Password = o.Type.Domain.Auth.Password
-					}
-					if o.Type.Domain.Auth.Username != nil {
-						nestedType.Domain.Auth.Username = o.Type.Domain.Auth.Username
-					}
-				}
-				if o.Type.Domain.CertificateProfile != nil {
-					nestedType.Domain.CertificateProfile = o.Type.Domain.CertificateProfile
 				}
 				if o.Type.Domain.Description != nil {
 					nestedType.Domain.Description = o.Type.Domain.Description
@@ -1113,6 +1113,30 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 					nestedType.Domain.Recurring = &TypeDomainRecurring{}
 					if o.Type.Domain.Recurring.Misc != nil {
 						entry.Misc["TypeDomainRecurring"] = o.Type.Domain.Recurring.Misc
+					}
+					if o.Type.Domain.Recurring.Monthly != nil {
+						nestedType.Domain.Recurring.Monthly = &TypeDomainRecurringMonthly{}
+						if o.Type.Domain.Recurring.Monthly.Misc != nil {
+							entry.Misc["TypeDomainRecurringMonthly"] = o.Type.Domain.Recurring.Monthly.Misc
+						}
+						if o.Type.Domain.Recurring.Monthly.DayOfMonth != nil {
+							nestedType.Domain.Recurring.Monthly.DayOfMonth = o.Type.Domain.Recurring.Monthly.DayOfMonth
+						}
+						if o.Type.Domain.Recurring.Monthly.At != nil {
+							nestedType.Domain.Recurring.Monthly.At = o.Type.Domain.Recurring.Monthly.At
+						}
+					}
+					if o.Type.Domain.Recurring.Weekly != nil {
+						nestedType.Domain.Recurring.Weekly = &TypeDomainRecurringWeekly{}
+						if o.Type.Domain.Recurring.Weekly.Misc != nil {
+							entry.Misc["TypeDomainRecurringWeekly"] = o.Type.Domain.Recurring.Weekly.Misc
+						}
+						if o.Type.Domain.Recurring.Weekly.At != nil {
+							nestedType.Domain.Recurring.Weekly.At = o.Type.Domain.Recurring.Weekly.At
+						}
+						if o.Type.Domain.Recurring.Weekly.DayOfWeek != nil {
+							nestedType.Domain.Recurring.Weekly.DayOfWeek = o.Type.Domain.Recurring.Weekly.DayOfWeek
+						}
 					}
 					if o.Type.Domain.Recurring.Daily != nil {
 						nestedType.Domain.Recurring.Daily = &TypeDomainRecurringDaily{}
@@ -1135,33 +1159,24 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 							entry.Misc["TypeDomainRecurringHourly"] = o.Type.Domain.Recurring.Hourly.Misc
 						}
 					}
-					if o.Type.Domain.Recurring.Monthly != nil {
-						nestedType.Domain.Recurring.Monthly = &TypeDomainRecurringMonthly{}
-						if o.Type.Domain.Recurring.Monthly.Misc != nil {
-							entry.Misc["TypeDomainRecurringMonthly"] = o.Type.Domain.Recurring.Monthly.Misc
-						}
-						if o.Type.Domain.Recurring.Monthly.At != nil {
-							nestedType.Domain.Recurring.Monthly.At = o.Type.Domain.Recurring.Monthly.At
-						}
-						if o.Type.Domain.Recurring.Monthly.DayOfMonth != nil {
-							nestedType.Domain.Recurring.Monthly.DayOfMonth = o.Type.Domain.Recurring.Monthly.DayOfMonth
-						}
-					}
-					if o.Type.Domain.Recurring.Weekly != nil {
-						nestedType.Domain.Recurring.Weekly = &TypeDomainRecurringWeekly{}
-						if o.Type.Domain.Recurring.Weekly.Misc != nil {
-							entry.Misc["TypeDomainRecurringWeekly"] = o.Type.Domain.Recurring.Weekly.Misc
-						}
-						if o.Type.Domain.Recurring.Weekly.At != nil {
-							nestedType.Domain.Recurring.Weekly.At = o.Type.Domain.Recurring.Weekly.At
-						}
-						if o.Type.Domain.Recurring.Weekly.DayOfWeek != nil {
-							nestedType.Domain.Recurring.Weekly.DayOfWeek = o.Type.Domain.Recurring.Weekly.DayOfWeek
-						}
-					}
 				}
 				if o.Type.Domain.Url != nil {
 					nestedType.Domain.Url = o.Type.Domain.Url
+				}
+				if o.Type.Domain.Auth != nil {
+					nestedType.Domain.Auth = &TypeDomainAuth{}
+					if o.Type.Domain.Auth.Misc != nil {
+						entry.Misc["TypeDomainAuth"] = o.Type.Domain.Auth.Misc
+					}
+					if o.Type.Domain.Auth.Password != nil {
+						nestedType.Domain.Auth.Password = o.Type.Domain.Auth.Password
+					}
+					if o.Type.Domain.Auth.Username != nil {
+						nestedType.Domain.Auth.Username = o.Type.Domain.Auth.Username
+					}
+				}
+				if o.Type.Domain.CertificateProfile != nil {
+					nestedType.Domain.CertificateProfile = o.Type.Domain.CertificateProfile
 				}
 			}
 			if o.Type.Imei != nil {
@@ -1195,6 +1210,27 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 					if o.Type.Imei.Recurring.Misc != nil {
 						entry.Misc["TypeImeiRecurring"] = o.Type.Imei.Recurring.Misc
 					}
+					if o.Type.Imei.Recurring.Daily != nil {
+						nestedType.Imei.Recurring.Daily = &TypeImeiRecurringDaily{}
+						if o.Type.Imei.Recurring.Daily.Misc != nil {
+							entry.Misc["TypeImeiRecurringDaily"] = o.Type.Imei.Recurring.Daily.Misc
+						}
+						if o.Type.Imei.Recurring.Daily.At != nil {
+							nestedType.Imei.Recurring.Daily.At = o.Type.Imei.Recurring.Daily.At
+						}
+					}
+					if o.Type.Imei.Recurring.FiveMinute != nil {
+						nestedType.Imei.Recurring.FiveMinute = &TypeImeiRecurringFiveMinute{}
+						if o.Type.Imei.Recurring.FiveMinute.Misc != nil {
+							entry.Misc["TypeImeiRecurringFiveMinute"] = o.Type.Imei.Recurring.FiveMinute.Misc
+						}
+					}
+					if o.Type.Imei.Recurring.Hourly != nil {
+						nestedType.Imei.Recurring.Hourly = &TypeImeiRecurringHourly{}
+						if o.Type.Imei.Recurring.Hourly.Misc != nil {
+							entry.Misc["TypeImeiRecurringHourly"] = o.Type.Imei.Recurring.Hourly.Misc
+						}
+					}
 					if o.Type.Imei.Recurring.Monthly != nil {
 						nestedType.Imei.Recurring.Monthly = &TypeImeiRecurringMonthly{}
 						if o.Type.Imei.Recurring.Monthly.Misc != nil {
@@ -1219,27 +1255,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 							nestedType.Imei.Recurring.Weekly.DayOfWeek = o.Type.Imei.Recurring.Weekly.DayOfWeek
 						}
 					}
-					if o.Type.Imei.Recurring.Daily != nil {
-						nestedType.Imei.Recurring.Daily = &TypeImeiRecurringDaily{}
-						if o.Type.Imei.Recurring.Daily.Misc != nil {
-							entry.Misc["TypeImeiRecurringDaily"] = o.Type.Imei.Recurring.Daily.Misc
-						}
-						if o.Type.Imei.Recurring.Daily.At != nil {
-							nestedType.Imei.Recurring.Daily.At = o.Type.Imei.Recurring.Daily.At
-						}
-					}
-					if o.Type.Imei.Recurring.FiveMinute != nil {
-						nestedType.Imei.Recurring.FiveMinute = &TypeImeiRecurringFiveMinute{}
-						if o.Type.Imei.Recurring.FiveMinute.Misc != nil {
-							entry.Misc["TypeImeiRecurringFiveMinute"] = o.Type.Imei.Recurring.FiveMinute.Misc
-						}
-					}
-					if o.Type.Imei.Recurring.Hourly != nil {
-						nestedType.Imei.Recurring.Hourly = &TypeImeiRecurringHourly{}
-						if o.Type.Imei.Recurring.Hourly.Misc != nil {
-							entry.Misc["TypeImeiRecurringHourly"] = o.Type.Imei.Recurring.Hourly.Misc
-						}
-					}
 				}
 				if o.Type.Imei.Url != nil {
 					nestedType.Imei.Url = o.Type.Imei.Url
@@ -1250,6 +1265,24 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				if o.Type.Imsi.Misc != nil {
 					entry.Misc["TypeImsi"] = o.Type.Imsi.Misc
 				}
+				if o.Type.Imsi.Auth != nil {
+					nestedType.Imsi.Auth = &TypeImsiAuth{}
+					if o.Type.Imsi.Auth.Misc != nil {
+						entry.Misc["TypeImsiAuth"] = o.Type.Imsi.Auth.Misc
+					}
+					if o.Type.Imsi.Auth.Password != nil {
+						nestedType.Imsi.Auth.Password = o.Type.Imsi.Auth.Password
+					}
+					if o.Type.Imsi.Auth.Username != nil {
+						nestedType.Imsi.Auth.Username = o.Type.Imsi.Auth.Username
+					}
+				}
+				if o.Type.Imsi.CertificateProfile != nil {
+					nestedType.Imsi.CertificateProfile = o.Type.Imsi.CertificateProfile
+				}
+				if o.Type.Imsi.Description != nil {
+					nestedType.Imsi.Description = o.Type.Imsi.Description
+				}
 				if o.Type.Imsi.ExceptionList != nil {
 					nestedType.Imsi.ExceptionList = util.MemToStr(o.Type.Imsi.ExceptionList)
 				}
@@ -1257,18 +1290,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 					nestedType.Imsi.Recurring = &TypeImsiRecurring{}
 					if o.Type.Imsi.Recurring.Misc != nil {
 						entry.Misc["TypeImsiRecurring"] = o.Type.Imsi.Recurring.Misc
-					}
-					if o.Type.Imsi.Recurring.Monthly != nil {
-						nestedType.Imsi.Recurring.Monthly = &TypeImsiRecurringMonthly{}
-						if o.Type.Imsi.Recurring.Monthly.Misc != nil {
-							entry.Misc["TypeImsiRecurringMonthly"] = o.Type.Imsi.Recurring.Monthly.Misc
-						}
-						if o.Type.Imsi.Recurring.Monthly.At != nil {
-							nestedType.Imsi.Recurring.Monthly.At = o.Type.Imsi.Recurring.Monthly.At
-						}
-						if o.Type.Imsi.Recurring.Monthly.DayOfMonth != nil {
-							nestedType.Imsi.Recurring.Monthly.DayOfMonth = o.Type.Imsi.Recurring.Monthly.DayOfMonth
-						}
 					}
 					if o.Type.Imsi.Recurring.Weekly != nil {
 						nestedType.Imsi.Recurring.Weekly = &TypeImsiRecurringWeekly{}
@@ -1303,33 +1324,78 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 							entry.Misc["TypeImsiRecurringHourly"] = o.Type.Imsi.Recurring.Hourly.Misc
 						}
 					}
+					if o.Type.Imsi.Recurring.Monthly != nil {
+						nestedType.Imsi.Recurring.Monthly = &TypeImsiRecurringMonthly{}
+						if o.Type.Imsi.Recurring.Monthly.Misc != nil {
+							entry.Misc["TypeImsiRecurringMonthly"] = o.Type.Imsi.Recurring.Monthly.Misc
+						}
+						if o.Type.Imsi.Recurring.Monthly.At != nil {
+							nestedType.Imsi.Recurring.Monthly.At = o.Type.Imsi.Recurring.Monthly.At
+						}
+						if o.Type.Imsi.Recurring.Monthly.DayOfMonth != nil {
+							nestedType.Imsi.Recurring.Monthly.DayOfMonth = o.Type.Imsi.Recurring.Monthly.DayOfMonth
+						}
+					}
 				}
 				if o.Type.Imsi.Url != nil {
 					nestedType.Imsi.Url = o.Type.Imsi.Url
-				}
-				if o.Type.Imsi.Auth != nil {
-					nestedType.Imsi.Auth = &TypeImsiAuth{}
-					if o.Type.Imsi.Auth.Misc != nil {
-						entry.Misc["TypeImsiAuth"] = o.Type.Imsi.Auth.Misc
-					}
-					if o.Type.Imsi.Auth.Password != nil {
-						nestedType.Imsi.Auth.Password = o.Type.Imsi.Auth.Password
-					}
-					if o.Type.Imsi.Auth.Username != nil {
-						nestedType.Imsi.Auth.Username = o.Type.Imsi.Auth.Username
-					}
-				}
-				if o.Type.Imsi.CertificateProfile != nil {
-					nestedType.Imsi.CertificateProfile = o.Type.Imsi.CertificateProfile
-				}
-				if o.Type.Imsi.Description != nil {
-					nestedType.Imsi.Description = o.Type.Imsi.Description
 				}
 			}
 			if o.Type.Ip != nil {
 				nestedType.Ip = &TypeIp{}
 				if o.Type.Ip.Misc != nil {
 					entry.Misc["TypeIp"] = o.Type.Ip.Misc
+				}
+				if o.Type.Ip.Recurring != nil {
+					nestedType.Ip.Recurring = &TypeIpRecurring{}
+					if o.Type.Ip.Recurring.Misc != nil {
+						entry.Misc["TypeIpRecurring"] = o.Type.Ip.Recurring.Misc
+					}
+					if o.Type.Ip.Recurring.Daily != nil {
+						nestedType.Ip.Recurring.Daily = &TypeIpRecurringDaily{}
+						if o.Type.Ip.Recurring.Daily.Misc != nil {
+							entry.Misc["TypeIpRecurringDaily"] = o.Type.Ip.Recurring.Daily.Misc
+						}
+						if o.Type.Ip.Recurring.Daily.At != nil {
+							nestedType.Ip.Recurring.Daily.At = o.Type.Ip.Recurring.Daily.At
+						}
+					}
+					if o.Type.Ip.Recurring.FiveMinute != nil {
+						nestedType.Ip.Recurring.FiveMinute = &TypeIpRecurringFiveMinute{}
+						if o.Type.Ip.Recurring.FiveMinute.Misc != nil {
+							entry.Misc["TypeIpRecurringFiveMinute"] = o.Type.Ip.Recurring.FiveMinute.Misc
+						}
+					}
+					if o.Type.Ip.Recurring.Hourly != nil {
+						nestedType.Ip.Recurring.Hourly = &TypeIpRecurringHourly{}
+						if o.Type.Ip.Recurring.Hourly.Misc != nil {
+							entry.Misc["TypeIpRecurringHourly"] = o.Type.Ip.Recurring.Hourly.Misc
+						}
+					}
+					if o.Type.Ip.Recurring.Monthly != nil {
+						nestedType.Ip.Recurring.Monthly = &TypeIpRecurringMonthly{}
+						if o.Type.Ip.Recurring.Monthly.Misc != nil {
+							entry.Misc["TypeIpRecurringMonthly"] = o.Type.Ip.Recurring.Monthly.Misc
+						}
+						if o.Type.Ip.Recurring.Monthly.At != nil {
+							nestedType.Ip.Recurring.Monthly.At = o.Type.Ip.Recurring.Monthly.At
+						}
+						if o.Type.Ip.Recurring.Monthly.DayOfMonth != nil {
+							nestedType.Ip.Recurring.Monthly.DayOfMonth = o.Type.Ip.Recurring.Monthly.DayOfMonth
+						}
+					}
+					if o.Type.Ip.Recurring.Weekly != nil {
+						nestedType.Ip.Recurring.Weekly = &TypeIpRecurringWeekly{}
+						if o.Type.Ip.Recurring.Weekly.Misc != nil {
+							entry.Misc["TypeIpRecurringWeekly"] = o.Type.Ip.Recurring.Weekly.Misc
+						}
+						if o.Type.Ip.Recurring.Weekly.At != nil {
+							nestedType.Ip.Recurring.Weekly.At = o.Type.Ip.Recurring.Weekly.At
+						}
+						if o.Type.Ip.Recurring.Weekly.DayOfWeek != nil {
+							nestedType.Ip.Recurring.Weekly.DayOfWeek = o.Type.Ip.Recurring.Weekly.DayOfWeek
+						}
+					}
 				}
 				if o.Type.Ip.Url != nil {
 					nestedType.Ip.Url = o.Type.Ip.Url
@@ -1354,72 +1420,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				}
 				if o.Type.Ip.ExceptionList != nil {
 					nestedType.Ip.ExceptionList = util.MemToStr(o.Type.Ip.ExceptionList)
-				}
-				if o.Type.Ip.Recurring != nil {
-					nestedType.Ip.Recurring = &TypeIpRecurring{}
-					if o.Type.Ip.Recurring.Misc != nil {
-						entry.Misc["TypeIpRecurring"] = o.Type.Ip.Recurring.Misc
-					}
-					if o.Type.Ip.Recurring.Monthly != nil {
-						nestedType.Ip.Recurring.Monthly = &TypeIpRecurringMonthly{}
-						if o.Type.Ip.Recurring.Monthly.Misc != nil {
-							entry.Misc["TypeIpRecurringMonthly"] = o.Type.Ip.Recurring.Monthly.Misc
-						}
-						if o.Type.Ip.Recurring.Monthly.At != nil {
-							nestedType.Ip.Recurring.Monthly.At = o.Type.Ip.Recurring.Monthly.At
-						}
-						if o.Type.Ip.Recurring.Monthly.DayOfMonth != nil {
-							nestedType.Ip.Recurring.Monthly.DayOfMonth = o.Type.Ip.Recurring.Monthly.DayOfMonth
-						}
-					}
-					if o.Type.Ip.Recurring.Weekly != nil {
-						nestedType.Ip.Recurring.Weekly = &TypeIpRecurringWeekly{}
-						if o.Type.Ip.Recurring.Weekly.Misc != nil {
-							entry.Misc["TypeIpRecurringWeekly"] = o.Type.Ip.Recurring.Weekly.Misc
-						}
-						if o.Type.Ip.Recurring.Weekly.DayOfWeek != nil {
-							nestedType.Ip.Recurring.Weekly.DayOfWeek = o.Type.Ip.Recurring.Weekly.DayOfWeek
-						}
-						if o.Type.Ip.Recurring.Weekly.At != nil {
-							nestedType.Ip.Recurring.Weekly.At = o.Type.Ip.Recurring.Weekly.At
-						}
-					}
-					if o.Type.Ip.Recurring.Daily != nil {
-						nestedType.Ip.Recurring.Daily = &TypeIpRecurringDaily{}
-						if o.Type.Ip.Recurring.Daily.Misc != nil {
-							entry.Misc["TypeIpRecurringDaily"] = o.Type.Ip.Recurring.Daily.Misc
-						}
-						if o.Type.Ip.Recurring.Daily.At != nil {
-							nestedType.Ip.Recurring.Daily.At = o.Type.Ip.Recurring.Daily.At
-						}
-					}
-					if o.Type.Ip.Recurring.FiveMinute != nil {
-						nestedType.Ip.Recurring.FiveMinute = &TypeIpRecurringFiveMinute{}
-						if o.Type.Ip.Recurring.FiveMinute.Misc != nil {
-							entry.Misc["TypeIpRecurringFiveMinute"] = o.Type.Ip.Recurring.FiveMinute.Misc
-						}
-					}
-					if o.Type.Ip.Recurring.Hourly != nil {
-						nestedType.Ip.Recurring.Hourly = &TypeIpRecurringHourly{}
-						if o.Type.Ip.Recurring.Hourly.Misc != nil {
-							entry.Misc["TypeIpRecurringHourly"] = o.Type.Ip.Recurring.Hourly.Misc
-						}
-					}
-				}
-			}
-			if o.Type.PredefinedIp != nil {
-				nestedType.PredefinedIp = &TypePredefinedIp{}
-				if o.Type.PredefinedIp.Misc != nil {
-					entry.Misc["TypePredefinedIp"] = o.Type.PredefinedIp.Misc
-				}
-				if o.Type.PredefinedIp.Description != nil {
-					nestedType.PredefinedIp.Description = o.Type.PredefinedIp.Description
-				}
-				if o.Type.PredefinedIp.ExceptionList != nil {
-					nestedType.PredefinedIp.ExceptionList = util.MemToStr(o.Type.PredefinedIp.ExceptionList)
-				}
-				if o.Type.PredefinedIp.Url != nil {
-					nestedType.PredefinedIp.Url = o.Type.PredefinedIp.Url
 				}
 			}
 		}
@@ -1451,7 +1451,7 @@ func SpecMatches(a, b *Entry) bool {
 	return true
 }
 
-func matchTypeDomainAuth(a *TypeDomainAuth, b *TypeDomainAuth) bool {
+func matchTypeUrlAuth(a *TypeUrlAuth, b *TypeUrlAuth) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
 	} else if a == nil && b == nil {
@@ -1461,6 +1461,124 @@ func matchTypeDomainAuth(a *TypeDomainAuth, b *TypeDomainAuth) bool {
 		return false
 	}
 	if !util.StringsMatch(a.Username, b.Username) {
+		return false
+	}
+	return true
+}
+func matchTypeUrlRecurringDaily(a *TypeUrlRecurringDaily, b *TypeUrlRecurringDaily) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !util.StringsMatch(a.At, b.At) {
+		return false
+	}
+	return true
+}
+func matchTypeUrlRecurringFiveMinute(a *TypeUrlRecurringFiveMinute, b *TypeUrlRecurringFiveMinute) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	return true
+}
+func matchTypeUrlRecurringHourly(a *TypeUrlRecurringHourly, b *TypeUrlRecurringHourly) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	return true
+}
+func matchTypeUrlRecurringMonthly(a *TypeUrlRecurringMonthly, b *TypeUrlRecurringMonthly) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !util.StringsMatch(a.At, b.At) {
+		return false
+	}
+	if !util.Ints64Match(a.DayOfMonth, b.DayOfMonth) {
+		return false
+	}
+	return true
+}
+func matchTypeUrlRecurringWeekly(a *TypeUrlRecurringWeekly, b *TypeUrlRecurringWeekly) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !util.StringsMatch(a.At, b.At) {
+		return false
+	}
+	if !util.StringsMatch(a.DayOfWeek, b.DayOfWeek) {
+		return false
+	}
+	return true
+}
+func matchTypeUrlRecurring(a *TypeUrlRecurring, b *TypeUrlRecurring) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !matchTypeUrlRecurringDaily(a.Daily, b.Daily) {
+		return false
+	}
+	if !matchTypeUrlRecurringFiveMinute(a.FiveMinute, b.FiveMinute) {
+		return false
+	}
+	if !matchTypeUrlRecurringHourly(a.Hourly, b.Hourly) {
+		return false
+	}
+	if !matchTypeUrlRecurringMonthly(a.Monthly, b.Monthly) {
+		return false
+	}
+	if !matchTypeUrlRecurringWeekly(a.Weekly, b.Weekly) {
+		return false
+	}
+	return true
+}
+func matchTypeUrl(a *TypeUrl, b *TypeUrl) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !util.StringsMatch(a.CertificateProfile, b.CertificateProfile) {
+		return false
+	}
+	if !util.StringsMatch(a.Description, b.Description) {
+		return false
+	}
+	if !util.OrderedListsMatch(a.ExceptionList, b.ExceptionList) {
+		return false
+	}
+	if !matchTypeUrlRecurring(a.Recurring, b.Recurring) {
+		return false
+	}
+	if !util.StringsMatch(a.Url, b.Url) {
+		return false
+	}
+	if !matchTypeUrlAuth(a.Auth, b.Auth) {
+		return false
+	}
+	return true
+}
+func matchTypeDomainRecurringWeekly(a *TypeDomainRecurringWeekly, b *TypeDomainRecurringWeekly) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !util.StringsMatch(a.At, b.At) {
+		return false
+	}
+	if !util.StringsMatch(a.DayOfWeek, b.DayOfWeek) {
 		return false
 	}
 	return true
@@ -1506,31 +1624,11 @@ func matchTypeDomainRecurringMonthly(a *TypeDomainRecurringMonthly, b *TypeDomai
 	}
 	return true
 }
-func matchTypeDomainRecurringWeekly(a *TypeDomainRecurringWeekly, b *TypeDomainRecurringWeekly) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !util.StringsMatch(a.DayOfWeek, b.DayOfWeek) {
-		return false
-	}
-	if !util.StringsMatch(a.At, b.At) {
-		return false
-	}
-	return true
-}
 func matchTypeDomainRecurring(a *TypeDomainRecurring, b *TypeDomainRecurring) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
 	} else if a == nil && b == nil {
 		return true
-	}
-	if !matchTypeDomainRecurringMonthly(a.Monthly, b.Monthly) {
-		return false
-	}
-	if !matchTypeDomainRecurringWeekly(a.Weekly, b.Weekly) {
-		return false
 	}
 	if !matchTypeDomainRecurringDaily(a.Daily, b.Daily) {
 		return false
@@ -1541,6 +1639,26 @@ func matchTypeDomainRecurring(a *TypeDomainRecurring, b *TypeDomainRecurring) bo
 	if !matchTypeDomainRecurringHourly(a.Hourly, b.Hourly) {
 		return false
 	}
+	if !matchTypeDomainRecurringMonthly(a.Monthly, b.Monthly) {
+		return false
+	}
+	if !matchTypeDomainRecurringWeekly(a.Weekly, b.Weekly) {
+		return false
+	}
+	return true
+}
+func matchTypeDomainAuth(a *TypeDomainAuth, b *TypeDomainAuth) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !util.StringsMatch(a.Password, b.Password) {
+		return false
+	}
+	if !util.StringsMatch(a.Username, b.Username) {
+		return false
+	}
 	return true
 }
 func matchTypeDomain(a *TypeDomain, b *TypeDomain) bool {
@@ -1548,9 +1666,6 @@ func matchTypeDomain(a *TypeDomain, b *TypeDomain) bool {
 		return false
 	} else if a == nil && b == nil {
 		return true
-	}
-	if !util.OrderedListsMatch(a.ExceptionList, b.ExceptionList) {
-		return false
 	}
 	if !util.BoolsMatch(a.ExpandDomain, b.ExpandDomain) {
 		return false
@@ -1570,26 +1685,7 @@ func matchTypeDomain(a *TypeDomain, b *TypeDomain) bool {
 	if !util.StringsMatch(a.Description, b.Description) {
 		return false
 	}
-	return true
-}
-func matchTypeImeiRecurringHourly(a *TypeImeiRecurringHourly, b *TypeImeiRecurringHourly) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	return true
-}
-func matchTypeImeiRecurringMonthly(a *TypeImeiRecurringMonthly, b *TypeImeiRecurringMonthly) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !util.StringsMatch(a.At, b.At) {
-		return false
-	}
-	if !util.Ints64Match(a.DayOfMonth, b.DayOfMonth) {
+	if !util.OrderedListsMatch(a.ExceptionList, b.ExceptionList) {
 		return false
 	}
 	return true
@@ -1627,11 +1723,36 @@ func matchTypeImeiRecurringFiveMinute(a *TypeImeiRecurringFiveMinute, b *TypeIme
 	}
 	return true
 }
+func matchTypeImeiRecurringHourly(a *TypeImeiRecurringHourly, b *TypeImeiRecurringHourly) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	return true
+}
+func matchTypeImeiRecurringMonthly(a *TypeImeiRecurringMonthly, b *TypeImeiRecurringMonthly) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !util.StringsMatch(a.At, b.At) {
+		return false
+	}
+	if !util.Ints64Match(a.DayOfMonth, b.DayOfMonth) {
+		return false
+	}
+	return true
+}
 func matchTypeImeiRecurring(a *TypeImeiRecurring, b *TypeImeiRecurring) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
 	} else if a == nil && b == nil {
 		return true
+	}
+	if !matchTypeImeiRecurringWeekly(a.Weekly, b.Weekly) {
+		return false
 	}
 	if !matchTypeImeiRecurringDaily(a.Daily, b.Daily) {
 		return false
@@ -1645,9 +1766,6 @@ func matchTypeImeiRecurring(a *TypeImeiRecurring, b *TypeImeiRecurring) bool {
 	if !matchTypeImeiRecurringMonthly(a.Monthly, b.Monthly) {
 		return false
 	}
-	if !matchTypeImeiRecurringWeekly(a.Weekly, b.Weekly) {
-		return false
-	}
 	return true
 }
 func matchTypeImeiAuth(a *TypeImeiAuth, b *TypeImeiAuth) bool {
@@ -1656,10 +1774,10 @@ func matchTypeImeiAuth(a *TypeImeiAuth, b *TypeImeiAuth) bool {
 	} else if a == nil && b == nil {
 		return true
 	}
-	if !util.StringsMatch(a.Username, b.Username) {
+	if !util.StringsMatch(a.Password, b.Password) {
 		return false
 	}
-	if !util.StringsMatch(a.Password, b.Password) {
+	if !util.StringsMatch(a.Username, b.Username) {
 		return false
 	}
 	return true
@@ -1690,16 +1808,16 @@ func matchTypeImei(a *TypeImei, b *TypeImei) bool {
 	}
 	return true
 }
-func matchTypeImsiRecurringMonthly(a *TypeImsiRecurringMonthly, b *TypeImsiRecurringMonthly) bool {
+func matchTypeImsiAuth(a *TypeImsiAuth, b *TypeImsiAuth) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
 	} else if a == nil && b == nil {
 		return true
 	}
-	if !util.StringsMatch(a.At, b.At) {
+	if !util.StringsMatch(a.Password, b.Password) {
 		return false
 	}
-	if !util.Ints64Match(a.DayOfMonth, b.DayOfMonth) {
+	if !util.StringsMatch(a.Username, b.Username) {
 		return false
 	}
 	return true
@@ -1745,11 +1863,31 @@ func matchTypeImsiRecurringHourly(a *TypeImsiRecurringHourly, b *TypeImsiRecurri
 	}
 	return true
 }
+func matchTypeImsiRecurringMonthly(a *TypeImsiRecurringMonthly, b *TypeImsiRecurringMonthly) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !util.StringsMatch(a.At, b.At) {
+		return false
+	}
+	if !util.Ints64Match(a.DayOfMonth, b.DayOfMonth) {
+		return false
+	}
+	return true
+}
 func matchTypeImsiRecurring(a *TypeImsiRecurring, b *TypeImsiRecurring) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
 	} else if a == nil && b == nil {
 		return true
+	}
+	if !matchTypeImsiRecurringDaily(a.Daily, b.Daily) {
+		return false
+	}
+	if !matchTypeImsiRecurringFiveMinute(a.FiveMinute, b.FiveMinute) {
+		return false
 	}
 	if !matchTypeImsiRecurringHourly(a.Hourly, b.Hourly) {
 		return false
@@ -1760,26 +1898,6 @@ func matchTypeImsiRecurring(a *TypeImsiRecurring, b *TypeImsiRecurring) bool {
 	if !matchTypeImsiRecurringWeekly(a.Weekly, b.Weekly) {
 		return false
 	}
-	if !matchTypeImsiRecurringDaily(a.Daily, b.Daily) {
-		return false
-	}
-	if !matchTypeImsiRecurringFiveMinute(a.FiveMinute, b.FiveMinute) {
-		return false
-	}
-	return true
-}
-func matchTypeImsiAuth(a *TypeImsiAuth, b *TypeImsiAuth) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !util.StringsMatch(a.Password, b.Password) {
-		return false
-	}
-	if !util.StringsMatch(a.Username, b.Username) {
-		return false
-	}
 	return true
 }
 func matchTypeImsi(a *TypeImsi, b *TypeImsi) bool {
@@ -1787,6 +1905,12 @@ func matchTypeImsi(a *TypeImsi, b *TypeImsi) bool {
 		return false
 	} else if a == nil && b == nil {
 		return true
+	}
+	if !util.OrderedListsMatch(a.ExceptionList, b.ExceptionList) {
+		return false
+	}
+	if !matchTypeImsiRecurring(a.Recurring, b.Recurring) {
+		return false
 	}
 	if !util.StringsMatch(a.Url, b.Url) {
 		return false
@@ -1798,12 +1922,6 @@ func matchTypeImsi(a *TypeImsi, b *TypeImsi) bool {
 		return false
 	}
 	if !util.StringsMatch(a.Description, b.Description) {
-		return false
-	}
-	if !util.OrderedListsMatch(a.ExceptionList, b.ExceptionList) {
-		return false
-	}
-	if !matchTypeImsiRecurring(a.Recurring, b.Recurring) {
 		return false
 	}
 	return true
@@ -1869,10 +1987,10 @@ func matchTypeIpRecurringWeekly(a *TypeIpRecurringWeekly, b *TypeIpRecurringWeek
 	} else if a == nil && b == nil {
 		return true
 	}
-	if !util.StringsMatch(a.DayOfWeek, b.DayOfWeek) {
+	if !util.StringsMatch(a.At, b.At) {
 		return false
 	}
-	if !util.StringsMatch(a.At, b.At) {
+	if !util.StringsMatch(a.DayOfWeek, b.DayOfWeek) {
 		return false
 	}
 	return true
@@ -1906,6 +2024,9 @@ func matchTypeIp(a *TypeIp, b *TypeIp) bool {
 	} else if a == nil && b == nil {
 		return true
 	}
+	if !util.StringsMatch(a.Url, b.Url) {
+		return false
+	}
 	if !matchTypeIpAuth(a.Auth, b.Auth) {
 		return false
 	}
@@ -1919,9 +2040,6 @@ func matchTypeIp(a *TypeIp, b *TypeIp) bool {
 		return false
 	}
 	if !matchTypeIpRecurring(a.Recurring, b.Recurring) {
-		return false
-	}
-	if !util.StringsMatch(a.Url, b.Url) {
 		return false
 	}
 	return true
@@ -1960,129 +2078,17 @@ func matchTypePredefinedUrl(a *TypePredefinedUrl, b *TypePredefinedUrl) bool {
 	}
 	return true
 }
-func matchTypeUrlAuth(a *TypeUrlAuth, b *TypeUrlAuth) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !util.StringsMatch(a.Password, b.Password) {
-		return false
-	}
-	if !util.StringsMatch(a.Username, b.Username) {
-		return false
-	}
-	return true
-}
-func matchTypeUrlRecurringFiveMinute(a *TypeUrlRecurringFiveMinute, b *TypeUrlRecurringFiveMinute) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	return true
-}
-func matchTypeUrlRecurringHourly(a *TypeUrlRecurringHourly, b *TypeUrlRecurringHourly) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	return true
-}
-func matchTypeUrlRecurringMonthly(a *TypeUrlRecurringMonthly, b *TypeUrlRecurringMonthly) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !util.StringsMatch(a.At, b.At) {
-		return false
-	}
-	if !util.Ints64Match(a.DayOfMonth, b.DayOfMonth) {
-		return false
-	}
-	return true
-}
-func matchTypeUrlRecurringWeekly(a *TypeUrlRecurringWeekly, b *TypeUrlRecurringWeekly) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !util.StringsMatch(a.At, b.At) {
-		return false
-	}
-	if !util.StringsMatch(a.DayOfWeek, b.DayOfWeek) {
-		return false
-	}
-	return true
-}
-func matchTypeUrlRecurringDaily(a *TypeUrlRecurringDaily, b *TypeUrlRecurringDaily) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !util.StringsMatch(a.At, b.At) {
-		return false
-	}
-	return true
-}
-func matchTypeUrlRecurring(a *TypeUrlRecurring, b *TypeUrlRecurring) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !matchTypeUrlRecurringHourly(a.Hourly, b.Hourly) {
-		return false
-	}
-	if !matchTypeUrlRecurringMonthly(a.Monthly, b.Monthly) {
-		return false
-	}
-	if !matchTypeUrlRecurringWeekly(a.Weekly, b.Weekly) {
-		return false
-	}
-	if !matchTypeUrlRecurringDaily(a.Daily, b.Daily) {
-		return false
-	}
-	if !matchTypeUrlRecurringFiveMinute(a.FiveMinute, b.FiveMinute) {
-		return false
-	}
-	return true
-}
-func matchTypeUrl(a *TypeUrl, b *TypeUrl) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !matchTypeUrlAuth(a.Auth, b.Auth) {
-		return false
-	}
-	if !util.StringsMatch(a.CertificateProfile, b.CertificateProfile) {
-		return false
-	}
-	if !util.StringsMatch(a.Description, b.Description) {
-		return false
-	}
-	if !util.OrderedListsMatch(a.ExceptionList, b.ExceptionList) {
-		return false
-	}
-	if !matchTypeUrlRecurring(a.Recurring, b.Recurring) {
-		return false
-	}
-	if !util.StringsMatch(a.Url, b.Url) {
-		return false
-	}
-	return true
-}
 func matchType(a *Type, b *Type) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
 	} else if a == nil && b == nil {
 		return true
+	}
+	if !matchTypePredefinedIp(a.PredefinedIp, b.PredefinedIp) {
+		return false
+	}
+	if !matchTypePredefinedUrl(a.PredefinedUrl, b.PredefinedUrl) {
+		return false
 	}
 	if !matchTypeUrl(a.Url, b.Url) {
 		return false
@@ -2097,12 +2103,6 @@ func matchType(a *Type, b *Type) bool {
 		return false
 	}
 	if !matchTypeIp(a.Ip, b.Ip) {
-		return false
-	}
-	if !matchTypePredefinedIp(a.PredefinedIp, b.PredefinedIp) {
-		return false
-	}
-	if !matchTypePredefinedUrl(a.PredefinedUrl, b.PredefinedUrl) {
 		return false
 	}
 	return true

@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{}
+	Suffix = []string{"network", "ike", "crypto-profiles", "ipsec-crypto-profiles"}
 )
 
 type Entry struct {
@@ -129,6 +129,9 @@ func specifyEntry(o *Entry) (any, error) {
 		if _, ok := o.Misc["Lifesize"]; ok {
 			nestedLifesize.Misc = o.Misc["Lifesize"]
 		}
+		if o.Lifesize.Tb != nil {
+			nestedLifesize.Tb = o.Lifesize.Tb
+		}
 		if o.Lifesize.Gb != nil {
 			nestedLifesize.Gb = o.Lifesize.Gb
 		}
@@ -137,9 +140,6 @@ func specifyEntry(o *Entry) (any, error) {
 		}
 		if o.Lifesize.Mb != nil {
 			nestedLifesize.Mb = o.Lifesize.Mb
-		}
-		if o.Lifesize.Tb != nil {
-			nestedLifesize.Tb = o.Lifesize.Tb
 		}
 	}
 	entry.Lifesize = nestedLifesize

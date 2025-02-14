@@ -69,14 +69,14 @@ func specifyConfig(o *Config) (any, error) {
 			if _, ok := o.Misc["SslExcludeCert"]; ok {
 				nestedSslExcludeCert.Misc = o.Misc["SslExcludeCert"]
 			}
-			if oSslExcludeCert.Name != "" {
-				nestedSslExcludeCert.Name = oSslExcludeCert.Name
-			}
 			if oSslExcludeCert.Description != nil {
 				nestedSslExcludeCert.Description = oSslExcludeCert.Description
 			}
 			if oSslExcludeCert.Exclude != nil {
 				nestedSslExcludeCert.Exclude = util.YesNo(oSslExcludeCert.Exclude, nil)
+			}
+			if oSslExcludeCert.Name != "" {
+				nestedSslExcludeCert.Name = oSslExcludeCert.Name
 			}
 			nestedSslExcludeCertCol = append(nestedSslExcludeCertCol, nestedSslExcludeCert)
 		}
@@ -109,14 +109,14 @@ func (c *configXmlContainer) Normalize() ([]*Config, error) {
 				if oSslExcludeCert.Misc != nil {
 					config.Misc["SslExcludeCert"] = oSslExcludeCert.Misc
 				}
+				if oSslExcludeCert.Name != "" {
+					nestedSslExcludeCert.Name = oSslExcludeCert.Name
+				}
 				if oSslExcludeCert.Description != nil {
 					nestedSslExcludeCert.Description = oSslExcludeCert.Description
 				}
 				if oSslExcludeCert.Exclude != nil {
 					nestedSslExcludeCert.Exclude = util.AsBool(oSslExcludeCert.Exclude, nil)
-				}
-				if oSslExcludeCert.Name != "" {
-					nestedSslExcludeCert.Name = oSslExcludeCert.Name
 				}
 				nestedSslExcludeCertCol = append(nestedSslExcludeCertCol, nestedSslExcludeCert)
 			}

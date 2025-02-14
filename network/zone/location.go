@@ -183,21 +183,6 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 
 	return ans, nil
 }
-
-func (o Location) XpathWithComponents(vn version.Number, components ...string) ([]string, error) {
-	if len(components) != 1 {
-		return nil, fmt.Errorf("invalid number of arguments for Xpath() call")
-	}
-
-	ans, err := o.XpathPrefix(vn)
-	if err != nil {
-		return nil, err
-	}
-
-	ans = append(ans, components[0])
-
-	return ans, nil
-}
 func (o Location) XpathWithEntryName(vn version.Number, name string) ([]string, error) {
 
 	ans, err := o.XpathPrefix(vn)

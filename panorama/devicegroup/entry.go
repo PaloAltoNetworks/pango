@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{}
+	Suffix = []string{"device-group"}
 )
 
 type Entry struct {
@@ -133,11 +133,11 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				if oDevices.Misc != nil {
 					entry.Misc["Devices"] = oDevices.Misc
 				}
-				if oDevices.Name != "" {
-					nestedDevices.Name = oDevices.Name
-				}
 				if oDevices.Vsys != nil {
 					nestedDevices.Vsys = util.MemToStr(oDevices.Vsys)
+				}
+				if oDevices.Name != "" {
+					nestedDevices.Name = oDevices.Name
 				}
 				nestedDevicesCol = append(nestedDevicesCol, nestedDevices)
 			}
@@ -186,10 +186,10 @@ func matchDevices(a []Devices, b []Devices) bool {
 	}
 	for _, a := range a {
 		for _, b := range b {
-			if !util.OrderedListsMatch(a.Vsys, b.Vsys) {
+			if !util.StringsEqual(a.Name, b.Name) {
 				return false
 			}
-			if !util.StringsEqual(a.Name, b.Name) {
+			if !util.OrderedListsMatch(a.Vsys, b.Vsys) {
 				return false
 			}
 		}

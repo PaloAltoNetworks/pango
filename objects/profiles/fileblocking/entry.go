@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{}
+	Suffix = []string{"profiles", "file-blocking"}
 )
 
 type Entry struct {
@@ -138,12 +138,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				if oRules.Misc != nil {
 					entry.Misc["Rules"] = oRules.Misc
 				}
-				if oRules.Action != nil {
-					nestedRules.Action = oRules.Action
-				}
-				if oRules.Name != "" {
-					nestedRules.Name = oRules.Name
-				}
 				if oRules.Application != nil {
 					nestedRules.Application = util.MemToStr(oRules.Application)
 				}
@@ -152,6 +146,12 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				}
 				if oRules.Direction != nil {
 					nestedRules.Direction = oRules.Direction
+				}
+				if oRules.Action != nil {
+					nestedRules.Action = oRules.Action
+				}
+				if oRules.Name != "" {
+					nestedRules.Name = oRules.Name
 				}
 				nestedRulesCol = append(nestedRulesCol, nestedRules)
 			}

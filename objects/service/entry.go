@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{}
+	Suffix = []string{"service"}
 )
 
 type Entry struct {
@@ -136,40 +136,10 @@ func specifyEntry(o *Entry) (any, error) {
 		if _, ok := o.Misc["Protocol"]; ok {
 			nestedProtocol.Misc = o.Misc["Protocol"]
 		}
-		if o.Protocol.Tcp != nil {
-			nestedProtocol.Tcp = &ProtocolTcpXml{}
-			if _, ok := o.Misc["ProtocolTcp"]; ok {
-				nestedProtocol.Tcp.Misc = o.Misc["ProtocolTcp"]
-			}
-			if o.Protocol.Tcp.Override != nil {
-				nestedProtocol.Tcp.Override = &ProtocolTcpOverrideXml{}
-				if _, ok := o.Misc["ProtocolTcpOverride"]; ok {
-					nestedProtocol.Tcp.Override.Misc = o.Misc["ProtocolTcpOverride"]
-				}
-				if o.Protocol.Tcp.Override.HalfcloseTimeout != nil {
-					nestedProtocol.Tcp.Override.HalfcloseTimeout = o.Protocol.Tcp.Override.HalfcloseTimeout
-				}
-				if o.Protocol.Tcp.Override.Timeout != nil {
-					nestedProtocol.Tcp.Override.Timeout = o.Protocol.Tcp.Override.Timeout
-				}
-				if o.Protocol.Tcp.Override.TimewaitTimeout != nil {
-					nestedProtocol.Tcp.Override.TimewaitTimeout = o.Protocol.Tcp.Override.TimewaitTimeout
-				}
-			}
-			if o.Protocol.Tcp.Port != nil {
-				nestedProtocol.Tcp.Port = o.Protocol.Tcp.Port
-			}
-			if o.Protocol.Tcp.SourcePort != nil {
-				nestedProtocol.Tcp.SourcePort = o.Protocol.Tcp.SourcePort
-			}
-		}
 		if o.Protocol.Udp != nil {
 			nestedProtocol.Udp = &ProtocolUdpXml{}
 			if _, ok := o.Misc["ProtocolUdp"]; ok {
 				nestedProtocol.Udp.Misc = o.Misc["ProtocolUdp"]
-			}
-			if o.Protocol.Udp.Port != nil {
-				nestedProtocol.Udp.Port = o.Protocol.Udp.Port
 			}
 			if o.Protocol.Udp.SourcePort != nil {
 				nestedProtocol.Udp.SourcePort = o.Protocol.Udp.SourcePort
@@ -182,6 +152,36 @@ func specifyEntry(o *Entry) (any, error) {
 				if o.Protocol.Udp.Override.Timeout != nil {
 					nestedProtocol.Udp.Override.Timeout = o.Protocol.Udp.Override.Timeout
 				}
+			}
+			if o.Protocol.Udp.Port != nil {
+				nestedProtocol.Udp.Port = o.Protocol.Udp.Port
+			}
+		}
+		if o.Protocol.Tcp != nil {
+			nestedProtocol.Tcp = &ProtocolTcpXml{}
+			if _, ok := o.Misc["ProtocolTcp"]; ok {
+				nestedProtocol.Tcp.Misc = o.Misc["ProtocolTcp"]
+			}
+			if o.Protocol.Tcp.Override != nil {
+				nestedProtocol.Tcp.Override = &ProtocolTcpOverrideXml{}
+				if _, ok := o.Misc["ProtocolTcpOverride"]; ok {
+					nestedProtocol.Tcp.Override.Misc = o.Misc["ProtocolTcpOverride"]
+				}
+				if o.Protocol.Tcp.Override.Timeout != nil {
+					nestedProtocol.Tcp.Override.Timeout = o.Protocol.Tcp.Override.Timeout
+				}
+				if o.Protocol.Tcp.Override.TimewaitTimeout != nil {
+					nestedProtocol.Tcp.Override.TimewaitTimeout = o.Protocol.Tcp.Override.TimewaitTimeout
+				}
+				if o.Protocol.Tcp.Override.HalfcloseTimeout != nil {
+					nestedProtocol.Tcp.Override.HalfcloseTimeout = o.Protocol.Tcp.Override.HalfcloseTimeout
+				}
+			}
+			if o.Protocol.Tcp.Port != nil {
+				nestedProtocol.Tcp.Port = o.Protocol.Tcp.Port
+			}
+			if o.Protocol.Tcp.SourcePort != nil {
+				nestedProtocol.Tcp.SourcePort = o.Protocol.Tcp.SourcePort
 			}
 		}
 	}
@@ -219,14 +219,14 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 					if o.Protocol.Tcp.Override.Misc != nil {
 						entry.Misc["ProtocolTcpOverride"] = o.Protocol.Tcp.Override.Misc
 					}
+					if o.Protocol.Tcp.Override.HalfcloseTimeout != nil {
+						nestedProtocol.Tcp.Override.HalfcloseTimeout = o.Protocol.Tcp.Override.HalfcloseTimeout
+					}
 					if o.Protocol.Tcp.Override.Timeout != nil {
 						nestedProtocol.Tcp.Override.Timeout = o.Protocol.Tcp.Override.Timeout
 					}
 					if o.Protocol.Tcp.Override.TimewaitTimeout != nil {
 						nestedProtocol.Tcp.Override.TimewaitTimeout = o.Protocol.Tcp.Override.TimewaitTimeout
-					}
-					if o.Protocol.Tcp.Override.HalfcloseTimeout != nil {
-						nestedProtocol.Tcp.Override.HalfcloseTimeout = o.Protocol.Tcp.Override.HalfcloseTimeout
 					}
 				}
 				if o.Protocol.Tcp.Port != nil {
@@ -241,12 +241,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				if o.Protocol.Udp.Misc != nil {
 					entry.Misc["ProtocolUdp"] = o.Protocol.Udp.Misc
 				}
-				if o.Protocol.Udp.Port != nil {
-					nestedProtocol.Udp.Port = o.Protocol.Udp.Port
-				}
-				if o.Protocol.Udp.SourcePort != nil {
-					nestedProtocol.Udp.SourcePort = o.Protocol.Udp.SourcePort
-				}
 				if o.Protocol.Udp.Override != nil {
 					nestedProtocol.Udp.Override = &ProtocolUdpOverride{}
 					if o.Protocol.Udp.Override.Misc != nil {
@@ -255,6 +249,12 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 					if o.Protocol.Udp.Override.Timeout != nil {
 						nestedProtocol.Udp.Override.Timeout = o.Protocol.Udp.Override.Timeout
 					}
+				}
+				if o.Protocol.Udp.Port != nil {
+					nestedProtocol.Udp.Port = o.Protocol.Udp.Port
+				}
+				if o.Protocol.Udp.SourcePort != nil {
+					nestedProtocol.Udp.SourcePort = o.Protocol.Udp.SourcePort
 				}
 			}
 		}
@@ -294,6 +294,40 @@ func SpecMatches(a, b *Entry) bool {
 	return true
 }
 
+func matchProtocolTcpOverride(a *ProtocolTcpOverride, b *ProtocolTcpOverride) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !util.Ints64Match(a.Timeout, b.Timeout) {
+		return false
+	}
+	if !util.Ints64Match(a.TimewaitTimeout, b.TimewaitTimeout) {
+		return false
+	}
+	if !util.Ints64Match(a.HalfcloseTimeout, b.HalfcloseTimeout) {
+		return false
+	}
+	return true
+}
+func matchProtocolTcp(a *ProtocolTcp, b *ProtocolTcp) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !util.StringsMatch(a.SourcePort, b.SourcePort) {
+		return false
+	}
+	if !matchProtocolTcpOverride(a.Override, b.Override) {
+		return false
+	}
+	if !util.StringsMatch(a.Port, b.Port) {
+		return false
+	}
+	return true
+}
 func matchProtocolUdpOverride(a *ProtocolUdpOverride, b *ProtocolUdpOverride) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
@@ -312,40 +346,6 @@ func matchProtocolUdp(a *ProtocolUdp, b *ProtocolUdp) bool {
 		return true
 	}
 	if !matchProtocolUdpOverride(a.Override, b.Override) {
-		return false
-	}
-	if !util.StringsMatch(a.Port, b.Port) {
-		return false
-	}
-	if !util.StringsMatch(a.SourcePort, b.SourcePort) {
-		return false
-	}
-	return true
-}
-func matchProtocolTcpOverride(a *ProtocolTcpOverride, b *ProtocolTcpOverride) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !util.Ints64Match(a.HalfcloseTimeout, b.HalfcloseTimeout) {
-		return false
-	}
-	if !util.Ints64Match(a.Timeout, b.Timeout) {
-		return false
-	}
-	if !util.Ints64Match(a.TimewaitTimeout, b.TimewaitTimeout) {
-		return false
-	}
-	return true
-}
-func matchProtocolTcp(a *ProtocolTcp, b *ProtocolTcp) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !matchProtocolTcpOverride(a.Override, b.Override) {
 		return false
 	}
 	if !util.StringsMatch(a.Port, b.Port) {

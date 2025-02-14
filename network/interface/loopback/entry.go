@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{}
+	Suffix = []string{"network", "interface", "loopback", "units"}
 )
 
 type Entry struct {
@@ -283,6 +283,9 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 			if o.Ipv6.Misc != nil {
 				entry.Misc["Ipv6"] = o.Ipv6.Misc
 			}
+			if o.Ipv6.InterfaceId != nil {
+				nestedIpv6.InterfaceId = o.Ipv6.InterfaceId
+			}
 			if o.Ipv6.Address != nil {
 				nestedIpv6.Address = []Ipv6Address{}
 				for _, oIpv6Address := range o.Ipv6.Address {
@@ -313,9 +316,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 			}
 			if o.Ipv6.Enabled != nil {
 				nestedIpv6.Enabled = util.AsBool(o.Ipv6.Enabled, nil)
-			}
-			if o.Ipv6.InterfaceId != nil {
-				nestedIpv6.InterfaceId = o.Ipv6.InterfaceId
 			}
 		}
 		entry.Ipv6 = nestedIpv6
@@ -379,7 +379,7 @@ func matchIp(a []Ip, b []Ip) bool {
 	}
 	return true
 }
-func matchIpv6AddressPrefix(a *Ipv6AddressPrefix, b *Ipv6AddressPrefix) bool {
+func matchIpv6AddressAnycast(a *Ipv6AddressAnycast, b *Ipv6AddressAnycast) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
 	} else if a == nil && b == nil {
@@ -387,7 +387,7 @@ func matchIpv6AddressPrefix(a *Ipv6AddressPrefix, b *Ipv6AddressPrefix) bool {
 	}
 	return true
 }
-func matchIpv6AddressAnycast(a *Ipv6AddressAnycast, b *Ipv6AddressAnycast) bool {
+func matchIpv6AddressPrefix(a *Ipv6AddressPrefix, b *Ipv6AddressPrefix) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
 	} else if a == nil && b == nil {

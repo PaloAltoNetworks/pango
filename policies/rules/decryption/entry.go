@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{}
+	Suffix = []string{"decryption", "rules"}
 )
 
 type Entry struct {
@@ -289,12 +289,18 @@ func specifyEntry(o *Entry) (any, error) {
 		if _, ok := o.Misc["Target"]; ok {
 			nestedTarget.Misc = o.Misc["Target"]
 		}
+		if o.Target.Tags != nil {
+			nestedTarget.Tags = util.StrToMem(o.Target.Tags)
+		}
 		if o.Target.Devices != nil {
 			nestedTarget.Devices = []TargetDevicesXml{}
 			for _, oTargetDevices := range o.Target.Devices {
 				nestedTargetDevices := TargetDevicesXml{}
 				if _, ok := o.Misc["TargetDevices"]; ok {
 					nestedTargetDevices.Misc = o.Misc["TargetDevices"]
+				}
+				if oTargetDevices.Name != "" {
+					nestedTargetDevices.Name = oTargetDevices.Name
 				}
 				if oTargetDevices.Vsys != nil {
 					nestedTargetDevices.Vsys = []TargetDevicesVsysXml{}
@@ -309,17 +315,11 @@ func specifyEntry(o *Entry) (any, error) {
 						nestedTargetDevices.Vsys = append(nestedTargetDevices.Vsys, nestedTargetDevicesVsys)
 					}
 				}
-				if oTargetDevices.Name != "" {
-					nestedTargetDevices.Name = oTargetDevices.Name
-				}
 				nestedTarget.Devices = append(nestedTarget.Devices, nestedTargetDevices)
 			}
 		}
 		if o.Target.Negate != nil {
 			nestedTarget.Negate = util.YesNo(o.Target.Negate, nil)
-		}
-		if o.Target.Tags != nil {
-			nestedTarget.Tags = util.StrToMem(o.Target.Tags)
 		}
 	}
 	entry.Target = nestedTarget
@@ -330,6 +330,12 @@ func specifyEntry(o *Entry) (any, error) {
 		nestedType = &TypeXml{}
 		if _, ok := o.Misc["Type"]; ok {
 			nestedType.Misc = o.Misc["Type"]
+		}
+		if o.Type.SshProxy != nil {
+			nestedType.SshProxy = &TypeSshProxyXml{}
+			if _, ok := o.Misc["TypeSshProxy"]; ok {
+				nestedType.SshProxy.Misc = o.Misc["TypeSshProxy"]
+			}
 		}
 		if o.Type.SslForwardProxy != nil {
 			nestedType.SslForwardProxy = &TypeSslForwardProxyXml{}
@@ -344,12 +350,6 @@ func specifyEntry(o *Entry) (any, error) {
 			}
 			if o.Type.SslInboundInspection.Certificates != nil {
 				nestedType.SslInboundInspection.Certificates = util.StrToMem(o.Type.SslInboundInspection.Certificates)
-			}
-		}
-		if o.Type.SshProxy != nil {
-			nestedType.SshProxy = &TypeSshProxyXml{}
-			if _, ok := o.Misc["TypeSshProxy"]; ok {
-				nestedType.SshProxy.Misc = o.Misc["TypeSshProxy"]
 			}
 		}
 	}
@@ -395,6 +395,12 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 			if o.Target.Misc != nil {
 				entry.Misc["Target"] = o.Target.Misc
 			}
+			if o.Target.Negate != nil {
+				nestedTarget.Negate = util.AsBool(o.Target.Negate, nil)
+			}
+			if o.Target.Tags != nil {
+				nestedTarget.Tags = util.MemToStr(o.Target.Tags)
+			}
 			if o.Target.Devices != nil {
 				nestedTarget.Devices = []TargetDevices{}
 				for _, oTargetDevices := range o.Target.Devices {
@@ -420,12 +426,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 					}
 					nestedTarget.Devices = append(nestedTarget.Devices, nestedTargetDevices)
 				}
-			}
-			if o.Target.Negate != nil {
-				nestedTarget.Negate = util.AsBool(o.Target.Negate, nil)
-			}
-			if o.Target.Tags != nil {
-				nestedTarget.Tags = util.MemToStr(o.Target.Tags)
 			}
 		}
 		entry.Target = nestedTarget
@@ -555,6 +555,50 @@ func SpecMatches(a, b *Entry) bool {
 	return true
 }
 
+func matchTypeSslForwardProxy(a *TypeSslForwardProxy, b *TypeSslForwardProxy) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	return true
+}
+func matchTypeSslInboundInspection(a *TypeSslInboundInspection, b *TypeSslInboundInspection) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !util.OrderedListsMatch(a.Certificates, b.Certificates) {
+		return false
+	}
+	return true
+}
+func matchTypeSshProxy(a *TypeSshProxy, b *TypeSshProxy) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	return true
+}
+func matchType(a *Type, b *Type) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !matchTypeSslInboundInspection(a.SslInboundInspection, b.SslInboundInspection) {
+		return false
+	}
+	if !matchTypeSshProxy(a.SshProxy, b.SshProxy) {
+		return false
+	}
+	if !matchTypeSslForwardProxy(a.SslForwardProxy, b.SslForwardProxy) {
+		return false
+	}
+	return true
+}
 func matchTargetDevicesVsys(a []TargetDevicesVsys, b []TargetDevicesVsys) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
@@ -594,57 +638,13 @@ func matchTarget(a *Target, b *Target) bool {
 	} else if a == nil && b == nil {
 		return true
 	}
-	if !util.OrderedListsMatch(a.Tags, b.Tags) {
-		return false
-	}
 	if !matchTargetDevices(a.Devices, b.Devices) {
 		return false
 	}
 	if !util.BoolsMatch(a.Negate, b.Negate) {
 		return false
 	}
-	return true
-}
-func matchTypeSshProxy(a *TypeSshProxy, b *TypeSshProxy) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	return true
-}
-func matchTypeSslForwardProxy(a *TypeSslForwardProxy, b *TypeSslForwardProxy) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	return true
-}
-func matchTypeSslInboundInspection(a *TypeSslInboundInspection, b *TypeSslInboundInspection) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !util.OrderedListsMatch(a.Certificates, b.Certificates) {
-		return false
-	}
-	return true
-}
-func matchType(a *Type, b *Type) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !matchTypeSshProxy(a.SshProxy, b.SshProxy) {
-		return false
-	}
-	if !matchTypeSslForwardProxy(a.SslForwardProxy, b.SslForwardProxy) {
-		return false
-	}
-	if !matchTypeSslInboundInspection(a.SslInboundInspection, b.SslInboundInspection) {
+	if !util.OrderedListsMatch(a.Tags, b.Tags) {
 		return false
 	}
 	return true
