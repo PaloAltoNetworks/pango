@@ -115,15 +115,13 @@ type TargetXml struct {
 	Misc []generic.Xml `xml:",any"`
 }
 type TargetDevicesXml struct {
-	XMLName xml.Name               `xml:"entry"`
-	Name    string                 `xml:"name,attr"`
-	Vsys    []TargetDevicesVsysXml `xml:"vsys>entry,omitempty"`
+	Name string                 `xml:"name,attr"`
+	Vsys []TargetDevicesVsysXml `xml:"vsys>entry,omitempty"`
 
 	Misc []generic.Xml `xml:",any"`
 }
 type TargetDevicesVsysXml struct {
-	XMLName xml.Name `xml:"entry"`
-	Name    string   `xml:"name,attr"`
+	Name string `xml:"name,attr"`
 
 	Misc []generic.Xml `xml:",any"`
 }
@@ -289,9 +287,6 @@ func specifyEntry(o *Entry) (any, error) {
 		if _, ok := o.Misc["Target"]; ok {
 			nestedTarget.Misc = o.Misc["Target"]
 		}
-		if o.Target.Tags != nil {
-			nestedTarget.Tags = util.StrToMem(o.Target.Tags)
-		}
 		if o.Target.Devices != nil {
 			nestedTarget.Devices = []TargetDevicesXml{}
 			for _, oTargetDevices := range o.Target.Devices {
@@ -320,6 +315,9 @@ func specifyEntry(o *Entry) (any, error) {
 		}
 		if o.Target.Negate != nil {
 			nestedTarget.Negate = util.YesNo(o.Target.Negate, nil)
+		}
+		if o.Target.Tags != nil {
+			nestedTarget.Tags = util.StrToMem(o.Target.Tags)
 		}
 	}
 	entry.Target = nestedTarget
@@ -395,18 +393,15 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 			if o.Target.Misc != nil {
 				entry.Misc["Target"] = o.Target.Misc
 			}
-			if o.Target.Negate != nil {
-				nestedTarget.Negate = util.AsBool(o.Target.Negate, nil)
-			}
-			if o.Target.Tags != nil {
-				nestedTarget.Tags = util.MemToStr(o.Target.Tags)
-			}
 			if o.Target.Devices != nil {
 				nestedTarget.Devices = []TargetDevices{}
 				for _, oTargetDevices := range o.Target.Devices {
 					nestedTargetDevices := TargetDevices{}
 					if oTargetDevices.Misc != nil {
 						entry.Misc["TargetDevices"] = oTargetDevices.Misc
+					}
+					if oTargetDevices.Name != "" {
+						nestedTargetDevices.Name = oTargetDevices.Name
 					}
 					if oTargetDevices.Vsys != nil {
 						nestedTargetDevices.Vsys = []TargetDevicesVsys{}
@@ -421,11 +416,14 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 							nestedTargetDevices.Vsys = append(nestedTargetDevices.Vsys, nestedTargetDevicesVsys)
 						}
 					}
-					if oTargetDevices.Name != "" {
-						nestedTargetDevices.Name = oTargetDevices.Name
-					}
 					nestedTarget.Devices = append(nestedTarget.Devices, nestedTargetDevices)
 				}
+			}
+			if o.Target.Negate != nil {
+				nestedTarget.Negate = util.AsBool(o.Target.Negate, nil)
+			}
+			if o.Target.Tags != nil {
+				nestedTarget.Tags = util.MemToStr(o.Target.Tags)
 			}
 		}
 		entry.Target = nestedTarget
@@ -555,50 +553,6 @@ func SpecMatches(a, b *Entry) bool {
 	return true
 }
 
-func matchTypeSslForwardProxy(a *TypeSslForwardProxy, b *TypeSslForwardProxy) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	return true
-}
-func matchTypeSslInboundInspection(a *TypeSslInboundInspection, b *TypeSslInboundInspection) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !util.OrderedListsMatch(a.Certificates, b.Certificates) {
-		return false
-	}
-	return true
-}
-func matchTypeSshProxy(a *TypeSshProxy, b *TypeSshProxy) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	return true
-}
-func matchType(a *Type, b *Type) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !matchTypeSslInboundInspection(a.SslInboundInspection, b.SslInboundInspection) {
-		return false
-	}
-	if !matchTypeSshProxy(a.SshProxy, b.SshProxy) {
-		return false
-	}
-	if !matchTypeSslForwardProxy(a.SslForwardProxy, b.SslForwardProxy) {
-		return false
-	}
-	return true
-}
 func matchTargetDevicesVsys(a []TargetDevicesVsys, b []TargetDevicesVsys) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
@@ -622,10 +576,10 @@ func matchTargetDevices(a []TargetDevices, b []TargetDevices) bool {
 	}
 	for _, a := range a {
 		for _, b := range b {
-			if !matchTargetDevicesVsys(a.Vsys, b.Vsys) {
+			if !util.StringsEqual(a.Name, b.Name) {
 				return false
 			}
-			if !util.StringsEqual(a.Name, b.Name) {
+			if !matchTargetDevicesVsys(a.Vsys, b.Vsys) {
 				return false
 			}
 		}
@@ -645,6 +599,50 @@ func matchTarget(a *Target, b *Target) bool {
 		return false
 	}
 	if !util.OrderedListsMatch(a.Tags, b.Tags) {
+		return false
+	}
+	return true
+}
+func matchTypeSshProxy(a *TypeSshProxy, b *TypeSshProxy) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	return true
+}
+func matchTypeSslForwardProxy(a *TypeSslForwardProxy, b *TypeSslForwardProxy) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	return true
+}
+func matchTypeSslInboundInspection(a *TypeSslInboundInspection, b *TypeSslInboundInspection) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !util.OrderedListsMatch(a.Certificates, b.Certificates) {
+		return false
+	}
+	return true
+}
+func matchType(a *Type, b *Type) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !matchTypeSshProxy(a.SshProxy, b.SshProxy) {
+		return false
+	}
+	if !matchTypeSslForwardProxy(a.SslForwardProxy, b.SslForwardProxy) {
+		return false
+	}
+	if !matchTypeSslInboundInspection(a.SslInboundInspection, b.SslInboundInspection) {
 		return false
 	}
 	return true

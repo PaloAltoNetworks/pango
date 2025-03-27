@@ -109,17 +109,17 @@ func specifyEntry(o *Entry) (any, error) {
 		if _, ok := o.Misc["Lifetime"]; ok {
 			nestedLifetime.Misc = o.Misc["Lifetime"]
 		}
-		if o.Lifetime.Minutes != nil {
-			nestedLifetime.Minutes = o.Lifetime.Minutes
-		}
-		if o.Lifetime.Seconds != nil {
-			nestedLifetime.Seconds = o.Lifetime.Seconds
-		}
 		if o.Lifetime.Days != nil {
 			nestedLifetime.Days = o.Lifetime.Days
 		}
 		if o.Lifetime.Hours != nil {
 			nestedLifetime.Hours = o.Lifetime.Hours
+		}
+		if o.Lifetime.Minutes != nil {
+			nestedLifetime.Minutes = o.Lifetime.Minutes
+		}
+		if o.Lifetime.Seconds != nil {
+			nestedLifetime.Seconds = o.Lifetime.Seconds
 		}
 	}
 	entry.Lifetime = nestedLifetime

@@ -16,16 +16,23 @@ type ImportLocation interface {
 
 type Location struct {
 	Panorama          bool                       `json:"panorama"`
-	Shared            bool                       `json:"shared"`
 	Template          *TemplateLocation          `json:"template,omitempty"`
+	TemplateVsys      *TemplateVsysLocation      `json:"template_vsys,omitempty"`
 	TemplateStack     *TemplateStackLocation     `json:"template_stack,omitempty"`
 	TemplateStackVsys *TemplateStackVsysLocation `json:"template_stack_vsys,omitempty"`
-	TemplateVsys      *TemplateVsysLocation      `json:"template_vsys,omitempty"`
+	Shared            bool                       `json:"shared"`
 }
 
 type TemplateLocation struct {
 	PanoramaDevice string `json:"panorama_device"`
 	Template       string `json:"template"`
+}
+
+type TemplateVsysLocation struct {
+	NgfwDevice     string `json:"ngfw_device"`
+	PanoramaDevice string `json:"panorama_device"`
+	Template       string `json:"template"`
+	Vsys           string `json:"vsys"`
 }
 
 type TemplateStackLocation struct {
@@ -40,22 +47,19 @@ type TemplateStackVsysLocation struct {
 	Vsys           string `json:"vsys"`
 }
 
-type TemplateVsysLocation struct {
-	NgfwDevice     string `json:"ngfw_device"`
-	PanoramaDevice string `json:"panorama_device"`
-	Template       string `json:"template"`
-	Vsys           string `json:"vsys"`
-}
-
-func NewSharedLocation() *Location {
-	return &Location{
-		Shared: true,
-	}
-}
 func NewTemplateLocation() *Location {
 	return &Location{Template: &TemplateLocation{
 		PanoramaDevice: "localhost.localdomain",
 		Template:       "",
+	},
+	}
+}
+func NewTemplateVsysLocation() *Location {
+	return &Location{TemplateVsys: &TemplateVsysLocation{
+		NgfwDevice:     "localhost.localdomain",
+		PanoramaDevice: "localhost.localdomain",
+		Template:       "",
+		Vsys:           "vsys1",
 	},
 	}
 }
@@ -75,13 +79,9 @@ func NewTemplateStackVsysLocation() *Location {
 	},
 	}
 }
-func NewTemplateVsysLocation() *Location {
-	return &Location{TemplateVsys: &TemplateVsysLocation{
-		NgfwDevice:     "localhost.localdomain",
-		PanoramaDevice: "localhost.localdomain",
-		Template:       "",
-		Vsys:           "vsys1",
-	},
+func NewSharedLocation() *Location {
+	return &Location{
+		Shared: true,
 	}
 }
 
@@ -91,14 +91,26 @@ func (o Location) IsValid() error {
 	switch {
 	case o.Panorama:
 		count++
-	case o.Shared:
-		count++
 	case o.Template != nil:
 		if o.Template.PanoramaDevice == "" {
 			return fmt.Errorf("PanoramaDevice is unspecified")
 		}
 		if o.Template.Template == "" {
 			return fmt.Errorf("Template is unspecified")
+		}
+		count++
+	case o.TemplateVsys != nil:
+		if o.TemplateVsys.NgfwDevice == "" {
+			return fmt.Errorf("NgfwDevice is unspecified")
+		}
+		if o.TemplateVsys.PanoramaDevice == "" {
+			return fmt.Errorf("PanoramaDevice is unspecified")
+		}
+		if o.TemplateVsys.Template == "" {
+			return fmt.Errorf("Template is unspecified")
+		}
+		if o.TemplateVsys.Vsys == "" {
+			return fmt.Errorf("Vsys is unspecified")
 		}
 		count++
 	case o.TemplateStack != nil:
@@ -123,19 +135,7 @@ func (o Location) IsValid() error {
 			return fmt.Errorf("Vsys is unspecified")
 		}
 		count++
-	case o.TemplateVsys != nil:
-		if o.TemplateVsys.NgfwDevice == "" {
-			return fmt.Errorf("NgfwDevice is unspecified")
-		}
-		if o.TemplateVsys.PanoramaDevice == "" {
-			return fmt.Errorf("PanoramaDevice is unspecified")
-		}
-		if o.TemplateVsys.Template == "" {
-			return fmt.Errorf("Template is unspecified")
-		}
-		if o.TemplateVsys.Vsys == "" {
-			return fmt.Errorf("Vsys is unspecified")
-		}
+	case o.Shared:
 		count++
 	}
 
@@ -160,11 +160,6 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 			"config",
 			"panorama",
 		}
-	case o.Shared:
-		ans = []string{
-			"config",
-			"shared",
-		}
 	case o.Template != nil:
 		if o.Template.PanoramaDevice == "" {
 			return nil, fmt.Errorf("PanoramaDevice is unspecified")
@@ -180,6 +175,31 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 			util.AsEntryXpath([]string{o.Template.Template}),
 			"config",
 			"shared",
+		}
+	case o.TemplateVsys != nil:
+		if o.TemplateVsys.NgfwDevice == "" {
+			return nil, fmt.Errorf("NgfwDevice is unspecified")
+		}
+		if o.TemplateVsys.PanoramaDevice == "" {
+			return nil, fmt.Errorf("PanoramaDevice is unspecified")
+		}
+		if o.TemplateVsys.Template == "" {
+			return nil, fmt.Errorf("Template is unspecified")
+		}
+		if o.TemplateVsys.Vsys == "" {
+			return nil, fmt.Errorf("Vsys is unspecified")
+		}
+		ans = []string{
+			"config",
+			"devices",
+			util.AsEntryXpath([]string{o.TemplateVsys.PanoramaDevice}),
+			"template",
+			util.AsEntryXpath([]string{o.TemplateVsys.Template}),
+			"config",
+			"devices",
+			util.AsEntryXpath([]string{o.TemplateVsys.NgfwDevice}),
+			"vsys",
+			util.AsEntryXpath([]string{o.TemplateVsys.Vsys}),
 		}
 	case o.TemplateStack != nil:
 		if o.TemplateStack.PanoramaDevice == "" {
@@ -222,30 +242,10 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 			"vsys",
 			util.AsEntryXpath([]string{o.TemplateStackVsys.Vsys}),
 		}
-	case o.TemplateVsys != nil:
-		if o.TemplateVsys.NgfwDevice == "" {
-			return nil, fmt.Errorf("NgfwDevice is unspecified")
-		}
-		if o.TemplateVsys.PanoramaDevice == "" {
-			return nil, fmt.Errorf("PanoramaDevice is unspecified")
-		}
-		if o.TemplateVsys.Template == "" {
-			return nil, fmt.Errorf("Template is unspecified")
-		}
-		if o.TemplateVsys.Vsys == "" {
-			return nil, fmt.Errorf("Vsys is unspecified")
-		}
+	case o.Shared:
 		ans = []string{
 			"config",
-			"devices",
-			util.AsEntryXpath([]string{o.TemplateVsys.PanoramaDevice}),
-			"template",
-			util.AsEntryXpath([]string{o.TemplateVsys.Template}),
-			"config",
-			"devices",
-			util.AsEntryXpath([]string{o.TemplateVsys.NgfwDevice}),
-			"vsys",
-			util.AsEntryXpath([]string{o.TemplateVsys.Vsys}),
+			"shared",
 		}
 	default:
 		return nil, errors.NoLocationSpecifiedError

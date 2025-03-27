@@ -45,10 +45,10 @@ type Ipv6 struct {
 	InterfaceId *string
 }
 type Ipv6Address struct {
-	Anycast           *Ipv6AddressAnycast
-	EnableOnInterface *bool
 	Name              string
+	EnableOnInterface *bool
 	Prefix            *Ipv6AddressPrefix
+	Anycast           *Ipv6AddressAnycast
 }
 type Ipv6AddressAnycast struct {
 }
@@ -80,8 +80,7 @@ type AdjustTcpMssXml struct {
 	Misc []generic.Xml `xml:",any"`
 }
 type IpXml struct {
-	XMLName xml.Name `xml:"entry"`
-	Name    string   `xml:"name,attr"`
+	Name string `xml:"name,attr"`
 
 	Misc []generic.Xml `xml:",any"`
 }
@@ -95,7 +94,6 @@ type Ipv6Xml struct {
 type Ipv6AddressXml struct {
 	Anycast           *Ipv6AddressAnycastXml `xml:"anycast,omitempty"`
 	EnableOnInterface *string                `xml:"enable-on-interface,omitempty"`
-	XMLName           xml.Name               `xml:"entry"`
 	Name              string                 `xml:"name,attr"`
 	Prefix            *Ipv6AddressPrefixXml  `xml:"prefix,omitempty"`
 
@@ -196,6 +194,9 @@ func specifyEntry(o *Entry) (any, error) {
 				if _, ok := o.Misc["Ipv6Address"]; ok {
 					nestedIpv6Address.Misc = o.Misc["Ipv6Address"]
 				}
+				if oIpv6Address.Name != "" {
+					nestedIpv6Address.Name = oIpv6Address.Name
+				}
 				if oIpv6Address.EnableOnInterface != nil {
 					nestedIpv6Address.EnableOnInterface = util.YesNo(oIpv6Address.EnableOnInterface, nil)
 				}
@@ -210,9 +211,6 @@ func specifyEntry(o *Entry) (any, error) {
 					if _, ok := o.Misc["Ipv6AddressAnycast"]; ok {
 						nestedIpv6Address.Anycast.Misc = o.Misc["Ipv6AddressAnycast"]
 					}
-				}
-				if oIpv6Address.Name != "" {
-					nestedIpv6Address.Name = oIpv6Address.Name
 				}
 				nestedIpv6.Address = append(nestedIpv6.Address, nestedIpv6Address)
 			}
@@ -283,15 +281,15 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 			if o.Ipv6.Misc != nil {
 				entry.Misc["Ipv6"] = o.Ipv6.Misc
 			}
-			if o.Ipv6.InterfaceId != nil {
-				nestedIpv6.InterfaceId = o.Ipv6.InterfaceId
-			}
 			if o.Ipv6.Address != nil {
 				nestedIpv6.Address = []Ipv6Address{}
 				for _, oIpv6Address := range o.Ipv6.Address {
 					nestedIpv6Address := Ipv6Address{}
 					if oIpv6Address.Misc != nil {
 						entry.Misc["Ipv6Address"] = oIpv6Address.Misc
+					}
+					if oIpv6Address.Name != "" {
+						nestedIpv6Address.Name = oIpv6Address.Name
 					}
 					if oIpv6Address.EnableOnInterface != nil {
 						nestedIpv6Address.EnableOnInterface = util.AsBool(oIpv6Address.EnableOnInterface, nil)
@@ -308,14 +306,14 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 							entry.Misc["Ipv6AddressAnycast"] = oIpv6Address.Anycast.Misc
 						}
 					}
-					if oIpv6Address.Name != "" {
-						nestedIpv6Address.Name = oIpv6Address.Name
-					}
 					nestedIpv6.Address = append(nestedIpv6.Address, nestedIpv6Address)
 				}
 			}
 			if o.Ipv6.Enabled != nil {
 				nestedIpv6.Enabled = util.AsBool(o.Ipv6.Enabled, nil)
+			}
+			if o.Ipv6.InterfaceId != nil {
+				nestedIpv6.InterfaceId = o.Ipv6.InterfaceId
 			}
 		}
 		entry.Ipv6 = nestedIpv6
@@ -364,6 +362,23 @@ func SpecMatches(a, b *Entry) bool {
 	return true
 }
 
+func matchAdjustTcpMss(a *AdjustTcpMss, b *AdjustTcpMss) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !util.BoolsMatch(a.Enable, b.Enable) {
+		return false
+	}
+	if !util.Ints64Match(a.Ipv4MssAdjustment, b.Ipv4MssAdjustment) {
+		return false
+	}
+	if !util.Ints64Match(a.Ipv6MssAdjustment, b.Ipv6MssAdjustment) {
+		return false
+	}
+	return true
+}
 func matchIp(a []Ip, b []Ip) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
@@ -379,7 +394,7 @@ func matchIp(a []Ip, b []Ip) bool {
 	}
 	return true
 }
-func matchIpv6AddressAnycast(a *Ipv6AddressAnycast, b *Ipv6AddressAnycast) bool {
+func matchIpv6AddressPrefix(a *Ipv6AddressPrefix, b *Ipv6AddressPrefix) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
 	} else if a == nil && b == nil {
@@ -387,7 +402,7 @@ func matchIpv6AddressAnycast(a *Ipv6AddressAnycast, b *Ipv6AddressAnycast) bool 
 	}
 	return true
 }
-func matchIpv6AddressPrefix(a *Ipv6AddressPrefix, b *Ipv6AddressPrefix) bool {
+func matchIpv6AddressAnycast(a *Ipv6AddressAnycast, b *Ipv6AddressAnycast) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
 	} else if a == nil && b == nil {
@@ -403,6 +418,9 @@ func matchIpv6Address(a []Ipv6Address, b []Ipv6Address) bool {
 	}
 	for _, a := range a {
 		for _, b := range b {
+			if !util.StringsEqual(a.Name, b.Name) {
+				return false
+			}
 			if !util.BoolsMatch(a.EnableOnInterface, b.EnableOnInterface) {
 				return false
 			}
@@ -410,9 +428,6 @@ func matchIpv6Address(a []Ipv6Address, b []Ipv6Address) bool {
 				return false
 			}
 			if !matchIpv6AddressAnycast(a.Anycast, b.Anycast) {
-				return false
-			}
-			if !util.StringsEqual(a.Name, b.Name) {
 				return false
 			}
 		}
@@ -432,23 +447,6 @@ func matchIpv6(a *Ipv6, b *Ipv6) bool {
 		return false
 	}
 	if !util.StringsMatch(a.InterfaceId, b.InterfaceId) {
-		return false
-	}
-	return true
-}
-func matchAdjustTcpMss(a *AdjustTcpMss, b *AdjustTcpMss) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !util.BoolsMatch(a.Enable, b.Enable) {
-		return false
-	}
-	if !util.Ints64Match(a.Ipv4MssAdjustment, b.Ipv4MssAdjustment) {
-		return false
-	}
-	if !util.Ints64Match(a.Ipv6MssAdjustment, b.Ipv6MssAdjustment) {
 		return false
 	}
 	return true

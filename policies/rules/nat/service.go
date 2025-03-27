@@ -10,9 +10,8 @@ import (
 	"github.com/PaloAltoNetworks/pango/audit"
 	"github.com/PaloAltoNetworks/pango/errors"
 	"github.com/PaloAltoNetworks/pango/filtering"
-	"github.com/PaloAltoNetworks/pango/rule"
+	"github.com/PaloAltoNetworks/pango/movement"
 	"github.com/PaloAltoNetworks/pango/util"
-	"github.com/PaloAltoNetworks/pango/version"
 	"github.com/PaloAltoNetworks/pango/xmlapi"
 )
 
@@ -335,84 +334,50 @@ func (s *Service) list(ctx context.Context, loc Location, action, filter, quote 
 // MoveGroup arranges the given rules in the order specified.
 // Any rule with a UUID specified is ignored.
 // Only the rule names are considered for the purposes of the rule placement.
-func (s *Service) MoveGroup(ctx context.Context, loc Location, position rule.Position, entries []*Entry) error {
+func (s *Service) MoveGroup(ctx context.Context, loc Location, position movement.Position, entries []*Entry) error {
 	if len(entries) == 0 {
 		return nil
 	}
 
-	listing, err := s.List(ctx, loc, "get", "", "")
+	existing, err := s.List(ctx, loc, "get", "", "")
 	if err != nil {
 		return err
-	} else if len(listing) == 0 {
+	} else if len(existing) == 0 {
 		return fmt.Errorf("no rules present")
 	}
 
-	rp := make(map[string]int)
-	for idx, live := range listing {
-		rp[live.Name] = idx
+	movements, err := movement.MoveGroup(position, entries, existing)
+	if err != nil {
+		return err
 	}
 
-	vn := s.client.Versioning()
-	updates := xmlapi.NewMultiConfig(len(entries))
+	updates := xmlapi.NewMultiConfig(len(movements))
 
-	var ok, topDown bool
-	var otherIndex int
-	baseIndex := -1
-	switch {
-	case position.First != nil && *position.First:
-		topDown, baseIndex, ok, err = s.moveTop(topDown, entries, baseIndex, ok, rp, loc, vn, updates)
+	for _, elt := range movements {
+		path, err := loc.XpathWithEntryName(s.client.Versioning(), elt.Movable.EntryName())
 		if err != nil {
 			return err
 		}
-	case position.Last != nil && *position.Last:
-		baseIndex, ok, err = s.moveBottom(entries, baseIndex, ok, rp, listing, loc, vn, updates)
-		if err != nil {
-			return err
-		}
-	case position.SomewhereAfter != nil && *position.SomewhereAfter != "":
-		topDown, baseIndex, ok, otherIndex, err = s.moveSomewhereAfter(topDown, entries, baseIndex, ok, rp, otherIndex, position, loc, vn, updates)
-		if err != nil {
-			return err
-		}
-	case position.SomewhereBefore != nil && *position.SomewhereBefore != "":
-		baseIndex, ok, otherIndex, err = s.moveSomewhereBefore(entries, baseIndex, ok, rp, otherIndex, position, loc, vn, updates)
-		if err != nil {
-			return err
-		}
-	case position.DirectlyAfter != nil && *position.DirectlyAfter != "":
-		topDown, baseIndex, ok, otherIndex, err = s.moveDirectlyAfter(topDown, entries, baseIndex, ok, rp, otherIndex, position, loc, vn, updates)
-		if err != nil {
-			return err
-		}
-	case position.DirectlyBefore != nil && *position.DirectlyBefore != "":
-		baseIndex, ok, err = s.moveDirectlyBefore(entries, baseIndex, ok, rp, otherIndex, position, loc, vn, updates)
-		if err != nil {
-			return err
-		}
-	default:
-		topDown = true
-		target := entries[0]
 
-		baseIndex, ok = rp[target.Name]
-		if !ok {
-			return fmt.Errorf("could not find rule %q for first positioning", target.Name)
+		switch elt.Where {
+		case movement.ActionWhereFirst, movement.ActionWhereLast:
+			updates.Add(&xmlapi.Config{
+				Action:      "move",
+				Xpath:       util.AsXpath(path),
+				Where:       string(elt.Where),
+				Destination: string(elt.Where),
+				Target:      s.client.GetTarget(),
+			})
+		case movement.ActionWhereBefore, movement.ActionWhereAfter:
+			updates.Add(&xmlapi.Config{
+				Action:      "move",
+				Xpath:       util.AsXpath(path),
+				Where:       string(elt.Where),
+				Destination: elt.Destination.EntryName(),
+				Target:      s.client.GetTarget(),
+			})
 		}
-	}
 
-	var prevName, where string
-	if topDown {
-		prevName = entries[0].Name
-		where = "after"
-	} else {
-		prevName = entries[len(entries)-1].Name
-		where = "before"
-	}
-
-	for i := 1; i < len(entries); i++ {
-		err := s.moveRestOfRules(topDown, entries, i, baseIndex, rp, loc, vn, updates, where, prevName)
-		if err != nil {
-			return err
-		}
 	}
 
 	if len(updates.Operations) > 0 {
@@ -423,308 +388,7 @@ func (s *Service) MoveGroup(ctx context.Context, loc Location, position rule.Pos
 	return nil
 }
 
-func (s *Service) moveRestOfRules(topDown bool, entries []*Entry, i int, baseIndex int, rp map[string]int, loc Location, vn version.Number, updates *xmlapi.MultiConfig, where string, prevName string) error {
-	var target Entry
-	var desiredIndex int
-	if topDown {
-		target = *entries[i]
-		desiredIndex = baseIndex + i
-	} else {
-		target = *entries[len(entries)-1-i]
-		desiredIndex = baseIndex - i
-	}
-
-	idx, ok := rp[target.Name]
-	if !ok {
-		return fmt.Errorf("rule %q not present", target.Name)
-	}
-
-	if idx != desiredIndex {
-		path, err := loc.XpathWithEntryName(vn, target.Name)
-		if err != nil {
-			return err
-		}
-
-		if idx < desiredIndex {
-			for name, val := range rp {
-				if val > idx && val <= desiredIndex {
-					rp[name] = val - 1
-				}
-			}
-		} else {
-			for name, val := range rp {
-				if val < idx && val >= desiredIndex {
-					rp[name] = val + 1
-				}
-			}
-		}
-		rp[target.Name] = desiredIndex
-
-		updates.Add(&xmlapi.Config{
-			Action:      "move",
-			Xpath:       util.AsXpath(path),
-			Where:       where,
-			Destination: prevName,
-			Target:      s.client.GetTarget(),
-		})
-	}
-
-	prevName = target.Name
-	return nil
-}
-
-func (s *Service) moveDirectlyBefore(entries []*Entry, baseIndex int, ok bool, rp map[string]int, otherIndex int, position rule.Position, loc Location, vn version.Number, updates *xmlapi.MultiConfig) (int, bool, error) {
-	target := entries[len(entries)-1]
-
-	baseIndex, ok = rp[target.Name]
-	if !ok {
-		return 0, false, fmt.Errorf("could not find rule %q for initial positioning", target.Name)
-	}
-
-	otherIndex, ok = rp[*position.DirectlyBefore]
-	if !ok {
-		return 0, false, fmt.Errorf("could not find referenced rule %q", *position.DirectlyBefore)
-	}
-
-	if baseIndex+1 != otherIndex {
-		path, err := loc.XpathWithEntryName(vn, target.Name)
-		if err != nil {
-			return 0, false, err
-		}
-
-		for name, val := range rp {
-			switch {
-			case name == target.Name:
-				rp[name] = otherIndex
-			case val < baseIndex && val >= otherIndex:
-				rp[name] = val + 1
-			}
-		}
-
-		updates.Add(&xmlapi.Config{
-			Action:      "move",
-			Xpath:       util.AsXpath(path),
-			Where:       "before",
-			Destination: *position.DirectlyBefore,
-			Target:      s.client.GetTarget(),
-		})
-
-		baseIndex = otherIndex
-	}
-	return baseIndex, ok, nil
-}
-
-func (s *Service) moveDirectlyAfter(topDown bool, entries []*Entry, baseIndex int, ok bool, rp map[string]int, otherIndex int, position rule.Position, loc Location, vn version.Number, updates *xmlapi.MultiConfig) (bool, int, bool, int, error) {
-	topDown = true
-	target := entries[0]
-
-	baseIndex, ok = rp[target.Name]
-	if !ok {
-		return false, 0, false, 0, fmt.Errorf("could not find rule %q for initial positioning", target.Name)
-	}
-
-	otherIndex, ok = rp[*position.DirectlyAfter]
-	if !ok {
-		return false, 0, false, 0, fmt.Errorf("could not find referenced rule %q for initial positioning", *position.DirectlyAfter)
-	}
-
-	if baseIndex != otherIndex+1 {
-		path, err := loc.XpathWithEntryName(vn, target.Name)
-		if err != nil {
-			return false, 0, false, 0, err
-		}
-
-		for name, val := range rp {
-			switch {
-			case name == target.Name:
-				rp[name] = otherIndex
-			case val > baseIndex && val <= otherIndex:
-				rp[name] = otherIndex - 1
-			}
-		}
-
-		updates.Add(&xmlapi.Config{
-			Action:      "move",
-			Xpath:       util.AsXpath(path),
-			Where:       "after",
-			Destination: *position.DirectlyAfter,
-			Target:      s.client.GetTarget(),
-		})
-
-		baseIndex = otherIndex
-	}
-	return topDown, baseIndex, ok, otherIndex, nil
-}
-
-func (s *Service) moveSomewhereBefore(entries []*Entry, baseIndex int, ok bool, rp map[string]int, otherIndex int, position rule.Position, loc Location, vn version.Number, updates *xmlapi.MultiConfig) (int, bool, int, error) {
-	target := entries[len(entries)-1]
-
-	baseIndex, ok = rp[target.Name]
-	if !ok {
-		return 0, false, 0, fmt.Errorf("could not find rule %q for initial positioning", target.Name)
-	}
-
-	otherIndex, ok = rp[*position.SomewhereBefore]
-	if !ok {
-		return 0, false, 0, fmt.Errorf("could not find referenced rule %q", *position.SomewhereBefore)
-	}
-
-	if baseIndex > otherIndex {
-		path, err := loc.XpathWithEntryName(vn, target.Name)
-		if err != nil {
-			return 0, false, 0, err
-		}
-
-		for name, val := range rp {
-			switch {
-			case name == target.Name:
-				rp[name] = otherIndex
-			case val < baseIndex && val >= otherIndex:
-				rp[name] = val + 1
-			}
-		}
-
-		updates.Add(&xmlapi.Config{
-			Action:      "move",
-			Xpath:       util.AsXpath(path),
-			Where:       "before",
-			Destination: *position.SomewhereBefore,
-			Target:      s.client.GetTarget(),
-		})
-
-		baseIndex = otherIndex
-	}
-	return baseIndex, ok, otherIndex, nil
-}
-
-func (s *Service) moveSomewhereAfter(topDown bool, entries []*Entry, baseIndex int, ok bool, rp map[string]int, otherIndex int, position rule.Position, loc Location, vn version.Number, updates *xmlapi.MultiConfig) (bool, int, bool, int, error) {
-	topDown = true
-	target := entries[0]
-
-	baseIndex, ok = rp[target.Name]
-	if !ok {
-		return false, 0, false, 0, fmt.Errorf("could not find rule %q for initial positioning", target.Name)
-	}
-
-	otherIndex, ok = rp[*position.SomewhereAfter]
-	if !ok {
-		return false, 0, false, 0, fmt.Errorf("could not find referenced rule %q for initial positioning", *position.SomewhereAfter)
-	}
-
-	if baseIndex < otherIndex {
-		path, err := loc.XpathWithEntryName(vn, target.Name)
-		if err != nil {
-			return false, 0, false, 0, err
-		}
-
-		for name, val := range rp {
-			switch {
-			case name == target.Name:
-				rp[name] = otherIndex
-			case val > baseIndex && val <= otherIndex:
-				rp[name] = otherIndex - 1
-			}
-		}
-
-		updates.Add(&xmlapi.Config{
-			Action:      "move",
-			Xpath:       util.AsXpath(path),
-			Where:       "after",
-			Destination: *position.SomewhereAfter,
-			Target:      s.client.GetTarget(),
-		})
-
-		baseIndex = otherIndex
-	}
-	return topDown, baseIndex, ok, otherIndex, nil
-}
-
-func (s *Service) moveBottom(entries []*Entry, baseIndex int, ok bool, rp map[string]int, listing []*Entry, loc Location, vn version.Number, updates *xmlapi.MultiConfig) (int, bool, error) {
-	target := entries[len(entries)-1]
-
-	baseIndex, ok = rp[target.Name]
-	if !ok {
-		return 0, false, fmt.Errorf("could not find rule %q for last positioning", target.Name)
-	}
-
-	if baseIndex != len(listing)-1 {
-		path, err := loc.XpathWithEntryName(vn, target.Name)
-		if err != nil {
-			return 0, false, err
-		}
-
-		for name, val := range rp {
-			switch {
-			case name == target.Name:
-				rp[name] = len(listing) - 1
-			case val > baseIndex:
-				rp[name] = val - 1
-			}
-		}
-
-		// some versions of PAN-OS require that the destination always be set
-		var dst string
-		if !vn.Gte(util.FixedPanosVersionForMultiConfigMove) {
-			dst = "bottom"
-		}
-
-		updates.Add(&xmlapi.Config{
-			Action:      "move",
-			Xpath:       util.AsXpath(path),
-			Where:       "bottom",
-			Destination: dst,
-			Target:      s.client.GetTarget(),
-		})
-
-		baseIndex = len(listing) - 1
-	}
-	return baseIndex, ok, nil
-}
-
-func (s *Service) moveTop(topDown bool, entries []*Entry, baseIndex int, ok bool, rp map[string]int, loc Location, vn version.Number, updates *xmlapi.MultiConfig) (bool, int, bool, error) {
-	topDown = true
-	target := entries[0]
-
-	baseIndex, ok = rp[target.Name]
-	if !ok {
-		return false, 0, false, fmt.Errorf("could not find rule %q for first positioning", target.Name)
-	}
-
-	if baseIndex != 0 {
-		path, err := loc.XpathWithEntryName(vn, target.Name)
-		if err != nil {
-			return false, 0, false, err
-		}
-
-		for name, val := range rp {
-			switch {
-			case name == entries[0].Name:
-				rp[name] = 0
-			case val < baseIndex:
-				rp[name] = val + 1
-			}
-		}
-
-		// some versions of PAN-OS require that the destination always be set
-		var dst string
-		if !vn.Gte(util.FixedPanosVersionForMultiConfigMove) {
-			dst = "top"
-		}
-
-		updates.Add(&xmlapi.Config{
-			Action:      "move",
-			Xpath:       util.AsXpath(path),
-			Where:       "top",
-			Destination: dst,
-			Target:      s.client.GetTarget(),
-		})
-
-		baseIndex = 0
-	}
-	return topDown, baseIndex, ok, nil
-}
-
-// HitCount returns the hit count for the given rule.
+// HITCOUNT returns the hit count for the given rule.
 func (s *Service) HitCount(ctx context.Context, loc Location, rules ...string) ([]util.HitCount, error) {
 	switch {
 	case loc.Vsys != nil:

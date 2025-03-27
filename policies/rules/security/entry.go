@@ -178,15 +178,13 @@ type TargetXml struct {
 	Misc []generic.Xml `xml:",any"`
 }
 type TargetDevicesXml struct {
-	XMLName xml.Name               `xml:"entry"`
-	Name    string                 `xml:"name,attr"`
-	Vsys    []TargetDevicesVsysXml `xml:"vsys>entry,omitempty"`
+	Name string                 `xml:"name,attr"`
+	Vsys []TargetDevicesVsysXml `xml:"vsys>entry,omitempty"`
 
 	Misc []generic.Xml `xml:",any"`
 }
 type TargetDevicesVsysXml struct {
-	XMLName xml.Name `xml:"entry"`
-	Name    string   `xml:"name,attr"`
+	Name string `xml:"name,attr"`
 
 	Misc []generic.Xml `xml:",any"`
 }
@@ -227,9 +225,6 @@ func (e *Entry) Field(v string) (any, error) {
 	}
 	if v == "disable_inspect" || v == "DisableInspect" {
 		return e.DisableInspect, nil
-	}
-	if v == "disable_server_response_inspection" || v == "DisableServerResponseInspection" {
-		return e.DisableServerResponseInspection, nil
 	}
 	if v == "disabled" || v == "Disabled" {
 		return e.Disabled, nil
@@ -333,6 +328,9 @@ func (e *Entry) Field(v string) (any, error) {
 	if v == "uuid" || v == "Uuid" {
 		return e.Uuid, nil
 	}
+	if v == "disable_server_response_inspection" || v == "DisableServerResponseInspection" {
+		return e.DisableServerResponseInspection, nil
+	}
 
 	return nil, fmt.Errorf("unknown field")
 }
@@ -375,17 +373,8 @@ func specifyEntry(o *Entry) (any, error) {
 			if _, ok := o.Misc["ProfileSettingProfiles"]; ok {
 				nestedProfileSetting.Profiles.Misc = o.Misc["ProfileSettingProfiles"]
 			}
-			if o.ProfileSetting.Profiles.Spyware != nil {
-				nestedProfileSetting.Profiles.Spyware = util.StrToMem(o.ProfileSetting.Profiles.Spyware)
-			}
-			if o.ProfileSetting.Profiles.Virus != nil {
-				nestedProfileSetting.Profiles.Virus = util.StrToMem(o.ProfileSetting.Profiles.Virus)
-			}
-			if o.ProfileSetting.Profiles.Vulnerability != nil {
-				nestedProfileSetting.Profiles.Vulnerability = util.StrToMem(o.ProfileSetting.Profiles.Vulnerability)
-			}
-			if o.ProfileSetting.Profiles.WildfireAnalysis != nil {
-				nestedProfileSetting.Profiles.WildfireAnalysis = util.StrToMem(o.ProfileSetting.Profiles.WildfireAnalysis)
+			if o.ProfileSetting.Profiles.DataFiltering != nil {
+				nestedProfileSetting.Profiles.DataFiltering = util.StrToMem(o.ProfileSetting.Profiles.DataFiltering)
 			}
 			if o.ProfileSetting.Profiles.FileBlocking != nil {
 				nestedProfileSetting.Profiles.FileBlocking = util.StrToMem(o.ProfileSetting.Profiles.FileBlocking)
@@ -396,11 +385,20 @@ func specifyEntry(o *Entry) (any, error) {
 			if o.ProfileSetting.Profiles.Sctp != nil {
 				nestedProfileSetting.Profiles.Sctp = util.StrToMem(o.ProfileSetting.Profiles.Sctp)
 			}
-			if o.ProfileSetting.Profiles.DataFiltering != nil {
-				nestedProfileSetting.Profiles.DataFiltering = util.StrToMem(o.ProfileSetting.Profiles.DataFiltering)
+			if o.ProfileSetting.Profiles.Spyware != nil {
+				nestedProfileSetting.Profiles.Spyware = util.StrToMem(o.ProfileSetting.Profiles.Spyware)
 			}
 			if o.ProfileSetting.Profiles.UrlFiltering != nil {
 				nestedProfileSetting.Profiles.UrlFiltering = util.StrToMem(o.ProfileSetting.Profiles.UrlFiltering)
+			}
+			if o.ProfileSetting.Profiles.Virus != nil {
+				nestedProfileSetting.Profiles.Virus = util.StrToMem(o.ProfileSetting.Profiles.Virus)
+			}
+			if o.ProfileSetting.Profiles.Vulnerability != nil {
+				nestedProfileSetting.Profiles.Vulnerability = util.StrToMem(o.ProfileSetting.Profiles.Vulnerability)
+			}
+			if o.ProfileSetting.Profiles.WildfireAnalysis != nil {
+				nestedProfileSetting.Profiles.WildfireAnalysis = util.StrToMem(o.ProfileSetting.Profiles.WildfireAnalysis)
 			}
 		}
 	}
@@ -456,6 +454,9 @@ func specifyEntry(o *Entry) (any, error) {
 				if _, ok := o.Misc["TargetDevices"]; ok {
 					nestedTargetDevices.Misc = o.Misc["TargetDevices"]
 				}
+				if oTargetDevices.Name != "" {
+					nestedTargetDevices.Name = oTargetDevices.Name
+				}
 				if oTargetDevices.Vsys != nil {
 					nestedTargetDevices.Vsys = []TargetDevicesVsysXml{}
 					for _, oTargetDevicesVsys := range oTargetDevices.Vsys {
@@ -468,9 +469,6 @@ func specifyEntry(o *Entry) (any, error) {
 						}
 						nestedTargetDevices.Vsys = append(nestedTargetDevices.Vsys, nestedTargetDevicesVsys)
 					}
-				}
-				if oTargetDevices.Name != "" {
-					nestedTargetDevices.Name = oTargetDevices.Name
 				}
 				nestedTarget.Devices = append(nestedTarget.Devices, nestedTargetDevices)
 			}
@@ -530,11 +528,8 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				if o.ProfileSetting.Profiles.Misc != nil {
 					entry.Misc["ProfileSettingProfiles"] = o.ProfileSetting.Profiles.Misc
 				}
-				if o.ProfileSetting.Profiles.Vulnerability != nil {
-					nestedProfileSetting.Profiles.Vulnerability = util.MemToStr(o.ProfileSetting.Profiles.Vulnerability)
-				}
-				if o.ProfileSetting.Profiles.WildfireAnalysis != nil {
-					nestedProfileSetting.Profiles.WildfireAnalysis = util.MemToStr(o.ProfileSetting.Profiles.WildfireAnalysis)
+				if o.ProfileSetting.Profiles.DataFiltering != nil {
+					nestedProfileSetting.Profiles.DataFiltering = util.MemToStr(o.ProfileSetting.Profiles.DataFiltering)
 				}
 				if o.ProfileSetting.Profiles.FileBlocking != nil {
 					nestedProfileSetting.Profiles.FileBlocking = util.MemToStr(o.ProfileSetting.Profiles.FileBlocking)
@@ -548,14 +543,17 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				if o.ProfileSetting.Profiles.Spyware != nil {
 					nestedProfileSetting.Profiles.Spyware = util.MemToStr(o.ProfileSetting.Profiles.Spyware)
 				}
+				if o.ProfileSetting.Profiles.UrlFiltering != nil {
+					nestedProfileSetting.Profiles.UrlFiltering = util.MemToStr(o.ProfileSetting.Profiles.UrlFiltering)
+				}
 				if o.ProfileSetting.Profiles.Virus != nil {
 					nestedProfileSetting.Profiles.Virus = util.MemToStr(o.ProfileSetting.Profiles.Virus)
 				}
-				if o.ProfileSetting.Profiles.DataFiltering != nil {
-					nestedProfileSetting.Profiles.DataFiltering = util.MemToStr(o.ProfileSetting.Profiles.DataFiltering)
+				if o.ProfileSetting.Profiles.Vulnerability != nil {
+					nestedProfileSetting.Profiles.Vulnerability = util.MemToStr(o.ProfileSetting.Profiles.Vulnerability)
 				}
-				if o.ProfileSetting.Profiles.UrlFiltering != nil {
-					nestedProfileSetting.Profiles.UrlFiltering = util.MemToStr(o.ProfileSetting.Profiles.UrlFiltering)
+				if o.ProfileSetting.Profiles.WildfireAnalysis != nil {
+					nestedProfileSetting.Profiles.WildfireAnalysis = util.MemToStr(o.ProfileSetting.Profiles.WildfireAnalysis)
 				}
 			}
 		}
@@ -604,15 +602,15 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 			if o.Target.Misc != nil {
 				entry.Misc["Target"] = o.Target.Misc
 			}
-			if o.Target.Tags != nil {
-				nestedTarget.Tags = util.MemToStr(o.Target.Tags)
-			}
 			if o.Target.Devices != nil {
 				nestedTarget.Devices = []TargetDevices{}
 				for _, oTargetDevices := range o.Target.Devices {
 					nestedTargetDevices := TargetDevices{}
 					if oTargetDevices.Misc != nil {
 						entry.Misc["TargetDevices"] = oTargetDevices.Misc
+					}
+					if oTargetDevices.Name != "" {
+						nestedTargetDevices.Name = oTargetDevices.Name
 					}
 					if oTargetDevices.Vsys != nil {
 						nestedTargetDevices.Vsys = []TargetDevicesVsys{}
@@ -627,14 +625,14 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 							nestedTargetDevices.Vsys = append(nestedTargetDevices.Vsys, nestedTargetDevicesVsys)
 						}
 					}
-					if oTargetDevices.Name != "" {
-						nestedTargetDevices.Name = oTargetDevices.Name
-					}
 					nestedTarget.Devices = append(nestedTarget.Devices, nestedTargetDevices)
 				}
 			}
 			if o.Target.Negate != nil {
 				nestedTarget.Negate = util.AsBool(o.Target.Negate, nil)
+			}
+			if o.Target.Tags != nil {
+				nestedTarget.Tags = util.MemToStr(o.Target.Tags)
 			}
 		}
 		entry.Target = nestedTarget
@@ -677,9 +675,6 @@ func SpecMatches(a, b *Entry) bool {
 		return false
 	}
 	if !util.BoolsMatch(a.DisableInspect, b.DisableInspect) {
-		return false
-	}
-	if !util.BoolsMatch(a.DisableServerResponseInspection, b.DisableServerResponseInspection) {
 		return false
 	}
 	if !util.BoolsMatch(a.Disabled, b.Disabled) {
@@ -754,65 +749,21 @@ func SpecMatches(a, b *Entry) bool {
 	if !util.StringsMatch(a.Uuid, b.Uuid) {
 		return false
 	}
+	if !util.BoolsMatch(a.DisableServerResponseInspection, b.DisableServerResponseInspection) {
+		return false
+	}
 
 	return true
 }
 
-func matchTargetDevicesVsys(a []TargetDevicesVsys, b []TargetDevicesVsys) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	for _, a := range a {
-		for _, b := range b {
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-		}
-	}
-	return true
-}
-func matchTargetDevices(a []TargetDevices, b []TargetDevices) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	for _, a := range a {
-		for _, b := range b {
-			if !matchTargetDevicesVsys(a.Vsys, b.Vsys) {
-				return false
-			}
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-		}
-	}
-	return true
-}
-func matchTarget(a *Target, b *Target) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !matchTargetDevices(a.Devices, b.Devices) {
-		return false
-	}
-	if !util.BoolsMatch(a.Negate, b.Negate) {
-		return false
-	}
-	if !util.OrderedListsMatch(a.Tags, b.Tags) {
-		return false
-	}
-	return true
-}
 func matchProfileSettingProfiles(a *ProfileSettingProfiles, b *ProfileSettingProfiles) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
 	} else if a == nil && b == nil {
 		return true
+	}
+	if !util.OrderedListsMatch(a.DataFiltering, b.DataFiltering) {
+		return false
 	}
 	if !util.OrderedListsMatch(a.FileBlocking, b.FileBlocking) {
 		return false
@@ -826,6 +777,9 @@ func matchProfileSettingProfiles(a *ProfileSettingProfiles, b *ProfileSettingPro
 	if !util.OrderedListsMatch(a.Spyware, b.Spyware) {
 		return false
 	}
+	if !util.OrderedListsMatch(a.UrlFiltering, b.UrlFiltering) {
+		return false
+	}
 	if !util.OrderedListsMatch(a.Virus, b.Virus) {
 		return false
 	}
@@ -833,12 +787,6 @@ func matchProfileSettingProfiles(a *ProfileSettingProfiles, b *ProfileSettingPro
 		return false
 	}
 	if !util.OrderedListsMatch(a.WildfireAnalysis, b.WildfireAnalysis) {
-		return false
-	}
-	if !util.OrderedListsMatch(a.DataFiltering, b.DataFiltering) {
-		return false
-	}
-	if !util.OrderedListsMatch(a.UrlFiltering, b.UrlFiltering) {
 		return false
 	}
 	return true
@@ -889,6 +837,56 @@ func matchQos(a *Qos, b *Qos) bool {
 		return true
 	}
 	if !matchQosMarking(a.Marking, b.Marking) {
+		return false
+	}
+	return true
+}
+func matchTargetDevicesVsys(a []TargetDevicesVsys, b []TargetDevicesVsys) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	for _, a := range a {
+		for _, b := range b {
+			if !util.StringsEqual(a.Name, b.Name) {
+				return false
+			}
+		}
+	}
+	return true
+}
+func matchTargetDevices(a []TargetDevices, b []TargetDevices) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	for _, a := range a {
+		for _, b := range b {
+			if !util.StringsEqual(a.Name, b.Name) {
+				return false
+			}
+			if !matchTargetDevicesVsys(a.Vsys, b.Vsys) {
+				return false
+			}
+		}
+	}
+	return true
+}
+func matchTarget(a *Target, b *Target) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	if !matchTargetDevices(a.Devices, b.Devices) {
+		return false
+	}
+	if !util.BoolsMatch(a.Negate, b.Negate) {
+		return false
+	}
+	if !util.OrderedListsMatch(a.Tags, b.Tags) {
 		return false
 	}
 	return true

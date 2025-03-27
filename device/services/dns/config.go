@@ -60,11 +60,11 @@ func specifyConfig(o *Config) (any, error) {
 			if _, ok := o.Misc["DnsSettingServers"]; ok {
 				nestedDnsSetting.Servers.Misc = o.Misc["DnsSettingServers"]
 			}
-			if o.DnsSetting.Servers.Secondary != nil {
-				nestedDnsSetting.Servers.Secondary = o.DnsSetting.Servers.Secondary
-			}
 			if o.DnsSetting.Servers.Primary != nil {
 				nestedDnsSetting.Servers.Primary = o.DnsSetting.Servers.Primary
+			}
+			if o.DnsSetting.Servers.Secondary != nil {
+				nestedDnsSetting.Servers.Secondary = o.DnsSetting.Servers.Secondary
 			}
 		}
 	}

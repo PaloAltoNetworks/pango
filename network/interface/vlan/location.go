@@ -15,14 +15,10 @@ type ImportLocation interface {
 }
 
 type Location struct {
-	Ngfw          *NgfwLocation          `json:"ngfw,omitempty"`
 	Shared        bool                   `json:"shared"`
 	Template      *TemplateLocation      `json:"template,omitempty"`
 	TemplateStack *TemplateStackLocation `json:"template_stack,omitempty"`
-}
-
-type NgfwLocation struct {
-	NgfwDevice string `json:"ngfw_device"`
+	Ngfw          *NgfwLocation          `json:"ngfw,omitempty"`
 }
 
 type TemplateLocation struct {
@@ -37,12 +33,10 @@ type TemplateStackLocation struct {
 	TemplateStack  string `json:"template_stack"`
 }
 
-func NewNgfwLocation() *Location {
-	return &Location{Ngfw: &NgfwLocation{
-		NgfwDevice: "localhost.localdomain",
-	},
-	}
+type NgfwLocation struct {
+	NgfwDevice string `json:"ngfw_device"`
 }
+
 func NewSharedLocation() *Location {
 	return &Location{
 		Shared: true,
@@ -64,16 +58,17 @@ func NewTemplateStackLocation() *Location {
 	},
 	}
 }
+func NewNgfwLocation() *Location {
+	return &Location{Ngfw: &NgfwLocation{
+		NgfwDevice: "localhost.localdomain",
+	},
+	}
+}
 
 func (o Location) IsValid() error {
 	count := 0
 
 	switch {
-	case o.Ngfw != nil:
-		if o.Ngfw.NgfwDevice == "" {
-			return fmt.Errorf("NgfwDevice is unspecified")
-		}
-		count++
 	case o.Shared:
 		count++
 	case o.Template != nil:
@@ -98,6 +93,11 @@ func (o Location) IsValid() error {
 			return fmt.Errorf("TemplateStack is unspecified")
 		}
 		count++
+	case o.Ngfw != nil:
+		if o.Ngfw.NgfwDevice == "" {
+			return fmt.Errorf("NgfwDevice is unspecified")
+		}
+		count++
 	}
 
 	if count == 0 {
@@ -116,15 +116,6 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 	var ans []string
 
 	switch {
-	case o.Ngfw != nil:
-		if o.Ngfw.NgfwDevice == "" {
-			return nil, fmt.Errorf("NgfwDevice is unspecified")
-		}
-		ans = []string{
-			"config",
-			"devices",
-			util.AsEntryXpath([]string{o.Ngfw.NgfwDevice}),
-		}
 	case o.Shared:
 		ans = []string{
 			"config",
@@ -169,6 +160,15 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 			"config",
 			"devices",
 			util.AsEntryXpath([]string{o.TemplateStack.NgfwDevice}),
+		}
+	case o.Ngfw != nil:
+		if o.Ngfw.NgfwDevice == "" {
+			return nil, fmt.Errorf("NgfwDevice is unspecified")
+		}
+		ans = []string{
+			"config",
+			"devices",
+			util.AsEntryXpath([]string{o.Ngfw.NgfwDevice}),
 		}
 	default:
 		return nil, errors.NoLocationSpecifiedError

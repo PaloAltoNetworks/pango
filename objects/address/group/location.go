@@ -15,14 +15,9 @@ type ImportLocation interface {
 }
 
 type Location struct {
-	DeviceGroup *DeviceGroupLocation `json:"device_group,omitempty"`
 	Shared      bool                 `json:"shared"`
 	Vsys        *VsysLocation        `json:"vsys,omitempty"`
-}
-
-type DeviceGroupLocation struct {
-	DeviceGroup    string `json:"device_group"`
-	PanoramaDevice string `json:"panorama_device"`
+	DeviceGroup *DeviceGroupLocation `json:"device_group,omitempty"`
 }
 
 type VsysLocation struct {
@@ -30,13 +25,11 @@ type VsysLocation struct {
 	Vsys       string `json:"vsys"`
 }
 
-func NewDeviceGroupLocation() *Location {
-	return &Location{DeviceGroup: &DeviceGroupLocation{
-		DeviceGroup:    "",
-		PanoramaDevice: "localhost.localdomain",
-	},
-	}
+type DeviceGroupLocation struct {
+	DeviceGroup    string `json:"device_group"`
+	PanoramaDevice string `json:"panorama_device"`
 }
+
 func NewSharedLocation() *Location {
 	return &Location{
 		Shared: true,
@@ -49,19 +42,18 @@ func NewVsysLocation() *Location {
 	},
 	}
 }
+func NewDeviceGroupLocation() *Location {
+	return &Location{DeviceGroup: &DeviceGroupLocation{
+		DeviceGroup:    "",
+		PanoramaDevice: "localhost.localdomain",
+	},
+	}
+}
 
 func (o Location) IsValid() error {
 	count := 0
 
 	switch {
-	case o.DeviceGroup != nil:
-		if o.DeviceGroup.DeviceGroup == "" {
-			return fmt.Errorf("DeviceGroup is unspecified")
-		}
-		if o.DeviceGroup.PanoramaDevice == "" {
-			return fmt.Errorf("PanoramaDevice is unspecified")
-		}
-		count++
 	case o.Shared:
 		count++
 	case o.Vsys != nil:
@@ -70,6 +62,14 @@ func (o Location) IsValid() error {
 		}
 		if o.Vsys.Vsys == "" {
 			return fmt.Errorf("Vsys is unspecified")
+		}
+		count++
+	case o.DeviceGroup != nil:
+		if o.DeviceGroup.DeviceGroup == "" {
+			return fmt.Errorf("DeviceGroup is unspecified")
+		}
+		if o.DeviceGroup.PanoramaDevice == "" {
+			return fmt.Errorf("PanoramaDevice is unspecified")
 		}
 		count++
 	}
@@ -90,20 +90,6 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 	var ans []string
 
 	switch {
-	case o.DeviceGroup != nil:
-		if o.DeviceGroup.DeviceGroup == "" {
-			return nil, fmt.Errorf("DeviceGroup is unspecified")
-		}
-		if o.DeviceGroup.PanoramaDevice == "" {
-			return nil, fmt.Errorf("PanoramaDevice is unspecified")
-		}
-		ans = []string{
-			"config",
-			"devices",
-			util.AsEntryXpath([]string{o.DeviceGroup.PanoramaDevice}),
-			"device-group",
-			util.AsEntryXpath([]string{o.DeviceGroup.DeviceGroup}),
-		}
 	case o.Shared:
 		ans = []string{
 			"config",
@@ -122,6 +108,20 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 			util.AsEntryXpath([]string{o.Vsys.NgfwDevice}),
 			"vsys",
 			util.AsEntryXpath([]string{o.Vsys.Vsys}),
+		}
+	case o.DeviceGroup != nil:
+		if o.DeviceGroup.DeviceGroup == "" {
+			return nil, fmt.Errorf("DeviceGroup is unspecified")
+		}
+		if o.DeviceGroup.PanoramaDevice == "" {
+			return nil, fmt.Errorf("PanoramaDevice is unspecified")
+		}
+		ans = []string{
+			"config",
+			"devices",
+			util.AsEntryXpath([]string{o.DeviceGroup.PanoramaDevice}),
+			"device-group",
+			util.AsEntryXpath([]string{o.DeviceGroup.DeviceGroup}),
 		}
 	default:
 		return nil, errors.NoLocationSpecifiedError

@@ -48,9 +48,8 @@ type entryXml struct {
 	Misc []generic.Xml `xml:",any"`
 }
 type DevicesXml struct {
-	XMLName xml.Name         `xml:"entry"`
-	Name    string           `xml:"name,attr"`
-	Vsys    *util.MemberType `xml:"vsys,omitempty"`
+	Name string           `xml:"name,attr"`
+	Vsys *util.MemberType `xml:"vsys,omitempty"`
 
 	Misc []generic.Xml `xml:",any"`
 }
@@ -59,11 +58,14 @@ func (e *Entry) Field(v string) (any, error) {
 	if v == "name" || v == "Name" {
 		return e.Name, nil
 	}
-	if v == "authorization_code" || v == "AuthorizationCode" {
-		return e.AuthorizationCode, nil
-	}
 	if v == "description" || v == "Description" {
 		return e.Description, nil
+	}
+	if v == "templates" || v == "Templates" {
+		return e.Templates, nil
+	}
+	if v == "templates|LENGTH" || v == "Templates|LENGTH" {
+		return int64(len(e.Templates)), nil
 	}
 	if v == "devices" || v == "Devices" {
 		return e.Devices, nil
@@ -71,11 +73,8 @@ func (e *Entry) Field(v string) (any, error) {
 	if v == "devices|LENGTH" || v == "Devices|LENGTH" {
 		return int64(len(e.Devices)), nil
 	}
-	if v == "templates" || v == "Templates" {
-		return e.Templates, nil
-	}
-	if v == "templates|LENGTH" || v == "Templates|LENGTH" {
-		return int64(len(e.Templates)), nil
+	if v == "authorization_code" || v == "AuthorizationCode" {
+		return e.AuthorizationCode, nil
 	}
 
 	return nil, fmt.Errorf("unknown field")
@@ -98,11 +97,11 @@ func specifyEntry(o *Entry) (any, error) {
 			if _, ok := o.Misc["Devices"]; ok {
 				nestedDevices.Misc = o.Misc["Devices"]
 			}
-			if oDevices.Vsys != nil {
-				nestedDevices.Vsys = util.StrToMem(oDevices.Vsys)
-			}
 			if oDevices.Name != "" {
 				nestedDevices.Name = oDevices.Name
+			}
+			if oDevices.Vsys != nil {
+				nestedDevices.Vsys = util.StrToMem(oDevices.Vsys)
 			}
 			nestedDevicesCol = append(nestedDevicesCol, nestedDevices)
 		}
@@ -133,11 +132,11 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				if oDevices.Misc != nil {
 					entry.Misc["Devices"] = oDevices.Misc
 				}
-				if oDevices.Vsys != nil {
-					nestedDevices.Vsys = util.MemToStr(oDevices.Vsys)
-				}
 				if oDevices.Name != "" {
 					nestedDevices.Name = oDevices.Name
+				}
+				if oDevices.Vsys != nil {
+					nestedDevices.Vsys = util.MemToStr(oDevices.Vsys)
 				}
 				nestedDevicesCol = append(nestedDevicesCol, nestedDevices)
 			}
@@ -162,16 +161,16 @@ func SpecMatches(a, b *Entry) bool {
 	}
 
 	// Don't compare Name.
-	if !util.StringsMatch(a.AuthorizationCode, b.AuthorizationCode) {
+	if !util.StringsMatch(a.Description, b.Description) {
 		return false
 	}
-	if !util.StringsMatch(a.Description, b.Description) {
+	if !util.OrderedListsMatch(a.Templates, b.Templates) {
 		return false
 	}
 	if !matchDevices(a.Devices, b.Devices) {
 		return false
 	}
-	if !util.OrderedListsMatch(a.Templates, b.Templates) {
+	if !util.StringsMatch(a.AuthorizationCode, b.AuthorizationCode) {
 		return false
 	}
 

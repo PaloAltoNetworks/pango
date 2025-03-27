@@ -38,8 +38,8 @@ type Entry struct {
 }
 
 type Certificate struct {
-	DefaultOcspUrl        *string
 	Name                  string
+	DefaultOcspUrl        *string
 	OcspVerifyCertificate *string
 	TemplateName          *string
 }
@@ -72,11 +72,10 @@ type entryXml struct {
 	Misc []generic.Xml `xml:",any"`
 }
 type CertificateXml struct {
-	DefaultOcspUrl        *string  `xml:"default-ocsp-url,omitempty"`
-	XMLName               xml.Name `xml:"entry"`
-	Name                  string   `xml:"name,attr"`
-	OcspVerifyCertificate *string  `xml:"ocsp-verify-cert,omitempty"`
-	TemplateName          *string  `xml:"template-name,omitempty"`
+	DefaultOcspUrl        *string `xml:"default-ocsp-url,omitempty"`
+	Name                  string  `xml:"name,attr"`
+	OcspVerifyCertificate *string `xml:"ocsp-verify-cert,omitempty"`
+	TemplateName          *string `xml:"template-name,omitempty"`
 
 	Misc []generic.Xml `xml:",any"`
 }
@@ -91,6 +90,12 @@ func (e *Entry) Field(v string) (any, error) {
 	if v == "name" || v == "Name" {
 		return e.Name, nil
 	}
+	if v == "certificate" || v == "Certificate" {
+		return e.Certificate, nil
+	}
+	if v == "certificate|LENGTH" || v == "Certificate|LENGTH" {
+		return int64(len(e.Certificate)), nil
+	}
 	if v == "block_expired_certificate" || v == "BlockExpiredCertificate" {
 		return e.BlockExpiredCertificate, nil
 	}
@@ -102,12 +107,6 @@ func (e *Entry) Field(v string) (any, error) {
 	}
 	if v == "block_unknown_certificate" || v == "BlockUnknownCertificate" {
 		return e.BlockUnknownCertificate, nil
-	}
-	if v == "certificate" || v == "Certificate" {
-		return e.Certificate, nil
-	}
-	if v == "certificate|LENGTH" || v == "Certificate|LENGTH" {
-		return int64(len(e.Certificate)), nil
 	}
 	if v == "certificate_status_timeout" || v == "CertificateStatusTimeout" {
 		return e.CertificateStatusTimeout, nil
@@ -156,6 +155,9 @@ func specifyEntry(o *Entry) (any, error) {
 			if _, ok := o.Misc["Certificate"]; ok {
 				nestedCertificate.Misc = o.Misc["Certificate"]
 			}
+			if oCertificate.Name != "" {
+				nestedCertificate.Name = oCertificate.Name
+			}
 			if oCertificate.DefaultOcspUrl != nil {
 				nestedCertificate.DefaultOcspUrl = oCertificate.DefaultOcspUrl
 			}
@@ -164,9 +166,6 @@ func specifyEntry(o *Entry) (any, error) {
 			}
 			if oCertificate.TemplateName != nil {
 				nestedCertificate.TemplateName = oCertificate.TemplateName
-			}
-			if oCertificate.Name != "" {
-				nestedCertificate.Name = oCertificate.Name
 			}
 			nestedCertificateCol = append(nestedCertificateCol, nestedCertificate)
 		}
@@ -186,11 +185,11 @@ func specifyEntry(o *Entry) (any, error) {
 		if _, ok := o.Misc["UsernameField"]; ok {
 			nestedUsernameField.Misc = o.Misc["UsernameField"]
 		}
-		if o.UsernameField.SubjectAlt != nil {
-			nestedUsernameField.SubjectAlt = o.UsernameField.SubjectAlt
-		}
 		if o.UsernameField.Subject != nil {
 			nestedUsernameField.Subject = o.UsernameField.Subject
+		}
+		if o.UsernameField.SubjectAlt != nil {
+			nestedUsernameField.SubjectAlt = o.UsernameField.SubjectAlt
 		}
 	}
 	entry.UsernameField = nestedUsernameField
@@ -219,6 +218,9 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				if oCertificate.Misc != nil {
 					entry.Misc["Certificate"] = oCertificate.Misc
 				}
+				if oCertificate.Name != "" {
+					nestedCertificate.Name = oCertificate.Name
+				}
 				if oCertificate.DefaultOcspUrl != nil {
 					nestedCertificate.DefaultOcspUrl = oCertificate.DefaultOcspUrl
 				}
@@ -227,9 +229,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				}
 				if oCertificate.TemplateName != nil {
 					nestedCertificate.TemplateName = oCertificate.TemplateName
-				}
-				if oCertificate.Name != "" {
-					nestedCertificate.Name = oCertificate.Name
 				}
 				nestedCertificateCol = append(nestedCertificateCol, nestedCertificate)
 			}
@@ -249,11 +248,11 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 			if o.UsernameField.Misc != nil {
 				entry.Misc["UsernameField"] = o.UsernameField.Misc
 			}
-			if o.UsernameField.SubjectAlt != nil {
-				nestedUsernameField.SubjectAlt = o.UsernameField.SubjectAlt
-			}
 			if o.UsernameField.Subject != nil {
 				nestedUsernameField.Subject = o.UsernameField.Subject
+			}
+			if o.UsernameField.SubjectAlt != nil {
+				nestedUsernameField.SubjectAlt = o.UsernameField.SubjectAlt
 			}
 		}
 		entry.UsernameField = nestedUsernameField
@@ -274,6 +273,9 @@ func SpecMatches(a, b *Entry) bool {
 	}
 
 	// Don't compare Name.
+	if !matchCertificate(a.Certificate, b.Certificate) {
+		return false
+	}
 	if !util.BoolsMatch(a.BlockExpiredCertificate, b.BlockExpiredCertificate) {
 		return false
 	}
@@ -284,9 +286,6 @@ func SpecMatches(a, b *Entry) bool {
 		return false
 	}
 	if !util.BoolsMatch(a.BlockUnknownCertificate, b.BlockUnknownCertificate) {
-		return false
-	}
-	if !matchCertificate(a.Certificate, b.Certificate) {
 		return false
 	}
 	if !util.Ints64Match(a.CertificateStatusTimeout, b.CertificateStatusTimeout) {
@@ -317,6 +316,30 @@ func SpecMatches(a, b *Entry) bool {
 	return true
 }
 
+func matchCertificate(a []Certificate, b []Certificate) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	for _, a := range a {
+		for _, b := range b {
+			if !util.StringsEqual(a.Name, b.Name) {
+				return false
+			}
+			if !util.StringsMatch(a.DefaultOcspUrl, b.DefaultOcspUrl) {
+				return false
+			}
+			if !util.StringsMatch(a.OcspVerifyCertificate, b.OcspVerifyCertificate) {
+				return false
+			}
+			if !util.StringsMatch(a.TemplateName, b.TemplateName) {
+				return false
+			}
+		}
+	}
+	return true
+}
 func matchUsernameField(a *UsernameField, b *UsernameField) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
@@ -328,30 +351,6 @@ func matchUsernameField(a *UsernameField, b *UsernameField) bool {
 	}
 	if !util.StringsMatch(a.SubjectAlt, b.SubjectAlt) {
 		return false
-	}
-	return true
-}
-func matchCertificate(a []Certificate, b []Certificate) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	for _, a := range a {
-		for _, b := range b {
-			if !util.StringsMatch(a.DefaultOcspUrl, b.DefaultOcspUrl) {
-				return false
-			}
-			if !util.StringsMatch(a.OcspVerifyCertificate, b.OcspVerifyCertificate) {
-				return false
-			}
-			if !util.StringsMatch(a.TemplateName, b.TemplateName) {
-				return false
-			}
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-		}
 	}
 	return true
 }

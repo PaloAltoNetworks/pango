@@ -10,20 +10,20 @@ import (
 
 type Config struct {
 	DisabledSslExcludeCertFromPredefined []string
+	RootCaExcludeList                    []string
+	SslExcludeCert                       []SslExcludeCert
+	TrustedRootCa                        []string
 	ForwardTrustCertificateEcdsa         *string
 	ForwardTrustCertificateRsa           *string
 	ForwardUntrustCertificateEcdsa       *string
 	ForwardUntrustCertificateRsa         *string
-	RootCaExcludeList                    []string
-	SslExcludeCert                       []SslExcludeCert
-	TrustedRootCa                        []string
 
 	Misc map[string][]generic.Xml
 }
 type SslExcludeCert struct {
+	Name        string
 	Description *string
 	Exclude     *bool
-	Name        string
 }
 type configXmlContainer struct {
 	XMLName xml.Name    `xml:"result"`
@@ -69,14 +69,14 @@ func specifyConfig(o *Config) (any, error) {
 			if _, ok := o.Misc["SslExcludeCert"]; ok {
 				nestedSslExcludeCert.Misc = o.Misc["SslExcludeCert"]
 			}
+			if oSslExcludeCert.Name != "" {
+				nestedSslExcludeCert.Name = oSslExcludeCert.Name
+			}
 			if oSslExcludeCert.Description != nil {
 				nestedSslExcludeCert.Description = oSslExcludeCert.Description
 			}
 			if oSslExcludeCert.Exclude != nil {
 				nestedSslExcludeCert.Exclude = util.YesNo(oSslExcludeCert.Exclude, nil)
-			}
-			if oSslExcludeCert.Name != "" {
-				nestedSslExcludeCert.Name = oSslExcludeCert.Name
 			}
 			nestedSslExcludeCertCol = append(nestedSslExcludeCertCol, nestedSslExcludeCert)
 		}
@@ -144,6 +144,15 @@ func SpecMatches(a, b *Config) bool {
 	if !util.OrderedListsMatch(a.DisabledSslExcludeCertFromPredefined, b.DisabledSslExcludeCertFromPredefined) {
 		return false
 	}
+	if !util.OrderedListsMatch(a.RootCaExcludeList, b.RootCaExcludeList) {
+		return false
+	}
+	if !matchSslExcludeCert(a.SslExcludeCert, b.SslExcludeCert) {
+		return false
+	}
+	if !util.OrderedListsMatch(a.TrustedRootCa, b.TrustedRootCa) {
+		return false
+	}
 	if !util.StringsMatch(a.ForwardTrustCertificateEcdsa, b.ForwardTrustCertificateEcdsa) {
 		return false
 	}
@@ -154,15 +163,6 @@ func SpecMatches(a, b *Config) bool {
 		return false
 	}
 	if !util.StringsMatch(a.ForwardUntrustCertificateRsa, b.ForwardUntrustCertificateRsa) {
-		return false
-	}
-	if !util.OrderedListsMatch(a.RootCaExcludeList, b.RootCaExcludeList) {
-		return false
-	}
-	if !matchSslExcludeCert(a.SslExcludeCert, b.SslExcludeCert) {
-		return false
-	}
-	if !util.OrderedListsMatch(a.TrustedRootCa, b.TrustedRootCa) {
 		return false
 	}
 
@@ -177,13 +177,13 @@ func matchSslExcludeCert(a []SslExcludeCert, b []SslExcludeCert) bool {
 	}
 	for _, a := range a {
 		for _, b := range b {
+			if !util.StringsEqual(a.Name, b.Name) {
+				return false
+			}
 			if !util.StringsMatch(a.Description, b.Description) {
 				return false
 			}
 			if !util.BoolsMatch(a.Exclude, b.Exclude) {
-				return false
-			}
-			if !util.StringsEqual(a.Name, b.Name) {
 				return false
 			}
 		}

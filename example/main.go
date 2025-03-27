@@ -9,6 +9,7 @@ import (
 	"github.com/PaloAltoNetworks/pango"
 	"github.com/PaloAltoNetworks/pango/device/services/dns"
 	"github.com/PaloAltoNetworks/pango/device/services/ntp"
+	"github.com/PaloAltoNetworks/pango/movement"
 	"github.com/PaloAltoNetworks/pango/network/interface/ethernet"
 	"github.com/PaloAltoNetworks/pango/network/interface/loopback"
 	"github.com/PaloAltoNetworks/pango/network/profiles/interface_management"
@@ -23,7 +24,6 @@ import (
 	"github.com/PaloAltoNetworks/pango/panorama/template"
 	"github.com/PaloAltoNetworks/pango/panorama/template_stack"
 	"github.com/PaloAltoNetworks/pango/policies/rules/security"
-	"github.com/PaloAltoNetworks/pango/rule"
 	"github.com/PaloAltoNetworks/pango/util"
 )
 
@@ -773,22 +773,11 @@ func checkSecurityPolicyRulesMove(c *pango.Client, ctx context.Context) {
 		log.Printf("Security policy rule '%s:%s' with description '%s' created", *securityPolicyRuleItemReply.Uuid, securityPolicyRuleItemReply.Name, *securityPolicyRuleItemReply.Description)
 	}
 
-	rulePositionBefore7 := rule.Position{
-		First:           nil,
-		Last:            nil,
-		SomewhereBefore: nil,
-		DirectlyBefore:  util.String("codegen_rule7"),
-		SomewhereAfter:  nil,
-		DirectlyAfter:   nil,
+	positionBefore7 := movement.PositionBefore{
+		Directly: true,
+		Pivot:    "codegen_rule7",
 	}
-	rulePositionBottom := rule.Position{
-		First:           nil,
-		Last:            util.Bool(true),
-		SomewhereBefore: nil,
-		DirectlyBefore:  nil,
-		SomewhereAfter:  nil,
-		DirectlyAfter:   nil,
-	}
+	positionLast := movement.PositionLast{}
 
 	var securityPolicyRulesEntriesToMove []*security.Entry
 	securityPolicyRulesEntriesToMove = append(securityPolicyRulesEntriesToMove, securityPolicyRulesEntries[3])
@@ -797,7 +786,7 @@ func checkSecurityPolicyRulesMove(c *pango.Client, ctx context.Context) {
 	for _, securityPolicyRuleItemToMove := range securityPolicyRulesEntriesToMove {
 		log.Printf("Security policy rule '%s' is going to be moved", securityPolicyRuleItemToMove.Name)
 	}
-	err := securityPolicyRuleApi.MoveGroup(ctx, *securityPolicyRuleLocation, rulePositionBefore7, securityPolicyRulesEntriesToMove)
+	err := securityPolicyRuleApi.MoveGroup(ctx, *securityPolicyRuleLocation, positionBefore7, securityPolicyRulesEntriesToMove)
 	if err != nil {
 		log.Printf("Failed to move security policy rules %v: %s", securityPolicyRulesEntriesToMove, err)
 		return
@@ -807,7 +796,7 @@ func checkSecurityPolicyRulesMove(c *pango.Client, ctx context.Context) {
 	for _, securityPolicyRuleItemToMove := range securityPolicyRulesEntriesToMove {
 		log.Printf("Security policy rule '%s' is going to be moved", securityPolicyRuleItemToMove.Name)
 	}
-	err = securityPolicyRuleApi.MoveGroup(ctx, *securityPolicyRuleLocation, rulePositionBottom, securityPolicyRulesEntriesToMove)
+	err = securityPolicyRuleApi.MoveGroup(ctx, *securityPolicyRuleLocation, positionLast, securityPolicyRulesEntriesToMove)
 	if err != nil {
 		log.Printf("Failed to move security policy rules %v: %s", securityPolicyRulesEntriesToMove, err)
 		return

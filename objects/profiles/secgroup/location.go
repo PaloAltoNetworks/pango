@@ -15,8 +15,8 @@ type ImportLocation interface {
 }
 
 type Location struct {
-	DeviceGroup *DeviceGroupLocation `json:"device_group,omitempty"`
 	Shared      bool                 `json:"shared"`
+	DeviceGroup *DeviceGroupLocation `json:"device_group,omitempty"`
 }
 
 type DeviceGroupLocation struct {
@@ -24,6 +24,11 @@ type DeviceGroupLocation struct {
 	PanoramaDevice string `json:"panorama_device"`
 }
 
+func NewSharedLocation() *Location {
+	return &Location{
+		Shared: true,
+	}
+}
 func NewDeviceGroupLocation() *Location {
 	return &Location{DeviceGroup: &DeviceGroupLocation{
 		DeviceGroup:    "",
@@ -31,16 +36,13 @@ func NewDeviceGroupLocation() *Location {
 	},
 	}
 }
-func NewSharedLocation() *Location {
-	return &Location{
-		Shared: true,
-	}
-}
 
 func (o Location) IsValid() error {
 	count := 0
 
 	switch {
+	case o.Shared:
+		count++
 	case o.DeviceGroup != nil:
 		if o.DeviceGroup.DeviceGroup == "" {
 			return fmt.Errorf("DeviceGroup is unspecified")
@@ -48,8 +50,6 @@ func (o Location) IsValid() error {
 		if o.DeviceGroup.PanoramaDevice == "" {
 			return fmt.Errorf("PanoramaDevice is unspecified")
 		}
-		count++
-	case o.Shared:
 		count++
 	}
 
@@ -69,6 +69,11 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 	var ans []string
 
 	switch {
+	case o.Shared:
+		ans = []string{
+			"config",
+			"shared",
+		}
 	case o.DeviceGroup != nil:
 		if o.DeviceGroup.DeviceGroup == "" {
 			return nil, fmt.Errorf("DeviceGroup is unspecified")
@@ -82,11 +87,6 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 			util.AsEntryXpath([]string{o.DeviceGroup.PanoramaDevice}),
 			"device-group",
 			util.AsEntryXpath([]string{o.DeviceGroup.DeviceGroup}),
-		}
-	case o.Shared:
-		ans = []string{
-			"config",
-			"shared",
 		}
 	default:
 		return nil, errors.NoLocationSpecifiedError

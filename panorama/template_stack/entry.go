@@ -58,11 +58,14 @@ func (e *Entry) Field(v string) (any, error) {
 	if v == "name" || v == "Name" {
 		return e.Name, nil
 	}
-	if v == "default_vsys" || v == "DefaultVsys" {
-		return e.DefaultVsys, nil
-	}
 	if v == "description" || v == "Description" {
 		return e.Description, nil
+	}
+	if v == "templates" || v == "Templates" {
+		return e.Templates, nil
+	}
+	if v == "templates|LENGTH" || v == "Templates|LENGTH" {
+		return int64(len(e.Templates)), nil
 	}
 	if v == "devices" || v == "Devices" {
 		return e.Devices, nil
@@ -70,11 +73,8 @@ func (e *Entry) Field(v string) (any, error) {
 	if v == "devices|LENGTH" || v == "Devices|LENGTH" {
 		return int64(len(e.Devices)), nil
 	}
-	if v == "templates" || v == "Templates" {
-		return e.Templates, nil
-	}
-	if v == "templates|LENGTH" || v == "Templates|LENGTH" {
-		return int64(len(e.Templates)), nil
+	if v == "default_vsys" || v == "DefaultVsys" {
+		return e.DefaultVsys, nil
 	}
 	if v == "user_group_source" || v == "UserGroupSource" {
 		return e.UserGroupSource, nil
@@ -150,16 +150,16 @@ func SpecMatches(a, b *Entry) bool {
 	}
 
 	// Don't compare Name.
-	if !util.StringsMatch(a.DefaultVsys, b.DefaultVsys) {
+	if !util.StringsMatch(a.Description, b.Description) {
 		return false
 	}
-	if !util.StringsMatch(a.Description, b.Description) {
+	if !util.OrderedListsMatch(a.Templates, b.Templates) {
 		return false
 	}
 	if !util.OrderedListsMatch(a.Devices, b.Devices) {
 		return false
 	}
-	if !util.OrderedListsMatch(a.Templates, b.Templates) {
+	if !util.StringsMatch(a.DefaultVsys, b.DefaultVsys) {
 		return false
 	}
 	if !matchUserGroupSource(a.UserGroupSource, b.UserGroupSource) {

@@ -28,11 +28,11 @@ type Entry struct {
 }
 
 type Rules struct {
-	Action      *string
-	Application []string
-	Direction   *string
-	FileType    []string
 	Name        string
+	Application []string
+	FileType    []string
+	Direction   *string
+	Action      *string
 }
 
 type entryXmlContainer struct {
@@ -53,7 +53,6 @@ type RulesXml struct {
 	Application *util.MemberType `xml:"application,omitempty"`
 	Direction   *string          `xml:"direction,omitempty"`
 	FileType    *util.MemberType `xml:"file-type,omitempty"`
-	XMLName     xml.Name         `xml:"entry"`
 	Name        string           `xml:"name,attr"`
 
 	Misc []generic.Xml `xml:",any"`
@@ -96,6 +95,9 @@ func specifyEntry(o *Entry) (any, error) {
 			if _, ok := o.Misc["Rules"]; ok {
 				nestedRules.Misc = o.Misc["Rules"]
 			}
+			if oRules.Name != "" {
+				nestedRules.Name = oRules.Name
+			}
 			if oRules.Application != nil {
 				nestedRules.Application = util.StrToMem(oRules.Application)
 			}
@@ -107,9 +109,6 @@ func specifyEntry(o *Entry) (any, error) {
 			}
 			if oRules.Action != nil {
 				nestedRules.Action = oRules.Action
-			}
-			if oRules.Name != "" {
-				nestedRules.Name = oRules.Name
 			}
 			nestedRulesCol = append(nestedRulesCol, nestedRules)
 		}
@@ -138,6 +137,9 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				if oRules.Misc != nil {
 					entry.Misc["Rules"] = oRules.Misc
 				}
+				if oRules.Name != "" {
+					nestedRules.Name = oRules.Name
+				}
 				if oRules.Application != nil {
 					nestedRules.Application = util.MemToStr(oRules.Application)
 				}
@@ -149,9 +151,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				}
 				if oRules.Action != nil {
 					nestedRules.Action = oRules.Action
-				}
-				if oRules.Name != "" {
-					nestedRules.Name = oRules.Name
 				}
 				nestedRulesCol = append(nestedRulesCol, nestedRules)
 			}
@@ -195,6 +194,9 @@ func matchRules(a []Rules, b []Rules) bool {
 	}
 	for _, a := range a {
 		for _, b := range b {
+			if !util.StringsEqual(a.Name, b.Name) {
+				return false
+			}
 			if !util.OrderedListsMatch(a.Application, b.Application) {
 				return false
 			}
@@ -205,9 +207,6 @@ func matchRules(a []Rules, b []Rules) bool {
 				return false
 			}
 			if !util.StringsMatch(a.Action, b.Action) {
-				return false
-			}
-			if !util.StringsEqual(a.Name, b.Name) {
 				return false
 			}
 		}

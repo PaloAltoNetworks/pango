@@ -15,15 +15,9 @@ type ImportLocation interface {
 }
 
 type Location struct {
-	DeviceGroup *DeviceGroupLocation `json:"device_group,omitempty"`
 	Shared      *SharedLocation      `json:"shared,omitempty"`
 	Vsys        *VsysLocation        `json:"vsys,omitempty"`
-}
-
-type DeviceGroupLocation struct {
-	DeviceGroup    string `json:"device_group"`
-	PanoramaDevice string `json:"panorama_device"`
-	Rulebase       string `json:"rulebase"`
+	DeviceGroup *DeviceGroupLocation `json:"device_group,omitempty"`
 }
 
 type SharedLocation struct {
@@ -35,14 +29,12 @@ type VsysLocation struct {
 	Vsys       string `json:"vsys"`
 }
 
-func NewDeviceGroupLocation() *Location {
-	return &Location{DeviceGroup: &DeviceGroupLocation{
-		DeviceGroup:    "",
-		PanoramaDevice: "localhost.localdomain",
-		Rulebase:       "pre-rulebase",
-	},
-	}
+type DeviceGroupLocation struct {
+	DeviceGroup    string `json:"device_group"`
+	PanoramaDevice string `json:"panorama_device"`
+	Rulebase       string `json:"rulebase"`
 }
+
 func NewSharedLocation() *Location {
 	return &Location{Shared: &SharedLocation{
 		Rulebase: "pre-rulebase",
@@ -56,22 +48,19 @@ func NewVsysLocation() *Location {
 	},
 	}
 }
+func NewDeviceGroupLocation() *Location {
+	return &Location{DeviceGroup: &DeviceGroupLocation{
+		DeviceGroup:    "",
+		PanoramaDevice: "localhost.localdomain",
+		Rulebase:       "pre-rulebase",
+	},
+	}
+}
 
 func (o Location) IsValid() error {
 	count := 0
 
 	switch {
-	case o.DeviceGroup != nil:
-		if o.DeviceGroup.DeviceGroup == "" {
-			return fmt.Errorf("DeviceGroup is unspecified")
-		}
-		if o.DeviceGroup.PanoramaDevice == "" {
-			return fmt.Errorf("PanoramaDevice is unspecified")
-		}
-		if o.DeviceGroup.Rulebase == "" {
-			return fmt.Errorf("Rulebase is unspecified")
-		}
-		count++
 	case o.Shared != nil:
 		if o.Shared.Rulebase == "" {
 			return fmt.Errorf("Rulebase is unspecified")
@@ -83,6 +72,17 @@ func (o Location) IsValid() error {
 		}
 		if o.Vsys.Vsys == "" {
 			return fmt.Errorf("Vsys is unspecified")
+		}
+		count++
+	case o.DeviceGroup != nil:
+		if o.DeviceGroup.DeviceGroup == "" {
+			return fmt.Errorf("DeviceGroup is unspecified")
+		}
+		if o.DeviceGroup.PanoramaDevice == "" {
+			return fmt.Errorf("PanoramaDevice is unspecified")
+		}
+		if o.DeviceGroup.Rulebase == "" {
+			return fmt.Errorf("Rulebase is unspecified")
 		}
 		count++
 	}
@@ -103,24 +103,6 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 	var ans []string
 
 	switch {
-	case o.DeviceGroup != nil:
-		if o.DeviceGroup.DeviceGroup == "" {
-			return nil, fmt.Errorf("DeviceGroup is unspecified")
-		}
-		if o.DeviceGroup.PanoramaDevice == "" {
-			return nil, fmt.Errorf("PanoramaDevice is unspecified")
-		}
-		if o.DeviceGroup.Rulebase == "" {
-			return nil, fmt.Errorf("Rulebase is unspecified")
-		}
-		ans = []string{
-			"config",
-			"devices",
-			util.AsEntryXpath([]string{o.DeviceGroup.PanoramaDevice}),
-			"device-group",
-			util.AsEntryXpath([]string{o.DeviceGroup.DeviceGroup}),
-			o.DeviceGroup.Rulebase,
-		}
 	case o.Shared != nil:
 		if o.Shared.Rulebase == "" {
 			return nil, fmt.Errorf("Rulebase is unspecified")
@@ -144,6 +126,24 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 			"vsys",
 			util.AsEntryXpath([]string{o.Vsys.Vsys}),
 			"rulebase",
+		}
+	case o.DeviceGroup != nil:
+		if o.DeviceGroup.DeviceGroup == "" {
+			return nil, fmt.Errorf("DeviceGroup is unspecified")
+		}
+		if o.DeviceGroup.PanoramaDevice == "" {
+			return nil, fmt.Errorf("PanoramaDevice is unspecified")
+		}
+		if o.DeviceGroup.Rulebase == "" {
+			return nil, fmt.Errorf("Rulebase is unspecified")
+		}
+		ans = []string{
+			"config",
+			"devices",
+			util.AsEntryXpath([]string{o.DeviceGroup.PanoramaDevice}),
+			"device-group",
+			util.AsEntryXpath([]string{o.DeviceGroup.DeviceGroup}),
+			o.DeviceGroup.Rulebase,
 		}
 	default:
 		return nil, errors.NoLocationSpecifiedError

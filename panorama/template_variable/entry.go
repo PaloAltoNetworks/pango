@@ -27,17 +27,17 @@ type Entry struct {
 }
 
 type Type struct {
-	AsNumber       *string
-	DeviceId       *string
-	DevicePriority *string
-	EgressMax      *string
-	Fqdn           *string
-	GroupId        *string
-	Interface      *string
 	IpNetmask      *string
 	IpRange        *string
-	LinkTag        *string
+	Fqdn           *string
+	GroupId        *string
+	DevicePriority *string
+	DeviceId       *string
+	Interface      *string
+	AsNumber       *string
 	QosProfile     *string
+	EgressMax      *string
+	LinkTag        *string
 }
 
 type entryXmlContainer struct {
@@ -96,18 +96,6 @@ func specifyEntry(o *Entry) (any, error) {
 		if _, ok := o.Misc["Type"]; ok {
 			nestedType.Misc = o.Misc["Type"]
 		}
-		if o.Type.GroupId != nil {
-			nestedType.GroupId = o.Type.GroupId
-		}
-		if o.Type.Interface != nil {
-			nestedType.Interface = o.Type.Interface
-		}
-		if o.Type.AsNumber != nil {
-			nestedType.AsNumber = o.Type.AsNumber
-		}
-		if o.Type.QosProfile != nil {
-			nestedType.QosProfile = o.Type.QosProfile
-		}
 		if o.Type.IpNetmask != nil {
 			nestedType.IpNetmask = o.Type.IpNetmask
 		}
@@ -117,11 +105,23 @@ func specifyEntry(o *Entry) (any, error) {
 		if o.Type.Fqdn != nil {
 			nestedType.Fqdn = o.Type.Fqdn
 		}
+		if o.Type.GroupId != nil {
+			nestedType.GroupId = o.Type.GroupId
+		}
 		if o.Type.DevicePriority != nil {
 			nestedType.DevicePriority = o.Type.DevicePriority
 		}
 		if o.Type.DeviceId != nil {
 			nestedType.DeviceId = o.Type.DeviceId
+		}
+		if o.Type.Interface != nil {
+			nestedType.Interface = o.Type.Interface
+		}
+		if o.Type.AsNumber != nil {
+			nestedType.AsNumber = o.Type.AsNumber
+		}
+		if o.Type.QosProfile != nil {
+			nestedType.QosProfile = o.Type.QosProfile
 		}
 		if o.Type.EgressMax != nil {
 			nestedType.EgressMax = o.Type.EgressMax
@@ -151,9 +151,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 			if o.Type.Misc != nil {
 				entry.Misc["Type"] = o.Type.Misc
 			}
-			if o.Type.QosProfile != nil {
-				nestedType.QosProfile = o.Type.QosProfile
-			}
 			if o.Type.IpNetmask != nil {
 				nestedType.IpNetmask = o.Type.IpNetmask
 			}
@@ -162,6 +159,9 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 			}
 			if o.Type.Fqdn != nil {
 				nestedType.Fqdn = o.Type.Fqdn
+			}
+			if o.Type.GroupId != nil {
+				nestedType.GroupId = o.Type.GroupId
 			}
 			if o.Type.DevicePriority != nil {
 				nestedType.DevicePriority = o.Type.DevicePriority
@@ -175,14 +175,14 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 			if o.Type.AsNumber != nil {
 				nestedType.AsNumber = o.Type.AsNumber
 			}
+			if o.Type.QosProfile != nil {
+				nestedType.QosProfile = o.Type.QosProfile
+			}
 			if o.Type.EgressMax != nil {
 				nestedType.EgressMax = o.Type.EgressMax
 			}
 			if o.Type.LinkTag != nil {
 				nestedType.LinkTag = o.Type.LinkTag
-			}
-			if o.Type.GroupId != nil {
-				nestedType.GroupId = o.Type.GroupId
 			}
 		}
 		entry.Type = nestedType
@@ -219,9 +219,6 @@ func matchType(a *Type, b *Type) bool {
 	} else if a == nil && b == nil {
 		return true
 	}
-	if !util.StringsMatch(a.GroupId, b.GroupId) {
-		return false
-	}
 	if !util.StringsMatch(a.IpNetmask, b.IpNetmask) {
 		return false
 	}
@@ -229,6 +226,9 @@ func matchType(a *Type, b *Type) bool {
 		return false
 	}
 	if !util.StringsMatch(a.Fqdn, b.Fqdn) {
+		return false
+	}
+	if !util.StringsMatch(a.GroupId, b.GroupId) {
 		return false
 	}
 	if !util.StringsMatch(a.DevicePriority, b.DevicePriority) {

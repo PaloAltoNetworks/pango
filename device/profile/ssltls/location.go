@@ -1,4 +1,4 @@
-package ssldecrypt
+package ssltls
 
 import (
 	"fmt"
@@ -15,12 +15,12 @@ type ImportLocation interface {
 }
 
 type Location struct {
+	Shared            bool                       `json:"shared"`
 	Panorama          bool                       `json:"panorama"`
 	Template          *TemplateLocation          `json:"template,omitempty"`
 	TemplateVsys      *TemplateVsysLocation      `json:"template_vsys,omitempty"`
 	TemplateStack     *TemplateStackLocation     `json:"template_stack,omitempty"`
 	TemplateStackVsys *TemplateStackVsysLocation `json:"template_stack_vsys,omitempty"`
-	Shared            bool                       `json:"shared"`
 }
 
 type TemplateLocation struct {
@@ -47,6 +47,11 @@ type TemplateStackVsysLocation struct {
 	Vsys           string `json:"vsys"`
 }
 
+func NewSharedLocation() *Location {
+	return &Location{
+		Shared: true,
+	}
+}
 func NewTemplateLocation() *Location {
 	return &Location{Template: &TemplateLocation{
 		PanoramaDevice: "localhost.localdomain",
@@ -79,16 +84,13 @@ func NewTemplateStackVsysLocation() *Location {
 	},
 	}
 }
-func NewSharedLocation() *Location {
-	return &Location{
-		Shared: true,
-	}
-}
 
 func (o Location) IsValid() error {
 	count := 0
 
 	switch {
+	case o.Shared:
+		count++
 	case o.Panorama:
 		count++
 	case o.Template != nil:
@@ -135,8 +137,6 @@ func (o Location) IsValid() error {
 			return fmt.Errorf("Vsys is unspecified")
 		}
 		count++
-	case o.Shared:
-		count++
 	}
 
 	if count == 0 {
@@ -155,6 +155,11 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 	var ans []string
 
 	switch {
+	case o.Shared:
+		ans = []string{
+			"config",
+			"shared",
+		}
 	case o.Panorama:
 		ans = []string{
 			"config",
@@ -242,23 +247,31 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 			"vsys",
 			util.AsEntryXpath([]string{o.TemplateStackVsys.Vsys}),
 		}
-	case o.Shared:
-		ans = []string{
-			"config",
-			"shared",
-		}
 	default:
 		return nil, errors.NoLocationSpecifiedError
 	}
 
 	return ans, nil
 }
-func (o Location) Xpath(vn version.Number) ([]string, error) {
+func (o Location) XpathWithEntryName(vn version.Number, name string) ([]string, error) {
 
 	ans, err := o.XpathPrefix(vn)
 	if err != nil {
 		return nil, err
 	}
+	ans = append(ans, Suffix...)
+	ans = append(ans, util.AsEntryXpath([]string{name}))
+
+	return ans, nil
+}
+func (o Location) XpathWithUuid(vn version.Number, uuid string) ([]string, error) {
+
+	ans, err := o.XpathPrefix(vn)
+	if err != nil {
+		return nil, err
+	}
+	ans = append(ans, Suffix...)
+	ans = append(ans, util.AsUuidXpath(uuid))
 
 	return ans, nil
 }

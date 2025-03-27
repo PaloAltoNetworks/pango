@@ -129,9 +129,6 @@ func specifyEntry(o *Entry) (any, error) {
 		if _, ok := o.Misc["Lifesize"]; ok {
 			nestedLifesize.Misc = o.Misc["Lifesize"]
 		}
-		if o.Lifesize.Tb != nil {
-			nestedLifesize.Tb = o.Lifesize.Tb
-		}
 		if o.Lifesize.Gb != nil {
 			nestedLifesize.Gb = o.Lifesize.Gb
 		}
@@ -140,6 +137,9 @@ func specifyEntry(o *Entry) (any, error) {
 		}
 		if o.Lifesize.Mb != nil {
 			nestedLifesize.Mb = o.Lifesize.Mb
+		}
+		if o.Lifesize.Tb != nil {
+			nestedLifesize.Tb = o.Lifesize.Tb
 		}
 	}
 	entry.Lifesize = nestedLifesize
@@ -183,11 +183,11 @@ func specifyEntry(o *Entry) (any, error) {
 		if _, ok := o.Misc["Esp"]; ok {
 			nestedEsp.Misc = o.Misc["Esp"]
 		}
-		if o.Esp.Encryption != nil {
-			nestedEsp.Encryption = util.StrToMem(o.Esp.Encryption)
-		}
 		if o.Esp.Authentication != nil {
 			nestedEsp.Authentication = util.StrToMem(o.Esp.Authentication)
+		}
+		if o.Esp.Encryption != nil {
+			nestedEsp.Encryption = util.StrToMem(o.Esp.Encryption)
 		}
 	}
 	entry.Esp = nestedEsp

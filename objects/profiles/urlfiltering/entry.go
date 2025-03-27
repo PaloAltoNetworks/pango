@@ -63,20 +63,20 @@ type CredentialEnforcementModeDomainCredentials struct {
 type CredentialEnforcementModeIpUser struct {
 }
 type HttpHeaderInsertion struct {
-	DisableOverride *string
 	Name            string
+	DisableOverride *string
 	Type            []HttpHeaderInsertionType
 }
 type HttpHeaderInsertionType struct {
-	Domains []string
-	Headers []HttpHeaderInsertionTypeHeaders
 	Name    string
+	Headers []HttpHeaderInsertionTypeHeaders
+	Domains []string
 }
 type HttpHeaderInsertionTypeHeaders struct {
-	Header *string
-	Log    *bool
 	Name   string
+	Header *string
 	Value  *string
+	Log    *bool
 }
 
 type entryXmlContainer struct {
@@ -136,7 +136,6 @@ type CredentialEnforcementModeIpUserXml struct {
 }
 type HttpHeaderInsertionXml struct {
 	DisableOverride *string                      `xml:"disable-override,omitempty"`
-	XMLName         xml.Name                     `xml:"entry"`
 	Name            string                       `xml:"name,attr"`
 	Type            []HttpHeaderInsertionTypeXml `xml:"type>entry,omitempty"`
 
@@ -145,17 +144,15 @@ type HttpHeaderInsertionXml struct {
 type HttpHeaderInsertionTypeXml struct {
 	Domains *util.MemberType                    `xml:"domains,omitempty"`
 	Headers []HttpHeaderInsertionTypeHeadersXml `xml:"headers>entry,omitempty"`
-	XMLName xml.Name                            `xml:"entry"`
 	Name    string                              `xml:"name,attr"`
 
 	Misc []generic.Xml `xml:",any"`
 }
 type HttpHeaderInsertionTypeHeadersXml struct {
-	Header  *string  `xml:"header,omitempty"`
-	Log     *string  `xml:"log,omitempty"`
-	XMLName xml.Name `xml:"entry"`
-	Name    string   `xml:"name,attr"`
-	Value   *string  `xml:"value,omitempty"`
+	Header *string `xml:"header,omitempty"`
+	Log    *string `xml:"log,omitempty"`
+	Name   string  `xml:"name,attr"`
+	Value  *string `xml:"value,omitempty"`
 
 	Misc []generic.Xml `xml:",any"`
 }
@@ -261,6 +258,12 @@ func specifyEntry(o *Entry) (any, error) {
 		if _, ok := o.Misc["CredentialEnforcement"]; ok {
 			nestedCredentialEnforcement.Misc = o.Misc["CredentialEnforcement"]
 		}
+		if o.CredentialEnforcement.Alert != nil {
+			nestedCredentialEnforcement.Alert = util.StrToMem(o.CredentialEnforcement.Alert)
+		}
+		if o.CredentialEnforcement.Allow != nil {
+			nestedCredentialEnforcement.Allow = util.StrToMem(o.CredentialEnforcement.Allow)
+		}
 		if o.CredentialEnforcement.Block != nil {
 			nestedCredentialEnforcement.Block = util.StrToMem(o.CredentialEnforcement.Block)
 		}
@@ -296,12 +299,6 @@ func specifyEntry(o *Entry) (any, error) {
 					nestedCredentialEnforcement.Mode.IpUser.Misc = o.Misc["CredentialEnforcementModeIpUser"]
 				}
 			}
-		}
-		if o.CredentialEnforcement.Alert != nil {
-			nestedCredentialEnforcement.Alert = util.StrToMem(o.CredentialEnforcement.Alert)
-		}
-		if o.CredentialEnforcement.Allow != nil {
-			nestedCredentialEnforcement.Allow = util.StrToMem(o.CredentialEnforcement.Allow)
 		}
 	}
 	entry.CredentialEnforcement = nestedCredentialEnforcement
@@ -340,17 +337,17 @@ func specifyEntry(o *Entry) (any, error) {
 							if _, ok := o.Misc["HttpHeaderInsertionTypeHeaders"]; ok {
 								nestedHttpHeaderInsertionTypeHeaders.Misc = o.Misc["HttpHeaderInsertionTypeHeaders"]
 							}
-							if oHttpHeaderInsertionTypeHeaders.Value != nil {
-								nestedHttpHeaderInsertionTypeHeaders.Value = oHttpHeaderInsertionTypeHeaders.Value
-							}
-							if oHttpHeaderInsertionTypeHeaders.Log != nil {
-								nestedHttpHeaderInsertionTypeHeaders.Log = util.YesNo(oHttpHeaderInsertionTypeHeaders.Log, nil)
-							}
 							if oHttpHeaderInsertionTypeHeaders.Name != "" {
 								nestedHttpHeaderInsertionTypeHeaders.Name = oHttpHeaderInsertionTypeHeaders.Name
 							}
 							if oHttpHeaderInsertionTypeHeaders.Header != nil {
 								nestedHttpHeaderInsertionTypeHeaders.Header = oHttpHeaderInsertionTypeHeaders.Header
+							}
+							if oHttpHeaderInsertionTypeHeaders.Value != nil {
+								nestedHttpHeaderInsertionTypeHeaders.Value = oHttpHeaderInsertionTypeHeaders.Value
+							}
+							if oHttpHeaderInsertionTypeHeaders.Log != nil {
+								nestedHttpHeaderInsertionTypeHeaders.Log = util.YesNo(oHttpHeaderInsertionTypeHeaders.Log, nil)
 							}
 							nestedHttpHeaderInsertionType.Headers = append(nestedHttpHeaderInsertionType.Headers, nestedHttpHeaderInsertionTypeHeaders)
 						}
@@ -398,6 +395,15 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 			if o.CredentialEnforcement.Misc != nil {
 				entry.Misc["CredentialEnforcement"] = o.CredentialEnforcement.Misc
 			}
+			if o.CredentialEnforcement.Alert != nil {
+				nestedCredentialEnforcement.Alert = util.MemToStr(o.CredentialEnforcement.Alert)
+			}
+			if o.CredentialEnforcement.Allow != nil {
+				nestedCredentialEnforcement.Allow = util.MemToStr(o.CredentialEnforcement.Allow)
+			}
+			if o.CredentialEnforcement.Block != nil {
+				nestedCredentialEnforcement.Block = util.MemToStr(o.CredentialEnforcement.Block)
+			}
 			if o.CredentialEnforcement.Continue != nil {
 				nestedCredentialEnforcement.Continue = util.MemToStr(o.CredentialEnforcement.Continue)
 			}
@@ -408,15 +414,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				nestedCredentialEnforcement.Mode = &CredentialEnforcementMode{}
 				if o.CredentialEnforcement.Mode.Misc != nil {
 					entry.Misc["CredentialEnforcementMode"] = o.CredentialEnforcement.Mode.Misc
-				}
-				if o.CredentialEnforcement.Mode.GroupMapping != nil {
-					nestedCredentialEnforcement.Mode.GroupMapping = o.CredentialEnforcement.Mode.GroupMapping
-				}
-				if o.CredentialEnforcement.Mode.IpUser != nil {
-					nestedCredentialEnforcement.Mode.IpUser = &CredentialEnforcementModeIpUser{}
-					if o.CredentialEnforcement.Mode.IpUser.Misc != nil {
-						entry.Misc["CredentialEnforcementModeIpUser"] = o.CredentialEnforcement.Mode.IpUser.Misc
-					}
 				}
 				if o.CredentialEnforcement.Mode.Disabled != nil {
 					nestedCredentialEnforcement.Mode.Disabled = &CredentialEnforcementModeDisabled{}
@@ -430,15 +427,15 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 						entry.Misc["CredentialEnforcementModeDomainCredentials"] = o.CredentialEnforcement.Mode.DomainCredentials.Misc
 					}
 				}
-			}
-			if o.CredentialEnforcement.Alert != nil {
-				nestedCredentialEnforcement.Alert = util.MemToStr(o.CredentialEnforcement.Alert)
-			}
-			if o.CredentialEnforcement.Allow != nil {
-				nestedCredentialEnforcement.Allow = util.MemToStr(o.CredentialEnforcement.Allow)
-			}
-			if o.CredentialEnforcement.Block != nil {
-				nestedCredentialEnforcement.Block = util.MemToStr(o.CredentialEnforcement.Block)
+				if o.CredentialEnforcement.Mode.GroupMapping != nil {
+					nestedCredentialEnforcement.Mode.GroupMapping = o.CredentialEnforcement.Mode.GroupMapping
+				}
+				if o.CredentialEnforcement.Mode.IpUser != nil {
+					nestedCredentialEnforcement.Mode.IpUser = &CredentialEnforcementModeIpUser{}
+					if o.CredentialEnforcement.Mode.IpUser.Misc != nil {
+						entry.Misc["CredentialEnforcementModeIpUser"] = o.CredentialEnforcement.Mode.IpUser.Misc
+					}
+				}
 			}
 		}
 		entry.CredentialEnforcement = nestedCredentialEnforcement
@@ -454,6 +451,9 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				if oHttpHeaderInsertion.Misc != nil {
 					entry.Misc["HttpHeaderInsertion"] = oHttpHeaderInsertion.Misc
 				}
+				if oHttpHeaderInsertion.Name != "" {
+					nestedHttpHeaderInsertion.Name = oHttpHeaderInsertion.Name
+				}
 				if oHttpHeaderInsertion.DisableOverride != nil {
 					nestedHttpHeaderInsertion.DisableOverride = oHttpHeaderInsertion.DisableOverride
 				}
@@ -464,15 +464,15 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 						if oHttpHeaderInsertionType.Misc != nil {
 							entry.Misc["HttpHeaderInsertionType"] = oHttpHeaderInsertionType.Misc
 						}
+						if oHttpHeaderInsertionType.Name != "" {
+							nestedHttpHeaderInsertionType.Name = oHttpHeaderInsertionType.Name
+						}
 						if oHttpHeaderInsertionType.Headers != nil {
 							nestedHttpHeaderInsertionType.Headers = []HttpHeaderInsertionTypeHeaders{}
 							for _, oHttpHeaderInsertionTypeHeaders := range oHttpHeaderInsertionType.Headers {
 								nestedHttpHeaderInsertionTypeHeaders := HttpHeaderInsertionTypeHeaders{}
 								if oHttpHeaderInsertionTypeHeaders.Misc != nil {
 									entry.Misc["HttpHeaderInsertionTypeHeaders"] = oHttpHeaderInsertionTypeHeaders.Misc
-								}
-								if oHttpHeaderInsertionTypeHeaders.Log != nil {
-									nestedHttpHeaderInsertionTypeHeaders.Log = util.AsBool(oHttpHeaderInsertionTypeHeaders.Log, nil)
 								}
 								if oHttpHeaderInsertionTypeHeaders.Name != "" {
 									nestedHttpHeaderInsertionTypeHeaders.Name = oHttpHeaderInsertionTypeHeaders.Name
@@ -483,20 +483,17 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 								if oHttpHeaderInsertionTypeHeaders.Value != nil {
 									nestedHttpHeaderInsertionTypeHeaders.Value = oHttpHeaderInsertionTypeHeaders.Value
 								}
+								if oHttpHeaderInsertionTypeHeaders.Log != nil {
+									nestedHttpHeaderInsertionTypeHeaders.Log = util.AsBool(oHttpHeaderInsertionTypeHeaders.Log, nil)
+								}
 								nestedHttpHeaderInsertionType.Headers = append(nestedHttpHeaderInsertionType.Headers, nestedHttpHeaderInsertionTypeHeaders)
 							}
 						}
 						if oHttpHeaderInsertionType.Domains != nil {
 							nestedHttpHeaderInsertionType.Domains = util.MemToStr(oHttpHeaderInsertionType.Domains)
 						}
-						if oHttpHeaderInsertionType.Name != "" {
-							nestedHttpHeaderInsertionType.Name = oHttpHeaderInsertionType.Name
-						}
 						nestedHttpHeaderInsertion.Type = append(nestedHttpHeaderInsertion.Type, nestedHttpHeaderInsertionType)
 					}
-				}
-				if oHttpHeaderInsertion.Name != "" {
-					nestedHttpHeaderInsertion.Name = oHttpHeaderInsertion.Name
 				}
 				nestedHttpHeaderInsertionCol = append(nestedHttpHeaderInsertionCol, nestedHttpHeaderInsertion)
 			}
@@ -586,80 +583,6 @@ func SpecMatches(a, b *Entry) bool {
 	return true
 }
 
-func matchHttpHeaderInsertionTypeHeaders(a []HttpHeaderInsertionTypeHeaders, b []HttpHeaderInsertionTypeHeaders) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	for _, a := range a {
-		for _, b := range b {
-			if !util.BoolsMatch(a.Log, b.Log) {
-				return false
-			}
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-			if !util.StringsMatch(a.Header, b.Header) {
-				return false
-			}
-			if !util.StringsMatch(a.Value, b.Value) {
-				return false
-			}
-		}
-	}
-	return true
-}
-func matchHttpHeaderInsertionType(a []HttpHeaderInsertionType, b []HttpHeaderInsertionType) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	for _, a := range a {
-		for _, b := range b {
-			if !matchHttpHeaderInsertionTypeHeaders(a.Headers, b.Headers) {
-				return false
-			}
-			if !util.OrderedListsMatch(a.Domains, b.Domains) {
-				return false
-			}
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-		}
-	}
-	return true
-}
-func matchHttpHeaderInsertion(a []HttpHeaderInsertion, b []HttpHeaderInsertion) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	for _, a := range a {
-		for _, b := range b {
-			if !util.StringsMatch(a.DisableOverride, b.DisableOverride) {
-				return false
-			}
-			if !matchHttpHeaderInsertionType(a.Type, b.Type) {
-				return false
-			}
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-		}
-	}
-	return true
-}
-func matchCredentialEnforcementModeIpUser(a *CredentialEnforcementModeIpUser, b *CredentialEnforcementModeIpUser) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	return true
-}
 func matchCredentialEnforcementModeDisabled(a *CredentialEnforcementModeDisabled, b *CredentialEnforcementModeDisabled) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
@@ -669,6 +592,14 @@ func matchCredentialEnforcementModeDisabled(a *CredentialEnforcementModeDisabled
 	return true
 }
 func matchCredentialEnforcementModeDomainCredentials(a *CredentialEnforcementModeDomainCredentials, b *CredentialEnforcementModeDomainCredentials) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	return true
+}
+func matchCredentialEnforcementModeIpUser(a *CredentialEnforcementModeIpUser, b *CredentialEnforcementModeIpUser) bool {
 	if a == nil && b != nil || a != nil && b == nil {
 		return false
 	} else if a == nil && b == nil {
@@ -719,6 +650,72 @@ func matchCredentialEnforcement(a *CredentialEnforcement, b *CredentialEnforceme
 	}
 	if !matchCredentialEnforcementMode(a.Mode, b.Mode) {
 		return false
+	}
+	return true
+}
+func matchHttpHeaderInsertionTypeHeaders(a []HttpHeaderInsertionTypeHeaders, b []HttpHeaderInsertionTypeHeaders) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	for _, a := range a {
+		for _, b := range b {
+			if !util.StringsEqual(a.Name, b.Name) {
+				return false
+			}
+			if !util.StringsMatch(a.Header, b.Header) {
+				return false
+			}
+			if !util.StringsMatch(a.Value, b.Value) {
+				return false
+			}
+			if !util.BoolsMatch(a.Log, b.Log) {
+				return false
+			}
+		}
+	}
+	return true
+}
+func matchHttpHeaderInsertionType(a []HttpHeaderInsertionType, b []HttpHeaderInsertionType) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	for _, a := range a {
+		for _, b := range b {
+			if !util.StringsEqual(a.Name, b.Name) {
+				return false
+			}
+			if !matchHttpHeaderInsertionTypeHeaders(a.Headers, b.Headers) {
+				return false
+			}
+			if !util.OrderedListsMatch(a.Domains, b.Domains) {
+				return false
+			}
+		}
+	}
+	return true
+}
+func matchHttpHeaderInsertion(a []HttpHeaderInsertion, b []HttpHeaderInsertion) bool {
+	if a == nil && b != nil || a != nil && b == nil {
+		return false
+	} else if a == nil && b == nil {
+		return true
+	}
+	for _, a := range a {
+		for _, b := range b {
+			if !util.StringsEqual(a.Name, b.Name) {
+				return false
+			}
+			if !util.StringsMatch(a.DisableOverride, b.DisableOverride) {
+				return false
+			}
+			if !matchHttpHeaderInsertionType(a.Type, b.Type) {
+				return false
+			}
+		}
 	}
 	return true
 }

@@ -28,11 +28,11 @@ type Entry struct {
 }
 
 type Rules struct {
-	Analysis    *string
-	Application []string
-	Direction   *string
-	FileType    []string
 	Name        string
+	Application []string
+	FileType    []string
+	Direction   *string
+	Analysis    *string
 }
 
 type entryXmlContainer struct {
@@ -53,7 +53,6 @@ type RulesXml struct {
 	Application *util.MemberType `xml:"application,omitempty"`
 	Direction   *string          `xml:"direction,omitempty"`
 	FileType    *util.MemberType `xml:"file-type,omitempty"`
-	XMLName     xml.Name         `xml:"entry"`
 	Name        string           `xml:"name,attr"`
 
 	Misc []generic.Xml `xml:",any"`
@@ -96,12 +95,6 @@ func specifyEntry(o *Entry) (any, error) {
 			if _, ok := o.Misc["Rules"]; ok {
 				nestedRules.Misc = o.Misc["Rules"]
 			}
-			if oRules.Direction != nil {
-				nestedRules.Direction = oRules.Direction
-			}
-			if oRules.Analysis != nil {
-				nestedRules.Analysis = oRules.Analysis
-			}
 			if oRules.Name != "" {
 				nestedRules.Name = oRules.Name
 			}
@@ -110,6 +103,12 @@ func specifyEntry(o *Entry) (any, error) {
 			}
 			if oRules.FileType != nil {
 				nestedRules.FileType = util.StrToMem(oRules.FileType)
+			}
+			if oRules.Direction != nil {
+				nestedRules.Direction = oRules.Direction
+			}
+			if oRules.Analysis != nil {
+				nestedRules.Analysis = oRules.Analysis
 			}
 			nestedRulesCol = append(nestedRulesCol, nestedRules)
 		}
@@ -138,6 +137,12 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				if oRules.Misc != nil {
 					entry.Misc["Rules"] = oRules.Misc
 				}
+				if oRules.Name != "" {
+					nestedRules.Name = oRules.Name
+				}
+				if oRules.Application != nil {
+					nestedRules.Application = util.MemToStr(oRules.Application)
+				}
 				if oRules.FileType != nil {
 					nestedRules.FileType = util.MemToStr(oRules.FileType)
 				}
@@ -146,12 +151,6 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 				}
 				if oRules.Analysis != nil {
 					nestedRules.Analysis = oRules.Analysis
-				}
-				if oRules.Name != "" {
-					nestedRules.Name = oRules.Name
-				}
-				if oRules.Application != nil {
-					nestedRules.Application = util.MemToStr(oRules.Application)
 				}
 				nestedRulesCol = append(nestedRulesCol, nestedRules)
 			}

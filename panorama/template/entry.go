@@ -35,8 +35,8 @@ type ConfigDevices struct {
 	Vsys []ConfigDevicesVsys
 }
 type ConfigDevicesVsys struct {
-	Import *ConfigDevicesVsysImport
 	Name   string
+	Import *ConfigDevicesVsysImport
 }
 type ConfigDevicesVsysImport struct {
 	Network *ConfigDevicesVsysImportNetwork
@@ -64,16 +64,14 @@ type ConfigXml struct {
 	Misc []generic.Xml `xml:",any"`
 }
 type ConfigDevicesXml struct {
-	XMLName xml.Name               `xml:"entry"`
-	Name    string                 `xml:"name,attr"`
-	Vsys    []ConfigDevicesVsysXml `xml:"vsys>entry,omitempty"`
+	Name string                 `xml:"name,attr"`
+	Vsys []ConfigDevicesVsysXml `xml:"vsys>entry,omitempty"`
 
 	Misc []generic.Xml `xml:",any"`
 }
 type ConfigDevicesVsysXml struct {
-	Import  *ConfigDevicesVsysImportXml `xml:"import,omitempty"`
-	XMLName xml.Name                    `xml:"entry"`
-	Name    string                      `xml:"name,attr"`
+	Import *ConfigDevicesVsysImportXml `xml:"import,omitempty"`
+	Name   string                      `xml:"name,attr"`
 
 	Misc []generic.Xml `xml:",any"`
 }
@@ -92,14 +90,14 @@ func (e *Entry) Field(v string) (any, error) {
 	if v == "name" || v == "Name" {
 		return e.Name, nil
 	}
-	if v == "config" || v == "Config" {
-		return e.Config, nil
+	if v == "description" || v == "Description" {
+		return e.Description, nil
 	}
 	if v == "default_vsys" || v == "DefaultVsys" {
 		return e.DefaultVsys, nil
 	}
-	if v == "description" || v == "Description" {
-		return e.Description, nil
+	if v == "config" || v == "Config" {
+		return e.Config, nil
 	}
 
 	return nil, fmt.Errorf("unknown field")
@@ -125,12 +123,18 @@ func specifyEntry(o *Entry) (any, error) {
 				if _, ok := o.Misc["ConfigDevices"]; ok {
 					nestedConfigDevices.Misc = o.Misc["ConfigDevices"]
 				}
+				if oConfigDevices.Name != "" {
+					nestedConfigDevices.Name = oConfigDevices.Name
+				}
 				if oConfigDevices.Vsys != nil {
 					nestedConfigDevices.Vsys = []ConfigDevicesVsysXml{}
 					for _, oConfigDevicesVsys := range oConfigDevices.Vsys {
 						nestedConfigDevicesVsys := ConfigDevicesVsysXml{}
 						if _, ok := o.Misc["ConfigDevicesVsys"]; ok {
 							nestedConfigDevicesVsys.Misc = o.Misc["ConfigDevicesVsys"]
+						}
+						if oConfigDevicesVsys.Name != "" {
+							nestedConfigDevicesVsys.Name = oConfigDevicesVsys.Name
 						}
 						if oConfigDevicesVsys.Import != nil {
 							nestedConfigDevicesVsys.Import = &ConfigDevicesVsysImportXml{}
@@ -147,14 +151,8 @@ func specifyEntry(o *Entry) (any, error) {
 								}
 							}
 						}
-						if oConfigDevicesVsys.Name != "" {
-							nestedConfigDevicesVsys.Name = oConfigDevicesVsys.Name
-						}
 						nestedConfigDevices.Vsys = append(nestedConfigDevices.Vsys, nestedConfigDevicesVsys)
 					}
-				}
-				if oConfigDevices.Name != "" {
-					nestedConfigDevices.Name = oConfigDevices.Name
 				}
 				nestedConfig.Devices = append(nestedConfig.Devices, nestedConfigDevices)
 			}
@@ -190,12 +188,18 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 					if oConfigDevices.Misc != nil {
 						entry.Misc["ConfigDevices"] = oConfigDevices.Misc
 					}
+					if oConfigDevices.Name != "" {
+						nestedConfigDevices.Name = oConfigDevices.Name
+					}
 					if oConfigDevices.Vsys != nil {
 						nestedConfigDevices.Vsys = []ConfigDevicesVsys{}
 						for _, oConfigDevicesVsys := range oConfigDevices.Vsys {
 							nestedConfigDevicesVsys := ConfigDevicesVsys{}
 							if oConfigDevicesVsys.Misc != nil {
 								entry.Misc["ConfigDevicesVsys"] = oConfigDevicesVsys.Misc
+							}
+							if oConfigDevicesVsys.Name != "" {
+								nestedConfigDevicesVsys.Name = oConfigDevicesVsys.Name
 							}
 							if oConfigDevicesVsys.Import != nil {
 								nestedConfigDevicesVsys.Import = &ConfigDevicesVsysImport{}
@@ -212,14 +216,8 @@ func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
 									}
 								}
 							}
-							if oConfigDevicesVsys.Name != "" {
-								nestedConfigDevicesVsys.Name = oConfigDevicesVsys.Name
-							}
 							nestedConfigDevices.Vsys = append(nestedConfigDevices.Vsys, nestedConfigDevicesVsys)
 						}
-					}
-					if oConfigDevices.Name != "" {
-						nestedConfigDevices.Name = oConfigDevices.Name
 					}
 					nestedConfig.Devices = append(nestedConfig.Devices, nestedConfigDevices)
 				}
@@ -246,13 +244,13 @@ func SpecMatches(a, b *Entry) bool {
 	}
 
 	// Don't compare Name.
-	if !matchConfig(a.Config, b.Config) {
+	if !util.StringsMatch(a.Description, b.Description) {
 		return false
 	}
 	if !util.StringsMatch(a.DefaultVsys, b.DefaultVsys) {
 		return false
 	}
-	if !util.StringsMatch(a.Description, b.Description) {
+	if !matchConfig(a.Config, b.Config) {
 		return false
 	}
 
@@ -289,10 +287,10 @@ func matchConfigDevicesVsys(a []ConfigDevicesVsys, b []ConfigDevicesVsys) bool {
 	}
 	for _, a := range a {
 		for _, b := range b {
-			if !matchConfigDevicesVsysImport(a.Import, b.Import) {
+			if !util.StringsEqual(a.Name, b.Name) {
 				return false
 			}
-			if !util.StringsEqual(a.Name, b.Name) {
+			if !matchConfigDevicesVsysImport(a.Import, b.Import) {
 				return false
 			}
 		}
@@ -307,10 +305,10 @@ func matchConfigDevices(a []ConfigDevices, b []ConfigDevices) bool {
 	}
 	for _, a := range a {
 		for _, b := range b {
-			if !matchConfigDevicesVsys(a.Vsys, b.Vsys) {
+			if !util.StringsEqual(a.Name, b.Name) {
 				return false
 			}
-			if !util.StringsEqual(a.Name, b.Name) {
+			if !matchConfigDevicesVsys(a.Vsys, b.Vsys) {
 				return false
 			}
 		}

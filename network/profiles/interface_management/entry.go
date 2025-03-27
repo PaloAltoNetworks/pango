@@ -63,8 +63,7 @@ type entryXml struct {
 	Misc []generic.Xml `xml:",any"`
 }
 type PermittedIpXml struct {
-	XMLName xml.Name `xml:"entry"`
-	Name    string   `xml:"name,attr"`
+	Name string `xml:"name,attr"`
 
 	Misc []generic.Xml `xml:",any"`
 }
