@@ -334,7 +334,7 @@ func (s *Service) list(ctx context.Context, loc Location, action, filter, quote 
 // MoveGroup arranges the given rules in the order specified.
 // Any rule with a UUID specified is ignored.
 // Only the rule names are considered for the purposes of the rule placement.
-func (s *Service) MoveGroup(ctx context.Context, loc Location, position movement.Position, entries []*Entry) error {
+func (s *Service) MoveGroup(ctx context.Context, loc Location, position movement.Position, entries []*Entry, batchSize int) error {
 	if len(entries) == 0 {
 		return nil
 	}
@@ -351,7 +351,7 @@ func (s *Service) MoveGroup(ctx context.Context, loc Location, position movement
 		return err
 	}
 
-	updates := xmlapi.NewMultiConfig(len(movements))
+	updates := xmlapi.NewChunkedMultiConfig(len(movements), batchSize)
 
 	for _, elt := range movements {
 		path, err := loc.XpathWithEntryName(s.client.Versioning(), elt.Movable.EntryName())

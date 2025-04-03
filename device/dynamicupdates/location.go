@@ -23,13 +23,11 @@ type Location struct {
 type SystemLocation struct {
 	NgfwDevice string `json:"ngfw_device"`
 }
-
 type TemplateLocation struct {
 	NgfwDevice     string `json:"ngfw_device"`
 	PanoramaDevice string `json:"panorama_device"`
 	Template       string `json:"template"`
 }
-
 type TemplateStackLocation struct {
 	NgfwDevice     string `json:"ngfw_device"`
 	PanoramaDevice string `json:"panorama_device"`

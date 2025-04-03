@@ -15,38 +15,43 @@ type ImportLocation interface {
 }
 
 type Location struct {
-	Panorama          bool                       `json:"panorama"`
+	Panorama          *PanoramaLocation          `json:"panorama"`
 	Template          *TemplateLocation          `json:"template,omitempty"`
 	TemplateVsys      *TemplateVsysLocation      `json:"template_vsys,omitempty"`
 	TemplateStack     *TemplateStackLocation     `json:"template_stack,omitempty"`
 	TemplateStackVsys *TemplateStackVsysLocation `json:"template_stack_vsys,omitempty"`
-	Shared            bool                       `json:"shared"`
+	Shared            *SharedLocation            `json:"shared"`
 }
 
+type PanoramaLocation struct {
+}
 type TemplateLocation struct {
 	PanoramaDevice string `json:"panorama_device"`
 	Template       string `json:"template"`
 }
-
 type TemplateVsysLocation struct {
 	NgfwDevice     string `json:"ngfw_device"`
 	PanoramaDevice string `json:"panorama_device"`
 	Template       string `json:"template"`
 	Vsys           string `json:"vsys"`
 }
-
 type TemplateStackLocation struct {
 	PanoramaDevice string `json:"panorama_device"`
 	TemplateStack  string `json:"template_stack"`
 }
-
 type TemplateStackVsysLocation struct {
 	NgfwDevice     string `json:"ngfw_device"`
 	PanoramaDevice string `json:"panorama_device"`
 	TemplateStack  string `json:"template_stack"`
 	Vsys           string `json:"vsys"`
 }
+type SharedLocation struct {
+}
 
+func NewPanoramaLocation() *Location {
+	return &Location{Panorama: &PanoramaLocation{},
+	}
+}
 func NewTemplateLocation() *Location {
 	return &Location{Template: &TemplateLocation{
 		PanoramaDevice: "localhost.localdomain",
@@ -80,8 +85,7 @@ func NewTemplateStackVsysLocation() *Location {
 	}
 }
 func NewSharedLocation() *Location {
-	return &Location{
-		Shared: true,
+	return &Location{Shared: &SharedLocation{},
 	}
 }
 
@@ -89,7 +93,7 @@ func (o Location) IsValid() error {
 	count := 0
 
 	switch {
-	case o.Panorama:
+	case o.Panorama != nil:
 		count++
 	case o.Template != nil:
 		if o.Template.PanoramaDevice == "" {
@@ -135,7 +139,7 @@ func (o Location) IsValid() error {
 			return fmt.Errorf("Vsys is unspecified")
 		}
 		count++
-	case o.Shared:
+	case o.Shared != nil:
 		count++
 	}
 
@@ -155,7 +159,7 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 	var ans []string
 
 	switch {
-	case o.Panorama:
+	case o.Panorama != nil:
 		ans = []string{
 			"config",
 			"panorama",
@@ -242,7 +246,7 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 			"vsys",
 			util.AsEntryXpath([]string{o.TemplateStackVsys.Vsys}),
 		}
-	case o.Shared:
+	case o.Shared != nil:
 		ans = []string{
 			"config",
 			"shared",

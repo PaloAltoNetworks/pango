@@ -23,12 +23,10 @@ type Location struct {
 type SharedLocation struct {
 	Rulebase string `json:"rulebase"`
 }
-
 type VsysLocation struct {
 	NgfwDevice string `json:"ngfw_device"`
 	Vsys       string `json:"vsys"`
 }
-
 type DeviceGroupLocation struct {
 	DeviceGroup    string `json:"device_group"`
 	PanoramaDevice string `json:"panorama_device"`

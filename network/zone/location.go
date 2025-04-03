@@ -24,14 +24,12 @@ type VsysLocation struct {
 	NgfwDevice string `json:"ngfw_device"`
 	Vsys       string `json:"vsys"`
 }
-
 type TemplateLocation struct {
 	NgfwDevice     string `json:"ngfw_device"`
 	PanoramaDevice string `json:"panorama_device"`
 	Template       string `json:"template"`
 	Vsys           string `json:"vsys"`
 }
-
 type TemplateStackLocation struct {
 	NgfwDevice     string `json:"ngfw_device"`
 	PanoramaDevice string `json:"panorama_device"`

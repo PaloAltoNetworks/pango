@@ -24,7 +24,6 @@ type TemplateLocation struct {
 	PanoramaDevice string `json:"panorama_device"`
 	Template       string `json:"template"`
 }
-
 type TemplateStackLocation struct {
 	NgfwDevice     string `json:"ngfw_device"`
 	PanoramaDevice string `json:"panorama_device"`

@@ -434,31 +434,30 @@ func (o *Layer3TemplateImportLocation) XpathForLocation(vn version.Number, loc u
 }
 
 type Location struct {
-	Shared        bool                   `json:"shared"`
+	Shared        *SharedLocation        `json:"shared"`
 	Template      *TemplateLocation      `json:"template,omitempty"`
 	TemplateStack *TemplateStackLocation `json:"template_stack,omitempty"`
 	Ngfw          *NgfwLocation          `json:"ngfw,omitempty"`
 }
 
+type SharedLocation struct {
+}
 type TemplateLocation struct {
 	NgfwDevice     string `json:"ngfw_device"`
 	PanoramaDevice string `json:"panorama_device"`
 	Template       string `json:"template"`
 }
-
 type TemplateStackLocation struct {
 	NgfwDevice     string `json:"ngfw_device"`
 	PanoramaDevice string `json:"panorama_device"`
 	TemplateStack  string `json:"template_stack"`
 }
-
 type NgfwLocation struct {
 	NgfwDevice string `json:"ngfw_device"`
 }
 
 func NewSharedLocation() *Location {
-	return &Location{
-		Shared: true,
+	return &Location{Shared: &SharedLocation{},
 	}
 }
 func NewTemplateLocation() *Location {
@@ -488,7 +487,7 @@ func (o Location) IsValid() error {
 	count := 0
 
 	switch {
-	case o.Shared:
+	case o.Shared != nil:
 		count++
 	case o.Template != nil:
 		if o.Template.NgfwDevice == "" {
@@ -535,7 +534,7 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 	var ans []string
 
 	switch {
-	case o.Shared:
+	case o.Shared != nil:
 		ans = []string{
 			"config",
 			"shared",

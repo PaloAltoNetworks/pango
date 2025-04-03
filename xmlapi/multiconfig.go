@@ -3,10 +3,18 @@ package xmlapi
 import (
 	"encoding/xml"
 	"fmt"
+	"net/http"
 	"strings"
 
 	"github.com/PaloAltoNetworks/pango/errors"
 )
+
+func NewChunkedMultiConfig(capacity int, batchSize int) *MultiConfig {
+	return &MultiConfig{
+		BatchSize:  batchSize,
+		Operations: make([]MultiConfigOperation, 0, capacity),
+	}
+}
 
 // Returns a new struct for performing multi-config operations with.
 func NewMultiConfig(capacity int) *MultiConfig {
@@ -18,6 +26,7 @@ func NewMultiConfig(capacity int) *MultiConfig {
 // MultiConfig contains individual operations of a larger multi-config API call.
 type MultiConfig struct {
 	XMLName    xml.Name `xml:"multi-configure-request"`
+	BatchSize  int      `xml:"-"`
 	Operations []MultiConfigOperation
 }
 
@@ -144,4 +153,10 @@ func (m *MultiConfigResponseElement) Message() string {
 	}
 
 	return m.Msg.Message
+}
+
+type ChunkedMultiConfigResponse struct {
+	Data                []byte
+	HttpResponse        *http.Response
+	MultiConfigResponse *MultiConfigResponse
 }

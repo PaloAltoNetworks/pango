@@ -15,24 +15,24 @@ type ImportLocation interface {
 }
 
 type Location struct {
-	Shared      bool                 `json:"shared"`
+	Shared      *SharedLocation      `json:"shared"`
 	Vsys        *VsysLocation        `json:"vsys,omitempty"`
 	DeviceGroup *DeviceGroupLocation `json:"device_group,omitempty"`
 }
 
+type SharedLocation struct {
+}
 type VsysLocation struct {
 	NgfwDevice string `json:"ngfw_device"`
 	Vsys       string `json:"vsys"`
 }
-
 type DeviceGroupLocation struct {
 	DeviceGroup    string `json:"device_group"`
 	PanoramaDevice string `json:"panorama_device"`
 }
 
 func NewSharedLocation() *Location {
-	return &Location{
-		Shared: true,
+	return &Location{Shared: &SharedLocation{},
 	}
 }
 func NewVsysLocation() *Location {
@@ -54,7 +54,7 @@ func (o Location) IsValid() error {
 	count := 0
 
 	switch {
-	case o.Shared:
+	case o.Shared != nil:
 		count++
 	case o.Vsys != nil:
 		if o.Vsys.NgfwDevice == "" {
@@ -90,7 +90,7 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 	var ans []string
 
 	switch {
-	case o.Shared:
+	case o.Shared != nil:
 		ans = []string{
 			"config",
 			"shared",

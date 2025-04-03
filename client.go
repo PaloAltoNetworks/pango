@@ -592,6 +592,47 @@ func (c *Client) Clock(ctx context.Context) (time.Time, error) {
 	return time.Parse(time.UnixDate+"\n", ans.Result)
 }
 
+// ChunkedMultiConfig wraps
+func (c *Client) ChunkedMultiConfig(ctx context.Context, mc *xmlapi.MultiConfig, strict bool, extras url.Values) ([]xmlapi.ChunkedMultiConfigResponse, error) {
+	if mc.BatchSize == 0 {
+		return nil, fmt.Errorf("cannot use ChunkedMultiConfig() with batchSize of 0")
+	}
+
+	if len(mc.Operations) == 0 {
+		return nil, nil
+	}
+
+	var chunked [][]xmlapi.MultiConfigOperation
+	for i := 0; i < len(mc.Operations); i += mc.BatchSize {
+		end := i + mc.BatchSize
+		if end > len(mc.Operations) {
+			end = len(mc.Operations)
+		}
+
+		chunked = append(chunked, mc.Operations[i:end])
+	}
+
+	var response []xmlapi.ChunkedMultiConfigResponse
+	for _, chunk := range chunked {
+		updates := &xmlapi.MultiConfig{
+			Operations: chunk,
+		}
+
+		data, resp, mcResp, err := c.MultiConfig(ctx, updates, strict, extras)
+		if err != nil {
+			return response, err
+		}
+
+		response = append(response, xmlapi.ChunkedMultiConfigResponse{
+			Data:                data,
+			HttpResponse:        resp,
+			MultiConfigResponse: mcResp,
+		})
+	}
+
+	return response, nil
+}
+
 // MultiConfig does a "multi-config" type command.
 //
 // Param strict should be true if you want strict transactional support.
