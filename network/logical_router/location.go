@@ -1,7 +1,6 @@
-package tunnel
+package logical_router
 
 import (
-	"encoding/xml"
 	"fmt"
 
 	"github.com/PaloAltoNetworks/pango/errors"
@@ -14,138 +13,16 @@ type ImportLocation interface {
 	MarshalPangoXML([]string) (string, error)
 	UnmarshalPangoXML([]byte) ([]string, error)
 }
-type Layer3TemplateType int
-
-const (
-	layer3TemplateVsys Layer3TemplateType = iota
-)
-
-type Layer3TemplateImportLocation struct {
-	typ  Layer3TemplateType
-	vsys *Layer3TemplateVsysImportLocation
-}
-
-type Layer3TemplateVsysImportLocation struct {
-	xpath []string
-	vsys  string
-}
-
-type Layer3TemplateVsysImportLocationSpec struct {
-	Vsys string
-}
-
-func NewLayer3TemplateVsysImportLocation(spec Layer3TemplateVsysImportLocationSpec) *Layer3TemplateImportLocation {
-	location := &Layer3TemplateVsysImportLocation{
-		vsys: spec.Vsys,
-	}
-
-	return &Layer3TemplateImportLocation{
-		typ:  layer3TemplateVsys,
-		vsys: location,
-	}
-}
-
-func (o *Layer3TemplateVsysImportLocation) XpathForLocation(vn version.Number, loc util.ILocation) ([]string, error) {
-	ans, err := loc.XpathPrefix(vn)
-	if err != nil {
-		return nil, err
-	}
-
-	importAns := []string{
-		"vsys",
-		util.AsEntryXpath([]string{o.vsys}),
-		"import",
-		"network",
-		"interface",
-	}
-
-	return append(ans, importAns...), nil
-}
-
-func (o *Layer3TemplateVsysImportLocation) MarshalPangoXML(interfaces []string) (string, error) {
-	type member struct {
-		Name string `xml:",chardata"`
-	}
-
-	type request struct {
-		XMLName xml.Name `xml:"interface"`
-		Members []member `xml:"member"`
-	}
-
-	var members []member
-	for _, elt := range interfaces {
-		members = append(members, member{Name: elt})
-	}
-
-	expected := request{
-		Members: members,
-	}
-	bytes, err := xml.Marshal(expected)
-	if err != nil {
-		return "", err
-	}
-
-	return string(bytes), nil
-}
-
-func (o *Layer3TemplateVsysImportLocation) UnmarshalPangoXML(bytes []byte) ([]string, error) {
-	type member struct {
-		Name string `xml:",chardata"`
-	}
-
-	type response struct {
-		Members []member `xml:"result>interface>member"`
-	}
-
-	var existing response
-	err := xml.Unmarshal(bytes, &existing)
-	if err != nil {
-		return nil, err
-	}
-
-	var interfaces []string
-	for _, elt := range existing.Members {
-		interfaces = append(interfaces, elt.Name)
-	}
-
-	return interfaces, nil
-}
-
-func (o *Layer3TemplateImportLocation) MarshalPangoXML(interfaces []string) (string, error) {
-	switch o.typ {
-	case layer3TemplateVsys:
-		return o.vsys.MarshalPangoXML(interfaces)
-	default:
-		return "", fmt.Errorf("invalid import location")
-	}
-}
-
-func (o *Layer3TemplateImportLocation) UnmarshalPangoXML(bytes []byte) ([]string, error) {
-	switch o.typ {
-	case layer3TemplateVsys:
-		return o.vsys.UnmarshalPangoXML(bytes)
-	default:
-		return nil, fmt.Errorf("invalid import location")
-	}
-}
-
-func (o *Layer3TemplateImportLocation) XpathForLocation(vn version.Number, loc util.ILocation) ([]string, error) {
-	switch o.typ {
-	case layer3TemplateVsys:
-		return o.vsys.XpathForLocation(vn, loc)
-	default:
-		return nil, fmt.Errorf("invalid import location")
-	}
-}
 
 type Location struct {
-	Shared        *SharedLocation        `json:"shared"`
+	Vsys          *VsysLocation          `json:"vsys,omitempty"`
 	Template      *TemplateLocation      `json:"template,omitempty"`
 	TemplateStack *TemplateStackLocation `json:"template_stack,omitempty"`
-	Ngfw          *NgfwLocation          `json:"ngfw,omitempty"`
 }
 
-type SharedLocation struct {
+type VsysLocation struct {
+	NgfwDevice string `json:"ngfw_device"`
+	Vsys       string `json:"vsys"`
 }
 type TemplateLocation struct {
 	NgfwDevice     string `json:"ngfw_device"`
@@ -157,12 +34,12 @@ type TemplateStackLocation struct {
 	PanoramaDevice string `json:"panorama_device"`
 	TemplateStack  string `json:"template_stack"`
 }
-type NgfwLocation struct {
-	NgfwDevice string `json:"ngfw_device"`
-}
 
-func NewSharedLocation() *Location {
-	return &Location{Shared: &SharedLocation{},
+func NewVsysLocation() *Location {
+	return &Location{Vsys: &VsysLocation{
+		NgfwDevice: "localhost.localdomain",
+		Vsys:       "vsys1",
+	},
 	}
 }
 func NewTemplateLocation() *Location {
@@ -181,18 +58,18 @@ func NewTemplateStackLocation() *Location {
 	},
 	}
 }
-func NewNgfwLocation() *Location {
-	return &Location{Ngfw: &NgfwLocation{
-		NgfwDevice: "localhost.localdomain",
-	},
-	}
-}
 
 func (o Location) IsValid() error {
 	count := 0
 
 	switch {
-	case o.Shared != nil:
+	case o.Vsys != nil:
+		if o.Vsys.NgfwDevice == "" {
+			return fmt.Errorf("NgfwDevice is unspecified")
+		}
+		if o.Vsys.Vsys == "" {
+			return fmt.Errorf("Vsys is unspecified")
+		}
 		count++
 	case o.Template != nil:
 		if o.Template.NgfwDevice == "" {
@@ -216,11 +93,6 @@ func (o Location) IsValid() error {
 			return fmt.Errorf("TemplateStack is unspecified")
 		}
 		count++
-	case o.Ngfw != nil:
-		if o.Ngfw.NgfwDevice == "" {
-			return fmt.Errorf("NgfwDevice is unspecified")
-		}
-		count++
 	}
 
 	if count == 0 {
@@ -239,10 +111,19 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 	var ans []string
 
 	switch {
-	case o.Shared != nil:
+	case o.Vsys != nil:
+		if o.Vsys.NgfwDevice == "" {
+			return nil, fmt.Errorf("NgfwDevice is unspecified")
+		}
+		if o.Vsys.Vsys == "" {
+			return nil, fmt.Errorf("Vsys is unspecified")
+		}
 		ans = []string{
 			"config",
-			"shared",
+			"devices",
+			util.AsEntryXpath([]string{o.Vsys.NgfwDevice}),
+			"vsys",
+			util.AsEntryXpath([]string{o.Vsys.Vsys}),
 		}
 	case o.Template != nil:
 		if o.Template.NgfwDevice == "" {
@@ -283,15 +164,6 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 			"config",
 			"devices",
 			util.AsEntryXpath([]string{o.TemplateStack.NgfwDevice}),
-		}
-	case o.Ngfw != nil:
-		if o.Ngfw.NgfwDevice == "" {
-			return nil, fmt.Errorf("NgfwDevice is unspecified")
-		}
-		ans = []string{
-			"config",
-			"devices",
-			util.AsEntryXpath([]string{o.Ngfw.NgfwDevice}),
 		}
 	default:
 		return nil, errors.NoLocationSpecifiedError

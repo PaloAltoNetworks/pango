@@ -1,35 +1,14 @@
-package tunnel
+package logical_router
 
 import (
 	"context"
 	"fmt"
-	"sync"
 
 	"github.com/PaloAltoNetworks/pango/errors"
 	"github.com/PaloAltoNetworks/pango/filtering"
 	"github.com/PaloAltoNetworks/pango/util"
 	"github.com/PaloAltoNetworks/pango/xmlapi"
 )
-
-var (
-	importsMutexMap     = make(map[string]*sync.Mutex)
-	importsMutexMapLock = sync.Mutex{}
-)
-
-func (s *Service) getImportMutex(xpath string) *sync.Mutex {
-	importsMutexMapLock.Lock()
-	defer importsMutexMapLock.Unlock()
-
-	var importMutex *sync.Mutex
-	var ok bool
-	importMutex, ok = importsMutexMap[xpath]
-	if !ok {
-		importMutex = &sync.Mutex{}
-		importsMutexMap[xpath] = importMutex
-	}
-
-	return importMutex
-}
 
 type Service struct {
 	client util.PangoClient
@@ -42,7 +21,7 @@ func NewService(client util.PangoClient) *Service {
 }
 
 // Create adds new item, then returns the result.
-func (s *Service) Create(ctx context.Context, loc Location, importLocations []ImportLocation, entry *Entry) (*Entry, error) {
+func (s *Service) Create(ctx context.Context, loc Location, entry *Entry) (*Entry, error) {
 	if entry.Name == "" {
 		return nil, errors.NameNotSpecifiedError
 	}
@@ -72,144 +51,7 @@ func (s *Service) Create(ctx context.Context, loc Location, importLocations []Im
 	if _, _, err = s.client.Communicate(ctx, cmd, false, nil); err != nil {
 		return nil, err
 	}
-	err = s.importToLocations(ctx, loc, importLocations, entry.Name)
-	if err != nil {
-		return nil, err
-	}
 	return s.Read(ctx, loc, entry.Name, "get")
-}
-
-func (s *Service) importToLocations(ctx context.Context, loc Location, importLocations []ImportLocation, entryName string) error {
-	vn := s.client.Versioning()
-
-	importToLocation := func(il ImportLocation) error {
-		xpath, err := il.XpathForLocation(vn, loc)
-		if err != nil {
-			return err
-		}
-
-		mutex := s.getImportMutex(util.AsXpath(xpath))
-		mutex.Lock()
-		defer mutex.Unlock()
-
-		cmd := &xmlapi.Config{
-			Action: "get",
-			Xpath:  util.AsXpath(xpath),
-		}
-
-		bytes, _, err := s.client.Communicate(ctx, cmd, false, nil)
-		if err != nil && !errors.IsObjectNotFound(err) {
-			return err
-		}
-
-		existing, err := il.UnmarshalPangoXML(bytes)
-		if err != nil {
-			return err
-		}
-
-		for _, elt := range existing {
-			if elt == entryName {
-				return nil
-			}
-		}
-
-		existing = append(existing, entryName)
-
-		element, err := il.MarshalPangoXML(existing)
-		if err != nil {
-			return err
-		}
-
-		cmd = &xmlapi.Config{
-			Action:  "set",
-			Xpath:   util.AsXpath(xpath[:len(xpath)-1]),
-			Element: element,
-		}
-
-		_, _, err = s.client.Communicate(ctx, cmd, false, nil)
-		if err != nil {
-			return err
-		}
-
-		return err
-	}
-
-	for _, elt := range importLocations {
-		err := importToLocation(elt)
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (s *Service) unimportFromLocations(ctx context.Context, loc Location, importLocations []ImportLocation, values []string) error {
-	vn := s.client.Versioning()
-	valuesByName := make(map[string]bool)
-	for _, elt := range values {
-		valuesByName[elt] = true
-	}
-
-	unimportFromLocation := func(il ImportLocation) error {
-		xpath, err := il.XpathForLocation(vn, loc)
-		if err != nil {
-			return err
-		}
-
-		mutex := s.getImportMutex(util.AsXpath(xpath))
-		mutex.Lock()
-		defer mutex.Unlock()
-
-		cmd := &xmlapi.Config{
-			Action: "get",
-			Xpath:  util.AsXpath(xpath),
-		}
-
-		bytes, _, err := s.client.Communicate(ctx, cmd, false, nil)
-		if err != nil && !errors.IsObjectNotFound(err) {
-			return err
-		}
-
-		existing, err := il.UnmarshalPangoXML(bytes)
-		if err != nil {
-			return err
-		}
-
-		var filtered []string
-		for _, elt := range existing {
-			if _, found := valuesByName[elt]; !found {
-				filtered = append(filtered, elt)
-			}
-		}
-
-		element, err := il.MarshalPangoXML(filtered)
-		if err != nil {
-			return err
-		}
-
-		cmd = &xmlapi.Config{
-			Action:  "edit",
-			Xpath:   util.AsXpath(xpath),
-			Element: element,
-		}
-
-		_, _, err = s.client.Communicate(ctx, cmd, false, nil)
-		if err != nil {
-			return err
-		}
-
-		return err
-	}
-
-	for _, elt := range importLocations {
-		err := unimportFromLocation(elt)
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
 }
 
 // Read returns the given config object, using the specified action ("get" or "show").
@@ -333,10 +175,10 @@ func (s *Service) update(ctx context.Context, loc Location, entry *Entry, value 
 }
 
 // Delete deletes the given item.
-func (s *Service) Delete(ctx context.Context, loc Location, importLocations []ImportLocation, name ...string) error {
-	return s.delete(ctx, loc, importLocations, name)
+func (s *Service) Delete(ctx context.Context, loc Location, name ...string) error {
+	return s.delete(ctx, loc, name)
 }
-func (s *Service) delete(ctx context.Context, loc Location, importLocations []ImportLocation, values []string) error {
+func (s *Service) delete(ctx context.Context, loc Location, values []string) error {
 	for _, value := range values {
 		if value == "" {
 			return errors.NameNotSpecifiedError
@@ -346,10 +188,6 @@ func (s *Service) delete(ctx context.Context, loc Location, importLocations []Im
 	vn := s.client.Versioning()
 	var err error
 	deletes := xmlapi.NewMultiConfig(len(values))
-	err = s.unimportFromLocations(ctx, loc, importLocations, values)
-	if err != nil {
-		return err
-	}
 	for _, value := range values {
 		var path []string
 		path, err = loc.XpathWithEntryName(vn, value)

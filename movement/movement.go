@@ -2,8 +2,10 @@ package movement
 
 import (
 	"errors"
+	"fmt"
 	"log/slog"
 	"slices"
+	"strings"
 )
 
 var _ = slog.LevelDebug
@@ -230,8 +232,25 @@ func getPivotMovement(entries []Movable, existing []Movable, pivot string, direc
 	switch movement {
 	case ActionWhereBefore:
 		expectedIdx := 0
-		for ; expectedIdx < filteredPivotIdx; expectedIdx++ {
-			expected[expectedIdx] = filtered[expectedIdx]
+
+		if direct {
+			// If this is a direct move, all entries preceeding the pivot are moved
+			// to the beginning of the list
+			for ; expectedIdx < filteredPivotIdx; expectedIdx++ {
+				expected[expectedIdx] = filtered[expectedIdx]
+			}
+		} else {
+			for _, elt := range filtered {
+				filteredInExisting, _ := existingIdxMap[elt.EntryName()]
+				firstEntryInExisting, _ := existingIdxMap[entries[0].EntryName()]
+				if filteredInExisting.Idx < firstEntryInExisting.Idx && filteredInExisting.Idx < filteredPivotIdx {
+					filtered = filtered[1:]
+					expected[expectedIdx] = filteredInExisting.Entry
+					expectedIdx += 1
+				}
+			}
+
+			filteredPivotIdx, _ = findPivotIdx(filtered, pivot)
 		}
 
 		for _, elt := range entries {
@@ -239,10 +258,19 @@ func getPivotMovement(entries []Movable, existing []Movable, pivot string, direc
 			expectedIdx++
 		}
 
+		filteredLen := len(filtered)
+
+		if !direct {
+			filteredIdx := 0
+			for ; filteredIdx < filteredPivotIdx; expectedIdx++ {
+				expected[expectedIdx] = filtered[filteredIdx]
+				filteredIdx += 1
+			}
+		}
+
 		expected[expectedIdx] = pivotEntry
 		expectedIdx++
 
-		filteredLen := len(filtered)
 		for i := filteredPivotIdx + 1; i < filteredLen; i++ {
 			expected[expectedIdx] = filtered[i]
 			expectedIdx++
@@ -375,8 +403,6 @@ func OptimizeMovements(existing []Movable, expected []Movable, entries []Movable
 			targetIdx = simulatedIdxMap[action.Destination.EntryName()].Idx + 1
 		}
 
-		slog.Debug("OptimizeMovements()", "action", action, "currentIdx", currentIdx, "targetIdx", targetIdx)
-
 		if targetIdx != currentIdx {
 			optimized = append(optimized, action)
 			entry := simulatedIdxMap[action.Movable.EntryName()]
@@ -386,15 +412,59 @@ func OptimizeMovements(existing []Movable, expected []Movable, entries []Movable
 		}
 	}
 
-	slog.Debug("OptimizeMovements()", "optimized", optimized)
+	slog.Debug("OptimizeMovements()", "optimized", movementsAsDebug(optimized))
 
 	return optimized
+}
+
+func entryWithIdxAsDebug[E Movable](entry entryWithIdx[E]) string {
+	return fmt.Sprintf("{Entry:%s Idx:%d}", entry.Entry.EntryName(), entry.Idx)
+}
+
+func movablesAsDebug(movables []Movable) string {
+	var movablesFormatted []string
+	for _, elt := range movables {
+		var entryName string
+		if elt == nil {
+			entryName = "<MISSING>"
+		} else {
+			entryName = elt.EntryName()
+		}
+		movablesFormatted = append(movablesFormatted, entryName)
+	}
+
+	return fmt.Sprintf("[%s]", strings.Join(movablesFormatted, " "))
+}
+
+func movementsAsDebug(movements []MoveAction) string {
+	var movementsFormatted []string
+	for _, elt := range movements {
+		var destination string
+		if elt.Destination != nil {
+			destination = elt.Destination.EntryName()
+		}
+		movementsFormatted = append(movementsFormatted, fmt.Sprintf("{Movable:%s Where:%s Destination:%s}", elt.Movable.EntryName(), elt.Where, destination))
+	}
+
+	return fmt.Sprintf("[%s]", strings.Join(movementsFormatted, " "))
 }
 
 func GenerateMovements(existing []Movable, expected []Movable, entries []Movable, movement ActionWhereType, pivot string, directly bool) ([]MoveAction, error) {
 	if len(existing) != len(expected) {
 		slog.Error("GenerateMovements()", "len(existing)", len(existing), "len(expected)", len(expected))
 		return nil, ErrSlicesNotEqualLength
+	}
+
+	// Early optimization to skip generation of movements if existing list already matches expected one
+	var needsSorting bool
+	for idx := range existing {
+		if existing[idx].EntryName() != expected[idx].EntryName() {
+			needsSorting = true
+		}
+	}
+
+	if !needsSorting {
+		return nil, nil
 	}
 
 	entriesIdxMap := entriesByName(entries)
@@ -404,7 +474,7 @@ func GenerateMovements(existing []Movable, expected []Movable, entries []Movable
 	var movements []MoveAction
 	var previous Movable
 	for _, elt := range entries {
-		slog.Debug("GeneraveMovements()", "elt", elt, "existing", existingIdxMap[elt.EntryName()], "expected", expectedIdxMap[elt.EntryName()])
+		slog.Debug("GenerateMovements()", "elt", elt, "existing", existingIdxMap[elt.EntryName()], "expected", expectedIdxMap[elt.EntryName()])
 
 		if previous != nil {
 			movements = append(movements, MoveAction{
@@ -431,8 +501,8 @@ func GenerateMovements(existing []Movable, expected []Movable, entries []Movable
 			previous = elt
 		} else {
 			var where ActionWhereType
-
 			var pivot Movable
+
 			switch movement {
 			case ActionWhereLast:
 				where = ActionWhereLast
@@ -450,17 +520,29 @@ func GenerateMovements(existing []Movable, expected []Movable, entries []Movable
 				// are processing the first element in entries set) and selected pivot is part of the
 				// entries set, we need to find the actual pivot, i.e. element of the expected list
 				// that directly follows all elements from the entries set.
-				if _, ok := entriesIdxMap[pivot.EntryName()]; ok && directly {
-					// The actual pivot for the move is the element that follows all elements
-					// from the existing set.
-					pivotIdx := eltExpectedIdx + len(entries)
-					if pivotIdx >= len(expected) {
-						// This should never happen as by definition there is at least
-						// element (pivot point) at the end of the expected slice.
-						return nil, ErrInvalidMovementPlan
+				if _, ok := entriesIdxMap[pivot.EntryName()]; ok {
+					if directly {
+						// If the move is direct, he actual pivot for the move is the element that
+						// follows all elements from the existing set.
+						pivotIdx := eltExpectedIdx + len(entries)
+						if pivotIdx >= len(expected) {
+							// This should never happen as by definition there is at least
+							// element (pivot point) at the end of the expected slice.
+							return nil, ErrInvalidMovementPlan
+						}
+						pivot = expected[pivotIdx]
+					} else {
+						// Otherwise, if the move is not direct we use the element preceeding the
+						// first element of the entries list as a pivot and change where action
+						// to ActionWhereAfter.
+						pivotIdx := eltExpectedIdx - 1
+						if pivotIdx < 0 {
+							return nil, ErrInvalidMovementPlan
+						} else {
+							pivot = expected[pivotIdx]
+							where = ActionWhereAfter
+						}
 					}
-					pivot = expected[pivotIdx]
-
 				}
 			}
 
@@ -469,13 +551,12 @@ func GenerateMovements(existing []Movable, expected []Movable, entries []Movable
 				Destination: pivot,
 				Where:       where,
 			})
-			previous = elt
 		}
 
+		previous = elt
 	}
 
-	slog.Debug("GenerateMovements()", "movements", movements)
-
+	slog.Debug("GenerateMovements()", "movements", movementsAsDebug(movements))
 	return movements, nil
 }
 

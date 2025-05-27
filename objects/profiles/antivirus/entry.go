@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{"virus"}
+	Suffix = []string{"profiles", "virus"}
 )
 
 type Entry struct {
