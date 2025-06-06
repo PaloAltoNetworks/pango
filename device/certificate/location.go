@@ -52,7 +52,8 @@ type TemplateStackVsysLocation struct {
 }
 
 func NewPanoramaLocation() *Location {
-	return &Location{Panorama: &PanoramaLocation{}}
+	return &Location{Panorama: &PanoramaLocation{},
+	}
 }
 func NewVsysLocation() *Location {
 	return &Location{Vsys: &VsysLocation{
