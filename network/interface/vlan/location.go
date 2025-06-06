@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/PaloAltoNetworks/pango/errors"
-	"github.com/PaloAltoNetworks/pango/util"
-	"github.com/PaloAltoNetworks/pango/version"
+	"github.com/PaloAltoNetworks/pango/v2/errors"
+	"github.com/PaloAltoNetworks/pango/v2/util"
+	"github.com/PaloAltoNetworks/pango/v2/version"
 )
 
 type ImportLocation interface {
@@ -40,7 +40,7 @@ type NgfwLocation struct {
 
 func NewSharedLocation() *Location {
 	return &Location{Shared: &SharedLocation{},
-	}
+    }
 }
 func NewTemplateLocation() *Location {
 	return &Location{Template: &TemplateLocation{

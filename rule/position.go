@@ -3,7 +3,7 @@ package rule
 import (
 	"fmt"
 
-	"github.com/PaloAltoNetworks/pango/errors"
+	"github.com/PaloAltoNetworks/pango/v2/errors"
 )
 
 type Position struct {

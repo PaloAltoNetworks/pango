@@ -7,9 +7,9 @@ import (
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
-	"github.com/PaloAltoNetworks/pango/generic"
-	"github.com/PaloAltoNetworks/pango/objects/application"
-	"github.com/PaloAltoNetworks/pango/version"
+	"github.com/PaloAltoNetworks/pango/v2/generic"
+	"github.com/PaloAltoNetworks/pango/v2/objects/application"
+	"github.com/PaloAltoNetworks/pango/v2/version"
 )
 
 var _ = Describe("XML Marshalling and Unmarshalling tests", func() {

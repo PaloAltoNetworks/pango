@@ -4,10 +4,10 @@ import (
 	"encoding/xml"
 	"fmt"
 
-	"github.com/PaloAltoNetworks/pango/filtering"
-	"github.com/PaloAltoNetworks/pango/generic"
-	"github.com/PaloAltoNetworks/pango/util"
-	"github.com/PaloAltoNetworks/pango/version"
+	"github.com/PaloAltoNetworks/pango/v2/filtering"
+	"github.com/PaloAltoNetworks/pango/v2/generic"
+	"github.com/PaloAltoNetworks/pango/v2/util"
+	"github.com/PaloAltoNetworks/pango/v2/version"
 )
 
 var (

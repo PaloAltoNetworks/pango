@@ -3,8 +3,8 @@ package util
 import (
 	"time"
 
-	"github.com/PaloAltoNetworks/pango/plugin"
-	"github.com/PaloAltoNetworks/pango/version"
+	"github.com/PaloAltoNetworks/pango/v2/plugin"
+	"github.com/PaloAltoNetworks/pango/v2/version"
 )
 
 // XapiClient is the interface that describes an pango.Client.

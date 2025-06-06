@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/PaloAltoNetworks/pango/errors"
+	"github.com/PaloAltoNetworks/pango/v2/errors"
 )
 
 func NewChunkedMultiConfig(capacity int, batchSize int) *MultiConfig {

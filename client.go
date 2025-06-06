@@ -18,12 +18,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/PaloAltoNetworks/pango/errors"
-	"github.com/PaloAltoNetworks/pango/generic"
-	"github.com/PaloAltoNetworks/pango/plugin"
-	"github.com/PaloAltoNetworks/pango/util"
-	"github.com/PaloAltoNetworks/pango/version"
-	"github.com/PaloAltoNetworks/pango/xmlapi"
+	"github.com/PaloAltoNetworks/pango/v2/errors"
+	"github.com/PaloAltoNetworks/pango/v2/generic"
+	"github.com/PaloAltoNetworks/pango/v2/plugin"
+	"github.com/PaloAltoNetworks/pango/v2/util"
+	"github.com/PaloAltoNetworks/pango/v2/version"
+	"github.com/PaloAltoNetworks/pango/v2/xmlapi"
 )
 
 type LoggingInfo struct {

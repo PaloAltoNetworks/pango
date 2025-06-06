@@ -7,12 +7,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/PaloAltoNetworks/pango/audit"
-	"github.com/PaloAltoNetworks/pango/errors"
-	"github.com/PaloAltoNetworks/pango/filtering"
-	"github.com/PaloAltoNetworks/pango/movement"
-	"github.com/PaloAltoNetworks/pango/util"
-	"github.com/PaloAltoNetworks/pango/xmlapi"
+	"github.com/PaloAltoNetworks/pango/v2/audit"
+	"github.com/PaloAltoNetworks/pango/v2/errors"
+	"github.com/PaloAltoNetworks/pango/v2/filtering"
+	"github.com/PaloAltoNetworks/pango/v2/movement"
+	"github.com/PaloAltoNetworks/pango/v2/util"
+	"github.com/PaloAltoNetworks/pango/v2/xmlapi"
 )
 
 type Service struct {
