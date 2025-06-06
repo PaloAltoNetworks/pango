@@ -50,7 +50,8 @@ type SharedLocation struct {
 }
 
 func NewPanoramaLocation() *Location {
-	return &Location{Panorama: &PanoramaLocation{}}
+	return &Location{Panorama: &PanoramaLocation{},
+	}
 }
 func NewTemplateLocation() *Location {
 	return &Location{Template: &TemplateLocation{
