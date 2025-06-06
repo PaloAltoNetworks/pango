@@ -49,7 +49,8 @@ type SharedLocation struct {
 }
 
 func NewPanoramaLocation() *Location {
-	return &Location{Panorama: &PanoramaLocation{}}
+	return &Location{Panorama: &PanoramaLocation{},
+	}
 }
 func NewTemplateLocation() *Location {
 	return &Location{Template: &TemplateLocation{
@@ -84,7 +85,8 @@ func NewTemplateStackVsysLocation() *Location {
 	}
 }
 func NewSharedLocation() *Location {
-	return &Location{Shared: &SharedLocation{}}
+	return &Location{Shared: &SharedLocation{},
+	}
 }
 
 func (o Location) IsValid() error {
