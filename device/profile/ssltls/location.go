@@ -52,10 +52,12 @@ type TemplateStackVsysLocation struct {
 }
 
 func NewSharedLocation() *Location {
-	return &Location{Shared: &SharedLocation{}}
+	return &Location{Shared: &SharedLocation{},
+	}
 }
 func NewPanoramaLocation() *Location {
-	return &Location{Panorama: &PanoramaLocation{}}
+	return &Location{Panorama: &PanoramaLocation{},
+	}
 }
 func NewTemplateLocation() *Location {
 	return &Location{Template: &TemplateLocation{
