@@ -28,7 +28,8 @@ type DeviceGroupLocation struct {
 }
 
 func NewSharedLocation() *Location {
-	return &Location{Shared: &SharedLocation{}}
+	return &Location{Shared: &SharedLocation{}
+    }
 }
 func NewDeviceGroupLocation() *Location {
 	return &Location{DeviceGroup: &DeviceGroupLocation{

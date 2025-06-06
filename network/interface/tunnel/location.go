@@ -163,7 +163,8 @@ type NgfwLocation struct {
 }
 
 func NewSharedLocation() *Location {
-	return &Location{Shared: &SharedLocation{}}
+	return &Location{Shared: &SharedLocation{}
+    }
 }
 func NewTemplateLocation() *Location {
 	return &Location{Template: &TemplateLocation{
