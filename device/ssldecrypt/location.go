@@ -3,9 +3,9 @@ package ssldecrypt
 import (
 	"fmt"
 
-	"github.com/PaloAltoNetworks/pango/errors"
-	"github.com/PaloAltoNetworks/pango/util"
-	"github.com/PaloAltoNetworks/pango/version"
+	"github.com/PaloAltoNetworks/pango/v2/errors"
+	"github.com/PaloAltoNetworks/pango/v2/util"
+	"github.com/PaloAltoNetworks/pango/v2/version"
 )
 
 type ImportLocation interface {
@@ -49,8 +49,7 @@ type SharedLocation struct {
 }
 
 func NewPanoramaLocation() *Location {
-	return &Location{Panorama: &PanoramaLocation{},
-	}
+	return &Location{Panorama: &PanoramaLocation{}}
 }
 func NewTemplateLocation() *Location {
 	return &Location{Template: &TemplateLocation{
@@ -85,8 +84,7 @@ func NewTemplateStackVsysLocation() *Location {
 	}
 }
 func NewSharedLocation() *Location {
-	return &Location{Shared: &SharedLocation{},
-	}
+	return &Location{Shared: &SharedLocation{}}
 }
 
 func (o Location) IsValid() error {

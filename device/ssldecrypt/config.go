@@ -3,9 +3,9 @@ package ssldecrypt
 import (
 	"encoding/xml"
 
-	"github.com/PaloAltoNetworks/pango/generic"
-	"github.com/PaloAltoNetworks/pango/util"
-	"github.com/PaloAltoNetworks/pango/version"
+	"github.com/PaloAltoNetworks/pango/v2/generic"
+	"github.com/PaloAltoNetworks/pango/v2/util"
+	"github.com/PaloAltoNetworks/pango/v2/version"
 )
 
 type Config struct {

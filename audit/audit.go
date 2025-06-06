@@ -4,7 +4,7 @@ import (
 	"encoding/xml"
 	"time"
 
-	"github.com/PaloAltoNetworks/pango/util"
+	"github.com/PaloAltoNetworks/pango/v2/util"
 )
 
 // CommentHistory is a container for audit comment history.

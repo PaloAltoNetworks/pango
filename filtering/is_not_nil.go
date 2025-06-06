@@ -1,7 +1,7 @@
 package filtering
 
 import (
-	"github.com/PaloAltoNetworks/pango/errors"
+	"github.com/PaloAltoNetworks/pango/v2/errors"
 )
 
 var (

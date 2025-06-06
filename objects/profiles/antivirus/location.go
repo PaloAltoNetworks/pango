@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/PaloAltoNetworks/pango/errors"
-	"github.com/PaloAltoNetworks/pango/util"
-	"github.com/PaloAltoNetworks/pango/version"
+	"github.com/PaloAltoNetworks/pango/v2/errors"
+	"github.com/PaloAltoNetworks/pango/v2/util"
+	"github.com/PaloAltoNetworks/pango/v2/version"
 )
 
 type ImportLocation interface {
@@ -33,8 +33,7 @@ type VsysLocation struct {
 }
 
 func NewSharedLocation() *Location {
-	return &Location{Shared: &SharedLocation{},
-	}
+	return &Location{Shared: &SharedLocation{}}
 }
 func NewDeviceGroupLocation() *Location {
 	return &Location{DeviceGroup: &DeviceGroupLocation{

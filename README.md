@@ -3,8 +3,8 @@
 > [!NOTE]  
 > This package is auto-generated via [pan-os-codegen](https://github.com/PaloAltoNetworks/pan-os-codegen)
 
-<!-- [![GoDoc](https://godoc.org/github.com/PaloAltoNetworks/pango?status.svg)](https://godoc.org/github.com/PaloAltoNetworks/pango) -->
-<!-- [![Build](https://github.com/PaloAltoNetworks/pango/workflows/Sanity%20Check/badge.svg?branch=main)](https://github.com/PaloAltoNetworks/pango/actions?query=workflow%3A%22Sanity+Check%22) -->
+<!-- [![GoDoc](https://godoc.org/github.com/PaloAltoNetworks/pango/v2?status.svg)](https://godoc.org/github.com/PaloAltoNetworks/pango/v2) -->
+<!-- [![Build](https://github.com/PaloAltoNetworks/pango/v2/workflows/Sanity%20Check/badge.svg?branch=main)](https://github.com/PaloAltoNetworks/pango/v2/actions?query=workflow%3A%22Sanity+Check%22) -->
 
 Package pango is a golang cross version mechanism for interacting with Palo Alto Networks devices (including physical and virtualized Next-generation Firewalls and Panorama). Versioning support is in place for PANOS 10.1 and above.
 
@@ -19,7 +19,7 @@ package main
 
 import (
     "log"
-    "github.com/PaloAltoNetworks/pango"
+    "github.com/PaloAltoNetworks/pango/v2"
 )
 
 func main() {

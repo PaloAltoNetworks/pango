@@ -5,7 +5,7 @@ import (
 	"io"
 	"strings"
 
-	"github.com/PaloAltoNetworks/pango/errors"
+	"github.com/PaloAltoNetworks/pango/v2/errors"
 )
 
 func Parse(s string, quote string) (*Group, error) {

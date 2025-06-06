@@ -6,9 +6,9 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/PaloAltoNetworks/pango/plugin"
-	"github.com/PaloAltoNetworks/pango/version"
-	"github.com/PaloAltoNetworks/pango/xmlapi"
+	"github.com/PaloAltoNetworks/pango/v2/plugin"
+	"github.com/PaloAltoNetworks/pango/v2/version"
+	"github.com/PaloAltoNetworks/pango/v2/xmlapi"
 )
 
 // PangoClient interface.

@@ -9,7 +9,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/PaloAltoNetworks/pango/version"
+	"github.com/PaloAltoNetworks/pango/v2/version"
 )
 
 var FixedPanosVersionForMultiConfigMove = version.Number{99, 99, 99, ""}
