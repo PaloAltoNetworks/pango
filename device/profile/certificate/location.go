@@ -86,7 +86,8 @@ func NewTemplateStackVsysLocation() *Location {
 	}
 }
 func NewSharedLocation() *Location {
-	return &Location{Shared: &SharedLocation{}}
+	return &Location{Shared: &SharedLocation{},
+	}
 }
 
 func (o Location) IsValid() error {
