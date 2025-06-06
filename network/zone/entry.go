@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{"zone"}
+	suffix = []string{"zone", "$name"}
 )
 
 type Entry struct {
@@ -25,31 +25,33 @@ type Entry struct {
 	EnableUserIdentification   *bool
 	Network                    *Network
 	UserAcl                    *UserAcl
-
-	Misc map[string][]generic.Xml
+	Misc                       []generic.Xml
 }
-
 type DeviceAcl struct {
 	ExcludeList []string
 	IncludeList []string
+	Misc        []generic.Xml
 }
 type Network struct {
 	EnablePacketBufferProtection *bool
 	LogSetting                   *string
-	ZoneProtectionProfile        *string
 	NetInspection                *bool
+	ZoneProtectionProfile        *string
 	External                     []string
 	Layer2                       []string
 	Layer3                       []string
 	Tap                          []string
 	Tunnel                       *NetworkTunnel
 	VirtualWire                  []string
+	Misc                         []generic.Xml
 }
 type NetworkTunnel struct {
+	Misc []generic.Xml
 }
 type UserAcl struct {
 	ExcludeList []string
 	IncludeList []string
+	Misc        []generic.Xml
 }
 
 type entryXmlContainer struct {
@@ -59,35 +61,59 @@ type entryXmlContainer struct {
 type entryXmlContainer_11_0_2 struct {
 	Answer []entryXml_11_0_2 `xml:"entry"`
 }
+
+func (o *entryXmlContainer) Normalize() ([]*Entry, error) {
+	entries := make([]*Entry, 0, len(o.Answer))
+	for _, elt := range o.Answer {
+		obj, err := elt.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		entries = append(entries, obj)
+	}
+
+	return entries, nil
+}
+func (o *entryXmlContainer_11_0_2) Normalize() ([]*Entry, error) {
+	entries := make([]*Entry, 0, len(o.Answer))
+	for _, elt := range o.Answer {
+		obj, err := elt.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		entries = append(entries, obj)
+	}
+
+	return entries, nil
+}
+
+func specifyEntry(source *Entry) (any, error) {
+	var obj entryXml
+	obj.MarshalFromObject(*source)
+	return obj, nil
+}
+func specifyEntry_11_0_2(source *Entry) (any, error) {
+	var obj entryXml_11_0_2
+	obj.MarshalFromObject(*source)
+	return obj, nil
+}
+
 type entryXml struct {
 	XMLName                    xml.Name      `xml:"entry"`
 	Name                       string        `xml:"name,attr"`
-	DeviceAcl                  *DeviceAclXml `xml:"device-acl,omitempty"`
+	DeviceAcl                  *deviceAclXml `xml:"device-acl,omitempty"`
 	EnableDeviceIdentification *string       `xml:"enable-device-identification,omitempty"`
 	EnableUserIdentification   *string       `xml:"enable-user-identification,omitempty"`
-	Network                    *NetworkXml   `xml:"network,omitempty"`
-	UserAcl                    *UserAclXml   `xml:"user-acl,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
+	Network                    *networkXml   `xml:"network,omitempty"`
+	UserAcl                    *userAclXml   `xml:"user-acl,omitempty"`
+	Misc                       []generic.Xml `xml:",any"`
 }
-type entryXml_11_0_2 struct {
-	XMLName                    xml.Name             `xml:"entry"`
-	Name                       string               `xml:"name,attr"`
-	DeviceAcl                  *DeviceAclXml_11_0_2 `xml:"device-acl,omitempty"`
-	EnableDeviceIdentification *string              `xml:"enable-device-identification,omitempty"`
-	EnableUserIdentification   *string              `xml:"enable-user-identification,omitempty"`
-	Network                    *NetworkXml_11_0_2   `xml:"network,omitempty"`
-	UserAcl                    *UserAclXml_11_0_2   `xml:"user-acl,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
-}
-type DeviceAclXml struct {
+type deviceAclXml struct {
 	ExcludeList *util.MemberType `xml:"exclude-list,omitempty"`
 	IncludeList *util.MemberType `xml:"include-list,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
+	Misc        []generic.Xml    `xml:",any"`
 }
-type NetworkXml struct {
+type networkXml struct {
 	EnablePacketBufferProtection *string           `xml:"enable-packet-buffer-protection,omitempty"`
 	LogSetting                   *string           `xml:"log-setting,omitempty"`
 	NetInspection                *string           `xml:"net-inspection,omitempty"`
@@ -96,27 +122,34 @@ type NetworkXml struct {
 	Layer2                       *util.MemberType  `xml:"layer2,omitempty"`
 	Layer3                       *util.MemberType  `xml:"layer3,omitempty"`
 	Tap                          *util.MemberType  `xml:"tap,omitempty"`
-	Tunnel                       *NetworkTunnelXml `xml:"tunnel,omitempty"`
+	Tunnel                       *networkTunnelXml `xml:"tunnel,omitempty"`
 	VirtualWire                  *util.MemberType  `xml:"virtual-wire,omitempty"`
-
+	Misc                         []generic.Xml     `xml:",any"`
+}
+type networkTunnelXml struct {
 	Misc []generic.Xml `xml:",any"`
 }
-type NetworkTunnelXml struct {
-	Misc []generic.Xml `xml:",any"`
-}
-type UserAclXml struct {
+type userAclXml struct {
 	ExcludeList *util.MemberType `xml:"exclude-list,omitempty"`
 	IncludeList *util.MemberType `xml:"include-list,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
+	Misc        []generic.Xml    `xml:",any"`
 }
-type DeviceAclXml_11_0_2 struct {
+type entryXml_11_0_2 struct {
+	XMLName                    xml.Name             `xml:"entry"`
+	Name                       string               `xml:"name,attr"`
+	DeviceAcl                  *deviceAclXml_11_0_2 `xml:"device-acl,omitempty"`
+	EnableDeviceIdentification *string              `xml:"enable-device-identification,omitempty"`
+	EnableUserIdentification   *string              `xml:"enable-user-identification,omitempty"`
+	Network                    *networkXml_11_0_2   `xml:"network,omitempty"`
+	UserAcl                    *userAclXml_11_0_2   `xml:"user-acl,omitempty"`
+	Misc                       []generic.Xml        `xml:",any"`
+}
+type deviceAclXml_11_0_2 struct {
 	ExcludeList *util.MemberType `xml:"exclude-list,omitempty"`
 	IncludeList *util.MemberType `xml:"include-list,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
+	Misc        []generic.Xml    `xml:",any"`
 }
-type NetworkXml_11_0_2 struct {
+type networkXml_11_0_2 struct {
 	EnablePacketBufferProtection *string                  `xml:"enable-packet-buffer-protection,omitempty"`
 	LogSetting                   *string                  `xml:"log-setting,omitempty"`
 	NetInspection                *string                  `xml:"net-inspection,omitempty"`
@@ -125,19 +158,412 @@ type NetworkXml_11_0_2 struct {
 	Layer2                       *util.MemberType         `xml:"layer2,omitempty"`
 	Layer3                       *util.MemberType         `xml:"layer3,omitempty"`
 	Tap                          *util.MemberType         `xml:"tap,omitempty"`
-	Tunnel                       *NetworkTunnelXml_11_0_2 `xml:"tunnel,omitempty"`
+	Tunnel                       *networkTunnelXml_11_0_2 `xml:"tunnel,omitempty"`
 	VirtualWire                  *util.MemberType         `xml:"virtual-wire,omitempty"`
-
+	Misc                         []generic.Xml            `xml:",any"`
+}
+type networkTunnelXml_11_0_2 struct {
 	Misc []generic.Xml `xml:",any"`
 }
-type NetworkTunnelXml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
-}
-type UserAclXml_11_0_2 struct {
+type userAclXml_11_0_2 struct {
 	ExcludeList *util.MemberType `xml:"exclude-list,omitempty"`
 	IncludeList *util.MemberType `xml:"include-list,omitempty"`
+	Misc        []generic.Xml    `xml:",any"`
+}
 
-	Misc []generic.Xml `xml:",any"`
+func (o *entryXml) MarshalFromObject(s Entry) {
+	o.Name = s.Name
+	if s.DeviceAcl != nil {
+		var obj deviceAclXml
+		obj.MarshalFromObject(*s.DeviceAcl)
+		o.DeviceAcl = &obj
+	}
+	o.EnableDeviceIdentification = util.YesNo(s.EnableDeviceIdentification, nil)
+	o.EnableUserIdentification = util.YesNo(s.EnableUserIdentification, nil)
+	if s.Network != nil {
+		var obj networkXml
+		obj.MarshalFromObject(*s.Network)
+		o.Network = &obj
+	}
+	if s.UserAcl != nil {
+		var obj userAclXml
+		obj.MarshalFromObject(*s.UserAcl)
+		o.UserAcl = &obj
+	}
+	o.Misc = s.Misc
+}
+
+func (o entryXml) UnmarshalToObject() (*Entry, error) {
+	var deviceAclVal *DeviceAcl
+	if o.DeviceAcl != nil {
+		obj, err := o.DeviceAcl.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		deviceAclVal = obj
+	}
+	var networkVal *Network
+	if o.Network != nil {
+		obj, err := o.Network.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		networkVal = obj
+	}
+	var userAclVal *UserAcl
+	if o.UserAcl != nil {
+		obj, err := o.UserAcl.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		userAclVal = obj
+	}
+
+	result := &Entry{
+		Name:                       o.Name,
+		DeviceAcl:                  deviceAclVal,
+		EnableDeviceIdentification: util.AsBool(o.EnableDeviceIdentification, nil),
+		EnableUserIdentification:   util.AsBool(o.EnableUserIdentification, nil),
+		Network:                    networkVal,
+		UserAcl:                    userAclVal,
+		Misc:                       o.Misc,
+	}
+	return result, nil
+}
+func (o *deviceAclXml) MarshalFromObject(s DeviceAcl) {
+	if s.ExcludeList != nil {
+		o.ExcludeList = util.StrToMem(s.ExcludeList)
+	}
+	if s.IncludeList != nil {
+		o.IncludeList = util.StrToMem(s.IncludeList)
+	}
+	o.Misc = s.Misc
+}
+
+func (o deviceAclXml) UnmarshalToObject() (*DeviceAcl, error) {
+	var excludeListVal []string
+	if o.ExcludeList != nil {
+		excludeListVal = util.MemToStr(o.ExcludeList)
+	}
+	var includeListVal []string
+	if o.IncludeList != nil {
+		includeListVal = util.MemToStr(o.IncludeList)
+	}
+
+	result := &DeviceAcl{
+		ExcludeList: excludeListVal,
+		IncludeList: includeListVal,
+		Misc:        o.Misc,
+	}
+	return result, nil
+}
+func (o *networkXml) MarshalFromObject(s Network) {
+	o.EnablePacketBufferProtection = util.YesNo(s.EnablePacketBufferProtection, nil)
+	o.LogSetting = s.LogSetting
+	o.NetInspection = util.YesNo(s.NetInspection, nil)
+	o.ZoneProtectionProfile = s.ZoneProtectionProfile
+	if s.External != nil {
+		o.External = util.StrToMem(s.External)
+	}
+	if s.Layer2 != nil {
+		o.Layer2 = util.StrToMem(s.Layer2)
+	}
+	if s.Layer3 != nil {
+		o.Layer3 = util.StrToMem(s.Layer3)
+	}
+	if s.Tap != nil {
+		o.Tap = util.StrToMem(s.Tap)
+	}
+	if s.Tunnel != nil {
+		var obj networkTunnelXml
+		obj.MarshalFromObject(*s.Tunnel)
+		o.Tunnel = &obj
+	}
+	if s.VirtualWire != nil {
+		o.VirtualWire = util.StrToMem(s.VirtualWire)
+	}
+	o.Misc = s.Misc
+}
+
+func (o networkXml) UnmarshalToObject() (*Network, error) {
+	var externalVal []string
+	if o.External != nil {
+		externalVal = util.MemToStr(o.External)
+	}
+	var layer2Val []string
+	if o.Layer2 != nil {
+		layer2Val = util.MemToStr(o.Layer2)
+	}
+	var layer3Val []string
+	if o.Layer3 != nil {
+		layer3Val = util.MemToStr(o.Layer3)
+	}
+	var tapVal []string
+	if o.Tap != nil {
+		tapVal = util.MemToStr(o.Tap)
+	}
+	var tunnelVal *NetworkTunnel
+	if o.Tunnel != nil {
+		obj, err := o.Tunnel.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		tunnelVal = obj
+	}
+	var virtualWireVal []string
+	if o.VirtualWire != nil {
+		virtualWireVal = util.MemToStr(o.VirtualWire)
+	}
+
+	result := &Network{
+		EnablePacketBufferProtection: util.AsBool(o.EnablePacketBufferProtection, nil),
+		LogSetting:                   o.LogSetting,
+		NetInspection:                util.AsBool(o.NetInspection, nil),
+		ZoneProtectionProfile:        o.ZoneProtectionProfile,
+		External:                     externalVal,
+		Layer2:                       layer2Val,
+		Layer3:                       layer3Val,
+		Tap:                          tapVal,
+		Tunnel:                       tunnelVal,
+		VirtualWire:                  virtualWireVal,
+		Misc:                         o.Misc,
+	}
+	return result, nil
+}
+func (o *networkTunnelXml) MarshalFromObject(s NetworkTunnel) {
+	o.Misc = s.Misc
+}
+
+func (o networkTunnelXml) UnmarshalToObject() (*NetworkTunnel, error) {
+
+	result := &NetworkTunnel{
+		Misc: o.Misc,
+	}
+	return result, nil
+}
+func (o *userAclXml) MarshalFromObject(s UserAcl) {
+	if s.ExcludeList != nil {
+		o.ExcludeList = util.StrToMem(s.ExcludeList)
+	}
+	if s.IncludeList != nil {
+		o.IncludeList = util.StrToMem(s.IncludeList)
+	}
+	o.Misc = s.Misc
+}
+
+func (o userAclXml) UnmarshalToObject() (*UserAcl, error) {
+	var excludeListVal []string
+	if o.ExcludeList != nil {
+		excludeListVal = util.MemToStr(o.ExcludeList)
+	}
+	var includeListVal []string
+	if o.IncludeList != nil {
+		includeListVal = util.MemToStr(o.IncludeList)
+	}
+
+	result := &UserAcl{
+		ExcludeList: excludeListVal,
+		IncludeList: includeListVal,
+		Misc:        o.Misc,
+	}
+	return result, nil
+}
+func (o *entryXml_11_0_2) MarshalFromObject(s Entry) {
+	o.Name = s.Name
+	if s.DeviceAcl != nil {
+		var obj deviceAclXml_11_0_2
+		obj.MarshalFromObject(*s.DeviceAcl)
+		o.DeviceAcl = &obj
+	}
+	o.EnableDeviceIdentification = util.YesNo(s.EnableDeviceIdentification, nil)
+	o.EnableUserIdentification = util.YesNo(s.EnableUserIdentification, nil)
+	if s.Network != nil {
+		var obj networkXml_11_0_2
+		obj.MarshalFromObject(*s.Network)
+		o.Network = &obj
+	}
+	if s.UserAcl != nil {
+		var obj userAclXml_11_0_2
+		obj.MarshalFromObject(*s.UserAcl)
+		o.UserAcl = &obj
+	}
+	o.Misc = s.Misc
+}
+
+func (o entryXml_11_0_2) UnmarshalToObject() (*Entry, error) {
+	var deviceAclVal *DeviceAcl
+	if o.DeviceAcl != nil {
+		obj, err := o.DeviceAcl.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		deviceAclVal = obj
+	}
+	var networkVal *Network
+	if o.Network != nil {
+		obj, err := o.Network.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		networkVal = obj
+	}
+	var userAclVal *UserAcl
+	if o.UserAcl != nil {
+		obj, err := o.UserAcl.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		userAclVal = obj
+	}
+
+	result := &Entry{
+		Name:                       o.Name,
+		DeviceAcl:                  deviceAclVal,
+		EnableDeviceIdentification: util.AsBool(o.EnableDeviceIdentification, nil),
+		EnableUserIdentification:   util.AsBool(o.EnableUserIdentification, nil),
+		Network:                    networkVal,
+		UserAcl:                    userAclVal,
+		Misc:                       o.Misc,
+	}
+	return result, nil
+}
+func (o *deviceAclXml_11_0_2) MarshalFromObject(s DeviceAcl) {
+	if s.ExcludeList != nil {
+		o.ExcludeList = util.StrToMem(s.ExcludeList)
+	}
+	if s.IncludeList != nil {
+		o.IncludeList = util.StrToMem(s.IncludeList)
+	}
+	o.Misc = s.Misc
+}
+
+func (o deviceAclXml_11_0_2) UnmarshalToObject() (*DeviceAcl, error) {
+	var excludeListVal []string
+	if o.ExcludeList != nil {
+		excludeListVal = util.MemToStr(o.ExcludeList)
+	}
+	var includeListVal []string
+	if o.IncludeList != nil {
+		includeListVal = util.MemToStr(o.IncludeList)
+	}
+
+	result := &DeviceAcl{
+		ExcludeList: excludeListVal,
+		IncludeList: includeListVal,
+		Misc:        o.Misc,
+	}
+	return result, nil
+}
+func (o *networkXml_11_0_2) MarshalFromObject(s Network) {
+	o.EnablePacketBufferProtection = util.YesNo(s.EnablePacketBufferProtection, nil)
+	o.LogSetting = s.LogSetting
+	o.NetInspection = util.YesNo(s.NetInspection, nil)
+	o.ZoneProtectionProfile = s.ZoneProtectionProfile
+	if s.External != nil {
+		o.External = util.StrToMem(s.External)
+	}
+	if s.Layer2 != nil {
+		o.Layer2 = util.StrToMem(s.Layer2)
+	}
+	if s.Layer3 != nil {
+		o.Layer3 = util.StrToMem(s.Layer3)
+	}
+	if s.Tap != nil {
+		o.Tap = util.StrToMem(s.Tap)
+	}
+	if s.Tunnel != nil {
+		var obj networkTunnelXml_11_0_2
+		obj.MarshalFromObject(*s.Tunnel)
+		o.Tunnel = &obj
+	}
+	if s.VirtualWire != nil {
+		o.VirtualWire = util.StrToMem(s.VirtualWire)
+	}
+	o.Misc = s.Misc
+}
+
+func (o networkXml_11_0_2) UnmarshalToObject() (*Network, error) {
+	var externalVal []string
+	if o.External != nil {
+		externalVal = util.MemToStr(o.External)
+	}
+	var layer2Val []string
+	if o.Layer2 != nil {
+		layer2Val = util.MemToStr(o.Layer2)
+	}
+	var layer3Val []string
+	if o.Layer3 != nil {
+		layer3Val = util.MemToStr(o.Layer3)
+	}
+	var tapVal []string
+	if o.Tap != nil {
+		tapVal = util.MemToStr(o.Tap)
+	}
+	var tunnelVal *NetworkTunnel
+	if o.Tunnel != nil {
+		obj, err := o.Tunnel.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		tunnelVal = obj
+	}
+	var virtualWireVal []string
+	if o.VirtualWire != nil {
+		virtualWireVal = util.MemToStr(o.VirtualWire)
+	}
+
+	result := &Network{
+		EnablePacketBufferProtection: util.AsBool(o.EnablePacketBufferProtection, nil),
+		LogSetting:                   o.LogSetting,
+		NetInspection:                util.AsBool(o.NetInspection, nil),
+		ZoneProtectionProfile:        o.ZoneProtectionProfile,
+		External:                     externalVal,
+		Layer2:                       layer2Val,
+		Layer3:                       layer3Val,
+		Tap:                          tapVal,
+		Tunnel:                       tunnelVal,
+		VirtualWire:                  virtualWireVal,
+		Misc:                         o.Misc,
+	}
+	return result, nil
+}
+func (o *networkTunnelXml_11_0_2) MarshalFromObject(s NetworkTunnel) {
+	o.Misc = s.Misc
+}
+
+func (o networkTunnelXml_11_0_2) UnmarshalToObject() (*NetworkTunnel, error) {
+
+	result := &NetworkTunnel{
+		Misc: o.Misc,
+	}
+	return result, nil
+}
+func (o *userAclXml_11_0_2) MarshalFromObject(s UserAcl) {
+	if s.ExcludeList != nil {
+		o.ExcludeList = util.StrToMem(s.ExcludeList)
+	}
+	if s.IncludeList != nil {
+		o.IncludeList = util.StrToMem(s.IncludeList)
+	}
+	o.Misc = s.Misc
+}
+
+func (o userAclXml_11_0_2) UnmarshalToObject() (*UserAcl, error) {
+	var excludeListVal []string
+	if o.ExcludeList != nil {
+		excludeListVal = util.MemToStr(o.ExcludeList)
+	}
+	var includeListVal []string
+	if o.IncludeList != nil {
+		includeListVal = util.MemToStr(o.IncludeList)
+	}
+
+	result := &UserAcl{
+		ExcludeList: excludeListVal,
+		IncludeList: includeListVal,
+		Misc:        o.Misc,
+	}
+	return result, nil
 }
 
 func (e *Entry) Field(v string) (any, error) {
@@ -172,445 +598,132 @@ func Versioning(vn version.Number) (Specifier, Normalizer, error) {
 
 	return specifyEntry, &entryXmlContainer{}, nil
 }
-func specifyEntry(o *Entry) (any, error) {
-	entry := entryXml{}
-	entry.Name = o.Name
-	var nestedDeviceAcl *DeviceAclXml
-	if o.DeviceAcl != nil {
-		nestedDeviceAcl = &DeviceAclXml{}
-		if _, ok := o.Misc["DeviceAcl"]; ok {
-			nestedDeviceAcl.Misc = o.Misc["DeviceAcl"]
-		}
-		if o.DeviceAcl.ExcludeList != nil {
-			nestedDeviceAcl.ExcludeList = util.StrToMem(o.DeviceAcl.ExcludeList)
-		}
-		if o.DeviceAcl.IncludeList != nil {
-			nestedDeviceAcl.IncludeList = util.StrToMem(o.DeviceAcl.IncludeList)
-		}
-	}
-	entry.DeviceAcl = nestedDeviceAcl
-
-	entry.EnableDeviceIdentification = util.YesNo(o.EnableDeviceIdentification, nil)
-	entry.EnableUserIdentification = util.YesNo(o.EnableUserIdentification, nil)
-	var nestedNetwork *NetworkXml
-	if o.Network != nil {
-		nestedNetwork = &NetworkXml{}
-		if _, ok := o.Misc["Network"]; ok {
-			nestedNetwork.Misc = o.Misc["Network"]
-		}
-		if o.Network.EnablePacketBufferProtection != nil {
-			nestedNetwork.EnablePacketBufferProtection = util.YesNo(o.Network.EnablePacketBufferProtection, nil)
-		}
-		if o.Network.LogSetting != nil {
-			nestedNetwork.LogSetting = o.Network.LogSetting
-		}
-		if o.Network.ZoneProtectionProfile != nil {
-			nestedNetwork.ZoneProtectionProfile = o.Network.ZoneProtectionProfile
-		}
-		if o.Network.NetInspection != nil {
-			nestedNetwork.NetInspection = util.YesNo(o.Network.NetInspection, nil)
-		}
-		if o.Network.External != nil {
-			nestedNetwork.External = util.StrToMem(o.Network.External)
-		}
-		if o.Network.Layer2 != nil {
-			nestedNetwork.Layer2 = util.StrToMem(o.Network.Layer2)
-		}
-		if o.Network.Layer3 != nil {
-			nestedNetwork.Layer3 = util.StrToMem(o.Network.Layer3)
-		}
-		if o.Network.Tap != nil {
-			nestedNetwork.Tap = util.StrToMem(o.Network.Tap)
-		}
-		if o.Network.Tunnel != nil {
-			nestedNetwork.Tunnel = &NetworkTunnelXml{}
-			if _, ok := o.Misc["NetworkTunnel"]; ok {
-				nestedNetwork.Tunnel.Misc = o.Misc["NetworkTunnel"]
-			}
-		}
-		if o.Network.VirtualWire != nil {
-			nestedNetwork.VirtualWire = util.StrToMem(o.Network.VirtualWire)
-		}
-	}
-	entry.Network = nestedNetwork
-
-	var nestedUserAcl *UserAclXml
-	if o.UserAcl != nil {
-		nestedUserAcl = &UserAclXml{}
-		if _, ok := o.Misc["UserAcl"]; ok {
-			nestedUserAcl.Misc = o.Misc["UserAcl"]
-		}
-		if o.UserAcl.ExcludeList != nil {
-			nestedUserAcl.ExcludeList = util.StrToMem(o.UserAcl.ExcludeList)
-		}
-		if o.UserAcl.IncludeList != nil {
-			nestedUserAcl.IncludeList = util.StrToMem(o.UserAcl.IncludeList)
-		}
-	}
-	entry.UserAcl = nestedUserAcl
-
-	entry.Misc = o.Misc["Entry"]
-
-	return entry, nil
-}
-
-func specifyEntry_11_0_2(o *Entry) (any, error) {
-	entry := entryXml_11_0_2{}
-	entry.Name = o.Name
-	var nestedDeviceAcl *DeviceAclXml_11_0_2
-	if o.DeviceAcl != nil {
-		nestedDeviceAcl = &DeviceAclXml_11_0_2{}
-		if _, ok := o.Misc["DeviceAcl"]; ok {
-			nestedDeviceAcl.Misc = o.Misc["DeviceAcl"]
-		}
-		if o.DeviceAcl.ExcludeList != nil {
-			nestedDeviceAcl.ExcludeList = util.StrToMem(o.DeviceAcl.ExcludeList)
-		}
-		if o.DeviceAcl.IncludeList != nil {
-			nestedDeviceAcl.IncludeList = util.StrToMem(o.DeviceAcl.IncludeList)
-		}
-	}
-	entry.DeviceAcl = nestedDeviceAcl
-
-	entry.EnableDeviceIdentification = util.YesNo(o.EnableDeviceIdentification, nil)
-	entry.EnableUserIdentification = util.YesNo(o.EnableUserIdentification, nil)
-	var nestedNetwork *NetworkXml_11_0_2
-	if o.Network != nil {
-		nestedNetwork = &NetworkXml_11_0_2{}
-		if _, ok := o.Misc["Network"]; ok {
-			nestedNetwork.Misc = o.Misc["Network"]
-		}
-		if o.Network.EnablePacketBufferProtection != nil {
-			nestedNetwork.EnablePacketBufferProtection = util.YesNo(o.Network.EnablePacketBufferProtection, nil)
-		}
-		if o.Network.LogSetting != nil {
-			nestedNetwork.LogSetting = o.Network.LogSetting
-		}
-		if o.Network.ZoneProtectionProfile != nil {
-			nestedNetwork.ZoneProtectionProfile = o.Network.ZoneProtectionProfile
-		}
-		if o.Network.NetInspection != nil {
-			nestedNetwork.NetInspection = util.YesNo(o.Network.NetInspection, nil)
-		}
-		if o.Network.External != nil {
-			nestedNetwork.External = util.StrToMem(o.Network.External)
-		}
-		if o.Network.Layer2 != nil {
-			nestedNetwork.Layer2 = util.StrToMem(o.Network.Layer2)
-		}
-		if o.Network.Layer3 != nil {
-			nestedNetwork.Layer3 = util.StrToMem(o.Network.Layer3)
-		}
-		if o.Network.Tap != nil {
-			nestedNetwork.Tap = util.StrToMem(o.Network.Tap)
-		}
-		if o.Network.Tunnel != nil {
-			nestedNetwork.Tunnel = &NetworkTunnelXml_11_0_2{}
-			if _, ok := o.Misc["NetworkTunnel"]; ok {
-				nestedNetwork.Tunnel.Misc = o.Misc["NetworkTunnel"]
-			}
-		}
-		if o.Network.VirtualWire != nil {
-			nestedNetwork.VirtualWire = util.StrToMem(o.Network.VirtualWire)
-		}
-	}
-	entry.Network = nestedNetwork
-
-	var nestedUserAcl *UserAclXml_11_0_2
-	if o.UserAcl != nil {
-		nestedUserAcl = &UserAclXml_11_0_2{}
-		if _, ok := o.Misc["UserAcl"]; ok {
-			nestedUserAcl.Misc = o.Misc["UserAcl"]
-		}
-		if o.UserAcl.ExcludeList != nil {
-			nestedUserAcl.ExcludeList = util.StrToMem(o.UserAcl.ExcludeList)
-		}
-		if o.UserAcl.IncludeList != nil {
-			nestedUserAcl.IncludeList = util.StrToMem(o.UserAcl.IncludeList)
-		}
-	}
-	entry.UserAcl = nestedUserAcl
-
-	entry.Misc = o.Misc["Entry"]
-
-	return entry, nil
-}
-func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
-	entryList := make([]*Entry, 0, len(c.Answer))
-	for _, o := range c.Answer {
-		entry := &Entry{
-			Misc: make(map[string][]generic.Xml),
-		}
-		entry.Name = o.Name
-		var nestedDeviceAcl *DeviceAcl
-		if o.DeviceAcl != nil {
-			nestedDeviceAcl = &DeviceAcl{}
-			if o.DeviceAcl.Misc != nil {
-				entry.Misc["DeviceAcl"] = o.DeviceAcl.Misc
-			}
-			if o.DeviceAcl.ExcludeList != nil {
-				nestedDeviceAcl.ExcludeList = util.MemToStr(o.DeviceAcl.ExcludeList)
-			}
-			if o.DeviceAcl.IncludeList != nil {
-				nestedDeviceAcl.IncludeList = util.MemToStr(o.DeviceAcl.IncludeList)
-			}
-		}
-		entry.DeviceAcl = nestedDeviceAcl
-
-		entry.EnableDeviceIdentification = util.AsBool(o.EnableDeviceIdentification, nil)
-		entry.EnableUserIdentification = util.AsBool(o.EnableUserIdentification, nil)
-		var nestedNetwork *Network
-		if o.Network != nil {
-			nestedNetwork = &Network{}
-			if o.Network.Misc != nil {
-				entry.Misc["Network"] = o.Network.Misc
-			}
-			if o.Network.EnablePacketBufferProtection != nil {
-				nestedNetwork.EnablePacketBufferProtection = util.AsBool(o.Network.EnablePacketBufferProtection, nil)
-			}
-			if o.Network.LogSetting != nil {
-				nestedNetwork.LogSetting = o.Network.LogSetting
-			}
-			if o.Network.ZoneProtectionProfile != nil {
-				nestedNetwork.ZoneProtectionProfile = o.Network.ZoneProtectionProfile
-			}
-			if o.Network.NetInspection != nil {
-				nestedNetwork.NetInspection = util.AsBool(o.Network.NetInspection, nil)
-			}
-			if o.Network.External != nil {
-				nestedNetwork.External = util.MemToStr(o.Network.External)
-			}
-			if o.Network.Layer2 != nil {
-				nestedNetwork.Layer2 = util.MemToStr(o.Network.Layer2)
-			}
-			if o.Network.Layer3 != nil {
-				nestedNetwork.Layer3 = util.MemToStr(o.Network.Layer3)
-			}
-			if o.Network.Tap != nil {
-				nestedNetwork.Tap = util.MemToStr(o.Network.Tap)
-			}
-			if o.Network.Tunnel != nil {
-				nestedNetwork.Tunnel = &NetworkTunnel{}
-				if o.Network.Tunnel.Misc != nil {
-					entry.Misc["NetworkTunnel"] = o.Network.Tunnel.Misc
-				}
-			}
-			if o.Network.VirtualWire != nil {
-				nestedNetwork.VirtualWire = util.MemToStr(o.Network.VirtualWire)
-			}
-		}
-		entry.Network = nestedNetwork
-
-		var nestedUserAcl *UserAcl
-		if o.UserAcl != nil {
-			nestedUserAcl = &UserAcl{}
-			if o.UserAcl.Misc != nil {
-				entry.Misc["UserAcl"] = o.UserAcl.Misc
-			}
-			if o.UserAcl.ExcludeList != nil {
-				nestedUserAcl.ExcludeList = util.MemToStr(o.UserAcl.ExcludeList)
-			}
-			if o.UserAcl.IncludeList != nil {
-				nestedUserAcl.IncludeList = util.MemToStr(o.UserAcl.IncludeList)
-			}
-		}
-		entry.UserAcl = nestedUserAcl
-
-		entry.Misc["Entry"] = o.Misc
-
-		entryList = append(entryList, entry)
-	}
-
-	return entryList, nil
-}
-func (c *entryXmlContainer_11_0_2) Normalize() ([]*Entry, error) {
-	entryList := make([]*Entry, 0, len(c.Answer))
-	for _, o := range c.Answer {
-		entry := &Entry{
-			Misc: make(map[string][]generic.Xml),
-		}
-		entry.Name = o.Name
-		var nestedDeviceAcl *DeviceAcl
-		if o.DeviceAcl != nil {
-			nestedDeviceAcl = &DeviceAcl{}
-			if o.DeviceAcl.Misc != nil {
-				entry.Misc["DeviceAcl"] = o.DeviceAcl.Misc
-			}
-			if o.DeviceAcl.ExcludeList != nil {
-				nestedDeviceAcl.ExcludeList = util.MemToStr(o.DeviceAcl.ExcludeList)
-			}
-			if o.DeviceAcl.IncludeList != nil {
-				nestedDeviceAcl.IncludeList = util.MemToStr(o.DeviceAcl.IncludeList)
-			}
-		}
-		entry.DeviceAcl = nestedDeviceAcl
-
-		entry.EnableDeviceIdentification = util.AsBool(o.EnableDeviceIdentification, nil)
-		entry.EnableUserIdentification = util.AsBool(o.EnableUserIdentification, nil)
-		var nestedNetwork *Network
-		if o.Network != nil {
-			nestedNetwork = &Network{}
-			if o.Network.Misc != nil {
-				entry.Misc["Network"] = o.Network.Misc
-			}
-			if o.Network.EnablePacketBufferProtection != nil {
-				nestedNetwork.EnablePacketBufferProtection = util.AsBool(o.Network.EnablePacketBufferProtection, nil)
-			}
-			if o.Network.LogSetting != nil {
-				nestedNetwork.LogSetting = o.Network.LogSetting
-			}
-			if o.Network.ZoneProtectionProfile != nil {
-				nestedNetwork.ZoneProtectionProfile = o.Network.ZoneProtectionProfile
-			}
-			if o.Network.NetInspection != nil {
-				nestedNetwork.NetInspection = util.AsBool(o.Network.NetInspection, nil)
-			}
-			if o.Network.External != nil {
-				nestedNetwork.External = util.MemToStr(o.Network.External)
-			}
-			if o.Network.Layer2 != nil {
-				nestedNetwork.Layer2 = util.MemToStr(o.Network.Layer2)
-			}
-			if o.Network.Layer3 != nil {
-				nestedNetwork.Layer3 = util.MemToStr(o.Network.Layer3)
-			}
-			if o.Network.Tap != nil {
-				nestedNetwork.Tap = util.MemToStr(o.Network.Tap)
-			}
-			if o.Network.Tunnel != nil {
-				nestedNetwork.Tunnel = &NetworkTunnel{}
-				if o.Network.Tunnel.Misc != nil {
-					entry.Misc["NetworkTunnel"] = o.Network.Tunnel.Misc
-				}
-			}
-			if o.Network.VirtualWire != nil {
-				nestedNetwork.VirtualWire = util.MemToStr(o.Network.VirtualWire)
-			}
-		}
-		entry.Network = nestedNetwork
-
-		var nestedUserAcl *UserAcl
-		if o.UserAcl != nil {
-			nestedUserAcl = &UserAcl{}
-			if o.UserAcl.Misc != nil {
-				entry.Misc["UserAcl"] = o.UserAcl.Misc
-			}
-			if o.UserAcl.ExcludeList != nil {
-				nestedUserAcl.ExcludeList = util.MemToStr(o.UserAcl.ExcludeList)
-			}
-			if o.UserAcl.IncludeList != nil {
-				nestedUserAcl.IncludeList = util.MemToStr(o.UserAcl.IncludeList)
-			}
-		}
-		entry.UserAcl = nestedUserAcl
-
-		entry.Misc["Entry"] = o.Misc
-
-		entryList = append(entryList, entry)
-	}
-
-	return entryList, nil
-}
-
 func SpecMatches(a, b *Entry) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+	if a == nil && b == nil {
 		return true
 	}
 
-	// Don't compare Name.
-	if !matchDeviceAcl(a.DeviceAcl, b.DeviceAcl) {
+	if (a == nil && b != nil) || (a != nil && b == nil) {
 		return false
 	}
-	if !util.BoolsMatch(a.EnableDeviceIdentification, b.EnableDeviceIdentification) {
+
+	return a.matches(b)
+}
+
+func (o *Entry) matches(other *Entry) bool {
+	if o == nil && other == nil {
+		return true
+	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.BoolsMatch(a.EnableUserIdentification, b.EnableUserIdentification) {
+	if !o.DeviceAcl.matches(other.DeviceAcl) {
 		return false
 	}
-	if !matchNetwork(a.Network, b.Network) {
+	if !util.BoolsMatch(o.EnableDeviceIdentification, other.EnableDeviceIdentification) {
 		return false
 	}
-	if !matchUserAcl(a.UserAcl, b.UserAcl) {
+	if !util.BoolsMatch(o.EnableUserIdentification, other.EnableUserIdentification) {
+		return false
+	}
+	if !o.Network.matches(other.Network) {
+		return false
+	}
+	if !o.UserAcl.matches(other.UserAcl) {
 		return false
 	}
 
 	return true
 }
 
-func matchDeviceAcl(a *DeviceAcl, b *DeviceAcl) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+func (o *DeviceAcl) matches(other *DeviceAcl) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.OrderedListsMatch(a.ExcludeList, b.ExcludeList) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.OrderedListsMatch(a.IncludeList, b.IncludeList) {
+	if !util.OrderedListsMatch[string](o.ExcludeList, other.ExcludeList) {
 		return false
 	}
+	if !util.OrderedListsMatch[string](o.IncludeList, other.IncludeList) {
+		return false
+	}
+
 	return true
 }
-func matchNetworkTunnel(a *NetworkTunnel, b *NetworkTunnel) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *Network) matches(other *Network) bool {
+	if o == nil && other == nil {
 		return true
 	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
+	}
+	if !util.BoolsMatch(o.EnablePacketBufferProtection, other.EnablePacketBufferProtection) {
+		return false
+	}
+	if !util.StringsMatch(o.LogSetting, other.LogSetting) {
+		return false
+	}
+	if !util.BoolsMatch(o.NetInspection, other.NetInspection) {
+		return false
+	}
+	if !util.StringsMatch(o.ZoneProtectionProfile, other.ZoneProtectionProfile) {
+		return false
+	}
+	if !util.OrderedListsMatch[string](o.External, other.External) {
+		return false
+	}
+	if !util.OrderedListsMatch[string](o.Layer2, other.Layer2) {
+		return false
+	}
+	if !util.OrderedListsMatch[string](o.Layer3, other.Layer3) {
+		return false
+	}
+	if !util.OrderedListsMatch[string](o.Tap, other.Tap) {
+		return false
+	}
+	if !o.Tunnel.matches(other.Tunnel) {
+		return false
+	}
+	if !util.OrderedListsMatch[string](o.VirtualWire, other.VirtualWire) {
+		return false
+	}
+
 	return true
 }
-func matchNetwork(a *Network, b *Network) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *NetworkTunnel) matches(other *NetworkTunnel) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.BoolsMatch(a.EnablePacketBufferProtection, b.EnablePacketBufferProtection) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.StringsMatch(a.LogSetting, b.LogSetting) {
-		return false
-	}
-	if !util.StringsMatch(a.ZoneProtectionProfile, b.ZoneProtectionProfile) {
-		return false
-	}
-	if !util.BoolsMatch(a.NetInspection, b.NetInspection) {
-		return false
-	}
-	if !util.OrderedListsMatch(a.External, b.External) {
-		return false
-	}
-	if !util.OrderedListsMatch(a.Layer2, b.Layer2) {
-		return false
-	}
-	if !util.OrderedListsMatch(a.Layer3, b.Layer3) {
-		return false
-	}
-	if !util.OrderedListsMatch(a.Tap, b.Tap) {
-		return false
-	}
-	if !matchNetworkTunnel(a.Tunnel, b.Tunnel) {
-		return false
-	}
-	if !util.OrderedListsMatch(a.VirtualWire, b.VirtualWire) {
-		return false
-	}
+
 	return true
 }
-func matchUserAcl(a *UserAcl, b *UserAcl) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *UserAcl) matches(other *UserAcl) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.OrderedListsMatch(a.ExcludeList, b.ExcludeList) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.OrderedListsMatch(a.IncludeList, b.IncludeList) {
+	if !util.OrderedListsMatch[string](o.ExcludeList, other.ExcludeList) {
 		return false
 	}
+	if !util.OrderedListsMatch[string](o.IncludeList, other.IncludeList) {
+		return false
+	}
+
 	return true
 }
 

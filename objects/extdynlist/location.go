@@ -2,6 +2,7 @@ package extdynlist
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/PaloAltoNetworks/pango/errors"
 	"github.com/PaloAltoNetworks/pango/util"
@@ -16,10 +17,15 @@ type ImportLocation interface {
 
 type Location struct {
 	Shared      *SharedLocation      `json:"shared"`
+	Vsys        *VsysLocation        `json:"vsys,omitempty"`
 	DeviceGroup *DeviceGroupLocation `json:"device_group,omitempty"`
 }
 
 type SharedLocation struct {
+}
+type VsysLocation struct {
+	NgfwDevice string `json:"ngfw_device"`
+	Vsys       string `json:"vsys"`
 }
 type DeviceGroupLocation struct {
 	DeviceGroup    string `json:"device_group"`
@@ -28,6 +34,13 @@ type DeviceGroupLocation struct {
 
 func NewSharedLocation() *Location {
 	return &Location{Shared: &SharedLocation{},
+	}
+}
+func NewVsysLocation() *Location {
+	return &Location{Vsys: &VsysLocation{
+		NgfwDevice: "localhost.localdomain",
+		Vsys:       "vsys1",
+	},
 	}
 }
 func NewDeviceGroupLocation() *Location {
@@ -43,6 +56,14 @@ func (o Location) IsValid() error {
 
 	switch {
 	case o.Shared != nil:
+		count++
+	case o.Vsys != nil:
+		if o.Vsys.NgfwDevice == "" {
+			return fmt.Errorf("NgfwDevice is unspecified")
+		}
+		if o.Vsys.Vsys == "" {
+			return fmt.Errorf("Vsys is unspecified")
+		}
 		count++
 	case o.DeviceGroup != nil:
 		if o.DeviceGroup.DeviceGroup == "" {
@@ -75,6 +96,20 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 			"config",
 			"shared",
 		}
+	case o.Vsys != nil:
+		if o.Vsys.NgfwDevice == "" {
+			return nil, fmt.Errorf("NgfwDevice is unspecified")
+		}
+		if o.Vsys.Vsys == "" {
+			return nil, fmt.Errorf("Vsys is unspecified")
+		}
+		ans = []string{
+			"config",
+			"devices",
+			util.AsEntryXpath(o.Vsys.NgfwDevice),
+			"vsys",
+			util.AsEntryXpath(o.Vsys.Vsys),
+		}
 	case o.DeviceGroup != nil:
 		if o.DeviceGroup.DeviceGroup == "" {
 			return nil, fmt.Errorf("DeviceGroup is unspecified")
@@ -85,9 +120,9 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 		ans = []string{
 			"config",
 			"devices",
-			util.AsEntryXpath([]string{o.DeviceGroup.PanoramaDevice}),
+			util.AsEntryXpath(o.DeviceGroup.PanoramaDevice),
 			"device-group",
-			util.AsEntryXpath([]string{o.DeviceGroup.DeviceGroup}),
+			util.AsEntryXpath(o.DeviceGroup.DeviceGroup),
 		}
 	default:
 		return nil, errors.NoLocationSpecifiedError
@@ -95,25 +130,32 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 
 	return ans, nil
 }
-func (o Location) XpathWithEntryName(vn version.Number, name string) ([]string, error) {
+
+func (o Location) XpathWithComponents(vn version.Number, components ...string) ([]string, error) {
+	if len(components) != 1 {
+		return nil, fmt.Errorf("invalid number of arguments for XpathWithComponents() call")
+	}
+
+	{
+		component := components[0]
+		if component != "entry" {
+			if !strings.HasPrefix(component, "entry[@name=\"]") && !strings.HasPrefix(component, "entry[@name='") {
+				return nil, errors.NewInvalidXpathComponentError(fmt.Sprintf("Name must be formatted as entry: %s", component))
+			}
+
+			if !strings.HasSuffix(component, "\"]") && !strings.HasSuffix(component, "']") {
+				return nil, errors.NewInvalidXpathComponentError(fmt.Sprintf("Name must be formatted as entry: %s", component))
+			}
+		}
+	}
 
 	ans, err := o.XpathPrefix(vn)
 	if err != nil {
 		return nil, err
 	}
-	ans = append(ans, Suffix...)
-	ans = append(ans, util.AsEntryXpath([]string{name}))
 
-	return ans, nil
-}
-func (o Location) XpathWithUuid(vn version.Number, uuid string) ([]string, error) {
-
-	ans, err := o.XpathPrefix(vn)
-	if err != nil {
-		return nil, err
-	}
-	ans = append(ans, Suffix...)
-	ans = append(ans, util.AsUuidXpath(uuid))
+	ans = append(ans, "external-list")
+	ans = append(ans, components[0])
 
 	return ans, nil
 }

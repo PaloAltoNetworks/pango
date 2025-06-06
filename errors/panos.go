@@ -7,6 +7,7 @@ import (
 	"strings"
 )
 
+var ObjectExists = stderr.New("object already exists")
 var InvalidFilterError = stderr.New("filter is improperly formatted")
 var NameNotSpecifiedError = stderr.New("name is not specified")
 var NoLocationSpecifiedError = stderr.New("no location specified")
@@ -14,6 +15,7 @@ var RelativePositionWithRemoveEverythingElseError = stderr.New("cannot do relati
 var UnrecognizedOperatorError = stderr.New("unsupported filter operator")
 var UnsupportedFilterTypeError = stderr.New("unsupported type for filtering")
 var UuidNotSpecifiedError = stderr.New("uuid is not specified")
+var UnsupportedMethodError = stderr.New("method is not supported")
 
 // Panos is an error returned from PAN-OS.
 //
@@ -149,5 +151,19 @@ func (e *errorCheck) CodeError() string {
 		return "Session timed out"
 	default:
 		return fmt.Sprintf("(%d) Unknown failure code, operation failed", e.Code)
+	}
+}
+
+type InvalidXpathComponentError struct {
+	Message string
+}
+
+func (o InvalidXpathComponentError) Error() string {
+	return o.Message
+}
+
+func NewInvalidXpathComponentError(message string) *InvalidXpathComponentError {
+	return &InvalidXpathComponentError{
+		Message: message,
 	}
 }

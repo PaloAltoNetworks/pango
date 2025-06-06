@@ -2,6 +2,8 @@ package util
 
 import (
 	"encoding/xml"
+	"fmt"
+	"strconv"
 )
 
 // MemberType defines a member config node used for sending and receiving XML
@@ -31,6 +33,26 @@ func MemToStr(e *MemberType) []string {
 	return ans
 }
 
+var ErrEmptyMemberList = fmt.Errorf("a list had no member elements")
+
+// MemToInt64 normalizes a MemberType pointer into a list of int64 values.
+func MemToInt64(e *MemberType) ([]int64, error) {
+	if e == nil {
+		return nil, ErrEmptyMemberList
+	}
+
+	ans := make([]int64, len(e.Members))
+	for idx, elt := range e.Members {
+		if converted, err := strconv.ParseInt(elt.Value, 10, 64); err != nil {
+			return nil, err
+		} else {
+			ans[idx] = converted
+		}
+	}
+
+	return ans, nil
+}
+
 // StrToMem converts a list of strings into a MemberType pointer.
 func StrToMem(e []string) *MemberType {
 	if e == nil {
@@ -40,6 +62,20 @@ func StrToMem(e []string) *MemberType {
 	ans := make([]Member, len(e))
 	for i := range e {
 		ans[i] = Member{Value: e[i]}
+	}
+
+	return &MemberType{ans}
+}
+
+// Int64ToMem converts a list of int64 values into a MemberType pointer
+func Int64ToMem(e []int64) *MemberType {
+	if e == nil {
+		return nil
+	}
+
+	ans := make([]Member, len(e))
+	for idx, elt := range e {
+		ans[idx].Value = strconv.FormatInt(elt, 10)
 	}
 
 	return &MemberType{ans}

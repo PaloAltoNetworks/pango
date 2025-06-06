@@ -2,6 +2,7 @@ package ipseccrypto
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/PaloAltoNetworks/pango/errors"
 	"github.com/PaloAltoNetworks/pango/util"
@@ -113,7 +114,7 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 		ans = []string{
 			"config",
 			"devices",
-			util.AsEntryXpath([]string{o.Ngfw.NgfwDevice}),
+			util.AsEntryXpath(o.Ngfw.NgfwDevice),
 		}
 	case o.Template != nil:
 		if o.Template.NgfwDevice == "" {
@@ -128,12 +129,12 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 		ans = []string{
 			"config",
 			"devices",
-			util.AsEntryXpath([]string{o.Template.PanoramaDevice}),
+			util.AsEntryXpath(o.Template.PanoramaDevice),
 			"template",
-			util.AsEntryXpath([]string{o.Template.Template}),
+			util.AsEntryXpath(o.Template.Template),
 			"config",
 			"devices",
-			util.AsEntryXpath([]string{o.Template.NgfwDevice}),
+			util.AsEntryXpath(o.Template.NgfwDevice),
 		}
 	case o.TemplateStack != nil:
 		if o.TemplateStack.NgfwDevice == "" {
@@ -148,12 +149,12 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 		ans = []string{
 			"config",
 			"devices",
-			util.AsEntryXpath([]string{o.TemplateStack.PanoramaDevice}),
+			util.AsEntryXpath(o.TemplateStack.PanoramaDevice),
 			"template-stack",
-			util.AsEntryXpath([]string{o.TemplateStack.TemplateStack}),
+			util.AsEntryXpath(o.TemplateStack.TemplateStack),
 			"config",
 			"devices",
-			util.AsEntryXpath([]string{o.TemplateStack.NgfwDevice}),
+			util.AsEntryXpath(o.TemplateStack.NgfwDevice),
 		}
 	default:
 		return nil, errors.NoLocationSpecifiedError
@@ -161,25 +162,35 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 
 	return ans, nil
 }
-func (o Location) XpathWithEntryName(vn version.Number, name string) ([]string, error) {
+
+func (o Location) XpathWithComponents(vn version.Number, components ...string) ([]string, error) {
+	if len(components) != 1 {
+		return nil, fmt.Errorf("invalid number of arguments for XpathWithComponents() call")
+	}
+
+	{
+		component := components[0]
+		if component != "entry" {
+			if !strings.HasPrefix(component, "entry[@name=\"]") && !strings.HasPrefix(component, "entry[@name='") {
+				return nil, errors.NewInvalidXpathComponentError(fmt.Sprintf("Name must be formatted as entry: %s", component))
+			}
+
+			if !strings.HasSuffix(component, "\"]") && !strings.HasSuffix(component, "']") {
+				return nil, errors.NewInvalidXpathComponentError(fmt.Sprintf("Name must be formatted as entry: %s", component))
+			}
+		}
+	}
 
 	ans, err := o.XpathPrefix(vn)
 	if err != nil {
 		return nil, err
 	}
-	ans = append(ans, Suffix...)
-	ans = append(ans, util.AsEntryXpath([]string{name}))
 
-	return ans, nil
-}
-func (o Location) XpathWithUuid(vn version.Number, uuid string) ([]string, error) {
-
-	ans, err := o.XpathPrefix(vn)
-	if err != nil {
-		return nil, err
-	}
-	ans = append(ans, Suffix...)
-	ans = append(ans, util.AsUuidXpath(uuid))
+	ans = append(ans, "network")
+	ans = append(ans, "ike")
+	ans = append(ans, "crypto-profiles")
+	ans = append(ans, "ipsec-crypto-profiles")
+	ans = append(ans, components[0])
 
 	return ans, nil
 }

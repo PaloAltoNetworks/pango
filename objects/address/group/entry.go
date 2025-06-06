@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{"address-group"}
+	suffix = []string{"address-group", "$name"}
 )
 
 type Entry struct {
@@ -25,16 +25,34 @@ type Entry struct {
 	Tag             []string
 	Dynamic         *Dynamic
 	Static          []string
-
-	Misc map[string][]generic.Xml
+	Misc            []generic.Xml
 }
-
 type Dynamic struct {
 	Filter *string
+	Misc   []generic.Xml
 }
 
 type entryXmlContainer struct {
 	Answer []entryXml `xml:"entry"`
+}
+
+func (o *entryXmlContainer) Normalize() ([]*Entry, error) {
+	entries := make([]*Entry, 0, len(o.Answer))
+	for _, elt := range o.Answer {
+		obj, err := elt.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		entries = append(entries, obj)
+	}
+
+	return entries, nil
+}
+
+func specifyEntry(source *Entry) (any, error) {
+	var obj entryXml
+	obj.MarshalFromObject(*source)
+	return obj, nil
 }
 
 type entryXml struct {
@@ -43,15 +61,74 @@ type entryXml struct {
 	Description     *string          `xml:"description,omitempty"`
 	DisableOverride *string          `xml:"disable-override,omitempty"`
 	Tag             *util.MemberType `xml:"tag,omitempty"`
-	Dynamic         *DynamicXml      `xml:"dynamic,omitempty"`
+	Dynamic         *dynamicXml      `xml:"dynamic,omitempty"`
 	Static          *util.MemberType `xml:"static,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
+	Misc            []generic.Xml    `xml:",any"`
 }
-type DynamicXml struct {
-	Filter *string `xml:"filter,omitempty"`
+type dynamicXml struct {
+	Filter *string       `xml:"filter,omitempty"`
+	Misc   []generic.Xml `xml:",any"`
+}
 
-	Misc []generic.Xml `xml:",any"`
+func (o *entryXml) MarshalFromObject(s Entry) {
+	o.Name = s.Name
+	o.Description = s.Description
+	o.DisableOverride = s.DisableOverride
+	if s.Tag != nil {
+		o.Tag = util.StrToMem(s.Tag)
+	}
+	if s.Dynamic != nil {
+		var obj dynamicXml
+		obj.MarshalFromObject(*s.Dynamic)
+		o.Dynamic = &obj
+	}
+	if s.Static != nil {
+		o.Static = util.StrToMem(s.Static)
+	}
+	o.Misc = s.Misc
+}
+
+func (o entryXml) UnmarshalToObject() (*Entry, error) {
+	var tagVal []string
+	if o.Tag != nil {
+		tagVal = util.MemToStr(o.Tag)
+	}
+	var dynamicVal *Dynamic
+	if o.Dynamic != nil {
+		obj, err := o.Dynamic.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		dynamicVal = obj
+	}
+	var staticVal []string
+	if o.Static != nil {
+		staticVal = util.MemToStr(o.Static)
+	}
+
+	result := &Entry{
+		Name:            o.Name,
+		Description:     o.Description,
+		DisableOverride: o.DisableOverride,
+		Tag:             tagVal,
+		Dynamic:         dynamicVal,
+		Static:          staticVal,
+		Misc:            o.Misc,
+	}
+	return result, nil
+}
+func (o *dynamicXml) MarshalFromObject(s Dynamic) {
+	o.Filter = s.Filter
+	o.Misc = s.Misc
+}
+
+func (o dynamicXml) UnmarshalToObject() (*Dynamic, error) {
+
+	result := &Dynamic{
+		Filter: o.Filter,
+		Misc:   o.Misc,
+	}
+	return result, nil
 }
 
 func (e *Entry) Field(v string) (any, error) {
@@ -84,99 +161,57 @@ func Versioning(vn version.Number) (Specifier, Normalizer, error) {
 
 	return specifyEntry, &entryXmlContainer{}, nil
 }
-func specifyEntry(o *Entry) (any, error) {
-	entry := entryXml{}
-	entry.Name = o.Name
-	entry.Description = o.Description
-	entry.DisableOverride = o.DisableOverride
-	entry.Tag = util.StrToMem(o.Tag)
-	var nestedDynamic *DynamicXml
-	if o.Dynamic != nil {
-		nestedDynamic = &DynamicXml{}
-		if _, ok := o.Misc["Dynamic"]; ok {
-			nestedDynamic.Misc = o.Misc["Dynamic"]
-		}
-		if o.Dynamic.Filter != nil {
-			nestedDynamic.Filter = o.Dynamic.Filter
-		}
-	}
-	entry.Dynamic = nestedDynamic
-
-	entry.Static = util.StrToMem(o.Static)
-
-	entry.Misc = o.Misc["Entry"]
-
-	return entry, nil
-}
-
-func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
-	entryList := make([]*Entry, 0, len(c.Answer))
-	for _, o := range c.Answer {
-		entry := &Entry{
-			Misc: make(map[string][]generic.Xml),
-		}
-		entry.Name = o.Name
-		entry.Description = o.Description
-		entry.DisableOverride = o.DisableOverride
-		entry.Tag = util.MemToStr(o.Tag)
-		var nestedDynamic *Dynamic
-		if o.Dynamic != nil {
-			nestedDynamic = &Dynamic{}
-			if o.Dynamic.Misc != nil {
-				entry.Misc["Dynamic"] = o.Dynamic.Misc
-			}
-			if o.Dynamic.Filter != nil {
-				nestedDynamic.Filter = o.Dynamic.Filter
-			}
-		}
-		entry.Dynamic = nestedDynamic
-
-		entry.Static = util.MemToStr(o.Static)
-
-		entry.Misc["Entry"] = o.Misc
-
-		entryList = append(entryList, entry)
-	}
-
-	return entryList, nil
-}
-
 func SpecMatches(a, b *Entry) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+	if a == nil && b == nil {
 		return true
 	}
 
-	// Don't compare Name.
-	if !util.StringsMatch(a.Description, b.Description) {
+	if (a == nil && b != nil) || (a != nil && b == nil) {
 		return false
 	}
-	if !util.StringsMatch(a.DisableOverride, b.DisableOverride) {
+
+	return a.matches(b)
+}
+
+func (o *Entry) matches(other *Entry) bool {
+	if o == nil && other == nil {
+		return true
+	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.OrderedListsMatch(a.Tag, b.Tag) {
+	if !util.StringsMatch(o.Description, other.Description) {
 		return false
 	}
-	if !matchDynamic(a.Dynamic, b.Dynamic) {
+	if !util.StringsMatch(o.DisableOverride, other.DisableOverride) {
 		return false
 	}
-	if !util.OrderedListsMatch(a.Static, b.Static) {
+	if !util.OrderedListsMatch[string](o.Tag, other.Tag) {
+		return false
+	}
+	if !o.Dynamic.matches(other.Dynamic) {
+		return false
+	}
+	if !util.OrderedListsMatch[string](o.Static, other.Static) {
 		return false
 	}
 
 	return true
 }
 
-func matchDynamic(a *Dynamic, b *Dynamic) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+func (o *Dynamic) matches(other *Dynamic) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.StringsMatch(a.Filter, b.Filter) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
+	if !util.StringsMatch(o.Filter, other.Filter) {
+		return false
+	}
+
 	return true
 }
 

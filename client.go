@@ -971,7 +971,7 @@ func (c *Client) Communicate(ctx context.Context, cmd util.PangoCommand, strip b
 }
 
 // ImportFile imports the given file into PAN-OS.
-func (c *Client) ImportFile(ctx context.Context, cmd *xmlapi.Import, content, filename, fp string, strip bool, ans any) ([]byte, *http.Response, error) {
+func (c *Client) ImportFile(ctx context.Context, cmd *xmlapi.Import, content []byte, filename, fp string, strip bool, ans any) ([]byte, *http.Response, error) {
 	if cmd == nil {
 		return nil, nil, fmt.Errorf("cmd is nil")
 	}
@@ -1002,7 +1002,7 @@ func (c *Client) ImportFile(ctx context.Context, cmd *xmlapi.Import, content, fi
 		return nil, nil, err
 	}
 
-	if _, err = io.Copy(w2, strings.NewReader(content)); err != nil {
+	if _, err = io.Copy(w2, bytes.NewReader(content)); err != nil {
 		return nil, nil, err
 	}
 
@@ -1037,6 +1037,8 @@ func (c *Client) ExportFile(ctx context.Context, cmd *xmlapi.Export, ans any) (s
 	if err != nil {
 		return "", nil, nil, err
 	}
+
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
 	b, resp, err := c.sendRequest(ctx, req, false, ans)
 	if err != nil {

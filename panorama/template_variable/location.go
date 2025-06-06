@@ -2,6 +2,7 @@ package template_variable
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/PaloAltoNetworks/pango/errors"
 	"github.com/PaloAltoNetworks/pango/util"
@@ -15,18 +16,30 @@ type ImportLocation interface {
 }
 
 type Location struct {
-	Template *TemplateLocation `json:"template,omitempty"`
+	Template      *TemplateLocation      `json:"template,omitempty"`
+	TemplateStack *TemplateStackLocation `json:"template_stack,omitempty"`
 }
 
 type TemplateLocation struct {
 	PanoramaDevice string `json:"panorama_device"`
 	Template       string `json:"template"`
 }
+type TemplateStackLocation struct {
+	PanoramaDevice string `json:"panorama_device"`
+	TemplateStack  string `json:"template_stack"`
+}
 
 func NewTemplateLocation() *Location {
 	return &Location{Template: &TemplateLocation{
 		PanoramaDevice: "localhost.localdomain",
 		Template:       "",
+	},
+	}
+}
+func NewTemplateStackLocation() *Location {
+	return &Location{TemplateStack: &TemplateStackLocation{
+		PanoramaDevice: "localhost.localdomain",
+		TemplateStack:  "",
 	},
 	}
 }
@@ -41,6 +54,14 @@ func (o Location) IsValid() error {
 		}
 		if o.Template.Template == "" {
 			return fmt.Errorf("Template is unspecified")
+		}
+		count++
+	case o.TemplateStack != nil:
+		if o.TemplateStack.PanoramaDevice == "" {
+			return fmt.Errorf("PanoramaDevice is unspecified")
+		}
+		if o.TemplateStack.TemplateStack == "" {
+			return fmt.Errorf("TemplateStack is unspecified")
 		}
 		count++
 	}
@@ -71,9 +92,23 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 		ans = []string{
 			"config",
 			"devices",
-			util.AsEntryXpath([]string{o.Template.PanoramaDevice}),
+			util.AsEntryXpath(o.Template.PanoramaDevice),
 			"template",
-			util.AsEntryXpath([]string{o.Template.Template}),
+			util.AsEntryXpath(o.Template.Template),
+		}
+	case o.TemplateStack != nil:
+		if o.TemplateStack.PanoramaDevice == "" {
+			return nil, fmt.Errorf("PanoramaDevice is unspecified")
+		}
+		if o.TemplateStack.TemplateStack == "" {
+			return nil, fmt.Errorf("TemplateStack is unspecified")
+		}
+		ans = []string{
+			"config",
+			"devices",
+			util.AsEntryXpath(o.TemplateStack.PanoramaDevice),
+			"template-stack",
+			util.AsEntryXpath(o.TemplateStack.TemplateStack),
 		}
 	default:
 		return nil, errors.NoLocationSpecifiedError
@@ -81,25 +116,32 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 
 	return ans, nil
 }
-func (o Location) XpathWithEntryName(vn version.Number, name string) ([]string, error) {
+
+func (o Location) XpathWithComponents(vn version.Number, components ...string) ([]string, error) {
+	if len(components) != 1 {
+		return nil, fmt.Errorf("invalid number of arguments for XpathWithComponents() call")
+	}
+
+	{
+		component := components[0]
+		if component != "entry" {
+			if !strings.HasPrefix(component, "entry[@name=\"]") && !strings.HasPrefix(component, "entry[@name='") {
+				return nil, errors.NewInvalidXpathComponentError(fmt.Sprintf("Name must be formatted as entry: %s", component))
+			}
+
+			if !strings.HasSuffix(component, "\"]") && !strings.HasSuffix(component, "']") {
+				return nil, errors.NewInvalidXpathComponentError(fmt.Sprintf("Name must be formatted as entry: %s", component))
+			}
+		}
+	}
 
 	ans, err := o.XpathPrefix(vn)
 	if err != nil {
 		return nil, err
 	}
-	ans = append(ans, Suffix...)
-	ans = append(ans, util.AsEntryXpath([]string{name}))
 
-	return ans, nil
-}
-func (o Location) XpathWithUuid(vn version.Number, uuid string) ([]string, error) {
-
-	ans, err := o.XpathPrefix(vn)
-	if err != nil {
-		return nil, err
-	}
-	ans = append(ans, Suffix...)
-	ans = append(ans, util.AsUuidXpath(uuid))
+	ans = append(ans, "variable")
+	ans = append(ans, components[0])
 
 	return ans, nil
 }

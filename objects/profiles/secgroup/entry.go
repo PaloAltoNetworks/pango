@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{"profile-group"}
+	suffix = []string{"profile-group", "$name"}
 )
 
 type Entry struct {
@@ -30,12 +30,30 @@ type Entry struct {
 	Virus            []string
 	Vulnerability    []string
 	WildfireAnalysis []string
-
-	Misc map[string][]generic.Xml
+	Misc             []generic.Xml
 }
 
 type entryXmlContainer struct {
 	Answer []entryXml `xml:"entry"`
+}
+
+func (o *entryXmlContainer) Normalize() ([]*Entry, error) {
+	entries := make([]*Entry, 0, len(o.Answer))
+	for _, elt := range o.Answer {
+		obj, err := elt.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		entries = append(entries, obj)
+	}
+
+	return entries, nil
+}
+
+func specifyEntry(source *Entry) (any, error) {
+	var obj entryXml
+	obj.MarshalFromObject(*source)
+	return obj, nil
 }
 
 type entryXml struct {
@@ -51,8 +69,95 @@ type entryXml struct {
 	Virus            *util.MemberType `xml:"virus,omitempty"`
 	Vulnerability    *util.MemberType `xml:"vulnerability,omitempty"`
 	WildfireAnalysis *util.MemberType `xml:"wildfire-analysis,omitempty"`
+	Misc             []generic.Xml    `xml:",any"`
+}
 
-	Misc []generic.Xml `xml:",any"`
+func (o *entryXml) MarshalFromObject(s Entry) {
+	o.Name = s.Name
+	if s.DataFiltering != nil {
+		o.DataFiltering = util.StrToMem(s.DataFiltering)
+	}
+	o.DisableOverride = s.DisableOverride
+	if s.FileBlocking != nil {
+		o.FileBlocking = util.StrToMem(s.FileBlocking)
+	}
+	if s.Gtp != nil {
+		o.Gtp = util.StrToMem(s.Gtp)
+	}
+	if s.Sctp != nil {
+		o.Sctp = util.StrToMem(s.Sctp)
+	}
+	if s.Spyware != nil {
+		o.Spyware = util.StrToMem(s.Spyware)
+	}
+	if s.UrlFiltering != nil {
+		o.UrlFiltering = util.StrToMem(s.UrlFiltering)
+	}
+	if s.Virus != nil {
+		o.Virus = util.StrToMem(s.Virus)
+	}
+	if s.Vulnerability != nil {
+		o.Vulnerability = util.StrToMem(s.Vulnerability)
+	}
+	if s.WildfireAnalysis != nil {
+		o.WildfireAnalysis = util.StrToMem(s.WildfireAnalysis)
+	}
+	o.Misc = s.Misc
+}
+
+func (o entryXml) UnmarshalToObject() (*Entry, error) {
+	var dataFilteringVal []string
+	if o.DataFiltering != nil {
+		dataFilteringVal = util.MemToStr(o.DataFiltering)
+	}
+	var fileBlockingVal []string
+	if o.FileBlocking != nil {
+		fileBlockingVal = util.MemToStr(o.FileBlocking)
+	}
+	var gtpVal []string
+	if o.Gtp != nil {
+		gtpVal = util.MemToStr(o.Gtp)
+	}
+	var sctpVal []string
+	if o.Sctp != nil {
+		sctpVal = util.MemToStr(o.Sctp)
+	}
+	var spywareVal []string
+	if o.Spyware != nil {
+		spywareVal = util.MemToStr(o.Spyware)
+	}
+	var urlFilteringVal []string
+	if o.UrlFiltering != nil {
+		urlFilteringVal = util.MemToStr(o.UrlFiltering)
+	}
+	var virusVal []string
+	if o.Virus != nil {
+		virusVal = util.MemToStr(o.Virus)
+	}
+	var vulnerabilityVal []string
+	if o.Vulnerability != nil {
+		vulnerabilityVal = util.MemToStr(o.Vulnerability)
+	}
+	var wildfireAnalysisVal []string
+	if o.WildfireAnalysis != nil {
+		wildfireAnalysisVal = util.MemToStr(o.WildfireAnalysis)
+	}
+
+	result := &Entry{
+		Name:             o.Name,
+		DataFiltering:    dataFilteringVal,
+		DisableOverride:  o.DisableOverride,
+		FileBlocking:     fileBlockingVal,
+		Gtp:              gtpVal,
+		Sctp:             sctpVal,
+		Spyware:          spywareVal,
+		UrlFiltering:     urlFilteringVal,
+		Virus:            virusVal,
+		Vulnerability:    vulnerabilityVal,
+		WildfireAnalysis: wildfireAnalysisVal,
+		Misc:             o.Misc,
+	}
+	return result, nil
 }
 
 func (e *Entry) Field(v string) (any, error) {
@@ -124,87 +229,54 @@ func Versioning(vn version.Number) (Specifier, Normalizer, error) {
 
 	return specifyEntry, &entryXmlContainer{}, nil
 }
-func specifyEntry(o *Entry) (any, error) {
-	entry := entryXml{}
-	entry.Name = o.Name
-	entry.DataFiltering = util.StrToMem(o.DataFiltering)
-	entry.DisableOverride = o.DisableOverride
-	entry.FileBlocking = util.StrToMem(o.FileBlocking)
-	entry.Gtp = util.StrToMem(o.Gtp)
-	entry.Sctp = util.StrToMem(o.Sctp)
-	entry.Spyware = util.StrToMem(o.Spyware)
-	entry.UrlFiltering = util.StrToMem(o.UrlFiltering)
-	entry.Virus = util.StrToMem(o.Virus)
-	entry.Vulnerability = util.StrToMem(o.Vulnerability)
-	entry.WildfireAnalysis = util.StrToMem(o.WildfireAnalysis)
-
-	entry.Misc = o.Misc["Entry"]
-
-	return entry, nil
-}
-
-func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
-	entryList := make([]*Entry, 0, len(c.Answer))
-	for _, o := range c.Answer {
-		entry := &Entry{
-			Misc: make(map[string][]generic.Xml),
-		}
-		entry.Name = o.Name
-		entry.DataFiltering = util.MemToStr(o.DataFiltering)
-		entry.DisableOverride = o.DisableOverride
-		entry.FileBlocking = util.MemToStr(o.FileBlocking)
-		entry.Gtp = util.MemToStr(o.Gtp)
-		entry.Sctp = util.MemToStr(o.Sctp)
-		entry.Spyware = util.MemToStr(o.Spyware)
-		entry.UrlFiltering = util.MemToStr(o.UrlFiltering)
-		entry.Virus = util.MemToStr(o.Virus)
-		entry.Vulnerability = util.MemToStr(o.Vulnerability)
-		entry.WildfireAnalysis = util.MemToStr(o.WildfireAnalysis)
-
-		entry.Misc["Entry"] = o.Misc
-
-		entryList = append(entryList, entry)
-	}
-
-	return entryList, nil
-}
-
 func SpecMatches(a, b *Entry) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+	if a == nil && b == nil {
 		return true
 	}
 
-	// Don't compare Name.
-	if !util.OrderedListsMatch(a.DataFiltering, b.DataFiltering) {
+	if (a == nil && b != nil) || (a != nil && b == nil) {
 		return false
 	}
-	if !util.StringsMatch(a.DisableOverride, b.DisableOverride) {
+
+	return a.matches(b)
+}
+
+func (o *Entry) matches(other *Entry) bool {
+	if o == nil && other == nil {
+		return true
+	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.OrderedListsMatch(a.FileBlocking, b.FileBlocking) {
+	if !util.OrderedListsMatch[string](o.DataFiltering, other.DataFiltering) {
 		return false
 	}
-	if !util.OrderedListsMatch(a.Gtp, b.Gtp) {
+	if !util.StringsMatch(o.DisableOverride, other.DisableOverride) {
 		return false
 	}
-	if !util.OrderedListsMatch(a.Sctp, b.Sctp) {
+	if !util.OrderedListsMatch[string](o.FileBlocking, other.FileBlocking) {
 		return false
 	}
-	if !util.OrderedListsMatch(a.Spyware, b.Spyware) {
+	if !util.OrderedListsMatch[string](o.Gtp, other.Gtp) {
 		return false
 	}
-	if !util.OrderedListsMatch(a.UrlFiltering, b.UrlFiltering) {
+	if !util.OrderedListsMatch[string](o.Sctp, other.Sctp) {
 		return false
 	}
-	if !util.OrderedListsMatch(a.Virus, b.Virus) {
+	if !util.OrderedListsMatch[string](o.Spyware, other.Spyware) {
 		return false
 	}
-	if !util.OrderedListsMatch(a.Vulnerability, b.Vulnerability) {
+	if !util.OrderedListsMatch[string](o.UrlFiltering, other.UrlFiltering) {
 		return false
 	}
-	if !util.OrderedListsMatch(a.WildfireAnalysis, b.WildfireAnalysis) {
+	if !util.OrderedListsMatch[string](o.Virus, other.Virus) {
+		return false
+	}
+	if !util.OrderedListsMatch[string](o.Vulnerability, other.Vulnerability) {
+		return false
+	}
+	if !util.OrderedListsMatch[string](o.WildfireAnalysis, other.WildfireAnalysis) {
 		return false
 	}
 

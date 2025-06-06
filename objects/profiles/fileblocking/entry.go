@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{"profiles", "file-blocking"}
+	suffix = []string{"profiles", "file-blocking", "$name"}
 )
 
 type Entry struct {
@@ -23,39 +23,130 @@ type Entry struct {
 	Description     *string
 	DisableOverride *string
 	Rules           []Rules
-
-	Misc map[string][]generic.Xml
+	Misc            []generic.Xml
 }
-
 type Rules struct {
 	Name        string
 	Application []string
 	FileType    []string
 	Direction   *string
 	Action      *string
+	Misc        []generic.Xml
 }
 
 type entryXmlContainer struct {
 	Answer []entryXml `xml:"entry"`
 }
 
-type entryXml struct {
-	XMLName         xml.Name   `xml:"entry"`
-	Name            string     `xml:"name,attr"`
-	Description     *string    `xml:"description,omitempty"`
-	DisableOverride *string    `xml:"disable-override,omitempty"`
-	Rules           []RulesXml `xml:"rules>entry,omitempty"`
+func (o *entryXmlContainer) Normalize() ([]*Entry, error) {
+	entries := make([]*Entry, 0, len(o.Answer))
+	for _, elt := range o.Answer {
+		obj, err := elt.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		entries = append(entries, obj)
+	}
 
-	Misc []generic.Xml `xml:",any"`
+	return entries, nil
 }
-type RulesXml struct {
-	Action      *string          `xml:"action,omitempty"`
-	Application *util.MemberType `xml:"application,omitempty"`
-	Direction   *string          `xml:"direction,omitempty"`
-	FileType    *util.MemberType `xml:"file-type,omitempty"`
-	Name        string           `xml:"name,attr"`
 
-	Misc []generic.Xml `xml:",any"`
+func specifyEntry(source *Entry) (any, error) {
+	var obj entryXml
+	obj.MarshalFromObject(*source)
+	return obj, nil
+}
+
+type entryXml struct {
+	XMLName         xml.Name           `xml:"entry"`
+	Name            string             `xml:"name,attr"`
+	Description     *string            `xml:"description,omitempty"`
+	DisableOverride *string            `xml:"disable-override,omitempty"`
+	Rules           *rulesContainerXml `xml:"rules,omitempty"`
+	Misc            []generic.Xml      `xml:",any"`
+}
+type rulesContainerXml struct {
+	Entries []rulesXml `xml:"entry"`
+}
+type rulesXml struct {
+	XMLName     xml.Name         `xml:"entry"`
+	Name        string           `xml:"name,attr"`
+	Application *util.MemberType `xml:"application,omitempty"`
+	FileType    *util.MemberType `xml:"file-type,omitempty"`
+	Direction   *string          `xml:"direction,omitempty"`
+	Action      *string          `xml:"action,omitempty"`
+	Misc        []generic.Xml    `xml:",any"`
+}
+
+func (o *entryXml) MarshalFromObject(s Entry) {
+	o.Name = s.Name
+	o.Description = s.Description
+	o.DisableOverride = s.DisableOverride
+	if s.Rules != nil {
+		var objs []rulesXml
+		for _, elt := range s.Rules {
+			var obj rulesXml
+			obj.MarshalFromObject(elt)
+			objs = append(objs, obj)
+		}
+		o.Rules = &rulesContainerXml{Entries: objs}
+	}
+	o.Misc = s.Misc
+}
+
+func (o entryXml) UnmarshalToObject() (*Entry, error) {
+	var rulesVal []Rules
+	if o.Rules != nil {
+		for _, elt := range o.Rules.Entries {
+			obj, err := elt.UnmarshalToObject()
+			if err != nil {
+				return nil, err
+			}
+			rulesVal = append(rulesVal, *obj)
+		}
+	}
+
+	result := &Entry{
+		Name:            o.Name,
+		Description:     o.Description,
+		DisableOverride: o.DisableOverride,
+		Rules:           rulesVal,
+		Misc:            o.Misc,
+	}
+	return result, nil
+}
+func (o *rulesXml) MarshalFromObject(s Rules) {
+	o.Name = s.Name
+	if s.Application != nil {
+		o.Application = util.StrToMem(s.Application)
+	}
+	if s.FileType != nil {
+		o.FileType = util.StrToMem(s.FileType)
+	}
+	o.Direction = s.Direction
+	o.Action = s.Action
+	o.Misc = s.Misc
+}
+
+func (o rulesXml) UnmarshalToObject() (*Rules, error) {
+	var applicationVal []string
+	if o.Application != nil {
+		applicationVal = util.MemToStr(o.Application)
+	}
+	var fileTypeVal []string
+	if o.FileType != nil {
+		fileTypeVal = util.MemToStr(o.FileType)
+	}
+
+	result := &Rules{
+		Name:        o.Name,
+		Application: applicationVal,
+		FileType:    fileTypeVal,
+		Direction:   o.Direction,
+		Action:      o.Action,
+		Misc:        o.Misc,
+	}
+	return result, nil
 }
 
 func (e *Entry) Field(v string) (any, error) {
@@ -82,135 +173,68 @@ func Versioning(vn version.Number) (Specifier, Normalizer, error) {
 
 	return specifyEntry, &entryXmlContainer{}, nil
 }
-func specifyEntry(o *Entry) (any, error) {
-	entry := entryXml{}
-	entry.Name = o.Name
-	entry.Description = o.Description
-	entry.DisableOverride = o.DisableOverride
-	var nestedRulesCol []RulesXml
-	if o.Rules != nil {
-		nestedRulesCol = []RulesXml{}
-		for _, oRules := range o.Rules {
-			nestedRules := RulesXml{}
-			if _, ok := o.Misc["Rules"]; ok {
-				nestedRules.Misc = o.Misc["Rules"]
-			}
-			if oRules.Name != "" {
-				nestedRules.Name = oRules.Name
-			}
-			if oRules.Application != nil {
-				nestedRules.Application = util.StrToMem(oRules.Application)
-			}
-			if oRules.FileType != nil {
-				nestedRules.FileType = util.StrToMem(oRules.FileType)
-			}
-			if oRules.Direction != nil {
-				nestedRules.Direction = oRules.Direction
-			}
-			if oRules.Action != nil {
-				nestedRules.Action = oRules.Action
-			}
-			nestedRulesCol = append(nestedRulesCol, nestedRules)
-		}
-		entry.Rules = nestedRulesCol
-	}
-
-	entry.Misc = o.Misc["Entry"]
-
-	return entry, nil
-}
-
-func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
-	entryList := make([]*Entry, 0, len(c.Answer))
-	for _, o := range c.Answer {
-		entry := &Entry{
-			Misc: make(map[string][]generic.Xml),
-		}
-		entry.Name = o.Name
-		entry.Description = o.Description
-		entry.DisableOverride = o.DisableOverride
-		var nestedRulesCol []Rules
-		if o.Rules != nil {
-			nestedRulesCol = []Rules{}
-			for _, oRules := range o.Rules {
-				nestedRules := Rules{}
-				if oRules.Misc != nil {
-					entry.Misc["Rules"] = oRules.Misc
-				}
-				if oRules.Name != "" {
-					nestedRules.Name = oRules.Name
-				}
-				if oRules.Application != nil {
-					nestedRules.Application = util.MemToStr(oRules.Application)
-				}
-				if oRules.FileType != nil {
-					nestedRules.FileType = util.MemToStr(oRules.FileType)
-				}
-				if oRules.Direction != nil {
-					nestedRules.Direction = oRules.Direction
-				}
-				if oRules.Action != nil {
-					nestedRules.Action = oRules.Action
-				}
-				nestedRulesCol = append(nestedRulesCol, nestedRules)
-			}
-			entry.Rules = nestedRulesCol
-		}
-
-		entry.Misc["Entry"] = o.Misc
-
-		entryList = append(entryList, entry)
-	}
-
-	return entryList, nil
-}
-
 func SpecMatches(a, b *Entry) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+	if a == nil && b == nil {
 		return true
 	}
 
-	// Don't compare Name.
-	if !util.StringsMatch(a.Description, b.Description) {
+	if (a == nil && b != nil) || (a != nil && b == nil) {
 		return false
 	}
-	if !util.StringsMatch(a.DisableOverride, b.DisableOverride) {
+
+	return a.matches(b)
+}
+
+func (o *Entry) matches(other *Entry) bool {
+	if o == nil && other == nil {
+		return true
+	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !matchRules(a.Rules, b.Rules) {
+	if !util.StringsMatch(o.Description, other.Description) {
 		return false
+	}
+	if !util.StringsMatch(o.DisableOverride, other.DisableOverride) {
+		return false
+	}
+	if len(o.Rules) != len(other.Rules) {
+		return false
+	}
+	for idx := range o.Rules {
+		if !o.Rules[idx].matches(&other.Rules[idx]) {
+			return false
+		}
 	}
 
 	return true
 }
 
-func matchRules(a []Rules, b []Rules) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+func (o *Rules) matches(other *Rules) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	for _, a := range a {
-		for _, b := range b {
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-			if !util.OrderedListsMatch(a.Application, b.Application) {
-				return false
-			}
-			if !util.OrderedListsMatch(a.FileType, b.FileType) {
-				return false
-			}
-			if !util.StringsMatch(a.Direction, b.Direction) {
-				return false
-			}
-			if !util.StringsMatch(a.Action, b.Action) {
-				return false
-			}
-		}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
 	}
+	if o.Name != other.Name {
+		return false
+	}
+	if !util.OrderedListsMatch[string](o.Application, other.Application) {
+		return false
+	}
+	if !util.OrderedListsMatch[string](o.FileType, other.FileType) {
+		return false
+	}
+	if !util.StringsMatch(o.Direction, other.Direction) {
+		return false
+	}
+	if !util.StringsMatch(o.Action, other.Action) {
+		return false
+	}
+
 	return true
 }
 

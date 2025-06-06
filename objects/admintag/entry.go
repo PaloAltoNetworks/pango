@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{"tag"}
+	suffix = []string{"tag", "$name"}
 )
 
 type Entry struct {
@@ -23,22 +23,59 @@ type Entry struct {
 	Color           *string
 	Comments        *string
 	DisableOverride *string
-
-	Misc map[string][]generic.Xml
+	Misc            []generic.Xml
 }
 
 type entryXmlContainer struct {
 	Answer []entryXml `xml:"entry"`
 }
 
-type entryXml struct {
-	XMLName         xml.Name `xml:"entry"`
-	Name            string   `xml:"name,attr"`
-	Color           *string  `xml:"color,omitempty"`
-	Comments        *string  `xml:"comments,omitempty"`
-	DisableOverride *string  `xml:"disable-override,omitempty"`
+func (o *entryXmlContainer) Normalize() ([]*Entry, error) {
+	entries := make([]*Entry, 0, len(o.Answer))
+	for _, elt := range o.Answer {
+		obj, err := elt.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		entries = append(entries, obj)
+	}
 
-	Misc []generic.Xml `xml:",any"`
+	return entries, nil
+}
+
+func specifyEntry(source *Entry) (any, error) {
+	var obj entryXml
+	obj.MarshalFromObject(*source)
+	return obj, nil
+}
+
+type entryXml struct {
+	XMLName         xml.Name      `xml:"entry"`
+	Name            string        `xml:"name,attr"`
+	Color           *string       `xml:"color,omitempty"`
+	Comments        *string       `xml:"comments,omitempty"`
+	DisableOverride *string       `xml:"disable-override,omitempty"`
+	Misc            []generic.Xml `xml:",any"`
+}
+
+func (o *entryXml) MarshalFromObject(s Entry) {
+	o.Name = s.Name
+	o.Color = s.Color
+	o.Comments = s.Comments
+	o.DisableOverride = s.DisableOverride
+	o.Misc = s.Misc
+}
+
+func (o entryXml) UnmarshalToObject() (*Entry, error) {
+
+	result := &Entry{
+		Name:            o.Name,
+		Color:           o.Color,
+		Comments:        o.Comments,
+		DisableOverride: o.DisableOverride,
+		Misc:            o.Misc,
+	}
+	return result, nil
 }
 
 const (
@@ -105,52 +142,33 @@ func Versioning(vn version.Number) (Specifier, Normalizer, error) {
 
 	return specifyEntry, &entryXmlContainer{}, nil
 }
-func specifyEntry(o *Entry) (any, error) {
-	entry := entryXml{}
-	entry.Name = o.Name
-	entry.Color = o.Color
-	entry.Comments = o.Comments
-	entry.DisableOverride = o.DisableOverride
-
-	entry.Misc = o.Misc["Entry"]
-
-	return entry, nil
-}
-
-func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
-	entryList := make([]*Entry, 0, len(c.Answer))
-	for _, o := range c.Answer {
-		entry := &Entry{
-			Misc: make(map[string][]generic.Xml),
-		}
-		entry.Name = o.Name
-		entry.Color = o.Color
-		entry.Comments = o.Comments
-		entry.DisableOverride = o.DisableOverride
-
-		entry.Misc["Entry"] = o.Misc
-
-		entryList = append(entryList, entry)
-	}
-
-	return entryList, nil
-}
-
 func SpecMatches(a, b *Entry) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+	if a == nil && b == nil {
 		return true
 	}
 
-	// Don't compare Name.
-	if !util.StringsMatch(a.Color, b.Color) {
+	if (a == nil && b != nil) || (a != nil && b == nil) {
 		return false
 	}
-	if !util.StringsMatch(a.Comments, b.Comments) {
+
+	return a.matches(b)
+}
+
+func (o *Entry) matches(other *Entry) bool {
+	if o == nil && other == nil {
+		return true
+	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.StringsMatch(a.DisableOverride, b.DisableOverride) {
+	if !util.StringsMatch(o.Color, other.Color) {
+		return false
+	}
+	if !util.StringsMatch(o.Comments, other.Comments) {
+		return false
+	}
+	if !util.StringsMatch(o.DisableOverride, other.DisableOverride) {
 		return false
 	}
 

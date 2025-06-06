@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{"network", "interface", "loopback", "units"}
+	suffix = []string{"network", "interface", "loopback", "units", "$name"}
 )
 
 type Entry struct {
@@ -27,83 +27,309 @@ type Entry struct {
 	Ipv6                       *Ipv6
 	Mtu                        *int64
 	NetflowProfile             *string
-
-	Misc map[string][]generic.Xml
+	Misc                       []generic.Xml
 }
-
 type AdjustTcpMss struct {
 	Enable            *bool
 	Ipv4MssAdjustment *int64
 	Ipv6MssAdjustment *int64
+	Misc              []generic.Xml
 }
 type Ip struct {
 	Name string
+	Misc []generic.Xml
 }
 type Ipv6 struct {
 	Address     []Ipv6Address
 	Enabled     *bool
 	InterfaceId *string
+	Misc        []generic.Xml
 }
 type Ipv6Address struct {
 	Name              string
 	EnableOnInterface *bool
 	Prefix            *Ipv6AddressPrefix
 	Anycast           *Ipv6AddressAnycast
-}
-type Ipv6AddressAnycast struct {
+	Misc              []generic.Xml
 }
 type Ipv6AddressPrefix struct {
+	Misc []generic.Xml
+}
+type Ipv6AddressAnycast struct {
+	Misc []generic.Xml
 }
 
 type entryXmlContainer struct {
 	Answer []entryXml `xml:"entry"`
 }
 
+func (o *entryXmlContainer) Normalize() ([]*Entry, error) {
+	entries := make([]*Entry, 0, len(o.Answer))
+	for _, elt := range o.Answer {
+		obj, err := elt.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		entries = append(entries, obj)
+	}
+
+	return entries, nil
+}
+
+func specifyEntry(source *Entry) (any, error) {
+	var obj entryXml
+	obj.MarshalFromObject(*source)
+	return obj, nil
+}
+
 type entryXml struct {
 	XMLName                    xml.Name         `xml:"entry"`
 	Name                       string           `xml:"name,attr"`
-	AdjustTcpMss               *AdjustTcpMssXml `xml:"adjust-tcp-mss,omitempty"`
+	AdjustTcpMss               *adjustTcpMssXml `xml:"adjust-tcp-mss,omitempty"`
 	Comment                    *string          `xml:"comment,omitempty"`
 	InterfaceManagementProfile *string          `xml:"interface-management-profile,omitempty"`
-	Ip                         []IpXml          `xml:"ip>entry,omitempty"`
-	Ipv6                       *Ipv6Xml         `xml:"ipv6,omitempty"`
+	Ip                         *ipContainerXml  `xml:"ip,omitempty"`
+	Ipv6                       *ipv6Xml         `xml:"ipv6,omitempty"`
 	Mtu                        *int64           `xml:"mtu,omitempty"`
 	NetflowProfile             *string          `xml:"netflow-profile,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
+	Misc                       []generic.Xml    `xml:",any"`
 }
-type AdjustTcpMssXml struct {
-	Enable            *string `xml:"enable,omitempty"`
-	Ipv4MssAdjustment *int64  `xml:"ipv4-mss-adjustment,omitempty"`
-	Ipv6MssAdjustment *int64  `xml:"ipv6-mss-adjustment,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
+type adjustTcpMssXml struct {
+	Enable            *string       `xml:"enable,omitempty"`
+	Ipv4MssAdjustment *int64        `xml:"ipv4-mss-adjustment,omitempty"`
+	Ipv6MssAdjustment *int64        `xml:"ipv6-mss-adjustment,omitempty"`
+	Misc              []generic.Xml `xml:",any"`
 }
-type IpXml struct {
-	Name string `xml:"name,attr"`
-
-	Misc []generic.Xml `xml:",any"`
+type ipContainerXml struct {
+	Entries []ipXml `xml:"entry"`
 }
-type Ipv6Xml struct {
-	Address     []Ipv6AddressXml `xml:"address>entry,omitempty"`
-	Enabled     *string          `xml:"enabled,omitempty"`
-	InterfaceId *string          `xml:"interface-id,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
+type ipXml struct {
+	XMLName xml.Name      `xml:"entry"`
+	Name    string        `xml:"name,attr"`
+	Misc    []generic.Xml `xml:",any"`
 }
-type Ipv6AddressXml struct {
-	Anycast           *Ipv6AddressAnycastXml `xml:"anycast,omitempty"`
-	EnableOnInterface *string                `xml:"enable-on-interface,omitempty"`
+type ipv6Xml struct {
+	Address     *ipv6AddressContainerXml `xml:"address,omitempty"`
+	Enabled     *string                  `xml:"enabled,omitempty"`
+	InterfaceId *string                  `xml:"interface-id,omitempty"`
+	Misc        []generic.Xml            `xml:",any"`
+}
+type ipv6AddressContainerXml struct {
+	Entries []ipv6AddressXml `xml:"entry"`
+}
+type ipv6AddressXml struct {
+	XMLName           xml.Name               `xml:"entry"`
 	Name              string                 `xml:"name,attr"`
-	Prefix            *Ipv6AddressPrefixXml  `xml:"prefix,omitempty"`
+	EnableOnInterface *string                `xml:"enable-on-interface,omitempty"`
+	Prefix            *ipv6AddressPrefixXml  `xml:"prefix,omitempty"`
+	Anycast           *ipv6AddressAnycastXml `xml:"anycast,omitempty"`
+	Misc              []generic.Xml          `xml:",any"`
+}
+type ipv6AddressPrefixXml struct {
+	Misc []generic.Xml `xml:",any"`
+}
+type ipv6AddressAnycastXml struct {
+	Misc []generic.Xml `xml:",any"`
+}
 
-	Misc []generic.Xml `xml:",any"`
+func (o *entryXml) MarshalFromObject(s Entry) {
+	o.Name = s.Name
+	if s.AdjustTcpMss != nil {
+		var obj adjustTcpMssXml
+		obj.MarshalFromObject(*s.AdjustTcpMss)
+		o.AdjustTcpMss = &obj
+	}
+	o.Comment = s.Comment
+	o.InterfaceManagementProfile = s.InterfaceManagementProfile
+	if s.Ip != nil {
+		var objs []ipXml
+		for _, elt := range s.Ip {
+			var obj ipXml
+			obj.MarshalFromObject(elt)
+			objs = append(objs, obj)
+		}
+		o.Ip = &ipContainerXml{Entries: objs}
+	}
+	if s.Ipv6 != nil {
+		var obj ipv6Xml
+		obj.MarshalFromObject(*s.Ipv6)
+		o.Ipv6 = &obj
+	}
+	o.Mtu = s.Mtu
+	o.NetflowProfile = s.NetflowProfile
+	o.Misc = s.Misc
 }
-type Ipv6AddressAnycastXml struct {
-	Misc []generic.Xml `xml:",any"`
+
+func (o entryXml) UnmarshalToObject() (*Entry, error) {
+	var adjustTcpMssVal *AdjustTcpMss
+	if o.AdjustTcpMss != nil {
+		obj, err := o.AdjustTcpMss.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		adjustTcpMssVal = obj
+	}
+	var ipVal []Ip
+	if o.Ip != nil {
+		for _, elt := range o.Ip.Entries {
+			obj, err := elt.UnmarshalToObject()
+			if err != nil {
+				return nil, err
+			}
+			ipVal = append(ipVal, *obj)
+		}
+	}
+	var ipv6Val *Ipv6
+	if o.Ipv6 != nil {
+		obj, err := o.Ipv6.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		ipv6Val = obj
+	}
+
+	result := &Entry{
+		Name:                       o.Name,
+		AdjustTcpMss:               adjustTcpMssVal,
+		Comment:                    o.Comment,
+		InterfaceManagementProfile: o.InterfaceManagementProfile,
+		Ip:                         ipVal,
+		Ipv6:                       ipv6Val,
+		Mtu:                        o.Mtu,
+		NetflowProfile:             o.NetflowProfile,
+		Misc:                       o.Misc,
+	}
+	return result, nil
 }
-type Ipv6AddressPrefixXml struct {
-	Misc []generic.Xml `xml:",any"`
+func (o *adjustTcpMssXml) MarshalFromObject(s AdjustTcpMss) {
+	o.Enable = util.YesNo(s.Enable, nil)
+	o.Ipv4MssAdjustment = s.Ipv4MssAdjustment
+	o.Ipv6MssAdjustment = s.Ipv6MssAdjustment
+	o.Misc = s.Misc
+}
+
+func (o adjustTcpMssXml) UnmarshalToObject() (*AdjustTcpMss, error) {
+
+	result := &AdjustTcpMss{
+		Enable:            util.AsBool(o.Enable, nil),
+		Ipv4MssAdjustment: o.Ipv4MssAdjustment,
+		Ipv6MssAdjustment: o.Ipv6MssAdjustment,
+		Misc:              o.Misc,
+	}
+	return result, nil
+}
+func (o *ipXml) MarshalFromObject(s Ip) {
+	o.Name = s.Name
+	o.Misc = s.Misc
+}
+
+func (o ipXml) UnmarshalToObject() (*Ip, error) {
+
+	result := &Ip{
+		Name: o.Name,
+		Misc: o.Misc,
+	}
+	return result, nil
+}
+func (o *ipv6Xml) MarshalFromObject(s Ipv6) {
+	if s.Address != nil {
+		var objs []ipv6AddressXml
+		for _, elt := range s.Address {
+			var obj ipv6AddressXml
+			obj.MarshalFromObject(elt)
+			objs = append(objs, obj)
+		}
+		o.Address = &ipv6AddressContainerXml{Entries: objs}
+	}
+	o.Enabled = util.YesNo(s.Enabled, nil)
+	o.InterfaceId = s.InterfaceId
+	o.Misc = s.Misc
+}
+
+func (o ipv6Xml) UnmarshalToObject() (*Ipv6, error) {
+	var addressVal []Ipv6Address
+	if o.Address != nil {
+		for _, elt := range o.Address.Entries {
+			obj, err := elt.UnmarshalToObject()
+			if err != nil {
+				return nil, err
+			}
+			addressVal = append(addressVal, *obj)
+		}
+	}
+
+	result := &Ipv6{
+		Address:     addressVal,
+		Enabled:     util.AsBool(o.Enabled, nil),
+		InterfaceId: o.InterfaceId,
+		Misc:        o.Misc,
+	}
+	return result, nil
+}
+func (o *ipv6AddressXml) MarshalFromObject(s Ipv6Address) {
+	o.Name = s.Name
+	o.EnableOnInterface = util.YesNo(s.EnableOnInterface, nil)
+	if s.Prefix != nil {
+		var obj ipv6AddressPrefixXml
+		obj.MarshalFromObject(*s.Prefix)
+		o.Prefix = &obj
+	}
+	if s.Anycast != nil {
+		var obj ipv6AddressAnycastXml
+		obj.MarshalFromObject(*s.Anycast)
+		o.Anycast = &obj
+	}
+	o.Misc = s.Misc
+}
+
+func (o ipv6AddressXml) UnmarshalToObject() (*Ipv6Address, error) {
+	var prefixVal *Ipv6AddressPrefix
+	if o.Prefix != nil {
+		obj, err := o.Prefix.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		prefixVal = obj
+	}
+	var anycastVal *Ipv6AddressAnycast
+	if o.Anycast != nil {
+		obj, err := o.Anycast.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		anycastVal = obj
+	}
+
+	result := &Ipv6Address{
+		Name:              o.Name,
+		EnableOnInterface: util.AsBool(o.EnableOnInterface, nil),
+		Prefix:            prefixVal,
+		Anycast:           anycastVal,
+		Misc:              o.Misc,
+	}
+	return result, nil
+}
+func (o *ipv6AddressPrefixXml) MarshalFromObject(s Ipv6AddressPrefix) {
+	o.Misc = s.Misc
+}
+
+func (o ipv6AddressPrefixXml) UnmarshalToObject() (*Ipv6AddressPrefix, error) {
+
+	result := &Ipv6AddressPrefix{
+		Misc: o.Misc,
+	}
+	return result, nil
+}
+func (o *ipv6AddressAnycastXml) MarshalFromObject(s Ipv6AddressAnycast) {
+	o.Misc = s.Misc
+}
+
+func (o ipv6AddressAnycastXml) UnmarshalToObject() (*Ipv6AddressAnycast, error) {
+
+	result := &Ipv6AddressAnycast{
+		Misc: o.Misc,
+	}
+	return result, nil
 }
 
 func (e *Entry) Field(v string) (any, error) {
@@ -142,313 +368,163 @@ func Versioning(vn version.Number) (Specifier, Normalizer, error) {
 
 	return specifyEntry, &entryXmlContainer{}, nil
 }
-func specifyEntry(o *Entry) (any, error) {
-	entry := entryXml{}
-	entry.Name = o.Name
-	var nestedAdjustTcpMss *AdjustTcpMssXml
-	if o.AdjustTcpMss != nil {
-		nestedAdjustTcpMss = &AdjustTcpMssXml{}
-		if _, ok := o.Misc["AdjustTcpMss"]; ok {
-			nestedAdjustTcpMss.Misc = o.Misc["AdjustTcpMss"]
-		}
-		if o.AdjustTcpMss.Enable != nil {
-			nestedAdjustTcpMss.Enable = util.YesNo(o.AdjustTcpMss.Enable, nil)
-		}
-		if o.AdjustTcpMss.Ipv4MssAdjustment != nil {
-			nestedAdjustTcpMss.Ipv4MssAdjustment = o.AdjustTcpMss.Ipv4MssAdjustment
-		}
-		if o.AdjustTcpMss.Ipv6MssAdjustment != nil {
-			nestedAdjustTcpMss.Ipv6MssAdjustment = o.AdjustTcpMss.Ipv6MssAdjustment
-		}
-	}
-	entry.AdjustTcpMss = nestedAdjustTcpMss
-
-	entry.Comment = o.Comment
-	entry.InterfaceManagementProfile = o.InterfaceManagementProfile
-	var nestedIpCol []IpXml
-	if o.Ip != nil {
-		nestedIpCol = []IpXml{}
-		for _, oIp := range o.Ip {
-			nestedIp := IpXml{}
-			if _, ok := o.Misc["Ip"]; ok {
-				nestedIp.Misc = o.Misc["Ip"]
-			}
-			if oIp.Name != "" {
-				nestedIp.Name = oIp.Name
-			}
-			nestedIpCol = append(nestedIpCol, nestedIp)
-		}
-		entry.Ip = nestedIpCol
-	}
-
-	var nestedIpv6 *Ipv6Xml
-	if o.Ipv6 != nil {
-		nestedIpv6 = &Ipv6Xml{}
-		if _, ok := o.Misc["Ipv6"]; ok {
-			nestedIpv6.Misc = o.Misc["Ipv6"]
-		}
-		if o.Ipv6.Address != nil {
-			nestedIpv6.Address = []Ipv6AddressXml{}
-			for _, oIpv6Address := range o.Ipv6.Address {
-				nestedIpv6Address := Ipv6AddressXml{}
-				if _, ok := o.Misc["Ipv6Address"]; ok {
-					nestedIpv6Address.Misc = o.Misc["Ipv6Address"]
-				}
-				if oIpv6Address.Name != "" {
-					nestedIpv6Address.Name = oIpv6Address.Name
-				}
-				if oIpv6Address.EnableOnInterface != nil {
-					nestedIpv6Address.EnableOnInterface = util.YesNo(oIpv6Address.EnableOnInterface, nil)
-				}
-				if oIpv6Address.Prefix != nil {
-					nestedIpv6Address.Prefix = &Ipv6AddressPrefixXml{}
-					if _, ok := o.Misc["Ipv6AddressPrefix"]; ok {
-						nestedIpv6Address.Prefix.Misc = o.Misc["Ipv6AddressPrefix"]
-					}
-				}
-				if oIpv6Address.Anycast != nil {
-					nestedIpv6Address.Anycast = &Ipv6AddressAnycastXml{}
-					if _, ok := o.Misc["Ipv6AddressAnycast"]; ok {
-						nestedIpv6Address.Anycast.Misc = o.Misc["Ipv6AddressAnycast"]
-					}
-				}
-				nestedIpv6.Address = append(nestedIpv6.Address, nestedIpv6Address)
-			}
-		}
-		if o.Ipv6.Enabled != nil {
-			nestedIpv6.Enabled = util.YesNo(o.Ipv6.Enabled, nil)
-		}
-		if o.Ipv6.InterfaceId != nil {
-			nestedIpv6.InterfaceId = o.Ipv6.InterfaceId
-		}
-	}
-	entry.Ipv6 = nestedIpv6
-
-	entry.Mtu = o.Mtu
-	entry.NetflowProfile = o.NetflowProfile
-
-	entry.Misc = o.Misc["Entry"]
-
-	return entry, nil
-}
-
-func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
-	entryList := make([]*Entry, 0, len(c.Answer))
-	for _, o := range c.Answer {
-		entry := &Entry{
-			Misc: make(map[string][]generic.Xml),
-		}
-		entry.Name = o.Name
-		var nestedAdjustTcpMss *AdjustTcpMss
-		if o.AdjustTcpMss != nil {
-			nestedAdjustTcpMss = &AdjustTcpMss{}
-			if o.AdjustTcpMss.Misc != nil {
-				entry.Misc["AdjustTcpMss"] = o.AdjustTcpMss.Misc
-			}
-			if o.AdjustTcpMss.Enable != nil {
-				nestedAdjustTcpMss.Enable = util.AsBool(o.AdjustTcpMss.Enable, nil)
-			}
-			if o.AdjustTcpMss.Ipv4MssAdjustment != nil {
-				nestedAdjustTcpMss.Ipv4MssAdjustment = o.AdjustTcpMss.Ipv4MssAdjustment
-			}
-			if o.AdjustTcpMss.Ipv6MssAdjustment != nil {
-				nestedAdjustTcpMss.Ipv6MssAdjustment = o.AdjustTcpMss.Ipv6MssAdjustment
-			}
-		}
-		entry.AdjustTcpMss = nestedAdjustTcpMss
-
-		entry.Comment = o.Comment
-		entry.InterfaceManagementProfile = o.InterfaceManagementProfile
-		var nestedIpCol []Ip
-		if o.Ip != nil {
-			nestedIpCol = []Ip{}
-			for _, oIp := range o.Ip {
-				nestedIp := Ip{}
-				if oIp.Misc != nil {
-					entry.Misc["Ip"] = oIp.Misc
-				}
-				if oIp.Name != "" {
-					nestedIp.Name = oIp.Name
-				}
-				nestedIpCol = append(nestedIpCol, nestedIp)
-			}
-			entry.Ip = nestedIpCol
-		}
-
-		var nestedIpv6 *Ipv6
-		if o.Ipv6 != nil {
-			nestedIpv6 = &Ipv6{}
-			if o.Ipv6.Misc != nil {
-				entry.Misc["Ipv6"] = o.Ipv6.Misc
-			}
-			if o.Ipv6.Address != nil {
-				nestedIpv6.Address = []Ipv6Address{}
-				for _, oIpv6Address := range o.Ipv6.Address {
-					nestedIpv6Address := Ipv6Address{}
-					if oIpv6Address.Misc != nil {
-						entry.Misc["Ipv6Address"] = oIpv6Address.Misc
-					}
-					if oIpv6Address.Name != "" {
-						nestedIpv6Address.Name = oIpv6Address.Name
-					}
-					if oIpv6Address.EnableOnInterface != nil {
-						nestedIpv6Address.EnableOnInterface = util.AsBool(oIpv6Address.EnableOnInterface, nil)
-					}
-					if oIpv6Address.Prefix != nil {
-						nestedIpv6Address.Prefix = &Ipv6AddressPrefix{}
-						if oIpv6Address.Prefix.Misc != nil {
-							entry.Misc["Ipv6AddressPrefix"] = oIpv6Address.Prefix.Misc
-						}
-					}
-					if oIpv6Address.Anycast != nil {
-						nestedIpv6Address.Anycast = &Ipv6AddressAnycast{}
-						if oIpv6Address.Anycast.Misc != nil {
-							entry.Misc["Ipv6AddressAnycast"] = oIpv6Address.Anycast.Misc
-						}
-					}
-					nestedIpv6.Address = append(nestedIpv6.Address, nestedIpv6Address)
-				}
-			}
-			if o.Ipv6.Enabled != nil {
-				nestedIpv6.Enabled = util.AsBool(o.Ipv6.Enabled, nil)
-			}
-			if o.Ipv6.InterfaceId != nil {
-				nestedIpv6.InterfaceId = o.Ipv6.InterfaceId
-			}
-		}
-		entry.Ipv6 = nestedIpv6
-
-		entry.Mtu = o.Mtu
-		entry.NetflowProfile = o.NetflowProfile
-
-		entry.Misc["Entry"] = o.Misc
-
-		entryList = append(entryList, entry)
-	}
-
-	return entryList, nil
-}
-
 func SpecMatches(a, b *Entry) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+	if a == nil && b == nil {
 		return true
 	}
 
-	// Don't compare Name.
-	if !matchAdjustTcpMss(a.AdjustTcpMss, b.AdjustTcpMss) {
-		return false
-	}
-	if !util.StringsMatch(a.Comment, b.Comment) {
-		return false
-	}
-	if !util.StringsMatch(a.InterfaceManagementProfile, b.InterfaceManagementProfile) {
-		return false
-	}
-	if !matchIp(a.Ip, b.Ip) {
-		return false
-	}
-	if !matchIpv6(a.Ipv6, b.Ipv6) {
-		return false
-	}
-	if !util.Ints64Match(a.Mtu, b.Mtu) {
-		return false
-	}
-	if !util.StringsMatch(a.NetflowProfile, b.NetflowProfile) {
+	if (a == nil && b != nil) || (a != nil && b == nil) {
 		return false
 	}
 
-	return true
+	return a.matches(b)
 }
 
-func matchAdjustTcpMss(a *AdjustTcpMss, b *AdjustTcpMss) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+func (o *Entry) matches(other *Entry) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.BoolsMatch(a.Enable, b.Enable) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.Ints64Match(a.Ipv4MssAdjustment, b.Ipv4MssAdjustment) {
+	if !o.AdjustTcpMss.matches(other.AdjustTcpMss) {
 		return false
 	}
-	if !util.Ints64Match(a.Ipv6MssAdjustment, b.Ipv6MssAdjustment) {
+	if !util.StringsMatch(o.Comment, other.Comment) {
 		return false
 	}
-	return true
-}
-func matchIp(a []Ip, b []Ip) bool {
-	if a == nil && b != nil || a != nil && b == nil {
+	if !util.StringsMatch(o.InterfaceManagementProfile, other.InterfaceManagementProfile) {
 		return false
-	} else if a == nil && b == nil {
-		return true
 	}
-	for _, a := range a {
-		for _, b := range b {
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
+	if len(o.Ip) != len(other.Ip) {
+		return false
+	}
+	for idx := range o.Ip {
+		if !o.Ip[idx].matches(&other.Ip[idx]) {
+			return false
 		}
 	}
+	if !o.Ipv6.matches(other.Ipv6) {
+		return false
+	}
+	if !util.Ints64Match(o.Mtu, other.Mtu) {
+		return false
+	}
+	if !util.StringsMatch(o.NetflowProfile, other.NetflowProfile) {
+		return false
+	}
+
 	return true
 }
-func matchIpv6AddressPrefix(a *Ipv6AddressPrefix, b *Ipv6AddressPrefix) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *AdjustTcpMss) matches(other *AdjustTcpMss) bool {
+	if o == nil && other == nil {
 		return true
 	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
+	}
+	if !util.BoolsMatch(o.Enable, other.Enable) {
+		return false
+	}
+	if !util.Ints64Match(o.Ipv4MssAdjustment, other.Ipv4MssAdjustment) {
+		return false
+	}
+	if !util.Ints64Match(o.Ipv6MssAdjustment, other.Ipv6MssAdjustment) {
+		return false
+	}
+
 	return true
 }
-func matchIpv6AddressAnycast(a *Ipv6AddressAnycast, b *Ipv6AddressAnycast) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *Ip) matches(other *Ip) bool {
+	if o == nil && other == nil {
 		return true
 	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
+	}
+	if o.Name != other.Name {
+		return false
+	}
+
 	return true
 }
-func matchIpv6Address(a []Ipv6Address, b []Ipv6Address) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *Ipv6) matches(other *Ipv6) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	for _, a := range a {
-		for _, b := range b {
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-			if !util.BoolsMatch(a.EnableOnInterface, b.EnableOnInterface) {
-				return false
-			}
-			if !matchIpv6AddressPrefix(a.Prefix, b.Prefix) {
-				return false
-			}
-			if !matchIpv6AddressAnycast(a.Anycast, b.Anycast) {
-				return false
-			}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
+	}
+	if len(o.Address) != len(other.Address) {
+		return false
+	}
+	for idx := range o.Address {
+		if !o.Address[idx].matches(&other.Address[idx]) {
+			return false
 		}
 	}
+	if !util.BoolsMatch(o.Enabled, other.Enabled) {
+		return false
+	}
+	if !util.StringsMatch(o.InterfaceId, other.InterfaceId) {
+		return false
+	}
+
 	return true
 }
-func matchIpv6(a *Ipv6, b *Ipv6) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *Ipv6Address) matches(other *Ipv6Address) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !matchIpv6Address(a.Address, b.Address) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.BoolsMatch(a.Enabled, b.Enabled) {
+	if o.Name != other.Name {
 		return false
 	}
-	if !util.StringsMatch(a.InterfaceId, b.InterfaceId) {
+	if !util.BoolsMatch(o.EnableOnInterface, other.EnableOnInterface) {
 		return false
 	}
+	if !o.Prefix.matches(other.Prefix) {
+		return false
+	}
+	if !o.Anycast.matches(other.Anycast) {
+		return false
+	}
+
+	return true
+}
+
+func (o *Ipv6AddressPrefix) matches(other *Ipv6AddressPrefix) bool {
+	if o == nil && other == nil {
+		return true
+	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
+	}
+
+	return true
+}
+
+func (o *Ipv6AddressAnycast) matches(other *Ipv6AddressAnycast) bool {
+	if o == nil && other == nil {
+		return true
+	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
+	}
+
 	return true
 }
 

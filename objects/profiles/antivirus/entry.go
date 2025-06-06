@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{"profiles", "virus"}
+	suffix = []string{"profiles", "virus", "$name"}
 )
 
 type Entry struct {
@@ -29,31 +29,34 @@ type Entry struct {
 	PacketCapture              *bool
 	ThreatException            []ThreatException
 	WfrtHoldMode               *bool
-
-	Misc map[string][]generic.Xml
+	Misc                       []generic.Xml
 }
-
 type Application struct {
 	Name   string
 	Action *string
+	Misc   []generic.Xml
 }
 type Decoder struct {
 	Name           string
 	Action         *string
 	WildfireAction *string
 	MlavAction     *string
+	Misc           []generic.Xml
 }
 type MlavEngineFilebasedEnabled struct {
 	Name             string
 	MlavPolicyAction *string
+	Misc             []generic.Xml
 }
 type MlavException struct {
 	Name        string
 	Filename    *string
 	Description *string
+	Misc        []generic.Xml
 }
 type ThreatException struct {
 	Name string
+	Misc []generic.Xml
 }
 
 type entryXmlContainer struct {
@@ -63,99 +66,565 @@ type entryXmlContainer struct {
 type entryXmlContainer_11_0_2 struct {
 	Answer []entryXml_11_0_2 `xml:"entry"`
 }
-type entryXml struct {
-	XMLName                    xml.Name                        `xml:"entry"`
-	Name                       string                          `xml:"name,attr"`
-	Application                []ApplicationXml                `xml:"application>entry,omitempty"`
-	Decoder                    []DecoderXml                    `xml:"decoder>entry,omitempty"`
-	Description                *string                         `xml:"description,omitempty"`
-	DisableOverride            *string                         `xml:"disable-override,omitempty"`
-	MlavEngineFilebasedEnabled []MlavEngineFilebasedEnabledXml `xml:"mlav-engine-filebased-enabled>entry,omitempty"`
-	MlavException              []MlavExceptionXml              `xml:"mlav-exception>entry,omitempty"`
-	PacketCapture              *string                         `xml:"packet-capture,omitempty"`
-	ThreatException            []ThreatExceptionXml            `xml:"threat-exception>entry,omitempty"`
-	WfrtHoldMode               *string                         `xml:"wfrt-hold-mode,omitempty"`
 
-	Misc []generic.Xml `xml:",any"`
+func (o *entryXmlContainer) Normalize() ([]*Entry, error) {
+	entries := make([]*Entry, 0, len(o.Answer))
+	for _, elt := range o.Answer {
+		obj, err := elt.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		entries = append(entries, obj)
+	}
+
+	return entries, nil
+}
+func (o *entryXmlContainer_11_0_2) Normalize() ([]*Entry, error) {
+	entries := make([]*Entry, 0, len(o.Answer))
+	for _, elt := range o.Answer {
+		obj, err := elt.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		entries = append(entries, obj)
+	}
+
+	return entries, nil
+}
+
+func specifyEntry(source *Entry) (any, error) {
+	var obj entryXml
+	obj.MarshalFromObject(*source)
+	return obj, nil
+}
+func specifyEntry_11_0_2(source *Entry) (any, error) {
+	var obj entryXml_11_0_2
+	obj.MarshalFromObject(*source)
+	return obj, nil
+}
+
+type entryXml struct {
+	XMLName                    xml.Name                                `xml:"entry"`
+	Name                       string                                  `xml:"name,attr"`
+	Application                *applicationContainerXml                `xml:"application,omitempty"`
+	Decoder                    *decoderContainerXml                    `xml:"decoder,omitempty"`
+	Description                *string                                 `xml:"description,omitempty"`
+	DisableOverride            *string                                 `xml:"disable-override,omitempty"`
+	MlavEngineFilebasedEnabled *mlavEngineFilebasedEnabledContainerXml `xml:"mlav-engine-filebased-enabled,omitempty"`
+	MlavException              *mlavExceptionContainerXml              `xml:"mlav-exception,omitempty"`
+	PacketCapture              *string                                 `xml:"packet-capture,omitempty"`
+	ThreatException            *threatExceptionContainerXml            `xml:"threat-exception,omitempty"`
+	WfrtHoldMode               *string                                 `xml:"wfrt-hold-mode,omitempty"`
+	Misc                       []generic.Xml                           `xml:",any"`
+}
+type applicationContainerXml struct {
+	Entries []applicationXml `xml:"entry"`
+}
+type applicationXml struct {
+	XMLName xml.Name      `xml:"entry"`
+	Name    string        `xml:"name,attr"`
+	Action  *string       `xml:"action,omitempty"`
+	Misc    []generic.Xml `xml:",any"`
+}
+type decoderContainerXml struct {
+	Entries []decoderXml `xml:"entry"`
+}
+type decoderXml struct {
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Action         *string       `xml:"action,omitempty"`
+	WildfireAction *string       `xml:"wildfire-action,omitempty"`
+	MlavAction     *string       `xml:"mlav-action,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+}
+type mlavEngineFilebasedEnabledContainerXml struct {
+	Entries []mlavEngineFilebasedEnabledXml `xml:"entry"`
+}
+type mlavEngineFilebasedEnabledXml struct {
+	XMLName          xml.Name      `xml:"entry"`
+	Name             string        `xml:"name,attr"`
+	MlavPolicyAction *string       `xml:"mlav-policy-action,omitempty"`
+	Misc             []generic.Xml `xml:",any"`
+}
+type mlavExceptionContainerXml struct {
+	Entries []mlavExceptionXml `xml:"entry"`
+}
+type mlavExceptionXml struct {
+	XMLName     xml.Name      `xml:"entry"`
+	Name        string        `xml:"name,attr"`
+	Filename    *string       `xml:"filename,omitempty"`
+	Description *string       `xml:"description,omitempty"`
+	Misc        []generic.Xml `xml:",any"`
+}
+type threatExceptionContainerXml struct {
+	Entries []threatExceptionXml `xml:"entry"`
+}
+type threatExceptionXml struct {
+	XMLName xml.Name      `xml:"entry"`
+	Name    string        `xml:"name,attr"`
+	Misc    []generic.Xml `xml:",any"`
 }
 type entryXml_11_0_2 struct {
-	XMLName                    xml.Name                               `xml:"entry"`
-	Name                       string                                 `xml:"name,attr"`
-	Application                []ApplicationXml_11_0_2                `xml:"application>entry,omitempty"`
-	Decoder                    []DecoderXml_11_0_2                    `xml:"decoder>entry,omitempty"`
-	Description                *string                                `xml:"description,omitempty"`
-	DisableOverride            *string                                `xml:"disable-override,omitempty"`
-	MlavEngineFilebasedEnabled []MlavEngineFilebasedEnabledXml_11_0_2 `xml:"mlav-engine-filebased-enabled>entry,omitempty"`
-	MlavException              []MlavExceptionXml_11_0_2              `xml:"mlav-exception>entry,omitempty"`
-	PacketCapture              *string                                `xml:"packet-capture,omitempty"`
-	ThreatException            []ThreatExceptionXml_11_0_2            `xml:"threat-exception>entry,omitempty"`
-	WfrtHoldMode               *string                                `xml:"wfrt-hold-mode,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
+	XMLName                    xml.Name                                       `xml:"entry"`
+	Name                       string                                         `xml:"name,attr"`
+	Application                *applicationContainerXml_11_0_2                `xml:"application,omitempty"`
+	Decoder                    *decoderContainerXml_11_0_2                    `xml:"decoder,omitempty"`
+	Description                *string                                        `xml:"description,omitempty"`
+	DisableOverride            *string                                        `xml:"disable-override,omitempty"`
+	MlavEngineFilebasedEnabled *mlavEngineFilebasedEnabledContainerXml_11_0_2 `xml:"mlav-engine-filebased-enabled,omitempty"`
+	MlavException              *mlavExceptionContainerXml_11_0_2              `xml:"mlav-exception,omitempty"`
+	PacketCapture              *string                                        `xml:"packet-capture,omitempty"`
+	ThreatException            *threatExceptionContainerXml_11_0_2            `xml:"threat-exception,omitempty"`
+	WfrtHoldMode               *string                                        `xml:"wfrt-hold-mode,omitempty"`
+	Misc                       []generic.Xml                                  `xml:",any"`
 }
-type ApplicationXml struct {
-	Action *string `xml:"action,omitempty"`
-	Name   string  `xml:"name,attr"`
-
-	Misc []generic.Xml `xml:",any"`
+type applicationContainerXml_11_0_2 struct {
+	Entries []applicationXml_11_0_2 `xml:"entry"`
 }
-type DecoderXml struct {
-	Action         *string `xml:"action,omitempty"`
-	MlavAction     *string `xml:"mlav-action,omitempty"`
-	Name           string  `xml:"name,attr"`
-	WildfireAction *string `xml:"wildfire-action,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
+type applicationXml_11_0_2 struct {
+	XMLName xml.Name      `xml:"entry"`
+	Name    string        `xml:"name,attr"`
+	Action  *string       `xml:"action,omitempty"`
+	Misc    []generic.Xml `xml:",any"`
 }
-type MlavEngineFilebasedEnabledXml struct {
-	MlavPolicyAction *string `xml:"mlav-policy-action,omitempty"`
-	Name             string  `xml:"name,attr"`
-
-	Misc []generic.Xml `xml:",any"`
+type decoderContainerXml_11_0_2 struct {
+	Entries []decoderXml_11_0_2 `xml:"entry"`
 }
-type MlavExceptionXml struct {
-	Description *string `xml:"description,omitempty"`
-	Filename    *string `xml:"filename,omitempty"`
-	Name        string  `xml:"name,attr"`
-
-	Misc []generic.Xml `xml:",any"`
+type decoderXml_11_0_2 struct {
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Action         *string       `xml:"action,omitempty"`
+	WildfireAction *string       `xml:"wildfire-action,omitempty"`
+	MlavAction     *string       `xml:"mlav-action,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
 }
-type ThreatExceptionXml struct {
-	Name string `xml:"name,attr"`
-
-	Misc []generic.Xml `xml:",any"`
+type mlavEngineFilebasedEnabledContainerXml_11_0_2 struct {
+	Entries []mlavEngineFilebasedEnabledXml_11_0_2 `xml:"entry"`
 }
-type ApplicationXml_11_0_2 struct {
-	Action *string `xml:"action,omitempty"`
-	Name   string  `xml:"name,attr"`
-
-	Misc []generic.Xml `xml:",any"`
+type mlavEngineFilebasedEnabledXml_11_0_2 struct {
+	XMLName          xml.Name      `xml:"entry"`
+	Name             string        `xml:"name,attr"`
+	MlavPolicyAction *string       `xml:"mlav-policy-action,omitempty"`
+	Misc             []generic.Xml `xml:",any"`
 }
-type DecoderXml_11_0_2 struct {
-	Action         *string `xml:"action,omitempty"`
-	MlavAction     *string `xml:"mlav-action,omitempty"`
-	Name           string  `xml:"name,attr"`
-	WildfireAction *string `xml:"wildfire-action,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
+type mlavExceptionContainerXml_11_0_2 struct {
+	Entries []mlavExceptionXml_11_0_2 `xml:"entry"`
 }
-type MlavEngineFilebasedEnabledXml_11_0_2 struct {
-	MlavPolicyAction *string `xml:"mlav-policy-action,omitempty"`
-	Name             string  `xml:"name,attr"`
-
-	Misc []generic.Xml `xml:",any"`
+type mlavExceptionXml_11_0_2 struct {
+	XMLName     xml.Name      `xml:"entry"`
+	Name        string        `xml:"name,attr"`
+	Filename    *string       `xml:"filename,omitempty"`
+	Description *string       `xml:"description,omitempty"`
+	Misc        []generic.Xml `xml:",any"`
 }
-type MlavExceptionXml_11_0_2 struct {
-	Description *string `xml:"description,omitempty"`
-	Filename    *string `xml:"filename,omitempty"`
-	Name        string  `xml:"name,attr"`
-
-	Misc []generic.Xml `xml:",any"`
+type threatExceptionContainerXml_11_0_2 struct {
+	Entries []threatExceptionXml_11_0_2 `xml:"entry"`
 }
-type ThreatExceptionXml_11_0_2 struct {
-	Name string `xml:"name,attr"`
+type threatExceptionXml_11_0_2 struct {
+	XMLName xml.Name      `xml:"entry"`
+	Name    string        `xml:"name,attr"`
+	Misc    []generic.Xml `xml:",any"`
+}
 
-	Misc []generic.Xml `xml:",any"`
+func (o *entryXml) MarshalFromObject(s Entry) {
+	o.Name = s.Name
+	if s.Application != nil {
+		var objs []applicationXml
+		for _, elt := range s.Application {
+			var obj applicationXml
+			obj.MarshalFromObject(elt)
+			objs = append(objs, obj)
+		}
+		o.Application = &applicationContainerXml{Entries: objs}
+	}
+	if s.Decoder != nil {
+		var objs []decoderXml
+		for _, elt := range s.Decoder {
+			var obj decoderXml
+			obj.MarshalFromObject(elt)
+			objs = append(objs, obj)
+		}
+		o.Decoder = &decoderContainerXml{Entries: objs}
+	}
+	o.Description = s.Description
+	o.DisableOverride = s.DisableOverride
+	if s.MlavEngineFilebasedEnabled != nil {
+		var objs []mlavEngineFilebasedEnabledXml
+		for _, elt := range s.MlavEngineFilebasedEnabled {
+			var obj mlavEngineFilebasedEnabledXml
+			obj.MarshalFromObject(elt)
+			objs = append(objs, obj)
+		}
+		o.MlavEngineFilebasedEnabled = &mlavEngineFilebasedEnabledContainerXml{Entries: objs}
+	}
+	if s.MlavException != nil {
+		var objs []mlavExceptionXml
+		for _, elt := range s.MlavException {
+			var obj mlavExceptionXml
+			obj.MarshalFromObject(elt)
+			objs = append(objs, obj)
+		}
+		o.MlavException = &mlavExceptionContainerXml{Entries: objs}
+	}
+	o.PacketCapture = util.YesNo(s.PacketCapture, nil)
+	if s.ThreatException != nil {
+		var objs []threatExceptionXml
+		for _, elt := range s.ThreatException {
+			var obj threatExceptionXml
+			obj.MarshalFromObject(elt)
+			objs = append(objs, obj)
+		}
+		o.ThreatException = &threatExceptionContainerXml{Entries: objs}
+	}
+	o.WfrtHoldMode = util.YesNo(s.WfrtHoldMode, nil)
+	o.Misc = s.Misc
+}
+
+func (o entryXml) UnmarshalToObject() (*Entry, error) {
+	var applicationVal []Application
+	if o.Application != nil {
+		for _, elt := range o.Application.Entries {
+			obj, err := elt.UnmarshalToObject()
+			if err != nil {
+				return nil, err
+			}
+			applicationVal = append(applicationVal, *obj)
+		}
+	}
+	var decoderVal []Decoder
+	if o.Decoder != nil {
+		for _, elt := range o.Decoder.Entries {
+			obj, err := elt.UnmarshalToObject()
+			if err != nil {
+				return nil, err
+			}
+			decoderVal = append(decoderVal, *obj)
+		}
+	}
+	var mlavEngineFilebasedEnabledVal []MlavEngineFilebasedEnabled
+	if o.MlavEngineFilebasedEnabled != nil {
+		for _, elt := range o.MlavEngineFilebasedEnabled.Entries {
+			obj, err := elt.UnmarshalToObject()
+			if err != nil {
+				return nil, err
+			}
+			mlavEngineFilebasedEnabledVal = append(mlavEngineFilebasedEnabledVal, *obj)
+		}
+	}
+	var mlavExceptionVal []MlavException
+	if o.MlavException != nil {
+		for _, elt := range o.MlavException.Entries {
+			obj, err := elt.UnmarshalToObject()
+			if err != nil {
+				return nil, err
+			}
+			mlavExceptionVal = append(mlavExceptionVal, *obj)
+		}
+	}
+	var threatExceptionVal []ThreatException
+	if o.ThreatException != nil {
+		for _, elt := range o.ThreatException.Entries {
+			obj, err := elt.UnmarshalToObject()
+			if err != nil {
+				return nil, err
+			}
+			threatExceptionVal = append(threatExceptionVal, *obj)
+		}
+	}
+
+	result := &Entry{
+		Name:                       o.Name,
+		Application:                applicationVal,
+		Decoder:                    decoderVal,
+		Description:                o.Description,
+		DisableOverride:            o.DisableOverride,
+		MlavEngineFilebasedEnabled: mlavEngineFilebasedEnabledVal,
+		MlavException:              mlavExceptionVal,
+		PacketCapture:              util.AsBool(o.PacketCapture, nil),
+		ThreatException:            threatExceptionVal,
+		WfrtHoldMode:               util.AsBool(o.WfrtHoldMode, nil),
+		Misc:                       o.Misc,
+	}
+	return result, nil
+}
+func (o *applicationXml) MarshalFromObject(s Application) {
+	o.Name = s.Name
+	o.Action = s.Action
+	o.Misc = s.Misc
+}
+
+func (o applicationXml) UnmarshalToObject() (*Application, error) {
+
+	result := &Application{
+		Name:   o.Name,
+		Action: o.Action,
+		Misc:   o.Misc,
+	}
+	return result, nil
+}
+func (o *decoderXml) MarshalFromObject(s Decoder) {
+	o.Name = s.Name
+	o.Action = s.Action
+	o.WildfireAction = s.WildfireAction
+	o.MlavAction = s.MlavAction
+	o.Misc = s.Misc
+}
+
+func (o decoderXml) UnmarshalToObject() (*Decoder, error) {
+
+	result := &Decoder{
+		Name:           o.Name,
+		Action:         o.Action,
+		WildfireAction: o.WildfireAction,
+		MlavAction:     o.MlavAction,
+		Misc:           o.Misc,
+	}
+	return result, nil
+}
+func (o *mlavEngineFilebasedEnabledXml) MarshalFromObject(s MlavEngineFilebasedEnabled) {
+	o.Name = s.Name
+	o.MlavPolicyAction = s.MlavPolicyAction
+	o.Misc = s.Misc
+}
+
+func (o mlavEngineFilebasedEnabledXml) UnmarshalToObject() (*MlavEngineFilebasedEnabled, error) {
+
+	result := &MlavEngineFilebasedEnabled{
+		Name:             o.Name,
+		MlavPolicyAction: o.MlavPolicyAction,
+		Misc:             o.Misc,
+	}
+	return result, nil
+}
+func (o *mlavExceptionXml) MarshalFromObject(s MlavException) {
+	o.Name = s.Name
+	o.Filename = s.Filename
+	o.Description = s.Description
+	o.Misc = s.Misc
+}
+
+func (o mlavExceptionXml) UnmarshalToObject() (*MlavException, error) {
+
+	result := &MlavException{
+		Name:        o.Name,
+		Filename:    o.Filename,
+		Description: o.Description,
+		Misc:        o.Misc,
+	}
+	return result, nil
+}
+func (o *threatExceptionXml) MarshalFromObject(s ThreatException) {
+	o.Name = s.Name
+	o.Misc = s.Misc
+}
+
+func (o threatExceptionXml) UnmarshalToObject() (*ThreatException, error) {
+
+	result := &ThreatException{
+		Name: o.Name,
+		Misc: o.Misc,
+	}
+	return result, nil
+}
+func (o *entryXml_11_0_2) MarshalFromObject(s Entry) {
+	o.Name = s.Name
+	if s.Application != nil {
+		var objs []applicationXml_11_0_2
+		for _, elt := range s.Application {
+			var obj applicationXml_11_0_2
+			obj.MarshalFromObject(elt)
+			objs = append(objs, obj)
+		}
+		o.Application = &applicationContainerXml_11_0_2{Entries: objs}
+	}
+	if s.Decoder != nil {
+		var objs []decoderXml_11_0_2
+		for _, elt := range s.Decoder {
+			var obj decoderXml_11_0_2
+			obj.MarshalFromObject(elt)
+			objs = append(objs, obj)
+		}
+		o.Decoder = &decoderContainerXml_11_0_2{Entries: objs}
+	}
+	o.Description = s.Description
+	o.DisableOverride = s.DisableOverride
+	if s.MlavEngineFilebasedEnabled != nil {
+		var objs []mlavEngineFilebasedEnabledXml_11_0_2
+		for _, elt := range s.MlavEngineFilebasedEnabled {
+			var obj mlavEngineFilebasedEnabledXml_11_0_2
+			obj.MarshalFromObject(elt)
+			objs = append(objs, obj)
+		}
+		o.MlavEngineFilebasedEnabled = &mlavEngineFilebasedEnabledContainerXml_11_0_2{Entries: objs}
+	}
+	if s.MlavException != nil {
+		var objs []mlavExceptionXml_11_0_2
+		for _, elt := range s.MlavException {
+			var obj mlavExceptionXml_11_0_2
+			obj.MarshalFromObject(elt)
+			objs = append(objs, obj)
+		}
+		o.MlavException = &mlavExceptionContainerXml_11_0_2{Entries: objs}
+	}
+	o.PacketCapture = util.YesNo(s.PacketCapture, nil)
+	if s.ThreatException != nil {
+		var objs []threatExceptionXml_11_0_2
+		for _, elt := range s.ThreatException {
+			var obj threatExceptionXml_11_0_2
+			obj.MarshalFromObject(elt)
+			objs = append(objs, obj)
+		}
+		o.ThreatException = &threatExceptionContainerXml_11_0_2{Entries: objs}
+	}
+	o.WfrtHoldMode = util.YesNo(s.WfrtHoldMode, nil)
+	o.Misc = s.Misc
+}
+
+func (o entryXml_11_0_2) UnmarshalToObject() (*Entry, error) {
+	var applicationVal []Application
+	if o.Application != nil {
+		for _, elt := range o.Application.Entries {
+			obj, err := elt.UnmarshalToObject()
+			if err != nil {
+				return nil, err
+			}
+			applicationVal = append(applicationVal, *obj)
+		}
+	}
+	var decoderVal []Decoder
+	if o.Decoder != nil {
+		for _, elt := range o.Decoder.Entries {
+			obj, err := elt.UnmarshalToObject()
+			if err != nil {
+				return nil, err
+			}
+			decoderVal = append(decoderVal, *obj)
+		}
+	}
+	var mlavEngineFilebasedEnabledVal []MlavEngineFilebasedEnabled
+	if o.MlavEngineFilebasedEnabled != nil {
+		for _, elt := range o.MlavEngineFilebasedEnabled.Entries {
+			obj, err := elt.UnmarshalToObject()
+			if err != nil {
+				return nil, err
+			}
+			mlavEngineFilebasedEnabledVal = append(mlavEngineFilebasedEnabledVal, *obj)
+		}
+	}
+	var mlavExceptionVal []MlavException
+	if o.MlavException != nil {
+		for _, elt := range o.MlavException.Entries {
+			obj, err := elt.UnmarshalToObject()
+			if err != nil {
+				return nil, err
+			}
+			mlavExceptionVal = append(mlavExceptionVal, *obj)
+		}
+	}
+	var threatExceptionVal []ThreatException
+	if o.ThreatException != nil {
+		for _, elt := range o.ThreatException.Entries {
+			obj, err := elt.UnmarshalToObject()
+			if err != nil {
+				return nil, err
+			}
+			threatExceptionVal = append(threatExceptionVal, *obj)
+		}
+	}
+
+	result := &Entry{
+		Name:                       o.Name,
+		Application:                applicationVal,
+		Decoder:                    decoderVal,
+		Description:                o.Description,
+		DisableOverride:            o.DisableOverride,
+		MlavEngineFilebasedEnabled: mlavEngineFilebasedEnabledVal,
+		MlavException:              mlavExceptionVal,
+		PacketCapture:              util.AsBool(o.PacketCapture, nil),
+		ThreatException:            threatExceptionVal,
+		WfrtHoldMode:               util.AsBool(o.WfrtHoldMode, nil),
+		Misc:                       o.Misc,
+	}
+	return result, nil
+}
+func (o *applicationXml_11_0_2) MarshalFromObject(s Application) {
+	o.Name = s.Name
+	o.Action = s.Action
+	o.Misc = s.Misc
+}
+
+func (o applicationXml_11_0_2) UnmarshalToObject() (*Application, error) {
+
+	result := &Application{
+		Name:   o.Name,
+		Action: o.Action,
+		Misc:   o.Misc,
+	}
+	return result, nil
+}
+func (o *decoderXml_11_0_2) MarshalFromObject(s Decoder) {
+	o.Name = s.Name
+	o.Action = s.Action
+	o.WildfireAction = s.WildfireAction
+	o.MlavAction = s.MlavAction
+	o.Misc = s.Misc
+}
+
+func (o decoderXml_11_0_2) UnmarshalToObject() (*Decoder, error) {
+
+	result := &Decoder{
+		Name:           o.Name,
+		Action:         o.Action,
+		WildfireAction: o.WildfireAction,
+		MlavAction:     o.MlavAction,
+		Misc:           o.Misc,
+	}
+	return result, nil
+}
+func (o *mlavEngineFilebasedEnabledXml_11_0_2) MarshalFromObject(s MlavEngineFilebasedEnabled) {
+	o.Name = s.Name
+	o.MlavPolicyAction = s.MlavPolicyAction
+	o.Misc = s.Misc
+}
+
+func (o mlavEngineFilebasedEnabledXml_11_0_2) UnmarshalToObject() (*MlavEngineFilebasedEnabled, error) {
+
+	result := &MlavEngineFilebasedEnabled{
+		Name:             o.Name,
+		MlavPolicyAction: o.MlavPolicyAction,
+		Misc:             o.Misc,
+	}
+	return result, nil
+}
+func (o *mlavExceptionXml_11_0_2) MarshalFromObject(s MlavException) {
+	o.Name = s.Name
+	o.Filename = s.Filename
+	o.Description = s.Description
+	o.Misc = s.Misc
+}
+
+func (o mlavExceptionXml_11_0_2) UnmarshalToObject() (*MlavException, error) {
+
+	result := &MlavException{
+		Name:        o.Name,
+		Filename:    o.Filename,
+		Description: o.Description,
+		Misc:        o.Misc,
+	}
+	return result, nil
+}
+func (o *threatExceptionXml_11_0_2) MarshalFromObject(s ThreatException) {
+	o.Name = s.Name
+	o.Misc = s.Misc
+}
+
+func (o threatExceptionXml_11_0_2) UnmarshalToObject() (*ThreatException, error) {
+
+	result := &ThreatException{
+		Name: o.Name,
+		Misc: o.Misc,
+	}
+	return result, nil
 }
 
 func (e *Entry) Field(v string) (any, error) {
@@ -217,607 +686,175 @@ func Versioning(vn version.Number) (Specifier, Normalizer, error) {
 
 	return specifyEntry, &entryXmlContainer{}, nil
 }
-func specifyEntry(o *Entry) (any, error) {
-	entry := entryXml{}
-	entry.Name = o.Name
-	var nestedApplicationCol []ApplicationXml
-	if o.Application != nil {
-		nestedApplicationCol = []ApplicationXml{}
-		for _, oApplication := range o.Application {
-			nestedApplication := ApplicationXml{}
-			if _, ok := o.Misc["Application"]; ok {
-				nestedApplication.Misc = o.Misc["Application"]
-			}
-			if oApplication.Name != "" {
-				nestedApplication.Name = oApplication.Name
-			}
-			if oApplication.Action != nil {
-				nestedApplication.Action = oApplication.Action
-			}
-			nestedApplicationCol = append(nestedApplicationCol, nestedApplication)
-		}
-		entry.Application = nestedApplicationCol
-	}
-
-	var nestedDecoderCol []DecoderXml
-	if o.Decoder != nil {
-		nestedDecoderCol = []DecoderXml{}
-		for _, oDecoder := range o.Decoder {
-			nestedDecoder := DecoderXml{}
-			if _, ok := o.Misc["Decoder"]; ok {
-				nestedDecoder.Misc = o.Misc["Decoder"]
-			}
-			if oDecoder.Name != "" {
-				nestedDecoder.Name = oDecoder.Name
-			}
-			if oDecoder.Action != nil {
-				nestedDecoder.Action = oDecoder.Action
-			}
-			if oDecoder.WildfireAction != nil {
-				nestedDecoder.WildfireAction = oDecoder.WildfireAction
-			}
-			if oDecoder.MlavAction != nil {
-				nestedDecoder.MlavAction = oDecoder.MlavAction
-			}
-			nestedDecoderCol = append(nestedDecoderCol, nestedDecoder)
-		}
-		entry.Decoder = nestedDecoderCol
-	}
-
-	entry.Description = o.Description
-	entry.DisableOverride = o.DisableOverride
-	var nestedMlavEngineFilebasedEnabledCol []MlavEngineFilebasedEnabledXml
-	if o.MlavEngineFilebasedEnabled != nil {
-		nestedMlavEngineFilebasedEnabledCol = []MlavEngineFilebasedEnabledXml{}
-		for _, oMlavEngineFilebasedEnabled := range o.MlavEngineFilebasedEnabled {
-			nestedMlavEngineFilebasedEnabled := MlavEngineFilebasedEnabledXml{}
-			if _, ok := o.Misc["MlavEngineFilebasedEnabled"]; ok {
-				nestedMlavEngineFilebasedEnabled.Misc = o.Misc["MlavEngineFilebasedEnabled"]
-			}
-			if oMlavEngineFilebasedEnabled.Name != "" {
-				nestedMlavEngineFilebasedEnabled.Name = oMlavEngineFilebasedEnabled.Name
-			}
-			if oMlavEngineFilebasedEnabled.MlavPolicyAction != nil {
-				nestedMlavEngineFilebasedEnabled.MlavPolicyAction = oMlavEngineFilebasedEnabled.MlavPolicyAction
-			}
-			nestedMlavEngineFilebasedEnabledCol = append(nestedMlavEngineFilebasedEnabledCol, nestedMlavEngineFilebasedEnabled)
-		}
-		entry.MlavEngineFilebasedEnabled = nestedMlavEngineFilebasedEnabledCol
-	}
-
-	var nestedMlavExceptionCol []MlavExceptionXml
-	if o.MlavException != nil {
-		nestedMlavExceptionCol = []MlavExceptionXml{}
-		for _, oMlavException := range o.MlavException {
-			nestedMlavException := MlavExceptionXml{}
-			if _, ok := o.Misc["MlavException"]; ok {
-				nestedMlavException.Misc = o.Misc["MlavException"]
-			}
-			if oMlavException.Name != "" {
-				nestedMlavException.Name = oMlavException.Name
-			}
-			if oMlavException.Filename != nil {
-				nestedMlavException.Filename = oMlavException.Filename
-			}
-			if oMlavException.Description != nil {
-				nestedMlavException.Description = oMlavException.Description
-			}
-			nestedMlavExceptionCol = append(nestedMlavExceptionCol, nestedMlavException)
-		}
-		entry.MlavException = nestedMlavExceptionCol
-	}
-
-	entry.PacketCapture = util.YesNo(o.PacketCapture, nil)
-	var nestedThreatExceptionCol []ThreatExceptionXml
-	if o.ThreatException != nil {
-		nestedThreatExceptionCol = []ThreatExceptionXml{}
-		for _, oThreatException := range o.ThreatException {
-			nestedThreatException := ThreatExceptionXml{}
-			if _, ok := o.Misc["ThreatException"]; ok {
-				nestedThreatException.Misc = o.Misc["ThreatException"]
-			}
-			if oThreatException.Name != "" {
-				nestedThreatException.Name = oThreatException.Name
-			}
-			nestedThreatExceptionCol = append(nestedThreatExceptionCol, nestedThreatException)
-		}
-		entry.ThreatException = nestedThreatExceptionCol
-	}
-
-	entry.WfrtHoldMode = util.YesNo(o.WfrtHoldMode, nil)
-
-	entry.Misc = o.Misc["Entry"]
-
-	return entry, nil
-}
-
-func specifyEntry_11_0_2(o *Entry) (any, error) {
-	entry := entryXml_11_0_2{}
-	entry.Name = o.Name
-	var nestedApplicationCol []ApplicationXml_11_0_2
-	if o.Application != nil {
-		nestedApplicationCol = []ApplicationXml_11_0_2{}
-		for _, oApplication := range o.Application {
-			nestedApplication := ApplicationXml_11_0_2{}
-			if _, ok := o.Misc["Application"]; ok {
-				nestedApplication.Misc = o.Misc["Application"]
-			}
-			if oApplication.Name != "" {
-				nestedApplication.Name = oApplication.Name
-			}
-			if oApplication.Action != nil {
-				nestedApplication.Action = oApplication.Action
-			}
-			nestedApplicationCol = append(nestedApplicationCol, nestedApplication)
-		}
-		entry.Application = nestedApplicationCol
-	}
-
-	var nestedDecoderCol []DecoderXml_11_0_2
-	if o.Decoder != nil {
-		nestedDecoderCol = []DecoderXml_11_0_2{}
-		for _, oDecoder := range o.Decoder {
-			nestedDecoder := DecoderXml_11_0_2{}
-			if _, ok := o.Misc["Decoder"]; ok {
-				nestedDecoder.Misc = o.Misc["Decoder"]
-			}
-			if oDecoder.Name != "" {
-				nestedDecoder.Name = oDecoder.Name
-			}
-			if oDecoder.Action != nil {
-				nestedDecoder.Action = oDecoder.Action
-			}
-			if oDecoder.WildfireAction != nil {
-				nestedDecoder.WildfireAction = oDecoder.WildfireAction
-			}
-			if oDecoder.MlavAction != nil {
-				nestedDecoder.MlavAction = oDecoder.MlavAction
-			}
-			nestedDecoderCol = append(nestedDecoderCol, nestedDecoder)
-		}
-		entry.Decoder = nestedDecoderCol
-	}
-
-	entry.Description = o.Description
-	entry.DisableOverride = o.DisableOverride
-	var nestedMlavEngineFilebasedEnabledCol []MlavEngineFilebasedEnabledXml_11_0_2
-	if o.MlavEngineFilebasedEnabled != nil {
-		nestedMlavEngineFilebasedEnabledCol = []MlavEngineFilebasedEnabledXml_11_0_2{}
-		for _, oMlavEngineFilebasedEnabled := range o.MlavEngineFilebasedEnabled {
-			nestedMlavEngineFilebasedEnabled := MlavEngineFilebasedEnabledXml_11_0_2{}
-			if _, ok := o.Misc["MlavEngineFilebasedEnabled"]; ok {
-				nestedMlavEngineFilebasedEnabled.Misc = o.Misc["MlavEngineFilebasedEnabled"]
-			}
-			if oMlavEngineFilebasedEnabled.Name != "" {
-				nestedMlavEngineFilebasedEnabled.Name = oMlavEngineFilebasedEnabled.Name
-			}
-			if oMlavEngineFilebasedEnabled.MlavPolicyAction != nil {
-				nestedMlavEngineFilebasedEnabled.MlavPolicyAction = oMlavEngineFilebasedEnabled.MlavPolicyAction
-			}
-			nestedMlavEngineFilebasedEnabledCol = append(nestedMlavEngineFilebasedEnabledCol, nestedMlavEngineFilebasedEnabled)
-		}
-		entry.MlavEngineFilebasedEnabled = nestedMlavEngineFilebasedEnabledCol
-	}
-
-	var nestedMlavExceptionCol []MlavExceptionXml_11_0_2
-	if o.MlavException != nil {
-		nestedMlavExceptionCol = []MlavExceptionXml_11_0_2{}
-		for _, oMlavException := range o.MlavException {
-			nestedMlavException := MlavExceptionXml_11_0_2{}
-			if _, ok := o.Misc["MlavException"]; ok {
-				nestedMlavException.Misc = o.Misc["MlavException"]
-			}
-			if oMlavException.Name != "" {
-				nestedMlavException.Name = oMlavException.Name
-			}
-			if oMlavException.Filename != nil {
-				nestedMlavException.Filename = oMlavException.Filename
-			}
-			if oMlavException.Description != nil {
-				nestedMlavException.Description = oMlavException.Description
-			}
-			nestedMlavExceptionCol = append(nestedMlavExceptionCol, nestedMlavException)
-		}
-		entry.MlavException = nestedMlavExceptionCol
-	}
-
-	entry.PacketCapture = util.YesNo(o.PacketCapture, nil)
-	var nestedThreatExceptionCol []ThreatExceptionXml_11_0_2
-	if o.ThreatException != nil {
-		nestedThreatExceptionCol = []ThreatExceptionXml_11_0_2{}
-		for _, oThreatException := range o.ThreatException {
-			nestedThreatException := ThreatExceptionXml_11_0_2{}
-			if _, ok := o.Misc["ThreatException"]; ok {
-				nestedThreatException.Misc = o.Misc["ThreatException"]
-			}
-			if oThreatException.Name != "" {
-				nestedThreatException.Name = oThreatException.Name
-			}
-			nestedThreatExceptionCol = append(nestedThreatExceptionCol, nestedThreatException)
-		}
-		entry.ThreatException = nestedThreatExceptionCol
-	}
-
-	entry.WfrtHoldMode = util.YesNo(o.WfrtHoldMode, nil)
-
-	entry.Misc = o.Misc["Entry"]
-
-	return entry, nil
-}
-func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
-	entryList := make([]*Entry, 0, len(c.Answer))
-	for _, o := range c.Answer {
-		entry := &Entry{
-			Misc: make(map[string][]generic.Xml),
-		}
-		entry.Name = o.Name
-		var nestedApplicationCol []Application
-		if o.Application != nil {
-			nestedApplicationCol = []Application{}
-			for _, oApplication := range o.Application {
-				nestedApplication := Application{}
-				if oApplication.Misc != nil {
-					entry.Misc["Application"] = oApplication.Misc
-				}
-				if oApplication.Name != "" {
-					nestedApplication.Name = oApplication.Name
-				}
-				if oApplication.Action != nil {
-					nestedApplication.Action = oApplication.Action
-				}
-				nestedApplicationCol = append(nestedApplicationCol, nestedApplication)
-			}
-			entry.Application = nestedApplicationCol
-		}
-
-		var nestedDecoderCol []Decoder
-		if o.Decoder != nil {
-			nestedDecoderCol = []Decoder{}
-			for _, oDecoder := range o.Decoder {
-				nestedDecoder := Decoder{}
-				if oDecoder.Misc != nil {
-					entry.Misc["Decoder"] = oDecoder.Misc
-				}
-				if oDecoder.Name != "" {
-					nestedDecoder.Name = oDecoder.Name
-				}
-				if oDecoder.Action != nil {
-					nestedDecoder.Action = oDecoder.Action
-				}
-				if oDecoder.WildfireAction != nil {
-					nestedDecoder.WildfireAction = oDecoder.WildfireAction
-				}
-				if oDecoder.MlavAction != nil {
-					nestedDecoder.MlavAction = oDecoder.MlavAction
-				}
-				nestedDecoderCol = append(nestedDecoderCol, nestedDecoder)
-			}
-			entry.Decoder = nestedDecoderCol
-		}
-
-		entry.Description = o.Description
-		entry.DisableOverride = o.DisableOverride
-		var nestedMlavEngineFilebasedEnabledCol []MlavEngineFilebasedEnabled
-		if o.MlavEngineFilebasedEnabled != nil {
-			nestedMlavEngineFilebasedEnabledCol = []MlavEngineFilebasedEnabled{}
-			for _, oMlavEngineFilebasedEnabled := range o.MlavEngineFilebasedEnabled {
-				nestedMlavEngineFilebasedEnabled := MlavEngineFilebasedEnabled{}
-				if oMlavEngineFilebasedEnabled.Misc != nil {
-					entry.Misc["MlavEngineFilebasedEnabled"] = oMlavEngineFilebasedEnabled.Misc
-				}
-				if oMlavEngineFilebasedEnabled.Name != "" {
-					nestedMlavEngineFilebasedEnabled.Name = oMlavEngineFilebasedEnabled.Name
-				}
-				if oMlavEngineFilebasedEnabled.MlavPolicyAction != nil {
-					nestedMlavEngineFilebasedEnabled.MlavPolicyAction = oMlavEngineFilebasedEnabled.MlavPolicyAction
-				}
-				nestedMlavEngineFilebasedEnabledCol = append(nestedMlavEngineFilebasedEnabledCol, nestedMlavEngineFilebasedEnabled)
-			}
-			entry.MlavEngineFilebasedEnabled = nestedMlavEngineFilebasedEnabledCol
-		}
-
-		var nestedMlavExceptionCol []MlavException
-		if o.MlavException != nil {
-			nestedMlavExceptionCol = []MlavException{}
-			for _, oMlavException := range o.MlavException {
-				nestedMlavException := MlavException{}
-				if oMlavException.Misc != nil {
-					entry.Misc["MlavException"] = oMlavException.Misc
-				}
-				if oMlavException.Name != "" {
-					nestedMlavException.Name = oMlavException.Name
-				}
-				if oMlavException.Filename != nil {
-					nestedMlavException.Filename = oMlavException.Filename
-				}
-				if oMlavException.Description != nil {
-					nestedMlavException.Description = oMlavException.Description
-				}
-				nestedMlavExceptionCol = append(nestedMlavExceptionCol, nestedMlavException)
-			}
-			entry.MlavException = nestedMlavExceptionCol
-		}
-
-		entry.PacketCapture = util.AsBool(o.PacketCapture, nil)
-		var nestedThreatExceptionCol []ThreatException
-		if o.ThreatException != nil {
-			nestedThreatExceptionCol = []ThreatException{}
-			for _, oThreatException := range o.ThreatException {
-				nestedThreatException := ThreatException{}
-				if oThreatException.Misc != nil {
-					entry.Misc["ThreatException"] = oThreatException.Misc
-				}
-				if oThreatException.Name != "" {
-					nestedThreatException.Name = oThreatException.Name
-				}
-				nestedThreatExceptionCol = append(nestedThreatExceptionCol, nestedThreatException)
-			}
-			entry.ThreatException = nestedThreatExceptionCol
-		}
-
-		entry.WfrtHoldMode = util.AsBool(o.WfrtHoldMode, nil)
-
-		entry.Misc["Entry"] = o.Misc
-
-		entryList = append(entryList, entry)
-	}
-
-	return entryList, nil
-}
-func (c *entryXmlContainer_11_0_2) Normalize() ([]*Entry, error) {
-	entryList := make([]*Entry, 0, len(c.Answer))
-	for _, o := range c.Answer {
-		entry := &Entry{
-			Misc: make(map[string][]generic.Xml),
-		}
-		entry.Name = o.Name
-		var nestedApplicationCol []Application
-		if o.Application != nil {
-			nestedApplicationCol = []Application{}
-			for _, oApplication := range o.Application {
-				nestedApplication := Application{}
-				if oApplication.Misc != nil {
-					entry.Misc["Application"] = oApplication.Misc
-				}
-				if oApplication.Name != "" {
-					nestedApplication.Name = oApplication.Name
-				}
-				if oApplication.Action != nil {
-					nestedApplication.Action = oApplication.Action
-				}
-				nestedApplicationCol = append(nestedApplicationCol, nestedApplication)
-			}
-			entry.Application = nestedApplicationCol
-		}
-
-		var nestedDecoderCol []Decoder
-		if o.Decoder != nil {
-			nestedDecoderCol = []Decoder{}
-			for _, oDecoder := range o.Decoder {
-				nestedDecoder := Decoder{}
-				if oDecoder.Misc != nil {
-					entry.Misc["Decoder"] = oDecoder.Misc
-				}
-				if oDecoder.Name != "" {
-					nestedDecoder.Name = oDecoder.Name
-				}
-				if oDecoder.Action != nil {
-					nestedDecoder.Action = oDecoder.Action
-				}
-				if oDecoder.WildfireAction != nil {
-					nestedDecoder.WildfireAction = oDecoder.WildfireAction
-				}
-				if oDecoder.MlavAction != nil {
-					nestedDecoder.MlavAction = oDecoder.MlavAction
-				}
-				nestedDecoderCol = append(nestedDecoderCol, nestedDecoder)
-			}
-			entry.Decoder = nestedDecoderCol
-		}
-
-		entry.Description = o.Description
-		entry.DisableOverride = o.DisableOverride
-		var nestedMlavEngineFilebasedEnabledCol []MlavEngineFilebasedEnabled
-		if o.MlavEngineFilebasedEnabled != nil {
-			nestedMlavEngineFilebasedEnabledCol = []MlavEngineFilebasedEnabled{}
-			for _, oMlavEngineFilebasedEnabled := range o.MlavEngineFilebasedEnabled {
-				nestedMlavEngineFilebasedEnabled := MlavEngineFilebasedEnabled{}
-				if oMlavEngineFilebasedEnabled.Misc != nil {
-					entry.Misc["MlavEngineFilebasedEnabled"] = oMlavEngineFilebasedEnabled.Misc
-				}
-				if oMlavEngineFilebasedEnabled.Name != "" {
-					nestedMlavEngineFilebasedEnabled.Name = oMlavEngineFilebasedEnabled.Name
-				}
-				if oMlavEngineFilebasedEnabled.MlavPolicyAction != nil {
-					nestedMlavEngineFilebasedEnabled.MlavPolicyAction = oMlavEngineFilebasedEnabled.MlavPolicyAction
-				}
-				nestedMlavEngineFilebasedEnabledCol = append(nestedMlavEngineFilebasedEnabledCol, nestedMlavEngineFilebasedEnabled)
-			}
-			entry.MlavEngineFilebasedEnabled = nestedMlavEngineFilebasedEnabledCol
-		}
-
-		var nestedMlavExceptionCol []MlavException
-		if o.MlavException != nil {
-			nestedMlavExceptionCol = []MlavException{}
-			for _, oMlavException := range o.MlavException {
-				nestedMlavException := MlavException{}
-				if oMlavException.Misc != nil {
-					entry.Misc["MlavException"] = oMlavException.Misc
-				}
-				if oMlavException.Name != "" {
-					nestedMlavException.Name = oMlavException.Name
-				}
-				if oMlavException.Filename != nil {
-					nestedMlavException.Filename = oMlavException.Filename
-				}
-				if oMlavException.Description != nil {
-					nestedMlavException.Description = oMlavException.Description
-				}
-				nestedMlavExceptionCol = append(nestedMlavExceptionCol, nestedMlavException)
-			}
-			entry.MlavException = nestedMlavExceptionCol
-		}
-
-		entry.PacketCapture = util.AsBool(o.PacketCapture, nil)
-		var nestedThreatExceptionCol []ThreatException
-		if o.ThreatException != nil {
-			nestedThreatExceptionCol = []ThreatException{}
-			for _, oThreatException := range o.ThreatException {
-				nestedThreatException := ThreatException{}
-				if oThreatException.Misc != nil {
-					entry.Misc["ThreatException"] = oThreatException.Misc
-				}
-				if oThreatException.Name != "" {
-					nestedThreatException.Name = oThreatException.Name
-				}
-				nestedThreatExceptionCol = append(nestedThreatExceptionCol, nestedThreatException)
-			}
-			entry.ThreatException = nestedThreatExceptionCol
-		}
-
-		entry.WfrtHoldMode = util.AsBool(o.WfrtHoldMode, nil)
-
-		entry.Misc["Entry"] = o.Misc
-
-		entryList = append(entryList, entry)
-	}
-
-	return entryList, nil
-}
-
 func SpecMatches(a, b *Entry) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+	if a == nil && b == nil {
 		return true
 	}
 
-	// Don't compare Name.
-	if !matchApplication(a.Application, b.Application) {
+	if (a == nil && b != nil) || (a != nil && b == nil) {
 		return false
 	}
-	if !matchDecoder(a.Decoder, b.Decoder) {
+
+	return a.matches(b)
+}
+
+func (o *Entry) matches(other *Entry) bool {
+	if o == nil && other == nil {
+		return true
+	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.StringsMatch(a.Description, b.Description) {
+	if len(o.Application) != len(other.Application) {
 		return false
 	}
-	if !util.StringsMatch(a.DisableOverride, b.DisableOverride) {
+	for idx := range o.Application {
+		if !o.Application[idx].matches(&other.Application[idx]) {
+			return false
+		}
+	}
+	if len(o.Decoder) != len(other.Decoder) {
 		return false
 	}
-	if !matchMlavEngineFilebasedEnabled(a.MlavEngineFilebasedEnabled, b.MlavEngineFilebasedEnabled) {
+	for idx := range o.Decoder {
+		if !o.Decoder[idx].matches(&other.Decoder[idx]) {
+			return false
+		}
+	}
+	if !util.StringsMatch(o.Description, other.Description) {
 		return false
 	}
-	if !matchMlavException(a.MlavException, b.MlavException) {
+	if !util.StringsMatch(o.DisableOverride, other.DisableOverride) {
 		return false
 	}
-	if !util.BoolsMatch(a.PacketCapture, b.PacketCapture) {
+	if len(o.MlavEngineFilebasedEnabled) != len(other.MlavEngineFilebasedEnabled) {
 		return false
 	}
-	if !matchThreatException(a.ThreatException, b.ThreatException) {
+	for idx := range o.MlavEngineFilebasedEnabled {
+		if !o.MlavEngineFilebasedEnabled[idx].matches(&other.MlavEngineFilebasedEnabled[idx]) {
+			return false
+		}
+	}
+	if len(o.MlavException) != len(other.MlavException) {
 		return false
 	}
-	if !util.BoolsMatch(a.WfrtHoldMode, b.WfrtHoldMode) {
+	for idx := range o.MlavException {
+		if !o.MlavException[idx].matches(&other.MlavException[idx]) {
+			return false
+		}
+	}
+	if !util.BoolsMatch(o.PacketCapture, other.PacketCapture) {
+		return false
+	}
+	if len(o.ThreatException) != len(other.ThreatException) {
+		return false
+	}
+	for idx := range o.ThreatException {
+		if !o.ThreatException[idx].matches(&other.ThreatException[idx]) {
+			return false
+		}
+	}
+	if !util.BoolsMatch(o.WfrtHoldMode, other.WfrtHoldMode) {
 		return false
 	}
 
 	return true
 }
 
-func matchApplication(a []Application, b []Application) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+func (o *Application) matches(other *Application) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	for _, a := range a {
-		for _, b := range b {
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-			if !util.StringsMatch(a.Action, b.Action) {
-				return false
-			}
-		}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
 	}
+	if o.Name != other.Name {
+		return false
+	}
+	if !util.StringsMatch(o.Action, other.Action) {
+		return false
+	}
+
 	return true
 }
-func matchDecoder(a []Decoder, b []Decoder) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *Decoder) matches(other *Decoder) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	for _, a := range a {
-		for _, b := range b {
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-			if !util.StringsMatch(a.Action, b.Action) {
-				return false
-			}
-			if !util.StringsMatch(a.WildfireAction, b.WildfireAction) {
-				return false
-			}
-			if !util.StringsMatch(a.MlavAction, b.MlavAction) {
-				return false
-			}
-		}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
 	}
+	if o.Name != other.Name {
+		return false
+	}
+	if !util.StringsMatch(o.Action, other.Action) {
+		return false
+	}
+	if !util.StringsMatch(o.WildfireAction, other.WildfireAction) {
+		return false
+	}
+	if !util.StringsMatch(o.MlavAction, other.MlavAction) {
+		return false
+	}
+
 	return true
 }
-func matchMlavEngineFilebasedEnabled(a []MlavEngineFilebasedEnabled, b []MlavEngineFilebasedEnabled) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *MlavEngineFilebasedEnabled) matches(other *MlavEngineFilebasedEnabled) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	for _, a := range a {
-		for _, b := range b {
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-			if !util.StringsMatch(a.MlavPolicyAction, b.MlavPolicyAction) {
-				return false
-			}
-		}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
 	}
+	if o.Name != other.Name {
+		return false
+	}
+	if !util.StringsMatch(o.MlavPolicyAction, other.MlavPolicyAction) {
+		return false
+	}
+
 	return true
 }
-func matchMlavException(a []MlavException, b []MlavException) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *MlavException) matches(other *MlavException) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	for _, a := range a {
-		for _, b := range b {
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-			if !util.StringsMatch(a.Filename, b.Filename) {
-				return false
-			}
-			if !util.StringsMatch(a.Description, b.Description) {
-				return false
-			}
-		}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
 	}
+	if o.Name != other.Name {
+		return false
+	}
+	if !util.StringsMatch(o.Filename, other.Filename) {
+		return false
+	}
+	if !util.StringsMatch(o.Description, other.Description) {
+		return false
+	}
+
 	return true
 }
-func matchThreatException(a []ThreatException, b []ThreatException) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *ThreatException) matches(other *ThreatException) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	for _, a := range a {
-		for _, b := range b {
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-		}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
 	}
+	if o.Name != other.Name {
+		return false
+	}
+
 	return true
 }
 

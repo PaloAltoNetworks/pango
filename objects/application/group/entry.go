@@ -15,19 +15,37 @@ var (
 )
 
 var (
-	Suffix = []string{"application-group"}
+	suffix = []string{"application-group", "$name"}
 )
 
 type Entry struct {
 	Name            string
 	DisableOverride *string
 	Members         []string
-
-	Misc map[string][]generic.Xml
+	Misc            []generic.Xml
 }
 
 type entryXmlContainer struct {
 	Answer []entryXml `xml:"entry"`
+}
+
+func (o *entryXmlContainer) Normalize() ([]*Entry, error) {
+	entries := make([]*Entry, 0, len(o.Answer))
+	for _, elt := range o.Answer {
+		obj, err := elt.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		entries = append(entries, obj)
+	}
+
+	return entries, nil
+}
+
+func specifyEntry(source *Entry) (any, error) {
+	var obj entryXml
+	obj.MarshalFromObject(*source)
+	return obj, nil
 }
 
 type entryXml struct {
@@ -35,8 +53,31 @@ type entryXml struct {
 	Name            string           `xml:"name,attr"`
 	DisableOverride *string          `xml:"disable-override,omitempty"`
 	Members         *util.MemberType `xml:"members,omitempty"`
+	Misc            []generic.Xml    `xml:",any"`
+}
 
-	Misc []generic.Xml `xml:",any"`
+func (o *entryXml) MarshalFromObject(s Entry) {
+	o.Name = s.Name
+	o.DisableOverride = s.DisableOverride
+	if s.Members != nil {
+		o.Members = util.StrToMem(s.Members)
+	}
+	o.Misc = s.Misc
+}
+
+func (o entryXml) UnmarshalToObject() (*Entry, error) {
+	var membersVal []string
+	if o.Members != nil {
+		membersVal = util.MemToStr(o.Members)
+	}
+
+	result := &Entry{
+		Name:            o.Name,
+		DisableOverride: o.DisableOverride,
+		Members:         membersVal,
+		Misc:            o.Misc,
+	}
+	return result, nil
 }
 
 func (e *Entry) Field(v string) (any, error) {
@@ -60,47 +101,30 @@ func Versioning(vn version.Number) (Specifier, Normalizer, error) {
 
 	return specifyEntry, &entryXmlContainer{}, nil
 }
-func specifyEntry(o *Entry) (any, error) {
-	entry := entryXml{}
-	entry.Name = o.Name
-	entry.DisableOverride = o.DisableOverride
-	entry.Members = util.StrToMem(o.Members)
-
-	entry.Misc = o.Misc["Entry"]
-
-	return entry, nil
-}
-
-func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
-	entryList := make([]*Entry, 0, len(c.Answer))
-	for _, o := range c.Answer {
-		entry := &Entry{
-			Misc: make(map[string][]generic.Xml),
-		}
-		entry.Name = o.Name
-		entry.DisableOverride = o.DisableOverride
-		entry.Members = util.MemToStr(o.Members)
-
-		entry.Misc["Entry"] = o.Misc
-
-		entryList = append(entryList, entry)
-	}
-
-	return entryList, nil
-}
-
 func SpecMatches(a, b *Entry) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+	if a == nil && b == nil {
 		return true
 	}
 
-	// Don't compare Name.
-	if !util.StringsMatch(a.DisableOverride, b.DisableOverride) {
+	if (a == nil && b != nil) || (a != nil && b == nil) {
 		return false
 	}
-	if !util.OrderedListsMatch(a.Members, b.Members) {
+
+	return a.matches(b)
+}
+
+func (o *Entry) matches(other *Entry) bool {
+	if o == nil && other == nil {
+		return true
+	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
+	}
+	if !util.StringsMatch(o.DisableOverride, other.DisableOverride) {
+		return false
+	}
+	if !util.OrderedListsMatch[string](o.Members, other.Members) {
 		return false
 	}
 

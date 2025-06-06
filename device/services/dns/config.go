@@ -11,148 +11,188 @@ import (
 type Config struct {
 	DnsSetting      *DnsSetting
 	FqdnRefreshTime *int64
-
-	Misc map[string][]generic.Xml
+	Misc            []generic.Xml
 }
 type DnsSetting struct {
 	Servers *DnsSettingServers
+	Misc    []generic.Xml
 }
 type DnsSettingServers struct {
 	Primary   *string
 	Secondary *string
+	Misc      []generic.Xml
 }
+
 type configXmlContainer struct {
 	XMLName xml.Name    `xml:"result"`
 	Answer  []configXml `xml:"system"`
 }
+
+func (o *configXmlContainer) Normalize() ([]*Config, error) {
+	entries := make([]*Config, 0, len(o.Answer))
+	for _, elt := range o.Answer {
+		obj, err := elt.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		entries = append(entries, obj)
+	}
+
+	return entries, nil
+}
+
+func specifyConfig(source *Config) (any, error) {
+	var obj configXml
+	obj.MarshalFromObject(*source)
+	return obj, nil
+}
+
 type configXml struct {
 	XMLName         xml.Name       `xml:"system"`
-	DnsSetting      *DnsSettingXml `xml:"dns-setting,omitempty"`
+	DnsSetting      *dnsSettingXml `xml:"dns-setting,omitempty"`
 	FqdnRefreshTime *int64         `xml:"fqdn-refresh-time,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
+	Misc            []generic.Xml  `xml:",any"`
 }
-type DnsSettingXml struct {
-	Servers *DnsSettingServersXml `xml:"servers,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
+type dnsSettingXml struct {
+	Servers *dnsSettingServersXml `xml:"servers,omitempty"`
+	Misc    []generic.Xml         `xml:",any"`
 }
-type DnsSettingServersXml struct {
-	Primary   *string `xml:"primary,omitempty"`
-	Secondary *string `xml:"secondary,omitempty"`
+type dnsSettingServersXml struct {
+	Primary   *string       `xml:"primary,omitempty"`
+	Secondary *string       `xml:"secondary,omitempty"`
+	Misc      []generic.Xml `xml:",any"`
+}
 
-	Misc []generic.Xml `xml:",any"`
+func (o *configXml) MarshalFromObject(s Config) {
+	if s.DnsSetting != nil {
+		var obj dnsSettingXml
+		obj.MarshalFromObject(*s.DnsSetting)
+		o.DnsSetting = &obj
+	}
+	o.FqdnRefreshTime = s.FqdnRefreshTime
+	o.Misc = s.Misc
+}
+
+func (o configXml) UnmarshalToObject() (*Config, error) {
+	var dnsSettingVal *DnsSetting
+	if o.DnsSetting != nil {
+		obj, err := o.DnsSetting.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		dnsSettingVal = obj
+	}
+
+	result := &Config{
+		DnsSetting:      dnsSettingVal,
+		FqdnRefreshTime: o.FqdnRefreshTime,
+		Misc:            o.Misc,
+	}
+	return result, nil
+}
+func (o *dnsSettingXml) MarshalFromObject(s DnsSetting) {
+	if s.Servers != nil {
+		var obj dnsSettingServersXml
+		obj.MarshalFromObject(*s.Servers)
+		o.Servers = &obj
+	}
+	o.Misc = s.Misc
+}
+
+func (o dnsSettingXml) UnmarshalToObject() (*DnsSetting, error) {
+	var serversVal *DnsSettingServers
+	if o.Servers != nil {
+		obj, err := o.Servers.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		serversVal = obj
+	}
+
+	result := &DnsSetting{
+		Servers: serversVal,
+		Misc:    o.Misc,
+	}
+	return result, nil
+}
+func (o *dnsSettingServersXml) MarshalFromObject(s DnsSettingServers) {
+	o.Primary = s.Primary
+	o.Secondary = s.Secondary
+	o.Misc = s.Misc
+}
+
+func (o dnsSettingServersXml) UnmarshalToObject() (*DnsSettingServers, error) {
+
+	result := &DnsSettingServers{
+		Primary:   o.Primary,
+		Secondary: o.Secondary,
+		Misc:      o.Misc,
+	}
+	return result, nil
 }
 
 func Versioning(vn version.Number) (Specifier, Normalizer, error) {
 	return specifyConfig, &configXmlContainer{}, nil
 }
-func specifyConfig(o *Config) (any, error) {
-	config := configXml{}
-	var nestedDnsSetting *DnsSettingXml
-	if o.DnsSetting != nil {
-		nestedDnsSetting = &DnsSettingXml{}
-		if _, ok := o.Misc["DnsSetting"]; ok {
-			nestedDnsSetting.Misc = o.Misc["DnsSetting"]
-		}
-		if o.DnsSetting.Servers != nil {
-			nestedDnsSetting.Servers = &DnsSettingServersXml{}
-			if _, ok := o.Misc["DnsSettingServers"]; ok {
-				nestedDnsSetting.Servers.Misc = o.Misc["DnsSettingServers"]
-			}
-			if o.DnsSetting.Servers.Primary != nil {
-				nestedDnsSetting.Servers.Primary = o.DnsSetting.Servers.Primary
-			}
-			if o.DnsSetting.Servers.Secondary != nil {
-				nestedDnsSetting.Servers.Secondary = o.DnsSetting.Servers.Secondary
-			}
-		}
-	}
-	config.DnsSetting = nestedDnsSetting
-
-	config.FqdnRefreshTime = o.FqdnRefreshTime
-
-	config.Misc = o.Misc["Config"]
-
-	return config, nil
-}
-func (c *configXmlContainer) Normalize() ([]*Config, error) {
-	configList := make([]*Config, 0, len(c.Answer))
-	for _, o := range c.Answer {
-		config := &Config{
-			Misc: make(map[string][]generic.Xml),
-		}
-		var nestedDnsSetting *DnsSetting
-		if o.DnsSetting != nil {
-			nestedDnsSetting = &DnsSetting{}
-			if o.DnsSetting.Misc != nil {
-				config.Misc["DnsSetting"] = o.DnsSetting.Misc
-			}
-			if o.DnsSetting.Servers != nil {
-				nestedDnsSetting.Servers = &DnsSettingServers{}
-				if o.DnsSetting.Servers.Misc != nil {
-					config.Misc["DnsSettingServers"] = o.DnsSetting.Servers.Misc
-				}
-				if o.DnsSetting.Servers.Primary != nil {
-					nestedDnsSetting.Servers.Primary = o.DnsSetting.Servers.Primary
-				}
-				if o.DnsSetting.Servers.Secondary != nil {
-					nestedDnsSetting.Servers.Secondary = o.DnsSetting.Servers.Secondary
-				}
-			}
-		}
-		config.DnsSetting = nestedDnsSetting
-
-		config.FqdnRefreshTime = o.FqdnRefreshTime
-
-		config.Misc["Config"] = o.Misc
-
-		configList = append(configList, config)
-	}
-
-	return configList, nil
-}
-
 func SpecMatches(a, b *Config) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+	if a == nil && b == nil {
 		return true
 	}
 
-	// Don't compare Name.
-	if !matchDnsSetting(a.DnsSetting, b.DnsSetting) {
+	if (a == nil && b != nil) || (a != nil && b == nil) {
 		return false
 	}
-	if !util.Ints64Match(a.FqdnRefreshTime, b.FqdnRefreshTime) {
+
+	return a.matches(b)
+}
+
+func (o *Config) matches(other *Config) bool {
+	if o == nil && other == nil {
+		return true
+	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
+	}
+	if !o.DnsSetting.matches(other.DnsSetting) {
+		return false
+	}
+	if !util.Ints64Match(o.FqdnRefreshTime, other.FqdnRefreshTime) {
 		return false
 	}
 
 	return true
 }
 
-func matchDnsSettingServers(a *DnsSettingServers, b *DnsSettingServers) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+func (o *DnsSetting) matches(other *DnsSetting) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.StringsMatch(a.Primary, b.Primary) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.StringsMatch(a.Secondary, b.Secondary) {
+	if !o.Servers.matches(other.Servers) {
 		return false
 	}
+
 	return true
 }
-func matchDnsSetting(a *DnsSetting, b *DnsSetting) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *DnsSettingServers) matches(other *DnsSettingServers) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !matchDnsSettingServers(a.Servers, b.Servers) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
+	if !util.StringsMatch(o.Primary, other.Primary) {
+		return false
+	}
+	if !util.StringsMatch(o.Secondary, other.Secondary) {
+		return false
+	}
+
 	return true
 }

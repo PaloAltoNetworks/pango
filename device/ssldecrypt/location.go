@@ -174,9 +174,9 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 		ans = []string{
 			"config",
 			"devices",
-			util.AsEntryXpath([]string{o.Template.PanoramaDevice}),
+			util.AsEntryXpath(o.Template.PanoramaDevice),
 			"template",
-			util.AsEntryXpath([]string{o.Template.Template}),
+			util.AsEntryXpath(o.Template.Template),
 			"config",
 			"shared",
 		}
@@ -196,14 +196,14 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 		ans = []string{
 			"config",
 			"devices",
-			util.AsEntryXpath([]string{o.TemplateVsys.PanoramaDevice}),
+			util.AsEntryXpath(o.TemplateVsys.PanoramaDevice),
 			"template",
-			util.AsEntryXpath([]string{o.TemplateVsys.Template}),
+			util.AsEntryXpath(o.TemplateVsys.Template),
 			"config",
 			"devices",
-			util.AsEntryXpath([]string{o.TemplateVsys.NgfwDevice}),
+			util.AsEntryXpath(o.TemplateVsys.NgfwDevice),
 			"vsys",
-			util.AsEntryXpath([]string{o.TemplateVsys.Vsys}),
+			util.AsEntryXpath(o.TemplateVsys.Vsys),
 		}
 	case o.TemplateStack != nil:
 		if o.TemplateStack.PanoramaDevice == "" {
@@ -215,9 +215,9 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 		ans = []string{
 			"config",
 			"devices",
-			util.AsEntryXpath([]string{o.TemplateStack.PanoramaDevice}),
+			util.AsEntryXpath(o.TemplateStack.PanoramaDevice),
 			"template-stack",
-			util.AsEntryXpath([]string{o.TemplateStack.TemplateStack}),
+			util.AsEntryXpath(o.TemplateStack.TemplateStack),
 			"config",
 			"shared",
 		}
@@ -237,14 +237,14 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 		ans = []string{
 			"config",
 			"devices",
-			util.AsEntryXpath([]string{o.TemplateStackVsys.PanoramaDevice}),
+			util.AsEntryXpath(o.TemplateStackVsys.PanoramaDevice),
 			"template-stack",
-			util.AsEntryXpath([]string{o.TemplateStackVsys.TemplateStack}),
+			util.AsEntryXpath(o.TemplateStackVsys.TemplateStack),
 			"config",
 			"devices",
-			util.AsEntryXpath([]string{o.TemplateStackVsys.NgfwDevice}),
+			util.AsEntryXpath(o.TemplateStackVsys.NgfwDevice),
 			"vsys",
-			util.AsEntryXpath([]string{o.TemplateStackVsys.Vsys}),
+			util.AsEntryXpath(o.TemplateStackVsys.Vsys),
 		}
 	case o.Shared != nil:
 		ans = []string{
@@ -257,7 +257,11 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 
 	return ans, nil
 }
-func (o Location) Xpath(vn version.Number) ([]string, error) {
+
+func (o Location) XpathWithComponents(vn version.Number, components ...string) ([]string, error) {
+	if len(components) != 0 {
+		return nil, fmt.Errorf("invalid number of arguments for XpathWithComponents() call")
+	}
 
 	ans, err := o.XpathPrefix(vn)
 	if err != nil {

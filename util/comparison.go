@@ -25,7 +25,7 @@ func UnorderedListsMatch(a, b []string) bool {
 	return true
 }
 
-func OrderedListsMatch(a, b []string) bool {
+func OrderedListsMatch[E comparable](a, b []E) bool {
 	if a == nil && b == nil {
 		return true
 	} else if a == nil || b == nil {

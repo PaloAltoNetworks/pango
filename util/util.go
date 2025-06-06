@@ -109,7 +109,7 @@ func AsXpath(i interface{}) string {
 }
 
 // AsEntryXpath returns the given values as an entry xpath segment.
-func AsEntryXpath(vals []string) string {
+func AsEntryXpath(vals ...string) string {
 	if len(vals) == 0 || (len(vals) == 1 && vals[0] == "") {
 		return "entry"
 	}
@@ -160,18 +160,18 @@ func TemplateXpathPrefix(tmpl, ts string) []string {
 		return []string{
 			"config",
 			"devices",
-			AsEntryXpath([]string{"localhost.localdomain"}),
+			AsEntryXpath("localhost.localdomain"),
 			"template",
-			AsEntryXpath([]string{tmpl}),
+			AsEntryXpath(tmpl),
 		}
 	}
 
 	return []string{
 		"config",
 		"devices",
-		AsEntryXpath([]string{"localhost.localdomain"}),
+		AsEntryXpath("localhost.localdomain"),
 		"template-stack",
-		AsEntryXpath([]string{ts}),
+		AsEntryXpath(ts),
 	}
 }
 
@@ -185,9 +185,9 @@ func DeviceGroupXpathPrefix(dg string) []string {
 	return []string{
 		"config",
 		"devices",
-		AsEntryXpath([]string{"localhost.localdomain"}),
+		AsEntryXpath("localhost.localdomain"),
 		"device-group",
-		AsEntryXpath([]string{dg}),
+		AsEntryXpath(dg),
 	}
 }
 
@@ -202,9 +202,9 @@ func VsysXpathPrefix(vsys string) []string {
 	return []string{
 		"config",
 		"devices",
-		AsEntryXpath([]string{"localhost.localdomain"}),
+		AsEntryXpath("localhost.localdomain"),
 		"vsys",
-		AsEntryXpath([]string{vsys}),
+		AsEntryXpath(vsys),
 	}
 }
 

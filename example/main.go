@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"encoding/xml"
 	"fmt"
 	"log"
 
@@ -195,35 +194,6 @@ func checkVr(c *pango.Client, ctx context.Context) {
 			Rip: &virtual_router.ProtocolRip{
 				Enable: util.Bool(false),
 			},
-		},
-		RoutingTable: &virtual_router.RoutingTable{
-			// Ip: &virtual_router.RoutingTableIp{
-			// 	StaticRoutes: []virtual_router.RoutingTableIpStaticRoutes{
-			// 		{
-			// 			Name:        "default",
-			// 			Destination: util.String("0.0.0.0/0"),
-			// 			Interface:   util.String("ethernet1/2"),
-			// 			NextHop: &virtual_router.RoutingTableIpStaticRoutesNextHop{
-			// 				IpAddress: util.String("1.1.1.1"),
-			// 			},
-			// 			Metric:    util.Int(64),
-			// 			AdminDist: util.Int(120),
-			// 		},
-			// 	},
-			// },
-			// Ipv6: &virtual_router.RoutingTableIpv6{
-			// 	StaticRoutes: []virtual_router.RoutingTableIpv6StaticRoutes{
-			// 		{
-			// 			Name:        "default",
-			// 			Destination: util.String("0.0.0.0/0"),
-			// 			NextHop: &virtual_router.RoutingTableIpv6StaticRoutesNextHop{
-			// 				Ipv6Address: util.String("2001:0000:130F:0000:0000:09C0:876A:230D"),
-			// 			},
-			// 			Metric:    util.Int(24),
-			// 			AdminDist: util.Int(20),
-			// 		},
-			// 	},
-			// },
 		},
 		Ecmp: &virtual_router.Ecmp{
 			Enable:          util.Bool(true),
@@ -671,8 +641,8 @@ func checkSecurityPolicyRules(c *pango.Client, ctx context.Context) {
 	log.Printf("Security policy rule '%s:%s' with description '%s' read by id", *securityPolicyRuleReply.Uuid, securityPolicyRuleReply.Name, *securityPolicyRuleReply.Description)
 
 	// SECURITY POLICY RULE - UPDATE 2
-	securityPolicyRuleEntry.Description = util.String("changed by id description")
-	securityPolicyRuleReply, err = securityPolicyRuleApi.UpdateById(ctx, *securityPolicyRuleLocation, securityPolicyRuleEntry, *securityPolicyRuleReply.Uuid)
+	securityPolicyRuleEntry.Description = util.String("changed by name description")
+	securityPolicyRuleReply, err = securityPolicyRuleApi.Update(ctx, *securityPolicyRuleLocation, securityPolicyRuleEntry, securityPolicyRuleReply.Name)
 	if err != nil {
 		log.Printf("Failed to update security policy rule: %s", err)
 		return
@@ -1038,21 +1008,6 @@ func checkService(c *pango.Client, ctx context.Context) {
 		return
 	}
 
-	readDescription := ""
-	if serviceReply.Description != nil {
-		readDescription = *serviceReply.Description
-	}
-
-	keys := make([]string, 0, len(serviceReply.Misc))
-	xmls := make([]string, 0, len(serviceReply.Misc))
-	for key := range serviceReply.Misc {
-		keys = append(keys, key)
-		data, _ := xml.Marshal(serviceReply.Misc[key])
-		xmls = append(xmls, string(data))
-	}
-	log.Printf("Service '%s=%s, description: %s misc XML: %s, misc keys: %s' read",
-		serviceReply.Name, *serviceReply.Protocol.Tcp.Port, readDescription, xmls, keys)
-
 	// SERVICE - UPDATE 3
 	serviceReply.Description = util.String("some text changed now")
 
@@ -1061,21 +1016,6 @@ func checkService(c *pango.Client, ctx context.Context) {
 		log.Printf("Failed to update object: %s", err)
 		return
 	}
-
-	readDescription = ""
-	if serviceReply.Description != nil {
-		readDescription = *serviceReply.Description
-	}
-
-	keys = make([]string, 0, len(serviceReply.Misc))
-	xmls = make([]string, 0, len(serviceReply.Misc))
-	for key := range serviceReply.Misc {
-		keys = append(keys, key)
-		data, _ := xml.Marshal(serviceReply.Misc[key])
-		xmls = append(xmls, string(data))
-	}
-	log.Printf("Service '%s=%s, description: %s misc XML: %s, misc keys: %s' update",
-		serviceReply.Name, *serviceReply.Protocol.Tcp.Port, readDescription, xmls, keys)
 }
 
 func checkNtp(c *pango.Client, ctx context.Context) {

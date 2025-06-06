@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{"decryption", "rules"}
+	suffix = []string{"decryption", "rules", "$name"}
 )
 
 type Entry struct {
@@ -44,37 +44,61 @@ type Entry struct {
 	To                  []string
 	Type                *Type
 	Uuid                *string
-
-	Misc map[string][]generic.Xml
+	Misc                []generic.Xml
 }
-
 type Target struct {
 	Devices []TargetDevices
 	Negate  *bool
 	Tags    []string
+	Misc    []generic.Xml
 }
 type TargetDevices struct {
 	Name string
 	Vsys []TargetDevicesVsys
+	Misc []generic.Xml
 }
 type TargetDevicesVsys struct {
 	Name string
+	Misc []generic.Xml
 }
 type Type struct {
 	SshProxy             *TypeSshProxy
 	SslForwardProxy      *TypeSslForwardProxy
 	SslInboundInspection *TypeSslInboundInspection
+	Misc                 []generic.Xml
 }
 type TypeSshProxy struct {
+	Misc []generic.Xml
 }
 type TypeSslForwardProxy struct {
+	Misc []generic.Xml
 }
 type TypeSslInboundInspection struct {
 	Certificates []string
+	Misc         []generic.Xml
 }
 
 type entryXmlContainer struct {
 	Answer []entryXml `xml:"entry"`
+}
+
+func (o *entryXmlContainer) Normalize() ([]*Entry, error) {
+	entries := make([]*Entry, 0, len(o.Answer))
+	for _, elt := range o.Answer {
+		obj, err := elt.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		entries = append(entries, obj)
+	}
+
+	return entries, nil
+}
+
+func specifyEntry(source *Entry) (any, error) {
+	var obj entryXml
+	obj.MarshalFromObject(*source)
+	return obj, nil
 }
 
 type entryXml struct {
@@ -100,48 +124,377 @@ type entryXml struct {
 	SourceHip           *util.MemberType `xml:"source-hip,omitempty"`
 	SourceUser          *util.MemberType `xml:"source-user,omitempty"`
 	Tag                 *util.MemberType `xml:"tag,omitempty"`
-	Target              *TargetXml       `xml:"target,omitempty"`
+	Target              *targetXml       `xml:"target,omitempty"`
 	To                  *util.MemberType `xml:"to,omitempty"`
-	Type                *TypeXml         `xml:"type,omitempty"`
+	Type                *typeXml         `xml:"type,omitempty"`
 	Uuid                *string          `xml:"uuid,attr,omitempty"`
-
+	Misc                []generic.Xml    `xml:",any"`
+}
+type targetXml struct {
+	Devices *targetDevicesContainerXml `xml:"devices,omitempty"`
+	Negate  *string                    `xml:"negate,omitempty"`
+	Tags    *util.MemberType           `xml:"tags,omitempty"`
+	Misc    []generic.Xml              `xml:",any"`
+}
+type targetDevicesContainerXml struct {
+	Entries []targetDevicesXml `xml:"entry"`
+}
+type targetDevicesXml struct {
+	XMLName xml.Name                       `xml:"entry"`
+	Name    string                         `xml:"name,attr"`
+	Vsys    *targetDevicesVsysContainerXml `xml:"vsys,omitempty"`
+	Misc    []generic.Xml                  `xml:",any"`
+}
+type targetDevicesVsysContainerXml struct {
+	Entries []targetDevicesVsysXml `xml:"entry"`
+}
+type targetDevicesVsysXml struct {
+	XMLName xml.Name      `xml:"entry"`
+	Name    string        `xml:"name,attr"`
+	Misc    []generic.Xml `xml:",any"`
+}
+type typeXml struct {
+	SshProxy             *typeSshProxyXml             `xml:"ssh-proxy,omitempty"`
+	SslForwardProxy      *typeSslForwardProxyXml      `xml:"ssl-forward-proxy,omitempty"`
+	SslInboundInspection *typeSslInboundInspectionXml `xml:"ssl-inbound-inspection,omitempty"`
+	Misc                 []generic.Xml                `xml:",any"`
+}
+type typeSshProxyXml struct {
 	Misc []generic.Xml `xml:",any"`
 }
-type TargetXml struct {
-	Devices []TargetDevicesXml `xml:"devices>entry,omitempty"`
-	Negate  *string            `xml:"negate,omitempty"`
-	Tags    *util.MemberType   `xml:"tags,omitempty"`
-
+type typeSslForwardProxyXml struct {
 	Misc []generic.Xml `xml:",any"`
 }
-type TargetDevicesXml struct {
-	Name string                 `xml:"name,attr"`
-	Vsys []TargetDevicesVsysXml `xml:"vsys>entry,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
-}
-type TargetDevicesVsysXml struct {
-	Name string `xml:"name,attr"`
-
-	Misc []generic.Xml `xml:",any"`
-}
-type TypeXml struct {
-	SshProxy             *TypeSshProxyXml             `xml:"ssh-proxy,omitempty"`
-	SslForwardProxy      *TypeSslForwardProxyXml      `xml:"ssl-forward-proxy,omitempty"`
-	SslInboundInspection *TypeSslInboundInspectionXml `xml:"ssl-inbound-inspection,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
-}
-type TypeSshProxyXml struct {
-	Misc []generic.Xml `xml:",any"`
-}
-type TypeSslForwardProxyXml struct {
-	Misc []generic.Xml `xml:",any"`
-}
-type TypeSslInboundInspectionXml struct {
+type typeSslInboundInspectionXml struct {
 	Certificates *util.MemberType `xml:"certificates,omitempty"`
+	Misc         []generic.Xml    `xml:",any"`
+}
 
-	Misc []generic.Xml `xml:",any"`
+func (o *entryXml) MarshalFromObject(s Entry) {
+	o.Name = s.Name
+	o.Action = s.Action
+	if s.Category != nil {
+		o.Category = util.StrToMem(s.Category)
+	}
+	o.Description = s.Description
+	if s.Destination != nil {
+		o.Destination = util.StrToMem(s.Destination)
+	}
+	if s.DestinationHip != nil {
+		o.DestinationHip = util.StrToMem(s.DestinationHip)
+	}
+	o.Disabled = util.YesNo(s.Disabled, nil)
+	if s.From != nil {
+		o.From = util.StrToMem(s.From)
+	}
+	o.GroupTag = s.GroupTag
+	o.LogFail = util.YesNo(s.LogFail, nil)
+	o.LogSetting = s.LogSetting
+	o.LogSuccess = util.YesNo(s.LogSuccess, nil)
+	o.NegateDestination = util.YesNo(s.NegateDestination, nil)
+	o.NegateSource = util.YesNo(s.NegateSource, nil)
+	o.PacketBrokerProfile = s.PacketBrokerProfile
+	o.Profile = s.Profile
+	if s.Service != nil {
+		o.Service = util.StrToMem(s.Service)
+	}
+	if s.Source != nil {
+		o.Source = util.StrToMem(s.Source)
+	}
+	if s.SourceHip != nil {
+		o.SourceHip = util.StrToMem(s.SourceHip)
+	}
+	if s.SourceUser != nil {
+		o.SourceUser = util.StrToMem(s.SourceUser)
+	}
+	if s.Tag != nil {
+		o.Tag = util.StrToMem(s.Tag)
+	}
+	if s.Target != nil {
+		var obj targetXml
+		obj.MarshalFromObject(*s.Target)
+		o.Target = &obj
+	}
+	if s.To != nil {
+		o.To = util.StrToMem(s.To)
+	}
+	if s.Type != nil {
+		var obj typeXml
+		obj.MarshalFromObject(*s.Type)
+		o.Type = &obj
+	}
+	o.Uuid = s.Uuid
+	o.Misc = s.Misc
+}
+
+func (o entryXml) UnmarshalToObject() (*Entry, error) {
+	var categoryVal []string
+	if o.Category != nil {
+		categoryVal = util.MemToStr(o.Category)
+	}
+	var destinationVal []string
+	if o.Destination != nil {
+		destinationVal = util.MemToStr(o.Destination)
+	}
+	var destinationHipVal []string
+	if o.DestinationHip != nil {
+		destinationHipVal = util.MemToStr(o.DestinationHip)
+	}
+	var fromVal []string
+	if o.From != nil {
+		fromVal = util.MemToStr(o.From)
+	}
+	var serviceVal []string
+	if o.Service != nil {
+		serviceVal = util.MemToStr(o.Service)
+	}
+	var sourceVal []string
+	if o.Source != nil {
+		sourceVal = util.MemToStr(o.Source)
+	}
+	var sourceHipVal []string
+	if o.SourceHip != nil {
+		sourceHipVal = util.MemToStr(o.SourceHip)
+	}
+	var sourceUserVal []string
+	if o.SourceUser != nil {
+		sourceUserVal = util.MemToStr(o.SourceUser)
+	}
+	var tagVal []string
+	if o.Tag != nil {
+		tagVal = util.MemToStr(o.Tag)
+	}
+	var targetVal *Target
+	if o.Target != nil {
+		obj, err := o.Target.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		targetVal = obj
+	}
+	var toVal []string
+	if o.To != nil {
+		toVal = util.MemToStr(o.To)
+	}
+	var typeVal *Type
+	if o.Type != nil {
+		obj, err := o.Type.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		typeVal = obj
+	}
+
+	result := &Entry{
+		Name:                o.Name,
+		Action:              o.Action,
+		Category:            categoryVal,
+		Description:         o.Description,
+		Destination:         destinationVal,
+		DestinationHip:      destinationHipVal,
+		Disabled:            util.AsBool(o.Disabled, nil),
+		From:                fromVal,
+		GroupTag:            o.GroupTag,
+		LogFail:             util.AsBool(o.LogFail, nil),
+		LogSetting:          o.LogSetting,
+		LogSuccess:          util.AsBool(o.LogSuccess, nil),
+		NegateDestination:   util.AsBool(o.NegateDestination, nil),
+		NegateSource:        util.AsBool(o.NegateSource, nil),
+		PacketBrokerProfile: o.PacketBrokerProfile,
+		Profile:             o.Profile,
+		Service:             serviceVal,
+		Source:              sourceVal,
+		SourceHip:           sourceHipVal,
+		SourceUser:          sourceUserVal,
+		Tag:                 tagVal,
+		Target:              targetVal,
+		To:                  toVal,
+		Type:                typeVal,
+		Uuid:                o.Uuid,
+		Misc:                o.Misc,
+	}
+	return result, nil
+}
+func (o *targetXml) MarshalFromObject(s Target) {
+	if s.Devices != nil {
+		var objs []targetDevicesXml
+		for _, elt := range s.Devices {
+			var obj targetDevicesXml
+			obj.MarshalFromObject(elt)
+			objs = append(objs, obj)
+		}
+		o.Devices = &targetDevicesContainerXml{Entries: objs}
+	}
+	o.Negate = util.YesNo(s.Negate, nil)
+	if s.Tags != nil {
+		o.Tags = util.StrToMem(s.Tags)
+	}
+	o.Misc = s.Misc
+}
+
+func (o targetXml) UnmarshalToObject() (*Target, error) {
+	var devicesVal []TargetDevices
+	if o.Devices != nil {
+		for _, elt := range o.Devices.Entries {
+			obj, err := elt.UnmarshalToObject()
+			if err != nil {
+				return nil, err
+			}
+			devicesVal = append(devicesVal, *obj)
+		}
+	}
+	var tagsVal []string
+	if o.Tags != nil {
+		tagsVal = util.MemToStr(o.Tags)
+	}
+
+	result := &Target{
+		Devices: devicesVal,
+		Negate:  util.AsBool(o.Negate, nil),
+		Tags:    tagsVal,
+		Misc:    o.Misc,
+	}
+	return result, nil
+}
+func (o *targetDevicesXml) MarshalFromObject(s TargetDevices) {
+	o.Name = s.Name
+	if s.Vsys != nil {
+		var objs []targetDevicesVsysXml
+		for _, elt := range s.Vsys {
+			var obj targetDevicesVsysXml
+			obj.MarshalFromObject(elt)
+			objs = append(objs, obj)
+		}
+		o.Vsys = &targetDevicesVsysContainerXml{Entries: objs}
+	}
+	o.Misc = s.Misc
+}
+
+func (o targetDevicesXml) UnmarshalToObject() (*TargetDevices, error) {
+	var vsysVal []TargetDevicesVsys
+	if o.Vsys != nil {
+		for _, elt := range o.Vsys.Entries {
+			obj, err := elt.UnmarshalToObject()
+			if err != nil {
+				return nil, err
+			}
+			vsysVal = append(vsysVal, *obj)
+		}
+	}
+
+	result := &TargetDevices{
+		Name: o.Name,
+		Vsys: vsysVal,
+		Misc: o.Misc,
+	}
+	return result, nil
+}
+func (o *targetDevicesVsysXml) MarshalFromObject(s TargetDevicesVsys) {
+	o.Name = s.Name
+	o.Misc = s.Misc
+}
+
+func (o targetDevicesVsysXml) UnmarshalToObject() (*TargetDevicesVsys, error) {
+
+	result := &TargetDevicesVsys{
+		Name: o.Name,
+		Misc: o.Misc,
+	}
+	return result, nil
+}
+func (o *typeXml) MarshalFromObject(s Type) {
+	if s.SshProxy != nil {
+		var obj typeSshProxyXml
+		obj.MarshalFromObject(*s.SshProxy)
+		o.SshProxy = &obj
+	}
+	if s.SslForwardProxy != nil {
+		var obj typeSslForwardProxyXml
+		obj.MarshalFromObject(*s.SslForwardProxy)
+		o.SslForwardProxy = &obj
+	}
+	if s.SslInboundInspection != nil {
+		var obj typeSslInboundInspectionXml
+		obj.MarshalFromObject(*s.SslInboundInspection)
+		o.SslInboundInspection = &obj
+	}
+	o.Misc = s.Misc
+}
+
+func (o typeXml) UnmarshalToObject() (*Type, error) {
+	var sshProxyVal *TypeSshProxy
+	if o.SshProxy != nil {
+		obj, err := o.SshProxy.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		sshProxyVal = obj
+	}
+	var sslForwardProxyVal *TypeSslForwardProxy
+	if o.SslForwardProxy != nil {
+		obj, err := o.SslForwardProxy.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		sslForwardProxyVal = obj
+	}
+	var sslInboundInspectionVal *TypeSslInboundInspection
+	if o.SslInboundInspection != nil {
+		obj, err := o.SslInboundInspection.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		sslInboundInspectionVal = obj
+	}
+
+	result := &Type{
+		SshProxy:             sshProxyVal,
+		SslForwardProxy:      sslForwardProxyVal,
+		SslInboundInspection: sslInboundInspectionVal,
+		Misc:                 o.Misc,
+	}
+	return result, nil
+}
+func (o *typeSshProxyXml) MarshalFromObject(s TypeSshProxy) {
+	o.Misc = s.Misc
+}
+
+func (o typeSshProxyXml) UnmarshalToObject() (*TypeSshProxy, error) {
+
+	result := &TypeSshProxy{
+		Misc: o.Misc,
+	}
+	return result, nil
+}
+func (o *typeSslForwardProxyXml) MarshalFromObject(s TypeSslForwardProxy) {
+	o.Misc = s.Misc
+}
+
+func (o typeSslForwardProxyXml) UnmarshalToObject() (*TypeSslForwardProxy, error) {
+
+	result := &TypeSslForwardProxy{
+		Misc: o.Misc,
+	}
+	return result, nil
+}
+func (o *typeSslInboundInspectionXml) MarshalFromObject(s TypeSslInboundInspection) {
+	if s.Certificates != nil {
+		o.Certificates = util.StrToMem(s.Certificates)
+	}
+	o.Misc = s.Misc
+}
+
+func (o typeSslInboundInspectionXml) UnmarshalToObject() (*TypeSslInboundInspection, error) {
+	var certificatesVal []string
+	if o.Certificates != nil {
+		certificatesVal = util.MemToStr(o.Certificates)
+	}
+
+	result := &TypeSslInboundInspection{
+		Certificates: certificatesVal,
+		Misc:         o.Misc,
+	}
+	return result, nil
 }
 
 func (e *Entry) Field(v string) (any, error) {
@@ -258,393 +611,223 @@ func Versioning(vn version.Number) (Specifier, Normalizer, error) {
 
 	return specifyEntry, &entryXmlContainer{}, nil
 }
-func specifyEntry(o *Entry) (any, error) {
-	entry := entryXml{}
-	entry.Name = o.Name
-	entry.Action = o.Action
-	entry.Category = util.StrToMem(o.Category)
-	entry.Description = o.Description
-	entry.Destination = util.StrToMem(o.Destination)
-	entry.DestinationHip = util.StrToMem(o.DestinationHip)
-	entry.Disabled = util.YesNo(o.Disabled, nil)
-	entry.From = util.StrToMem(o.From)
-	entry.GroupTag = o.GroupTag
-	entry.LogFail = util.YesNo(o.LogFail, nil)
-	entry.LogSetting = o.LogSetting
-	entry.LogSuccess = util.YesNo(o.LogSuccess, nil)
-	entry.NegateDestination = util.YesNo(o.NegateDestination, nil)
-	entry.NegateSource = util.YesNo(o.NegateSource, nil)
-	entry.PacketBrokerProfile = o.PacketBrokerProfile
-	entry.Profile = o.Profile
-	entry.Service = util.StrToMem(o.Service)
-	entry.Source = util.StrToMem(o.Source)
-	entry.SourceHip = util.StrToMem(o.SourceHip)
-	entry.SourceUser = util.StrToMem(o.SourceUser)
-	entry.Tag = util.StrToMem(o.Tag)
-	var nestedTarget *TargetXml
-	if o.Target != nil {
-		nestedTarget = &TargetXml{}
-		if _, ok := o.Misc["Target"]; ok {
-			nestedTarget.Misc = o.Misc["Target"]
-		}
-		if o.Target.Devices != nil {
-			nestedTarget.Devices = []TargetDevicesXml{}
-			for _, oTargetDevices := range o.Target.Devices {
-				nestedTargetDevices := TargetDevicesXml{}
-				if _, ok := o.Misc["TargetDevices"]; ok {
-					nestedTargetDevices.Misc = o.Misc["TargetDevices"]
-				}
-				if oTargetDevices.Name != "" {
-					nestedTargetDevices.Name = oTargetDevices.Name
-				}
-				if oTargetDevices.Vsys != nil {
-					nestedTargetDevices.Vsys = []TargetDevicesVsysXml{}
-					for _, oTargetDevicesVsys := range oTargetDevices.Vsys {
-						nestedTargetDevicesVsys := TargetDevicesVsysXml{}
-						if _, ok := o.Misc["TargetDevicesVsys"]; ok {
-							nestedTargetDevicesVsys.Misc = o.Misc["TargetDevicesVsys"]
-						}
-						if oTargetDevicesVsys.Name != "" {
-							nestedTargetDevicesVsys.Name = oTargetDevicesVsys.Name
-						}
-						nestedTargetDevices.Vsys = append(nestedTargetDevices.Vsys, nestedTargetDevicesVsys)
-					}
-				}
-				nestedTarget.Devices = append(nestedTarget.Devices, nestedTargetDevices)
-			}
-		}
-		if o.Target.Negate != nil {
-			nestedTarget.Negate = util.YesNo(o.Target.Negate, nil)
-		}
-		if o.Target.Tags != nil {
-			nestedTarget.Tags = util.StrToMem(o.Target.Tags)
-		}
-	}
-	entry.Target = nestedTarget
-
-	entry.To = util.StrToMem(o.To)
-	var nestedType *TypeXml
-	if o.Type != nil {
-		nestedType = &TypeXml{}
-		if _, ok := o.Misc["Type"]; ok {
-			nestedType.Misc = o.Misc["Type"]
-		}
-		if o.Type.SshProxy != nil {
-			nestedType.SshProxy = &TypeSshProxyXml{}
-			if _, ok := o.Misc["TypeSshProxy"]; ok {
-				nestedType.SshProxy.Misc = o.Misc["TypeSshProxy"]
-			}
-		}
-		if o.Type.SslForwardProxy != nil {
-			nestedType.SslForwardProxy = &TypeSslForwardProxyXml{}
-			if _, ok := o.Misc["TypeSslForwardProxy"]; ok {
-				nestedType.SslForwardProxy.Misc = o.Misc["TypeSslForwardProxy"]
-			}
-		}
-		if o.Type.SslInboundInspection != nil {
-			nestedType.SslInboundInspection = &TypeSslInboundInspectionXml{}
-			if _, ok := o.Misc["TypeSslInboundInspection"]; ok {
-				nestedType.SslInboundInspection.Misc = o.Misc["TypeSslInboundInspection"]
-			}
-			if o.Type.SslInboundInspection.Certificates != nil {
-				nestedType.SslInboundInspection.Certificates = util.StrToMem(o.Type.SslInboundInspection.Certificates)
-			}
-		}
-	}
-	entry.Type = nestedType
-
-	entry.Uuid = o.Uuid
-
-	entry.Misc = o.Misc["Entry"]
-
-	return entry, nil
-}
-
-func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
-	entryList := make([]*Entry, 0, len(c.Answer))
-	for _, o := range c.Answer {
-		entry := &Entry{
-			Misc: make(map[string][]generic.Xml),
-		}
-		entry.Name = o.Name
-		entry.Action = o.Action
-		entry.Category = util.MemToStr(o.Category)
-		entry.Description = o.Description
-		entry.Destination = util.MemToStr(o.Destination)
-		entry.DestinationHip = util.MemToStr(o.DestinationHip)
-		entry.Disabled = util.AsBool(o.Disabled, nil)
-		entry.From = util.MemToStr(o.From)
-		entry.GroupTag = o.GroupTag
-		entry.LogFail = util.AsBool(o.LogFail, nil)
-		entry.LogSetting = o.LogSetting
-		entry.LogSuccess = util.AsBool(o.LogSuccess, nil)
-		entry.NegateDestination = util.AsBool(o.NegateDestination, nil)
-		entry.NegateSource = util.AsBool(o.NegateSource, nil)
-		entry.PacketBrokerProfile = o.PacketBrokerProfile
-		entry.Profile = o.Profile
-		entry.Service = util.MemToStr(o.Service)
-		entry.Source = util.MemToStr(o.Source)
-		entry.SourceHip = util.MemToStr(o.SourceHip)
-		entry.SourceUser = util.MemToStr(o.SourceUser)
-		entry.Tag = util.MemToStr(o.Tag)
-		var nestedTarget *Target
-		if o.Target != nil {
-			nestedTarget = &Target{}
-			if o.Target.Misc != nil {
-				entry.Misc["Target"] = o.Target.Misc
-			}
-			if o.Target.Devices != nil {
-				nestedTarget.Devices = []TargetDevices{}
-				for _, oTargetDevices := range o.Target.Devices {
-					nestedTargetDevices := TargetDevices{}
-					if oTargetDevices.Misc != nil {
-						entry.Misc["TargetDevices"] = oTargetDevices.Misc
-					}
-					if oTargetDevices.Name != "" {
-						nestedTargetDevices.Name = oTargetDevices.Name
-					}
-					if oTargetDevices.Vsys != nil {
-						nestedTargetDevices.Vsys = []TargetDevicesVsys{}
-						for _, oTargetDevicesVsys := range oTargetDevices.Vsys {
-							nestedTargetDevicesVsys := TargetDevicesVsys{}
-							if oTargetDevicesVsys.Misc != nil {
-								entry.Misc["TargetDevicesVsys"] = oTargetDevicesVsys.Misc
-							}
-							if oTargetDevicesVsys.Name != "" {
-								nestedTargetDevicesVsys.Name = oTargetDevicesVsys.Name
-							}
-							nestedTargetDevices.Vsys = append(nestedTargetDevices.Vsys, nestedTargetDevicesVsys)
-						}
-					}
-					nestedTarget.Devices = append(nestedTarget.Devices, nestedTargetDevices)
-				}
-			}
-			if o.Target.Negate != nil {
-				nestedTarget.Negate = util.AsBool(o.Target.Negate, nil)
-			}
-			if o.Target.Tags != nil {
-				nestedTarget.Tags = util.MemToStr(o.Target.Tags)
-			}
-		}
-		entry.Target = nestedTarget
-
-		entry.To = util.MemToStr(o.To)
-		var nestedType *Type
-		if o.Type != nil {
-			nestedType = &Type{}
-			if o.Type.Misc != nil {
-				entry.Misc["Type"] = o.Type.Misc
-			}
-			if o.Type.SshProxy != nil {
-				nestedType.SshProxy = &TypeSshProxy{}
-				if o.Type.SshProxy.Misc != nil {
-					entry.Misc["TypeSshProxy"] = o.Type.SshProxy.Misc
-				}
-			}
-			if o.Type.SslForwardProxy != nil {
-				nestedType.SslForwardProxy = &TypeSslForwardProxy{}
-				if o.Type.SslForwardProxy.Misc != nil {
-					entry.Misc["TypeSslForwardProxy"] = o.Type.SslForwardProxy.Misc
-				}
-			}
-			if o.Type.SslInboundInspection != nil {
-				nestedType.SslInboundInspection = &TypeSslInboundInspection{}
-				if o.Type.SslInboundInspection.Misc != nil {
-					entry.Misc["TypeSslInboundInspection"] = o.Type.SslInboundInspection.Misc
-				}
-				if o.Type.SslInboundInspection.Certificates != nil {
-					nestedType.SslInboundInspection.Certificates = util.MemToStr(o.Type.SslInboundInspection.Certificates)
-				}
-			}
-		}
-		entry.Type = nestedType
-
-		entry.Uuid = o.Uuid
-
-		entry.Misc["Entry"] = o.Misc
-
-		entryList = append(entryList, entry)
-	}
-
-	return entryList, nil
-}
-
 func SpecMatches(a, b *Entry) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+	if a == nil && b == nil {
 		return true
 	}
 
-	// Don't compare Name.
-	if !util.StringsMatch(a.Action, b.Action) {
+	if (a == nil && b != nil) || (a != nil && b == nil) {
 		return false
 	}
-	if !util.OrderedListsMatch(a.Category, b.Category) {
+
+	return a.matches(b)
+}
+
+func (o *Entry) matches(other *Entry) bool {
+	if o == nil && other == nil {
+		return true
+	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.StringsMatch(a.Description, b.Description) {
+	if !util.StringsMatch(o.Action, other.Action) {
 		return false
 	}
-	if !util.OrderedListsMatch(a.Destination, b.Destination) {
+	if !util.OrderedListsMatch[string](o.Category, other.Category) {
 		return false
 	}
-	if !util.OrderedListsMatch(a.DestinationHip, b.DestinationHip) {
+	if !util.StringsMatch(o.Description, other.Description) {
 		return false
 	}
-	if !util.BoolsMatch(a.Disabled, b.Disabled) {
+	if !util.OrderedListsMatch[string](o.Destination, other.Destination) {
 		return false
 	}
-	if !util.OrderedListsMatch(a.From, b.From) {
+	if !util.OrderedListsMatch[string](o.DestinationHip, other.DestinationHip) {
 		return false
 	}
-	if !util.StringsMatch(a.GroupTag, b.GroupTag) {
+	if !util.BoolsMatch(o.Disabled, other.Disabled) {
 		return false
 	}
-	if !util.BoolsMatch(a.LogFail, b.LogFail) {
+	if !util.OrderedListsMatch[string](o.From, other.From) {
 		return false
 	}
-	if !util.StringsMatch(a.LogSetting, b.LogSetting) {
+	if !util.StringsMatch(o.GroupTag, other.GroupTag) {
 		return false
 	}
-	if !util.BoolsMatch(a.LogSuccess, b.LogSuccess) {
+	if !util.BoolsMatch(o.LogFail, other.LogFail) {
 		return false
 	}
-	if !util.BoolsMatch(a.NegateDestination, b.NegateDestination) {
+	if !util.StringsMatch(o.LogSetting, other.LogSetting) {
 		return false
 	}
-	if !util.BoolsMatch(a.NegateSource, b.NegateSource) {
+	if !util.BoolsMatch(o.LogSuccess, other.LogSuccess) {
 		return false
 	}
-	if !util.StringsMatch(a.PacketBrokerProfile, b.PacketBrokerProfile) {
+	if !util.BoolsMatch(o.NegateDestination, other.NegateDestination) {
 		return false
 	}
-	if !util.StringsMatch(a.Profile, b.Profile) {
+	if !util.BoolsMatch(o.NegateSource, other.NegateSource) {
 		return false
 	}
-	if !util.OrderedListsMatch(a.Service, b.Service) {
+	if !util.StringsMatch(o.PacketBrokerProfile, other.PacketBrokerProfile) {
 		return false
 	}
-	if !util.OrderedListsMatch(a.Source, b.Source) {
+	if !util.StringsMatch(o.Profile, other.Profile) {
 		return false
 	}
-	if !util.OrderedListsMatch(a.SourceHip, b.SourceHip) {
+	if !util.OrderedListsMatch[string](o.Service, other.Service) {
 		return false
 	}
-	if !util.OrderedListsMatch(a.SourceUser, b.SourceUser) {
+	if !util.OrderedListsMatch[string](o.Source, other.Source) {
 		return false
 	}
-	if !util.OrderedListsMatch(a.Tag, b.Tag) {
+	if !util.OrderedListsMatch[string](o.SourceHip, other.SourceHip) {
 		return false
 	}
-	if !matchTarget(a.Target, b.Target) {
+	if !util.OrderedListsMatch[string](o.SourceUser, other.SourceUser) {
 		return false
 	}
-	if !util.OrderedListsMatch(a.To, b.To) {
+	if !util.OrderedListsMatch[string](o.Tag, other.Tag) {
 		return false
 	}
-	if !matchType(a.Type, b.Type) {
+	if !o.Target.matches(other.Target) {
 		return false
 	}
-	if !util.StringsMatch(a.Uuid, b.Uuid) {
+	if !util.OrderedListsMatch[string](o.To, other.To) {
+		return false
+	}
+	if !o.Type.matches(other.Type) {
+		return false
+	}
+	if !util.StringsMatch(o.Uuid, other.Uuid) {
 		return false
 	}
 
 	return true
 }
 
-func matchTargetDevicesVsys(a []TargetDevicesVsys, b []TargetDevicesVsys) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+func (o *Target) matches(other *Target) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	for _, a := range a {
-		for _, b := range b {
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
+	}
+	if len(o.Devices) != len(other.Devices) {
+		return false
+	}
+	for idx := range o.Devices {
+		if !o.Devices[idx].matches(&other.Devices[idx]) {
+			return false
 		}
 	}
+	if !util.BoolsMatch(o.Negate, other.Negate) {
+		return false
+	}
+	if !util.OrderedListsMatch[string](o.Tags, other.Tags) {
+		return false
+	}
+
 	return true
 }
-func matchTargetDevices(a []TargetDevices, b []TargetDevices) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *TargetDevices) matches(other *TargetDevices) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	for _, a := range a {
-		for _, b := range b {
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-			if !matchTargetDevicesVsys(a.Vsys, b.Vsys) {
-				return false
-			}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
+	}
+	if o.Name != other.Name {
+		return false
+	}
+	if len(o.Vsys) != len(other.Vsys) {
+		return false
+	}
+	for idx := range o.Vsys {
+		if !o.Vsys[idx].matches(&other.Vsys[idx]) {
+			return false
 		}
 	}
+
 	return true
 }
-func matchTarget(a *Target, b *Target) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *TargetDevicesVsys) matches(other *TargetDevicesVsys) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !matchTargetDevices(a.Devices, b.Devices) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.BoolsMatch(a.Negate, b.Negate) {
+	if o.Name != other.Name {
 		return false
 	}
-	if !util.OrderedListsMatch(a.Tags, b.Tags) {
-		return false
-	}
+
 	return true
 }
-func matchTypeSshProxy(a *TypeSshProxy, b *TypeSshProxy) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *Type) matches(other *Type) bool {
+	if o == nil && other == nil {
 		return true
 	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
+	}
+	if !o.SshProxy.matches(other.SshProxy) {
+		return false
+	}
+	if !o.SslForwardProxy.matches(other.SslForwardProxy) {
+		return false
+	}
+	if !o.SslInboundInspection.matches(other.SslInboundInspection) {
+		return false
+	}
+
 	return true
 }
-func matchTypeSslForwardProxy(a *TypeSslForwardProxy, b *TypeSslForwardProxy) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *TypeSshProxy) matches(other *TypeSshProxy) bool {
+	if o == nil && other == nil {
 		return true
 	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
+	}
+
 	return true
 }
-func matchTypeSslInboundInspection(a *TypeSslInboundInspection, b *TypeSslInboundInspection) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *TypeSslForwardProxy) matches(other *TypeSslForwardProxy) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.OrderedListsMatch(a.Certificates, b.Certificates) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
+
 	return true
 }
-func matchType(a *Type, b *Type) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *TypeSslInboundInspection) matches(other *TypeSslInboundInspection) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !matchTypeSshProxy(a.SshProxy, b.SshProxy) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !matchTypeSslForwardProxy(a.SslForwardProxy, b.SslForwardProxy) {
+	if !util.OrderedListsMatch[string](o.Certificates, other.Certificates) {
 		return false
 	}
-	if !matchTypeSslInboundInspection(a.SslInboundInspection, b.SslInboundInspection) {
-		return false
-	}
+
 	return true
 }
 

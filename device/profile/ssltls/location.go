@@ -2,6 +2,7 @@ package ssltls
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/PaloAltoNetworks/pango/errors"
 	"github.com/PaloAltoNetworks/pango/util"
@@ -28,6 +29,7 @@ type SharedLocation struct {
 type PanoramaLocation struct {
 }
 type TemplateLocation struct {
+	NgfwDevice     string `json:"ngfw_device"`
 	PanoramaDevice string `json:"panorama_device"`
 	Template       string `json:"template"`
 }
@@ -38,6 +40,7 @@ type TemplateVsysLocation struct {
 	Vsys           string `json:"vsys"`
 }
 type TemplateStackLocation struct {
+	NgfwDevice     string `json:"ngfw_device"`
 	PanoramaDevice string `json:"panorama_device"`
 	TemplateStack  string `json:"template_stack"`
 }
@@ -58,6 +61,7 @@ func NewPanoramaLocation() *Location {
 }
 func NewTemplateLocation() *Location {
 	return &Location{Template: &TemplateLocation{
+		NgfwDevice:     "localhost.localdomain",
 		PanoramaDevice: "localhost.localdomain",
 		Template:       "",
 	},
@@ -74,6 +78,7 @@ func NewTemplateVsysLocation() *Location {
 }
 func NewTemplateStackLocation() *Location {
 	return &Location{TemplateStack: &TemplateStackLocation{
+		NgfwDevice:     "localhost.localdomain",
 		PanoramaDevice: "localhost.localdomain",
 		TemplateStack:  "",
 	},
@@ -98,6 +103,9 @@ func (o Location) IsValid() error {
 	case o.Panorama != nil:
 		count++
 	case o.Template != nil:
+		if o.Template.NgfwDevice == "" {
+			return fmt.Errorf("NgfwDevice is unspecified")
+		}
 		if o.Template.PanoramaDevice == "" {
 			return fmt.Errorf("PanoramaDevice is unspecified")
 		}
@@ -120,6 +128,9 @@ func (o Location) IsValid() error {
 		}
 		count++
 	case o.TemplateStack != nil:
+		if o.TemplateStack.NgfwDevice == "" {
+			return fmt.Errorf("NgfwDevice is unspecified")
+		}
 		if o.TemplateStack.PanoramaDevice == "" {
 			return fmt.Errorf("PanoramaDevice is unspecified")
 		}
@@ -170,6 +181,9 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 			"panorama",
 		}
 	case o.Template != nil:
+		if o.Template.NgfwDevice == "" {
+			return nil, fmt.Errorf("NgfwDevice is unspecified")
+		}
 		if o.Template.PanoramaDevice == "" {
 			return nil, fmt.Errorf("PanoramaDevice is unspecified")
 		}
@@ -179,11 +193,12 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 		ans = []string{
 			"config",
 			"devices",
-			util.AsEntryXpath([]string{o.Template.PanoramaDevice}),
+			util.AsEntryXpath(o.Template.PanoramaDevice),
 			"template",
-			util.AsEntryXpath([]string{o.Template.Template}),
+			util.AsEntryXpath(o.Template.Template),
 			"config",
-			"shared",
+			"devices",
+			util.AsEntryXpath(o.Template.NgfwDevice),
 		}
 	case o.TemplateVsys != nil:
 		if o.TemplateVsys.NgfwDevice == "" {
@@ -201,16 +216,19 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 		ans = []string{
 			"config",
 			"devices",
-			util.AsEntryXpath([]string{o.TemplateVsys.PanoramaDevice}),
+			util.AsEntryXpath(o.TemplateVsys.PanoramaDevice),
 			"template",
-			util.AsEntryXpath([]string{o.TemplateVsys.Template}),
+			util.AsEntryXpath(o.TemplateVsys.Template),
 			"config",
 			"devices",
-			util.AsEntryXpath([]string{o.TemplateVsys.NgfwDevice}),
+			util.AsEntryXpath(o.TemplateVsys.NgfwDevice),
 			"vsys",
-			util.AsEntryXpath([]string{o.TemplateVsys.Vsys}),
+			util.AsEntryXpath(o.TemplateVsys.Vsys),
 		}
 	case o.TemplateStack != nil:
+		if o.TemplateStack.NgfwDevice == "" {
+			return nil, fmt.Errorf("NgfwDevice is unspecified")
+		}
 		if o.TemplateStack.PanoramaDevice == "" {
 			return nil, fmt.Errorf("PanoramaDevice is unspecified")
 		}
@@ -220,11 +238,12 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 		ans = []string{
 			"config",
 			"devices",
-			util.AsEntryXpath([]string{o.TemplateStack.PanoramaDevice}),
+			util.AsEntryXpath(o.TemplateStack.PanoramaDevice),
 			"template-stack",
-			util.AsEntryXpath([]string{o.TemplateStack.TemplateStack}),
+			util.AsEntryXpath(o.TemplateStack.TemplateStack),
 			"config",
-			"shared",
+			"devices",
+			util.AsEntryXpath(o.TemplateStack.NgfwDevice),
 		}
 	case o.TemplateStackVsys != nil:
 		if o.TemplateStackVsys.NgfwDevice == "" {
@@ -242,14 +261,14 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 		ans = []string{
 			"config",
 			"devices",
-			util.AsEntryXpath([]string{o.TemplateStackVsys.PanoramaDevice}),
+			util.AsEntryXpath(o.TemplateStackVsys.PanoramaDevice),
 			"template-stack",
-			util.AsEntryXpath([]string{o.TemplateStackVsys.TemplateStack}),
+			util.AsEntryXpath(o.TemplateStackVsys.TemplateStack),
 			"config",
 			"devices",
-			util.AsEntryXpath([]string{o.TemplateStackVsys.NgfwDevice}),
+			util.AsEntryXpath(o.TemplateStackVsys.NgfwDevice),
 			"vsys",
-			util.AsEntryXpath([]string{o.TemplateStackVsys.Vsys}),
+			util.AsEntryXpath(o.TemplateStackVsys.Vsys),
 		}
 	default:
 		return nil, errors.NoLocationSpecifiedError
@@ -257,25 +276,32 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 
 	return ans, nil
 }
-func (o Location) XpathWithEntryName(vn version.Number, name string) ([]string, error) {
+
+func (o Location) XpathWithComponents(vn version.Number, components ...string) ([]string, error) {
+	if len(components) != 1 {
+		return nil, fmt.Errorf("invalid number of arguments for XpathWithComponents() call")
+	}
+
+	{
+		component := components[0]
+		if component != "entry" {
+			if !strings.HasPrefix(component, "entry[@name=\"]") && !strings.HasPrefix(component, "entry[@name='") {
+				return nil, errors.NewInvalidXpathComponentError(fmt.Sprintf("Name must be formatted as entry: %s", component))
+			}
+
+			if !strings.HasSuffix(component, "\"]") && !strings.HasSuffix(component, "']") {
+				return nil, errors.NewInvalidXpathComponentError(fmt.Sprintf("Name must be formatted as entry: %s", component))
+			}
+		}
+	}
 
 	ans, err := o.XpathPrefix(vn)
 	if err != nil {
 		return nil, err
 	}
-	ans = append(ans, Suffix...)
-	ans = append(ans, util.AsEntryXpath([]string{name}))
 
-	return ans, nil
-}
-func (o Location) XpathWithUuid(vn version.Number, uuid string) ([]string, error) {
-
-	ans, err := o.XpathPrefix(vn)
-	if err != nil {
-		return nil, err
-	}
-	ans = append(ans, Suffix...)
-	ans = append(ans, util.AsUuidXpath(uuid))
+	ans = append(ans, "ssl-tls-service-profile")
+	ans = append(ans, components[0])
 
 	return ans, nil
 }

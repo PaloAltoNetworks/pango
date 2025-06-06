@@ -3,6 +3,7 @@ package ethernet
 import (
 	"encoding/xml"
 	"fmt"
+	"strings"
 
 	"github.com/PaloAltoNetworks/pango/errors"
 	"github.com/PaloAltoNetworks/pango/util"
@@ -63,7 +64,7 @@ func (o *Layer3TemplateVirtualRouterImportLocation) XpathForLocation(vn version.
 	importAns := []string{
 		"network",
 		"virtual-router",
-		util.AsEntryXpath([]string{o.router}),
+		util.AsEntryXpath(o.router),
 		"interface",
 	}
 
@@ -154,9 +155,9 @@ func (o *Layer3TemplateLogicalRouterImportLocation) XpathForLocation(vn version.
 	importAns := []string{
 		"network",
 		"logical-router",
-		util.AsEntryXpath([]string{o.router}),
+		util.AsEntryXpath(o.router),
 		"vrf",
-		util.AsEntryXpath([]string{o.vrf}),
+		util.AsEntryXpath(o.vrf),
 		"interface",
 	}
 
@@ -240,7 +241,7 @@ func (o *Layer3TemplateVsysImportLocation) XpathForLocation(vn version.Number, l
 
 	importAns := []string{
 		"vsys",
-		util.AsEntryXpath([]string{o.vsys}),
+		util.AsEntryXpath(o.vsys),
 		"import",
 		"network",
 		"interface",
@@ -329,9 +330,9 @@ func (o *Layer3TemplateZoneImportLocation) XpathForLocation(vn version.Number, l
 
 	importAns := []string{
 		"vsys",
-		util.AsEntryXpath([]string{o.vsys}),
+		util.AsEntryXpath(o.vsys),
 		"zone",
-		util.AsEntryXpath([]string{o.zone}),
+		util.AsEntryXpath(o.zone),
 		"network",
 		"layer3",
 	}
@@ -552,12 +553,12 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 		ans = []string{
 			"config",
 			"devices",
-			util.AsEntryXpath([]string{o.Template.PanoramaDevice}),
+			util.AsEntryXpath(o.Template.PanoramaDevice),
 			"template",
-			util.AsEntryXpath([]string{o.Template.Template}),
+			util.AsEntryXpath(o.Template.Template),
 			"config",
 			"devices",
-			util.AsEntryXpath([]string{o.Template.NgfwDevice}),
+			util.AsEntryXpath(o.Template.NgfwDevice),
 		}
 	case o.TemplateStack != nil:
 		if o.TemplateStack.NgfwDevice == "" {
@@ -572,12 +573,12 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 		ans = []string{
 			"config",
 			"devices",
-			util.AsEntryXpath([]string{o.TemplateStack.PanoramaDevice}),
+			util.AsEntryXpath(o.TemplateStack.PanoramaDevice),
 			"template-stack",
-			util.AsEntryXpath([]string{o.TemplateStack.TemplateStack}),
+			util.AsEntryXpath(o.TemplateStack.TemplateStack),
 			"config",
 			"devices",
-			util.AsEntryXpath([]string{o.TemplateStack.NgfwDevice}),
+			util.AsEntryXpath(o.TemplateStack.NgfwDevice),
 		}
 	case o.Ngfw != nil:
 		if o.Ngfw.NgfwDevice == "" {
@@ -586,7 +587,7 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 		ans = []string{
 			"config",
 			"devices",
-			util.AsEntryXpath([]string{o.Ngfw.NgfwDevice}),
+			util.AsEntryXpath(o.Ngfw.NgfwDevice),
 		}
 	default:
 		return nil, errors.NoLocationSpecifiedError
@@ -594,25 +595,34 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 
 	return ans, nil
 }
-func (o Location) XpathWithEntryName(vn version.Number, name string) ([]string, error) {
+
+func (o Location) XpathWithComponents(vn version.Number, components ...string) ([]string, error) {
+	if len(components) != 1 {
+		return nil, fmt.Errorf("invalid number of arguments for XpathWithComponents() call")
+	}
+
+	{
+		component := components[0]
+		if component != "entry" {
+			if !strings.HasPrefix(component, "entry[@name=\"]") && !strings.HasPrefix(component, "entry[@name='") {
+				return nil, errors.NewInvalidXpathComponentError(fmt.Sprintf("Name must be formatted as entry: %s", component))
+			}
+
+			if !strings.HasSuffix(component, "\"]") && !strings.HasSuffix(component, "']") {
+				return nil, errors.NewInvalidXpathComponentError(fmt.Sprintf("Name must be formatted as entry: %s", component))
+			}
+		}
+	}
 
 	ans, err := o.XpathPrefix(vn)
 	if err != nil {
 		return nil, err
 	}
-	ans = append(ans, Suffix...)
-	ans = append(ans, util.AsEntryXpath([]string{name}))
 
-	return ans, nil
-}
-func (o Location) XpathWithUuid(vn version.Number, uuid string) ([]string, error) {
-
-	ans, err := o.XpathPrefix(vn)
-	if err != nil {
-		return nil, err
-	}
-	ans = append(ans, Suffix...)
-	ans = append(ans, util.AsUuidXpath(uuid))
+	ans = append(ans, "network")
+	ans = append(ans, "interface")
+	ans = append(ans, "ethernet")
+	ans = append(ans, components[0])
 
 	return ans, nil
 }

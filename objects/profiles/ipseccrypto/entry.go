@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{"network", "ike", "crypto-profiles", "ipsec-crypto-profiles"}
+	suffix = []string{"network", "ike", "crypto-profiles", "ipsec-crypto-profiles", "$name"}
 )
 
 type Entry struct {
@@ -25,71 +25,243 @@ type Entry struct {
 	Lifetime *Lifetime
 	Ah       *Ah
 	Esp      *Esp
-
-	Misc map[string][]generic.Xml
-}
-
-type Ah struct {
-	Authentication []string
-}
-type Esp struct {
-	Authentication []string
-	Encryption     []string
+	Misc     []generic.Xml
 }
 type Lifesize struct {
-	Gb *int64
-	Kb *int64
-	Mb *int64
-	Tb *int64
+	Gb   *int64
+	Kb   *int64
+	Mb   *int64
+	Tb   *int64
+	Misc []generic.Xml
 }
 type Lifetime struct {
 	Days    *int64
 	Hours   *int64
 	Minutes *int64
 	Seconds *int64
+	Misc    []generic.Xml
+}
+type Ah struct {
+	Authentication []string
+	Misc           []generic.Xml
+}
+type Esp struct {
+	Authentication []string
+	Encryption     []string
+	Misc           []generic.Xml
 }
 
 type entryXmlContainer struct {
 	Answer []entryXml `xml:"entry"`
 }
 
+func (o *entryXmlContainer) Normalize() ([]*Entry, error) {
+	entries := make([]*Entry, 0, len(o.Answer))
+	for _, elt := range o.Answer {
+		obj, err := elt.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		entries = append(entries, obj)
+	}
+
+	return entries, nil
+}
+
+func specifyEntry(source *Entry) (any, error) {
+	var obj entryXml
+	obj.MarshalFromObject(*source)
+	return obj, nil
+}
+
 type entryXml struct {
-	XMLName  xml.Name     `xml:"entry"`
-	Name     string       `xml:"name,attr"`
-	DhGroup  *string      `xml:"dh-group,omitempty"`
-	Lifesize *LifesizeXml `xml:"lifesize,omitempty"`
-	Lifetime *LifetimeXml `xml:"lifetime,omitempty"`
-	Ah       *AhXml       `xml:"ah,omitempty"`
-	Esp      *EspXml      `xml:"esp,omitempty"`
-
+	XMLName  xml.Name      `xml:"entry"`
+	Name     string        `xml:"name,attr"`
+	DhGroup  *string       `xml:"dh-group,omitempty"`
+	Lifesize *lifesizeXml  `xml:"lifesize,omitempty"`
+	Lifetime *lifetimeXml  `xml:"lifetime,omitempty"`
+	Ah       *ahXml        `xml:"ah,omitempty"`
+	Esp      *espXml       `xml:"esp,omitempty"`
+	Misc     []generic.Xml `xml:",any"`
+}
+type lifesizeXml struct {
+	Gb   *int64        `xml:"gb,omitempty"`
+	Kb   *int64        `xml:"kb,omitempty"`
+	Mb   *int64        `xml:"mb,omitempty"`
+	Tb   *int64        `xml:"tb,omitempty"`
 	Misc []generic.Xml `xml:",any"`
 }
-type AhXml struct {
+type lifetimeXml struct {
+	Days    *int64        `xml:"days,omitempty"`
+	Hours   *int64        `xml:"hours,omitempty"`
+	Minutes *int64        `xml:"minutes,omitempty"`
+	Seconds *int64        `xml:"seconds,omitempty"`
+	Misc    []generic.Xml `xml:",any"`
+}
+type ahXml struct {
 	Authentication *util.MemberType `xml:"authentication,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml    `xml:",any"`
 }
-type EspXml struct {
+type espXml struct {
 	Authentication *util.MemberType `xml:"authentication,omitempty"`
 	Encryption     *util.MemberType `xml:"encryption,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml    `xml:",any"`
 }
-type LifesizeXml struct {
-	Gb *int64 `xml:"gb,omitempty"`
-	Kb *int64 `xml:"kb,omitempty"`
-	Mb *int64 `xml:"mb,omitempty"`
-	Tb *int64 `xml:"tb,omitempty"`
 
-	Misc []generic.Xml `xml:",any"`
+func (o *entryXml) MarshalFromObject(s Entry) {
+	o.Name = s.Name
+	o.DhGroup = s.DhGroup
+	if s.Lifesize != nil {
+		var obj lifesizeXml
+		obj.MarshalFromObject(*s.Lifesize)
+		o.Lifesize = &obj
+	}
+	if s.Lifetime != nil {
+		var obj lifetimeXml
+		obj.MarshalFromObject(*s.Lifetime)
+		o.Lifetime = &obj
+	}
+	if s.Ah != nil {
+		var obj ahXml
+		obj.MarshalFromObject(*s.Ah)
+		o.Ah = &obj
+	}
+	if s.Esp != nil {
+		var obj espXml
+		obj.MarshalFromObject(*s.Esp)
+		o.Esp = &obj
+	}
+	o.Misc = s.Misc
 }
-type LifetimeXml struct {
-	Days    *int64 `xml:"days,omitempty"`
-	Hours   *int64 `xml:"hours,omitempty"`
-	Minutes *int64 `xml:"minutes,omitempty"`
-	Seconds *int64 `xml:"seconds,omitempty"`
 
-	Misc []generic.Xml `xml:",any"`
+func (o entryXml) UnmarshalToObject() (*Entry, error) {
+	var lifesizeVal *Lifesize
+	if o.Lifesize != nil {
+		obj, err := o.Lifesize.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		lifesizeVal = obj
+	}
+	var lifetimeVal *Lifetime
+	if o.Lifetime != nil {
+		obj, err := o.Lifetime.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		lifetimeVal = obj
+	}
+	var ahVal *Ah
+	if o.Ah != nil {
+		obj, err := o.Ah.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		ahVal = obj
+	}
+	var espVal *Esp
+	if o.Esp != nil {
+		obj, err := o.Esp.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		espVal = obj
+	}
+
+	result := &Entry{
+		Name:     o.Name,
+		DhGroup:  o.DhGroup,
+		Lifesize: lifesizeVal,
+		Lifetime: lifetimeVal,
+		Ah:       ahVal,
+		Esp:      espVal,
+		Misc:     o.Misc,
+	}
+	return result, nil
+}
+func (o *lifesizeXml) MarshalFromObject(s Lifesize) {
+	o.Gb = s.Gb
+	o.Kb = s.Kb
+	o.Mb = s.Mb
+	o.Tb = s.Tb
+	o.Misc = s.Misc
+}
+
+func (o lifesizeXml) UnmarshalToObject() (*Lifesize, error) {
+
+	result := &Lifesize{
+		Gb:   o.Gb,
+		Kb:   o.Kb,
+		Mb:   o.Mb,
+		Tb:   o.Tb,
+		Misc: o.Misc,
+	}
+	return result, nil
+}
+func (o *lifetimeXml) MarshalFromObject(s Lifetime) {
+	o.Days = s.Days
+	o.Hours = s.Hours
+	o.Minutes = s.Minutes
+	o.Seconds = s.Seconds
+	o.Misc = s.Misc
+}
+
+func (o lifetimeXml) UnmarshalToObject() (*Lifetime, error) {
+
+	result := &Lifetime{
+		Days:    o.Days,
+		Hours:   o.Hours,
+		Minutes: o.Minutes,
+		Seconds: o.Seconds,
+		Misc:    o.Misc,
+	}
+	return result, nil
+}
+func (o *ahXml) MarshalFromObject(s Ah) {
+	if s.Authentication != nil {
+		o.Authentication = util.StrToMem(s.Authentication)
+	}
+	o.Misc = s.Misc
+}
+
+func (o ahXml) UnmarshalToObject() (*Ah, error) {
+	var authenticationVal []string
+	if o.Authentication != nil {
+		authenticationVal = util.MemToStr(o.Authentication)
+	}
+
+	result := &Ah{
+		Authentication: authenticationVal,
+		Misc:           o.Misc,
+	}
+	return result, nil
+}
+func (o *espXml) MarshalFromObject(s Esp) {
+	if s.Authentication != nil {
+		o.Authentication = util.StrToMem(s.Authentication)
+	}
+	if s.Encryption != nil {
+		o.Encryption = util.StrToMem(s.Encryption)
+	}
+	o.Misc = s.Misc
+}
+
+func (o espXml) UnmarshalToObject() (*Esp, error) {
+	var authenticationVal []string
+	if o.Authentication != nil {
+		authenticationVal = util.MemToStr(o.Authentication)
+	}
+	var encryptionVal []string
+	if o.Encryption != nil {
+		encryptionVal = util.MemToStr(o.Encryption)
+	}
+
+	result := &Esp{
+		Authentication: authenticationVal,
+		Encryption:     encryptionVal,
+		Misc:           o.Misc,
+	}
+	return result, nil
 }
 
 func (e *Entry) Field(v string) (any, error) {
@@ -119,259 +291,123 @@ func Versioning(vn version.Number) (Specifier, Normalizer, error) {
 
 	return specifyEntry, &entryXmlContainer{}, nil
 }
-func specifyEntry(o *Entry) (any, error) {
-	entry := entryXml{}
-	entry.Name = o.Name
-	entry.DhGroup = o.DhGroup
-	var nestedLifesize *LifesizeXml
-	if o.Lifesize != nil {
-		nestedLifesize = &LifesizeXml{}
-		if _, ok := o.Misc["Lifesize"]; ok {
-			nestedLifesize.Misc = o.Misc["Lifesize"]
-		}
-		if o.Lifesize.Gb != nil {
-			nestedLifesize.Gb = o.Lifesize.Gb
-		}
-		if o.Lifesize.Kb != nil {
-			nestedLifesize.Kb = o.Lifesize.Kb
-		}
-		if o.Lifesize.Mb != nil {
-			nestedLifesize.Mb = o.Lifesize.Mb
-		}
-		if o.Lifesize.Tb != nil {
-			nestedLifesize.Tb = o.Lifesize.Tb
-		}
-	}
-	entry.Lifesize = nestedLifesize
-
-	var nestedLifetime *LifetimeXml
-	if o.Lifetime != nil {
-		nestedLifetime = &LifetimeXml{}
-		if _, ok := o.Misc["Lifetime"]; ok {
-			nestedLifetime.Misc = o.Misc["Lifetime"]
-		}
-		if o.Lifetime.Days != nil {
-			nestedLifetime.Days = o.Lifetime.Days
-		}
-		if o.Lifetime.Hours != nil {
-			nestedLifetime.Hours = o.Lifetime.Hours
-		}
-		if o.Lifetime.Minutes != nil {
-			nestedLifetime.Minutes = o.Lifetime.Minutes
-		}
-		if o.Lifetime.Seconds != nil {
-			nestedLifetime.Seconds = o.Lifetime.Seconds
-		}
-	}
-	entry.Lifetime = nestedLifetime
-
-	var nestedAh *AhXml
-	if o.Ah != nil {
-		nestedAh = &AhXml{}
-		if _, ok := o.Misc["Ah"]; ok {
-			nestedAh.Misc = o.Misc["Ah"]
-		}
-		if o.Ah.Authentication != nil {
-			nestedAh.Authentication = util.StrToMem(o.Ah.Authentication)
-		}
-	}
-	entry.Ah = nestedAh
-
-	var nestedEsp *EspXml
-	if o.Esp != nil {
-		nestedEsp = &EspXml{}
-		if _, ok := o.Misc["Esp"]; ok {
-			nestedEsp.Misc = o.Misc["Esp"]
-		}
-		if o.Esp.Authentication != nil {
-			nestedEsp.Authentication = util.StrToMem(o.Esp.Authentication)
-		}
-		if o.Esp.Encryption != nil {
-			nestedEsp.Encryption = util.StrToMem(o.Esp.Encryption)
-		}
-	}
-	entry.Esp = nestedEsp
-
-	entry.Misc = o.Misc["Entry"]
-
-	return entry, nil
-}
-
-func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
-	entryList := make([]*Entry, 0, len(c.Answer))
-	for _, o := range c.Answer {
-		entry := &Entry{
-			Misc: make(map[string][]generic.Xml),
-		}
-		entry.Name = o.Name
-		entry.DhGroup = o.DhGroup
-		var nestedLifesize *Lifesize
-		if o.Lifesize != nil {
-			nestedLifesize = &Lifesize{}
-			if o.Lifesize.Misc != nil {
-				entry.Misc["Lifesize"] = o.Lifesize.Misc
-			}
-			if o.Lifesize.Gb != nil {
-				nestedLifesize.Gb = o.Lifesize.Gb
-			}
-			if o.Lifesize.Kb != nil {
-				nestedLifesize.Kb = o.Lifesize.Kb
-			}
-			if o.Lifesize.Mb != nil {
-				nestedLifesize.Mb = o.Lifesize.Mb
-			}
-			if o.Lifesize.Tb != nil {
-				nestedLifesize.Tb = o.Lifesize.Tb
-			}
-		}
-		entry.Lifesize = nestedLifesize
-
-		var nestedLifetime *Lifetime
-		if o.Lifetime != nil {
-			nestedLifetime = &Lifetime{}
-			if o.Lifetime.Misc != nil {
-				entry.Misc["Lifetime"] = o.Lifetime.Misc
-			}
-			if o.Lifetime.Days != nil {
-				nestedLifetime.Days = o.Lifetime.Days
-			}
-			if o.Lifetime.Hours != nil {
-				nestedLifetime.Hours = o.Lifetime.Hours
-			}
-			if o.Lifetime.Minutes != nil {
-				nestedLifetime.Minutes = o.Lifetime.Minutes
-			}
-			if o.Lifetime.Seconds != nil {
-				nestedLifetime.Seconds = o.Lifetime.Seconds
-			}
-		}
-		entry.Lifetime = nestedLifetime
-
-		var nestedAh *Ah
-		if o.Ah != nil {
-			nestedAh = &Ah{}
-			if o.Ah.Misc != nil {
-				entry.Misc["Ah"] = o.Ah.Misc
-			}
-			if o.Ah.Authentication != nil {
-				nestedAh.Authentication = util.MemToStr(o.Ah.Authentication)
-			}
-		}
-		entry.Ah = nestedAh
-
-		var nestedEsp *Esp
-		if o.Esp != nil {
-			nestedEsp = &Esp{}
-			if o.Esp.Misc != nil {
-				entry.Misc["Esp"] = o.Esp.Misc
-			}
-			if o.Esp.Authentication != nil {
-				nestedEsp.Authentication = util.MemToStr(o.Esp.Authentication)
-			}
-			if o.Esp.Encryption != nil {
-				nestedEsp.Encryption = util.MemToStr(o.Esp.Encryption)
-			}
-		}
-		entry.Esp = nestedEsp
-
-		entry.Misc["Entry"] = o.Misc
-
-		entryList = append(entryList, entry)
-	}
-
-	return entryList, nil
-}
-
 func SpecMatches(a, b *Entry) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+	if a == nil && b == nil {
 		return true
 	}
 
-	// Don't compare Name.
-	if !util.StringsMatch(a.DhGroup, b.DhGroup) {
+	if (a == nil && b != nil) || (a != nil && b == nil) {
 		return false
 	}
-	if !matchLifesize(a.Lifesize, b.Lifesize) {
+
+	return a.matches(b)
+}
+
+func (o *Entry) matches(other *Entry) bool {
+	if o == nil && other == nil {
+		return true
+	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !matchLifetime(a.Lifetime, b.Lifetime) {
+	if !util.StringsMatch(o.DhGroup, other.DhGroup) {
 		return false
 	}
-	if !matchAh(a.Ah, b.Ah) {
+	if !o.Lifesize.matches(other.Lifesize) {
 		return false
 	}
-	if !matchEsp(a.Esp, b.Esp) {
+	if !o.Lifetime.matches(other.Lifetime) {
+		return false
+	}
+	if !o.Ah.matches(other.Ah) {
+		return false
+	}
+	if !o.Esp.matches(other.Esp) {
 		return false
 	}
 
 	return true
 }
 
-func matchLifesize(a *Lifesize, b *Lifesize) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+func (o *Lifesize) matches(other *Lifesize) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.Ints64Match(a.Gb, b.Gb) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.Ints64Match(a.Kb, b.Kb) {
+	if !util.Ints64Match(o.Gb, other.Gb) {
 		return false
 	}
-	if !util.Ints64Match(a.Mb, b.Mb) {
+	if !util.Ints64Match(o.Kb, other.Kb) {
 		return false
 	}
-	if !util.Ints64Match(a.Tb, b.Tb) {
+	if !util.Ints64Match(o.Mb, other.Mb) {
 		return false
 	}
+	if !util.Ints64Match(o.Tb, other.Tb) {
+		return false
+	}
+
 	return true
 }
-func matchLifetime(a *Lifetime, b *Lifetime) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *Lifetime) matches(other *Lifetime) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.Ints64Match(a.Days, b.Days) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.Ints64Match(a.Hours, b.Hours) {
+	if !util.Ints64Match(o.Days, other.Days) {
 		return false
 	}
-	if !util.Ints64Match(a.Minutes, b.Minutes) {
+	if !util.Ints64Match(o.Hours, other.Hours) {
 		return false
 	}
-	if !util.Ints64Match(a.Seconds, b.Seconds) {
+	if !util.Ints64Match(o.Minutes, other.Minutes) {
 		return false
 	}
+	if !util.Ints64Match(o.Seconds, other.Seconds) {
+		return false
+	}
+
 	return true
 }
-func matchAh(a *Ah, b *Ah) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *Ah) matches(other *Ah) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.OrderedListsMatch(a.Authentication, b.Authentication) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
+	if !util.OrderedListsMatch[string](o.Authentication, other.Authentication) {
+		return false
+	}
+
 	return true
 }
-func matchEsp(a *Esp, b *Esp) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *Esp) matches(other *Esp) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.OrderedListsMatch(a.Authentication, b.Authentication) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.OrderedListsMatch(a.Encryption, b.Encryption) {
+	if !util.OrderedListsMatch[string](o.Authentication, other.Authentication) {
 		return false
 	}
+	if !util.OrderedListsMatch[string](o.Encryption, other.Encryption) {
+		return false
+	}
+
 	return true
 }
 

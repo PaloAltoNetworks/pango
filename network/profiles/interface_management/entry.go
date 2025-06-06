@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{"network", "profiles", "interface-management-profile"}
+	suffix = []string{"network", "profiles", "interface-management-profile", "$name"}
 )
 
 type Entry struct {
@@ -32,40 +32,129 @@ type Entry struct {
 	UseridService           *bool
 	UseridSyslogListenerSsl *bool
 	UseridSyslogListenerUdp *bool
-
-	Misc map[string][]generic.Xml
+	Misc                    []generic.Xml
 }
-
 type PermittedIp struct {
 	Name string
+	Misc []generic.Xml
 }
 
 type entryXmlContainer struct {
 	Answer []entryXml `xml:"entry"`
 }
 
-type entryXml struct {
-	XMLName                 xml.Name         `xml:"entry"`
-	Name                    string           `xml:"name,attr"`
-	Http                    *string          `xml:"http,omitempty"`
-	HttpOcsp                *string          `xml:"http-ocsp,omitempty"`
-	Https                   *string          `xml:"https,omitempty"`
-	PermittedIp             []PermittedIpXml `xml:"permitted-ip>entry,omitempty"`
-	Ping                    *string          `xml:"ping,omitempty"`
-	ResponsePages           *string          `xml:"response-pages,omitempty"`
-	Snmp                    *string          `xml:"snmp,omitempty"`
-	Ssh                     *string          `xml:"ssh,omitempty"`
-	Telnet                  *string          `xml:"telnet,omitempty"`
-	UseridService           *string          `xml:"userid-service,omitempty"`
-	UseridSyslogListenerSsl *string          `xml:"userid-syslog-listener-ssl,omitempty"`
-	UseridSyslogListenerUdp *string          `xml:"userid-syslog-listener-udp,omitempty"`
+func (o *entryXmlContainer) Normalize() ([]*Entry, error) {
+	entries := make([]*Entry, 0, len(o.Answer))
+	for _, elt := range o.Answer {
+		obj, err := elt.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		entries = append(entries, obj)
+	}
 
-	Misc []generic.Xml `xml:",any"`
+	return entries, nil
 }
-type PermittedIpXml struct {
-	Name string `xml:"name,attr"`
 
-	Misc []generic.Xml `xml:",any"`
+func specifyEntry(source *Entry) (any, error) {
+	var obj entryXml
+	obj.MarshalFromObject(*source)
+	return obj, nil
+}
+
+type entryXml struct {
+	XMLName                 xml.Name                 `xml:"entry"`
+	Name                    string                   `xml:"name,attr"`
+	Http                    *string                  `xml:"http,omitempty"`
+	HttpOcsp                *string                  `xml:"http-ocsp,omitempty"`
+	Https                   *string                  `xml:"https,omitempty"`
+	PermittedIp             *permittedIpContainerXml `xml:"permitted-ip,omitempty"`
+	Ping                    *string                  `xml:"ping,omitempty"`
+	ResponsePages           *string                  `xml:"response-pages,omitempty"`
+	Snmp                    *string                  `xml:"snmp,omitempty"`
+	Ssh                     *string                  `xml:"ssh,omitempty"`
+	Telnet                  *string                  `xml:"telnet,omitempty"`
+	UseridService           *string                  `xml:"userid-service,omitempty"`
+	UseridSyslogListenerSsl *string                  `xml:"userid-syslog-listener-ssl,omitempty"`
+	UseridSyslogListenerUdp *string                  `xml:"userid-syslog-listener-udp,omitempty"`
+	Misc                    []generic.Xml            `xml:",any"`
+}
+type permittedIpContainerXml struct {
+	Entries []permittedIpXml `xml:"entry"`
+}
+type permittedIpXml struct {
+	XMLName xml.Name      `xml:"entry"`
+	Name    string        `xml:"name,attr"`
+	Misc    []generic.Xml `xml:",any"`
+}
+
+func (o *entryXml) MarshalFromObject(s Entry) {
+	o.Name = s.Name
+	o.Http = util.YesNo(s.Http, nil)
+	o.HttpOcsp = util.YesNo(s.HttpOcsp, nil)
+	o.Https = util.YesNo(s.Https, nil)
+	if s.PermittedIp != nil {
+		var objs []permittedIpXml
+		for _, elt := range s.PermittedIp {
+			var obj permittedIpXml
+			obj.MarshalFromObject(elt)
+			objs = append(objs, obj)
+		}
+		o.PermittedIp = &permittedIpContainerXml{Entries: objs}
+	}
+	o.Ping = util.YesNo(s.Ping, nil)
+	o.ResponsePages = util.YesNo(s.ResponsePages, nil)
+	o.Snmp = util.YesNo(s.Snmp, nil)
+	o.Ssh = util.YesNo(s.Ssh, nil)
+	o.Telnet = util.YesNo(s.Telnet, nil)
+	o.UseridService = util.YesNo(s.UseridService, nil)
+	o.UseridSyslogListenerSsl = util.YesNo(s.UseridSyslogListenerSsl, nil)
+	o.UseridSyslogListenerUdp = util.YesNo(s.UseridSyslogListenerUdp, nil)
+	o.Misc = s.Misc
+}
+
+func (o entryXml) UnmarshalToObject() (*Entry, error) {
+	var permittedIpVal []PermittedIp
+	if o.PermittedIp != nil {
+		for _, elt := range o.PermittedIp.Entries {
+			obj, err := elt.UnmarshalToObject()
+			if err != nil {
+				return nil, err
+			}
+			permittedIpVal = append(permittedIpVal, *obj)
+		}
+	}
+
+	result := &Entry{
+		Name:                    o.Name,
+		Http:                    util.AsBool(o.Http, nil),
+		HttpOcsp:                util.AsBool(o.HttpOcsp, nil),
+		Https:                   util.AsBool(o.Https, nil),
+		PermittedIp:             permittedIpVal,
+		Ping:                    util.AsBool(o.Ping, nil),
+		ResponsePages:           util.AsBool(o.ResponsePages, nil),
+		Snmp:                    util.AsBool(o.Snmp, nil),
+		Ssh:                     util.AsBool(o.Ssh, nil),
+		Telnet:                  util.AsBool(o.Telnet, nil),
+		UseridService:           util.AsBool(o.UseridService, nil),
+		UseridSyslogListenerSsl: util.AsBool(o.UseridSyslogListenerSsl, nil),
+		UseridSyslogListenerUdp: util.AsBool(o.UseridSyslogListenerUdp, nil),
+		Misc:                    o.Misc,
+	}
+	return result, nil
+}
+func (o *permittedIpXml) MarshalFromObject(s PermittedIp) {
+	o.Name = s.Name
+	o.Misc = s.Misc
+}
+
+func (o permittedIpXml) UnmarshalToObject() (*PermittedIp, error) {
+
+	result := &PermittedIp{
+		Name: o.Name,
+		Misc: o.Misc,
+	}
+	return result, nil
 }
 
 func (e *Entry) Field(v string) (any, error) {
@@ -119,146 +208,83 @@ func Versioning(vn version.Number) (Specifier, Normalizer, error) {
 
 	return specifyEntry, &entryXmlContainer{}, nil
 }
-func specifyEntry(o *Entry) (any, error) {
-	entry := entryXml{}
-	entry.Name = o.Name
-	entry.Http = util.YesNo(o.Http, nil)
-	entry.HttpOcsp = util.YesNo(o.HttpOcsp, nil)
-	entry.Https = util.YesNo(o.Https, nil)
-	var nestedPermittedIpCol []PermittedIpXml
-	if o.PermittedIp != nil {
-		nestedPermittedIpCol = []PermittedIpXml{}
-		for _, oPermittedIp := range o.PermittedIp {
-			nestedPermittedIp := PermittedIpXml{}
-			if _, ok := o.Misc["PermittedIp"]; ok {
-				nestedPermittedIp.Misc = o.Misc["PermittedIp"]
-			}
-			if oPermittedIp.Name != "" {
-				nestedPermittedIp.Name = oPermittedIp.Name
-			}
-			nestedPermittedIpCol = append(nestedPermittedIpCol, nestedPermittedIp)
-		}
-		entry.PermittedIp = nestedPermittedIpCol
-	}
-
-	entry.Ping = util.YesNo(o.Ping, nil)
-	entry.ResponsePages = util.YesNo(o.ResponsePages, nil)
-	entry.Snmp = util.YesNo(o.Snmp, nil)
-	entry.Ssh = util.YesNo(o.Ssh, nil)
-	entry.Telnet = util.YesNo(o.Telnet, nil)
-	entry.UseridService = util.YesNo(o.UseridService, nil)
-	entry.UseridSyslogListenerSsl = util.YesNo(o.UseridSyslogListenerSsl, nil)
-	entry.UseridSyslogListenerUdp = util.YesNo(o.UseridSyslogListenerUdp, nil)
-
-	entry.Misc = o.Misc["Entry"]
-
-	return entry, nil
-}
-
-func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
-	entryList := make([]*Entry, 0, len(c.Answer))
-	for _, o := range c.Answer {
-		entry := &Entry{
-			Misc: make(map[string][]generic.Xml),
-		}
-		entry.Name = o.Name
-		entry.Http = util.AsBool(o.Http, nil)
-		entry.HttpOcsp = util.AsBool(o.HttpOcsp, nil)
-		entry.Https = util.AsBool(o.Https, nil)
-		var nestedPermittedIpCol []PermittedIp
-		if o.PermittedIp != nil {
-			nestedPermittedIpCol = []PermittedIp{}
-			for _, oPermittedIp := range o.PermittedIp {
-				nestedPermittedIp := PermittedIp{}
-				if oPermittedIp.Misc != nil {
-					entry.Misc["PermittedIp"] = oPermittedIp.Misc
-				}
-				if oPermittedIp.Name != "" {
-					nestedPermittedIp.Name = oPermittedIp.Name
-				}
-				nestedPermittedIpCol = append(nestedPermittedIpCol, nestedPermittedIp)
-			}
-			entry.PermittedIp = nestedPermittedIpCol
-		}
-
-		entry.Ping = util.AsBool(o.Ping, nil)
-		entry.ResponsePages = util.AsBool(o.ResponsePages, nil)
-		entry.Snmp = util.AsBool(o.Snmp, nil)
-		entry.Ssh = util.AsBool(o.Ssh, nil)
-		entry.Telnet = util.AsBool(o.Telnet, nil)
-		entry.UseridService = util.AsBool(o.UseridService, nil)
-		entry.UseridSyslogListenerSsl = util.AsBool(o.UseridSyslogListenerSsl, nil)
-		entry.UseridSyslogListenerUdp = util.AsBool(o.UseridSyslogListenerUdp, nil)
-
-		entry.Misc["Entry"] = o.Misc
-
-		entryList = append(entryList, entry)
-	}
-
-	return entryList, nil
-}
-
 func SpecMatches(a, b *Entry) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+	if a == nil && b == nil {
 		return true
 	}
 
-	// Don't compare Name.
-	if !util.BoolsMatch(a.Http, b.Http) {
+	if (a == nil && b != nil) || (a != nil && b == nil) {
 		return false
 	}
-	if !util.BoolsMatch(a.HttpOcsp, b.HttpOcsp) {
+
+	return a.matches(b)
+}
+
+func (o *Entry) matches(other *Entry) bool {
+	if o == nil && other == nil {
+		return true
+	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.BoolsMatch(a.Https, b.Https) {
+	if !util.BoolsMatch(o.Http, other.Http) {
 		return false
 	}
-	if !matchPermittedIp(a.PermittedIp, b.PermittedIp) {
+	if !util.BoolsMatch(o.HttpOcsp, other.HttpOcsp) {
 		return false
 	}
-	if !util.BoolsMatch(a.Ping, b.Ping) {
+	if !util.BoolsMatch(o.Https, other.Https) {
 		return false
 	}
-	if !util.BoolsMatch(a.ResponsePages, b.ResponsePages) {
+	if len(o.PermittedIp) != len(other.PermittedIp) {
 		return false
 	}
-	if !util.BoolsMatch(a.Snmp, b.Snmp) {
+	for idx := range o.PermittedIp {
+		if !o.PermittedIp[idx].matches(&other.PermittedIp[idx]) {
+			return false
+		}
+	}
+	if !util.BoolsMatch(o.Ping, other.Ping) {
 		return false
 	}
-	if !util.BoolsMatch(a.Ssh, b.Ssh) {
+	if !util.BoolsMatch(o.ResponsePages, other.ResponsePages) {
 		return false
 	}
-	if !util.BoolsMatch(a.Telnet, b.Telnet) {
+	if !util.BoolsMatch(o.Snmp, other.Snmp) {
 		return false
 	}
-	if !util.BoolsMatch(a.UseridService, b.UseridService) {
+	if !util.BoolsMatch(o.Ssh, other.Ssh) {
 		return false
 	}
-	if !util.BoolsMatch(a.UseridSyslogListenerSsl, b.UseridSyslogListenerSsl) {
+	if !util.BoolsMatch(o.Telnet, other.Telnet) {
 		return false
 	}
-	if !util.BoolsMatch(a.UseridSyslogListenerUdp, b.UseridSyslogListenerUdp) {
+	if !util.BoolsMatch(o.UseridService, other.UseridService) {
+		return false
+	}
+	if !util.BoolsMatch(o.UseridSyslogListenerSsl, other.UseridSyslogListenerSsl) {
+		return false
+	}
+	if !util.BoolsMatch(o.UseridSyslogListenerUdp, other.UseridSyslogListenerUdp) {
 		return false
 	}
 
 	return true
 }
 
-func matchPermittedIp(a []PermittedIp, b []PermittedIp) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+func (o *PermittedIp) matches(other *PermittedIp) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	for _, a := range a {
-		for _, b := range b {
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-		}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
 	}
+	if o.Name != other.Name {
+		return false
+	}
+
 	return true
 }
 

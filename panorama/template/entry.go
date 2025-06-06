@@ -15,75 +15,266 @@ var (
 )
 
 var (
-	Suffix = []string{"template"}
+	suffix = []string{"template", "$name"}
 )
 
 type Entry struct {
 	Name        string
-	Config      *Config
-	DefaultVsys *string
 	Description *string
-
-	Misc map[string][]generic.Xml
+	DefaultVsys *string
+	Config      *Config
+	Misc        []generic.Xml
 }
-
 type Config struct {
 	Devices []ConfigDevices
+	Misc    []generic.Xml
 }
 type ConfigDevices struct {
 	Name string
 	Vsys []ConfigDevicesVsys
+	Misc []generic.Xml
 }
 type ConfigDevicesVsys struct {
 	Name   string
 	Import *ConfigDevicesVsysImport
+	Misc   []generic.Xml
 }
 type ConfigDevicesVsysImport struct {
 	Network *ConfigDevicesVsysImportNetwork
+	Misc    []generic.Xml
 }
 type ConfigDevicesVsysImportNetwork struct {
 	Interfaces []string
+	Misc       []generic.Xml
 }
 
 type entryXmlContainer struct {
 	Answer []entryXml `xml:"entry"`
 }
 
+func (o *entryXmlContainer) Normalize() ([]*Entry, error) {
+	entries := make([]*Entry, 0, len(o.Answer))
+	for _, elt := range o.Answer {
+		obj, err := elt.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		entries = append(entries, obj)
+	}
+
+	return entries, nil
+}
+
+func specifyEntry(source *Entry) (any, error) {
+	var obj entryXml
+	obj.MarshalFromObject(*source)
+	return obj, nil
+}
+
 type entryXml struct {
-	XMLName     xml.Name   `xml:"entry"`
-	Name        string     `xml:"name,attr"`
-	Config      *ConfigXml `xml:"config,omitempty"`
-	DefaultVsys *string    `xml:"settings>default-vsys,omitempty"`
-	Description *string    `xml:"description,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
+	XMLName     xml.Name      `xml:"entry"`
+	Name        string        `xml:"name,attr"`
+	Description *string       `xml:"description,omitempty"`
+	DefaultVsys *string       `xml:"settings>default-vsys,omitempty"`
+	Config      *configXml    `xml:"config,omitempty"`
+	Misc        []generic.Xml `xml:",any"`
 }
-type ConfigXml struct {
-	Devices []ConfigDevicesXml `xml:"devices>entry,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
+type configXml struct {
+	Devices *configDevicesContainerXml `xml:"devices,omitempty"`
+	Misc    []generic.Xml              `xml:",any"`
 }
-type ConfigDevicesXml struct {
-	Name string                 `xml:"name,attr"`
-	Vsys []ConfigDevicesVsysXml `xml:"vsys>entry,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
+type configDevicesContainerXml struct {
+	Entries []configDevicesXml `xml:"entry"`
 }
-type ConfigDevicesVsysXml struct {
-	Import *ConfigDevicesVsysImportXml `xml:"import,omitempty"`
-	Name   string                      `xml:"name,attr"`
-
-	Misc []generic.Xml `xml:",any"`
+type configDevicesXml struct {
+	XMLName xml.Name                       `xml:"entry"`
+	Name    string                         `xml:"name,attr"`
+	Vsys    *configDevicesVsysContainerXml `xml:"vsys,omitempty"`
+	Misc    []generic.Xml                  `xml:",any"`
 }
-type ConfigDevicesVsysImportXml struct {
-	Network *ConfigDevicesVsysImportNetworkXml `xml:"network,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
+type configDevicesVsysContainerXml struct {
+	Entries []configDevicesVsysXml `xml:"entry"`
 }
-type ConfigDevicesVsysImportNetworkXml struct {
+type configDevicesVsysXml struct {
+	XMLName xml.Name                    `xml:"entry"`
+	Name    string                      `xml:"name,attr"`
+	Import  *configDevicesVsysImportXml `xml:"import,omitempty"`
+	Misc    []generic.Xml               `xml:",any"`
+}
+type configDevicesVsysImportXml struct {
+	Network *configDevicesVsysImportNetworkXml `xml:"network,omitempty"`
+	Misc    []generic.Xml                      `xml:",any"`
+}
+type configDevicesVsysImportNetworkXml struct {
 	Interfaces *util.MemberType `xml:"interface,omitempty"`
+	Misc       []generic.Xml    `xml:",any"`
+}
 
-	Misc []generic.Xml `xml:",any"`
+func (o *entryXml) MarshalFromObject(s Entry) {
+	o.Name = s.Name
+	o.Description = s.Description
+	o.DefaultVsys = s.DefaultVsys
+	if s.Config != nil {
+		var obj configXml
+		obj.MarshalFromObject(*s.Config)
+		o.Config = &obj
+	}
+	o.Misc = s.Misc
+}
+
+func (o entryXml) UnmarshalToObject() (*Entry, error) {
+	var configVal *Config
+	if o.Config != nil {
+		obj, err := o.Config.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		configVal = obj
+	}
+
+	result := &Entry{
+		Name:        o.Name,
+		Description: o.Description,
+		DefaultVsys: o.DefaultVsys,
+		Config:      configVal,
+		Misc:        o.Misc,
+	}
+	return result, nil
+}
+func (o *configXml) MarshalFromObject(s Config) {
+	if s.Devices != nil {
+		var objs []configDevicesXml
+		for _, elt := range s.Devices {
+			var obj configDevicesXml
+			obj.MarshalFromObject(elt)
+			objs = append(objs, obj)
+		}
+		o.Devices = &configDevicesContainerXml{Entries: objs}
+	}
+	o.Misc = s.Misc
+}
+
+func (o configXml) UnmarshalToObject() (*Config, error) {
+	var devicesVal []ConfigDevices
+	if o.Devices != nil {
+		for _, elt := range o.Devices.Entries {
+			obj, err := elt.UnmarshalToObject()
+			if err != nil {
+				return nil, err
+			}
+			devicesVal = append(devicesVal, *obj)
+		}
+	}
+
+	result := &Config{
+		Devices: devicesVal,
+		Misc:    o.Misc,
+	}
+	return result, nil
+}
+func (o *configDevicesXml) MarshalFromObject(s ConfigDevices) {
+	o.Name = s.Name
+	if s.Vsys != nil {
+		var objs []configDevicesVsysXml
+		for _, elt := range s.Vsys {
+			var obj configDevicesVsysXml
+			obj.MarshalFromObject(elt)
+			objs = append(objs, obj)
+		}
+		o.Vsys = &configDevicesVsysContainerXml{Entries: objs}
+	}
+	o.Misc = s.Misc
+}
+
+func (o configDevicesXml) UnmarshalToObject() (*ConfigDevices, error) {
+	var vsysVal []ConfigDevicesVsys
+	if o.Vsys != nil {
+		for _, elt := range o.Vsys.Entries {
+			obj, err := elt.UnmarshalToObject()
+			if err != nil {
+				return nil, err
+			}
+			vsysVal = append(vsysVal, *obj)
+		}
+	}
+
+	result := &ConfigDevices{
+		Name: o.Name,
+		Vsys: vsysVal,
+		Misc: o.Misc,
+	}
+	return result, nil
+}
+func (o *configDevicesVsysXml) MarshalFromObject(s ConfigDevicesVsys) {
+	o.Name = s.Name
+	if s.Import != nil {
+		var obj configDevicesVsysImportXml
+		obj.MarshalFromObject(*s.Import)
+		o.Import = &obj
+	}
+	o.Misc = s.Misc
+}
+
+func (o configDevicesVsysXml) UnmarshalToObject() (*ConfigDevicesVsys, error) {
+	var importVal *ConfigDevicesVsysImport
+	if o.Import != nil {
+		obj, err := o.Import.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		importVal = obj
+	}
+
+	result := &ConfigDevicesVsys{
+		Name:   o.Name,
+		Import: importVal,
+		Misc:   o.Misc,
+	}
+	return result, nil
+}
+func (o *configDevicesVsysImportXml) MarshalFromObject(s ConfigDevicesVsysImport) {
+	if s.Network != nil {
+		var obj configDevicesVsysImportNetworkXml
+		obj.MarshalFromObject(*s.Network)
+		o.Network = &obj
+	}
+	o.Misc = s.Misc
+}
+
+func (o configDevicesVsysImportXml) UnmarshalToObject() (*ConfigDevicesVsysImport, error) {
+	var networkVal *ConfigDevicesVsysImportNetwork
+	if o.Network != nil {
+		obj, err := o.Network.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		networkVal = obj
+	}
+
+	result := &ConfigDevicesVsysImport{
+		Network: networkVal,
+		Misc:    o.Misc,
+	}
+	return result, nil
+}
+func (o *configDevicesVsysImportNetworkXml) MarshalFromObject(s ConfigDevicesVsysImportNetwork) {
+	if s.Interfaces != nil {
+		o.Interfaces = util.StrToMem(s.Interfaces)
+	}
+	o.Misc = s.Misc
+}
+
+func (o configDevicesVsysImportNetworkXml) UnmarshalToObject() (*ConfigDevicesVsysImportNetwork, error) {
+	var interfacesVal []string
+	if o.Interfaces != nil {
+		interfacesVal = util.MemToStr(o.Interfaces)
+	}
+
+	result := &ConfigDevicesVsysImportNetwork{
+		Interfaces: interfacesVal,
+		Misc:       o.Misc,
+	}
+	return result, nil
 }
 
 func (e *Entry) Field(v string) (any, error) {
@@ -107,223 +298,127 @@ func Versioning(vn version.Number) (Specifier, Normalizer, error) {
 
 	return specifyEntry, &entryXmlContainer{}, nil
 }
-func specifyEntry(o *Entry) (any, error) {
-	entry := entryXml{}
-	entry.Name = o.Name
-	var nestedConfig *ConfigXml
-	if o.Config != nil {
-		nestedConfig = &ConfigXml{}
-		if _, ok := o.Misc["Config"]; ok {
-			nestedConfig.Misc = o.Misc["Config"]
-		}
-		if o.Config.Devices != nil {
-			nestedConfig.Devices = []ConfigDevicesXml{}
-			for _, oConfigDevices := range o.Config.Devices {
-				nestedConfigDevices := ConfigDevicesXml{}
-				if _, ok := o.Misc["ConfigDevices"]; ok {
-					nestedConfigDevices.Misc = o.Misc["ConfigDevices"]
-				}
-				if oConfigDevices.Name != "" {
-					nestedConfigDevices.Name = oConfigDevices.Name
-				}
-				if oConfigDevices.Vsys != nil {
-					nestedConfigDevices.Vsys = []ConfigDevicesVsysXml{}
-					for _, oConfigDevicesVsys := range oConfigDevices.Vsys {
-						nestedConfigDevicesVsys := ConfigDevicesVsysXml{}
-						if _, ok := o.Misc["ConfigDevicesVsys"]; ok {
-							nestedConfigDevicesVsys.Misc = o.Misc["ConfigDevicesVsys"]
-						}
-						if oConfigDevicesVsys.Name != "" {
-							nestedConfigDevicesVsys.Name = oConfigDevicesVsys.Name
-						}
-						if oConfigDevicesVsys.Import != nil {
-							nestedConfigDevicesVsys.Import = &ConfigDevicesVsysImportXml{}
-							if _, ok := o.Misc["ConfigDevicesVsysImport"]; ok {
-								nestedConfigDevicesVsys.Import.Misc = o.Misc["ConfigDevicesVsysImport"]
-							}
-							if oConfigDevicesVsys.Import.Network != nil {
-								nestedConfigDevicesVsys.Import.Network = &ConfigDevicesVsysImportNetworkXml{}
-								if _, ok := o.Misc["ConfigDevicesVsysImportNetwork"]; ok {
-									nestedConfigDevicesVsys.Import.Network.Misc = o.Misc["ConfigDevicesVsysImportNetwork"]
-								}
-								if oConfigDevicesVsys.Import.Network.Interfaces != nil {
-									nestedConfigDevicesVsys.Import.Network.Interfaces = util.StrToMem(oConfigDevicesVsys.Import.Network.Interfaces)
-								}
-							}
-						}
-						nestedConfigDevices.Vsys = append(nestedConfigDevices.Vsys, nestedConfigDevicesVsys)
-					}
-				}
-				nestedConfig.Devices = append(nestedConfig.Devices, nestedConfigDevices)
-			}
-		}
-	}
-	entry.Config = nestedConfig
-
-	entry.DefaultVsys = o.DefaultVsys
-	entry.Description = o.Description
-
-	entry.Misc = o.Misc["Entry"]
-
-	return entry, nil
-}
-
-func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
-	entryList := make([]*Entry, 0, len(c.Answer))
-	for _, o := range c.Answer {
-		entry := &Entry{
-			Misc: make(map[string][]generic.Xml),
-		}
-		entry.Name = o.Name
-		var nestedConfig *Config
-		if o.Config != nil {
-			nestedConfig = &Config{}
-			if o.Config.Misc != nil {
-				entry.Misc["Config"] = o.Config.Misc
-			}
-			if o.Config.Devices != nil {
-				nestedConfig.Devices = []ConfigDevices{}
-				for _, oConfigDevices := range o.Config.Devices {
-					nestedConfigDevices := ConfigDevices{}
-					if oConfigDevices.Misc != nil {
-						entry.Misc["ConfigDevices"] = oConfigDevices.Misc
-					}
-					if oConfigDevices.Name != "" {
-						nestedConfigDevices.Name = oConfigDevices.Name
-					}
-					if oConfigDevices.Vsys != nil {
-						nestedConfigDevices.Vsys = []ConfigDevicesVsys{}
-						for _, oConfigDevicesVsys := range oConfigDevices.Vsys {
-							nestedConfigDevicesVsys := ConfigDevicesVsys{}
-							if oConfigDevicesVsys.Misc != nil {
-								entry.Misc["ConfigDevicesVsys"] = oConfigDevicesVsys.Misc
-							}
-							if oConfigDevicesVsys.Name != "" {
-								nestedConfigDevicesVsys.Name = oConfigDevicesVsys.Name
-							}
-							if oConfigDevicesVsys.Import != nil {
-								nestedConfigDevicesVsys.Import = &ConfigDevicesVsysImport{}
-								if oConfigDevicesVsys.Import.Misc != nil {
-									entry.Misc["ConfigDevicesVsysImport"] = oConfigDevicesVsys.Import.Misc
-								}
-								if oConfigDevicesVsys.Import.Network != nil {
-									nestedConfigDevicesVsys.Import.Network = &ConfigDevicesVsysImportNetwork{}
-									if oConfigDevicesVsys.Import.Network.Misc != nil {
-										entry.Misc["ConfigDevicesVsysImportNetwork"] = oConfigDevicesVsys.Import.Network.Misc
-									}
-									if oConfigDevicesVsys.Import.Network.Interfaces != nil {
-										nestedConfigDevicesVsys.Import.Network.Interfaces = util.MemToStr(oConfigDevicesVsys.Import.Network.Interfaces)
-									}
-								}
-							}
-							nestedConfigDevices.Vsys = append(nestedConfigDevices.Vsys, nestedConfigDevicesVsys)
-						}
-					}
-					nestedConfig.Devices = append(nestedConfig.Devices, nestedConfigDevices)
-				}
-			}
-		}
-		entry.Config = nestedConfig
-
-		entry.DefaultVsys = o.DefaultVsys
-		entry.Description = o.Description
-
-		entry.Misc["Entry"] = o.Misc
-
-		entryList = append(entryList, entry)
-	}
-
-	return entryList, nil
-}
-
 func SpecMatches(a, b *Entry) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+	if a == nil && b == nil {
 		return true
 	}
 
-	// Don't compare Name.
-	if !util.StringsMatch(a.Description, b.Description) {
+	if (a == nil && b != nil) || (a != nil && b == nil) {
 		return false
 	}
-	if !util.StringsMatch(a.DefaultVsys, b.DefaultVsys) {
+
+	return a.matches(b)
+}
+
+func (o *Entry) matches(other *Entry) bool {
+	if o == nil && other == nil {
+		return true
+	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !matchConfig(a.Config, b.Config) {
+	if !util.StringsMatch(o.Description, other.Description) {
+		return false
+	}
+	if !util.StringsMatch(o.DefaultVsys, other.DefaultVsys) {
+		return false
+	}
+	if !o.Config.matches(other.Config) {
 		return false
 	}
 
 	return true
 }
 
-func matchConfigDevicesVsysImportNetwork(a *ConfigDevicesVsysImportNetwork, b *ConfigDevicesVsysImportNetwork) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+func (o *Config) matches(other *Config) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.OrderedListsMatch(a.Interfaces, b.Interfaces) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	return true
-}
-func matchConfigDevicesVsysImport(a *ConfigDevicesVsysImport, b *ConfigDevicesVsysImport) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !matchConfigDevicesVsysImportNetwork(a.Network, b.Network) {
+	if len(o.Devices) != len(other.Devices) {
 		return false
 	}
-	return true
-}
-func matchConfigDevicesVsys(a []ConfigDevicesVsys, b []ConfigDevicesVsys) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	for _, a := range a {
-		for _, b := range b {
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-			if !matchConfigDevicesVsysImport(a.Import, b.Import) {
-				return false
-			}
+	for idx := range o.Devices {
+		if !o.Devices[idx].matches(&other.Devices[idx]) {
+			return false
 		}
 	}
+
 	return true
 }
-func matchConfigDevices(a []ConfigDevices, b []ConfigDevices) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *ConfigDevices) matches(other *ConfigDevices) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	for _, a := range a {
-		for _, b := range b {
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-			if !matchConfigDevicesVsys(a.Vsys, b.Vsys) {
-				return false
-			}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
+	}
+	if o.Name != other.Name {
+		return false
+	}
+	if len(o.Vsys) != len(other.Vsys) {
+		return false
+	}
+	for idx := range o.Vsys {
+		if !o.Vsys[idx].matches(&other.Vsys[idx]) {
+			return false
 		}
 	}
+
 	return true
 }
-func matchConfig(a *Config, b *Config) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *ConfigDevicesVsys) matches(other *ConfigDevicesVsys) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !matchConfigDevices(a.Devices, b.Devices) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
+	if o.Name != other.Name {
+		return false
+	}
+	if !o.Import.matches(other.Import) {
+		return false
+	}
+
+	return true
+}
+
+func (o *ConfigDevicesVsysImport) matches(other *ConfigDevicesVsysImport) bool {
+	if o == nil && other == nil {
+		return true
+	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
+	}
+	if !o.Network.matches(other.Network) {
+		return false
+	}
+
+	return true
+}
+
+func (o *ConfigDevicesVsysImportNetwork) matches(other *ConfigDevicesVsysImportNetwork) bool {
+	if o == nil && other == nil {
+		return true
+	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
+	}
+	if !util.OrderedListsMatch[string](o.Interfaces, other.Interfaces) {
+		return false
+	}
+
 	return true
 }
 

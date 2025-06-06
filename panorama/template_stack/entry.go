@@ -15,43 +15,120 @@ var (
 )
 
 var (
-	Suffix = []string{"template-stack"}
+	suffix = []string{"template-stack", "$name"}
 )
 
 type Entry struct {
 	Name            string
-	DefaultVsys     *string
 	Description     *string
-	Devices         []string
 	Templates       []string
+	Devices         []string
+	DefaultVsys     *string
 	UserGroupSource *UserGroupSource
-
-	Misc map[string][]generic.Xml
+	Misc            []generic.Xml
 }
-
 type UserGroupSource struct {
 	MasterDevice *string
+	Misc         []generic.Xml
 }
 
 type entryXmlContainer struct {
 	Answer []entryXml `xml:"entry"`
 }
 
+func (o *entryXmlContainer) Normalize() ([]*Entry, error) {
+	entries := make([]*Entry, 0, len(o.Answer))
+	for _, elt := range o.Answer {
+		obj, err := elt.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		entries = append(entries, obj)
+	}
+
+	return entries, nil
+}
+
+func specifyEntry(source *Entry) (any, error) {
+	var obj entryXml
+	obj.MarshalFromObject(*source)
+	return obj, nil
+}
+
 type entryXml struct {
 	XMLName         xml.Name            `xml:"entry"`
 	Name            string              `xml:"name,attr"`
-	DefaultVsys     *string             `xml:"settings>default-vsys,omitempty"`
 	Description     *string             `xml:"description,omitempty"`
-	Devices         *util.EntryType     `xml:"devices,omitempty"`
 	Templates       *util.MemberType    `xml:"templates,omitempty"`
-	UserGroupSource *UserGroupSourceXml `xml:"user-group-source,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
+	Devices         *util.MemberType    `xml:"devices,omitempty"`
+	DefaultVsys     *string             `xml:"settings>default-vsys,omitempty"`
+	UserGroupSource *userGroupSourceXml `xml:"user-group-source,omitempty"`
+	Misc            []generic.Xml       `xml:",any"`
 }
-type UserGroupSourceXml struct {
-	MasterDevice *string `xml:"master-device,omitempty"`
+type userGroupSourceXml struct {
+	MasterDevice *string       `xml:"master-device,omitempty"`
+	Misc         []generic.Xml `xml:",any"`
+}
 
-	Misc []generic.Xml `xml:",any"`
+func (o *entryXml) MarshalFromObject(s Entry) {
+	o.Name = s.Name
+	o.Description = s.Description
+	if s.Templates != nil {
+		o.Templates = util.StrToMem(s.Templates)
+	}
+	if s.Devices != nil {
+		o.Devices = util.StrToMem(s.Devices)
+	}
+	o.DefaultVsys = s.DefaultVsys
+	if s.UserGroupSource != nil {
+		var obj userGroupSourceXml
+		obj.MarshalFromObject(*s.UserGroupSource)
+		o.UserGroupSource = &obj
+	}
+	o.Misc = s.Misc
+}
+
+func (o entryXml) UnmarshalToObject() (*Entry, error) {
+	var templatesVal []string
+	if o.Templates != nil {
+		templatesVal = util.MemToStr(o.Templates)
+	}
+	var devicesVal []string
+	if o.Devices != nil {
+		devicesVal = util.MemToStr(o.Devices)
+	}
+	var userGroupSourceVal *UserGroupSource
+	if o.UserGroupSource != nil {
+		obj, err := o.UserGroupSource.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		userGroupSourceVal = obj
+	}
+
+	result := &Entry{
+		Name:            o.Name,
+		Description:     o.Description,
+		Templates:       templatesVal,
+		Devices:         devicesVal,
+		DefaultVsys:     o.DefaultVsys,
+		UserGroupSource: userGroupSourceVal,
+		Misc:            o.Misc,
+	}
+	return result, nil
+}
+func (o *userGroupSourceXml) MarshalFromObject(s UserGroupSource) {
+	o.MasterDevice = s.MasterDevice
+	o.Misc = s.Misc
+}
+
+func (o userGroupSourceXml) UnmarshalToObject() (*UserGroupSource, error) {
+
+	result := &UserGroupSource{
+		MasterDevice: o.MasterDevice,
+		Misc:         o.Misc,
+	}
+	return result, nil
 }
 
 func (e *Entry) Field(v string) (any, error) {
@@ -87,97 +164,57 @@ func Versioning(vn version.Number) (Specifier, Normalizer, error) {
 
 	return specifyEntry, &entryXmlContainer{}, nil
 }
-func specifyEntry(o *Entry) (any, error) {
-	entry := entryXml{}
-	entry.Name = o.Name
-	entry.DefaultVsys = o.DefaultVsys
-	entry.Description = o.Description
-	entry.Devices = util.StrToEnt(o.Devices)
-	entry.Templates = util.StrToMem(o.Templates)
-	var nestedUserGroupSource *UserGroupSourceXml
-	if o.UserGroupSource != nil {
-		nestedUserGroupSource = &UserGroupSourceXml{}
-		if _, ok := o.Misc["UserGroupSource"]; ok {
-			nestedUserGroupSource.Misc = o.Misc["UserGroupSource"]
-		}
-		if o.UserGroupSource.MasterDevice != nil {
-			nestedUserGroupSource.MasterDevice = o.UserGroupSource.MasterDevice
-		}
-	}
-	entry.UserGroupSource = nestedUserGroupSource
-
-	entry.Misc = o.Misc["Entry"]
-
-	return entry, nil
-}
-
-func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
-	entryList := make([]*Entry, 0, len(c.Answer))
-	for _, o := range c.Answer {
-		entry := &Entry{
-			Misc: make(map[string][]generic.Xml),
-		}
-		entry.Name = o.Name
-		entry.DefaultVsys = o.DefaultVsys
-		entry.Description = o.Description
-		entry.Devices = util.EntToStr(o.Devices)
-		entry.Templates = util.MemToStr(o.Templates)
-		var nestedUserGroupSource *UserGroupSource
-		if o.UserGroupSource != nil {
-			nestedUserGroupSource = &UserGroupSource{}
-			if o.UserGroupSource.Misc != nil {
-				entry.Misc["UserGroupSource"] = o.UserGroupSource.Misc
-			}
-			if o.UserGroupSource.MasterDevice != nil {
-				nestedUserGroupSource.MasterDevice = o.UserGroupSource.MasterDevice
-			}
-		}
-		entry.UserGroupSource = nestedUserGroupSource
-
-		entry.Misc["Entry"] = o.Misc
-
-		entryList = append(entryList, entry)
-	}
-
-	return entryList, nil
-}
-
 func SpecMatches(a, b *Entry) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+	if a == nil && b == nil {
 		return true
 	}
 
-	// Don't compare Name.
-	if !util.StringsMatch(a.Description, b.Description) {
+	if (a == nil && b != nil) || (a != nil && b == nil) {
 		return false
 	}
-	if !util.OrderedListsMatch(a.Templates, b.Templates) {
+
+	return a.matches(b)
+}
+
+func (o *Entry) matches(other *Entry) bool {
+	if o == nil && other == nil {
+		return true
+	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.OrderedListsMatch(a.Devices, b.Devices) {
+	if !util.StringsMatch(o.Description, other.Description) {
 		return false
 	}
-	if !util.StringsMatch(a.DefaultVsys, b.DefaultVsys) {
+	if !util.OrderedListsMatch[string](o.Templates, other.Templates) {
 		return false
 	}
-	if !matchUserGroupSource(a.UserGroupSource, b.UserGroupSource) {
+	if !util.OrderedListsMatch[string](o.Devices, other.Devices) {
+		return false
+	}
+	if !util.StringsMatch(o.DefaultVsys, other.DefaultVsys) {
+		return false
+	}
+	if !o.UserGroupSource.matches(other.UserGroupSource) {
 		return false
 	}
 
 	return true
 }
 
-func matchUserGroupSource(a *UserGroupSource, b *UserGroupSource) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+func (o *UserGroupSource) matches(other *UserGroupSource) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.StringsMatch(a.MasterDevice, b.MasterDevice) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
+	if !util.StringsMatch(o.MasterDevice, other.MasterDevice) {
+		return false
+	}
+
 	return true
 }
 

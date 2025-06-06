@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{"address"}
+	suffix = []string{"address", "$name"}
 )
 
 type Entry struct {
@@ -27,12 +27,30 @@ type Entry struct {
 	IpNetmask       *string
 	IpRange         *string
 	IpWildcard      *string
-
-	Misc map[string][]generic.Xml
+	Misc            []generic.Xml
 }
 
 type entryXmlContainer struct {
 	Answer []entryXml `xml:"entry"`
+}
+
+func (o *entryXmlContainer) Normalize() ([]*Entry, error) {
+	entries := make([]*Entry, 0, len(o.Answer))
+	for _, elt := range o.Answer {
+		obj, err := elt.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		entries = append(entries, obj)
+	}
+
+	return entries, nil
+}
+
+func specifyEntry(source *Entry) (any, error) {
+	var obj entryXml
+	obj.MarshalFromObject(*source)
+	return obj, nil
 }
 
 type entryXml struct {
@@ -45,8 +63,41 @@ type entryXml struct {
 	IpNetmask       *string          `xml:"ip-netmask,omitempty"`
 	IpRange         *string          `xml:"ip-range,omitempty"`
 	IpWildcard      *string          `xml:"ip-wildcard,omitempty"`
+	Misc            []generic.Xml    `xml:",any"`
+}
 
-	Misc []generic.Xml `xml:",any"`
+func (o *entryXml) MarshalFromObject(s Entry) {
+	o.Name = s.Name
+	o.Description = s.Description
+	o.DisableOverride = s.DisableOverride
+	if s.Tag != nil {
+		o.Tag = util.StrToMem(s.Tag)
+	}
+	o.Fqdn = s.Fqdn
+	o.IpNetmask = s.IpNetmask
+	o.IpRange = s.IpRange
+	o.IpWildcard = s.IpWildcard
+	o.Misc = s.Misc
+}
+
+func (o entryXml) UnmarshalToObject() (*Entry, error) {
+	var tagVal []string
+	if o.Tag != nil {
+		tagVal = util.MemToStr(o.Tag)
+	}
+
+	result := &Entry{
+		Name:            o.Name,
+		Description:     o.Description,
+		DisableOverride: o.DisableOverride,
+		Tag:             tagVal,
+		Fqdn:            o.Fqdn,
+		IpNetmask:       o.IpNetmask,
+		IpRange:         o.IpRange,
+		IpWildcard:      o.IpWildcard,
+		Misc:            o.Misc,
+	}
+	return result, nil
 }
 
 func (e *Entry) Field(v string) (any, error) {
@@ -85,72 +136,45 @@ func Versioning(vn version.Number) (Specifier, Normalizer, error) {
 
 	return specifyEntry, &entryXmlContainer{}, nil
 }
-func specifyEntry(o *Entry) (any, error) {
-	entry := entryXml{}
-	entry.Name = o.Name
-	entry.Description = o.Description
-	entry.DisableOverride = o.DisableOverride
-	entry.Tag = util.StrToMem(o.Tag)
-	entry.Fqdn = o.Fqdn
-	entry.IpNetmask = o.IpNetmask
-	entry.IpRange = o.IpRange
-	entry.IpWildcard = o.IpWildcard
-
-	entry.Misc = o.Misc["Entry"]
-
-	return entry, nil
-}
-
-func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
-	entryList := make([]*Entry, 0, len(c.Answer))
-	for _, o := range c.Answer {
-		entry := &Entry{
-			Misc: make(map[string][]generic.Xml),
-		}
-		entry.Name = o.Name
-		entry.Description = o.Description
-		entry.DisableOverride = o.DisableOverride
-		entry.Tag = util.MemToStr(o.Tag)
-		entry.Fqdn = o.Fqdn
-		entry.IpNetmask = o.IpNetmask
-		entry.IpRange = o.IpRange
-		entry.IpWildcard = o.IpWildcard
-
-		entry.Misc["Entry"] = o.Misc
-
-		entryList = append(entryList, entry)
-	}
-
-	return entryList, nil
-}
-
 func SpecMatches(a, b *Entry) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+	if a == nil && b == nil {
 		return true
 	}
 
-	// Don't compare Name.
-	if !util.StringsMatch(a.Description, b.Description) {
+	if (a == nil && b != nil) || (a != nil && b == nil) {
 		return false
 	}
-	if !util.StringsMatch(a.DisableOverride, b.DisableOverride) {
+
+	return a.matches(b)
+}
+
+func (o *Entry) matches(other *Entry) bool {
+	if o == nil && other == nil {
+		return true
+	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.OrderedListsMatch(a.Tag, b.Tag) {
+	if !util.StringsMatch(o.Description, other.Description) {
 		return false
 	}
-	if !util.StringsMatch(a.Fqdn, b.Fqdn) {
+	if !util.StringsMatch(o.DisableOverride, other.DisableOverride) {
 		return false
 	}
-	if !util.StringsMatch(a.IpNetmask, b.IpNetmask) {
+	if !util.OrderedListsMatch[string](o.Tag, other.Tag) {
 		return false
 	}
-	if !util.StringsMatch(a.IpRange, b.IpRange) {
+	if !util.StringsMatch(o.Fqdn, other.Fqdn) {
 		return false
 	}
-	if !util.StringsMatch(a.IpWildcard, b.IpWildcard) {
+	if !util.StringsMatch(o.IpNetmask, other.IpNetmask) {
+		return false
+	}
+	if !util.StringsMatch(o.IpRange, other.IpRange) {
+		return false
+	}
+	if !util.StringsMatch(o.IpWildcard, other.IpWildcard) {
 		return false
 	}
 

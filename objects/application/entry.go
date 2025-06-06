@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{"application"}
+	suffix = []string{"application", "$name"}
 )
 
 type Entry struct {
@@ -48,23 +48,24 @@ type Entry struct {
 	UdpTimeout             *int64
 	UsedByMalware          *bool
 	VirusIdent             *bool
-
-	Misc map[string][]generic.Xml
+	Misc                   []generic.Xml
 }
-
 type Default struct {
 	IdentByIcmpType   *DefaultIdentByIcmpType
 	IdentByIcmp6Type  *DefaultIdentByIcmp6Type
 	IdentByIpProtocol *string
 	Port              []string
-}
-type DefaultIdentByIcmp6Type struct {
-	Code *string
-	Type *string
+	Misc              []generic.Xml
 }
 type DefaultIdentByIcmpType struct {
 	Code *string
 	Type *string
+	Misc []generic.Xml
+}
+type DefaultIdentByIcmp6Type struct {
+	Code *string
+	Type *string
+	Misc []generic.Xml
 }
 type Signature struct {
 	Name         string
@@ -72,188 +73,741 @@ type Signature struct {
 	Scope        *string
 	OrderFree    *bool
 	AndCondition []SignatureAndCondition
+	Misc         []generic.Xml
 }
 type SignatureAndCondition struct {
 	Name        string
 	OrCondition []SignatureAndConditionOrCondition
+	Misc        []generic.Xml
 }
 type SignatureAndConditionOrCondition struct {
 	Name     string
 	Operator *SignatureAndConditionOrConditionOperator
+	Misc     []generic.Xml
 }
 type SignatureAndConditionOrConditionOperator struct {
 	PatternMatch *SignatureAndConditionOrConditionOperatorPatternMatch
 	GreaterThan  *SignatureAndConditionOrConditionOperatorGreaterThan
 	LessThan     *SignatureAndConditionOrConditionOperatorLessThan
 	EqualTo      *SignatureAndConditionOrConditionOperatorEqualTo
+	Misc         []generic.Xml
+}
+type SignatureAndConditionOrConditionOperatorPatternMatch struct {
+	Context   *string
+	Pattern   *string
+	Qualifier []SignatureAndConditionOrConditionOperatorPatternMatchQualifier
+	Misc      []generic.Xml
+}
+type SignatureAndConditionOrConditionOperatorPatternMatchQualifier struct {
+	Name  string
+	Value *string
+	Misc  []generic.Xml
+}
+type SignatureAndConditionOrConditionOperatorGreaterThan struct {
+	Context   *string
+	Value     *int64
+	Qualifier []SignatureAndConditionOrConditionOperatorGreaterThanQualifier
+	Misc      []generic.Xml
+}
+type SignatureAndConditionOrConditionOperatorGreaterThanQualifier struct {
+	Name  string
+	Value *string
+	Misc  []generic.Xml
+}
+type SignatureAndConditionOrConditionOperatorLessThan struct {
+	Context   *string
+	Value     *int64
+	Qualifier []SignatureAndConditionOrConditionOperatorLessThanQualifier
+	Misc      []generic.Xml
+}
+type SignatureAndConditionOrConditionOperatorLessThanQualifier struct {
+	Name  string
+	Value *string
+	Misc  []generic.Xml
 }
 type SignatureAndConditionOrConditionOperatorEqualTo struct {
 	Context  *string
 	Position *string
 	Mask     *string
 	Value    *string
-}
-type SignatureAndConditionOrConditionOperatorGreaterThan struct {
-	Context   *string
-	Value     *int64
-	Qualifier []SignatureAndConditionOrConditionOperatorGreaterThanQualifier
-}
-type SignatureAndConditionOrConditionOperatorGreaterThanQualifier struct {
-	Name  string
-	Value *string
-}
-type SignatureAndConditionOrConditionOperatorLessThan struct {
-	Context   *string
-	Value     *int64
-	Qualifier []SignatureAndConditionOrConditionOperatorLessThanQualifier
-}
-type SignatureAndConditionOrConditionOperatorLessThanQualifier struct {
-	Name  string
-	Value *string
-}
-type SignatureAndConditionOrConditionOperatorPatternMatch struct {
-	Context   *string
-	Pattern   *string
-	Qualifier []SignatureAndConditionOrConditionOperatorPatternMatchQualifier
-}
-type SignatureAndConditionOrConditionOperatorPatternMatchQualifier struct {
-	Name  string
-	Value *string
+	Misc     []generic.Xml
 }
 
 type entryXmlContainer struct {
 	Answer []entryXml `xml:"entry"`
 }
 
-type entryXml struct {
-	XMLName                xml.Name       `xml:"entry"`
-	Name                   string         `xml:"name,attr"`
-	AbleToTransferFile     *string        `xml:"able-to-transfer-file,omitempty"`
-	AlgDisableCapability   *string        `xml:"alg-disable-capability,omitempty"`
-	Category               *string        `xml:"category,omitempty"`
-	ConsumeBigBandwidth    *string        `xml:"consume-big-bandwidth,omitempty"`
-	DataIdent              *string        `xml:"data-ident,omitempty"`
-	Default                *DefaultXml    `xml:"default,omitempty"`
-	Description            *string        `xml:"description,omitempty"`
-	DisableOverride        *string        `xml:"disable-override,omitempty"`
-	EvasiveBehavior        *string        `xml:"evasive-behavior,omitempty"`
-	FileTypeIdent          *string        `xml:"file-type-ident,omitempty"`
-	HasKnownVulnerability  *string        `xml:"has-known-vulnerability,omitempty"`
-	NoAppidCaching         *string        `xml:"no-appid-caching,omitempty"`
-	ParentApp              *string        `xml:"parent-app,omitempty"`
-	PervasiveUse           *string        `xml:"pervasive-use,omitempty"`
-	ProneToMisuse          *string        `xml:"prone-to-misuse,omitempty"`
-	Risk                   *int64         `xml:"risk,omitempty"`
-	Signature              []SignatureXml `xml:"signature>entry,omitempty"`
-	Subcategory            *string        `xml:"subcategory,omitempty"`
-	TcpHalfClosedTimeout   *int64         `xml:"tcp-half-closed-timeout,omitempty"`
-	TcpTimeWaitTimeout     *int64         `xml:"tcp-time-wait-timeout,omitempty"`
-	TcpTimeout             *int64         `xml:"tcp-timeout,omitempty"`
-	Technology             *string        `xml:"technology,omitempty"`
-	Timeout                *int64         `xml:"timeout,omitempty"`
-	TunnelApplications     *string        `xml:"tunnel-applications,omitempty"`
-	TunnelOtherApplication *string        `xml:"tunnel-other-application,omitempty"`
-	UdpTimeout             *int64         `xml:"udp-timeout,omitempty"`
-	UsedByMalware          *string        `xml:"used-by-malware,omitempty"`
-	VirusIdent             *string        `xml:"virus-ident,omitempty"`
+func (o *entryXmlContainer) Normalize() ([]*Entry, error) {
+	entries := make([]*Entry, 0, len(o.Answer))
+	for _, elt := range o.Answer {
+		obj, err := elt.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		entries = append(entries, obj)
+	}
 
-	Misc []generic.Xml `xml:",any"`
+	return entries, nil
 }
-type DefaultXml struct {
-	IdentByIcmpType   *DefaultIdentByIcmpTypeXml  `xml:"ident-by-icmp-type,omitempty"`
-	IdentByIcmp6Type  *DefaultIdentByIcmp6TypeXml `xml:"ident-by-icmp6-type,omitempty"`
+
+func specifyEntry(source *Entry) (any, error) {
+	var obj entryXml
+	obj.MarshalFromObject(*source)
+	return obj, nil
+}
+
+type entryXml struct {
+	XMLName                xml.Name               `xml:"entry"`
+	Name                   string                 `xml:"name,attr"`
+	AbleToTransferFile     *string                `xml:"able-to-transfer-file,omitempty"`
+	AlgDisableCapability   *string                `xml:"alg-disable-capability,omitempty"`
+	Category               *string                `xml:"category,omitempty"`
+	ConsumeBigBandwidth    *string                `xml:"consume-big-bandwidth,omitempty"`
+	DataIdent              *string                `xml:"data-ident,omitempty"`
+	Default                *defaultXml            `xml:"default,omitempty"`
+	Description            *string                `xml:"description,omitempty"`
+	DisableOverride        *string                `xml:"disable-override,omitempty"`
+	EvasiveBehavior        *string                `xml:"evasive-behavior,omitempty"`
+	FileTypeIdent          *string                `xml:"file-type-ident,omitempty"`
+	HasKnownVulnerability  *string                `xml:"has-known-vulnerability,omitempty"`
+	NoAppidCaching         *string                `xml:"no-appid-caching,omitempty"`
+	ParentApp              *string                `xml:"parent-app,omitempty"`
+	PervasiveUse           *string                `xml:"pervasive-use,omitempty"`
+	ProneToMisuse          *string                `xml:"prone-to-misuse,omitempty"`
+	Risk                   *int64                 `xml:"risk,omitempty"`
+	Signature              *signatureContainerXml `xml:"signature,omitempty"`
+	Subcategory            *string                `xml:"subcategory,omitempty"`
+	TcpHalfClosedTimeout   *int64                 `xml:"tcp-half-closed-timeout,omitempty"`
+	TcpTimeWaitTimeout     *int64                 `xml:"tcp-time-wait-timeout,omitempty"`
+	TcpTimeout             *int64                 `xml:"tcp-timeout,omitempty"`
+	Technology             *string                `xml:"technology,omitempty"`
+	Timeout                *int64                 `xml:"timeout,omitempty"`
+	TunnelApplications     *string                `xml:"tunnel-applications,omitempty"`
+	TunnelOtherApplication *string                `xml:"tunnel-other-application,omitempty"`
+	UdpTimeout             *int64                 `xml:"udp-timeout,omitempty"`
+	UsedByMalware          *string                `xml:"used-by-malware,omitempty"`
+	VirusIdent             *string                `xml:"virus-ident,omitempty"`
+	Misc                   []generic.Xml          `xml:",any"`
+}
+type defaultXml struct {
+	IdentByIcmpType   *defaultIdentByIcmpTypeXml  `xml:"ident-by-icmp-type,omitempty"`
+	IdentByIcmp6Type  *defaultIdentByIcmp6TypeXml `xml:"ident-by-icmp6-type,omitempty"`
 	IdentByIpProtocol *string                     `xml:"ident-by-ip-protocol,omitempty"`
 	Port              *util.MemberType            `xml:"port,omitempty"`
-
+	Misc              []generic.Xml               `xml:",any"`
+}
+type defaultIdentByIcmpTypeXml struct {
+	Code *string       `xml:"code,omitempty"`
+	Type *string       `xml:"type,omitempty"`
 	Misc []generic.Xml `xml:",any"`
 }
-type DefaultIdentByIcmp6TypeXml struct {
-	Code *string `xml:"code,omitempty"`
-	Type *string `xml:"type,omitempty"`
-
+type defaultIdentByIcmp6TypeXml struct {
+	Code *string       `xml:"code,omitempty"`
+	Type *string       `xml:"type,omitempty"`
 	Misc []generic.Xml `xml:",any"`
 }
-type DefaultIdentByIcmpTypeXml struct {
-	Code *string `xml:"code,omitempty"`
-	Type *string `xml:"type,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
+type signatureContainerXml struct {
+	Entries []signatureXml `xml:"entry"`
 }
-type SignatureXml struct {
-	AndCondition []SignatureAndConditionXml `xml:"and-condition>entry,omitempty"`
-	Comment      *string                    `xml:"comment,omitempty"`
-	Name         string                     `xml:"name,attr"`
-	OrderFree    *string                    `xml:"order-free,omitempty"`
-	Scope        *string                    `xml:"scope,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
+type signatureXml struct {
+	XMLName      xml.Name                           `xml:"entry"`
+	Name         string                             `xml:"name,attr"`
+	Comment      *string                            `xml:"comment,omitempty"`
+	Scope        *string                            `xml:"scope,omitempty"`
+	OrderFree    *string                            `xml:"order-free,omitempty"`
+	AndCondition *signatureAndConditionContainerXml `xml:"and-condition,omitempty"`
+	Misc         []generic.Xml                      `xml:",any"`
 }
-type SignatureAndConditionXml struct {
-	Name        string                                `xml:"name,attr"`
-	OrCondition []SignatureAndConditionOrConditionXml `xml:"or-condition>entry,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
+type signatureAndConditionContainerXml struct {
+	Entries []signatureAndConditionXml `xml:"entry"`
 }
-type SignatureAndConditionOrConditionXml struct {
+type signatureAndConditionXml struct {
+	XMLName     xml.Name                                      `xml:"entry"`
+	Name        string                                        `xml:"name,attr"`
+	OrCondition *signatureAndConditionOrConditionContainerXml `xml:"or-condition,omitempty"`
+	Misc        []generic.Xml                                 `xml:",any"`
+}
+type signatureAndConditionOrConditionContainerXml struct {
+	Entries []signatureAndConditionOrConditionXml `xml:"entry"`
+}
+type signatureAndConditionOrConditionXml struct {
+	XMLName  xml.Name                                     `xml:"entry"`
 	Name     string                                       `xml:"name,attr"`
-	Operator *SignatureAndConditionOrConditionOperatorXml `xml:"operator,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
+	Operator *signatureAndConditionOrConditionOperatorXml `xml:"operator,omitempty"`
+	Misc     []generic.Xml                                `xml:",any"`
 }
-type SignatureAndConditionOrConditionOperatorXml struct {
-	EqualTo      *SignatureAndConditionOrConditionOperatorEqualToXml      `xml:"equal-to,omitempty"`
-	GreaterThan  *SignatureAndConditionOrConditionOperatorGreaterThanXml  `xml:"greater-than,omitempty"`
-	LessThan     *SignatureAndConditionOrConditionOperatorLessThanXml     `xml:"less-than,omitempty"`
-	PatternMatch *SignatureAndConditionOrConditionOperatorPatternMatchXml `xml:"pattern-match,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
+type signatureAndConditionOrConditionOperatorXml struct {
+	PatternMatch *signatureAndConditionOrConditionOperatorPatternMatchXml `xml:"pattern-match,omitempty"`
+	GreaterThan  *signatureAndConditionOrConditionOperatorGreaterThanXml  `xml:"greater-than,omitempty"`
+	LessThan     *signatureAndConditionOrConditionOperatorLessThanXml     `xml:"less-than,omitempty"`
+	EqualTo      *signatureAndConditionOrConditionOperatorEqualToXml      `xml:"equal-to,omitempty"`
+	Misc         []generic.Xml                                            `xml:",any"`
 }
-type SignatureAndConditionOrConditionOperatorEqualToXml struct {
-	Context  *string `xml:"context,omitempty"`
-	Mask     *string `xml:"mask,omitempty"`
-	Position *string `xml:"position,omitempty"`
-	Value    *string `xml:"value,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
+type signatureAndConditionOrConditionOperatorPatternMatchXml struct {
+	Context   *string                                                                    `xml:"context,omitempty"`
+	Pattern   *string                                                                    `xml:"pattern,omitempty"`
+	Qualifier *signatureAndConditionOrConditionOperatorPatternMatchQualifierContainerXml `xml:"qualifier,omitempty"`
+	Misc      []generic.Xml                                                              `xml:",any"`
 }
-type SignatureAndConditionOrConditionOperatorGreaterThanXml struct {
-	Context   *string                                                           `xml:"context,omitempty"`
-	Qualifier []SignatureAndConditionOrConditionOperatorGreaterThanQualifierXml `xml:"qualifier>entry,omitempty"`
-	Value     *int64                                                            `xml:"value,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
+type signatureAndConditionOrConditionOperatorPatternMatchQualifierContainerXml struct {
+	Entries []signatureAndConditionOrConditionOperatorPatternMatchQualifierXml `xml:"entry"`
 }
-type SignatureAndConditionOrConditionOperatorGreaterThanQualifierXml struct {
-	Name  string  `xml:"name,attr"`
-	Value *string `xml:"value,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
+type signatureAndConditionOrConditionOperatorPatternMatchQualifierXml struct {
+	XMLName xml.Name      `xml:"entry"`
+	Name    string        `xml:"name,attr"`
+	Value   *string       `xml:"value,omitempty"`
+	Misc    []generic.Xml `xml:",any"`
 }
-type SignatureAndConditionOrConditionOperatorLessThanXml struct {
-	Context   *string                                                        `xml:"context,omitempty"`
-	Qualifier []SignatureAndConditionOrConditionOperatorLessThanQualifierXml `xml:"qualifier>entry,omitempty"`
-	Value     *int64                                                         `xml:"value,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
+type signatureAndConditionOrConditionOperatorGreaterThanXml struct {
+	Context   *string                                                                   `xml:"context,omitempty"`
+	Value     *int64                                                                    `xml:"value,omitempty"`
+	Qualifier *signatureAndConditionOrConditionOperatorGreaterThanQualifierContainerXml `xml:"qualifier,omitempty"`
+	Misc      []generic.Xml                                                             `xml:",any"`
 }
-type SignatureAndConditionOrConditionOperatorLessThanQualifierXml struct {
-	Name  string  `xml:"name,attr"`
-	Value *string `xml:"value,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
+type signatureAndConditionOrConditionOperatorGreaterThanQualifierContainerXml struct {
+	Entries []signatureAndConditionOrConditionOperatorGreaterThanQualifierXml `xml:"entry"`
 }
-type SignatureAndConditionOrConditionOperatorPatternMatchXml struct {
-	Context   *string                                                            `xml:"context,omitempty"`
-	Pattern   *string                                                            `xml:"pattern,omitempty"`
-	Qualifier []SignatureAndConditionOrConditionOperatorPatternMatchQualifierXml `xml:"qualifier>entry,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
+type signatureAndConditionOrConditionOperatorGreaterThanQualifierXml struct {
+	XMLName xml.Name      `xml:"entry"`
+	Name    string        `xml:"name,attr"`
+	Value   *string       `xml:"value,omitempty"`
+	Misc    []generic.Xml `xml:",any"`
 }
-type SignatureAndConditionOrConditionOperatorPatternMatchQualifierXml struct {
-	Name  string  `xml:"name,attr"`
-	Value *string `xml:"value,omitempty"`
+type signatureAndConditionOrConditionOperatorLessThanXml struct {
+	Context   *string                                                                `xml:"context,omitempty"`
+	Value     *int64                                                                 `xml:"value,omitempty"`
+	Qualifier *signatureAndConditionOrConditionOperatorLessThanQualifierContainerXml `xml:"qualifier,omitempty"`
+	Misc      []generic.Xml                                                          `xml:",any"`
+}
+type signatureAndConditionOrConditionOperatorLessThanQualifierContainerXml struct {
+	Entries []signatureAndConditionOrConditionOperatorLessThanQualifierXml `xml:"entry"`
+}
+type signatureAndConditionOrConditionOperatorLessThanQualifierXml struct {
+	XMLName xml.Name      `xml:"entry"`
+	Name    string        `xml:"name,attr"`
+	Value   *string       `xml:"value,omitempty"`
+	Misc    []generic.Xml `xml:",any"`
+}
+type signatureAndConditionOrConditionOperatorEqualToXml struct {
+	Context  *string       `xml:"context,omitempty"`
+	Position *string       `xml:"position,omitempty"`
+	Mask     *string       `xml:"mask,omitempty"`
+	Value    *string       `xml:"value,omitempty"`
+	Misc     []generic.Xml `xml:",any"`
+}
 
-	Misc []generic.Xml `xml:",any"`
+func (o *entryXml) MarshalFromObject(s Entry) {
+	o.Name = s.Name
+	o.AbleToTransferFile = util.YesNo(s.AbleToTransferFile, nil)
+	o.AlgDisableCapability = s.AlgDisableCapability
+	o.Category = s.Category
+	o.ConsumeBigBandwidth = util.YesNo(s.ConsumeBigBandwidth, nil)
+	o.DataIdent = util.YesNo(s.DataIdent, nil)
+	if s.Default != nil {
+		var obj defaultXml
+		obj.MarshalFromObject(*s.Default)
+		o.Default = &obj
+	}
+	o.Description = s.Description
+	o.DisableOverride = s.DisableOverride
+	o.EvasiveBehavior = util.YesNo(s.EvasiveBehavior, nil)
+	o.FileTypeIdent = util.YesNo(s.FileTypeIdent, nil)
+	o.HasKnownVulnerability = util.YesNo(s.HasKnownVulnerability, nil)
+	o.NoAppidCaching = util.YesNo(s.NoAppidCaching, nil)
+	o.ParentApp = s.ParentApp
+	o.PervasiveUse = util.YesNo(s.PervasiveUse, nil)
+	o.ProneToMisuse = util.YesNo(s.ProneToMisuse, nil)
+	o.Risk = s.Risk
+	if s.Signature != nil {
+		var objs []signatureXml
+		for _, elt := range s.Signature {
+			var obj signatureXml
+			obj.MarshalFromObject(elt)
+			objs = append(objs, obj)
+		}
+		o.Signature = &signatureContainerXml{Entries: objs}
+	}
+	o.Subcategory = s.Subcategory
+	o.TcpHalfClosedTimeout = s.TcpHalfClosedTimeout
+	o.TcpTimeWaitTimeout = s.TcpTimeWaitTimeout
+	o.TcpTimeout = s.TcpTimeout
+	o.Technology = s.Technology
+	o.Timeout = s.Timeout
+	o.TunnelApplications = util.YesNo(s.TunnelApplications, nil)
+	o.TunnelOtherApplication = util.YesNo(s.TunnelOtherApplication, nil)
+	o.UdpTimeout = s.UdpTimeout
+	o.UsedByMalware = util.YesNo(s.UsedByMalware, nil)
+	o.VirusIdent = util.YesNo(s.VirusIdent, nil)
+	o.Misc = s.Misc
+}
+
+func (o entryXml) UnmarshalToObject() (*Entry, error) {
+	var defaultVal *Default
+	if o.Default != nil {
+		obj, err := o.Default.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		defaultVal = obj
+	}
+	var signatureVal []Signature
+	if o.Signature != nil {
+		for _, elt := range o.Signature.Entries {
+			obj, err := elt.UnmarshalToObject()
+			if err != nil {
+				return nil, err
+			}
+			signatureVal = append(signatureVal, *obj)
+		}
+	}
+
+	result := &Entry{
+		Name:                   o.Name,
+		AbleToTransferFile:     util.AsBool(o.AbleToTransferFile, nil),
+		AlgDisableCapability:   o.AlgDisableCapability,
+		Category:               o.Category,
+		ConsumeBigBandwidth:    util.AsBool(o.ConsumeBigBandwidth, nil),
+		DataIdent:              util.AsBool(o.DataIdent, nil),
+		Default:                defaultVal,
+		Description:            o.Description,
+		DisableOverride:        o.DisableOverride,
+		EvasiveBehavior:        util.AsBool(o.EvasiveBehavior, nil),
+		FileTypeIdent:          util.AsBool(o.FileTypeIdent, nil),
+		HasKnownVulnerability:  util.AsBool(o.HasKnownVulnerability, nil),
+		NoAppidCaching:         util.AsBool(o.NoAppidCaching, nil),
+		ParentApp:              o.ParentApp,
+		PervasiveUse:           util.AsBool(o.PervasiveUse, nil),
+		ProneToMisuse:          util.AsBool(o.ProneToMisuse, nil),
+		Risk:                   o.Risk,
+		Signature:              signatureVal,
+		Subcategory:            o.Subcategory,
+		TcpHalfClosedTimeout:   o.TcpHalfClosedTimeout,
+		TcpTimeWaitTimeout:     o.TcpTimeWaitTimeout,
+		TcpTimeout:             o.TcpTimeout,
+		Technology:             o.Technology,
+		Timeout:                o.Timeout,
+		TunnelApplications:     util.AsBool(o.TunnelApplications, nil),
+		TunnelOtherApplication: util.AsBool(o.TunnelOtherApplication, nil),
+		UdpTimeout:             o.UdpTimeout,
+		UsedByMalware:          util.AsBool(o.UsedByMalware, nil),
+		VirusIdent:             util.AsBool(o.VirusIdent, nil),
+		Misc:                   o.Misc,
+	}
+	return result, nil
+}
+func (o *defaultXml) MarshalFromObject(s Default) {
+	if s.IdentByIcmpType != nil {
+		var obj defaultIdentByIcmpTypeXml
+		obj.MarshalFromObject(*s.IdentByIcmpType)
+		o.IdentByIcmpType = &obj
+	}
+	if s.IdentByIcmp6Type != nil {
+		var obj defaultIdentByIcmp6TypeXml
+		obj.MarshalFromObject(*s.IdentByIcmp6Type)
+		o.IdentByIcmp6Type = &obj
+	}
+	o.IdentByIpProtocol = s.IdentByIpProtocol
+	if s.Port != nil {
+		o.Port = util.StrToMem(s.Port)
+	}
+	o.Misc = s.Misc
+}
+
+func (o defaultXml) UnmarshalToObject() (*Default, error) {
+	var identByIcmpTypeVal *DefaultIdentByIcmpType
+	if o.IdentByIcmpType != nil {
+		obj, err := o.IdentByIcmpType.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		identByIcmpTypeVal = obj
+	}
+	var identByIcmp6TypeVal *DefaultIdentByIcmp6Type
+	if o.IdentByIcmp6Type != nil {
+		obj, err := o.IdentByIcmp6Type.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		identByIcmp6TypeVal = obj
+	}
+	var portVal []string
+	if o.Port != nil {
+		portVal = util.MemToStr(o.Port)
+	}
+
+	result := &Default{
+		IdentByIcmpType:   identByIcmpTypeVal,
+		IdentByIcmp6Type:  identByIcmp6TypeVal,
+		IdentByIpProtocol: o.IdentByIpProtocol,
+		Port:              portVal,
+		Misc:              o.Misc,
+	}
+	return result, nil
+}
+func (o *defaultIdentByIcmpTypeXml) MarshalFromObject(s DefaultIdentByIcmpType) {
+	o.Code = s.Code
+	o.Type = s.Type
+	o.Misc = s.Misc
+}
+
+func (o defaultIdentByIcmpTypeXml) UnmarshalToObject() (*DefaultIdentByIcmpType, error) {
+
+	result := &DefaultIdentByIcmpType{
+		Code: o.Code,
+		Type: o.Type,
+		Misc: o.Misc,
+	}
+	return result, nil
+}
+func (o *defaultIdentByIcmp6TypeXml) MarshalFromObject(s DefaultIdentByIcmp6Type) {
+	o.Code = s.Code
+	o.Type = s.Type
+	o.Misc = s.Misc
+}
+
+func (o defaultIdentByIcmp6TypeXml) UnmarshalToObject() (*DefaultIdentByIcmp6Type, error) {
+
+	result := &DefaultIdentByIcmp6Type{
+		Code: o.Code,
+		Type: o.Type,
+		Misc: o.Misc,
+	}
+	return result, nil
+}
+func (o *signatureXml) MarshalFromObject(s Signature) {
+	o.Name = s.Name
+	o.Comment = s.Comment
+	o.Scope = s.Scope
+	o.OrderFree = util.YesNo(s.OrderFree, nil)
+	if s.AndCondition != nil {
+		var objs []signatureAndConditionXml
+		for _, elt := range s.AndCondition {
+			var obj signatureAndConditionXml
+			obj.MarshalFromObject(elt)
+			objs = append(objs, obj)
+		}
+		o.AndCondition = &signatureAndConditionContainerXml{Entries: objs}
+	}
+	o.Misc = s.Misc
+}
+
+func (o signatureXml) UnmarshalToObject() (*Signature, error) {
+	var andConditionVal []SignatureAndCondition
+	if o.AndCondition != nil {
+		for _, elt := range o.AndCondition.Entries {
+			obj, err := elt.UnmarshalToObject()
+			if err != nil {
+				return nil, err
+			}
+			andConditionVal = append(andConditionVal, *obj)
+		}
+	}
+
+	result := &Signature{
+		Name:         o.Name,
+		Comment:      o.Comment,
+		Scope:        o.Scope,
+		OrderFree:    util.AsBool(o.OrderFree, nil),
+		AndCondition: andConditionVal,
+		Misc:         o.Misc,
+	}
+	return result, nil
+}
+func (o *signatureAndConditionXml) MarshalFromObject(s SignatureAndCondition) {
+	o.Name = s.Name
+	if s.OrCondition != nil {
+		var objs []signatureAndConditionOrConditionXml
+		for _, elt := range s.OrCondition {
+			var obj signatureAndConditionOrConditionXml
+			obj.MarshalFromObject(elt)
+			objs = append(objs, obj)
+		}
+		o.OrCondition = &signatureAndConditionOrConditionContainerXml{Entries: objs}
+	}
+	o.Misc = s.Misc
+}
+
+func (o signatureAndConditionXml) UnmarshalToObject() (*SignatureAndCondition, error) {
+	var orConditionVal []SignatureAndConditionOrCondition
+	if o.OrCondition != nil {
+		for _, elt := range o.OrCondition.Entries {
+			obj, err := elt.UnmarshalToObject()
+			if err != nil {
+				return nil, err
+			}
+			orConditionVal = append(orConditionVal, *obj)
+		}
+	}
+
+	result := &SignatureAndCondition{
+		Name:        o.Name,
+		OrCondition: orConditionVal,
+		Misc:        o.Misc,
+	}
+	return result, nil
+}
+func (o *signatureAndConditionOrConditionXml) MarshalFromObject(s SignatureAndConditionOrCondition) {
+	o.Name = s.Name
+	if s.Operator != nil {
+		var obj signatureAndConditionOrConditionOperatorXml
+		obj.MarshalFromObject(*s.Operator)
+		o.Operator = &obj
+	}
+	o.Misc = s.Misc
+}
+
+func (o signatureAndConditionOrConditionXml) UnmarshalToObject() (*SignatureAndConditionOrCondition, error) {
+	var operatorVal *SignatureAndConditionOrConditionOperator
+	if o.Operator != nil {
+		obj, err := o.Operator.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		operatorVal = obj
+	}
+
+	result := &SignatureAndConditionOrCondition{
+		Name:     o.Name,
+		Operator: operatorVal,
+		Misc:     o.Misc,
+	}
+	return result, nil
+}
+func (o *signatureAndConditionOrConditionOperatorXml) MarshalFromObject(s SignatureAndConditionOrConditionOperator) {
+	if s.PatternMatch != nil {
+		var obj signatureAndConditionOrConditionOperatorPatternMatchXml
+		obj.MarshalFromObject(*s.PatternMatch)
+		o.PatternMatch = &obj
+	}
+	if s.GreaterThan != nil {
+		var obj signatureAndConditionOrConditionOperatorGreaterThanXml
+		obj.MarshalFromObject(*s.GreaterThan)
+		o.GreaterThan = &obj
+	}
+	if s.LessThan != nil {
+		var obj signatureAndConditionOrConditionOperatorLessThanXml
+		obj.MarshalFromObject(*s.LessThan)
+		o.LessThan = &obj
+	}
+	if s.EqualTo != nil {
+		var obj signatureAndConditionOrConditionOperatorEqualToXml
+		obj.MarshalFromObject(*s.EqualTo)
+		o.EqualTo = &obj
+	}
+	o.Misc = s.Misc
+}
+
+func (o signatureAndConditionOrConditionOperatorXml) UnmarshalToObject() (*SignatureAndConditionOrConditionOperator, error) {
+	var patternMatchVal *SignatureAndConditionOrConditionOperatorPatternMatch
+	if o.PatternMatch != nil {
+		obj, err := o.PatternMatch.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		patternMatchVal = obj
+	}
+	var greaterThanVal *SignatureAndConditionOrConditionOperatorGreaterThan
+	if o.GreaterThan != nil {
+		obj, err := o.GreaterThan.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		greaterThanVal = obj
+	}
+	var lessThanVal *SignatureAndConditionOrConditionOperatorLessThan
+	if o.LessThan != nil {
+		obj, err := o.LessThan.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		lessThanVal = obj
+	}
+	var equalToVal *SignatureAndConditionOrConditionOperatorEqualTo
+	if o.EqualTo != nil {
+		obj, err := o.EqualTo.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		equalToVal = obj
+	}
+
+	result := &SignatureAndConditionOrConditionOperator{
+		PatternMatch: patternMatchVal,
+		GreaterThan:  greaterThanVal,
+		LessThan:     lessThanVal,
+		EqualTo:      equalToVal,
+		Misc:         o.Misc,
+	}
+	return result, nil
+}
+func (o *signatureAndConditionOrConditionOperatorPatternMatchXml) MarshalFromObject(s SignatureAndConditionOrConditionOperatorPatternMatch) {
+	o.Context = s.Context
+	o.Pattern = s.Pattern
+	if s.Qualifier != nil {
+		var objs []signatureAndConditionOrConditionOperatorPatternMatchQualifierXml
+		for _, elt := range s.Qualifier {
+			var obj signatureAndConditionOrConditionOperatorPatternMatchQualifierXml
+			obj.MarshalFromObject(elt)
+			objs = append(objs, obj)
+		}
+		o.Qualifier = &signatureAndConditionOrConditionOperatorPatternMatchQualifierContainerXml{Entries: objs}
+	}
+	o.Misc = s.Misc
+}
+
+func (o signatureAndConditionOrConditionOperatorPatternMatchXml) UnmarshalToObject() (*SignatureAndConditionOrConditionOperatorPatternMatch, error) {
+	var qualifierVal []SignatureAndConditionOrConditionOperatorPatternMatchQualifier
+	if o.Qualifier != nil {
+		for _, elt := range o.Qualifier.Entries {
+			obj, err := elt.UnmarshalToObject()
+			if err != nil {
+				return nil, err
+			}
+			qualifierVal = append(qualifierVal, *obj)
+		}
+	}
+
+	result := &SignatureAndConditionOrConditionOperatorPatternMatch{
+		Context:   o.Context,
+		Pattern:   o.Pattern,
+		Qualifier: qualifierVal,
+		Misc:      o.Misc,
+	}
+	return result, nil
+}
+func (o *signatureAndConditionOrConditionOperatorPatternMatchQualifierXml) MarshalFromObject(s SignatureAndConditionOrConditionOperatorPatternMatchQualifier) {
+	o.Name = s.Name
+	o.Value = s.Value
+	o.Misc = s.Misc
+}
+
+func (o signatureAndConditionOrConditionOperatorPatternMatchQualifierXml) UnmarshalToObject() (*SignatureAndConditionOrConditionOperatorPatternMatchQualifier, error) {
+
+	result := &SignatureAndConditionOrConditionOperatorPatternMatchQualifier{
+		Name:  o.Name,
+		Value: o.Value,
+		Misc:  o.Misc,
+	}
+	return result, nil
+}
+func (o *signatureAndConditionOrConditionOperatorGreaterThanXml) MarshalFromObject(s SignatureAndConditionOrConditionOperatorGreaterThan) {
+	o.Context = s.Context
+	o.Value = s.Value
+	if s.Qualifier != nil {
+		var objs []signatureAndConditionOrConditionOperatorGreaterThanQualifierXml
+		for _, elt := range s.Qualifier {
+			var obj signatureAndConditionOrConditionOperatorGreaterThanQualifierXml
+			obj.MarshalFromObject(elt)
+			objs = append(objs, obj)
+		}
+		o.Qualifier = &signatureAndConditionOrConditionOperatorGreaterThanQualifierContainerXml{Entries: objs}
+	}
+	o.Misc = s.Misc
+}
+
+func (o signatureAndConditionOrConditionOperatorGreaterThanXml) UnmarshalToObject() (*SignatureAndConditionOrConditionOperatorGreaterThan, error) {
+	var qualifierVal []SignatureAndConditionOrConditionOperatorGreaterThanQualifier
+	if o.Qualifier != nil {
+		for _, elt := range o.Qualifier.Entries {
+			obj, err := elt.UnmarshalToObject()
+			if err != nil {
+				return nil, err
+			}
+			qualifierVal = append(qualifierVal, *obj)
+		}
+	}
+
+	result := &SignatureAndConditionOrConditionOperatorGreaterThan{
+		Context:   o.Context,
+		Value:     o.Value,
+		Qualifier: qualifierVal,
+		Misc:      o.Misc,
+	}
+	return result, nil
+}
+func (o *signatureAndConditionOrConditionOperatorGreaterThanQualifierXml) MarshalFromObject(s SignatureAndConditionOrConditionOperatorGreaterThanQualifier) {
+	o.Name = s.Name
+	o.Value = s.Value
+	o.Misc = s.Misc
+}
+
+func (o signatureAndConditionOrConditionOperatorGreaterThanQualifierXml) UnmarshalToObject() (*SignatureAndConditionOrConditionOperatorGreaterThanQualifier, error) {
+
+	result := &SignatureAndConditionOrConditionOperatorGreaterThanQualifier{
+		Name:  o.Name,
+		Value: o.Value,
+		Misc:  o.Misc,
+	}
+	return result, nil
+}
+func (o *signatureAndConditionOrConditionOperatorLessThanXml) MarshalFromObject(s SignatureAndConditionOrConditionOperatorLessThan) {
+	o.Context = s.Context
+	o.Value = s.Value
+	if s.Qualifier != nil {
+		var objs []signatureAndConditionOrConditionOperatorLessThanQualifierXml
+		for _, elt := range s.Qualifier {
+			var obj signatureAndConditionOrConditionOperatorLessThanQualifierXml
+			obj.MarshalFromObject(elt)
+			objs = append(objs, obj)
+		}
+		o.Qualifier = &signatureAndConditionOrConditionOperatorLessThanQualifierContainerXml{Entries: objs}
+	}
+	o.Misc = s.Misc
+}
+
+func (o signatureAndConditionOrConditionOperatorLessThanXml) UnmarshalToObject() (*SignatureAndConditionOrConditionOperatorLessThan, error) {
+	var qualifierVal []SignatureAndConditionOrConditionOperatorLessThanQualifier
+	if o.Qualifier != nil {
+		for _, elt := range o.Qualifier.Entries {
+			obj, err := elt.UnmarshalToObject()
+			if err != nil {
+				return nil, err
+			}
+			qualifierVal = append(qualifierVal, *obj)
+		}
+	}
+
+	result := &SignatureAndConditionOrConditionOperatorLessThan{
+		Context:   o.Context,
+		Value:     o.Value,
+		Qualifier: qualifierVal,
+		Misc:      o.Misc,
+	}
+	return result, nil
+}
+func (o *signatureAndConditionOrConditionOperatorLessThanQualifierXml) MarshalFromObject(s SignatureAndConditionOrConditionOperatorLessThanQualifier) {
+	o.Name = s.Name
+	o.Value = s.Value
+	o.Misc = s.Misc
+}
+
+func (o signatureAndConditionOrConditionOperatorLessThanQualifierXml) UnmarshalToObject() (*SignatureAndConditionOrConditionOperatorLessThanQualifier, error) {
+
+	result := &SignatureAndConditionOrConditionOperatorLessThanQualifier{
+		Name:  o.Name,
+		Value: o.Value,
+		Misc:  o.Misc,
+	}
+	return result, nil
+}
+func (o *signatureAndConditionOrConditionOperatorEqualToXml) MarshalFromObject(s SignatureAndConditionOrConditionOperatorEqualTo) {
+	o.Context = s.Context
+	o.Position = s.Position
+	o.Mask = s.Mask
+	o.Value = s.Value
+	o.Misc = s.Misc
+}
+
+func (o signatureAndConditionOrConditionOperatorEqualToXml) UnmarshalToObject() (*SignatureAndConditionOrConditionOperatorEqualTo, error) {
+
+	result := &SignatureAndConditionOrConditionOperatorEqualTo{
+		Context:  o.Context,
+		Position: o.Position,
+		Mask:     o.Mask,
+		Value:    o.Value,
+		Misc:     o.Misc,
+	}
+	return result, nil
 }
 
 func (e *Entry) Field(v string) (any, error) {
@@ -355,829 +909,429 @@ func Versioning(vn version.Number) (Specifier, Normalizer, error) {
 
 	return specifyEntry, &entryXmlContainer{}, nil
 }
-func specifyEntry(o *Entry) (any, error) {
-	entry := entryXml{}
-	entry.Name = o.Name
-	entry.AbleToTransferFile = util.YesNo(o.AbleToTransferFile, nil)
-	entry.AlgDisableCapability = o.AlgDisableCapability
-	entry.Category = o.Category
-	entry.ConsumeBigBandwidth = util.YesNo(o.ConsumeBigBandwidth, nil)
-	entry.DataIdent = util.YesNo(o.DataIdent, nil)
-	var nestedDefault *DefaultXml
-	if o.Default != nil {
-		nestedDefault = &DefaultXml{}
-		if _, ok := o.Misc["Default"]; ok {
-			nestedDefault.Misc = o.Misc["Default"]
-		}
-		if o.Default.IdentByIcmpType != nil {
-			nestedDefault.IdentByIcmpType = &DefaultIdentByIcmpTypeXml{}
-			if _, ok := o.Misc["DefaultIdentByIcmpType"]; ok {
-				nestedDefault.IdentByIcmpType.Misc = o.Misc["DefaultIdentByIcmpType"]
-			}
-			if o.Default.IdentByIcmpType.Code != nil {
-				nestedDefault.IdentByIcmpType.Code = o.Default.IdentByIcmpType.Code
-			}
-			if o.Default.IdentByIcmpType.Type != nil {
-				nestedDefault.IdentByIcmpType.Type = o.Default.IdentByIcmpType.Type
-			}
-		}
-		if o.Default.IdentByIcmp6Type != nil {
-			nestedDefault.IdentByIcmp6Type = &DefaultIdentByIcmp6TypeXml{}
-			if _, ok := o.Misc["DefaultIdentByIcmp6Type"]; ok {
-				nestedDefault.IdentByIcmp6Type.Misc = o.Misc["DefaultIdentByIcmp6Type"]
-			}
-			if o.Default.IdentByIcmp6Type.Code != nil {
-				nestedDefault.IdentByIcmp6Type.Code = o.Default.IdentByIcmp6Type.Code
-			}
-			if o.Default.IdentByIcmp6Type.Type != nil {
-				nestedDefault.IdentByIcmp6Type.Type = o.Default.IdentByIcmp6Type.Type
-			}
-		}
-		if o.Default.IdentByIpProtocol != nil {
-			nestedDefault.IdentByIpProtocol = o.Default.IdentByIpProtocol
-		}
-		if o.Default.Port != nil {
-			nestedDefault.Port = util.StrToMem(o.Default.Port)
-		}
-	}
-	entry.Default = nestedDefault
-
-	entry.Description = o.Description
-	entry.DisableOverride = o.DisableOverride
-	entry.EvasiveBehavior = util.YesNo(o.EvasiveBehavior, nil)
-	entry.FileTypeIdent = util.YesNo(o.FileTypeIdent, nil)
-	entry.HasKnownVulnerability = util.YesNo(o.HasKnownVulnerability, nil)
-	entry.NoAppidCaching = util.YesNo(o.NoAppidCaching, nil)
-	entry.ParentApp = o.ParentApp
-	entry.PervasiveUse = util.YesNo(o.PervasiveUse, nil)
-	entry.ProneToMisuse = util.YesNo(o.ProneToMisuse, nil)
-	entry.Risk = o.Risk
-	var nestedSignatureCol []SignatureXml
-	if o.Signature != nil {
-		nestedSignatureCol = []SignatureXml{}
-		for _, oSignature := range o.Signature {
-			nestedSignature := SignatureXml{}
-			if _, ok := o.Misc["Signature"]; ok {
-				nestedSignature.Misc = o.Misc["Signature"]
-			}
-			if oSignature.Name != "" {
-				nestedSignature.Name = oSignature.Name
-			}
-			if oSignature.Comment != nil {
-				nestedSignature.Comment = oSignature.Comment
-			}
-			if oSignature.Scope != nil {
-				nestedSignature.Scope = oSignature.Scope
-			}
-			if oSignature.OrderFree != nil {
-				nestedSignature.OrderFree = util.YesNo(oSignature.OrderFree, nil)
-			}
-			if oSignature.AndCondition != nil {
-				nestedSignature.AndCondition = []SignatureAndConditionXml{}
-				for _, oSignatureAndCondition := range oSignature.AndCondition {
-					nestedSignatureAndCondition := SignatureAndConditionXml{}
-					if _, ok := o.Misc["SignatureAndCondition"]; ok {
-						nestedSignatureAndCondition.Misc = o.Misc["SignatureAndCondition"]
-					}
-					if oSignatureAndCondition.Name != "" {
-						nestedSignatureAndCondition.Name = oSignatureAndCondition.Name
-					}
-					if oSignatureAndCondition.OrCondition != nil {
-						nestedSignatureAndCondition.OrCondition = []SignatureAndConditionOrConditionXml{}
-						for _, oSignatureAndConditionOrCondition := range oSignatureAndCondition.OrCondition {
-							nestedSignatureAndConditionOrCondition := SignatureAndConditionOrConditionXml{}
-							if _, ok := o.Misc["SignatureAndConditionOrCondition"]; ok {
-								nestedSignatureAndConditionOrCondition.Misc = o.Misc["SignatureAndConditionOrCondition"]
-							}
-							if oSignatureAndConditionOrCondition.Name != "" {
-								nestedSignatureAndConditionOrCondition.Name = oSignatureAndConditionOrCondition.Name
-							}
-							if oSignatureAndConditionOrCondition.Operator != nil {
-								nestedSignatureAndConditionOrCondition.Operator = &SignatureAndConditionOrConditionOperatorXml{}
-								if _, ok := o.Misc["SignatureAndConditionOrConditionOperator"]; ok {
-									nestedSignatureAndConditionOrCondition.Operator.Misc = o.Misc["SignatureAndConditionOrConditionOperator"]
-								}
-								if oSignatureAndConditionOrCondition.Operator.PatternMatch != nil {
-									nestedSignatureAndConditionOrCondition.Operator.PatternMatch = &SignatureAndConditionOrConditionOperatorPatternMatchXml{}
-									if _, ok := o.Misc["SignatureAndConditionOrConditionOperatorPatternMatch"]; ok {
-										nestedSignatureAndConditionOrCondition.Operator.PatternMatch.Misc = o.Misc["SignatureAndConditionOrConditionOperatorPatternMatch"]
-									}
-									if oSignatureAndConditionOrCondition.Operator.PatternMatch.Context != nil {
-										nestedSignatureAndConditionOrCondition.Operator.PatternMatch.Context = oSignatureAndConditionOrCondition.Operator.PatternMatch.Context
-									}
-									if oSignatureAndConditionOrCondition.Operator.PatternMatch.Pattern != nil {
-										nestedSignatureAndConditionOrCondition.Operator.PatternMatch.Pattern = oSignatureAndConditionOrCondition.Operator.PatternMatch.Pattern
-									}
-									if oSignatureAndConditionOrCondition.Operator.PatternMatch.Qualifier != nil {
-										nestedSignatureAndConditionOrCondition.Operator.PatternMatch.Qualifier = []SignatureAndConditionOrConditionOperatorPatternMatchQualifierXml{}
-										for _, oSignatureAndConditionOrConditionOperatorPatternMatchQualifier := range oSignatureAndConditionOrCondition.Operator.PatternMatch.Qualifier {
-											nestedSignatureAndConditionOrConditionOperatorPatternMatchQualifier := SignatureAndConditionOrConditionOperatorPatternMatchQualifierXml{}
-											if _, ok := o.Misc["SignatureAndConditionOrConditionOperatorPatternMatchQualifier"]; ok {
-												nestedSignatureAndConditionOrConditionOperatorPatternMatchQualifier.Misc = o.Misc["SignatureAndConditionOrConditionOperatorPatternMatchQualifier"]
-											}
-											if oSignatureAndConditionOrConditionOperatorPatternMatchQualifier.Name != "" {
-												nestedSignatureAndConditionOrConditionOperatorPatternMatchQualifier.Name = oSignatureAndConditionOrConditionOperatorPatternMatchQualifier.Name
-											}
-											if oSignatureAndConditionOrConditionOperatorPatternMatchQualifier.Value != nil {
-												nestedSignatureAndConditionOrConditionOperatorPatternMatchQualifier.Value = oSignatureAndConditionOrConditionOperatorPatternMatchQualifier.Value
-											}
-											nestedSignatureAndConditionOrCondition.Operator.PatternMatch.Qualifier = append(nestedSignatureAndConditionOrCondition.Operator.PatternMatch.Qualifier, nestedSignatureAndConditionOrConditionOperatorPatternMatchQualifier)
-										}
-									}
-								}
-								if oSignatureAndConditionOrCondition.Operator.GreaterThan != nil {
-									nestedSignatureAndConditionOrCondition.Operator.GreaterThan = &SignatureAndConditionOrConditionOperatorGreaterThanXml{}
-									if _, ok := o.Misc["SignatureAndConditionOrConditionOperatorGreaterThan"]; ok {
-										nestedSignatureAndConditionOrCondition.Operator.GreaterThan.Misc = o.Misc["SignatureAndConditionOrConditionOperatorGreaterThan"]
-									}
-									if oSignatureAndConditionOrCondition.Operator.GreaterThan.Context != nil {
-										nestedSignatureAndConditionOrCondition.Operator.GreaterThan.Context = oSignatureAndConditionOrCondition.Operator.GreaterThan.Context
-									}
-									if oSignatureAndConditionOrCondition.Operator.GreaterThan.Value != nil {
-										nestedSignatureAndConditionOrCondition.Operator.GreaterThan.Value = oSignatureAndConditionOrCondition.Operator.GreaterThan.Value
-									}
-									if oSignatureAndConditionOrCondition.Operator.GreaterThan.Qualifier != nil {
-										nestedSignatureAndConditionOrCondition.Operator.GreaterThan.Qualifier = []SignatureAndConditionOrConditionOperatorGreaterThanQualifierXml{}
-										for _, oSignatureAndConditionOrConditionOperatorGreaterThanQualifier := range oSignatureAndConditionOrCondition.Operator.GreaterThan.Qualifier {
-											nestedSignatureAndConditionOrConditionOperatorGreaterThanQualifier := SignatureAndConditionOrConditionOperatorGreaterThanQualifierXml{}
-											if _, ok := o.Misc["SignatureAndConditionOrConditionOperatorGreaterThanQualifier"]; ok {
-												nestedSignatureAndConditionOrConditionOperatorGreaterThanQualifier.Misc = o.Misc["SignatureAndConditionOrConditionOperatorGreaterThanQualifier"]
-											}
-											if oSignatureAndConditionOrConditionOperatorGreaterThanQualifier.Name != "" {
-												nestedSignatureAndConditionOrConditionOperatorGreaterThanQualifier.Name = oSignatureAndConditionOrConditionOperatorGreaterThanQualifier.Name
-											}
-											if oSignatureAndConditionOrConditionOperatorGreaterThanQualifier.Value != nil {
-												nestedSignatureAndConditionOrConditionOperatorGreaterThanQualifier.Value = oSignatureAndConditionOrConditionOperatorGreaterThanQualifier.Value
-											}
-											nestedSignatureAndConditionOrCondition.Operator.GreaterThan.Qualifier = append(nestedSignatureAndConditionOrCondition.Operator.GreaterThan.Qualifier, nestedSignatureAndConditionOrConditionOperatorGreaterThanQualifier)
-										}
-									}
-								}
-								if oSignatureAndConditionOrCondition.Operator.LessThan != nil {
-									nestedSignatureAndConditionOrCondition.Operator.LessThan = &SignatureAndConditionOrConditionOperatorLessThanXml{}
-									if _, ok := o.Misc["SignatureAndConditionOrConditionOperatorLessThan"]; ok {
-										nestedSignatureAndConditionOrCondition.Operator.LessThan.Misc = o.Misc["SignatureAndConditionOrConditionOperatorLessThan"]
-									}
-									if oSignatureAndConditionOrCondition.Operator.LessThan.Context != nil {
-										nestedSignatureAndConditionOrCondition.Operator.LessThan.Context = oSignatureAndConditionOrCondition.Operator.LessThan.Context
-									}
-									if oSignatureAndConditionOrCondition.Operator.LessThan.Value != nil {
-										nestedSignatureAndConditionOrCondition.Operator.LessThan.Value = oSignatureAndConditionOrCondition.Operator.LessThan.Value
-									}
-									if oSignatureAndConditionOrCondition.Operator.LessThan.Qualifier != nil {
-										nestedSignatureAndConditionOrCondition.Operator.LessThan.Qualifier = []SignatureAndConditionOrConditionOperatorLessThanQualifierXml{}
-										for _, oSignatureAndConditionOrConditionOperatorLessThanQualifier := range oSignatureAndConditionOrCondition.Operator.LessThan.Qualifier {
-											nestedSignatureAndConditionOrConditionOperatorLessThanQualifier := SignatureAndConditionOrConditionOperatorLessThanQualifierXml{}
-											if _, ok := o.Misc["SignatureAndConditionOrConditionOperatorLessThanQualifier"]; ok {
-												nestedSignatureAndConditionOrConditionOperatorLessThanQualifier.Misc = o.Misc["SignatureAndConditionOrConditionOperatorLessThanQualifier"]
-											}
-											if oSignatureAndConditionOrConditionOperatorLessThanQualifier.Name != "" {
-												nestedSignatureAndConditionOrConditionOperatorLessThanQualifier.Name = oSignatureAndConditionOrConditionOperatorLessThanQualifier.Name
-											}
-											if oSignatureAndConditionOrConditionOperatorLessThanQualifier.Value != nil {
-												nestedSignatureAndConditionOrConditionOperatorLessThanQualifier.Value = oSignatureAndConditionOrConditionOperatorLessThanQualifier.Value
-											}
-											nestedSignatureAndConditionOrCondition.Operator.LessThan.Qualifier = append(nestedSignatureAndConditionOrCondition.Operator.LessThan.Qualifier, nestedSignatureAndConditionOrConditionOperatorLessThanQualifier)
-										}
-									}
-								}
-								if oSignatureAndConditionOrCondition.Operator.EqualTo != nil {
-									nestedSignatureAndConditionOrCondition.Operator.EqualTo = &SignatureAndConditionOrConditionOperatorEqualToXml{}
-									if _, ok := o.Misc["SignatureAndConditionOrConditionOperatorEqualTo"]; ok {
-										nestedSignatureAndConditionOrCondition.Operator.EqualTo.Misc = o.Misc["SignatureAndConditionOrConditionOperatorEqualTo"]
-									}
-									if oSignatureAndConditionOrCondition.Operator.EqualTo.Context != nil {
-										nestedSignatureAndConditionOrCondition.Operator.EqualTo.Context = oSignatureAndConditionOrCondition.Operator.EqualTo.Context
-									}
-									if oSignatureAndConditionOrCondition.Operator.EqualTo.Position != nil {
-										nestedSignatureAndConditionOrCondition.Operator.EqualTo.Position = oSignatureAndConditionOrCondition.Operator.EqualTo.Position
-									}
-									if oSignatureAndConditionOrCondition.Operator.EqualTo.Mask != nil {
-										nestedSignatureAndConditionOrCondition.Operator.EqualTo.Mask = oSignatureAndConditionOrCondition.Operator.EqualTo.Mask
-									}
-									if oSignatureAndConditionOrCondition.Operator.EqualTo.Value != nil {
-										nestedSignatureAndConditionOrCondition.Operator.EqualTo.Value = oSignatureAndConditionOrCondition.Operator.EqualTo.Value
-									}
-								}
-							}
-							nestedSignatureAndCondition.OrCondition = append(nestedSignatureAndCondition.OrCondition, nestedSignatureAndConditionOrCondition)
-						}
-					}
-					nestedSignature.AndCondition = append(nestedSignature.AndCondition, nestedSignatureAndCondition)
-				}
-			}
-			nestedSignatureCol = append(nestedSignatureCol, nestedSignature)
-		}
-		entry.Signature = nestedSignatureCol
-	}
-
-	entry.Subcategory = o.Subcategory
-	entry.TcpHalfClosedTimeout = o.TcpHalfClosedTimeout
-	entry.TcpTimeWaitTimeout = o.TcpTimeWaitTimeout
-	entry.TcpTimeout = o.TcpTimeout
-	entry.Technology = o.Technology
-	entry.Timeout = o.Timeout
-	entry.TunnelApplications = util.YesNo(o.TunnelApplications, nil)
-	entry.TunnelOtherApplication = util.YesNo(o.TunnelOtherApplication, nil)
-	entry.UdpTimeout = o.UdpTimeout
-	entry.UsedByMalware = util.YesNo(o.UsedByMalware, nil)
-	entry.VirusIdent = util.YesNo(o.VirusIdent, nil)
-
-	entry.Misc = o.Misc["Entry"]
-
-	return entry, nil
-}
-
-func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
-	entryList := make([]*Entry, 0, len(c.Answer))
-	for _, o := range c.Answer {
-		entry := &Entry{
-			Misc: make(map[string][]generic.Xml),
-		}
-		entry.Name = o.Name
-		entry.AbleToTransferFile = util.AsBool(o.AbleToTransferFile, nil)
-		entry.AlgDisableCapability = o.AlgDisableCapability
-		entry.Category = o.Category
-		entry.ConsumeBigBandwidth = util.AsBool(o.ConsumeBigBandwidth, nil)
-		entry.DataIdent = util.AsBool(o.DataIdent, nil)
-		var nestedDefault *Default
-		if o.Default != nil {
-			nestedDefault = &Default{}
-			if o.Default.Misc != nil {
-				entry.Misc["Default"] = o.Default.Misc
-			}
-			if o.Default.IdentByIcmpType != nil {
-				nestedDefault.IdentByIcmpType = &DefaultIdentByIcmpType{}
-				if o.Default.IdentByIcmpType.Misc != nil {
-					entry.Misc["DefaultIdentByIcmpType"] = o.Default.IdentByIcmpType.Misc
-				}
-				if o.Default.IdentByIcmpType.Code != nil {
-					nestedDefault.IdentByIcmpType.Code = o.Default.IdentByIcmpType.Code
-				}
-				if o.Default.IdentByIcmpType.Type != nil {
-					nestedDefault.IdentByIcmpType.Type = o.Default.IdentByIcmpType.Type
-				}
-			}
-			if o.Default.IdentByIcmp6Type != nil {
-				nestedDefault.IdentByIcmp6Type = &DefaultIdentByIcmp6Type{}
-				if o.Default.IdentByIcmp6Type.Misc != nil {
-					entry.Misc["DefaultIdentByIcmp6Type"] = o.Default.IdentByIcmp6Type.Misc
-				}
-				if o.Default.IdentByIcmp6Type.Code != nil {
-					nestedDefault.IdentByIcmp6Type.Code = o.Default.IdentByIcmp6Type.Code
-				}
-				if o.Default.IdentByIcmp6Type.Type != nil {
-					nestedDefault.IdentByIcmp6Type.Type = o.Default.IdentByIcmp6Type.Type
-				}
-			}
-			if o.Default.IdentByIpProtocol != nil {
-				nestedDefault.IdentByIpProtocol = o.Default.IdentByIpProtocol
-			}
-			if o.Default.Port != nil {
-				nestedDefault.Port = util.MemToStr(o.Default.Port)
-			}
-		}
-		entry.Default = nestedDefault
-
-		entry.Description = o.Description
-		entry.DisableOverride = o.DisableOverride
-		entry.EvasiveBehavior = util.AsBool(o.EvasiveBehavior, nil)
-		entry.FileTypeIdent = util.AsBool(o.FileTypeIdent, nil)
-		entry.HasKnownVulnerability = util.AsBool(o.HasKnownVulnerability, nil)
-		entry.NoAppidCaching = util.AsBool(o.NoAppidCaching, nil)
-		entry.ParentApp = o.ParentApp
-		entry.PervasiveUse = util.AsBool(o.PervasiveUse, nil)
-		entry.ProneToMisuse = util.AsBool(o.ProneToMisuse, nil)
-		entry.Risk = o.Risk
-		var nestedSignatureCol []Signature
-		if o.Signature != nil {
-			nestedSignatureCol = []Signature{}
-			for _, oSignature := range o.Signature {
-				nestedSignature := Signature{}
-				if oSignature.Misc != nil {
-					entry.Misc["Signature"] = oSignature.Misc
-				}
-				if oSignature.Name != "" {
-					nestedSignature.Name = oSignature.Name
-				}
-				if oSignature.Comment != nil {
-					nestedSignature.Comment = oSignature.Comment
-				}
-				if oSignature.Scope != nil {
-					nestedSignature.Scope = oSignature.Scope
-				}
-				if oSignature.OrderFree != nil {
-					nestedSignature.OrderFree = util.AsBool(oSignature.OrderFree, nil)
-				}
-				if oSignature.AndCondition != nil {
-					nestedSignature.AndCondition = []SignatureAndCondition{}
-					for _, oSignatureAndCondition := range oSignature.AndCondition {
-						nestedSignatureAndCondition := SignatureAndCondition{}
-						if oSignatureAndCondition.Misc != nil {
-							entry.Misc["SignatureAndCondition"] = oSignatureAndCondition.Misc
-						}
-						if oSignatureAndCondition.Name != "" {
-							nestedSignatureAndCondition.Name = oSignatureAndCondition.Name
-						}
-						if oSignatureAndCondition.OrCondition != nil {
-							nestedSignatureAndCondition.OrCondition = []SignatureAndConditionOrCondition{}
-							for _, oSignatureAndConditionOrCondition := range oSignatureAndCondition.OrCondition {
-								nestedSignatureAndConditionOrCondition := SignatureAndConditionOrCondition{}
-								if oSignatureAndConditionOrCondition.Misc != nil {
-									entry.Misc["SignatureAndConditionOrCondition"] = oSignatureAndConditionOrCondition.Misc
-								}
-								if oSignatureAndConditionOrCondition.Name != "" {
-									nestedSignatureAndConditionOrCondition.Name = oSignatureAndConditionOrCondition.Name
-								}
-								if oSignatureAndConditionOrCondition.Operator != nil {
-									nestedSignatureAndConditionOrCondition.Operator = &SignatureAndConditionOrConditionOperator{}
-									if oSignatureAndConditionOrCondition.Operator.Misc != nil {
-										entry.Misc["SignatureAndConditionOrConditionOperator"] = oSignatureAndConditionOrCondition.Operator.Misc
-									}
-									if oSignatureAndConditionOrCondition.Operator.PatternMatch != nil {
-										nestedSignatureAndConditionOrCondition.Operator.PatternMatch = &SignatureAndConditionOrConditionOperatorPatternMatch{}
-										if oSignatureAndConditionOrCondition.Operator.PatternMatch.Misc != nil {
-											entry.Misc["SignatureAndConditionOrConditionOperatorPatternMatch"] = oSignatureAndConditionOrCondition.Operator.PatternMatch.Misc
-										}
-										if oSignatureAndConditionOrCondition.Operator.PatternMatch.Context != nil {
-											nestedSignatureAndConditionOrCondition.Operator.PatternMatch.Context = oSignatureAndConditionOrCondition.Operator.PatternMatch.Context
-										}
-										if oSignatureAndConditionOrCondition.Operator.PatternMatch.Pattern != nil {
-											nestedSignatureAndConditionOrCondition.Operator.PatternMatch.Pattern = oSignatureAndConditionOrCondition.Operator.PatternMatch.Pattern
-										}
-										if oSignatureAndConditionOrCondition.Operator.PatternMatch.Qualifier != nil {
-											nestedSignatureAndConditionOrCondition.Operator.PatternMatch.Qualifier = []SignatureAndConditionOrConditionOperatorPatternMatchQualifier{}
-											for _, oSignatureAndConditionOrConditionOperatorPatternMatchQualifier := range oSignatureAndConditionOrCondition.Operator.PatternMatch.Qualifier {
-												nestedSignatureAndConditionOrConditionOperatorPatternMatchQualifier := SignatureAndConditionOrConditionOperatorPatternMatchQualifier{}
-												if oSignatureAndConditionOrConditionOperatorPatternMatchQualifier.Misc != nil {
-													entry.Misc["SignatureAndConditionOrConditionOperatorPatternMatchQualifier"] = oSignatureAndConditionOrConditionOperatorPatternMatchQualifier.Misc
-												}
-												if oSignatureAndConditionOrConditionOperatorPatternMatchQualifier.Name != "" {
-													nestedSignatureAndConditionOrConditionOperatorPatternMatchQualifier.Name = oSignatureAndConditionOrConditionOperatorPatternMatchQualifier.Name
-												}
-												if oSignatureAndConditionOrConditionOperatorPatternMatchQualifier.Value != nil {
-													nestedSignatureAndConditionOrConditionOperatorPatternMatchQualifier.Value = oSignatureAndConditionOrConditionOperatorPatternMatchQualifier.Value
-												}
-												nestedSignatureAndConditionOrCondition.Operator.PatternMatch.Qualifier = append(nestedSignatureAndConditionOrCondition.Operator.PatternMatch.Qualifier, nestedSignatureAndConditionOrConditionOperatorPatternMatchQualifier)
-											}
-										}
-									}
-									if oSignatureAndConditionOrCondition.Operator.GreaterThan != nil {
-										nestedSignatureAndConditionOrCondition.Operator.GreaterThan = &SignatureAndConditionOrConditionOperatorGreaterThan{}
-										if oSignatureAndConditionOrCondition.Operator.GreaterThan.Misc != nil {
-											entry.Misc["SignatureAndConditionOrConditionOperatorGreaterThan"] = oSignatureAndConditionOrCondition.Operator.GreaterThan.Misc
-										}
-										if oSignatureAndConditionOrCondition.Operator.GreaterThan.Context != nil {
-											nestedSignatureAndConditionOrCondition.Operator.GreaterThan.Context = oSignatureAndConditionOrCondition.Operator.GreaterThan.Context
-										}
-										if oSignatureAndConditionOrCondition.Operator.GreaterThan.Value != nil {
-											nestedSignatureAndConditionOrCondition.Operator.GreaterThan.Value = oSignatureAndConditionOrCondition.Operator.GreaterThan.Value
-										}
-										if oSignatureAndConditionOrCondition.Operator.GreaterThan.Qualifier != nil {
-											nestedSignatureAndConditionOrCondition.Operator.GreaterThan.Qualifier = []SignatureAndConditionOrConditionOperatorGreaterThanQualifier{}
-											for _, oSignatureAndConditionOrConditionOperatorGreaterThanQualifier := range oSignatureAndConditionOrCondition.Operator.GreaterThan.Qualifier {
-												nestedSignatureAndConditionOrConditionOperatorGreaterThanQualifier := SignatureAndConditionOrConditionOperatorGreaterThanQualifier{}
-												if oSignatureAndConditionOrConditionOperatorGreaterThanQualifier.Misc != nil {
-													entry.Misc["SignatureAndConditionOrConditionOperatorGreaterThanQualifier"] = oSignatureAndConditionOrConditionOperatorGreaterThanQualifier.Misc
-												}
-												if oSignatureAndConditionOrConditionOperatorGreaterThanQualifier.Name != "" {
-													nestedSignatureAndConditionOrConditionOperatorGreaterThanQualifier.Name = oSignatureAndConditionOrConditionOperatorGreaterThanQualifier.Name
-												}
-												if oSignatureAndConditionOrConditionOperatorGreaterThanQualifier.Value != nil {
-													nestedSignatureAndConditionOrConditionOperatorGreaterThanQualifier.Value = oSignatureAndConditionOrConditionOperatorGreaterThanQualifier.Value
-												}
-												nestedSignatureAndConditionOrCondition.Operator.GreaterThan.Qualifier = append(nestedSignatureAndConditionOrCondition.Operator.GreaterThan.Qualifier, nestedSignatureAndConditionOrConditionOperatorGreaterThanQualifier)
-											}
-										}
-									}
-									if oSignatureAndConditionOrCondition.Operator.LessThan != nil {
-										nestedSignatureAndConditionOrCondition.Operator.LessThan = &SignatureAndConditionOrConditionOperatorLessThan{}
-										if oSignatureAndConditionOrCondition.Operator.LessThan.Misc != nil {
-											entry.Misc["SignatureAndConditionOrConditionOperatorLessThan"] = oSignatureAndConditionOrCondition.Operator.LessThan.Misc
-										}
-										if oSignatureAndConditionOrCondition.Operator.LessThan.Context != nil {
-											nestedSignatureAndConditionOrCondition.Operator.LessThan.Context = oSignatureAndConditionOrCondition.Operator.LessThan.Context
-										}
-										if oSignatureAndConditionOrCondition.Operator.LessThan.Value != nil {
-											nestedSignatureAndConditionOrCondition.Operator.LessThan.Value = oSignatureAndConditionOrCondition.Operator.LessThan.Value
-										}
-										if oSignatureAndConditionOrCondition.Operator.LessThan.Qualifier != nil {
-											nestedSignatureAndConditionOrCondition.Operator.LessThan.Qualifier = []SignatureAndConditionOrConditionOperatorLessThanQualifier{}
-											for _, oSignatureAndConditionOrConditionOperatorLessThanQualifier := range oSignatureAndConditionOrCondition.Operator.LessThan.Qualifier {
-												nestedSignatureAndConditionOrConditionOperatorLessThanQualifier := SignatureAndConditionOrConditionOperatorLessThanQualifier{}
-												if oSignatureAndConditionOrConditionOperatorLessThanQualifier.Misc != nil {
-													entry.Misc["SignatureAndConditionOrConditionOperatorLessThanQualifier"] = oSignatureAndConditionOrConditionOperatorLessThanQualifier.Misc
-												}
-												if oSignatureAndConditionOrConditionOperatorLessThanQualifier.Name != "" {
-													nestedSignatureAndConditionOrConditionOperatorLessThanQualifier.Name = oSignatureAndConditionOrConditionOperatorLessThanQualifier.Name
-												}
-												if oSignatureAndConditionOrConditionOperatorLessThanQualifier.Value != nil {
-													nestedSignatureAndConditionOrConditionOperatorLessThanQualifier.Value = oSignatureAndConditionOrConditionOperatorLessThanQualifier.Value
-												}
-												nestedSignatureAndConditionOrCondition.Operator.LessThan.Qualifier = append(nestedSignatureAndConditionOrCondition.Operator.LessThan.Qualifier, nestedSignatureAndConditionOrConditionOperatorLessThanQualifier)
-											}
-										}
-									}
-									if oSignatureAndConditionOrCondition.Operator.EqualTo != nil {
-										nestedSignatureAndConditionOrCondition.Operator.EqualTo = &SignatureAndConditionOrConditionOperatorEqualTo{}
-										if oSignatureAndConditionOrCondition.Operator.EqualTo.Misc != nil {
-											entry.Misc["SignatureAndConditionOrConditionOperatorEqualTo"] = oSignatureAndConditionOrCondition.Operator.EqualTo.Misc
-										}
-										if oSignatureAndConditionOrCondition.Operator.EqualTo.Context != nil {
-											nestedSignatureAndConditionOrCondition.Operator.EqualTo.Context = oSignatureAndConditionOrCondition.Operator.EqualTo.Context
-										}
-										if oSignatureAndConditionOrCondition.Operator.EqualTo.Position != nil {
-											nestedSignatureAndConditionOrCondition.Operator.EqualTo.Position = oSignatureAndConditionOrCondition.Operator.EqualTo.Position
-										}
-										if oSignatureAndConditionOrCondition.Operator.EqualTo.Mask != nil {
-											nestedSignatureAndConditionOrCondition.Operator.EqualTo.Mask = oSignatureAndConditionOrCondition.Operator.EqualTo.Mask
-										}
-										if oSignatureAndConditionOrCondition.Operator.EqualTo.Value != nil {
-											nestedSignatureAndConditionOrCondition.Operator.EqualTo.Value = oSignatureAndConditionOrCondition.Operator.EqualTo.Value
-										}
-									}
-								}
-								nestedSignatureAndCondition.OrCondition = append(nestedSignatureAndCondition.OrCondition, nestedSignatureAndConditionOrCondition)
-							}
-						}
-						nestedSignature.AndCondition = append(nestedSignature.AndCondition, nestedSignatureAndCondition)
-					}
-				}
-				nestedSignatureCol = append(nestedSignatureCol, nestedSignature)
-			}
-			entry.Signature = nestedSignatureCol
-		}
-
-		entry.Subcategory = o.Subcategory
-		entry.TcpHalfClosedTimeout = o.TcpHalfClosedTimeout
-		entry.TcpTimeWaitTimeout = o.TcpTimeWaitTimeout
-		entry.TcpTimeout = o.TcpTimeout
-		entry.Technology = o.Technology
-		entry.Timeout = o.Timeout
-		entry.TunnelApplications = util.AsBool(o.TunnelApplications, nil)
-		entry.TunnelOtherApplication = util.AsBool(o.TunnelOtherApplication, nil)
-		entry.UdpTimeout = o.UdpTimeout
-		entry.UsedByMalware = util.AsBool(o.UsedByMalware, nil)
-		entry.VirusIdent = util.AsBool(o.VirusIdent, nil)
-
-		entry.Misc["Entry"] = o.Misc
-
-		entryList = append(entryList, entry)
-	}
-
-	return entryList, nil
-}
-
 func SpecMatches(a, b *Entry) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+	if a == nil && b == nil {
 		return true
 	}
 
-	// Don't compare Name.
-	if !util.BoolsMatch(a.AbleToTransferFile, b.AbleToTransferFile) {
+	if (a == nil && b != nil) || (a != nil && b == nil) {
 		return false
 	}
-	if !util.StringsMatch(a.AlgDisableCapability, b.AlgDisableCapability) {
+
+	return a.matches(b)
+}
+
+func (o *Entry) matches(other *Entry) bool {
+	if o == nil && other == nil {
+		return true
+	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.StringsMatch(a.Category, b.Category) {
+	if !util.BoolsMatch(o.AbleToTransferFile, other.AbleToTransferFile) {
 		return false
 	}
-	if !util.BoolsMatch(a.ConsumeBigBandwidth, b.ConsumeBigBandwidth) {
+	if !util.StringsMatch(o.AlgDisableCapability, other.AlgDisableCapability) {
 		return false
 	}
-	if !util.BoolsMatch(a.DataIdent, b.DataIdent) {
+	if !util.StringsMatch(o.Category, other.Category) {
 		return false
 	}
-	if !matchDefault(a.Default, b.Default) {
+	if !util.BoolsMatch(o.ConsumeBigBandwidth, other.ConsumeBigBandwidth) {
 		return false
 	}
-	if !util.StringsMatch(a.Description, b.Description) {
+	if !util.BoolsMatch(o.DataIdent, other.DataIdent) {
 		return false
 	}
-	if !util.StringsMatch(a.DisableOverride, b.DisableOverride) {
+	if !o.Default.matches(other.Default) {
 		return false
 	}
-	if !util.BoolsMatch(a.EvasiveBehavior, b.EvasiveBehavior) {
+	if !util.StringsMatch(o.Description, other.Description) {
 		return false
 	}
-	if !util.BoolsMatch(a.FileTypeIdent, b.FileTypeIdent) {
+	if !util.StringsMatch(o.DisableOverride, other.DisableOverride) {
 		return false
 	}
-	if !util.BoolsMatch(a.HasKnownVulnerability, b.HasKnownVulnerability) {
+	if !util.BoolsMatch(o.EvasiveBehavior, other.EvasiveBehavior) {
 		return false
 	}
-	if !util.BoolsMatch(a.NoAppidCaching, b.NoAppidCaching) {
+	if !util.BoolsMatch(o.FileTypeIdent, other.FileTypeIdent) {
 		return false
 	}
-	if !util.StringsMatch(a.ParentApp, b.ParentApp) {
+	if !util.BoolsMatch(o.HasKnownVulnerability, other.HasKnownVulnerability) {
 		return false
 	}
-	if !util.BoolsMatch(a.PervasiveUse, b.PervasiveUse) {
+	if !util.BoolsMatch(o.NoAppidCaching, other.NoAppidCaching) {
 		return false
 	}
-	if !util.BoolsMatch(a.ProneToMisuse, b.ProneToMisuse) {
+	if !util.StringsMatch(o.ParentApp, other.ParentApp) {
 		return false
 	}
-	if !util.Ints64Match(a.Risk, b.Risk) {
+	if !util.BoolsMatch(o.PervasiveUse, other.PervasiveUse) {
 		return false
 	}
-	if !matchSignature(a.Signature, b.Signature) {
+	if !util.BoolsMatch(o.ProneToMisuse, other.ProneToMisuse) {
 		return false
 	}
-	if !util.StringsMatch(a.Subcategory, b.Subcategory) {
+	if !util.Ints64Match(o.Risk, other.Risk) {
 		return false
 	}
-	if !util.Ints64Match(a.TcpHalfClosedTimeout, b.TcpHalfClosedTimeout) {
+	if len(o.Signature) != len(other.Signature) {
 		return false
 	}
-	if !util.Ints64Match(a.TcpTimeWaitTimeout, b.TcpTimeWaitTimeout) {
+	for idx := range o.Signature {
+		if !o.Signature[idx].matches(&other.Signature[idx]) {
+			return false
+		}
+	}
+	if !util.StringsMatch(o.Subcategory, other.Subcategory) {
 		return false
 	}
-	if !util.Ints64Match(a.TcpTimeout, b.TcpTimeout) {
+	if !util.Ints64Match(o.TcpHalfClosedTimeout, other.TcpHalfClosedTimeout) {
 		return false
 	}
-	if !util.StringsMatch(a.Technology, b.Technology) {
+	if !util.Ints64Match(o.TcpTimeWaitTimeout, other.TcpTimeWaitTimeout) {
 		return false
 	}
-	if !util.Ints64Match(a.Timeout, b.Timeout) {
+	if !util.Ints64Match(o.TcpTimeout, other.TcpTimeout) {
 		return false
 	}
-	if !util.BoolsMatch(a.TunnelApplications, b.TunnelApplications) {
+	if !util.StringsMatch(o.Technology, other.Technology) {
 		return false
 	}
-	if !util.BoolsMatch(a.TunnelOtherApplication, b.TunnelOtherApplication) {
+	if !util.Ints64Match(o.Timeout, other.Timeout) {
 		return false
 	}
-	if !util.Ints64Match(a.UdpTimeout, b.UdpTimeout) {
+	if !util.BoolsMatch(o.TunnelApplications, other.TunnelApplications) {
 		return false
 	}
-	if !util.BoolsMatch(a.UsedByMalware, b.UsedByMalware) {
+	if !util.BoolsMatch(o.TunnelOtherApplication, other.TunnelOtherApplication) {
 		return false
 	}
-	if !util.BoolsMatch(a.VirusIdent, b.VirusIdent) {
+	if !util.Ints64Match(o.UdpTimeout, other.UdpTimeout) {
+		return false
+	}
+	if !util.BoolsMatch(o.UsedByMalware, other.UsedByMalware) {
+		return false
+	}
+	if !util.BoolsMatch(o.VirusIdent, other.VirusIdent) {
 		return false
 	}
 
 	return true
 }
 
-func matchDefaultIdentByIcmpType(a *DefaultIdentByIcmpType, b *DefaultIdentByIcmpType) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+func (o *Default) matches(other *Default) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.StringsMatch(a.Code, b.Code) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.StringsMatch(a.Type, b.Type) {
+	if !o.IdentByIcmpType.matches(other.IdentByIcmpType) {
 		return false
 	}
+	if !o.IdentByIcmp6Type.matches(other.IdentByIcmp6Type) {
+		return false
+	}
+	if !util.StringsMatch(o.IdentByIpProtocol, other.IdentByIpProtocol) {
+		return false
+	}
+	if !util.OrderedListsMatch[string](o.Port, other.Port) {
+		return false
+	}
+
 	return true
 }
-func matchDefaultIdentByIcmp6Type(a *DefaultIdentByIcmp6Type, b *DefaultIdentByIcmp6Type) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *DefaultIdentByIcmpType) matches(other *DefaultIdentByIcmpType) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.StringsMatch(a.Code, b.Code) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.StringsMatch(a.Type, b.Type) {
+	if !util.StringsMatch(o.Code, other.Code) {
 		return false
 	}
+	if !util.StringsMatch(o.Type, other.Type) {
+		return false
+	}
+
 	return true
 }
-func matchDefault(a *Default, b *Default) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *DefaultIdentByIcmp6Type) matches(other *DefaultIdentByIcmp6Type) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !matchDefaultIdentByIcmpType(a.IdentByIcmpType, b.IdentByIcmpType) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !matchDefaultIdentByIcmp6Type(a.IdentByIcmp6Type, b.IdentByIcmp6Type) {
+	if !util.StringsMatch(o.Code, other.Code) {
 		return false
 	}
-	if !util.StringsMatch(a.IdentByIpProtocol, b.IdentByIpProtocol) {
+	if !util.StringsMatch(o.Type, other.Type) {
 		return false
 	}
-	if !util.OrderedListsMatch(a.Port, b.Port) {
-		return false
-	}
+
 	return true
 }
-func matchSignatureAndConditionOrConditionOperatorPatternMatchQualifier(a []SignatureAndConditionOrConditionOperatorPatternMatchQualifier, b []SignatureAndConditionOrConditionOperatorPatternMatchQualifier) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *Signature) matches(other *Signature) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	for _, a := range a {
-		for _, b := range b {
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-			if !util.StringsMatch(a.Value, b.Value) {
-				return false
-			}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
+	}
+	if o.Name != other.Name {
+		return false
+	}
+	if !util.StringsMatch(o.Comment, other.Comment) {
+		return false
+	}
+	if !util.StringsMatch(o.Scope, other.Scope) {
+		return false
+	}
+	if !util.BoolsMatch(o.OrderFree, other.OrderFree) {
+		return false
+	}
+	if len(o.AndCondition) != len(other.AndCondition) {
+		return false
+	}
+	for idx := range o.AndCondition {
+		if !o.AndCondition[idx].matches(&other.AndCondition[idx]) {
+			return false
 		}
 	}
+
 	return true
 }
-func matchSignatureAndConditionOrConditionOperatorPatternMatch(a *SignatureAndConditionOrConditionOperatorPatternMatch, b *SignatureAndConditionOrConditionOperatorPatternMatch) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *SignatureAndCondition) matches(other *SignatureAndCondition) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.StringsMatch(a.Context, b.Context) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.StringsMatch(a.Pattern, b.Pattern) {
+	if o.Name != other.Name {
 		return false
 	}
-	if !matchSignatureAndConditionOrConditionOperatorPatternMatchQualifier(a.Qualifier, b.Qualifier) {
+	if len(o.OrCondition) != len(other.OrCondition) {
 		return false
 	}
-	return true
-}
-func matchSignatureAndConditionOrConditionOperatorGreaterThanQualifier(a []SignatureAndConditionOrConditionOperatorGreaterThanQualifier, b []SignatureAndConditionOrConditionOperatorGreaterThanQualifier) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	for _, a := range a {
-		for _, b := range b {
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-			if !util.StringsMatch(a.Value, b.Value) {
-				return false
-			}
+	for idx := range o.OrCondition {
+		if !o.OrCondition[idx].matches(&other.OrCondition[idx]) {
+			return false
 		}
 	}
+
 	return true
 }
-func matchSignatureAndConditionOrConditionOperatorGreaterThan(a *SignatureAndConditionOrConditionOperatorGreaterThan, b *SignatureAndConditionOrConditionOperatorGreaterThan) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *SignatureAndConditionOrCondition) matches(other *SignatureAndConditionOrCondition) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.StringsMatch(a.Context, b.Context) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.Ints64Match(a.Value, b.Value) {
+	if o.Name != other.Name {
 		return false
 	}
-	if !matchSignatureAndConditionOrConditionOperatorGreaterThanQualifier(a.Qualifier, b.Qualifier) {
+	if !o.Operator.matches(other.Operator) {
 		return false
 	}
+
 	return true
 }
-func matchSignatureAndConditionOrConditionOperatorLessThanQualifier(a []SignatureAndConditionOrConditionOperatorLessThanQualifier, b []SignatureAndConditionOrConditionOperatorLessThanQualifier) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *SignatureAndConditionOrConditionOperator) matches(other *SignatureAndConditionOrConditionOperator) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	for _, a := range a {
-		for _, b := range b {
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-			if !util.StringsMatch(a.Value, b.Value) {
-				return false
-			}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
+	}
+	if !o.PatternMatch.matches(other.PatternMatch) {
+		return false
+	}
+	if !o.GreaterThan.matches(other.GreaterThan) {
+		return false
+	}
+	if !o.LessThan.matches(other.LessThan) {
+		return false
+	}
+	if !o.EqualTo.matches(other.EqualTo) {
+		return false
+	}
+
+	return true
+}
+
+func (o *SignatureAndConditionOrConditionOperatorPatternMatch) matches(other *SignatureAndConditionOrConditionOperatorPatternMatch) bool {
+	if o == nil && other == nil {
+		return true
+	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
+	}
+	if !util.StringsMatch(o.Context, other.Context) {
+		return false
+	}
+	if !util.StringsMatch(o.Pattern, other.Pattern) {
+		return false
+	}
+	if len(o.Qualifier) != len(other.Qualifier) {
+		return false
+	}
+	for idx := range o.Qualifier {
+		if !o.Qualifier[idx].matches(&other.Qualifier[idx]) {
+			return false
 		}
 	}
+
 	return true
 }
-func matchSignatureAndConditionOrConditionOperatorLessThan(a *SignatureAndConditionOrConditionOperatorLessThan, b *SignatureAndConditionOrConditionOperatorLessThan) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *SignatureAndConditionOrConditionOperatorPatternMatchQualifier) matches(other *SignatureAndConditionOrConditionOperatorPatternMatchQualifier) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.StringsMatch(a.Context, b.Context) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.Ints64Match(a.Value, b.Value) {
+	if o.Name != other.Name {
 		return false
 	}
-	if !matchSignatureAndConditionOrConditionOperatorLessThanQualifier(a.Qualifier, b.Qualifier) {
+	if !util.StringsMatch(o.Value, other.Value) {
 		return false
 	}
+
 	return true
 }
-func matchSignatureAndConditionOrConditionOperatorEqualTo(a *SignatureAndConditionOrConditionOperatorEqualTo, b *SignatureAndConditionOrConditionOperatorEqualTo) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *SignatureAndConditionOrConditionOperatorGreaterThan) matches(other *SignatureAndConditionOrConditionOperatorGreaterThan) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.StringsMatch(a.Context, b.Context) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.StringsMatch(a.Position, b.Position) {
+	if !util.StringsMatch(o.Context, other.Context) {
 		return false
 	}
-	if !util.StringsMatch(a.Mask, b.Mask) {
+	if !util.Ints64Match(o.Value, other.Value) {
 		return false
 	}
-	if !util.StringsMatch(a.Value, b.Value) {
+	if len(o.Qualifier) != len(other.Qualifier) {
 		return false
 	}
-	return true
-}
-func matchSignatureAndConditionOrConditionOperator(a *SignatureAndConditionOrConditionOperator, b *SignatureAndConditionOrConditionOperator) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !matchSignatureAndConditionOrConditionOperatorPatternMatch(a.PatternMatch, b.PatternMatch) {
-		return false
-	}
-	if !matchSignatureAndConditionOrConditionOperatorGreaterThan(a.GreaterThan, b.GreaterThan) {
-		return false
-	}
-	if !matchSignatureAndConditionOrConditionOperatorLessThan(a.LessThan, b.LessThan) {
-		return false
-	}
-	if !matchSignatureAndConditionOrConditionOperatorEqualTo(a.EqualTo, b.EqualTo) {
-		return false
-	}
-	return true
-}
-func matchSignatureAndConditionOrCondition(a []SignatureAndConditionOrCondition, b []SignatureAndConditionOrCondition) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	for _, a := range a {
-		for _, b := range b {
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-			if !matchSignatureAndConditionOrConditionOperator(a.Operator, b.Operator) {
-				return false
-			}
+	for idx := range o.Qualifier {
+		if !o.Qualifier[idx].matches(&other.Qualifier[idx]) {
+			return false
 		}
 	}
+
 	return true
 }
-func matchSignatureAndCondition(a []SignatureAndCondition, b []SignatureAndCondition) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *SignatureAndConditionOrConditionOperatorGreaterThanQualifier) matches(other *SignatureAndConditionOrConditionOperatorGreaterThanQualifier) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	for _, a := range a {
-		for _, b := range b {
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-			if !matchSignatureAndConditionOrCondition(a.OrCondition, b.OrCondition) {
-				return false
-			}
-		}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
 	}
+	if o.Name != other.Name {
+		return false
+	}
+	if !util.StringsMatch(o.Value, other.Value) {
+		return false
+	}
+
 	return true
 }
-func matchSignature(a []Signature, b []Signature) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *SignatureAndConditionOrConditionOperatorLessThan) matches(other *SignatureAndConditionOrConditionOperatorLessThan) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	for _, a := range a {
-		for _, b := range b {
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-			if !util.StringsMatch(a.Comment, b.Comment) {
-				return false
-			}
-			if !util.StringsMatch(a.Scope, b.Scope) {
-				return false
-			}
-			if !util.BoolsMatch(a.OrderFree, b.OrderFree) {
-				return false
-			}
-			if !matchSignatureAndCondition(a.AndCondition, b.AndCondition) {
-				return false
-			}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
+	}
+	if !util.StringsMatch(o.Context, other.Context) {
+		return false
+	}
+	if !util.Ints64Match(o.Value, other.Value) {
+		return false
+	}
+	if len(o.Qualifier) != len(other.Qualifier) {
+		return false
+	}
+	for idx := range o.Qualifier {
+		if !o.Qualifier[idx].matches(&other.Qualifier[idx]) {
+			return false
 		}
 	}
+
+	return true
+}
+
+func (o *SignatureAndConditionOrConditionOperatorLessThanQualifier) matches(other *SignatureAndConditionOrConditionOperatorLessThanQualifier) bool {
+	if o == nil && other == nil {
+		return true
+	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
+	}
+	if o.Name != other.Name {
+		return false
+	}
+	if !util.StringsMatch(o.Value, other.Value) {
+		return false
+	}
+
+	return true
+}
+
+func (o *SignatureAndConditionOrConditionOperatorEqualTo) matches(other *SignatureAndConditionOrConditionOperatorEqualTo) bool {
+	if o == nil && other == nil {
+		return true
+	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
+	}
+	if !util.StringsMatch(o.Context, other.Context) {
+		return false
+	}
+	if !util.StringsMatch(o.Position, other.Position) {
+		return false
+	}
+	if !util.StringsMatch(o.Mask, other.Mask) {
+		return false
+	}
+	if !util.StringsMatch(o.Value, other.Value) {
+		return false
+	}
+
 	return true
 }
 

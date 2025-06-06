@@ -15,17 +15,15 @@ var (
 )
 
 var (
-	Suffix = []string{"variable"}
+	suffix = []string{"variable", "$name"}
 )
 
 type Entry struct {
 	Name        string
 	Description *string
 	Type        *Type
-
-	Misc map[string][]generic.Xml
+	Misc        []generic.Xml
 }
-
 type Type struct {
 	IpNetmask      *string
 	IpRange        *string
@@ -38,34 +36,115 @@ type Type struct {
 	QosProfile     *string
 	EgressMax      *string
 	LinkTag        *string
+	Misc           []generic.Xml
 }
 
 type entryXmlContainer struct {
 	Answer []entryXml `xml:"entry"`
 }
 
-type entryXml struct {
-	XMLName     xml.Name `xml:"entry"`
-	Name        string   `xml:"name,attr"`
-	Description *string  `xml:"description,omitempty"`
-	Type        *TypeXml `xml:"type,omitempty"`
+func (o *entryXmlContainer) Normalize() ([]*Entry, error) {
+	entries := make([]*Entry, 0, len(o.Answer))
+	for _, elt := range o.Answer {
+		obj, err := elt.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		entries = append(entries, obj)
+	}
 
-	Misc []generic.Xml `xml:",any"`
+	return entries, nil
 }
-type TypeXml struct {
-	AsNumber       *string `xml:"as-number,omitempty"`
-	DeviceId       *string `xml:"device-id,omitempty"`
-	DevicePriority *string `xml:"device-priority,omitempty"`
-	EgressMax      *string `xml:"egress-max,omitempty"`
-	Fqdn           *string `xml:"fqdn,omitempty"`
-	GroupId        *string `xml:"group-id,omitempty"`
-	Interface      *string `xml:"interface,omitempty"`
-	IpNetmask      *string `xml:"ip-netmask,omitempty"`
-	IpRange        *string `xml:"ip-range,omitempty"`
-	LinkTag        *string `xml:"link-tag,omitempty"`
-	QosProfile     *string `xml:"qos-profile,omitempty"`
 
-	Misc []generic.Xml `xml:",any"`
+func specifyEntry(source *Entry) (any, error) {
+	var obj entryXml
+	obj.MarshalFromObject(*source)
+	return obj, nil
+}
+
+type entryXml struct {
+	XMLName     xml.Name      `xml:"entry"`
+	Name        string        `xml:"name,attr"`
+	Description *string       `xml:"description,omitempty"`
+	Type        *typeXml      `xml:"type,omitempty"`
+	Misc        []generic.Xml `xml:",any"`
+}
+type typeXml struct {
+	IpNetmask      *string       `xml:"ip-netmask,omitempty"`
+	IpRange        *string       `xml:"ip-range,omitempty"`
+	Fqdn           *string       `xml:"fqdn,omitempty"`
+	GroupId        *string       `xml:"group-id,omitempty"`
+	DevicePriority *string       `xml:"device-priority,omitempty"`
+	DeviceId       *string       `xml:"device-id,omitempty"`
+	Interface      *string       `xml:"interface,omitempty"`
+	AsNumber       *string       `xml:"as-number,omitempty"`
+	QosProfile     *string       `xml:"qos-profile,omitempty"`
+	EgressMax      *string       `xml:"egress-max,omitempty"`
+	LinkTag        *string       `xml:"link-tag,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+}
+
+func (o *entryXml) MarshalFromObject(s Entry) {
+	o.Name = s.Name
+	o.Description = s.Description
+	if s.Type != nil {
+		var obj typeXml
+		obj.MarshalFromObject(*s.Type)
+		o.Type = &obj
+	}
+	o.Misc = s.Misc
+}
+
+func (o entryXml) UnmarshalToObject() (*Entry, error) {
+	var typeVal *Type
+	if o.Type != nil {
+		obj, err := o.Type.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		typeVal = obj
+	}
+
+	result := &Entry{
+		Name:        o.Name,
+		Description: o.Description,
+		Type:        typeVal,
+		Misc:        o.Misc,
+	}
+	return result, nil
+}
+func (o *typeXml) MarshalFromObject(s Type) {
+	o.IpNetmask = s.IpNetmask
+	o.IpRange = s.IpRange
+	o.Fqdn = s.Fqdn
+	o.GroupId = s.GroupId
+	o.DevicePriority = s.DevicePriority
+	o.DeviceId = s.DeviceId
+	o.Interface = s.Interface
+	o.AsNumber = s.AsNumber
+	o.QosProfile = s.QosProfile
+	o.EgressMax = s.EgressMax
+	o.LinkTag = s.LinkTag
+	o.Misc = s.Misc
+}
+
+func (o typeXml) UnmarshalToObject() (*Type, error) {
+
+	result := &Type{
+		IpNetmask:      o.IpNetmask,
+		IpRange:        o.IpRange,
+		Fqdn:           o.Fqdn,
+		GroupId:        o.GroupId,
+		DevicePriority: o.DevicePriority,
+		DeviceId:       o.DeviceId,
+		Interface:      o.Interface,
+		AsNumber:       o.AsNumber,
+		QosProfile:     o.QosProfile,
+		EgressMax:      o.EgressMax,
+		LinkTag:        o.LinkTag,
+		Misc:           o.Misc,
+	}
+	return result, nil
 }
 
 func (e *Entry) Field(v string) (any, error) {
@@ -86,172 +165,78 @@ func Versioning(vn version.Number) (Specifier, Normalizer, error) {
 
 	return specifyEntry, &entryXmlContainer{}, nil
 }
-func specifyEntry(o *Entry) (any, error) {
-	entry := entryXml{}
-	entry.Name = o.Name
-	entry.Description = o.Description
-	var nestedType *TypeXml
-	if o.Type != nil {
-		nestedType = &TypeXml{}
-		if _, ok := o.Misc["Type"]; ok {
-			nestedType.Misc = o.Misc["Type"]
-		}
-		if o.Type.IpNetmask != nil {
-			nestedType.IpNetmask = o.Type.IpNetmask
-		}
-		if o.Type.IpRange != nil {
-			nestedType.IpRange = o.Type.IpRange
-		}
-		if o.Type.Fqdn != nil {
-			nestedType.Fqdn = o.Type.Fqdn
-		}
-		if o.Type.GroupId != nil {
-			nestedType.GroupId = o.Type.GroupId
-		}
-		if o.Type.DevicePriority != nil {
-			nestedType.DevicePriority = o.Type.DevicePriority
-		}
-		if o.Type.DeviceId != nil {
-			nestedType.DeviceId = o.Type.DeviceId
-		}
-		if o.Type.Interface != nil {
-			nestedType.Interface = o.Type.Interface
-		}
-		if o.Type.AsNumber != nil {
-			nestedType.AsNumber = o.Type.AsNumber
-		}
-		if o.Type.QosProfile != nil {
-			nestedType.QosProfile = o.Type.QosProfile
-		}
-		if o.Type.EgressMax != nil {
-			nestedType.EgressMax = o.Type.EgressMax
-		}
-		if o.Type.LinkTag != nil {
-			nestedType.LinkTag = o.Type.LinkTag
-		}
-	}
-	entry.Type = nestedType
-
-	entry.Misc = o.Misc["Entry"]
-
-	return entry, nil
-}
-
-func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
-	entryList := make([]*Entry, 0, len(c.Answer))
-	for _, o := range c.Answer {
-		entry := &Entry{
-			Misc: make(map[string][]generic.Xml),
-		}
-		entry.Name = o.Name
-		entry.Description = o.Description
-		var nestedType *Type
-		if o.Type != nil {
-			nestedType = &Type{}
-			if o.Type.Misc != nil {
-				entry.Misc["Type"] = o.Type.Misc
-			}
-			if o.Type.IpNetmask != nil {
-				nestedType.IpNetmask = o.Type.IpNetmask
-			}
-			if o.Type.IpRange != nil {
-				nestedType.IpRange = o.Type.IpRange
-			}
-			if o.Type.Fqdn != nil {
-				nestedType.Fqdn = o.Type.Fqdn
-			}
-			if o.Type.GroupId != nil {
-				nestedType.GroupId = o.Type.GroupId
-			}
-			if o.Type.DevicePriority != nil {
-				nestedType.DevicePriority = o.Type.DevicePriority
-			}
-			if o.Type.DeviceId != nil {
-				nestedType.DeviceId = o.Type.DeviceId
-			}
-			if o.Type.Interface != nil {
-				nestedType.Interface = o.Type.Interface
-			}
-			if o.Type.AsNumber != nil {
-				nestedType.AsNumber = o.Type.AsNumber
-			}
-			if o.Type.QosProfile != nil {
-				nestedType.QosProfile = o.Type.QosProfile
-			}
-			if o.Type.EgressMax != nil {
-				nestedType.EgressMax = o.Type.EgressMax
-			}
-			if o.Type.LinkTag != nil {
-				nestedType.LinkTag = o.Type.LinkTag
-			}
-		}
-		entry.Type = nestedType
-
-		entry.Misc["Entry"] = o.Misc
-
-		entryList = append(entryList, entry)
-	}
-
-	return entryList, nil
-}
-
 func SpecMatches(a, b *Entry) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+	if a == nil && b == nil {
 		return true
 	}
 
-	// Don't compare Name.
-	if !util.StringsMatch(a.Description, b.Description) {
+	if (a == nil && b != nil) || (a != nil && b == nil) {
 		return false
 	}
-	if !matchType(a.Type, b.Type) {
+
+	return a.matches(b)
+}
+
+func (o *Entry) matches(other *Entry) bool {
+	if o == nil && other == nil {
+		return true
+	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
+	}
+	if !util.StringsMatch(o.Description, other.Description) {
+		return false
+	}
+	if !o.Type.matches(other.Type) {
 		return false
 	}
 
 	return true
 }
 
-func matchType(a *Type, b *Type) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+func (o *Type) matches(other *Type) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.StringsMatch(a.IpNetmask, b.IpNetmask) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.StringsMatch(a.IpRange, b.IpRange) {
+	if !util.StringsMatch(o.IpNetmask, other.IpNetmask) {
 		return false
 	}
-	if !util.StringsMatch(a.Fqdn, b.Fqdn) {
+	if !util.StringsMatch(o.IpRange, other.IpRange) {
 		return false
 	}
-	if !util.StringsMatch(a.GroupId, b.GroupId) {
+	if !util.StringsMatch(o.Fqdn, other.Fqdn) {
 		return false
 	}
-	if !util.StringsMatch(a.DevicePriority, b.DevicePriority) {
+	if !util.StringsMatch(o.GroupId, other.GroupId) {
 		return false
 	}
-	if !util.StringsMatch(a.DeviceId, b.DeviceId) {
+	if !util.StringsMatch(o.DevicePriority, other.DevicePriority) {
 		return false
 	}
-	if !util.StringsMatch(a.Interface, b.Interface) {
+	if !util.StringsMatch(o.DeviceId, other.DeviceId) {
 		return false
 	}
-	if !util.StringsMatch(a.AsNumber, b.AsNumber) {
+	if !util.StringsMatch(o.Interface, other.Interface) {
 		return false
 	}
-	if !util.StringsMatch(a.QosProfile, b.QosProfile) {
+	if !util.StringsMatch(o.AsNumber, other.AsNumber) {
 		return false
 	}
-	if !util.StringsMatch(a.EgressMax, b.EgressMax) {
+	if !util.StringsMatch(o.QosProfile, other.QosProfile) {
 		return false
 	}
-	if !util.StringsMatch(a.LinkTag, b.LinkTag) {
+	if !util.StringsMatch(o.EgressMax, other.EgressMax) {
 		return false
 	}
+	if !util.StringsMatch(o.LinkTag, other.LinkTag) {
+		return false
+	}
+
 	return true
 }
 

@@ -10,183 +10,223 @@ import (
 
 type Config struct {
 	DisabledSslExcludeCertFromPredefined []string
-	RootCaExcludeList                    []string
-	SslExcludeCert                       []SslExcludeCert
-	TrustedRootCa                        []string
 	ForwardTrustCertificateEcdsa         *string
 	ForwardTrustCertificateRsa           *string
 	ForwardUntrustCertificateEcdsa       *string
 	ForwardUntrustCertificateRsa         *string
-
-	Misc map[string][]generic.Xml
+	RootCaExcludeList                    []string
+	SslExcludeCert                       []SslExcludeCert
+	TrustedRootCa                        []string
+	Misc                                 []generic.Xml
 }
 type SslExcludeCert struct {
 	Name        string
 	Description *string
 	Exclude     *bool
+	Misc        []generic.Xml
 }
+
 type configXmlContainer struct {
 	XMLName xml.Name    `xml:"result"`
 	Answer  []configXml `xml:"system"`
 }
-type configXml struct {
-	XMLName                              xml.Name            `xml:"system"`
-	DisabledSslExcludeCertFromPredefined *util.MemberType    `xml:"disabled-ssl-exclude-cert-from-predefined,omitempty"`
-	ForwardTrustCertificateEcdsa         *string             `xml:"forward-trust-certificate>ecdsa,omitempty"`
-	ForwardTrustCertificateRsa           *string             `xml:"forward-trust-certificate>rsa,omitempty"`
-	ForwardUntrustCertificateEcdsa       *string             `xml:"forward-untrust-certificate>ecdsa,omitempty"`
-	ForwardUntrustCertificateRsa         *string             `xml:"forward-untrust-certificate>rsa,omitempty"`
-	RootCaExcludeList                    *util.MemberType    `xml:"root-ca-exclude-list,omitempty"`
-	SslExcludeCert                       []SslExcludeCertXml `xml:"ssl-exclude-cert>entry,omitempty"`
-	TrustedRootCa                        *util.MemberType    `xml:"trusted-root-CA,omitempty"`
 
-	Misc []generic.Xml `xml:",any"`
+func (o *configXmlContainer) Normalize() ([]*Config, error) {
+	entries := make([]*Config, 0, len(o.Answer))
+	for _, elt := range o.Answer {
+		obj, err := elt.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		entries = append(entries, obj)
+	}
+
+	return entries, nil
 }
-type SslExcludeCertXml struct {
-	Description *string `xml:"description,omitempty"`
-	Exclude     *string `xml:"exclude,omitempty"`
-	Name        string  `xml:"name,attr"`
 
-	Misc []generic.Xml `xml:",any"`
+func specifyConfig(source *Config) (any, error) {
+	var obj configXml
+	obj.MarshalFromObject(*source)
+	return obj, nil
+}
+
+type configXml struct {
+	XMLName                              xml.Name                    `xml:"system"`
+	DisabledSslExcludeCertFromPredefined *util.MemberType            `xml:"disabled-ssl-exclude-cert-from-predefined,omitempty"`
+	ForwardTrustCertificateEcdsa         *string                     `xml:"forward-trust-certificate>ecdsa,omitempty"`
+	ForwardTrustCertificateRsa           *string                     `xml:"forward-trust-certificate>rsa,omitempty"`
+	ForwardUntrustCertificateEcdsa       *string                     `xml:"forward-untrust-certificate>ecdsa,omitempty"`
+	ForwardUntrustCertificateRsa         *string                     `xml:"forward-untrust-certificate>rsa,omitempty"`
+	RootCaExcludeList                    *util.MemberType            `xml:"root-ca-exclude-list,omitempty"`
+	SslExcludeCert                       *sslExcludeCertContainerXml `xml:"ssl-exclude-cert,omitempty"`
+	TrustedRootCa                        *util.MemberType            `xml:"trusted-root-CA,omitempty"`
+	Misc                                 []generic.Xml               `xml:",any"`
+}
+type sslExcludeCertContainerXml struct {
+	Entries []sslExcludeCertXml `xml:"entry"`
+}
+type sslExcludeCertXml struct {
+	XMLName     xml.Name      `xml:"entry"`
+	Name        string        `xml:"name,attr"`
+	Description *string       `xml:"description,omitempty"`
+	Exclude     *string       `xml:"exclude,omitempty"`
+	Misc        []generic.Xml `xml:",any"`
+}
+
+func (o *configXml) MarshalFromObject(s Config) {
+	if s.DisabledSslExcludeCertFromPredefined != nil {
+		o.DisabledSslExcludeCertFromPredefined = util.StrToMem(s.DisabledSslExcludeCertFromPredefined)
+	}
+	o.ForwardTrustCertificateEcdsa = s.ForwardTrustCertificateEcdsa
+	o.ForwardTrustCertificateRsa = s.ForwardTrustCertificateRsa
+	o.ForwardUntrustCertificateEcdsa = s.ForwardUntrustCertificateEcdsa
+	o.ForwardUntrustCertificateRsa = s.ForwardUntrustCertificateRsa
+	if s.RootCaExcludeList != nil {
+		o.RootCaExcludeList = util.StrToMem(s.RootCaExcludeList)
+	}
+	if s.SslExcludeCert != nil {
+		var objs []sslExcludeCertXml
+		for _, elt := range s.SslExcludeCert {
+			var obj sslExcludeCertXml
+			obj.MarshalFromObject(elt)
+			objs = append(objs, obj)
+		}
+		o.SslExcludeCert = &sslExcludeCertContainerXml{Entries: objs}
+	}
+	if s.TrustedRootCa != nil {
+		o.TrustedRootCa = util.StrToMem(s.TrustedRootCa)
+	}
+	o.Misc = s.Misc
+}
+
+func (o configXml) UnmarshalToObject() (*Config, error) {
+	var disabledSslExcludeCertFromPredefinedVal []string
+	if o.DisabledSslExcludeCertFromPredefined != nil {
+		disabledSslExcludeCertFromPredefinedVal = util.MemToStr(o.DisabledSslExcludeCertFromPredefined)
+	}
+	var rootCaExcludeListVal []string
+	if o.RootCaExcludeList != nil {
+		rootCaExcludeListVal = util.MemToStr(o.RootCaExcludeList)
+	}
+	var sslExcludeCertVal []SslExcludeCert
+	if o.SslExcludeCert != nil {
+		for _, elt := range o.SslExcludeCert.Entries {
+			obj, err := elt.UnmarshalToObject()
+			if err != nil {
+				return nil, err
+			}
+			sslExcludeCertVal = append(sslExcludeCertVal, *obj)
+		}
+	}
+	var trustedRootCaVal []string
+	if o.TrustedRootCa != nil {
+		trustedRootCaVal = util.MemToStr(o.TrustedRootCa)
+	}
+
+	result := &Config{
+		DisabledSslExcludeCertFromPredefined: disabledSslExcludeCertFromPredefinedVal,
+		ForwardTrustCertificateEcdsa:         o.ForwardTrustCertificateEcdsa,
+		ForwardTrustCertificateRsa:           o.ForwardTrustCertificateRsa,
+		ForwardUntrustCertificateEcdsa:       o.ForwardUntrustCertificateEcdsa,
+		ForwardUntrustCertificateRsa:         o.ForwardUntrustCertificateRsa,
+		RootCaExcludeList:                    rootCaExcludeListVal,
+		SslExcludeCert:                       sslExcludeCertVal,
+		TrustedRootCa:                        trustedRootCaVal,
+		Misc:                                 o.Misc,
+	}
+	return result, nil
+}
+func (o *sslExcludeCertXml) MarshalFromObject(s SslExcludeCert) {
+	o.Name = s.Name
+	o.Description = s.Description
+	o.Exclude = util.YesNo(s.Exclude, nil)
+	o.Misc = s.Misc
+}
+
+func (o sslExcludeCertXml) UnmarshalToObject() (*SslExcludeCert, error) {
+
+	result := &SslExcludeCert{
+		Name:        o.Name,
+		Description: o.Description,
+		Exclude:     util.AsBool(o.Exclude, nil),
+		Misc:        o.Misc,
+	}
+	return result, nil
 }
 
 func Versioning(vn version.Number) (Specifier, Normalizer, error) {
 	return specifyConfig, &configXmlContainer{}, nil
 }
-func specifyConfig(o *Config) (any, error) {
-	config := configXml{}
-	config.DisabledSslExcludeCertFromPredefined = util.StrToMem(o.DisabledSslExcludeCertFromPredefined)
-	config.ForwardTrustCertificateEcdsa = o.ForwardTrustCertificateEcdsa
-	config.ForwardTrustCertificateRsa = o.ForwardTrustCertificateRsa
-	config.ForwardUntrustCertificateEcdsa = o.ForwardUntrustCertificateEcdsa
-	config.ForwardUntrustCertificateRsa = o.ForwardUntrustCertificateRsa
-	config.RootCaExcludeList = util.StrToMem(o.RootCaExcludeList)
-	var nestedSslExcludeCertCol []SslExcludeCertXml
-	if o.SslExcludeCert != nil {
-		nestedSslExcludeCertCol = []SslExcludeCertXml{}
-		for _, oSslExcludeCert := range o.SslExcludeCert {
-			nestedSslExcludeCert := SslExcludeCertXml{}
-			if _, ok := o.Misc["SslExcludeCert"]; ok {
-				nestedSslExcludeCert.Misc = o.Misc["SslExcludeCert"]
-			}
-			if oSslExcludeCert.Name != "" {
-				nestedSslExcludeCert.Name = oSslExcludeCert.Name
-			}
-			if oSslExcludeCert.Description != nil {
-				nestedSslExcludeCert.Description = oSslExcludeCert.Description
-			}
-			if oSslExcludeCert.Exclude != nil {
-				nestedSslExcludeCert.Exclude = util.YesNo(oSslExcludeCert.Exclude, nil)
-			}
-			nestedSslExcludeCertCol = append(nestedSslExcludeCertCol, nestedSslExcludeCert)
-		}
-		config.SslExcludeCert = nestedSslExcludeCertCol
-	}
-
-	config.TrustedRootCa = util.StrToMem(o.TrustedRootCa)
-
-	config.Misc = o.Misc["Config"]
-
-	return config, nil
-}
-func (c *configXmlContainer) Normalize() ([]*Config, error) {
-	configList := make([]*Config, 0, len(c.Answer))
-	for _, o := range c.Answer {
-		config := &Config{
-			Misc: make(map[string][]generic.Xml),
-		}
-		config.DisabledSslExcludeCertFromPredefined = util.MemToStr(o.DisabledSslExcludeCertFromPredefined)
-		config.ForwardTrustCertificateEcdsa = o.ForwardTrustCertificateEcdsa
-		config.ForwardTrustCertificateRsa = o.ForwardTrustCertificateRsa
-		config.ForwardUntrustCertificateEcdsa = o.ForwardUntrustCertificateEcdsa
-		config.ForwardUntrustCertificateRsa = o.ForwardUntrustCertificateRsa
-		config.RootCaExcludeList = util.MemToStr(o.RootCaExcludeList)
-		var nestedSslExcludeCertCol []SslExcludeCert
-		if o.SslExcludeCert != nil {
-			nestedSslExcludeCertCol = []SslExcludeCert{}
-			for _, oSslExcludeCert := range o.SslExcludeCert {
-				nestedSslExcludeCert := SslExcludeCert{}
-				if oSslExcludeCert.Misc != nil {
-					config.Misc["SslExcludeCert"] = oSslExcludeCert.Misc
-				}
-				if oSslExcludeCert.Name != "" {
-					nestedSslExcludeCert.Name = oSslExcludeCert.Name
-				}
-				if oSslExcludeCert.Description != nil {
-					nestedSslExcludeCert.Description = oSslExcludeCert.Description
-				}
-				if oSslExcludeCert.Exclude != nil {
-					nestedSslExcludeCert.Exclude = util.AsBool(oSslExcludeCert.Exclude, nil)
-				}
-				nestedSslExcludeCertCol = append(nestedSslExcludeCertCol, nestedSslExcludeCert)
-			}
-			config.SslExcludeCert = nestedSslExcludeCertCol
-		}
-
-		config.TrustedRootCa = util.MemToStr(o.TrustedRootCa)
-
-		config.Misc["Config"] = o.Misc
-
-		configList = append(configList, config)
-	}
-
-	return configList, nil
-}
-
 func SpecMatches(a, b *Config) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+	if a == nil && b == nil {
 		return true
 	}
 
-	// Don't compare Name.
-	if !util.OrderedListsMatch(a.DisabledSslExcludeCertFromPredefined, b.DisabledSslExcludeCertFromPredefined) {
+	if (a == nil && b != nil) || (a != nil && b == nil) {
 		return false
 	}
-	if !util.OrderedListsMatch(a.RootCaExcludeList, b.RootCaExcludeList) {
+
+	return a.matches(b)
+}
+
+func (o *Config) matches(other *Config) bool {
+	if o == nil && other == nil {
+		return true
+	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !matchSslExcludeCert(a.SslExcludeCert, b.SslExcludeCert) {
+	if !util.OrderedListsMatch[string](o.DisabledSslExcludeCertFromPredefined, other.DisabledSslExcludeCertFromPredefined) {
 		return false
 	}
-	if !util.OrderedListsMatch(a.TrustedRootCa, b.TrustedRootCa) {
+	if !util.StringsMatch(o.ForwardTrustCertificateEcdsa, other.ForwardTrustCertificateEcdsa) {
 		return false
 	}
-	if !util.StringsMatch(a.ForwardTrustCertificateEcdsa, b.ForwardTrustCertificateEcdsa) {
+	if !util.StringsMatch(o.ForwardTrustCertificateRsa, other.ForwardTrustCertificateRsa) {
 		return false
 	}
-	if !util.StringsMatch(a.ForwardTrustCertificateRsa, b.ForwardTrustCertificateRsa) {
+	if !util.StringsMatch(o.ForwardUntrustCertificateEcdsa, other.ForwardUntrustCertificateEcdsa) {
 		return false
 	}
-	if !util.StringsMatch(a.ForwardUntrustCertificateEcdsa, b.ForwardUntrustCertificateEcdsa) {
+	if !util.StringsMatch(o.ForwardUntrustCertificateRsa, other.ForwardUntrustCertificateRsa) {
 		return false
 	}
-	if !util.StringsMatch(a.ForwardUntrustCertificateRsa, b.ForwardUntrustCertificateRsa) {
+	if !util.OrderedListsMatch[string](o.RootCaExcludeList, other.RootCaExcludeList) {
+		return false
+	}
+	if len(o.SslExcludeCert) != len(other.SslExcludeCert) {
+		return false
+	}
+	for idx := range o.SslExcludeCert {
+		if !o.SslExcludeCert[idx].matches(&other.SslExcludeCert[idx]) {
+			return false
+		}
+	}
+	if !util.OrderedListsMatch[string](o.TrustedRootCa, other.TrustedRootCa) {
 		return false
 	}
 
 	return true
 }
 
-func matchSslExcludeCert(a []SslExcludeCert, b []SslExcludeCert) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+func (o *SslExcludeCert) matches(other *SslExcludeCert) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	for _, a := range a {
-		for _, b := range b {
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-			if !util.StringsMatch(a.Description, b.Description) {
-				return false
-			}
-			if !util.BoolsMatch(a.Exclude, b.Exclude) {
-				return false
-			}
-		}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
 	}
+	if o.Name != other.Name {
+		return false
+	}
+	if !util.StringsMatch(o.Description, other.Description) {
+		return false
+	}
+	if !util.BoolsMatch(o.Exclude, other.Exclude) {
+		return false
+	}
+
 	return true
 }

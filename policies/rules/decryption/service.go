@@ -32,94 +32,71 @@ func (s *Service) Create(ctx context.Context, loc Location, entry *Entry) (*Entr
 	}
 
 	vn := s.client.Versioning()
-
-	specifier, _, err := Versioning(vn)
+	path, err := loc.XpathWithComponents(vn, util.AsEntryXpath(entry.Name))
 	if err != nil {
 		return nil, err
 	}
-	path, err := loc.XpathWithEntryName(vn, entry.Name)
+	err = s.CreateWithXpath(ctx, util.AsXpath(path[:len(path)-1]), entry)
 	if err != nil {
 		return nil, err
+	}
+
+	return s.ReadWithXpath(ctx, util.AsXpath(path), "get")
+}
+
+func (s *Service) CreateWithXpath(ctx context.Context, xpath string, entry *Entry) error {
+	vn := s.client.Versioning()
+	specifier, _, err := Versioning(vn)
+	if err != nil {
+		return err
 	}
 	createSpec, err := specifier(entry)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	cmd := &xmlapi.Config{
 		Action:  "set",
-		Xpath:   util.AsXpath(path[:len(path)-1]),
+		Xpath:   xpath,
 		Element: createSpec,
 		Target:  s.client.GetTarget(),
 	}
 
 	if _, _, err = s.client.Communicate(ctx, cmd, false, nil); err != nil {
-		return nil, err
+		return err
 	}
-	return s.Read(ctx, loc, entry.Name, "get")
+
+	return nil
 }
 
 // Read returns the given config object, using the specified action ("get" or "show").
 func (s *Service) Read(ctx context.Context, loc Location, name, action string) (*Entry, error) {
-	return s.read(ctx, loc, name, action, true, false)
+	return s.read(ctx, loc, name, action, true)
 }
 
 // ReadById returns the given config object with specified ID, using the specified action ("get" or "show").
 func (s *Service) ReadById(ctx context.Context, loc Location, uuid, action string) (*Entry, error) {
-	return s.read(ctx, loc, uuid, action, false, false)
+	return s.read(ctx, loc, uuid, action, false)
 }
 
-// ReadFromConfig returns the given config object from the loaded XML config.
-// Requires that client.LoadPanosConfig() has been invoked.
-func (s *Service) ReadFromConfig(ctx context.Context, loc Location, name string) (*Entry, error) {
-	return s.read(ctx, loc, name, "", true, true)
-}
-
-// ReadFromConfigById returns the given config object with specified ID from the loaded XML config.
-// Requires that client.LoadPanosConfig() has been invoked.
-func (s *Service) ReadFromConfigById(ctx context.Context, loc Location, uuid string) (*Entry, error) {
-	return s.read(ctx, loc, uuid, "", false, true)
-}
-
-func (s *Service) read(ctx context.Context, loc Location, value, action string, byName, usePanosConfig bool) (*Entry, error) {
-	if byName && value == "" {
-		return nil, errors.NameNotSpecifiedError
-	}
-	if !byName && value == "" {
-		return nil, errors.UuidNotSpecifiedError
-	}
+func (s *Service) ReadWithXpath(ctx context.Context, xpath string, action string) (*Entry, error) {
 	vn := s.client.Versioning()
 	_, normalizer, err := Versioning(vn)
 	if err != nil {
 		return nil, err
 	}
-	var path []string
-	if byName {
-		path, err = loc.XpathWithEntryName(vn, value)
-	} else {
-		path, err = loc.XpathWithUuid(vn, value)
+
+	cmd := &xmlapi.Config{
+		Action: action,
+		Xpath:  xpath,
+		Target: s.client.GetTarget(),
 	}
-	if err != nil {
+
+	if _, _, err = s.client.Communicate(ctx, cmd, true, normalizer); err != nil {
+		if err.Error() == "No such node" && action == "show" {
+			return nil, errors.ObjectNotFound()
+		}
 		return nil, err
-	}
-
-	if usePanosConfig {
-		if _, err = s.client.ReadFromConfig(ctx, path, true, normalizer); err != nil {
-			return nil, err
-		}
-	} else {
-		cmd := &xmlapi.Config{
-			Action: action,
-			Xpath:  util.AsXpath(path),
-			Target: s.client.GetTarget(),
-		}
-
-		if _, _, err = s.client.Communicate(ctx, cmd, true, normalizer); err != nil {
-			if err.Error() == "No such node" && action == "show" {
-				return nil, errors.ObjectNotFound()
-			}
-			return nil, err
-		}
 	}
 
 	list, err := normalizer.Normalize()
@@ -132,70 +109,89 @@ func (s *Service) read(ctx context.Context, loc Location, value, action string, 
 	return list[0], nil
 }
 
-// Update updates the given config object, then returns the result.
-func (s *Service) Update(ctx context.Context, loc Location, entry *Entry, name string) (*Entry, error) {
-	return s.update(ctx, loc, entry, name, true)
-}
-
-// UpdateById updates the given config object, then returns the result.
-func (s *Service) UpdateById(ctx context.Context, loc Location, entry *Entry, uuid string) (*Entry, error) {
-	return s.update(ctx, loc, entry, uuid, false)
-}
-func (s *Service) update(ctx context.Context, loc Location, entry *Entry, value string, byName bool) (*Entry, error) {
-	if byName && entry.Name == "" {
+func (s *Service) read(ctx context.Context, loc Location, value, action string, byName bool) (*Entry, error) {
+	if byName && value == "" {
 		return nil, errors.NameNotSpecifiedError
 	}
+
 	if !byName && value == "" {
 		return nil, errors.UuidNotSpecifiedError
 	}
+	vn := s.client.Versioning()
+	var path []string
+	var err error
+	path, err = loc.XpathWithComponents(vn, value)
+	if err != nil {
+		return nil, err
+	}
 
+	return s.ReadWithXpath(ctx, util.AsXpath(path), action)
+}
+
+func (s *Service) Update(ctx context.Context, loc Location, entry *Entry, name string) (*Entry, error) {
+	if entry.Name == "" {
+		return nil, errors.NameNotSpecifiedError
+	}
+
+	xpath, err := loc.XpathWithComponents(s.client.Versioning(), entry.Name)
+	if err != nil {
+		return nil, err
+	}
+
+	err = s.UpdateWithXpath(ctx, util.AsXpath(xpath), entry, name)
+	if err != nil {
+		return nil, err
+	}
+
+	return s.ReadWithXpath(ctx, util.AsXpath(xpath), "get")
+}
+func (s *Service) UpdateWithXpath(ctx context.Context, xpath string, entry *Entry, name string) error {
 	vn := s.client.Versioning()
 	updates := xmlapi.NewMultiConfig(2)
 	specifier, _, err := Versioning(vn)
 	if err != nil {
-		return nil, err
+		return err
 	}
+
 	var old *Entry
-	if byName {
-		if value != "" && value != entry.Name {
-			path, err := loc.XpathWithEntryName(vn, value)
-			if err != nil {
-				return nil, err
-			}
-
-			old, err = s.Read(ctx, loc, value, "get")
-
-			updates.Add(&xmlapi.Config{
-				Action:  "rename",
-				Xpath:   util.AsXpath(path),
-				NewName: entry.Name,
-				Target:  s.client.GetTarget(),
-			})
-		} else {
-			old, err = s.Read(ctx, loc, entry.Name, "get")
-		}
-	} else {
-		old, err = s.ReadById(ctx, loc, value, "get")
-	}
-	if err != nil {
-		return nil, err
-	} else if old == nil {
-		return nil, fmt.Errorf("previous object doesn't exist for update")
-	}
-	if !SpecMatches(entry, old) {
-		path, err := loc.XpathWithEntryName(vn, entry.Name)
+	if name != "" && name != entry.Name {
+		old, err = s.ReadWithXpath(ctx, xpath, "get")
 		if err != nil {
-			return nil, err
+			return err
+		}
+
+		if old != nil {
+			return errors.ObjectExists
+		}
+
+		updates.Add(&xmlapi.Config{
+			Action:  "rename",
+			Xpath:   util.AsXpath(xpath),
+			NewName: entry.Name,
+			Target:  s.client.GetTarget(),
+		})
+	} else {
+		old, err = s.ReadWithXpath(ctx, xpath, "get")
+		if err != nil {
+			return err
+		}
+
+		if old == nil {
+			return errors.ObjectNotFound()
+		}
+
+		if SpecMatches(entry, old) {
+			return nil
 		}
 
 		updateSpec, err := specifier(entry)
 		if err != nil {
-			return nil, err
+			return err
 		}
 
 		updates.Add(&xmlapi.Config{
 			Action:  "edit",
-			Xpath:   util.AsXpath(path),
+			Xpath:   util.AsXpath(xpath),
 			Element: updateSpec,
 			Target:  s.client.GetTarget(),
 		})
@@ -203,14 +199,11 @@ func (s *Service) update(ctx context.Context, loc Location, entry *Entry, value 
 
 	if len(updates.Operations) != 0 {
 		if _, _, _, err = s.client.MultiConfig(ctx, updates, false, nil); err != nil {
-			return nil, err
+			return err
 		}
 	}
-	if byName {
-		return s.Read(ctx, loc, entry.Name, "get")
-	} else {
-		return s.ReadById(ctx, loc, value, "get")
-	}
+
+	return nil
 }
 
 // Delete deletes the given item.
@@ -237,11 +230,7 @@ func (s *Service) delete(ctx context.Context, loc Location, values []string, byN
 	deletes := xmlapi.NewMultiConfig(len(values))
 	for _, value := range values {
 		var path []string
-		if byName {
-			path, err = loc.XpathWithEntryName(vn, value)
-		} else {
-			path, err = loc.XpathWithUuid(vn, value)
-		}
+		path, err = loc.XpathWithComponents(vn, util.AsEntryXpath(value))
 		if err != nil {
 			return err
 		}
@@ -260,21 +249,22 @@ func (s *Service) delete(ctx context.Context, loc Location, values []string, byN
 // List returns a list of objects using the given action ("get" or "show").
 // Params filter and quote are for client side filtering.
 func (s *Service) List(ctx context.Context, loc Location, action, filter, quote string) ([]*Entry, error) {
-	return s.list(ctx, loc, action, filter, quote, false)
+	return s.list(ctx, loc, action, filter, quote)
 }
 
-// ListFromConfig returns a list of objects at the given location.
-// Requires that client.LoadPanosConfig() has been invoked.
-// Params filter and quote are for client side filtering.
-func (s *Service) ListFromConfig(ctx context.Context, loc Location, filter, quote string) ([]*Entry, error) {
-	return s.list(ctx, loc, "", filter, quote, true)
+func (s *Service) list(ctx context.Context, loc Location, action, filter, quote string) ([]*Entry, error) {
+	xpath, err := loc.XpathWithComponents(s.client.Versioning(), util.AsEntryXpath(""))
+	if err != nil {
+		return nil, err
+	}
+
+	return s.ListWithXpath(ctx, util.AsXpath(xpath), action, filter, quote)
 }
 
-func (s *Service) list(ctx context.Context, loc Location, action, filter, quote string, usePanosConfig bool) ([]*Entry, error) {
-	var err error
-
+func (s *Service) ListWithXpath(ctx context.Context, xpath string, action, filter, quote string) ([]*Entry, error) {
 	var logic *filtering.Group
 	if filter != "" {
+		var err error
 		logic, err = filtering.Parse(filter, quote)
 		if err != nil {
 			return nil, err
@@ -288,28 +278,17 @@ func (s *Service) list(ctx context.Context, loc Location, action, filter, quote 
 		return nil, err
 	}
 
-	path, err := loc.XpathWithEntryName(vn, "")
-	if err != nil {
-		return nil, err
+	cmd := &xmlapi.Config{
+		Action: action,
+		Xpath:  util.AsXpath(xpath),
+		Target: s.client.GetTarget(),
 	}
 
-	if usePanosConfig {
-		if _, err = s.client.ReadFromConfig(ctx, path, false, normalizer); err != nil {
-			return nil, err
+	if _, _, err = s.client.Communicate(ctx, cmd, true, normalizer); err != nil {
+		if err.Error() == "No such node" && action == "show" {
+			return nil, nil
 		}
-	} else {
-		cmd := &xmlapi.Config{
-			Action: action,
-			Xpath:  util.AsXpath(path),
-			Target: s.client.GetTarget(),
-		}
-
-		if _, _, err = s.client.Communicate(ctx, cmd, true, normalizer); err != nil {
-			if err.Error() == "No such node" && action == "show" {
-				return nil, nil
-			}
-			return nil, err
-		}
+		return nil, err
 	}
 
 	listing, err := normalizer.Normalize()
@@ -354,7 +333,7 @@ func (s *Service) MoveGroup(ctx context.Context, loc Location, position movement
 	updates := xmlapi.NewChunkedMultiConfig(len(movements), batchSize)
 
 	for _, elt := range movements {
-		path, err := loc.XpathWithEntryName(s.client.Versioning(), elt.Movable.EntryName())
+		path, err := loc.XpathWithComponents(s.client.Versioning(), util.AsEntryXpath(elt.Movable.EntryName()))
 		if err != nil {
 			return err
 		}
@@ -416,7 +395,7 @@ func (s *Service) SetAuditComment(ctx context.Context, loc Location, name, comme
 
 	vn := s.client.Versioning()
 
-	path, err := loc.XpathWithEntryName(vn, name)
+	path, err := loc.XpathWithComponents(vn, name)
 	if err != nil {
 		return err
 	}
@@ -441,7 +420,7 @@ func (s *Service) CurrentAuditComment(ctx context.Context, loc Location, name st
 
 	vn := s.client.Versioning()
 
-	path, err := loc.XpathWithEntryName(vn, name)
+	path, err := loc.XpathWithComponents(vn, name)
 	if err != nil {
 		return "", err
 	}

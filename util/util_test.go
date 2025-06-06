@@ -106,9 +106,9 @@ func BenchmarkAsXpath(b *testing.B) {
 	p := []string{
 		"config",
 		"devices",
-		AsEntryXpath([]string{"localhost.localdomain"}),
+		AsEntryXpath("localhost.localdomain"),
 		"vsys",
-		AsEntryXpath([]string{"vsys1"}),
+		AsEntryXpath("vsys1"),
 		"import",
 		"network",
 	}
@@ -124,7 +124,7 @@ func BenchmarkAsEntryXpathMultiple(b *testing.B) {
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
-		_ = AsEntryXpath(v)
+		_ = AsEntryXpath(v...)
 	}
 }
 
@@ -159,7 +159,7 @@ func TestAsEntryXpath(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.r, func(t *testing.T) {
-			if AsEntryXpath(tc.v) != tc.r {
+			if AsEntryXpath(tc.v...) != tc.r {
 				t.Fail()
 			}
 		})

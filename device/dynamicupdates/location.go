@@ -113,7 +113,7 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 		ans = []string{
 			"config",
 			"devices",
-			util.AsEntryXpath([]string{o.System.NgfwDevice}),
+			util.AsEntryXpath(o.System.NgfwDevice),
 			"deviceconfig",
 			"system",
 		}
@@ -130,12 +130,12 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 		ans = []string{
 			"config",
 			"devices",
-			util.AsEntryXpath([]string{o.Template.PanoramaDevice}),
+			util.AsEntryXpath(o.Template.PanoramaDevice),
 			"template",
-			util.AsEntryXpath([]string{o.Template.Template}),
+			util.AsEntryXpath(o.Template.Template),
 			"config",
 			"devices",
-			util.AsEntryXpath([]string{o.Template.NgfwDevice}),
+			util.AsEntryXpath(o.Template.NgfwDevice),
 			"deviceconfig",
 			"system",
 		}
@@ -152,12 +152,12 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 		ans = []string{
 			"config",
 			"devices",
-			util.AsEntryXpath([]string{o.TemplateStack.PanoramaDevice}),
+			util.AsEntryXpath(o.TemplateStack.PanoramaDevice),
 			"template-stack",
-			util.AsEntryXpath([]string{o.TemplateStack.TemplateStack}),
+			util.AsEntryXpath(o.TemplateStack.TemplateStack),
 			"config",
 			"devices",
-			util.AsEntryXpath([]string{o.TemplateStack.NgfwDevice}),
+			util.AsEntryXpath(o.TemplateStack.NgfwDevice),
 			"deviceconfig",
 			"system",
 		}
@@ -167,7 +167,11 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 
 	return ans, nil
 }
-func (o Location) Xpath(vn version.Number) ([]string, error) {
+
+func (o Location) XpathWithComponents(vn version.Number, components ...string) ([]string, error) {
+	if len(components) != 0 {
+		return nil, fmt.Errorf("invalid number of arguments for XpathWithComponents() call")
+	}
 
 	ans, err := o.XpathPrefix(vn)
 	if err != nil {

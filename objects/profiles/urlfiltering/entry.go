@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{"profiles", "url-filtering"}
+	suffix = []string{"profiles", "url-filtering", "$name"}
 )
 
 type Entry struct {
@@ -38,10 +38,8 @@ type Entry struct {
 	MlavCategoryException []string
 	Override              []string
 	SafeSearchEnforcement *bool
-
-	Misc map[string][]generic.Xml
+	Misc                  []generic.Xml
 }
-
 type CredentialEnforcement struct {
 	Alert       []string
 	Allow       []string
@@ -49,112 +47,503 @@ type CredentialEnforcement struct {
 	Continue    []string
 	LogSeverity *string
 	Mode        *CredentialEnforcementMode
+	Misc        []generic.Xml
 }
 type CredentialEnforcementMode struct {
 	Disabled          *CredentialEnforcementModeDisabled
 	DomainCredentials *CredentialEnforcementModeDomainCredentials
 	GroupMapping      *string
 	IpUser            *CredentialEnforcementModeIpUser
+	Misc              []generic.Xml
 }
 type CredentialEnforcementModeDisabled struct {
+	Misc []generic.Xml
 }
 type CredentialEnforcementModeDomainCredentials struct {
+	Misc []generic.Xml
 }
 type CredentialEnforcementModeIpUser struct {
+	Misc []generic.Xml
 }
 type HttpHeaderInsertion struct {
 	Name            string
 	DisableOverride *string
 	Type            []HttpHeaderInsertionType
+	Misc            []generic.Xml
 }
 type HttpHeaderInsertionType struct {
 	Name    string
 	Headers []HttpHeaderInsertionTypeHeaders
 	Domains []string
+	Misc    []generic.Xml
 }
 type HttpHeaderInsertionTypeHeaders struct {
 	Name   string
 	Header *string
 	Value  *string
 	Log    *bool
+	Misc   []generic.Xml
 }
 
 type entryXmlContainer struct {
 	Answer []entryXml `xml:"entry"`
 }
 
-type entryXml struct {
-	XMLName               xml.Name                  `xml:"entry"`
-	Name                  string                    `xml:"name,attr"`
-	Alert                 *util.MemberType          `xml:"alert,omitempty"`
-	Allow                 *util.MemberType          `xml:"allow,omitempty"`
-	Block                 *util.MemberType          `xml:"block,omitempty"`
-	CloudInlineCat        *string                   `xml:"cloud-inline-cat,omitempty"`
-	Continue              *util.MemberType          `xml:"continue,omitempty"`
-	CredentialEnforcement *CredentialEnforcementXml `xml:"credential-enforcement,omitempty"`
-	Description           *string                   `xml:"description,omitempty"`
-	DisableOverride       *string                   `xml:"disable-override,omitempty"`
-	EnableContainerPage   *string                   `xml:"enable-container-page,omitempty"`
-	HttpHeaderInsertion   []HttpHeaderInsertionXml  `xml:"http-header-insertion>entry,omitempty"`
-	LocalInlineCat        *string                   `xml:"local-inline-cat,omitempty"`
-	LogContainerPageOnly  *string                   `xml:"log-container-page-only,omitempty"`
-	LogHttpHdrReferer     *string                   `xml:"log-http-hdr-referer,omitempty"`
-	LogHttpHdrUserAgent   *string                   `xml:"log-http-hdr-user-agent,omitempty"`
-	LogHttpHdrXff         *string                   `xml:"log-http-hdr-xff,omitempty"`
-	MlavCategoryException *util.MemberType          `xml:"mlav-category-exception,omitempty"`
-	Override              *util.MemberType          `xml:"override,omitempty"`
-	SafeSearchEnforcement *string                   `xml:"safe-search-enforcement,omitempty"`
+func (o *entryXmlContainer) Normalize() ([]*Entry, error) {
+	entries := make([]*Entry, 0, len(o.Answer))
+	for _, elt := range o.Answer {
+		obj, err := elt.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		entries = append(entries, obj)
+	}
 
-	Misc []generic.Xml `xml:",any"`
+	return entries, nil
 }
-type CredentialEnforcementXml struct {
+
+func specifyEntry(source *Entry) (any, error) {
+	var obj entryXml
+	obj.MarshalFromObject(*source)
+	return obj, nil
+}
+
+type entryXml struct {
+	XMLName               xml.Name                         `xml:"entry"`
+	Name                  string                           `xml:"name,attr"`
+	Alert                 *util.MemberType                 `xml:"alert,omitempty"`
+	Allow                 *util.MemberType                 `xml:"allow,omitempty"`
+	Block                 *util.MemberType                 `xml:"block,omitempty"`
+	CloudInlineCat        *string                          `xml:"cloud-inline-cat,omitempty"`
+	Continue              *util.MemberType                 `xml:"continue,omitempty"`
+	CredentialEnforcement *credentialEnforcementXml        `xml:"credential-enforcement,omitempty"`
+	Description           *string                          `xml:"description,omitempty"`
+	DisableOverride       *string                          `xml:"disable-override,omitempty"`
+	EnableContainerPage   *string                          `xml:"enable-container-page,omitempty"`
+	HttpHeaderInsertion   *httpHeaderInsertionContainerXml `xml:"http-header-insertion,omitempty"`
+	LocalInlineCat        *string                          `xml:"local-inline-cat,omitempty"`
+	LogContainerPageOnly  *string                          `xml:"log-container-page-only,omitempty"`
+	LogHttpHdrReferer     *string                          `xml:"log-http-hdr-referer,omitempty"`
+	LogHttpHdrUserAgent   *string                          `xml:"log-http-hdr-user-agent,omitempty"`
+	LogHttpHdrXff         *string                          `xml:"log-http-hdr-xff,omitempty"`
+	MlavCategoryException *util.MemberType                 `xml:"mlav-category-exception,omitempty"`
+	Override              *util.MemberType                 `xml:"override,omitempty"`
+	SafeSearchEnforcement *string                          `xml:"safe-search-enforcement,omitempty"`
+	Misc                  []generic.Xml                    `xml:",any"`
+}
+type credentialEnforcementXml struct {
 	Alert       *util.MemberType              `xml:"alert,omitempty"`
 	Allow       *util.MemberType              `xml:"allow,omitempty"`
 	Block       *util.MemberType              `xml:"block,omitempty"`
 	Continue    *util.MemberType              `xml:"continue,omitempty"`
 	LogSeverity *string                       `xml:"log-severity,omitempty"`
-	Mode        *CredentialEnforcementModeXml `xml:"mode,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
+	Mode        *credentialEnforcementModeXml `xml:"mode,omitempty"`
+	Misc        []generic.Xml                 `xml:",any"`
 }
-type CredentialEnforcementModeXml struct {
-	Disabled          *CredentialEnforcementModeDisabledXml          `xml:"disabled,omitempty"`
-	DomainCredentials *CredentialEnforcementModeDomainCredentialsXml `xml:"domain-credentials,omitempty"`
+type credentialEnforcementModeXml struct {
+	Disabled          *credentialEnforcementModeDisabledXml          `xml:"disabled,omitempty"`
+	DomainCredentials *credentialEnforcementModeDomainCredentialsXml `xml:"domain-credentials,omitempty"`
 	GroupMapping      *string                                        `xml:"group-mapping,omitempty"`
-	IpUser            *CredentialEnforcementModeIpUserXml            `xml:"ip-user,omitempty"`
+	IpUser            *credentialEnforcementModeIpUserXml            `xml:"ip-user,omitempty"`
+	Misc              []generic.Xml                                  `xml:",any"`
+}
+type credentialEnforcementModeDisabledXml struct {
+	Misc []generic.Xml `xml:",any"`
+}
+type credentialEnforcementModeDomainCredentialsXml struct {
+	Misc []generic.Xml `xml:",any"`
+}
+type credentialEnforcementModeIpUserXml struct {
+	Misc []generic.Xml `xml:",any"`
+}
+type httpHeaderInsertionContainerXml struct {
+	Entries []httpHeaderInsertionXml `xml:"entry"`
+}
+type httpHeaderInsertionXml struct {
+	XMLName         xml.Name                             `xml:"entry"`
+	Name            string                               `xml:"name,attr"`
+	DisableOverride *string                              `xml:"disable-override,omitempty"`
+	Type            *httpHeaderInsertionTypeContainerXml `xml:"type,omitempty"`
+	Misc            []generic.Xml                        `xml:",any"`
+}
+type httpHeaderInsertionTypeContainerXml struct {
+	Entries []httpHeaderInsertionTypeXml `xml:"entry"`
+}
+type httpHeaderInsertionTypeXml struct {
+	XMLName xml.Name                                    `xml:"entry"`
+	Name    string                                      `xml:"name,attr"`
+	Headers *httpHeaderInsertionTypeHeadersContainerXml `xml:"headers,omitempty"`
+	Domains *util.MemberType                            `xml:"domains,omitempty"`
+	Misc    []generic.Xml                               `xml:",any"`
+}
+type httpHeaderInsertionTypeHeadersContainerXml struct {
+	Entries []httpHeaderInsertionTypeHeadersXml `xml:"entry"`
+}
+type httpHeaderInsertionTypeHeadersXml struct {
+	XMLName xml.Name      `xml:"entry"`
+	Name    string        `xml:"name,attr"`
+	Header  *string       `xml:"header,omitempty"`
+	Value   *string       `xml:"value,omitempty"`
+	Log     *string       `xml:"log,omitempty"`
+	Misc    []generic.Xml `xml:",any"`
+}
 
-	Misc []generic.Xml `xml:",any"`
+func (o *entryXml) MarshalFromObject(s Entry) {
+	o.Name = s.Name
+	if s.Alert != nil {
+		o.Alert = util.StrToMem(s.Alert)
+	}
+	if s.Allow != nil {
+		o.Allow = util.StrToMem(s.Allow)
+	}
+	if s.Block != nil {
+		o.Block = util.StrToMem(s.Block)
+	}
+	o.CloudInlineCat = util.YesNo(s.CloudInlineCat, nil)
+	if s.Continue != nil {
+		o.Continue = util.StrToMem(s.Continue)
+	}
+	if s.CredentialEnforcement != nil {
+		var obj credentialEnforcementXml
+		obj.MarshalFromObject(*s.CredentialEnforcement)
+		o.CredentialEnforcement = &obj
+	}
+	o.Description = s.Description
+	o.DisableOverride = s.DisableOverride
+	o.EnableContainerPage = util.YesNo(s.EnableContainerPage, nil)
+	if s.HttpHeaderInsertion != nil {
+		var objs []httpHeaderInsertionXml
+		for _, elt := range s.HttpHeaderInsertion {
+			var obj httpHeaderInsertionXml
+			obj.MarshalFromObject(elt)
+			objs = append(objs, obj)
+		}
+		o.HttpHeaderInsertion = &httpHeaderInsertionContainerXml{Entries: objs}
+	}
+	o.LocalInlineCat = util.YesNo(s.LocalInlineCat, nil)
+	o.LogContainerPageOnly = util.YesNo(s.LogContainerPageOnly, nil)
+	o.LogHttpHdrReferer = util.YesNo(s.LogHttpHdrReferer, nil)
+	o.LogHttpHdrUserAgent = util.YesNo(s.LogHttpHdrUserAgent, nil)
+	o.LogHttpHdrXff = util.YesNo(s.LogHttpHdrXff, nil)
+	if s.MlavCategoryException != nil {
+		o.MlavCategoryException = util.StrToMem(s.MlavCategoryException)
+	}
+	if s.Override != nil {
+		o.Override = util.StrToMem(s.Override)
+	}
+	o.SafeSearchEnforcement = util.YesNo(s.SafeSearchEnforcement, nil)
+	o.Misc = s.Misc
 }
-type CredentialEnforcementModeDisabledXml struct {
-	Misc []generic.Xml `xml:",any"`
-}
-type CredentialEnforcementModeDomainCredentialsXml struct {
-	Misc []generic.Xml `xml:",any"`
-}
-type CredentialEnforcementModeIpUserXml struct {
-	Misc []generic.Xml `xml:",any"`
-}
-type HttpHeaderInsertionXml struct {
-	DisableOverride *string                      `xml:"disable-override,omitempty"`
-	Name            string                       `xml:"name,attr"`
-	Type            []HttpHeaderInsertionTypeXml `xml:"type>entry,omitempty"`
 
-	Misc []generic.Xml `xml:",any"`
-}
-type HttpHeaderInsertionTypeXml struct {
-	Domains *util.MemberType                    `xml:"domains,omitempty"`
-	Headers []HttpHeaderInsertionTypeHeadersXml `xml:"headers>entry,omitempty"`
-	Name    string                              `xml:"name,attr"`
+func (o entryXml) UnmarshalToObject() (*Entry, error) {
+	var alertVal []string
+	if o.Alert != nil {
+		alertVal = util.MemToStr(o.Alert)
+	}
+	var allowVal []string
+	if o.Allow != nil {
+		allowVal = util.MemToStr(o.Allow)
+	}
+	var blockVal []string
+	if o.Block != nil {
+		blockVal = util.MemToStr(o.Block)
+	}
+	var continueVal []string
+	if o.Continue != nil {
+		continueVal = util.MemToStr(o.Continue)
+	}
+	var credentialEnforcementVal *CredentialEnforcement
+	if o.CredentialEnforcement != nil {
+		obj, err := o.CredentialEnforcement.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		credentialEnforcementVal = obj
+	}
+	var httpHeaderInsertionVal []HttpHeaderInsertion
+	if o.HttpHeaderInsertion != nil {
+		for _, elt := range o.HttpHeaderInsertion.Entries {
+			obj, err := elt.UnmarshalToObject()
+			if err != nil {
+				return nil, err
+			}
+			httpHeaderInsertionVal = append(httpHeaderInsertionVal, *obj)
+		}
+	}
+	var mlavCategoryExceptionVal []string
+	if o.MlavCategoryException != nil {
+		mlavCategoryExceptionVal = util.MemToStr(o.MlavCategoryException)
+	}
+	var overrideVal []string
+	if o.Override != nil {
+		overrideVal = util.MemToStr(o.Override)
+	}
 
-	Misc []generic.Xml `xml:",any"`
+	result := &Entry{
+		Name:                  o.Name,
+		Alert:                 alertVal,
+		Allow:                 allowVal,
+		Block:                 blockVal,
+		CloudInlineCat:        util.AsBool(o.CloudInlineCat, nil),
+		Continue:              continueVal,
+		CredentialEnforcement: credentialEnforcementVal,
+		Description:           o.Description,
+		DisableOverride:       o.DisableOverride,
+		EnableContainerPage:   util.AsBool(o.EnableContainerPage, nil),
+		HttpHeaderInsertion:   httpHeaderInsertionVal,
+		LocalInlineCat:        util.AsBool(o.LocalInlineCat, nil),
+		LogContainerPageOnly:  util.AsBool(o.LogContainerPageOnly, nil),
+		LogHttpHdrReferer:     util.AsBool(o.LogHttpHdrReferer, nil),
+		LogHttpHdrUserAgent:   util.AsBool(o.LogHttpHdrUserAgent, nil),
+		LogHttpHdrXff:         util.AsBool(o.LogHttpHdrXff, nil),
+		MlavCategoryException: mlavCategoryExceptionVal,
+		Override:              overrideVal,
+		SafeSearchEnforcement: util.AsBool(o.SafeSearchEnforcement, nil),
+		Misc:                  o.Misc,
+	}
+	return result, nil
 }
-type HttpHeaderInsertionTypeHeadersXml struct {
-	Header *string `xml:"header,omitempty"`
-	Log    *string `xml:"log,omitempty"`
-	Name   string  `xml:"name,attr"`
-	Value  *string `xml:"value,omitempty"`
+func (o *credentialEnforcementXml) MarshalFromObject(s CredentialEnforcement) {
+	if s.Alert != nil {
+		o.Alert = util.StrToMem(s.Alert)
+	}
+	if s.Allow != nil {
+		o.Allow = util.StrToMem(s.Allow)
+	}
+	if s.Block != nil {
+		o.Block = util.StrToMem(s.Block)
+	}
+	if s.Continue != nil {
+		o.Continue = util.StrToMem(s.Continue)
+	}
+	o.LogSeverity = s.LogSeverity
+	if s.Mode != nil {
+		var obj credentialEnforcementModeXml
+		obj.MarshalFromObject(*s.Mode)
+		o.Mode = &obj
+	}
+	o.Misc = s.Misc
+}
 
-	Misc []generic.Xml `xml:",any"`
+func (o credentialEnforcementXml) UnmarshalToObject() (*CredentialEnforcement, error) {
+	var alertVal []string
+	if o.Alert != nil {
+		alertVal = util.MemToStr(o.Alert)
+	}
+	var allowVal []string
+	if o.Allow != nil {
+		allowVal = util.MemToStr(o.Allow)
+	}
+	var blockVal []string
+	if o.Block != nil {
+		blockVal = util.MemToStr(o.Block)
+	}
+	var continueVal []string
+	if o.Continue != nil {
+		continueVal = util.MemToStr(o.Continue)
+	}
+	var modeVal *CredentialEnforcementMode
+	if o.Mode != nil {
+		obj, err := o.Mode.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		modeVal = obj
+	}
+
+	result := &CredentialEnforcement{
+		Alert:       alertVal,
+		Allow:       allowVal,
+		Block:       blockVal,
+		Continue:    continueVal,
+		LogSeverity: o.LogSeverity,
+		Mode:        modeVal,
+		Misc:        o.Misc,
+	}
+	return result, nil
+}
+func (o *credentialEnforcementModeXml) MarshalFromObject(s CredentialEnforcementMode) {
+	if s.Disabled != nil {
+		var obj credentialEnforcementModeDisabledXml
+		obj.MarshalFromObject(*s.Disabled)
+		o.Disabled = &obj
+	}
+	if s.DomainCredentials != nil {
+		var obj credentialEnforcementModeDomainCredentialsXml
+		obj.MarshalFromObject(*s.DomainCredentials)
+		o.DomainCredentials = &obj
+	}
+	o.GroupMapping = s.GroupMapping
+	if s.IpUser != nil {
+		var obj credentialEnforcementModeIpUserXml
+		obj.MarshalFromObject(*s.IpUser)
+		o.IpUser = &obj
+	}
+	o.Misc = s.Misc
+}
+
+func (o credentialEnforcementModeXml) UnmarshalToObject() (*CredentialEnforcementMode, error) {
+	var disabledVal *CredentialEnforcementModeDisabled
+	if o.Disabled != nil {
+		obj, err := o.Disabled.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		disabledVal = obj
+	}
+	var domainCredentialsVal *CredentialEnforcementModeDomainCredentials
+	if o.DomainCredentials != nil {
+		obj, err := o.DomainCredentials.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		domainCredentialsVal = obj
+	}
+	var ipUserVal *CredentialEnforcementModeIpUser
+	if o.IpUser != nil {
+		obj, err := o.IpUser.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		ipUserVal = obj
+	}
+
+	result := &CredentialEnforcementMode{
+		Disabled:          disabledVal,
+		DomainCredentials: domainCredentialsVal,
+		GroupMapping:      o.GroupMapping,
+		IpUser:            ipUserVal,
+		Misc:              o.Misc,
+	}
+	return result, nil
+}
+func (o *credentialEnforcementModeDisabledXml) MarshalFromObject(s CredentialEnforcementModeDisabled) {
+	o.Misc = s.Misc
+}
+
+func (o credentialEnforcementModeDisabledXml) UnmarshalToObject() (*CredentialEnforcementModeDisabled, error) {
+
+	result := &CredentialEnforcementModeDisabled{
+		Misc: o.Misc,
+	}
+	return result, nil
+}
+func (o *credentialEnforcementModeDomainCredentialsXml) MarshalFromObject(s CredentialEnforcementModeDomainCredentials) {
+	o.Misc = s.Misc
+}
+
+func (o credentialEnforcementModeDomainCredentialsXml) UnmarshalToObject() (*CredentialEnforcementModeDomainCredentials, error) {
+
+	result := &CredentialEnforcementModeDomainCredentials{
+		Misc: o.Misc,
+	}
+	return result, nil
+}
+func (o *credentialEnforcementModeIpUserXml) MarshalFromObject(s CredentialEnforcementModeIpUser) {
+	o.Misc = s.Misc
+}
+
+func (o credentialEnforcementModeIpUserXml) UnmarshalToObject() (*CredentialEnforcementModeIpUser, error) {
+
+	result := &CredentialEnforcementModeIpUser{
+		Misc: o.Misc,
+	}
+	return result, nil
+}
+func (o *httpHeaderInsertionXml) MarshalFromObject(s HttpHeaderInsertion) {
+	o.Name = s.Name
+	o.DisableOverride = s.DisableOverride
+	if s.Type != nil {
+		var objs []httpHeaderInsertionTypeXml
+		for _, elt := range s.Type {
+			var obj httpHeaderInsertionTypeXml
+			obj.MarshalFromObject(elt)
+			objs = append(objs, obj)
+		}
+		o.Type = &httpHeaderInsertionTypeContainerXml{Entries: objs}
+	}
+	o.Misc = s.Misc
+}
+
+func (o httpHeaderInsertionXml) UnmarshalToObject() (*HttpHeaderInsertion, error) {
+	var typeVal []HttpHeaderInsertionType
+	if o.Type != nil {
+		for _, elt := range o.Type.Entries {
+			obj, err := elt.UnmarshalToObject()
+			if err != nil {
+				return nil, err
+			}
+			typeVal = append(typeVal, *obj)
+		}
+	}
+
+	result := &HttpHeaderInsertion{
+		Name:            o.Name,
+		DisableOverride: o.DisableOverride,
+		Type:            typeVal,
+		Misc:            o.Misc,
+	}
+	return result, nil
+}
+func (o *httpHeaderInsertionTypeXml) MarshalFromObject(s HttpHeaderInsertionType) {
+	o.Name = s.Name
+	if s.Headers != nil {
+		var objs []httpHeaderInsertionTypeHeadersXml
+		for _, elt := range s.Headers {
+			var obj httpHeaderInsertionTypeHeadersXml
+			obj.MarshalFromObject(elt)
+			objs = append(objs, obj)
+		}
+		o.Headers = &httpHeaderInsertionTypeHeadersContainerXml{Entries: objs}
+	}
+	if s.Domains != nil {
+		o.Domains = util.StrToMem(s.Domains)
+	}
+	o.Misc = s.Misc
+}
+
+func (o httpHeaderInsertionTypeXml) UnmarshalToObject() (*HttpHeaderInsertionType, error) {
+	var headersVal []HttpHeaderInsertionTypeHeaders
+	if o.Headers != nil {
+		for _, elt := range o.Headers.Entries {
+			obj, err := elt.UnmarshalToObject()
+			if err != nil {
+				return nil, err
+			}
+			headersVal = append(headersVal, *obj)
+		}
+	}
+	var domainsVal []string
+	if o.Domains != nil {
+		domainsVal = util.MemToStr(o.Domains)
+	}
+
+	result := &HttpHeaderInsertionType{
+		Name:    o.Name,
+		Headers: headersVal,
+		Domains: domainsVal,
+		Misc:    o.Misc,
+	}
+	return result, nil
+}
+func (o *httpHeaderInsertionTypeHeadersXml) MarshalFromObject(s HttpHeaderInsertionTypeHeaders) {
+	o.Name = s.Name
+	o.Header = s.Header
+	o.Value = s.Value
+	o.Log = util.YesNo(s.Log, nil)
+	o.Misc = s.Misc
+}
+
+func (o httpHeaderInsertionTypeHeadersXml) UnmarshalToObject() (*HttpHeaderInsertionTypeHeaders, error) {
+
+	result := &HttpHeaderInsertionTypeHeaders{
+		Name:   o.Name,
+		Header: o.Header,
+		Value:  o.Value,
+		Log:    util.AsBool(o.Log, nil),
+		Misc:   o.Misc,
+	}
+	return result, nil
 }
 
 func (e *Entry) Field(v string) (any, error) {
@@ -244,479 +633,252 @@ func Versioning(vn version.Number) (Specifier, Normalizer, error) {
 
 	return specifyEntry, &entryXmlContainer{}, nil
 }
-func specifyEntry(o *Entry) (any, error) {
-	entry := entryXml{}
-	entry.Name = o.Name
-	entry.Alert = util.StrToMem(o.Alert)
-	entry.Allow = util.StrToMem(o.Allow)
-	entry.Block = util.StrToMem(o.Block)
-	entry.CloudInlineCat = util.YesNo(o.CloudInlineCat, nil)
-	entry.Continue = util.StrToMem(o.Continue)
-	var nestedCredentialEnforcement *CredentialEnforcementXml
-	if o.CredentialEnforcement != nil {
-		nestedCredentialEnforcement = &CredentialEnforcementXml{}
-		if _, ok := o.Misc["CredentialEnforcement"]; ok {
-			nestedCredentialEnforcement.Misc = o.Misc["CredentialEnforcement"]
-		}
-		if o.CredentialEnforcement.Alert != nil {
-			nestedCredentialEnforcement.Alert = util.StrToMem(o.CredentialEnforcement.Alert)
-		}
-		if o.CredentialEnforcement.Allow != nil {
-			nestedCredentialEnforcement.Allow = util.StrToMem(o.CredentialEnforcement.Allow)
-		}
-		if o.CredentialEnforcement.Block != nil {
-			nestedCredentialEnforcement.Block = util.StrToMem(o.CredentialEnforcement.Block)
-		}
-		if o.CredentialEnforcement.Continue != nil {
-			nestedCredentialEnforcement.Continue = util.StrToMem(o.CredentialEnforcement.Continue)
-		}
-		if o.CredentialEnforcement.LogSeverity != nil {
-			nestedCredentialEnforcement.LogSeverity = o.CredentialEnforcement.LogSeverity
-		}
-		if o.CredentialEnforcement.Mode != nil {
-			nestedCredentialEnforcement.Mode = &CredentialEnforcementModeXml{}
-			if _, ok := o.Misc["CredentialEnforcementMode"]; ok {
-				nestedCredentialEnforcement.Mode.Misc = o.Misc["CredentialEnforcementMode"]
-			}
-			if o.CredentialEnforcement.Mode.Disabled != nil {
-				nestedCredentialEnforcement.Mode.Disabled = &CredentialEnforcementModeDisabledXml{}
-				if _, ok := o.Misc["CredentialEnforcementModeDisabled"]; ok {
-					nestedCredentialEnforcement.Mode.Disabled.Misc = o.Misc["CredentialEnforcementModeDisabled"]
-				}
-			}
-			if o.CredentialEnforcement.Mode.DomainCredentials != nil {
-				nestedCredentialEnforcement.Mode.DomainCredentials = &CredentialEnforcementModeDomainCredentialsXml{}
-				if _, ok := o.Misc["CredentialEnforcementModeDomainCredentials"]; ok {
-					nestedCredentialEnforcement.Mode.DomainCredentials.Misc = o.Misc["CredentialEnforcementModeDomainCredentials"]
-				}
-			}
-			if o.CredentialEnforcement.Mode.GroupMapping != nil {
-				nestedCredentialEnforcement.Mode.GroupMapping = o.CredentialEnforcement.Mode.GroupMapping
-			}
-			if o.CredentialEnforcement.Mode.IpUser != nil {
-				nestedCredentialEnforcement.Mode.IpUser = &CredentialEnforcementModeIpUserXml{}
-				if _, ok := o.Misc["CredentialEnforcementModeIpUser"]; ok {
-					nestedCredentialEnforcement.Mode.IpUser.Misc = o.Misc["CredentialEnforcementModeIpUser"]
-				}
-			}
-		}
-	}
-	entry.CredentialEnforcement = nestedCredentialEnforcement
-
-	entry.Description = o.Description
-	entry.DisableOverride = o.DisableOverride
-	entry.EnableContainerPage = util.YesNo(o.EnableContainerPage, nil)
-	var nestedHttpHeaderInsertionCol []HttpHeaderInsertionXml
-	if o.HttpHeaderInsertion != nil {
-		nestedHttpHeaderInsertionCol = []HttpHeaderInsertionXml{}
-		for _, oHttpHeaderInsertion := range o.HttpHeaderInsertion {
-			nestedHttpHeaderInsertion := HttpHeaderInsertionXml{}
-			if _, ok := o.Misc["HttpHeaderInsertion"]; ok {
-				nestedHttpHeaderInsertion.Misc = o.Misc["HttpHeaderInsertion"]
-			}
-			if oHttpHeaderInsertion.Name != "" {
-				nestedHttpHeaderInsertion.Name = oHttpHeaderInsertion.Name
-			}
-			if oHttpHeaderInsertion.DisableOverride != nil {
-				nestedHttpHeaderInsertion.DisableOverride = oHttpHeaderInsertion.DisableOverride
-			}
-			if oHttpHeaderInsertion.Type != nil {
-				nestedHttpHeaderInsertion.Type = []HttpHeaderInsertionTypeXml{}
-				for _, oHttpHeaderInsertionType := range oHttpHeaderInsertion.Type {
-					nestedHttpHeaderInsertionType := HttpHeaderInsertionTypeXml{}
-					if _, ok := o.Misc["HttpHeaderInsertionType"]; ok {
-						nestedHttpHeaderInsertionType.Misc = o.Misc["HttpHeaderInsertionType"]
-					}
-					if oHttpHeaderInsertionType.Name != "" {
-						nestedHttpHeaderInsertionType.Name = oHttpHeaderInsertionType.Name
-					}
-					if oHttpHeaderInsertionType.Headers != nil {
-						nestedHttpHeaderInsertionType.Headers = []HttpHeaderInsertionTypeHeadersXml{}
-						for _, oHttpHeaderInsertionTypeHeaders := range oHttpHeaderInsertionType.Headers {
-							nestedHttpHeaderInsertionTypeHeaders := HttpHeaderInsertionTypeHeadersXml{}
-							if _, ok := o.Misc["HttpHeaderInsertionTypeHeaders"]; ok {
-								nestedHttpHeaderInsertionTypeHeaders.Misc = o.Misc["HttpHeaderInsertionTypeHeaders"]
-							}
-							if oHttpHeaderInsertionTypeHeaders.Name != "" {
-								nestedHttpHeaderInsertionTypeHeaders.Name = oHttpHeaderInsertionTypeHeaders.Name
-							}
-							if oHttpHeaderInsertionTypeHeaders.Header != nil {
-								nestedHttpHeaderInsertionTypeHeaders.Header = oHttpHeaderInsertionTypeHeaders.Header
-							}
-							if oHttpHeaderInsertionTypeHeaders.Value != nil {
-								nestedHttpHeaderInsertionTypeHeaders.Value = oHttpHeaderInsertionTypeHeaders.Value
-							}
-							if oHttpHeaderInsertionTypeHeaders.Log != nil {
-								nestedHttpHeaderInsertionTypeHeaders.Log = util.YesNo(oHttpHeaderInsertionTypeHeaders.Log, nil)
-							}
-							nestedHttpHeaderInsertionType.Headers = append(nestedHttpHeaderInsertionType.Headers, nestedHttpHeaderInsertionTypeHeaders)
-						}
-					}
-					if oHttpHeaderInsertionType.Domains != nil {
-						nestedHttpHeaderInsertionType.Domains = util.StrToMem(oHttpHeaderInsertionType.Domains)
-					}
-					nestedHttpHeaderInsertion.Type = append(nestedHttpHeaderInsertion.Type, nestedHttpHeaderInsertionType)
-				}
-			}
-			nestedHttpHeaderInsertionCol = append(nestedHttpHeaderInsertionCol, nestedHttpHeaderInsertion)
-		}
-		entry.HttpHeaderInsertion = nestedHttpHeaderInsertionCol
-	}
-
-	entry.LocalInlineCat = util.YesNo(o.LocalInlineCat, nil)
-	entry.LogContainerPageOnly = util.YesNo(o.LogContainerPageOnly, nil)
-	entry.LogHttpHdrReferer = util.YesNo(o.LogHttpHdrReferer, nil)
-	entry.LogHttpHdrUserAgent = util.YesNo(o.LogHttpHdrUserAgent, nil)
-	entry.LogHttpHdrXff = util.YesNo(o.LogHttpHdrXff, nil)
-	entry.MlavCategoryException = util.StrToMem(o.MlavCategoryException)
-	entry.Override = util.StrToMem(o.Override)
-	entry.SafeSearchEnforcement = util.YesNo(o.SafeSearchEnforcement, nil)
-
-	entry.Misc = o.Misc["Entry"]
-
-	return entry, nil
-}
-
-func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
-	entryList := make([]*Entry, 0, len(c.Answer))
-	for _, o := range c.Answer {
-		entry := &Entry{
-			Misc: make(map[string][]generic.Xml),
-		}
-		entry.Name = o.Name
-		entry.Alert = util.MemToStr(o.Alert)
-		entry.Allow = util.MemToStr(o.Allow)
-		entry.Block = util.MemToStr(o.Block)
-		entry.CloudInlineCat = util.AsBool(o.CloudInlineCat, nil)
-		entry.Continue = util.MemToStr(o.Continue)
-		var nestedCredentialEnforcement *CredentialEnforcement
-		if o.CredentialEnforcement != nil {
-			nestedCredentialEnforcement = &CredentialEnforcement{}
-			if o.CredentialEnforcement.Misc != nil {
-				entry.Misc["CredentialEnforcement"] = o.CredentialEnforcement.Misc
-			}
-			if o.CredentialEnforcement.Alert != nil {
-				nestedCredentialEnforcement.Alert = util.MemToStr(o.CredentialEnforcement.Alert)
-			}
-			if o.CredentialEnforcement.Allow != nil {
-				nestedCredentialEnforcement.Allow = util.MemToStr(o.CredentialEnforcement.Allow)
-			}
-			if o.CredentialEnforcement.Block != nil {
-				nestedCredentialEnforcement.Block = util.MemToStr(o.CredentialEnforcement.Block)
-			}
-			if o.CredentialEnforcement.Continue != nil {
-				nestedCredentialEnforcement.Continue = util.MemToStr(o.CredentialEnforcement.Continue)
-			}
-			if o.CredentialEnforcement.LogSeverity != nil {
-				nestedCredentialEnforcement.LogSeverity = o.CredentialEnforcement.LogSeverity
-			}
-			if o.CredentialEnforcement.Mode != nil {
-				nestedCredentialEnforcement.Mode = &CredentialEnforcementMode{}
-				if o.CredentialEnforcement.Mode.Misc != nil {
-					entry.Misc["CredentialEnforcementMode"] = o.CredentialEnforcement.Mode.Misc
-				}
-				if o.CredentialEnforcement.Mode.Disabled != nil {
-					nestedCredentialEnforcement.Mode.Disabled = &CredentialEnforcementModeDisabled{}
-					if o.CredentialEnforcement.Mode.Disabled.Misc != nil {
-						entry.Misc["CredentialEnforcementModeDisabled"] = o.CredentialEnforcement.Mode.Disabled.Misc
-					}
-				}
-				if o.CredentialEnforcement.Mode.DomainCredentials != nil {
-					nestedCredentialEnforcement.Mode.DomainCredentials = &CredentialEnforcementModeDomainCredentials{}
-					if o.CredentialEnforcement.Mode.DomainCredentials.Misc != nil {
-						entry.Misc["CredentialEnforcementModeDomainCredentials"] = o.CredentialEnforcement.Mode.DomainCredentials.Misc
-					}
-				}
-				if o.CredentialEnforcement.Mode.GroupMapping != nil {
-					nestedCredentialEnforcement.Mode.GroupMapping = o.CredentialEnforcement.Mode.GroupMapping
-				}
-				if o.CredentialEnforcement.Mode.IpUser != nil {
-					nestedCredentialEnforcement.Mode.IpUser = &CredentialEnforcementModeIpUser{}
-					if o.CredentialEnforcement.Mode.IpUser.Misc != nil {
-						entry.Misc["CredentialEnforcementModeIpUser"] = o.CredentialEnforcement.Mode.IpUser.Misc
-					}
-				}
-			}
-		}
-		entry.CredentialEnforcement = nestedCredentialEnforcement
-
-		entry.Description = o.Description
-		entry.DisableOverride = o.DisableOverride
-		entry.EnableContainerPage = util.AsBool(o.EnableContainerPage, nil)
-		var nestedHttpHeaderInsertionCol []HttpHeaderInsertion
-		if o.HttpHeaderInsertion != nil {
-			nestedHttpHeaderInsertionCol = []HttpHeaderInsertion{}
-			for _, oHttpHeaderInsertion := range o.HttpHeaderInsertion {
-				nestedHttpHeaderInsertion := HttpHeaderInsertion{}
-				if oHttpHeaderInsertion.Misc != nil {
-					entry.Misc["HttpHeaderInsertion"] = oHttpHeaderInsertion.Misc
-				}
-				if oHttpHeaderInsertion.Name != "" {
-					nestedHttpHeaderInsertion.Name = oHttpHeaderInsertion.Name
-				}
-				if oHttpHeaderInsertion.DisableOverride != nil {
-					nestedHttpHeaderInsertion.DisableOverride = oHttpHeaderInsertion.DisableOverride
-				}
-				if oHttpHeaderInsertion.Type != nil {
-					nestedHttpHeaderInsertion.Type = []HttpHeaderInsertionType{}
-					for _, oHttpHeaderInsertionType := range oHttpHeaderInsertion.Type {
-						nestedHttpHeaderInsertionType := HttpHeaderInsertionType{}
-						if oHttpHeaderInsertionType.Misc != nil {
-							entry.Misc["HttpHeaderInsertionType"] = oHttpHeaderInsertionType.Misc
-						}
-						if oHttpHeaderInsertionType.Name != "" {
-							nestedHttpHeaderInsertionType.Name = oHttpHeaderInsertionType.Name
-						}
-						if oHttpHeaderInsertionType.Headers != nil {
-							nestedHttpHeaderInsertionType.Headers = []HttpHeaderInsertionTypeHeaders{}
-							for _, oHttpHeaderInsertionTypeHeaders := range oHttpHeaderInsertionType.Headers {
-								nestedHttpHeaderInsertionTypeHeaders := HttpHeaderInsertionTypeHeaders{}
-								if oHttpHeaderInsertionTypeHeaders.Misc != nil {
-									entry.Misc["HttpHeaderInsertionTypeHeaders"] = oHttpHeaderInsertionTypeHeaders.Misc
-								}
-								if oHttpHeaderInsertionTypeHeaders.Name != "" {
-									nestedHttpHeaderInsertionTypeHeaders.Name = oHttpHeaderInsertionTypeHeaders.Name
-								}
-								if oHttpHeaderInsertionTypeHeaders.Header != nil {
-									nestedHttpHeaderInsertionTypeHeaders.Header = oHttpHeaderInsertionTypeHeaders.Header
-								}
-								if oHttpHeaderInsertionTypeHeaders.Value != nil {
-									nestedHttpHeaderInsertionTypeHeaders.Value = oHttpHeaderInsertionTypeHeaders.Value
-								}
-								if oHttpHeaderInsertionTypeHeaders.Log != nil {
-									nestedHttpHeaderInsertionTypeHeaders.Log = util.AsBool(oHttpHeaderInsertionTypeHeaders.Log, nil)
-								}
-								nestedHttpHeaderInsertionType.Headers = append(nestedHttpHeaderInsertionType.Headers, nestedHttpHeaderInsertionTypeHeaders)
-							}
-						}
-						if oHttpHeaderInsertionType.Domains != nil {
-							nestedHttpHeaderInsertionType.Domains = util.MemToStr(oHttpHeaderInsertionType.Domains)
-						}
-						nestedHttpHeaderInsertion.Type = append(nestedHttpHeaderInsertion.Type, nestedHttpHeaderInsertionType)
-					}
-				}
-				nestedHttpHeaderInsertionCol = append(nestedHttpHeaderInsertionCol, nestedHttpHeaderInsertion)
-			}
-			entry.HttpHeaderInsertion = nestedHttpHeaderInsertionCol
-		}
-
-		entry.LocalInlineCat = util.AsBool(o.LocalInlineCat, nil)
-		entry.LogContainerPageOnly = util.AsBool(o.LogContainerPageOnly, nil)
-		entry.LogHttpHdrReferer = util.AsBool(o.LogHttpHdrReferer, nil)
-		entry.LogHttpHdrUserAgent = util.AsBool(o.LogHttpHdrUserAgent, nil)
-		entry.LogHttpHdrXff = util.AsBool(o.LogHttpHdrXff, nil)
-		entry.MlavCategoryException = util.MemToStr(o.MlavCategoryException)
-		entry.Override = util.MemToStr(o.Override)
-		entry.SafeSearchEnforcement = util.AsBool(o.SafeSearchEnforcement, nil)
-
-		entry.Misc["Entry"] = o.Misc
-
-		entryList = append(entryList, entry)
-	}
-
-	return entryList, nil
-}
-
 func SpecMatches(a, b *Entry) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+	if a == nil && b == nil {
 		return true
 	}
 
-	// Don't compare Name.
-	if !util.OrderedListsMatch(a.Alert, b.Alert) {
+	if (a == nil && b != nil) || (a != nil && b == nil) {
 		return false
 	}
-	if !util.OrderedListsMatch(a.Allow, b.Allow) {
+
+	return a.matches(b)
+}
+
+func (o *Entry) matches(other *Entry) bool {
+	if o == nil && other == nil {
+		return true
+	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.OrderedListsMatch(a.Block, b.Block) {
+	if !util.OrderedListsMatch[string](o.Alert, other.Alert) {
 		return false
 	}
-	if !util.BoolsMatch(a.CloudInlineCat, b.CloudInlineCat) {
+	if !util.OrderedListsMatch[string](o.Allow, other.Allow) {
 		return false
 	}
-	if !util.OrderedListsMatch(a.Continue, b.Continue) {
+	if !util.OrderedListsMatch[string](o.Block, other.Block) {
 		return false
 	}
-	if !matchCredentialEnforcement(a.CredentialEnforcement, b.CredentialEnforcement) {
+	if !util.BoolsMatch(o.CloudInlineCat, other.CloudInlineCat) {
 		return false
 	}
-	if !util.StringsMatch(a.Description, b.Description) {
+	if !util.OrderedListsMatch[string](o.Continue, other.Continue) {
 		return false
 	}
-	if !util.StringsMatch(a.DisableOverride, b.DisableOverride) {
+	if !o.CredentialEnforcement.matches(other.CredentialEnforcement) {
 		return false
 	}
-	if !util.BoolsMatch(a.EnableContainerPage, b.EnableContainerPage) {
+	if !util.StringsMatch(o.Description, other.Description) {
 		return false
 	}
-	if !matchHttpHeaderInsertion(a.HttpHeaderInsertion, b.HttpHeaderInsertion) {
+	if !util.StringsMatch(o.DisableOverride, other.DisableOverride) {
 		return false
 	}
-	if !util.BoolsMatch(a.LocalInlineCat, b.LocalInlineCat) {
+	if !util.BoolsMatch(o.EnableContainerPage, other.EnableContainerPage) {
 		return false
 	}
-	if !util.BoolsMatch(a.LogContainerPageOnly, b.LogContainerPageOnly) {
+	if len(o.HttpHeaderInsertion) != len(other.HttpHeaderInsertion) {
 		return false
 	}
-	if !util.BoolsMatch(a.LogHttpHdrReferer, b.LogHttpHdrReferer) {
+	for idx := range o.HttpHeaderInsertion {
+		if !o.HttpHeaderInsertion[idx].matches(&other.HttpHeaderInsertion[idx]) {
+			return false
+		}
+	}
+	if !util.BoolsMatch(o.LocalInlineCat, other.LocalInlineCat) {
 		return false
 	}
-	if !util.BoolsMatch(a.LogHttpHdrUserAgent, b.LogHttpHdrUserAgent) {
+	if !util.BoolsMatch(o.LogContainerPageOnly, other.LogContainerPageOnly) {
 		return false
 	}
-	if !util.BoolsMatch(a.LogHttpHdrXff, b.LogHttpHdrXff) {
+	if !util.BoolsMatch(o.LogHttpHdrReferer, other.LogHttpHdrReferer) {
 		return false
 	}
-	if !util.OrderedListsMatch(a.MlavCategoryException, b.MlavCategoryException) {
+	if !util.BoolsMatch(o.LogHttpHdrUserAgent, other.LogHttpHdrUserAgent) {
 		return false
 	}
-	if !util.OrderedListsMatch(a.Override, b.Override) {
+	if !util.BoolsMatch(o.LogHttpHdrXff, other.LogHttpHdrXff) {
 		return false
 	}
-	if !util.BoolsMatch(a.SafeSearchEnforcement, b.SafeSearchEnforcement) {
+	if !util.OrderedListsMatch[string](o.MlavCategoryException, other.MlavCategoryException) {
+		return false
+	}
+	if !util.OrderedListsMatch[string](o.Override, other.Override) {
+		return false
+	}
+	if !util.BoolsMatch(o.SafeSearchEnforcement, other.SafeSearchEnforcement) {
 		return false
 	}
 
 	return true
 }
 
-func matchCredentialEnforcementModeDisabled(a *CredentialEnforcementModeDisabled, b *CredentialEnforcementModeDisabled) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+func (o *CredentialEnforcement) matches(other *CredentialEnforcement) bool {
+	if o == nil && other == nil {
 		return true
 	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
+	}
+	if !util.OrderedListsMatch[string](o.Alert, other.Alert) {
+		return false
+	}
+	if !util.OrderedListsMatch[string](o.Allow, other.Allow) {
+		return false
+	}
+	if !util.OrderedListsMatch[string](o.Block, other.Block) {
+		return false
+	}
+	if !util.OrderedListsMatch[string](o.Continue, other.Continue) {
+		return false
+	}
+	if !util.StringsMatch(o.LogSeverity, other.LogSeverity) {
+		return false
+	}
+	if !o.Mode.matches(other.Mode) {
+		return false
+	}
+
 	return true
 }
-func matchCredentialEnforcementModeDomainCredentials(a *CredentialEnforcementModeDomainCredentials, b *CredentialEnforcementModeDomainCredentials) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *CredentialEnforcementMode) matches(other *CredentialEnforcementMode) bool {
+	if o == nil && other == nil {
 		return true
 	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
+	}
+	if !o.Disabled.matches(other.Disabled) {
+		return false
+	}
+	if !o.DomainCredentials.matches(other.DomainCredentials) {
+		return false
+	}
+	if !util.StringsMatch(o.GroupMapping, other.GroupMapping) {
+		return false
+	}
+	if !o.IpUser.matches(other.IpUser) {
+		return false
+	}
+
 	return true
 }
-func matchCredentialEnforcementModeIpUser(a *CredentialEnforcementModeIpUser, b *CredentialEnforcementModeIpUser) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *CredentialEnforcementModeDisabled) matches(other *CredentialEnforcementModeDisabled) bool {
+	if o == nil && other == nil {
 		return true
 	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
+	}
+
 	return true
 }
-func matchCredentialEnforcementMode(a *CredentialEnforcementMode, b *CredentialEnforcementMode) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *CredentialEnforcementModeDomainCredentials) matches(other *CredentialEnforcementModeDomainCredentials) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !matchCredentialEnforcementModeDisabled(a.Disabled, b.Disabled) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !matchCredentialEnforcementModeDomainCredentials(a.DomainCredentials, b.DomainCredentials) {
-		return false
-	}
-	if !util.StringsMatch(a.GroupMapping, b.GroupMapping) {
-		return false
-	}
-	if !matchCredentialEnforcementModeIpUser(a.IpUser, b.IpUser) {
-		return false
-	}
+
 	return true
 }
-func matchCredentialEnforcement(a *CredentialEnforcement, b *CredentialEnforcement) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *CredentialEnforcementModeIpUser) matches(other *CredentialEnforcementModeIpUser) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.OrderedListsMatch(a.Alert, b.Alert) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.OrderedListsMatch(a.Allow, b.Allow) {
-		return false
-	}
-	if !util.OrderedListsMatch(a.Block, b.Block) {
-		return false
-	}
-	if !util.OrderedListsMatch(a.Continue, b.Continue) {
-		return false
-	}
-	if !util.StringsMatch(a.LogSeverity, b.LogSeverity) {
-		return false
-	}
-	if !matchCredentialEnforcementMode(a.Mode, b.Mode) {
-		return false
-	}
+
 	return true
 }
-func matchHttpHeaderInsertionTypeHeaders(a []HttpHeaderInsertionTypeHeaders, b []HttpHeaderInsertionTypeHeaders) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *HttpHeaderInsertion) matches(other *HttpHeaderInsertion) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	for _, a := range a {
-		for _, b := range b {
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-			if !util.StringsMatch(a.Header, b.Header) {
-				return false
-			}
-			if !util.StringsMatch(a.Value, b.Value) {
-				return false
-			}
-			if !util.BoolsMatch(a.Log, b.Log) {
-				return false
-			}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
+	}
+	if o.Name != other.Name {
+		return false
+	}
+	if !util.StringsMatch(o.DisableOverride, other.DisableOverride) {
+		return false
+	}
+	if len(o.Type) != len(other.Type) {
+		return false
+	}
+	for idx := range o.Type {
+		if !o.Type[idx].matches(&other.Type[idx]) {
+			return false
 		}
 	}
+
 	return true
 }
-func matchHttpHeaderInsertionType(a []HttpHeaderInsertionType, b []HttpHeaderInsertionType) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *HttpHeaderInsertionType) matches(other *HttpHeaderInsertionType) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	for _, a := range a {
-		for _, b := range b {
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-			if !matchHttpHeaderInsertionTypeHeaders(a.Headers, b.Headers) {
-				return false
-			}
-			if !util.OrderedListsMatch(a.Domains, b.Domains) {
-				return false
-			}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
+	}
+	if o.Name != other.Name {
+		return false
+	}
+	if len(o.Headers) != len(other.Headers) {
+		return false
+	}
+	for idx := range o.Headers {
+		if !o.Headers[idx].matches(&other.Headers[idx]) {
+			return false
 		}
 	}
+	if !util.OrderedListsMatch[string](o.Domains, other.Domains) {
+		return false
+	}
+
 	return true
 }
-func matchHttpHeaderInsertion(a []HttpHeaderInsertion, b []HttpHeaderInsertion) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *HttpHeaderInsertionTypeHeaders) matches(other *HttpHeaderInsertionTypeHeaders) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	for _, a := range a {
-		for _, b := range b {
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-			if !util.StringsMatch(a.DisableOverride, b.DisableOverride) {
-				return false
-			}
-			if !matchHttpHeaderInsertionType(a.Type, b.Type) {
-				return false
-			}
-		}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
 	}
+	if o.Name != other.Name {
+		return false
+	}
+	if !util.StringsMatch(o.Header, other.Header) {
+		return false
+	}
+	if !util.StringsMatch(o.Value, other.Value) {
+		return false
+	}
+	if !util.BoolsMatch(o.Log, other.Log) {
+		return false
+	}
+
 	return true
 }
 

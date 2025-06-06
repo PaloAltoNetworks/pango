@@ -21,7 +21,7 @@ type Location struct {
 }
 
 type SystemLocation struct {
-	NgfwDevice string `json:"ngfw_device"`
+	Device string `json:"device"`
 }
 type TemplateLocation struct {
 	NgfwDevice     string `json:"ngfw_device"`
@@ -36,7 +36,7 @@ type TemplateStackLocation struct {
 
 func NewSystemLocation() *Location {
 	return &Location{System: &SystemLocation{
-		NgfwDevice: "localhost.localdomain",
+		Device: "localhost.localdomain",
 	},
 	}
 }
@@ -62,8 +62,8 @@ func (o Location) IsValid() error {
 
 	switch {
 	case o.System != nil:
-		if o.System.NgfwDevice == "" {
-			return fmt.Errorf("NgfwDevice is unspecified")
+		if o.System.Device == "" {
+			return fmt.Errorf("Device is unspecified")
 		}
 		count++
 	case o.Template != nil:
@@ -107,15 +107,13 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 
 	switch {
 	case o.System != nil:
-		if o.System.NgfwDevice == "" {
-			return nil, fmt.Errorf("NgfwDevice is unspecified")
+		if o.System.Device == "" {
+			return nil, fmt.Errorf("Device is unspecified")
 		}
 		ans = []string{
 			"config",
 			"devices",
-			util.AsEntryXpath([]string{o.System.NgfwDevice}),
-			"deviceconfig",
-			"system",
+			util.AsEntryXpath(o.System.Device),
 		}
 	case o.Template != nil:
 		if o.Template.NgfwDevice == "" {
@@ -130,14 +128,12 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 		ans = []string{
 			"config",
 			"devices",
-			util.AsEntryXpath([]string{o.Template.PanoramaDevice}),
+			util.AsEntryXpath(o.Template.PanoramaDevice),
 			"template",
-			util.AsEntryXpath([]string{o.Template.Template}),
+			util.AsEntryXpath(o.Template.Template),
 			"config",
 			"devices",
-			util.AsEntryXpath([]string{o.Template.NgfwDevice}),
-			"deviceconfig",
-			"system",
+			util.AsEntryXpath(o.Template.NgfwDevice),
 		}
 	case o.TemplateStack != nil:
 		if o.TemplateStack.NgfwDevice == "" {
@@ -152,14 +148,12 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 		ans = []string{
 			"config",
 			"devices",
-			util.AsEntryXpath([]string{o.TemplateStack.PanoramaDevice}),
+			util.AsEntryXpath(o.TemplateStack.PanoramaDevice),
 			"template-stack",
-			util.AsEntryXpath([]string{o.TemplateStack.TemplateStack}),
+			util.AsEntryXpath(o.TemplateStack.TemplateStack),
 			"config",
 			"devices",
-			util.AsEntryXpath([]string{o.TemplateStack.NgfwDevice}),
-			"deviceconfig",
-			"system",
+			util.AsEntryXpath(o.TemplateStack.NgfwDevice),
 		}
 	default:
 		return nil, errors.NoLocationSpecifiedError
@@ -167,12 +161,19 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 
 	return ans, nil
 }
-func (o Location) Xpath(vn version.Number) ([]string, error) {
+
+func (o Location) XpathWithComponents(vn version.Number, components ...string) ([]string, error) {
+	if len(components) != 0 {
+		return nil, fmt.Errorf("invalid number of arguments for XpathWithComponents() call")
+	}
 
 	ans, err := o.XpathPrefix(vn)
 	if err != nil {
 		return nil, err
 	}
+
+	ans = append(ans, "deviceconfig")
+	ans = append(ans, "system")
 
 	return ans, nil
 }

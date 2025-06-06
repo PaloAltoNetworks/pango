@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	Suffix = []string{"log-settings", "profiles"}
+	suffix = []string{"log-settings", "profiles", "$name"}
 )
 
 type Entry struct {
@@ -24,10 +24,8 @@ type Entry struct {
 	DisableOverride            *string
 	EnhancedApplicationLogging *bool
 	MatchList                  []MatchList
-
-	Misc map[string][]generic.Xml
+	Misc                       []generic.Xml
 }
-
 type MatchList struct {
 	Name           string
 	ActionDesc     *string
@@ -40,17 +38,21 @@ type MatchList struct {
 	SendSyslog     []string
 	SendHttp       []string
 	Actions        []MatchListActions
+	Misc           []generic.Xml
 }
 type MatchListActions struct {
 	Name string
 	Type *MatchListActionsType
+	Misc []generic.Xml
 }
 type MatchListActionsType struct {
 	Integration *MatchListActionsTypeIntegration
 	Tagging     *MatchListActionsTypeTagging
+	Misc        []generic.Xml
 }
 type MatchListActionsTypeIntegration struct {
 	Action *string
+	Misc   []generic.Xml
 }
 type MatchListActionsTypeTagging struct {
 	Target       *string
@@ -58,92 +60,437 @@ type MatchListActionsTypeTagging struct {
 	Timeout      *int64
 	Registration *MatchListActionsTypeTaggingRegistration
 	Tags         []string
+	Misc         []generic.Xml
 }
 type MatchListActionsTypeTaggingRegistration struct {
 	Localhost *MatchListActionsTypeTaggingRegistrationLocalhost
 	Panorama  *MatchListActionsTypeTaggingRegistrationPanorama
 	Remote    *MatchListActionsTypeTaggingRegistrationRemote
+	Misc      []generic.Xml
 }
 type MatchListActionsTypeTaggingRegistrationLocalhost struct {
+	Misc []generic.Xml
 }
 type MatchListActionsTypeTaggingRegistrationPanorama struct {
+	Misc []generic.Xml
 }
 type MatchListActionsTypeTaggingRegistrationRemote struct {
 	HttpProfile *string
+	Misc        []generic.Xml
 }
 
 type entryXmlContainer struct {
 	Answer []entryXml `xml:"entry"`
 }
 
+func (o *entryXmlContainer) Normalize() ([]*Entry, error) {
+	entries := make([]*Entry, 0, len(o.Answer))
+	for _, elt := range o.Answer {
+		obj, err := elt.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		entries = append(entries, obj)
+	}
+
+	return entries, nil
+}
+
+func specifyEntry(source *Entry) (any, error) {
+	var obj entryXml
+	obj.MarshalFromObject(*source)
+	return obj, nil
+}
+
 type entryXml struct {
-	XMLName                    xml.Name       `xml:"entry"`
-	Name                       string         `xml:"name,attr"`
-	Description                *string        `xml:"description,omitempty"`
-	DisableOverride            *string        `xml:"disable-override,omitempty"`
-	EnhancedApplicationLogging *string        `xml:"enhanced-application-logging,omitempty"`
-	MatchList                  []MatchListXml `xml:"match-list>entry,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
+	XMLName                    xml.Name               `xml:"entry"`
+	Name                       string                 `xml:"name,attr"`
+	Description                *string                `xml:"description,omitempty"`
+	DisableOverride            *string                `xml:"disable-override,omitempty"`
+	EnhancedApplicationLogging *string                `xml:"enhanced-application-logging,omitempty"`
+	MatchList                  *matchListContainerXml `xml:"match-list,omitempty"`
+	Misc                       []generic.Xml          `xml:",any"`
 }
-type MatchListXml struct {
-	ActionDesc     *string               `xml:"action-desc,omitempty"`
-	Actions        []MatchListActionsXml `xml:"actions>entry,omitempty"`
-	Filter         *string               `xml:"filter,omitempty"`
-	LogType        *string               `xml:"log-type,omitempty"`
-	Name           string                `xml:"name,attr"`
-	Quarantine     *string               `xml:"quarantine,omitempty"`
-	SendEmail      *util.MemberType      `xml:"send-email,omitempty"`
-	SendHttp       *util.MemberType      `xml:"send-http,omitempty"`
-	SendSnmptrap   *util.MemberType      `xml:"send-snmptrap,omitempty"`
-	SendSyslog     *util.MemberType      `xml:"send-syslog,omitempty"`
-	SendToPanorama *string               `xml:"send-to-panorama,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
+type matchListContainerXml struct {
+	Entries []matchListXml `xml:"entry"`
 }
-type MatchListActionsXml struct {
-	Name string                   `xml:"name,attr"`
-	Type *MatchListActionsTypeXml `xml:"type,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
+type matchListXml struct {
+	XMLName        xml.Name                      `xml:"entry"`
+	Name           string                        `xml:"name,attr"`
+	ActionDesc     *string                       `xml:"action-desc,omitempty"`
+	LogType        *string                       `xml:"log-type,omitempty"`
+	Filter         *string                       `xml:"filter,omitempty"`
+	SendToPanorama *string                       `xml:"send-to-panorama,omitempty"`
+	Quarantine     *string                       `xml:"quarantine,omitempty"`
+	SendSnmptrap   *util.MemberType              `xml:"send-snmptrap,omitempty"`
+	SendEmail      *util.MemberType              `xml:"send-email,omitempty"`
+	SendSyslog     *util.MemberType              `xml:"send-syslog,omitempty"`
+	SendHttp       *util.MemberType              `xml:"send-http,omitempty"`
+	Actions        *matchListActionsContainerXml `xml:"actions,omitempty"`
+	Misc           []generic.Xml                 `xml:",any"`
 }
-type MatchListActionsTypeXml struct {
-	Integration *MatchListActionsTypeIntegrationXml `xml:"integration,omitempty"`
-	Tagging     *MatchListActionsTypeTaggingXml     `xml:"tagging,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
+type matchListActionsContainerXml struct {
+	Entries []matchListActionsXml `xml:"entry"`
 }
-type MatchListActionsTypeIntegrationXml struct {
-	Action *string `xml:"action,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
+type matchListActionsXml struct {
+	XMLName xml.Name                 `xml:"entry"`
+	Name    string                   `xml:"name,attr"`
+	Type    *matchListActionsTypeXml `xml:"type,omitempty"`
+	Misc    []generic.Xml            `xml:",any"`
 }
-type MatchListActionsTypeTaggingXml struct {
-	Action       *string                                     `xml:"action,omitempty"`
-	Registration *MatchListActionsTypeTaggingRegistrationXml `xml:"registration,omitempty"`
-	Tags         *util.MemberType                            `xml:"tags,omitempty"`
+type matchListActionsTypeXml struct {
+	Integration *matchListActionsTypeIntegrationXml `xml:"integration,omitempty"`
+	Tagging     *matchListActionsTypeTaggingXml     `xml:"tagging,omitempty"`
+	Misc        []generic.Xml                       `xml:",any"`
+}
+type matchListActionsTypeIntegrationXml struct {
+	Action *string       `xml:"action,omitempty"`
+	Misc   []generic.Xml `xml:",any"`
+}
+type matchListActionsTypeTaggingXml struct {
 	Target       *string                                     `xml:"target,omitempty"`
+	Action       *string                                     `xml:"action,omitempty"`
 	Timeout      *int64                                      `xml:"timeout,omitempty"`
+	Registration *matchListActionsTypeTaggingRegistrationXml `xml:"registration,omitempty"`
+	Tags         *util.MemberType                            `xml:"tags,omitempty"`
+	Misc         []generic.Xml                               `xml:",any"`
+}
+type matchListActionsTypeTaggingRegistrationXml struct {
+	Localhost *matchListActionsTypeTaggingRegistrationLocalhostXml `xml:"localhost,omitempty"`
+	Panorama  *matchListActionsTypeTaggingRegistrationPanoramaXml  `xml:"panorama,omitempty"`
+	Remote    *matchListActionsTypeTaggingRegistrationRemoteXml    `xml:"remote,omitempty"`
+	Misc      []generic.Xml                                        `xml:",any"`
+}
+type matchListActionsTypeTaggingRegistrationLocalhostXml struct {
+	Misc []generic.Xml `xml:",any"`
+}
+type matchListActionsTypeTaggingRegistrationPanoramaXml struct {
+	Misc []generic.Xml `xml:",any"`
+}
+type matchListActionsTypeTaggingRegistrationRemoteXml struct {
+	HttpProfile *string       `xml:"http-profile,omitempty"`
+	Misc        []generic.Xml `xml:",any"`
+}
 
-	Misc []generic.Xml `xml:",any"`
+func (o *entryXml) MarshalFromObject(s Entry) {
+	o.Name = s.Name
+	o.Description = s.Description
+	o.DisableOverride = s.DisableOverride
+	o.EnhancedApplicationLogging = util.YesNo(s.EnhancedApplicationLogging, nil)
+	if s.MatchList != nil {
+		var objs []matchListXml
+		for _, elt := range s.MatchList {
+			var obj matchListXml
+			obj.MarshalFromObject(elt)
+			objs = append(objs, obj)
+		}
+		o.MatchList = &matchListContainerXml{Entries: objs}
+	}
+	o.Misc = s.Misc
 }
-type MatchListActionsTypeTaggingRegistrationXml struct {
-	Localhost *MatchListActionsTypeTaggingRegistrationLocalhostXml `xml:"localhost,omitempty"`
-	Panorama  *MatchListActionsTypeTaggingRegistrationPanoramaXml  `xml:"panorama,omitempty"`
-	Remote    *MatchListActionsTypeTaggingRegistrationRemoteXml    `xml:"remote,omitempty"`
 
-	Misc []generic.Xml `xml:",any"`
-}
-type MatchListActionsTypeTaggingRegistrationLocalhostXml struct {
-	Misc []generic.Xml `xml:",any"`
-}
-type MatchListActionsTypeTaggingRegistrationPanoramaXml struct {
-	Misc []generic.Xml `xml:",any"`
-}
-type MatchListActionsTypeTaggingRegistrationRemoteXml struct {
-	HttpProfile *string `xml:"http-profile,omitempty"`
+func (o entryXml) UnmarshalToObject() (*Entry, error) {
+	var matchListVal []MatchList
+	if o.MatchList != nil {
+		for _, elt := range o.MatchList.Entries {
+			obj, err := elt.UnmarshalToObject()
+			if err != nil {
+				return nil, err
+			}
+			matchListVal = append(matchListVal, *obj)
+		}
+	}
 
-	Misc []generic.Xml `xml:",any"`
+	result := &Entry{
+		Name:                       o.Name,
+		Description:                o.Description,
+		DisableOverride:            o.DisableOverride,
+		EnhancedApplicationLogging: util.AsBool(o.EnhancedApplicationLogging, nil),
+		MatchList:                  matchListVal,
+		Misc:                       o.Misc,
+	}
+	return result, nil
+}
+func (o *matchListXml) MarshalFromObject(s MatchList) {
+	o.Name = s.Name
+	o.ActionDesc = s.ActionDesc
+	o.LogType = s.LogType
+	o.Filter = s.Filter
+	o.SendToPanorama = util.YesNo(s.SendToPanorama, nil)
+	o.Quarantine = util.YesNo(s.Quarantine, nil)
+	if s.SendSnmptrap != nil {
+		o.SendSnmptrap = util.StrToMem(s.SendSnmptrap)
+	}
+	if s.SendEmail != nil {
+		o.SendEmail = util.StrToMem(s.SendEmail)
+	}
+	if s.SendSyslog != nil {
+		o.SendSyslog = util.StrToMem(s.SendSyslog)
+	}
+	if s.SendHttp != nil {
+		o.SendHttp = util.StrToMem(s.SendHttp)
+	}
+	if s.Actions != nil {
+		var objs []matchListActionsXml
+		for _, elt := range s.Actions {
+			var obj matchListActionsXml
+			obj.MarshalFromObject(elt)
+			objs = append(objs, obj)
+		}
+		o.Actions = &matchListActionsContainerXml{Entries: objs}
+	}
+	o.Misc = s.Misc
+}
+
+func (o matchListXml) UnmarshalToObject() (*MatchList, error) {
+	var sendSnmptrapVal []string
+	if o.SendSnmptrap != nil {
+		sendSnmptrapVal = util.MemToStr(o.SendSnmptrap)
+	}
+	var sendEmailVal []string
+	if o.SendEmail != nil {
+		sendEmailVal = util.MemToStr(o.SendEmail)
+	}
+	var sendSyslogVal []string
+	if o.SendSyslog != nil {
+		sendSyslogVal = util.MemToStr(o.SendSyslog)
+	}
+	var sendHttpVal []string
+	if o.SendHttp != nil {
+		sendHttpVal = util.MemToStr(o.SendHttp)
+	}
+	var actionsVal []MatchListActions
+	if o.Actions != nil {
+		for _, elt := range o.Actions.Entries {
+			obj, err := elt.UnmarshalToObject()
+			if err != nil {
+				return nil, err
+			}
+			actionsVal = append(actionsVal, *obj)
+		}
+	}
+
+	result := &MatchList{
+		Name:           o.Name,
+		ActionDesc:     o.ActionDesc,
+		LogType:        o.LogType,
+		Filter:         o.Filter,
+		SendToPanorama: util.AsBool(o.SendToPanorama, nil),
+		Quarantine:     util.AsBool(o.Quarantine, nil),
+		SendSnmptrap:   sendSnmptrapVal,
+		SendEmail:      sendEmailVal,
+		SendSyslog:     sendSyslogVal,
+		SendHttp:       sendHttpVal,
+		Actions:        actionsVal,
+		Misc:           o.Misc,
+	}
+	return result, nil
+}
+func (o *matchListActionsXml) MarshalFromObject(s MatchListActions) {
+	o.Name = s.Name
+	if s.Type != nil {
+		var obj matchListActionsTypeXml
+		obj.MarshalFromObject(*s.Type)
+		o.Type = &obj
+	}
+	o.Misc = s.Misc
+}
+
+func (o matchListActionsXml) UnmarshalToObject() (*MatchListActions, error) {
+	var typeVal *MatchListActionsType
+	if o.Type != nil {
+		obj, err := o.Type.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		typeVal = obj
+	}
+
+	result := &MatchListActions{
+		Name: o.Name,
+		Type: typeVal,
+		Misc: o.Misc,
+	}
+	return result, nil
+}
+func (o *matchListActionsTypeXml) MarshalFromObject(s MatchListActionsType) {
+	if s.Integration != nil {
+		var obj matchListActionsTypeIntegrationXml
+		obj.MarshalFromObject(*s.Integration)
+		o.Integration = &obj
+	}
+	if s.Tagging != nil {
+		var obj matchListActionsTypeTaggingXml
+		obj.MarshalFromObject(*s.Tagging)
+		o.Tagging = &obj
+	}
+	o.Misc = s.Misc
+}
+
+func (o matchListActionsTypeXml) UnmarshalToObject() (*MatchListActionsType, error) {
+	var integrationVal *MatchListActionsTypeIntegration
+	if o.Integration != nil {
+		obj, err := o.Integration.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		integrationVal = obj
+	}
+	var taggingVal *MatchListActionsTypeTagging
+	if o.Tagging != nil {
+		obj, err := o.Tagging.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		taggingVal = obj
+	}
+
+	result := &MatchListActionsType{
+		Integration: integrationVal,
+		Tagging:     taggingVal,
+		Misc:        o.Misc,
+	}
+	return result, nil
+}
+func (o *matchListActionsTypeIntegrationXml) MarshalFromObject(s MatchListActionsTypeIntegration) {
+	o.Action = s.Action
+	o.Misc = s.Misc
+}
+
+func (o matchListActionsTypeIntegrationXml) UnmarshalToObject() (*MatchListActionsTypeIntegration, error) {
+
+	result := &MatchListActionsTypeIntegration{
+		Action: o.Action,
+		Misc:   o.Misc,
+	}
+	return result, nil
+}
+func (o *matchListActionsTypeTaggingXml) MarshalFromObject(s MatchListActionsTypeTagging) {
+	o.Target = s.Target
+	o.Action = s.Action
+	o.Timeout = s.Timeout
+	if s.Registration != nil {
+		var obj matchListActionsTypeTaggingRegistrationXml
+		obj.MarshalFromObject(*s.Registration)
+		o.Registration = &obj
+	}
+	if s.Tags != nil {
+		o.Tags = util.StrToMem(s.Tags)
+	}
+	o.Misc = s.Misc
+}
+
+func (o matchListActionsTypeTaggingXml) UnmarshalToObject() (*MatchListActionsTypeTagging, error) {
+	var registrationVal *MatchListActionsTypeTaggingRegistration
+	if o.Registration != nil {
+		obj, err := o.Registration.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		registrationVal = obj
+	}
+	var tagsVal []string
+	if o.Tags != nil {
+		tagsVal = util.MemToStr(o.Tags)
+	}
+
+	result := &MatchListActionsTypeTagging{
+		Target:       o.Target,
+		Action:       o.Action,
+		Timeout:      o.Timeout,
+		Registration: registrationVal,
+		Tags:         tagsVal,
+		Misc:         o.Misc,
+	}
+	return result, nil
+}
+func (o *matchListActionsTypeTaggingRegistrationXml) MarshalFromObject(s MatchListActionsTypeTaggingRegistration) {
+	if s.Localhost != nil {
+		var obj matchListActionsTypeTaggingRegistrationLocalhostXml
+		obj.MarshalFromObject(*s.Localhost)
+		o.Localhost = &obj
+	}
+	if s.Panorama != nil {
+		var obj matchListActionsTypeTaggingRegistrationPanoramaXml
+		obj.MarshalFromObject(*s.Panorama)
+		o.Panorama = &obj
+	}
+	if s.Remote != nil {
+		var obj matchListActionsTypeTaggingRegistrationRemoteXml
+		obj.MarshalFromObject(*s.Remote)
+		o.Remote = &obj
+	}
+	o.Misc = s.Misc
+}
+
+func (o matchListActionsTypeTaggingRegistrationXml) UnmarshalToObject() (*MatchListActionsTypeTaggingRegistration, error) {
+	var localhostVal *MatchListActionsTypeTaggingRegistrationLocalhost
+	if o.Localhost != nil {
+		obj, err := o.Localhost.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		localhostVal = obj
+	}
+	var panoramaVal *MatchListActionsTypeTaggingRegistrationPanorama
+	if o.Panorama != nil {
+		obj, err := o.Panorama.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		panoramaVal = obj
+	}
+	var remoteVal *MatchListActionsTypeTaggingRegistrationRemote
+	if o.Remote != nil {
+		obj, err := o.Remote.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		remoteVal = obj
+	}
+
+	result := &MatchListActionsTypeTaggingRegistration{
+		Localhost: localhostVal,
+		Panorama:  panoramaVal,
+		Remote:    remoteVal,
+		Misc:      o.Misc,
+	}
+	return result, nil
+}
+func (o *matchListActionsTypeTaggingRegistrationLocalhostXml) MarshalFromObject(s MatchListActionsTypeTaggingRegistrationLocalhost) {
+	o.Misc = s.Misc
+}
+
+func (o matchListActionsTypeTaggingRegistrationLocalhostXml) UnmarshalToObject() (*MatchListActionsTypeTaggingRegistrationLocalhost, error) {
+
+	result := &MatchListActionsTypeTaggingRegistrationLocalhost{
+		Misc: o.Misc,
+	}
+	return result, nil
+}
+func (o *matchListActionsTypeTaggingRegistrationPanoramaXml) MarshalFromObject(s MatchListActionsTypeTaggingRegistrationPanorama) {
+	o.Misc = s.Misc
+}
+
+func (o matchListActionsTypeTaggingRegistrationPanoramaXml) UnmarshalToObject() (*MatchListActionsTypeTaggingRegistrationPanorama, error) {
+
+	result := &MatchListActionsTypeTaggingRegistrationPanorama{
+		Misc: o.Misc,
+	}
+	return result, nil
+}
+func (o *matchListActionsTypeTaggingRegistrationRemoteXml) MarshalFromObject(s MatchListActionsTypeTaggingRegistrationRemote) {
+	o.HttpProfile = s.HttpProfile
+	o.Misc = s.Misc
+}
+
+func (o matchListActionsTypeTaggingRegistrationRemoteXml) UnmarshalToObject() (*MatchListActionsTypeTaggingRegistrationRemote, error) {
+
+	result := &MatchListActionsTypeTaggingRegistrationRemote{
+		HttpProfile: o.HttpProfile,
+		Misc:        o.Misc,
+	}
+	return result, nil
 }
 
 func (e *Entry) Field(v string) (any, error) {
@@ -173,444 +520,232 @@ func Versioning(vn version.Number) (Specifier, Normalizer, error) {
 
 	return specifyEntry, &entryXmlContainer{}, nil
 }
-func specifyEntry(o *Entry) (any, error) {
-	entry := entryXml{}
-	entry.Name = o.Name
-	entry.Description = o.Description
-	entry.DisableOverride = o.DisableOverride
-	entry.EnhancedApplicationLogging = util.YesNo(o.EnhancedApplicationLogging, nil)
-	var nestedMatchListCol []MatchListXml
-	if o.MatchList != nil {
-		nestedMatchListCol = []MatchListXml{}
-		for _, oMatchList := range o.MatchList {
-			nestedMatchList := MatchListXml{}
-			if _, ok := o.Misc["MatchList"]; ok {
-				nestedMatchList.Misc = o.Misc["MatchList"]
-			}
-			if oMatchList.Name != "" {
-				nestedMatchList.Name = oMatchList.Name
-			}
-			if oMatchList.ActionDesc != nil {
-				nestedMatchList.ActionDesc = oMatchList.ActionDesc
-			}
-			if oMatchList.LogType != nil {
-				nestedMatchList.LogType = oMatchList.LogType
-			}
-			if oMatchList.Filter != nil {
-				nestedMatchList.Filter = oMatchList.Filter
-			}
-			if oMatchList.SendToPanorama != nil {
-				nestedMatchList.SendToPanorama = util.YesNo(oMatchList.SendToPanorama, nil)
-			}
-			if oMatchList.Quarantine != nil {
-				nestedMatchList.Quarantine = util.YesNo(oMatchList.Quarantine, nil)
-			}
-			if oMatchList.SendSnmptrap != nil {
-				nestedMatchList.SendSnmptrap = util.StrToMem(oMatchList.SendSnmptrap)
-			}
-			if oMatchList.SendEmail != nil {
-				nestedMatchList.SendEmail = util.StrToMem(oMatchList.SendEmail)
-			}
-			if oMatchList.SendSyslog != nil {
-				nestedMatchList.SendSyslog = util.StrToMem(oMatchList.SendSyslog)
-			}
-			if oMatchList.SendHttp != nil {
-				nestedMatchList.SendHttp = util.StrToMem(oMatchList.SendHttp)
-			}
-			if oMatchList.Actions != nil {
-				nestedMatchList.Actions = []MatchListActionsXml{}
-				for _, oMatchListActions := range oMatchList.Actions {
-					nestedMatchListActions := MatchListActionsXml{}
-					if _, ok := o.Misc["MatchListActions"]; ok {
-						nestedMatchListActions.Misc = o.Misc["MatchListActions"]
-					}
-					if oMatchListActions.Name != "" {
-						nestedMatchListActions.Name = oMatchListActions.Name
-					}
-					if oMatchListActions.Type != nil {
-						nestedMatchListActions.Type = &MatchListActionsTypeXml{}
-						if _, ok := o.Misc["MatchListActionsType"]; ok {
-							nestedMatchListActions.Type.Misc = o.Misc["MatchListActionsType"]
-						}
-						if oMatchListActions.Type.Integration != nil {
-							nestedMatchListActions.Type.Integration = &MatchListActionsTypeIntegrationXml{}
-							if _, ok := o.Misc["MatchListActionsTypeIntegration"]; ok {
-								nestedMatchListActions.Type.Integration.Misc = o.Misc["MatchListActionsTypeIntegration"]
-							}
-							if oMatchListActions.Type.Integration.Action != nil {
-								nestedMatchListActions.Type.Integration.Action = oMatchListActions.Type.Integration.Action
-							}
-						}
-						if oMatchListActions.Type.Tagging != nil {
-							nestedMatchListActions.Type.Tagging = &MatchListActionsTypeTaggingXml{}
-							if _, ok := o.Misc["MatchListActionsTypeTagging"]; ok {
-								nestedMatchListActions.Type.Tagging.Misc = o.Misc["MatchListActionsTypeTagging"]
-							}
-							if oMatchListActions.Type.Tagging.Target != nil {
-								nestedMatchListActions.Type.Tagging.Target = oMatchListActions.Type.Tagging.Target
-							}
-							if oMatchListActions.Type.Tagging.Action != nil {
-								nestedMatchListActions.Type.Tagging.Action = oMatchListActions.Type.Tagging.Action
-							}
-							if oMatchListActions.Type.Tagging.Timeout != nil {
-								nestedMatchListActions.Type.Tagging.Timeout = oMatchListActions.Type.Tagging.Timeout
-							}
-							if oMatchListActions.Type.Tagging.Registration != nil {
-								nestedMatchListActions.Type.Tagging.Registration = &MatchListActionsTypeTaggingRegistrationXml{}
-								if _, ok := o.Misc["MatchListActionsTypeTaggingRegistration"]; ok {
-									nestedMatchListActions.Type.Tagging.Registration.Misc = o.Misc["MatchListActionsTypeTaggingRegistration"]
-								}
-								if oMatchListActions.Type.Tagging.Registration.Localhost != nil {
-									nestedMatchListActions.Type.Tagging.Registration.Localhost = &MatchListActionsTypeTaggingRegistrationLocalhostXml{}
-									if _, ok := o.Misc["MatchListActionsTypeTaggingRegistrationLocalhost"]; ok {
-										nestedMatchListActions.Type.Tagging.Registration.Localhost.Misc = o.Misc["MatchListActionsTypeTaggingRegistrationLocalhost"]
-									}
-								}
-								if oMatchListActions.Type.Tagging.Registration.Panorama != nil {
-									nestedMatchListActions.Type.Tagging.Registration.Panorama = &MatchListActionsTypeTaggingRegistrationPanoramaXml{}
-									if _, ok := o.Misc["MatchListActionsTypeTaggingRegistrationPanorama"]; ok {
-										nestedMatchListActions.Type.Tagging.Registration.Panorama.Misc = o.Misc["MatchListActionsTypeTaggingRegistrationPanorama"]
-									}
-								}
-								if oMatchListActions.Type.Tagging.Registration.Remote != nil {
-									nestedMatchListActions.Type.Tagging.Registration.Remote = &MatchListActionsTypeTaggingRegistrationRemoteXml{}
-									if _, ok := o.Misc["MatchListActionsTypeTaggingRegistrationRemote"]; ok {
-										nestedMatchListActions.Type.Tagging.Registration.Remote.Misc = o.Misc["MatchListActionsTypeTaggingRegistrationRemote"]
-									}
-									if oMatchListActions.Type.Tagging.Registration.Remote.HttpProfile != nil {
-										nestedMatchListActions.Type.Tagging.Registration.Remote.HttpProfile = oMatchListActions.Type.Tagging.Registration.Remote.HttpProfile
-									}
-								}
-							}
-							if oMatchListActions.Type.Tagging.Tags != nil {
-								nestedMatchListActions.Type.Tagging.Tags = util.StrToMem(oMatchListActions.Type.Tagging.Tags)
-							}
-						}
-					}
-					nestedMatchList.Actions = append(nestedMatchList.Actions, nestedMatchListActions)
-				}
-			}
-			nestedMatchListCol = append(nestedMatchListCol, nestedMatchList)
-		}
-		entry.MatchList = nestedMatchListCol
-	}
-
-	entry.Misc = o.Misc["Entry"]
-
-	return entry, nil
-}
-
-func (c *entryXmlContainer) Normalize() ([]*Entry, error) {
-	entryList := make([]*Entry, 0, len(c.Answer))
-	for _, o := range c.Answer {
-		entry := &Entry{
-			Misc: make(map[string][]generic.Xml),
-		}
-		entry.Name = o.Name
-		entry.Description = o.Description
-		entry.DisableOverride = o.DisableOverride
-		entry.EnhancedApplicationLogging = util.AsBool(o.EnhancedApplicationLogging, nil)
-		var nestedMatchListCol []MatchList
-		if o.MatchList != nil {
-			nestedMatchListCol = []MatchList{}
-			for _, oMatchList := range o.MatchList {
-				nestedMatchList := MatchList{}
-				if oMatchList.Misc != nil {
-					entry.Misc["MatchList"] = oMatchList.Misc
-				}
-				if oMatchList.Name != "" {
-					nestedMatchList.Name = oMatchList.Name
-				}
-				if oMatchList.ActionDesc != nil {
-					nestedMatchList.ActionDesc = oMatchList.ActionDesc
-				}
-				if oMatchList.LogType != nil {
-					nestedMatchList.LogType = oMatchList.LogType
-				}
-				if oMatchList.Filter != nil {
-					nestedMatchList.Filter = oMatchList.Filter
-				}
-				if oMatchList.SendToPanorama != nil {
-					nestedMatchList.SendToPanorama = util.AsBool(oMatchList.SendToPanorama, nil)
-				}
-				if oMatchList.Quarantine != nil {
-					nestedMatchList.Quarantine = util.AsBool(oMatchList.Quarantine, nil)
-				}
-				if oMatchList.SendSnmptrap != nil {
-					nestedMatchList.SendSnmptrap = util.MemToStr(oMatchList.SendSnmptrap)
-				}
-				if oMatchList.SendEmail != nil {
-					nestedMatchList.SendEmail = util.MemToStr(oMatchList.SendEmail)
-				}
-				if oMatchList.SendSyslog != nil {
-					nestedMatchList.SendSyslog = util.MemToStr(oMatchList.SendSyslog)
-				}
-				if oMatchList.SendHttp != nil {
-					nestedMatchList.SendHttp = util.MemToStr(oMatchList.SendHttp)
-				}
-				if oMatchList.Actions != nil {
-					nestedMatchList.Actions = []MatchListActions{}
-					for _, oMatchListActions := range oMatchList.Actions {
-						nestedMatchListActions := MatchListActions{}
-						if oMatchListActions.Misc != nil {
-							entry.Misc["MatchListActions"] = oMatchListActions.Misc
-						}
-						if oMatchListActions.Name != "" {
-							nestedMatchListActions.Name = oMatchListActions.Name
-						}
-						if oMatchListActions.Type != nil {
-							nestedMatchListActions.Type = &MatchListActionsType{}
-							if oMatchListActions.Type.Misc != nil {
-								entry.Misc["MatchListActionsType"] = oMatchListActions.Type.Misc
-							}
-							if oMatchListActions.Type.Integration != nil {
-								nestedMatchListActions.Type.Integration = &MatchListActionsTypeIntegration{}
-								if oMatchListActions.Type.Integration.Misc != nil {
-									entry.Misc["MatchListActionsTypeIntegration"] = oMatchListActions.Type.Integration.Misc
-								}
-								if oMatchListActions.Type.Integration.Action != nil {
-									nestedMatchListActions.Type.Integration.Action = oMatchListActions.Type.Integration.Action
-								}
-							}
-							if oMatchListActions.Type.Tagging != nil {
-								nestedMatchListActions.Type.Tagging = &MatchListActionsTypeTagging{}
-								if oMatchListActions.Type.Tagging.Misc != nil {
-									entry.Misc["MatchListActionsTypeTagging"] = oMatchListActions.Type.Tagging.Misc
-								}
-								if oMatchListActions.Type.Tagging.Target != nil {
-									nestedMatchListActions.Type.Tagging.Target = oMatchListActions.Type.Tagging.Target
-								}
-								if oMatchListActions.Type.Tagging.Action != nil {
-									nestedMatchListActions.Type.Tagging.Action = oMatchListActions.Type.Tagging.Action
-								}
-								if oMatchListActions.Type.Tagging.Timeout != nil {
-									nestedMatchListActions.Type.Tagging.Timeout = oMatchListActions.Type.Tagging.Timeout
-								}
-								if oMatchListActions.Type.Tagging.Registration != nil {
-									nestedMatchListActions.Type.Tagging.Registration = &MatchListActionsTypeTaggingRegistration{}
-									if oMatchListActions.Type.Tagging.Registration.Misc != nil {
-										entry.Misc["MatchListActionsTypeTaggingRegistration"] = oMatchListActions.Type.Tagging.Registration.Misc
-									}
-									if oMatchListActions.Type.Tagging.Registration.Localhost != nil {
-										nestedMatchListActions.Type.Tagging.Registration.Localhost = &MatchListActionsTypeTaggingRegistrationLocalhost{}
-										if oMatchListActions.Type.Tagging.Registration.Localhost.Misc != nil {
-											entry.Misc["MatchListActionsTypeTaggingRegistrationLocalhost"] = oMatchListActions.Type.Tagging.Registration.Localhost.Misc
-										}
-									}
-									if oMatchListActions.Type.Tagging.Registration.Panorama != nil {
-										nestedMatchListActions.Type.Tagging.Registration.Panorama = &MatchListActionsTypeTaggingRegistrationPanorama{}
-										if oMatchListActions.Type.Tagging.Registration.Panorama.Misc != nil {
-											entry.Misc["MatchListActionsTypeTaggingRegistrationPanorama"] = oMatchListActions.Type.Tagging.Registration.Panorama.Misc
-										}
-									}
-									if oMatchListActions.Type.Tagging.Registration.Remote != nil {
-										nestedMatchListActions.Type.Tagging.Registration.Remote = &MatchListActionsTypeTaggingRegistrationRemote{}
-										if oMatchListActions.Type.Tagging.Registration.Remote.Misc != nil {
-											entry.Misc["MatchListActionsTypeTaggingRegistrationRemote"] = oMatchListActions.Type.Tagging.Registration.Remote.Misc
-										}
-										if oMatchListActions.Type.Tagging.Registration.Remote.HttpProfile != nil {
-											nestedMatchListActions.Type.Tagging.Registration.Remote.HttpProfile = oMatchListActions.Type.Tagging.Registration.Remote.HttpProfile
-										}
-									}
-								}
-								if oMatchListActions.Type.Tagging.Tags != nil {
-									nestedMatchListActions.Type.Tagging.Tags = util.MemToStr(oMatchListActions.Type.Tagging.Tags)
-								}
-							}
-						}
-						nestedMatchList.Actions = append(nestedMatchList.Actions, nestedMatchListActions)
-					}
-				}
-				nestedMatchListCol = append(nestedMatchListCol, nestedMatchList)
-			}
-			entry.MatchList = nestedMatchListCol
-		}
-
-		entry.Misc["Entry"] = o.Misc
-
-		entryList = append(entryList, entry)
-	}
-
-	return entryList, nil
-}
-
 func SpecMatches(a, b *Entry) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+	if a == nil && b == nil {
 		return true
 	}
 
-	// Don't compare Name.
-	if !util.StringsMatch(a.Description, b.Description) {
-		return false
-	}
-	if !util.StringsMatch(a.DisableOverride, b.DisableOverride) {
-		return false
-	}
-	if !util.BoolsMatch(a.EnhancedApplicationLogging, b.EnhancedApplicationLogging) {
-		return false
-	}
-	if !matchMatchList(a.MatchList, b.MatchList) {
+	if (a == nil && b != nil) || (a != nil && b == nil) {
 		return false
 	}
 
-	return true
+	return a.matches(b)
 }
 
-func matchMatchListActionsTypeIntegration(a *MatchListActionsTypeIntegration, b *MatchListActionsTypeIntegration) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+func (o *Entry) matches(other *Entry) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.StringsMatch(a.Action, b.Action) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	return true
-}
-func matchMatchListActionsTypeTaggingRegistrationLocalhost(a *MatchListActionsTypeTaggingRegistrationLocalhost, b *MatchListActionsTypeTaggingRegistrationLocalhost) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	return true
-}
-func matchMatchListActionsTypeTaggingRegistrationPanorama(a *MatchListActionsTypeTaggingRegistrationPanorama, b *MatchListActionsTypeTaggingRegistrationPanorama) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	return true
-}
-func matchMatchListActionsTypeTaggingRegistrationRemote(a *MatchListActionsTypeTaggingRegistrationRemote, b *MatchListActionsTypeTaggingRegistrationRemote) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !util.StringsMatch(a.HttpProfile, b.HttpProfile) {
+	if !util.StringsMatch(o.Description, other.Description) {
 		return false
 	}
-	return true
-}
-func matchMatchListActionsTypeTaggingRegistration(a *MatchListActionsTypeTaggingRegistration, b *MatchListActionsTypeTaggingRegistration) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !matchMatchListActionsTypeTaggingRegistrationLocalhost(a.Localhost, b.Localhost) {
+	if !util.StringsMatch(o.DisableOverride, other.DisableOverride) {
 		return false
 	}
-	if !matchMatchListActionsTypeTaggingRegistrationPanorama(a.Panorama, b.Panorama) {
+	if !util.BoolsMatch(o.EnhancedApplicationLogging, other.EnhancedApplicationLogging) {
 		return false
 	}
-	if !matchMatchListActionsTypeTaggingRegistrationRemote(a.Remote, b.Remote) {
+	if len(o.MatchList) != len(other.MatchList) {
 		return false
 	}
-	return true
-}
-func matchMatchListActionsTypeTagging(a *MatchListActionsTypeTagging, b *MatchListActionsTypeTagging) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !util.StringsMatch(a.Target, b.Target) {
-		return false
-	}
-	if !util.StringsMatch(a.Action, b.Action) {
-		return false
-	}
-	if !util.Ints64Match(a.Timeout, b.Timeout) {
-		return false
-	}
-	if !matchMatchListActionsTypeTaggingRegistration(a.Registration, b.Registration) {
-		return false
-	}
-	if !util.OrderedListsMatch(a.Tags, b.Tags) {
-		return false
-	}
-	return true
-}
-func matchMatchListActionsType(a *MatchListActionsType, b *MatchListActionsType) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	if !matchMatchListActionsTypeIntegration(a.Integration, b.Integration) {
-		return false
-	}
-	if !matchMatchListActionsTypeTagging(a.Tagging, b.Tagging) {
-		return false
-	}
-	return true
-}
-func matchMatchListActions(a []MatchListActions, b []MatchListActions) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
-		return true
-	}
-	for _, a := range a {
-		for _, b := range b {
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-			if !matchMatchListActionsType(a.Type, b.Type) {
-				return false
-			}
+	for idx := range o.MatchList {
+		if !o.MatchList[idx].matches(&other.MatchList[idx]) {
+			return false
 		}
 	}
+
 	return true
 }
-func matchMatchList(a []MatchList, b []MatchList) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *MatchList) matches(other *MatchList) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	for _, a := range a {
-		for _, b := range b {
-			if !util.StringsEqual(a.Name, b.Name) {
-				return false
-			}
-			if !util.StringsMatch(a.ActionDesc, b.ActionDesc) {
-				return false
-			}
-			if !util.StringsMatch(a.LogType, b.LogType) {
-				return false
-			}
-			if !util.StringsMatch(a.Filter, b.Filter) {
-				return false
-			}
-			if !util.BoolsMatch(a.SendToPanorama, b.SendToPanorama) {
-				return false
-			}
-			if !util.BoolsMatch(a.Quarantine, b.Quarantine) {
-				return false
-			}
-			if !util.OrderedListsMatch(a.SendSnmptrap, b.SendSnmptrap) {
-				return false
-			}
-			if !util.OrderedListsMatch(a.SendEmail, b.SendEmail) {
-				return false
-			}
-			if !util.OrderedListsMatch(a.SendSyslog, b.SendSyslog) {
-				return false
-			}
-			if !util.OrderedListsMatch(a.SendHttp, b.SendHttp) {
-				return false
-			}
-			if !matchMatchListActions(a.Actions, b.Actions) {
-				return false
-			}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
+	}
+	if o.Name != other.Name {
+		return false
+	}
+	if !util.StringsMatch(o.ActionDesc, other.ActionDesc) {
+		return false
+	}
+	if !util.StringsMatch(o.LogType, other.LogType) {
+		return false
+	}
+	if !util.StringsMatch(o.Filter, other.Filter) {
+		return false
+	}
+	if !util.BoolsMatch(o.SendToPanorama, other.SendToPanorama) {
+		return false
+	}
+	if !util.BoolsMatch(o.Quarantine, other.Quarantine) {
+		return false
+	}
+	if !util.OrderedListsMatch[string](o.SendSnmptrap, other.SendSnmptrap) {
+		return false
+	}
+	if !util.OrderedListsMatch[string](o.SendEmail, other.SendEmail) {
+		return false
+	}
+	if !util.OrderedListsMatch[string](o.SendSyslog, other.SendSyslog) {
+		return false
+	}
+	if !util.OrderedListsMatch[string](o.SendHttp, other.SendHttp) {
+		return false
+	}
+	if len(o.Actions) != len(other.Actions) {
+		return false
+	}
+	for idx := range o.Actions {
+		if !o.Actions[idx].matches(&other.Actions[idx]) {
+			return false
 		}
 	}
+
+	return true
+}
+
+func (o *MatchListActions) matches(other *MatchListActions) bool {
+	if o == nil && other == nil {
+		return true
+	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
+	}
+	if o.Name != other.Name {
+		return false
+	}
+	if !o.Type.matches(other.Type) {
+		return false
+	}
+
+	return true
+}
+
+func (o *MatchListActionsType) matches(other *MatchListActionsType) bool {
+	if o == nil && other == nil {
+		return true
+	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
+	}
+	if !o.Integration.matches(other.Integration) {
+		return false
+	}
+	if !o.Tagging.matches(other.Tagging) {
+		return false
+	}
+
+	return true
+}
+
+func (o *MatchListActionsTypeIntegration) matches(other *MatchListActionsTypeIntegration) bool {
+	if o == nil && other == nil {
+		return true
+	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
+	}
+	if !util.StringsMatch(o.Action, other.Action) {
+		return false
+	}
+
+	return true
+}
+
+func (o *MatchListActionsTypeTagging) matches(other *MatchListActionsTypeTagging) bool {
+	if o == nil && other == nil {
+		return true
+	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
+	}
+	if !util.StringsMatch(o.Target, other.Target) {
+		return false
+	}
+	if !util.StringsMatch(o.Action, other.Action) {
+		return false
+	}
+	if !util.Ints64Match(o.Timeout, other.Timeout) {
+		return false
+	}
+	if !o.Registration.matches(other.Registration) {
+		return false
+	}
+	if !util.OrderedListsMatch[string](o.Tags, other.Tags) {
+		return false
+	}
+
+	return true
+}
+
+func (o *MatchListActionsTypeTaggingRegistration) matches(other *MatchListActionsTypeTaggingRegistration) bool {
+	if o == nil && other == nil {
+		return true
+	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
+	}
+	if !o.Localhost.matches(other.Localhost) {
+		return false
+	}
+	if !o.Panorama.matches(other.Panorama) {
+		return false
+	}
+	if !o.Remote.matches(other.Remote) {
+		return false
+	}
+
+	return true
+}
+
+func (o *MatchListActionsTypeTaggingRegistrationLocalhost) matches(other *MatchListActionsTypeTaggingRegistrationLocalhost) bool {
+	if o == nil && other == nil {
+		return true
+	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
+	}
+
+	return true
+}
+
+func (o *MatchListActionsTypeTaggingRegistrationPanorama) matches(other *MatchListActionsTypeTaggingRegistrationPanorama) bool {
+	if o == nil && other == nil {
+		return true
+	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
+	}
+
+	return true
+}
+
+func (o *MatchListActionsTypeTaggingRegistrationRemote) matches(other *MatchListActionsTypeTaggingRegistrationRemote) bool {
+	if o == nil && other == nil {
+		return true
+	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
+	}
+	if !util.StringsMatch(o.HttpProfile, other.HttpProfile) {
+		return false
+	}
+
 	return true
 }
 

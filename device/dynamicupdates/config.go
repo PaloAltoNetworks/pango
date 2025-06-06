@@ -10,8 +10,7 @@ import (
 
 type Config struct {
 	UpdateSchedule *UpdateSchedule
-
-	Misc map[string][]generic.Xml
+	Misc           []generic.Xml
 }
 type UpdateSchedule struct {
 	AntiVirus                  *UpdateScheduleAntiVirus
@@ -22,9 +21,11 @@ type UpdateSchedule struct {
 	Threats                    *UpdateScheduleThreats
 	WfPrivate                  *UpdateScheduleWfPrivate
 	Wildfire                   *UpdateScheduleWildfire
+	Misc                       []generic.Xml
 }
 type UpdateScheduleAntiVirus struct {
 	Recurring *UpdateScheduleAntiVirusRecurring
+	Misc      []generic.Xml
 }
 type UpdateScheduleAntiVirusRecurring struct {
 	SyncToPeer *bool
@@ -33,24 +34,30 @@ type UpdateScheduleAntiVirusRecurring struct {
 	Hourly     *UpdateScheduleAntiVirusRecurringHourly
 	None       *UpdateScheduleAntiVirusRecurringNone
 	Weekly     *UpdateScheduleAntiVirusRecurringWeekly
+	Misc       []generic.Xml
 }
 type UpdateScheduleAntiVirusRecurringDaily struct {
 	Action *string
 	At     *string
+	Misc   []generic.Xml
 }
 type UpdateScheduleAntiVirusRecurringHourly struct {
 	Action *string
 	At     *int64
+	Misc   []generic.Xml
 }
 type UpdateScheduleAntiVirusRecurringNone struct {
+	Misc []generic.Xml
 }
 type UpdateScheduleAntiVirusRecurringWeekly struct {
 	Action    *string
 	At        *string
 	DayOfWeek *string
+	Misc      []generic.Xml
 }
 type UpdateScheduleAppProfile struct {
 	Recurring *UpdateScheduleAppProfileRecurring
+	Misc      []generic.Xml
 }
 type UpdateScheduleAppProfileRecurring struct {
 	SyncToPeer *bool
@@ -58,65 +65,81 @@ type UpdateScheduleAppProfileRecurring struct {
 	Daily      *UpdateScheduleAppProfileRecurringDaily
 	None       *UpdateScheduleAppProfileRecurringNone
 	Weekly     *UpdateScheduleAppProfileRecurringWeekly
+	Misc       []generic.Xml
 }
 type UpdateScheduleAppProfileRecurringDaily struct {
 	Action *string
 	At     *string
+	Misc   []generic.Xml
 }
 type UpdateScheduleAppProfileRecurringNone struct {
+	Misc []generic.Xml
 }
 type UpdateScheduleAppProfileRecurringWeekly struct {
 	Action    *string
 	At        *string
 	DayOfWeek *string
+	Misc      []generic.Xml
 }
 type UpdateScheduleGlobalProtectClientlessVpn struct {
 	Recurring *UpdateScheduleGlobalProtectClientlessVpnRecurring
+	Misc      []generic.Xml
 }
 type UpdateScheduleGlobalProtectClientlessVpnRecurring struct {
 	Daily  *UpdateScheduleGlobalProtectClientlessVpnRecurringDaily
 	Hourly *UpdateScheduleGlobalProtectClientlessVpnRecurringHourly
 	None   *UpdateScheduleGlobalProtectClientlessVpnRecurringNone
 	Weekly *UpdateScheduleGlobalProtectClientlessVpnRecurringWeekly
+	Misc   []generic.Xml
 }
 type UpdateScheduleGlobalProtectClientlessVpnRecurringDaily struct {
 	Action *string
 	At     *string
+	Misc   []generic.Xml
 }
 type UpdateScheduleGlobalProtectClientlessVpnRecurringHourly struct {
 	Action *string
 	At     *int64
+	Misc   []generic.Xml
 }
 type UpdateScheduleGlobalProtectClientlessVpnRecurringNone struct {
+	Misc []generic.Xml
 }
 type UpdateScheduleGlobalProtectClientlessVpnRecurringWeekly struct {
 	Action    *string
 	At        *string
 	DayOfWeek *string
+	Misc      []generic.Xml
 }
 type UpdateScheduleGlobalProtectDatafile struct {
 	Recurring *UpdateScheduleGlobalProtectDatafileRecurring
+	Misc      []generic.Xml
 }
 type UpdateScheduleGlobalProtectDatafileRecurring struct {
 	Daily  *UpdateScheduleGlobalProtectDatafileRecurringDaily
 	Hourly *UpdateScheduleGlobalProtectDatafileRecurringHourly
 	None   *UpdateScheduleGlobalProtectDatafileRecurringNone
 	Weekly *UpdateScheduleGlobalProtectDatafileRecurringWeekly
+	Misc   []generic.Xml
 }
 type UpdateScheduleGlobalProtectDatafileRecurringDaily struct {
 	Action *string
 	At     *string
+	Misc   []generic.Xml
 }
 type UpdateScheduleGlobalProtectDatafileRecurringHourly struct {
 	Action *string
 	At     *int64
+	Misc   []generic.Xml
 }
 type UpdateScheduleGlobalProtectDatafileRecurringNone struct {
+	Misc []generic.Xml
 }
 type UpdateScheduleGlobalProtectDatafileRecurringWeekly struct {
 	Action    *string
 	At        *string
 	DayOfWeek *string
+	Misc      []generic.Xml
 }
 type UpdateScheduleStatisticsService struct {
 	ApplicationReports          *bool
@@ -127,9 +150,11 @@ type UpdateScheduleStatisticsService struct {
 	ThreatPreventionPcap        *bool
 	ThreatPreventionReports     *bool
 	UrlReports                  *bool
+	Misc                        []generic.Xml
 }
 type UpdateScheduleThreats struct {
 	Recurring *UpdateScheduleThreatsRecurring
+	Misc      []generic.Xml
 }
 type UpdateScheduleThreatsRecurring struct {
 	NewAppThreshold *int64
@@ -140,32 +165,39 @@ type UpdateScheduleThreatsRecurring struct {
 	Hourly          *UpdateScheduleThreatsRecurringHourly
 	None            *UpdateScheduleThreatsRecurringNone
 	Weekly          *UpdateScheduleThreatsRecurringWeekly
+	Misc            []generic.Xml
 }
 type UpdateScheduleThreatsRecurringDaily struct {
 	Action            *string
 	At                *string
 	DisableNewContent *bool
+	Misc              []generic.Xml
 }
 type UpdateScheduleThreatsRecurringEvery30Mins struct {
 	Action            *string
 	At                *int64
 	DisableNewContent *bool
+	Misc              []generic.Xml
 }
 type UpdateScheduleThreatsRecurringHourly struct {
 	Action            *string
 	At                *int64
 	DisableNewContent *bool
+	Misc              []generic.Xml
 }
 type UpdateScheduleThreatsRecurringNone struct {
+	Misc []generic.Xml
 }
 type UpdateScheduleThreatsRecurringWeekly struct {
 	Action            *string
 	At                *string
 	DayOfWeek         *string
 	DisableNewContent *bool
+	Misc              []generic.Xml
 }
 type UpdateScheduleWfPrivate struct {
 	Recurring *UpdateScheduleWfPrivateRecurring
+	Misc      []generic.Xml
 }
 type UpdateScheduleWfPrivateRecurring struct {
 	SyncToPeer  *bool
@@ -174,27 +206,34 @@ type UpdateScheduleWfPrivateRecurring struct {
 	Every5Mins  *UpdateScheduleWfPrivateRecurringEvery5Mins
 	EveryHour   *UpdateScheduleWfPrivateRecurringEveryHour
 	None        *UpdateScheduleWfPrivateRecurringNone
+	Misc        []generic.Xml
 }
 type UpdateScheduleWfPrivateRecurringEvery15Mins struct {
 	Action *string
 	At     *int64
+	Misc   []generic.Xml
 }
 type UpdateScheduleWfPrivateRecurringEvery30Mins struct {
 	Action *string
 	At     *int64
+	Misc   []generic.Xml
 }
 type UpdateScheduleWfPrivateRecurringEvery5Mins struct {
 	Action *string
 	At     *int64
+	Misc   []generic.Xml
 }
 type UpdateScheduleWfPrivateRecurringEveryHour struct {
 	Action *string
 	At     *int64
+	Misc   []generic.Xml
 }
 type UpdateScheduleWfPrivateRecurringNone struct {
+	Misc []generic.Xml
 }
 type UpdateScheduleWildfire struct {
 	Recurring *UpdateScheduleWildfireRecurring
+	Misc      []generic.Xml
 }
 type UpdateScheduleWildfireRecurring struct {
 	Every15Mins *UpdateScheduleWildfireRecurringEvery15Mins
@@ -203,2126 +242,2614 @@ type UpdateScheduleWildfireRecurring struct {
 	EveryMin    *UpdateScheduleWildfireRecurringEveryMin
 	None        *UpdateScheduleWildfireRecurringNone
 	RealTime    *UpdateScheduleWildfireRecurringRealTime
+	Misc        []generic.Xml
 }
 type UpdateScheduleWildfireRecurringEvery15Mins struct {
 	Action     *string
 	At         *int64
 	SyncToPeer *bool
+	Misc       []generic.Xml
 }
 type UpdateScheduleWildfireRecurringEvery30Mins struct {
 	Action     *string
 	At         *int64
 	SyncToPeer *bool
+	Misc       []generic.Xml
 }
 type UpdateScheduleWildfireRecurringEveryHour struct {
 	Action     *string
 	At         *int64
 	SyncToPeer *bool
+	Misc       []generic.Xml
 }
 type UpdateScheduleWildfireRecurringEveryMin struct {
 	Action     *string
 	SyncToPeer *bool
+	Misc       []generic.Xml
 }
 type UpdateScheduleWildfireRecurringNone struct {
+	Misc []generic.Xml
 }
 type UpdateScheduleWildfireRecurringRealTime struct {
+	Misc []generic.Xml
 }
+
 type configXmlContainer struct {
 	XMLName xml.Name    `xml:"result"`
 	Answer  []configXml `xml:"system"`
 }
+
+func (o *configXmlContainer) Normalize() ([]*Config, error) {
+	entries := make([]*Config, 0, len(o.Answer))
+	for _, elt := range o.Answer {
+		obj, err := elt.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		entries = append(entries, obj)
+	}
+
+	return entries, nil
+}
+
+func specifyConfig(source *Config) (any, error) {
+	var obj configXml
+	obj.MarshalFromObject(*source)
+	return obj, nil
+}
+
 type configXml struct {
 	XMLName        xml.Name           `xml:"system"`
-	UpdateSchedule *UpdateScheduleXml `xml:"update-schedule,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
+	UpdateSchedule *updateScheduleXml `xml:"update-schedule,omitempty"`
+	Misc           []generic.Xml      `xml:",any"`
 }
-type UpdateScheduleXml struct {
-	AntiVirus                  *UpdateScheduleAntiVirusXml                  `xml:"anti-virus,omitempty"`
-	AppProfile                 *UpdateScheduleAppProfileXml                 `xml:"app-profile,omitempty"`
-	GlobalProtectClientlessVpn *UpdateScheduleGlobalProtectClientlessVpnXml `xml:"global-protect-clientless-vpn,omitempty"`
-	GlobalProtectDatafile      *UpdateScheduleGlobalProtectDatafileXml      `xml:"global-protect-datafile,omitempty"`
-	StatisticsService          *UpdateScheduleStatisticsServiceXml          `xml:"statistics-service,omitempty"`
-	Threats                    *UpdateScheduleThreatsXml                    `xml:"threats,omitempty"`
-	WfPrivate                  *UpdateScheduleWfPrivateXml                  `xml:"wf-private,omitempty"`
-	Wildfire                   *UpdateScheduleWildfireXml                   `xml:"wildfire,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
+type updateScheduleXml struct {
+	AntiVirus                  *updateScheduleAntiVirusXml                  `xml:"anti-virus,omitempty"`
+	AppProfile                 *updateScheduleAppProfileXml                 `xml:"app-profile,omitempty"`
+	GlobalProtectClientlessVpn *updateScheduleGlobalProtectClientlessVpnXml `xml:"global-protect-clientless-vpn,omitempty"`
+	GlobalProtectDatafile      *updateScheduleGlobalProtectDatafileXml      `xml:"global-protect-datafile,omitempty"`
+	StatisticsService          *updateScheduleStatisticsServiceXml          `xml:"statistics-service,omitempty"`
+	Threats                    *updateScheduleThreatsXml                    `xml:"threats,omitempty"`
+	WfPrivate                  *updateScheduleWfPrivateXml                  `xml:"wf-private,omitempty"`
+	Wildfire                   *updateScheduleWildfireXml                   `xml:"wildfire,omitempty"`
+	Misc                       []generic.Xml                                `xml:",any"`
 }
-type UpdateScheduleAntiVirusXml struct {
-	Recurring *UpdateScheduleAntiVirusRecurringXml `xml:"recurring,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
+type updateScheduleAntiVirusXml struct {
+	Recurring *updateScheduleAntiVirusRecurringXml `xml:"recurring,omitempty"`
+	Misc      []generic.Xml                        `xml:",any"`
 }
-type UpdateScheduleAntiVirusRecurringXml struct {
+type updateScheduleAntiVirusRecurringXml struct {
 	SyncToPeer *string                                    `xml:"sync-to-peer,omitempty"`
 	Threshold  *int64                                     `xml:"threshold,omitempty"`
-	Daily      *UpdateScheduleAntiVirusRecurringDailyXml  `xml:"daily,omitempty"`
-	Hourly     *UpdateScheduleAntiVirusRecurringHourlyXml `xml:"hourly,omitempty"`
-	None       *UpdateScheduleAntiVirusRecurringNoneXml   `xml:"none,omitempty"`
-	Weekly     *UpdateScheduleAntiVirusRecurringWeeklyXml `xml:"weekly,omitempty"`
-
+	Daily      *updateScheduleAntiVirusRecurringDailyXml  `xml:"daily,omitempty"`
+	Hourly     *updateScheduleAntiVirusRecurringHourlyXml `xml:"hourly,omitempty"`
+	None       *updateScheduleAntiVirusRecurringNoneXml   `xml:"none,omitempty"`
+	Weekly     *updateScheduleAntiVirusRecurringWeeklyXml `xml:"weekly,omitempty"`
+	Misc       []generic.Xml                              `xml:",any"`
+}
+type updateScheduleAntiVirusRecurringDailyXml struct {
+	Action *string       `xml:"action,omitempty"`
+	At     *string       `xml:"at,omitempty"`
+	Misc   []generic.Xml `xml:",any"`
+}
+type updateScheduleAntiVirusRecurringHourlyXml struct {
+	Action *string       `xml:"action,omitempty"`
+	At     *int64        `xml:"at,omitempty"`
+	Misc   []generic.Xml `xml:",any"`
+}
+type updateScheduleAntiVirusRecurringNoneXml struct {
 	Misc []generic.Xml `xml:",any"`
 }
-type UpdateScheduleAntiVirusRecurringDailyXml struct {
-	Action *string `xml:"action,omitempty"`
-	At     *string `xml:"at,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
+type updateScheduleAntiVirusRecurringWeeklyXml struct {
+	Action    *string       `xml:"action,omitempty"`
+	At        *string       `xml:"at,omitempty"`
+	DayOfWeek *string       `xml:"day-of-week,omitempty"`
+	Misc      []generic.Xml `xml:",any"`
 }
-type UpdateScheduleAntiVirusRecurringHourlyXml struct {
-	Action *string `xml:"action,omitempty"`
-	At     *int64  `xml:"at,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
+type updateScheduleAppProfileXml struct {
+	Recurring *updateScheduleAppProfileRecurringXml `xml:"recurring,omitempty"`
+	Misc      []generic.Xml                         `xml:",any"`
 }
-type UpdateScheduleAntiVirusRecurringNoneXml struct {
-	Misc []generic.Xml `xml:",any"`
-}
-type UpdateScheduleAntiVirusRecurringWeeklyXml struct {
-	Action    *string `xml:"action,omitempty"`
-	At        *string `xml:"at,omitempty"`
-	DayOfWeek *string `xml:"day-of-week,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
-}
-type UpdateScheduleAppProfileXml struct {
-	Recurring *UpdateScheduleAppProfileRecurringXml `xml:"recurring,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
-}
-type UpdateScheduleAppProfileRecurringXml struct {
+type updateScheduleAppProfileRecurringXml struct {
 	SyncToPeer *string                                     `xml:"sync-to-peer,omitempty"`
 	Threshold  *int64                                      `xml:"threshold,omitempty"`
-	Daily      *UpdateScheduleAppProfileRecurringDailyXml  `xml:"daily,omitempty"`
-	None       *UpdateScheduleAppProfileRecurringNoneXml   `xml:"none,omitempty"`
-	Weekly     *UpdateScheduleAppProfileRecurringWeeklyXml `xml:"weekly,omitempty"`
-
+	Daily      *updateScheduleAppProfileRecurringDailyXml  `xml:"daily,omitempty"`
+	None       *updateScheduleAppProfileRecurringNoneXml   `xml:"none,omitempty"`
+	Weekly     *updateScheduleAppProfileRecurringWeeklyXml `xml:"weekly,omitempty"`
+	Misc       []generic.Xml                               `xml:",any"`
+}
+type updateScheduleAppProfileRecurringDailyXml struct {
+	Action *string       `xml:"action,omitempty"`
+	At     *string       `xml:"at,omitempty"`
+	Misc   []generic.Xml `xml:",any"`
+}
+type updateScheduleAppProfileRecurringNoneXml struct {
 	Misc []generic.Xml `xml:",any"`
 }
-type UpdateScheduleAppProfileRecurringDailyXml struct {
-	Action *string `xml:"action,omitempty"`
-	At     *string `xml:"at,omitempty"`
-
+type updateScheduleAppProfileRecurringWeeklyXml struct {
+	Action    *string       `xml:"action,omitempty"`
+	At        *string       `xml:"at,omitempty"`
+	DayOfWeek *string       `xml:"day-of-week,omitempty"`
+	Misc      []generic.Xml `xml:",any"`
+}
+type updateScheduleGlobalProtectClientlessVpnXml struct {
+	Recurring *updateScheduleGlobalProtectClientlessVpnRecurringXml `xml:"recurring,omitempty"`
+	Misc      []generic.Xml                                         `xml:",any"`
+}
+type updateScheduleGlobalProtectClientlessVpnRecurringXml struct {
+	Daily  *updateScheduleGlobalProtectClientlessVpnRecurringDailyXml  `xml:"daily,omitempty"`
+	Hourly *updateScheduleGlobalProtectClientlessVpnRecurringHourlyXml `xml:"hourly,omitempty"`
+	None   *updateScheduleGlobalProtectClientlessVpnRecurringNoneXml   `xml:"none,omitempty"`
+	Weekly *updateScheduleGlobalProtectClientlessVpnRecurringWeeklyXml `xml:"weekly,omitempty"`
+	Misc   []generic.Xml                                               `xml:",any"`
+}
+type updateScheduleGlobalProtectClientlessVpnRecurringDailyXml struct {
+	Action *string       `xml:"action,omitempty"`
+	At     *string       `xml:"at,omitempty"`
+	Misc   []generic.Xml `xml:",any"`
+}
+type updateScheduleGlobalProtectClientlessVpnRecurringHourlyXml struct {
+	Action *string       `xml:"action,omitempty"`
+	At     *int64        `xml:"at,omitempty"`
+	Misc   []generic.Xml `xml:",any"`
+}
+type updateScheduleGlobalProtectClientlessVpnRecurringNoneXml struct {
 	Misc []generic.Xml `xml:",any"`
 }
-type UpdateScheduleAppProfileRecurringNoneXml struct {
+type updateScheduleGlobalProtectClientlessVpnRecurringWeeklyXml struct {
+	Action    *string       `xml:"action,omitempty"`
+	At        *string       `xml:"at,omitempty"`
+	DayOfWeek *string       `xml:"day-of-week,omitempty"`
+	Misc      []generic.Xml `xml:",any"`
+}
+type updateScheduleGlobalProtectDatafileXml struct {
+	Recurring *updateScheduleGlobalProtectDatafileRecurringXml `xml:"recurring,omitempty"`
+	Misc      []generic.Xml                                    `xml:",any"`
+}
+type updateScheduleGlobalProtectDatafileRecurringXml struct {
+	Daily  *updateScheduleGlobalProtectDatafileRecurringDailyXml  `xml:"daily,omitempty"`
+	Hourly *updateScheduleGlobalProtectDatafileRecurringHourlyXml `xml:"hourly,omitempty"`
+	None   *updateScheduleGlobalProtectDatafileRecurringNoneXml   `xml:"none,omitempty"`
+	Weekly *updateScheduleGlobalProtectDatafileRecurringWeeklyXml `xml:"weekly,omitempty"`
+	Misc   []generic.Xml                                          `xml:",any"`
+}
+type updateScheduleGlobalProtectDatafileRecurringDailyXml struct {
+	Action *string       `xml:"action,omitempty"`
+	At     *string       `xml:"at,omitempty"`
+	Misc   []generic.Xml `xml:",any"`
+}
+type updateScheduleGlobalProtectDatafileRecurringHourlyXml struct {
+	Action *string       `xml:"action,omitempty"`
+	At     *int64        `xml:"at,omitempty"`
+	Misc   []generic.Xml `xml:",any"`
+}
+type updateScheduleGlobalProtectDatafileRecurringNoneXml struct {
 	Misc []generic.Xml `xml:",any"`
 }
-type UpdateScheduleAppProfileRecurringWeeklyXml struct {
-	Action    *string `xml:"action,omitempty"`
-	At        *string `xml:"at,omitempty"`
-	DayOfWeek *string `xml:"day-of-week,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
+type updateScheduleGlobalProtectDatafileRecurringWeeklyXml struct {
+	Action    *string       `xml:"action,omitempty"`
+	At        *string       `xml:"at,omitempty"`
+	DayOfWeek *string       `xml:"day-of-week,omitempty"`
+	Misc      []generic.Xml `xml:",any"`
 }
-type UpdateScheduleGlobalProtectClientlessVpnXml struct {
-	Recurring *UpdateScheduleGlobalProtectClientlessVpnRecurringXml `xml:"recurring,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
+type updateScheduleStatisticsServiceXml struct {
+	ApplicationReports          *string       `xml:"application-reports,omitempty"`
+	FileIdentificationReports   *string       `xml:"file-identification-reports,omitempty"`
+	HealthPerformanceReports    *string       `xml:"health-performance-reports,omitempty"`
+	PassiveDnsMonitoring        *string       `xml:"passive-dns-monitoring,omitempty"`
+	ThreatPreventionInformation *string       `xml:"threat-prevention-information,omitempty"`
+	ThreatPreventionPcap        *string       `xml:"threat-prevention-pcap,omitempty"`
+	ThreatPreventionReports     *string       `xml:"threat-prevention-reports,omitempty"`
+	UrlReports                  *string       `xml:"url-reports,omitempty"`
+	Misc                        []generic.Xml `xml:",any"`
 }
-type UpdateScheduleGlobalProtectClientlessVpnRecurringXml struct {
-	Daily  *UpdateScheduleGlobalProtectClientlessVpnRecurringDailyXml  `xml:"daily,omitempty"`
-	Hourly *UpdateScheduleGlobalProtectClientlessVpnRecurringHourlyXml `xml:"hourly,omitempty"`
-	None   *UpdateScheduleGlobalProtectClientlessVpnRecurringNoneXml   `xml:"none,omitempty"`
-	Weekly *UpdateScheduleGlobalProtectClientlessVpnRecurringWeeklyXml `xml:"weekly,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
+type updateScheduleThreatsXml struct {
+	Recurring *updateScheduleThreatsRecurringXml `xml:"recurring,omitempty"`
+	Misc      []generic.Xml                      `xml:",any"`
 }
-type UpdateScheduleGlobalProtectClientlessVpnRecurringDailyXml struct {
-	Action *string `xml:"action,omitempty"`
-	At     *string `xml:"at,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
-}
-type UpdateScheduleGlobalProtectClientlessVpnRecurringHourlyXml struct {
-	Action *string `xml:"action,omitempty"`
-	At     *int64  `xml:"at,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
-}
-type UpdateScheduleGlobalProtectClientlessVpnRecurringNoneXml struct {
-	Misc []generic.Xml `xml:",any"`
-}
-type UpdateScheduleGlobalProtectClientlessVpnRecurringWeeklyXml struct {
-	Action    *string `xml:"action,omitempty"`
-	At        *string `xml:"at,omitempty"`
-	DayOfWeek *string `xml:"day-of-week,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
-}
-type UpdateScheduleGlobalProtectDatafileXml struct {
-	Recurring *UpdateScheduleGlobalProtectDatafileRecurringXml `xml:"recurring,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
-}
-type UpdateScheduleGlobalProtectDatafileRecurringXml struct {
-	Daily  *UpdateScheduleGlobalProtectDatafileRecurringDailyXml  `xml:"daily,omitempty"`
-	Hourly *UpdateScheduleGlobalProtectDatafileRecurringHourlyXml `xml:"hourly,omitempty"`
-	None   *UpdateScheduleGlobalProtectDatafileRecurringNoneXml   `xml:"none,omitempty"`
-	Weekly *UpdateScheduleGlobalProtectDatafileRecurringWeeklyXml `xml:"weekly,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
-}
-type UpdateScheduleGlobalProtectDatafileRecurringDailyXml struct {
-	Action *string `xml:"action,omitempty"`
-	At     *string `xml:"at,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
-}
-type UpdateScheduleGlobalProtectDatafileRecurringHourlyXml struct {
-	Action *string `xml:"action,omitempty"`
-	At     *int64  `xml:"at,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
-}
-type UpdateScheduleGlobalProtectDatafileRecurringNoneXml struct {
-	Misc []generic.Xml `xml:",any"`
-}
-type UpdateScheduleGlobalProtectDatafileRecurringWeeklyXml struct {
-	Action    *string `xml:"action,omitempty"`
-	At        *string `xml:"at,omitempty"`
-	DayOfWeek *string `xml:"day-of-week,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
-}
-type UpdateScheduleStatisticsServiceXml struct {
-	ApplicationReports          *string `xml:"application-reports,omitempty"`
-	FileIdentificationReports   *string `xml:"file-identification-reports,omitempty"`
-	HealthPerformanceReports    *string `xml:"health-performance-reports,omitempty"`
-	PassiveDnsMonitoring        *string `xml:"passive-dns-monitoring,omitempty"`
-	ThreatPreventionInformation *string `xml:"threat-prevention-information,omitempty"`
-	ThreatPreventionPcap        *string `xml:"threat-prevention-pcap,omitempty"`
-	ThreatPreventionReports     *string `xml:"threat-prevention-reports,omitempty"`
-	UrlReports                  *string `xml:"url-reports,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
-}
-type UpdateScheduleThreatsXml struct {
-	Recurring *UpdateScheduleThreatsRecurringXml `xml:"recurring,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
-}
-type UpdateScheduleThreatsRecurringXml struct {
+type updateScheduleThreatsRecurringXml struct {
 	NewAppThreshold *int64                                        `xml:"new-app-threshold,omitempty"`
 	SyncToPeer      *string                                       `xml:"sync-to-peer,omitempty"`
 	Threshold       *int64                                        `xml:"threshold,omitempty"`
-	Daily           *UpdateScheduleThreatsRecurringDailyXml       `xml:"daily,omitempty"`
-	Every30Mins     *UpdateScheduleThreatsRecurringEvery30MinsXml `xml:"every-30-mins,omitempty"`
-	Hourly          *UpdateScheduleThreatsRecurringHourlyXml      `xml:"hourly,omitempty"`
-	None            *UpdateScheduleThreatsRecurringNoneXml        `xml:"none,omitempty"`
-	Weekly          *UpdateScheduleThreatsRecurringWeeklyXml      `xml:"weekly,omitempty"`
-
+	Daily           *updateScheduleThreatsRecurringDailyXml       `xml:"daily,omitempty"`
+	Every30Mins     *updateScheduleThreatsRecurringEvery30MinsXml `xml:"every-30-mins,omitempty"`
+	Hourly          *updateScheduleThreatsRecurringHourlyXml      `xml:"hourly,omitempty"`
+	None            *updateScheduleThreatsRecurringNoneXml        `xml:"none,omitempty"`
+	Weekly          *updateScheduleThreatsRecurringWeeklyXml      `xml:"weekly,omitempty"`
+	Misc            []generic.Xml                                 `xml:",any"`
+}
+type updateScheduleThreatsRecurringDailyXml struct {
+	Action            *string       `xml:"action,omitempty"`
+	At                *string       `xml:"at,omitempty"`
+	DisableNewContent *string       `xml:"disable-new-content,omitempty"`
+	Misc              []generic.Xml `xml:",any"`
+}
+type updateScheduleThreatsRecurringEvery30MinsXml struct {
+	Action            *string       `xml:"action,omitempty"`
+	At                *int64        `xml:"at,omitempty"`
+	DisableNewContent *string       `xml:"disable-new-content,omitempty"`
+	Misc              []generic.Xml `xml:",any"`
+}
+type updateScheduleThreatsRecurringHourlyXml struct {
+	Action            *string       `xml:"action,omitempty"`
+	At                *int64        `xml:"at,omitempty"`
+	DisableNewContent *string       `xml:"disable-new-content,omitempty"`
+	Misc              []generic.Xml `xml:",any"`
+}
+type updateScheduleThreatsRecurringNoneXml struct {
 	Misc []generic.Xml `xml:",any"`
 }
-type UpdateScheduleThreatsRecurringDailyXml struct {
-	Action            *string `xml:"action,omitempty"`
-	At                *string `xml:"at,omitempty"`
-	DisableNewContent *string `xml:"disable-new-content,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
+type updateScheduleThreatsRecurringWeeklyXml struct {
+	Action            *string       `xml:"action,omitempty"`
+	At                *string       `xml:"at,omitempty"`
+	DayOfWeek         *string       `xml:"day-of-week,omitempty"`
+	DisableNewContent *string       `xml:"disable-new-content,omitempty"`
+	Misc              []generic.Xml `xml:",any"`
 }
-type UpdateScheduleThreatsRecurringEvery30MinsXml struct {
-	Action            *string `xml:"action,omitempty"`
-	At                *int64  `xml:"at,omitempty"`
-	DisableNewContent *string `xml:"disable-new-content,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
+type updateScheduleWfPrivateXml struct {
+	Recurring *updateScheduleWfPrivateRecurringXml `xml:"recurring,omitempty"`
+	Misc      []generic.Xml                        `xml:",any"`
 }
-type UpdateScheduleThreatsRecurringHourlyXml struct {
-	Action            *string `xml:"action,omitempty"`
-	At                *int64  `xml:"at,omitempty"`
-	DisableNewContent *string `xml:"disable-new-content,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
-}
-type UpdateScheduleThreatsRecurringNoneXml struct {
-	Misc []generic.Xml `xml:",any"`
-}
-type UpdateScheduleThreatsRecurringWeeklyXml struct {
-	Action            *string `xml:"action,omitempty"`
-	At                *string `xml:"at,omitempty"`
-	DayOfWeek         *string `xml:"day-of-week,omitempty"`
-	DisableNewContent *string `xml:"disable-new-content,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
-}
-type UpdateScheduleWfPrivateXml struct {
-	Recurring *UpdateScheduleWfPrivateRecurringXml `xml:"recurring,omitempty"`
-
-	Misc []generic.Xml `xml:",any"`
-}
-type UpdateScheduleWfPrivateRecurringXml struct {
+type updateScheduleWfPrivateRecurringXml struct {
 	SyncToPeer  *string                                         `xml:"sync-to-peer,omitempty"`
-	Every15Mins *UpdateScheduleWfPrivateRecurringEvery15MinsXml `xml:"every-15-mins,omitempty"`
-	Every30Mins *UpdateScheduleWfPrivateRecurringEvery30MinsXml `xml:"every-30-mins,omitempty"`
-	Every5Mins  *UpdateScheduleWfPrivateRecurringEvery5MinsXml  `xml:"every-5-mins,omitempty"`
-	EveryHour   *UpdateScheduleWfPrivateRecurringEveryHourXml   `xml:"every-hour,omitempty"`
-	None        *UpdateScheduleWfPrivateRecurringNoneXml        `xml:"none,omitempty"`
+	Every15Mins *updateScheduleWfPrivateRecurringEvery15MinsXml `xml:"every-15-mins,omitempty"`
+	Every30Mins *updateScheduleWfPrivateRecurringEvery30MinsXml `xml:"every-30-mins,omitempty"`
+	Every5Mins  *updateScheduleWfPrivateRecurringEvery5MinsXml  `xml:"every-5-mins,omitempty"`
+	EveryHour   *updateScheduleWfPrivateRecurringEveryHourXml   `xml:"every-hour,omitempty"`
+	None        *updateScheduleWfPrivateRecurringNoneXml        `xml:"none,omitempty"`
+	Misc        []generic.Xml                                   `xml:",any"`
+}
+type updateScheduleWfPrivateRecurringEvery15MinsXml struct {
+	Action *string       `xml:"action,omitempty"`
+	At     *int64        `xml:"at,omitempty"`
+	Misc   []generic.Xml `xml:",any"`
+}
+type updateScheduleWfPrivateRecurringEvery30MinsXml struct {
+	Action *string       `xml:"action,omitempty"`
+	At     *int64        `xml:"at,omitempty"`
+	Misc   []generic.Xml `xml:",any"`
+}
+type updateScheduleWfPrivateRecurringEvery5MinsXml struct {
+	Action *string       `xml:"action,omitempty"`
+	At     *int64        `xml:"at,omitempty"`
+	Misc   []generic.Xml `xml:",any"`
+}
+type updateScheduleWfPrivateRecurringEveryHourXml struct {
+	Action *string       `xml:"action,omitempty"`
+	At     *int64        `xml:"at,omitempty"`
+	Misc   []generic.Xml `xml:",any"`
+}
+type updateScheduleWfPrivateRecurringNoneXml struct {
+	Misc []generic.Xml `xml:",any"`
+}
+type updateScheduleWildfireXml struct {
+	Recurring *updateScheduleWildfireRecurringXml `xml:"recurring,omitempty"`
+	Misc      []generic.Xml                       `xml:",any"`
+}
+type updateScheduleWildfireRecurringXml struct {
+	Every15Mins *updateScheduleWildfireRecurringEvery15MinsXml `xml:"every-15-mins,omitempty"`
+	Every30Mins *updateScheduleWildfireRecurringEvery30MinsXml `xml:"every-30-mins,omitempty"`
+	EveryHour   *updateScheduleWildfireRecurringEveryHourXml   `xml:"every-hour,omitempty"`
+	EveryMin    *updateScheduleWildfireRecurringEveryMinXml    `xml:"every-min,omitempty"`
+	None        *updateScheduleWildfireRecurringNoneXml        `xml:"none,omitempty"`
+	RealTime    *updateScheduleWildfireRecurringRealTimeXml    `xml:"real-time,omitempty"`
+	Misc        []generic.Xml                                  `xml:",any"`
+}
+type updateScheduleWildfireRecurringEvery15MinsXml struct {
+	Action     *string       `xml:"action,omitempty"`
+	At         *int64        `xml:"at,omitempty"`
+	SyncToPeer *string       `xml:"sync-to-peer,omitempty"`
+	Misc       []generic.Xml `xml:",any"`
+}
+type updateScheduleWildfireRecurringEvery30MinsXml struct {
+	Action     *string       `xml:"action,omitempty"`
+	At         *int64        `xml:"at,omitempty"`
+	SyncToPeer *string       `xml:"sync-to-peer,omitempty"`
+	Misc       []generic.Xml `xml:",any"`
+}
+type updateScheduleWildfireRecurringEveryHourXml struct {
+	Action     *string       `xml:"action,omitempty"`
+	At         *int64        `xml:"at,omitempty"`
+	SyncToPeer *string       `xml:"sync-to-peer,omitempty"`
+	Misc       []generic.Xml `xml:",any"`
+}
+type updateScheduleWildfireRecurringEveryMinXml struct {
+	Action     *string       `xml:"action,omitempty"`
+	SyncToPeer *string       `xml:"sync-to-peer,omitempty"`
+	Misc       []generic.Xml `xml:",any"`
+}
+type updateScheduleWildfireRecurringNoneXml struct {
+	Misc []generic.Xml `xml:",any"`
+}
+type updateScheduleWildfireRecurringRealTimeXml struct {
+	Misc []generic.Xml `xml:",any"`
+}
 
-	Misc []generic.Xml `xml:",any"`
+func (o *configXml) MarshalFromObject(s Config) {
+	if s.UpdateSchedule != nil {
+		var obj updateScheduleXml
+		obj.MarshalFromObject(*s.UpdateSchedule)
+		o.UpdateSchedule = &obj
+	}
+	o.Misc = s.Misc
 }
-type UpdateScheduleWfPrivateRecurringEvery15MinsXml struct {
-	Action *string `xml:"action,omitempty"`
-	At     *int64  `xml:"at,omitempty"`
 
-	Misc []generic.Xml `xml:",any"`
-}
-type UpdateScheduleWfPrivateRecurringEvery30MinsXml struct {
-	Action *string `xml:"action,omitempty"`
-	At     *int64  `xml:"at,omitempty"`
+func (o configXml) UnmarshalToObject() (*Config, error) {
+	var updateScheduleVal *UpdateSchedule
+	if o.UpdateSchedule != nil {
+		obj, err := o.UpdateSchedule.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		updateScheduleVal = obj
+	}
 
-	Misc []generic.Xml `xml:",any"`
+	result := &Config{
+		UpdateSchedule: updateScheduleVal,
+		Misc:           o.Misc,
+	}
+	return result, nil
 }
-type UpdateScheduleWfPrivateRecurringEvery5MinsXml struct {
-	Action *string `xml:"action,omitempty"`
-	At     *int64  `xml:"at,omitempty"`
+func (o *updateScheduleXml) MarshalFromObject(s UpdateSchedule) {
+	if s.AntiVirus != nil {
+		var obj updateScheduleAntiVirusXml
+		obj.MarshalFromObject(*s.AntiVirus)
+		o.AntiVirus = &obj
+	}
+	if s.AppProfile != nil {
+		var obj updateScheduleAppProfileXml
+		obj.MarshalFromObject(*s.AppProfile)
+		o.AppProfile = &obj
+	}
+	if s.GlobalProtectClientlessVpn != nil {
+		var obj updateScheduleGlobalProtectClientlessVpnXml
+		obj.MarshalFromObject(*s.GlobalProtectClientlessVpn)
+		o.GlobalProtectClientlessVpn = &obj
+	}
+	if s.GlobalProtectDatafile != nil {
+		var obj updateScheduleGlobalProtectDatafileXml
+		obj.MarshalFromObject(*s.GlobalProtectDatafile)
+		o.GlobalProtectDatafile = &obj
+	}
+	if s.StatisticsService != nil {
+		var obj updateScheduleStatisticsServiceXml
+		obj.MarshalFromObject(*s.StatisticsService)
+		o.StatisticsService = &obj
+	}
+	if s.Threats != nil {
+		var obj updateScheduleThreatsXml
+		obj.MarshalFromObject(*s.Threats)
+		o.Threats = &obj
+	}
+	if s.WfPrivate != nil {
+		var obj updateScheduleWfPrivateXml
+		obj.MarshalFromObject(*s.WfPrivate)
+		o.WfPrivate = &obj
+	}
+	if s.Wildfire != nil {
+		var obj updateScheduleWildfireXml
+		obj.MarshalFromObject(*s.Wildfire)
+		o.Wildfire = &obj
+	}
+	o.Misc = s.Misc
+}
 
-	Misc []generic.Xml `xml:",any"`
-}
-type UpdateScheduleWfPrivateRecurringEveryHourXml struct {
-	Action *string `xml:"action,omitempty"`
-	At     *int64  `xml:"at,omitempty"`
+func (o updateScheduleXml) UnmarshalToObject() (*UpdateSchedule, error) {
+	var antiVirusVal *UpdateScheduleAntiVirus
+	if o.AntiVirus != nil {
+		obj, err := o.AntiVirus.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		antiVirusVal = obj
+	}
+	var appProfileVal *UpdateScheduleAppProfile
+	if o.AppProfile != nil {
+		obj, err := o.AppProfile.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		appProfileVal = obj
+	}
+	var globalProtectClientlessVpnVal *UpdateScheduleGlobalProtectClientlessVpn
+	if o.GlobalProtectClientlessVpn != nil {
+		obj, err := o.GlobalProtectClientlessVpn.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		globalProtectClientlessVpnVal = obj
+	}
+	var globalProtectDatafileVal *UpdateScheduleGlobalProtectDatafile
+	if o.GlobalProtectDatafile != nil {
+		obj, err := o.GlobalProtectDatafile.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		globalProtectDatafileVal = obj
+	}
+	var statisticsServiceVal *UpdateScheduleStatisticsService
+	if o.StatisticsService != nil {
+		obj, err := o.StatisticsService.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		statisticsServiceVal = obj
+	}
+	var threatsVal *UpdateScheduleThreats
+	if o.Threats != nil {
+		obj, err := o.Threats.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		threatsVal = obj
+	}
+	var wfPrivateVal *UpdateScheduleWfPrivate
+	if o.WfPrivate != nil {
+		obj, err := o.WfPrivate.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		wfPrivateVal = obj
+	}
+	var wildfireVal *UpdateScheduleWildfire
+	if o.Wildfire != nil {
+		obj, err := o.Wildfire.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		wildfireVal = obj
+	}
 
-	Misc []generic.Xml `xml:",any"`
+	result := &UpdateSchedule{
+		AntiVirus:                  antiVirusVal,
+		AppProfile:                 appProfileVal,
+		GlobalProtectClientlessVpn: globalProtectClientlessVpnVal,
+		GlobalProtectDatafile:      globalProtectDatafileVal,
+		StatisticsService:          statisticsServiceVal,
+		Threats:                    threatsVal,
+		WfPrivate:                  wfPrivateVal,
+		Wildfire:                   wildfireVal,
+		Misc:                       o.Misc,
+	}
+	return result, nil
 }
-type UpdateScheduleWfPrivateRecurringNoneXml struct {
-	Misc []generic.Xml `xml:",any"`
+func (o *updateScheduleAntiVirusXml) MarshalFromObject(s UpdateScheduleAntiVirus) {
+	if s.Recurring != nil {
+		var obj updateScheduleAntiVirusRecurringXml
+		obj.MarshalFromObject(*s.Recurring)
+		o.Recurring = &obj
+	}
+	o.Misc = s.Misc
 }
-type UpdateScheduleWildfireXml struct {
-	Recurring *UpdateScheduleWildfireRecurringXml `xml:"recurring,omitempty"`
 
-	Misc []generic.Xml `xml:",any"`
-}
-type UpdateScheduleWildfireRecurringXml struct {
-	Every15Mins *UpdateScheduleWildfireRecurringEvery15MinsXml `xml:"every-15-mins,omitempty"`
-	Every30Mins *UpdateScheduleWildfireRecurringEvery30MinsXml `xml:"every-30-mins,omitempty"`
-	EveryHour   *UpdateScheduleWildfireRecurringEveryHourXml   `xml:"every-hour,omitempty"`
-	EveryMin    *UpdateScheduleWildfireRecurringEveryMinXml    `xml:"every-min,omitempty"`
-	None        *UpdateScheduleWildfireRecurringNoneXml        `xml:"none,omitempty"`
-	RealTime    *UpdateScheduleWildfireRecurringRealTimeXml    `xml:"real-time,omitempty"`
+func (o updateScheduleAntiVirusXml) UnmarshalToObject() (*UpdateScheduleAntiVirus, error) {
+	var recurringVal *UpdateScheduleAntiVirusRecurring
+	if o.Recurring != nil {
+		obj, err := o.Recurring.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		recurringVal = obj
+	}
 
-	Misc []generic.Xml `xml:",any"`
+	result := &UpdateScheduleAntiVirus{
+		Recurring: recurringVal,
+		Misc:      o.Misc,
+	}
+	return result, nil
 }
-type UpdateScheduleWildfireRecurringEvery15MinsXml struct {
-	Action     *string `xml:"action,omitempty"`
-	At         *int64  `xml:"at,omitempty"`
-	SyncToPeer *string `xml:"sync-to-peer,omitempty"`
+func (o *updateScheduleAntiVirusRecurringXml) MarshalFromObject(s UpdateScheduleAntiVirusRecurring) {
+	o.SyncToPeer = util.YesNo(s.SyncToPeer, nil)
+	o.Threshold = s.Threshold
+	if s.Daily != nil {
+		var obj updateScheduleAntiVirusRecurringDailyXml
+		obj.MarshalFromObject(*s.Daily)
+		o.Daily = &obj
+	}
+	if s.Hourly != nil {
+		var obj updateScheduleAntiVirusRecurringHourlyXml
+		obj.MarshalFromObject(*s.Hourly)
+		o.Hourly = &obj
+	}
+	if s.None != nil {
+		var obj updateScheduleAntiVirusRecurringNoneXml
+		obj.MarshalFromObject(*s.None)
+		o.None = &obj
+	}
+	if s.Weekly != nil {
+		var obj updateScheduleAntiVirusRecurringWeeklyXml
+		obj.MarshalFromObject(*s.Weekly)
+		o.Weekly = &obj
+	}
+	o.Misc = s.Misc
+}
 
-	Misc []generic.Xml `xml:",any"`
-}
-type UpdateScheduleWildfireRecurringEvery30MinsXml struct {
-	Action     *string `xml:"action,omitempty"`
-	At         *int64  `xml:"at,omitempty"`
-	SyncToPeer *string `xml:"sync-to-peer,omitempty"`
+func (o updateScheduleAntiVirusRecurringXml) UnmarshalToObject() (*UpdateScheduleAntiVirusRecurring, error) {
+	var dailyVal *UpdateScheduleAntiVirusRecurringDaily
+	if o.Daily != nil {
+		obj, err := o.Daily.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		dailyVal = obj
+	}
+	var hourlyVal *UpdateScheduleAntiVirusRecurringHourly
+	if o.Hourly != nil {
+		obj, err := o.Hourly.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		hourlyVal = obj
+	}
+	var noneVal *UpdateScheduleAntiVirusRecurringNone
+	if o.None != nil {
+		obj, err := o.None.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		noneVal = obj
+	}
+	var weeklyVal *UpdateScheduleAntiVirusRecurringWeekly
+	if o.Weekly != nil {
+		obj, err := o.Weekly.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		weeklyVal = obj
+	}
 
-	Misc []generic.Xml `xml:",any"`
+	result := &UpdateScheduleAntiVirusRecurring{
+		SyncToPeer: util.AsBool(o.SyncToPeer, nil),
+		Threshold:  o.Threshold,
+		Daily:      dailyVal,
+		Hourly:     hourlyVal,
+		None:       noneVal,
+		Weekly:     weeklyVal,
+		Misc:       o.Misc,
+	}
+	return result, nil
 }
-type UpdateScheduleWildfireRecurringEveryHourXml struct {
-	Action     *string `xml:"action,omitempty"`
-	At         *int64  `xml:"at,omitempty"`
-	SyncToPeer *string `xml:"sync-to-peer,omitempty"`
+func (o *updateScheduleAntiVirusRecurringDailyXml) MarshalFromObject(s UpdateScheduleAntiVirusRecurringDaily) {
+	o.Action = s.Action
+	o.At = s.At
+	o.Misc = s.Misc
+}
 
-	Misc []generic.Xml `xml:",any"`
-}
-type UpdateScheduleWildfireRecurringEveryMinXml struct {
-	Action     *string `xml:"action,omitempty"`
-	SyncToPeer *string `xml:"sync-to-peer,omitempty"`
+func (o updateScheduleAntiVirusRecurringDailyXml) UnmarshalToObject() (*UpdateScheduleAntiVirusRecurringDaily, error) {
 
-	Misc []generic.Xml `xml:",any"`
+	result := &UpdateScheduleAntiVirusRecurringDaily{
+		Action: o.Action,
+		At:     o.At,
+		Misc:   o.Misc,
+	}
+	return result, nil
 }
-type UpdateScheduleWildfireRecurringNoneXml struct {
-	Misc []generic.Xml `xml:",any"`
+func (o *updateScheduleAntiVirusRecurringHourlyXml) MarshalFromObject(s UpdateScheduleAntiVirusRecurringHourly) {
+	o.Action = s.Action
+	o.At = s.At
+	o.Misc = s.Misc
 }
-type UpdateScheduleWildfireRecurringRealTimeXml struct {
-	Misc []generic.Xml `xml:",any"`
+
+func (o updateScheduleAntiVirusRecurringHourlyXml) UnmarshalToObject() (*UpdateScheduleAntiVirusRecurringHourly, error) {
+
+	result := &UpdateScheduleAntiVirusRecurringHourly{
+		Action: o.Action,
+		At:     o.At,
+		Misc:   o.Misc,
+	}
+	return result, nil
+}
+func (o *updateScheduleAntiVirusRecurringNoneXml) MarshalFromObject(s UpdateScheduleAntiVirusRecurringNone) {
+	o.Misc = s.Misc
+}
+
+func (o updateScheduleAntiVirusRecurringNoneXml) UnmarshalToObject() (*UpdateScheduleAntiVirusRecurringNone, error) {
+
+	result := &UpdateScheduleAntiVirusRecurringNone{
+		Misc: o.Misc,
+	}
+	return result, nil
+}
+func (o *updateScheduleAntiVirusRecurringWeeklyXml) MarshalFromObject(s UpdateScheduleAntiVirusRecurringWeekly) {
+	o.Action = s.Action
+	o.At = s.At
+	o.DayOfWeek = s.DayOfWeek
+	o.Misc = s.Misc
+}
+
+func (o updateScheduleAntiVirusRecurringWeeklyXml) UnmarshalToObject() (*UpdateScheduleAntiVirusRecurringWeekly, error) {
+
+	result := &UpdateScheduleAntiVirusRecurringWeekly{
+		Action:    o.Action,
+		At:        o.At,
+		DayOfWeek: o.DayOfWeek,
+		Misc:      o.Misc,
+	}
+	return result, nil
+}
+func (o *updateScheduleAppProfileXml) MarshalFromObject(s UpdateScheduleAppProfile) {
+	if s.Recurring != nil {
+		var obj updateScheduleAppProfileRecurringXml
+		obj.MarshalFromObject(*s.Recurring)
+		o.Recurring = &obj
+	}
+	o.Misc = s.Misc
+}
+
+func (o updateScheduleAppProfileXml) UnmarshalToObject() (*UpdateScheduleAppProfile, error) {
+	var recurringVal *UpdateScheduleAppProfileRecurring
+	if o.Recurring != nil {
+		obj, err := o.Recurring.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		recurringVal = obj
+	}
+
+	result := &UpdateScheduleAppProfile{
+		Recurring: recurringVal,
+		Misc:      o.Misc,
+	}
+	return result, nil
+}
+func (o *updateScheduleAppProfileRecurringXml) MarshalFromObject(s UpdateScheduleAppProfileRecurring) {
+	o.SyncToPeer = util.YesNo(s.SyncToPeer, nil)
+	o.Threshold = s.Threshold
+	if s.Daily != nil {
+		var obj updateScheduleAppProfileRecurringDailyXml
+		obj.MarshalFromObject(*s.Daily)
+		o.Daily = &obj
+	}
+	if s.None != nil {
+		var obj updateScheduleAppProfileRecurringNoneXml
+		obj.MarshalFromObject(*s.None)
+		o.None = &obj
+	}
+	if s.Weekly != nil {
+		var obj updateScheduleAppProfileRecurringWeeklyXml
+		obj.MarshalFromObject(*s.Weekly)
+		o.Weekly = &obj
+	}
+	o.Misc = s.Misc
+}
+
+func (o updateScheduleAppProfileRecurringXml) UnmarshalToObject() (*UpdateScheduleAppProfileRecurring, error) {
+	var dailyVal *UpdateScheduleAppProfileRecurringDaily
+	if o.Daily != nil {
+		obj, err := o.Daily.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		dailyVal = obj
+	}
+	var noneVal *UpdateScheduleAppProfileRecurringNone
+	if o.None != nil {
+		obj, err := o.None.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		noneVal = obj
+	}
+	var weeklyVal *UpdateScheduleAppProfileRecurringWeekly
+	if o.Weekly != nil {
+		obj, err := o.Weekly.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		weeklyVal = obj
+	}
+
+	result := &UpdateScheduleAppProfileRecurring{
+		SyncToPeer: util.AsBool(o.SyncToPeer, nil),
+		Threshold:  o.Threshold,
+		Daily:      dailyVal,
+		None:       noneVal,
+		Weekly:     weeklyVal,
+		Misc:       o.Misc,
+	}
+	return result, nil
+}
+func (o *updateScheduleAppProfileRecurringDailyXml) MarshalFromObject(s UpdateScheduleAppProfileRecurringDaily) {
+	o.Action = s.Action
+	o.At = s.At
+	o.Misc = s.Misc
+}
+
+func (o updateScheduleAppProfileRecurringDailyXml) UnmarshalToObject() (*UpdateScheduleAppProfileRecurringDaily, error) {
+
+	result := &UpdateScheduleAppProfileRecurringDaily{
+		Action: o.Action,
+		At:     o.At,
+		Misc:   o.Misc,
+	}
+	return result, nil
+}
+func (o *updateScheduleAppProfileRecurringNoneXml) MarshalFromObject(s UpdateScheduleAppProfileRecurringNone) {
+	o.Misc = s.Misc
+}
+
+func (o updateScheduleAppProfileRecurringNoneXml) UnmarshalToObject() (*UpdateScheduleAppProfileRecurringNone, error) {
+
+	result := &UpdateScheduleAppProfileRecurringNone{
+		Misc: o.Misc,
+	}
+	return result, nil
+}
+func (o *updateScheduleAppProfileRecurringWeeklyXml) MarshalFromObject(s UpdateScheduleAppProfileRecurringWeekly) {
+	o.Action = s.Action
+	o.At = s.At
+	o.DayOfWeek = s.DayOfWeek
+	o.Misc = s.Misc
+}
+
+func (o updateScheduleAppProfileRecurringWeeklyXml) UnmarshalToObject() (*UpdateScheduleAppProfileRecurringWeekly, error) {
+
+	result := &UpdateScheduleAppProfileRecurringWeekly{
+		Action:    o.Action,
+		At:        o.At,
+		DayOfWeek: o.DayOfWeek,
+		Misc:      o.Misc,
+	}
+	return result, nil
+}
+func (o *updateScheduleGlobalProtectClientlessVpnXml) MarshalFromObject(s UpdateScheduleGlobalProtectClientlessVpn) {
+	if s.Recurring != nil {
+		var obj updateScheduleGlobalProtectClientlessVpnRecurringXml
+		obj.MarshalFromObject(*s.Recurring)
+		o.Recurring = &obj
+	}
+	o.Misc = s.Misc
+}
+
+func (o updateScheduleGlobalProtectClientlessVpnXml) UnmarshalToObject() (*UpdateScheduleGlobalProtectClientlessVpn, error) {
+	var recurringVal *UpdateScheduleGlobalProtectClientlessVpnRecurring
+	if o.Recurring != nil {
+		obj, err := o.Recurring.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		recurringVal = obj
+	}
+
+	result := &UpdateScheduleGlobalProtectClientlessVpn{
+		Recurring: recurringVal,
+		Misc:      o.Misc,
+	}
+	return result, nil
+}
+func (o *updateScheduleGlobalProtectClientlessVpnRecurringXml) MarshalFromObject(s UpdateScheduleGlobalProtectClientlessVpnRecurring) {
+	if s.Daily != nil {
+		var obj updateScheduleGlobalProtectClientlessVpnRecurringDailyXml
+		obj.MarshalFromObject(*s.Daily)
+		o.Daily = &obj
+	}
+	if s.Hourly != nil {
+		var obj updateScheduleGlobalProtectClientlessVpnRecurringHourlyXml
+		obj.MarshalFromObject(*s.Hourly)
+		o.Hourly = &obj
+	}
+	if s.None != nil {
+		var obj updateScheduleGlobalProtectClientlessVpnRecurringNoneXml
+		obj.MarshalFromObject(*s.None)
+		o.None = &obj
+	}
+	if s.Weekly != nil {
+		var obj updateScheduleGlobalProtectClientlessVpnRecurringWeeklyXml
+		obj.MarshalFromObject(*s.Weekly)
+		o.Weekly = &obj
+	}
+	o.Misc = s.Misc
+}
+
+func (o updateScheduleGlobalProtectClientlessVpnRecurringXml) UnmarshalToObject() (*UpdateScheduleGlobalProtectClientlessVpnRecurring, error) {
+	var dailyVal *UpdateScheduleGlobalProtectClientlessVpnRecurringDaily
+	if o.Daily != nil {
+		obj, err := o.Daily.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		dailyVal = obj
+	}
+	var hourlyVal *UpdateScheduleGlobalProtectClientlessVpnRecurringHourly
+	if o.Hourly != nil {
+		obj, err := o.Hourly.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		hourlyVal = obj
+	}
+	var noneVal *UpdateScheduleGlobalProtectClientlessVpnRecurringNone
+	if o.None != nil {
+		obj, err := o.None.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		noneVal = obj
+	}
+	var weeklyVal *UpdateScheduleGlobalProtectClientlessVpnRecurringWeekly
+	if o.Weekly != nil {
+		obj, err := o.Weekly.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		weeklyVal = obj
+	}
+
+	result := &UpdateScheduleGlobalProtectClientlessVpnRecurring{
+		Daily:  dailyVal,
+		Hourly: hourlyVal,
+		None:   noneVal,
+		Weekly: weeklyVal,
+		Misc:   o.Misc,
+	}
+	return result, nil
+}
+func (o *updateScheduleGlobalProtectClientlessVpnRecurringDailyXml) MarshalFromObject(s UpdateScheduleGlobalProtectClientlessVpnRecurringDaily) {
+	o.Action = s.Action
+	o.At = s.At
+	o.Misc = s.Misc
+}
+
+func (o updateScheduleGlobalProtectClientlessVpnRecurringDailyXml) UnmarshalToObject() (*UpdateScheduleGlobalProtectClientlessVpnRecurringDaily, error) {
+
+	result := &UpdateScheduleGlobalProtectClientlessVpnRecurringDaily{
+		Action: o.Action,
+		At:     o.At,
+		Misc:   o.Misc,
+	}
+	return result, nil
+}
+func (o *updateScheduleGlobalProtectClientlessVpnRecurringHourlyXml) MarshalFromObject(s UpdateScheduleGlobalProtectClientlessVpnRecurringHourly) {
+	o.Action = s.Action
+	o.At = s.At
+	o.Misc = s.Misc
+}
+
+func (o updateScheduleGlobalProtectClientlessVpnRecurringHourlyXml) UnmarshalToObject() (*UpdateScheduleGlobalProtectClientlessVpnRecurringHourly, error) {
+
+	result := &UpdateScheduleGlobalProtectClientlessVpnRecurringHourly{
+		Action: o.Action,
+		At:     o.At,
+		Misc:   o.Misc,
+	}
+	return result, nil
+}
+func (o *updateScheduleGlobalProtectClientlessVpnRecurringNoneXml) MarshalFromObject(s UpdateScheduleGlobalProtectClientlessVpnRecurringNone) {
+	o.Misc = s.Misc
+}
+
+func (o updateScheduleGlobalProtectClientlessVpnRecurringNoneXml) UnmarshalToObject() (*UpdateScheduleGlobalProtectClientlessVpnRecurringNone, error) {
+
+	result := &UpdateScheduleGlobalProtectClientlessVpnRecurringNone{
+		Misc: o.Misc,
+	}
+	return result, nil
+}
+func (o *updateScheduleGlobalProtectClientlessVpnRecurringWeeklyXml) MarshalFromObject(s UpdateScheduleGlobalProtectClientlessVpnRecurringWeekly) {
+	o.Action = s.Action
+	o.At = s.At
+	o.DayOfWeek = s.DayOfWeek
+	o.Misc = s.Misc
+}
+
+func (o updateScheduleGlobalProtectClientlessVpnRecurringWeeklyXml) UnmarshalToObject() (*UpdateScheduleGlobalProtectClientlessVpnRecurringWeekly, error) {
+
+	result := &UpdateScheduleGlobalProtectClientlessVpnRecurringWeekly{
+		Action:    o.Action,
+		At:        o.At,
+		DayOfWeek: o.DayOfWeek,
+		Misc:      o.Misc,
+	}
+	return result, nil
+}
+func (o *updateScheduleGlobalProtectDatafileXml) MarshalFromObject(s UpdateScheduleGlobalProtectDatafile) {
+	if s.Recurring != nil {
+		var obj updateScheduleGlobalProtectDatafileRecurringXml
+		obj.MarshalFromObject(*s.Recurring)
+		o.Recurring = &obj
+	}
+	o.Misc = s.Misc
+}
+
+func (o updateScheduleGlobalProtectDatafileXml) UnmarshalToObject() (*UpdateScheduleGlobalProtectDatafile, error) {
+	var recurringVal *UpdateScheduleGlobalProtectDatafileRecurring
+	if o.Recurring != nil {
+		obj, err := o.Recurring.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		recurringVal = obj
+	}
+
+	result := &UpdateScheduleGlobalProtectDatafile{
+		Recurring: recurringVal,
+		Misc:      o.Misc,
+	}
+	return result, nil
+}
+func (o *updateScheduleGlobalProtectDatafileRecurringXml) MarshalFromObject(s UpdateScheduleGlobalProtectDatafileRecurring) {
+	if s.Daily != nil {
+		var obj updateScheduleGlobalProtectDatafileRecurringDailyXml
+		obj.MarshalFromObject(*s.Daily)
+		o.Daily = &obj
+	}
+	if s.Hourly != nil {
+		var obj updateScheduleGlobalProtectDatafileRecurringHourlyXml
+		obj.MarshalFromObject(*s.Hourly)
+		o.Hourly = &obj
+	}
+	if s.None != nil {
+		var obj updateScheduleGlobalProtectDatafileRecurringNoneXml
+		obj.MarshalFromObject(*s.None)
+		o.None = &obj
+	}
+	if s.Weekly != nil {
+		var obj updateScheduleGlobalProtectDatafileRecurringWeeklyXml
+		obj.MarshalFromObject(*s.Weekly)
+		o.Weekly = &obj
+	}
+	o.Misc = s.Misc
+}
+
+func (o updateScheduleGlobalProtectDatafileRecurringXml) UnmarshalToObject() (*UpdateScheduleGlobalProtectDatafileRecurring, error) {
+	var dailyVal *UpdateScheduleGlobalProtectDatafileRecurringDaily
+	if o.Daily != nil {
+		obj, err := o.Daily.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		dailyVal = obj
+	}
+	var hourlyVal *UpdateScheduleGlobalProtectDatafileRecurringHourly
+	if o.Hourly != nil {
+		obj, err := o.Hourly.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		hourlyVal = obj
+	}
+	var noneVal *UpdateScheduleGlobalProtectDatafileRecurringNone
+	if o.None != nil {
+		obj, err := o.None.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		noneVal = obj
+	}
+	var weeklyVal *UpdateScheduleGlobalProtectDatafileRecurringWeekly
+	if o.Weekly != nil {
+		obj, err := o.Weekly.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		weeklyVal = obj
+	}
+
+	result := &UpdateScheduleGlobalProtectDatafileRecurring{
+		Daily:  dailyVal,
+		Hourly: hourlyVal,
+		None:   noneVal,
+		Weekly: weeklyVal,
+		Misc:   o.Misc,
+	}
+	return result, nil
+}
+func (o *updateScheduleGlobalProtectDatafileRecurringDailyXml) MarshalFromObject(s UpdateScheduleGlobalProtectDatafileRecurringDaily) {
+	o.Action = s.Action
+	o.At = s.At
+	o.Misc = s.Misc
+}
+
+func (o updateScheduleGlobalProtectDatafileRecurringDailyXml) UnmarshalToObject() (*UpdateScheduleGlobalProtectDatafileRecurringDaily, error) {
+
+	result := &UpdateScheduleGlobalProtectDatafileRecurringDaily{
+		Action: o.Action,
+		At:     o.At,
+		Misc:   o.Misc,
+	}
+	return result, nil
+}
+func (o *updateScheduleGlobalProtectDatafileRecurringHourlyXml) MarshalFromObject(s UpdateScheduleGlobalProtectDatafileRecurringHourly) {
+	o.Action = s.Action
+	o.At = s.At
+	o.Misc = s.Misc
+}
+
+func (o updateScheduleGlobalProtectDatafileRecurringHourlyXml) UnmarshalToObject() (*UpdateScheduleGlobalProtectDatafileRecurringHourly, error) {
+
+	result := &UpdateScheduleGlobalProtectDatafileRecurringHourly{
+		Action: o.Action,
+		At:     o.At,
+		Misc:   o.Misc,
+	}
+	return result, nil
+}
+func (o *updateScheduleGlobalProtectDatafileRecurringNoneXml) MarshalFromObject(s UpdateScheduleGlobalProtectDatafileRecurringNone) {
+	o.Misc = s.Misc
+}
+
+func (o updateScheduleGlobalProtectDatafileRecurringNoneXml) UnmarshalToObject() (*UpdateScheduleGlobalProtectDatafileRecurringNone, error) {
+
+	result := &UpdateScheduleGlobalProtectDatafileRecurringNone{
+		Misc: o.Misc,
+	}
+	return result, nil
+}
+func (o *updateScheduleGlobalProtectDatafileRecurringWeeklyXml) MarshalFromObject(s UpdateScheduleGlobalProtectDatafileRecurringWeekly) {
+	o.Action = s.Action
+	o.At = s.At
+	o.DayOfWeek = s.DayOfWeek
+	o.Misc = s.Misc
+}
+
+func (o updateScheduleGlobalProtectDatafileRecurringWeeklyXml) UnmarshalToObject() (*UpdateScheduleGlobalProtectDatafileRecurringWeekly, error) {
+
+	result := &UpdateScheduleGlobalProtectDatafileRecurringWeekly{
+		Action:    o.Action,
+		At:        o.At,
+		DayOfWeek: o.DayOfWeek,
+		Misc:      o.Misc,
+	}
+	return result, nil
+}
+func (o *updateScheduleStatisticsServiceXml) MarshalFromObject(s UpdateScheduleStatisticsService) {
+	o.ApplicationReports = util.YesNo(s.ApplicationReports, nil)
+	o.FileIdentificationReports = util.YesNo(s.FileIdentificationReports, nil)
+	o.HealthPerformanceReports = util.YesNo(s.HealthPerformanceReports, nil)
+	o.PassiveDnsMonitoring = util.YesNo(s.PassiveDnsMonitoring, nil)
+	o.ThreatPreventionInformation = util.YesNo(s.ThreatPreventionInformation, nil)
+	o.ThreatPreventionPcap = util.YesNo(s.ThreatPreventionPcap, nil)
+	o.ThreatPreventionReports = util.YesNo(s.ThreatPreventionReports, nil)
+	o.UrlReports = util.YesNo(s.UrlReports, nil)
+	o.Misc = s.Misc
+}
+
+func (o updateScheduleStatisticsServiceXml) UnmarshalToObject() (*UpdateScheduleStatisticsService, error) {
+
+	result := &UpdateScheduleStatisticsService{
+		ApplicationReports:          util.AsBool(o.ApplicationReports, nil),
+		FileIdentificationReports:   util.AsBool(o.FileIdentificationReports, nil),
+		HealthPerformanceReports:    util.AsBool(o.HealthPerformanceReports, nil),
+		PassiveDnsMonitoring:        util.AsBool(o.PassiveDnsMonitoring, nil),
+		ThreatPreventionInformation: util.AsBool(o.ThreatPreventionInformation, nil),
+		ThreatPreventionPcap:        util.AsBool(o.ThreatPreventionPcap, nil),
+		ThreatPreventionReports:     util.AsBool(o.ThreatPreventionReports, nil),
+		UrlReports:                  util.AsBool(o.UrlReports, nil),
+		Misc:                        o.Misc,
+	}
+	return result, nil
+}
+func (o *updateScheduleThreatsXml) MarshalFromObject(s UpdateScheduleThreats) {
+	if s.Recurring != nil {
+		var obj updateScheduleThreatsRecurringXml
+		obj.MarshalFromObject(*s.Recurring)
+		o.Recurring = &obj
+	}
+	o.Misc = s.Misc
+}
+
+func (o updateScheduleThreatsXml) UnmarshalToObject() (*UpdateScheduleThreats, error) {
+	var recurringVal *UpdateScheduleThreatsRecurring
+	if o.Recurring != nil {
+		obj, err := o.Recurring.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		recurringVal = obj
+	}
+
+	result := &UpdateScheduleThreats{
+		Recurring: recurringVal,
+		Misc:      o.Misc,
+	}
+	return result, nil
+}
+func (o *updateScheduleThreatsRecurringXml) MarshalFromObject(s UpdateScheduleThreatsRecurring) {
+	o.NewAppThreshold = s.NewAppThreshold
+	o.SyncToPeer = util.YesNo(s.SyncToPeer, nil)
+	o.Threshold = s.Threshold
+	if s.Daily != nil {
+		var obj updateScheduleThreatsRecurringDailyXml
+		obj.MarshalFromObject(*s.Daily)
+		o.Daily = &obj
+	}
+	if s.Every30Mins != nil {
+		var obj updateScheduleThreatsRecurringEvery30MinsXml
+		obj.MarshalFromObject(*s.Every30Mins)
+		o.Every30Mins = &obj
+	}
+	if s.Hourly != nil {
+		var obj updateScheduleThreatsRecurringHourlyXml
+		obj.MarshalFromObject(*s.Hourly)
+		o.Hourly = &obj
+	}
+	if s.None != nil {
+		var obj updateScheduleThreatsRecurringNoneXml
+		obj.MarshalFromObject(*s.None)
+		o.None = &obj
+	}
+	if s.Weekly != nil {
+		var obj updateScheduleThreatsRecurringWeeklyXml
+		obj.MarshalFromObject(*s.Weekly)
+		o.Weekly = &obj
+	}
+	o.Misc = s.Misc
+}
+
+func (o updateScheduleThreatsRecurringXml) UnmarshalToObject() (*UpdateScheduleThreatsRecurring, error) {
+	var dailyVal *UpdateScheduleThreatsRecurringDaily
+	if o.Daily != nil {
+		obj, err := o.Daily.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		dailyVal = obj
+	}
+	var every30MinsVal *UpdateScheduleThreatsRecurringEvery30Mins
+	if o.Every30Mins != nil {
+		obj, err := o.Every30Mins.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		every30MinsVal = obj
+	}
+	var hourlyVal *UpdateScheduleThreatsRecurringHourly
+	if o.Hourly != nil {
+		obj, err := o.Hourly.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		hourlyVal = obj
+	}
+	var noneVal *UpdateScheduleThreatsRecurringNone
+	if o.None != nil {
+		obj, err := o.None.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		noneVal = obj
+	}
+	var weeklyVal *UpdateScheduleThreatsRecurringWeekly
+	if o.Weekly != nil {
+		obj, err := o.Weekly.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		weeklyVal = obj
+	}
+
+	result := &UpdateScheduleThreatsRecurring{
+		NewAppThreshold: o.NewAppThreshold,
+		SyncToPeer:      util.AsBool(o.SyncToPeer, nil),
+		Threshold:       o.Threshold,
+		Daily:           dailyVal,
+		Every30Mins:     every30MinsVal,
+		Hourly:          hourlyVal,
+		None:            noneVal,
+		Weekly:          weeklyVal,
+		Misc:            o.Misc,
+	}
+	return result, nil
+}
+func (o *updateScheduleThreatsRecurringDailyXml) MarshalFromObject(s UpdateScheduleThreatsRecurringDaily) {
+	o.Action = s.Action
+	o.At = s.At
+	o.DisableNewContent = util.YesNo(s.DisableNewContent, nil)
+	o.Misc = s.Misc
+}
+
+func (o updateScheduleThreatsRecurringDailyXml) UnmarshalToObject() (*UpdateScheduleThreatsRecurringDaily, error) {
+
+	result := &UpdateScheduleThreatsRecurringDaily{
+		Action:            o.Action,
+		At:                o.At,
+		DisableNewContent: util.AsBool(o.DisableNewContent, nil),
+		Misc:              o.Misc,
+	}
+	return result, nil
+}
+func (o *updateScheduleThreatsRecurringEvery30MinsXml) MarshalFromObject(s UpdateScheduleThreatsRecurringEvery30Mins) {
+	o.Action = s.Action
+	o.At = s.At
+	o.DisableNewContent = util.YesNo(s.DisableNewContent, nil)
+	o.Misc = s.Misc
+}
+
+func (o updateScheduleThreatsRecurringEvery30MinsXml) UnmarshalToObject() (*UpdateScheduleThreatsRecurringEvery30Mins, error) {
+
+	result := &UpdateScheduleThreatsRecurringEvery30Mins{
+		Action:            o.Action,
+		At:                o.At,
+		DisableNewContent: util.AsBool(o.DisableNewContent, nil),
+		Misc:              o.Misc,
+	}
+	return result, nil
+}
+func (o *updateScheduleThreatsRecurringHourlyXml) MarshalFromObject(s UpdateScheduleThreatsRecurringHourly) {
+	o.Action = s.Action
+	o.At = s.At
+	o.DisableNewContent = util.YesNo(s.DisableNewContent, nil)
+	o.Misc = s.Misc
+}
+
+func (o updateScheduleThreatsRecurringHourlyXml) UnmarshalToObject() (*UpdateScheduleThreatsRecurringHourly, error) {
+
+	result := &UpdateScheduleThreatsRecurringHourly{
+		Action:            o.Action,
+		At:                o.At,
+		DisableNewContent: util.AsBool(o.DisableNewContent, nil),
+		Misc:              o.Misc,
+	}
+	return result, nil
+}
+func (o *updateScheduleThreatsRecurringNoneXml) MarshalFromObject(s UpdateScheduleThreatsRecurringNone) {
+	o.Misc = s.Misc
+}
+
+func (o updateScheduleThreatsRecurringNoneXml) UnmarshalToObject() (*UpdateScheduleThreatsRecurringNone, error) {
+
+	result := &UpdateScheduleThreatsRecurringNone{
+		Misc: o.Misc,
+	}
+	return result, nil
+}
+func (o *updateScheduleThreatsRecurringWeeklyXml) MarshalFromObject(s UpdateScheduleThreatsRecurringWeekly) {
+	o.Action = s.Action
+	o.At = s.At
+	o.DayOfWeek = s.DayOfWeek
+	o.DisableNewContent = util.YesNo(s.DisableNewContent, nil)
+	o.Misc = s.Misc
+}
+
+func (o updateScheduleThreatsRecurringWeeklyXml) UnmarshalToObject() (*UpdateScheduleThreatsRecurringWeekly, error) {
+
+	result := &UpdateScheduleThreatsRecurringWeekly{
+		Action:            o.Action,
+		At:                o.At,
+		DayOfWeek:         o.DayOfWeek,
+		DisableNewContent: util.AsBool(o.DisableNewContent, nil),
+		Misc:              o.Misc,
+	}
+	return result, nil
+}
+func (o *updateScheduleWfPrivateXml) MarshalFromObject(s UpdateScheduleWfPrivate) {
+	if s.Recurring != nil {
+		var obj updateScheduleWfPrivateRecurringXml
+		obj.MarshalFromObject(*s.Recurring)
+		o.Recurring = &obj
+	}
+	o.Misc = s.Misc
+}
+
+func (o updateScheduleWfPrivateXml) UnmarshalToObject() (*UpdateScheduleWfPrivate, error) {
+	var recurringVal *UpdateScheduleWfPrivateRecurring
+	if o.Recurring != nil {
+		obj, err := o.Recurring.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		recurringVal = obj
+	}
+
+	result := &UpdateScheduleWfPrivate{
+		Recurring: recurringVal,
+		Misc:      o.Misc,
+	}
+	return result, nil
+}
+func (o *updateScheduleWfPrivateRecurringXml) MarshalFromObject(s UpdateScheduleWfPrivateRecurring) {
+	o.SyncToPeer = util.YesNo(s.SyncToPeer, nil)
+	if s.Every15Mins != nil {
+		var obj updateScheduleWfPrivateRecurringEvery15MinsXml
+		obj.MarshalFromObject(*s.Every15Mins)
+		o.Every15Mins = &obj
+	}
+	if s.Every30Mins != nil {
+		var obj updateScheduleWfPrivateRecurringEvery30MinsXml
+		obj.MarshalFromObject(*s.Every30Mins)
+		o.Every30Mins = &obj
+	}
+	if s.Every5Mins != nil {
+		var obj updateScheduleWfPrivateRecurringEvery5MinsXml
+		obj.MarshalFromObject(*s.Every5Mins)
+		o.Every5Mins = &obj
+	}
+	if s.EveryHour != nil {
+		var obj updateScheduleWfPrivateRecurringEveryHourXml
+		obj.MarshalFromObject(*s.EveryHour)
+		o.EveryHour = &obj
+	}
+	if s.None != nil {
+		var obj updateScheduleWfPrivateRecurringNoneXml
+		obj.MarshalFromObject(*s.None)
+		o.None = &obj
+	}
+	o.Misc = s.Misc
+}
+
+func (o updateScheduleWfPrivateRecurringXml) UnmarshalToObject() (*UpdateScheduleWfPrivateRecurring, error) {
+	var every15MinsVal *UpdateScheduleWfPrivateRecurringEvery15Mins
+	if o.Every15Mins != nil {
+		obj, err := o.Every15Mins.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		every15MinsVal = obj
+	}
+	var every30MinsVal *UpdateScheduleWfPrivateRecurringEvery30Mins
+	if o.Every30Mins != nil {
+		obj, err := o.Every30Mins.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		every30MinsVal = obj
+	}
+	var every5MinsVal *UpdateScheduleWfPrivateRecurringEvery5Mins
+	if o.Every5Mins != nil {
+		obj, err := o.Every5Mins.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		every5MinsVal = obj
+	}
+	var everyHourVal *UpdateScheduleWfPrivateRecurringEveryHour
+	if o.EveryHour != nil {
+		obj, err := o.EveryHour.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		everyHourVal = obj
+	}
+	var noneVal *UpdateScheduleWfPrivateRecurringNone
+	if o.None != nil {
+		obj, err := o.None.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		noneVal = obj
+	}
+
+	result := &UpdateScheduleWfPrivateRecurring{
+		SyncToPeer:  util.AsBool(o.SyncToPeer, nil),
+		Every15Mins: every15MinsVal,
+		Every30Mins: every30MinsVal,
+		Every5Mins:  every5MinsVal,
+		EveryHour:   everyHourVal,
+		None:        noneVal,
+		Misc:        o.Misc,
+	}
+	return result, nil
+}
+func (o *updateScheduleWfPrivateRecurringEvery15MinsXml) MarshalFromObject(s UpdateScheduleWfPrivateRecurringEvery15Mins) {
+	o.Action = s.Action
+	o.At = s.At
+	o.Misc = s.Misc
+}
+
+func (o updateScheduleWfPrivateRecurringEvery15MinsXml) UnmarshalToObject() (*UpdateScheduleWfPrivateRecurringEvery15Mins, error) {
+
+	result := &UpdateScheduleWfPrivateRecurringEvery15Mins{
+		Action: o.Action,
+		At:     o.At,
+		Misc:   o.Misc,
+	}
+	return result, nil
+}
+func (o *updateScheduleWfPrivateRecurringEvery30MinsXml) MarshalFromObject(s UpdateScheduleWfPrivateRecurringEvery30Mins) {
+	o.Action = s.Action
+	o.At = s.At
+	o.Misc = s.Misc
+}
+
+func (o updateScheduleWfPrivateRecurringEvery30MinsXml) UnmarshalToObject() (*UpdateScheduleWfPrivateRecurringEvery30Mins, error) {
+
+	result := &UpdateScheduleWfPrivateRecurringEvery30Mins{
+		Action: o.Action,
+		At:     o.At,
+		Misc:   o.Misc,
+	}
+	return result, nil
+}
+func (o *updateScheduleWfPrivateRecurringEvery5MinsXml) MarshalFromObject(s UpdateScheduleWfPrivateRecurringEvery5Mins) {
+	o.Action = s.Action
+	o.At = s.At
+	o.Misc = s.Misc
+}
+
+func (o updateScheduleWfPrivateRecurringEvery5MinsXml) UnmarshalToObject() (*UpdateScheduleWfPrivateRecurringEvery5Mins, error) {
+
+	result := &UpdateScheduleWfPrivateRecurringEvery5Mins{
+		Action: o.Action,
+		At:     o.At,
+		Misc:   o.Misc,
+	}
+	return result, nil
+}
+func (o *updateScheduleWfPrivateRecurringEveryHourXml) MarshalFromObject(s UpdateScheduleWfPrivateRecurringEveryHour) {
+	o.Action = s.Action
+	o.At = s.At
+	o.Misc = s.Misc
+}
+
+func (o updateScheduleWfPrivateRecurringEveryHourXml) UnmarshalToObject() (*UpdateScheduleWfPrivateRecurringEveryHour, error) {
+
+	result := &UpdateScheduleWfPrivateRecurringEveryHour{
+		Action: o.Action,
+		At:     o.At,
+		Misc:   o.Misc,
+	}
+	return result, nil
+}
+func (o *updateScheduleWfPrivateRecurringNoneXml) MarshalFromObject(s UpdateScheduleWfPrivateRecurringNone) {
+	o.Misc = s.Misc
+}
+
+func (o updateScheduleWfPrivateRecurringNoneXml) UnmarshalToObject() (*UpdateScheduleWfPrivateRecurringNone, error) {
+
+	result := &UpdateScheduleWfPrivateRecurringNone{
+		Misc: o.Misc,
+	}
+	return result, nil
+}
+func (o *updateScheduleWildfireXml) MarshalFromObject(s UpdateScheduleWildfire) {
+	if s.Recurring != nil {
+		var obj updateScheduleWildfireRecurringXml
+		obj.MarshalFromObject(*s.Recurring)
+		o.Recurring = &obj
+	}
+	o.Misc = s.Misc
+}
+
+func (o updateScheduleWildfireXml) UnmarshalToObject() (*UpdateScheduleWildfire, error) {
+	var recurringVal *UpdateScheduleWildfireRecurring
+	if o.Recurring != nil {
+		obj, err := o.Recurring.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		recurringVal = obj
+	}
+
+	result := &UpdateScheduleWildfire{
+		Recurring: recurringVal,
+		Misc:      o.Misc,
+	}
+	return result, nil
+}
+func (o *updateScheduleWildfireRecurringXml) MarshalFromObject(s UpdateScheduleWildfireRecurring) {
+	if s.Every15Mins != nil {
+		var obj updateScheduleWildfireRecurringEvery15MinsXml
+		obj.MarshalFromObject(*s.Every15Mins)
+		o.Every15Mins = &obj
+	}
+	if s.Every30Mins != nil {
+		var obj updateScheduleWildfireRecurringEvery30MinsXml
+		obj.MarshalFromObject(*s.Every30Mins)
+		o.Every30Mins = &obj
+	}
+	if s.EveryHour != nil {
+		var obj updateScheduleWildfireRecurringEveryHourXml
+		obj.MarshalFromObject(*s.EveryHour)
+		o.EveryHour = &obj
+	}
+	if s.EveryMin != nil {
+		var obj updateScheduleWildfireRecurringEveryMinXml
+		obj.MarshalFromObject(*s.EveryMin)
+		o.EveryMin = &obj
+	}
+	if s.None != nil {
+		var obj updateScheduleWildfireRecurringNoneXml
+		obj.MarshalFromObject(*s.None)
+		o.None = &obj
+	}
+	if s.RealTime != nil {
+		var obj updateScheduleWildfireRecurringRealTimeXml
+		obj.MarshalFromObject(*s.RealTime)
+		o.RealTime = &obj
+	}
+	o.Misc = s.Misc
+}
+
+func (o updateScheduleWildfireRecurringXml) UnmarshalToObject() (*UpdateScheduleWildfireRecurring, error) {
+	var every15MinsVal *UpdateScheduleWildfireRecurringEvery15Mins
+	if o.Every15Mins != nil {
+		obj, err := o.Every15Mins.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		every15MinsVal = obj
+	}
+	var every30MinsVal *UpdateScheduleWildfireRecurringEvery30Mins
+	if o.Every30Mins != nil {
+		obj, err := o.Every30Mins.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		every30MinsVal = obj
+	}
+	var everyHourVal *UpdateScheduleWildfireRecurringEveryHour
+	if o.EveryHour != nil {
+		obj, err := o.EveryHour.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		everyHourVal = obj
+	}
+	var everyMinVal *UpdateScheduleWildfireRecurringEveryMin
+	if o.EveryMin != nil {
+		obj, err := o.EveryMin.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		everyMinVal = obj
+	}
+	var noneVal *UpdateScheduleWildfireRecurringNone
+	if o.None != nil {
+		obj, err := o.None.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		noneVal = obj
+	}
+	var realTimeVal *UpdateScheduleWildfireRecurringRealTime
+	if o.RealTime != nil {
+		obj, err := o.RealTime.UnmarshalToObject()
+		if err != nil {
+			return nil, err
+		}
+		realTimeVal = obj
+	}
+
+	result := &UpdateScheduleWildfireRecurring{
+		Every15Mins: every15MinsVal,
+		Every30Mins: every30MinsVal,
+		EveryHour:   everyHourVal,
+		EveryMin:    everyMinVal,
+		None:        noneVal,
+		RealTime:    realTimeVal,
+		Misc:        o.Misc,
+	}
+	return result, nil
+}
+func (o *updateScheduleWildfireRecurringEvery15MinsXml) MarshalFromObject(s UpdateScheduleWildfireRecurringEvery15Mins) {
+	o.Action = s.Action
+	o.At = s.At
+	o.SyncToPeer = util.YesNo(s.SyncToPeer, nil)
+	o.Misc = s.Misc
+}
+
+func (o updateScheduleWildfireRecurringEvery15MinsXml) UnmarshalToObject() (*UpdateScheduleWildfireRecurringEvery15Mins, error) {
+
+	result := &UpdateScheduleWildfireRecurringEvery15Mins{
+		Action:     o.Action,
+		At:         o.At,
+		SyncToPeer: util.AsBool(o.SyncToPeer, nil),
+		Misc:       o.Misc,
+	}
+	return result, nil
+}
+func (o *updateScheduleWildfireRecurringEvery30MinsXml) MarshalFromObject(s UpdateScheduleWildfireRecurringEvery30Mins) {
+	o.Action = s.Action
+	o.At = s.At
+	o.SyncToPeer = util.YesNo(s.SyncToPeer, nil)
+	o.Misc = s.Misc
+}
+
+func (o updateScheduleWildfireRecurringEvery30MinsXml) UnmarshalToObject() (*UpdateScheduleWildfireRecurringEvery30Mins, error) {
+
+	result := &UpdateScheduleWildfireRecurringEvery30Mins{
+		Action:     o.Action,
+		At:         o.At,
+		SyncToPeer: util.AsBool(o.SyncToPeer, nil),
+		Misc:       o.Misc,
+	}
+	return result, nil
+}
+func (o *updateScheduleWildfireRecurringEveryHourXml) MarshalFromObject(s UpdateScheduleWildfireRecurringEveryHour) {
+	o.Action = s.Action
+	o.At = s.At
+	o.SyncToPeer = util.YesNo(s.SyncToPeer, nil)
+	o.Misc = s.Misc
+}
+
+func (o updateScheduleWildfireRecurringEveryHourXml) UnmarshalToObject() (*UpdateScheduleWildfireRecurringEveryHour, error) {
+
+	result := &UpdateScheduleWildfireRecurringEveryHour{
+		Action:     o.Action,
+		At:         o.At,
+		SyncToPeer: util.AsBool(o.SyncToPeer, nil),
+		Misc:       o.Misc,
+	}
+	return result, nil
+}
+func (o *updateScheduleWildfireRecurringEveryMinXml) MarshalFromObject(s UpdateScheduleWildfireRecurringEveryMin) {
+	o.Action = s.Action
+	o.SyncToPeer = util.YesNo(s.SyncToPeer, nil)
+	o.Misc = s.Misc
+}
+
+func (o updateScheduleWildfireRecurringEveryMinXml) UnmarshalToObject() (*UpdateScheduleWildfireRecurringEveryMin, error) {
+
+	result := &UpdateScheduleWildfireRecurringEveryMin{
+		Action:     o.Action,
+		SyncToPeer: util.AsBool(o.SyncToPeer, nil),
+		Misc:       o.Misc,
+	}
+	return result, nil
+}
+func (o *updateScheduleWildfireRecurringNoneXml) MarshalFromObject(s UpdateScheduleWildfireRecurringNone) {
+	o.Misc = s.Misc
+}
+
+func (o updateScheduleWildfireRecurringNoneXml) UnmarshalToObject() (*UpdateScheduleWildfireRecurringNone, error) {
+
+	result := &UpdateScheduleWildfireRecurringNone{
+		Misc: o.Misc,
+	}
+	return result, nil
+}
+func (o *updateScheduleWildfireRecurringRealTimeXml) MarshalFromObject(s UpdateScheduleWildfireRecurringRealTime) {
+	o.Misc = s.Misc
+}
+
+func (o updateScheduleWildfireRecurringRealTimeXml) UnmarshalToObject() (*UpdateScheduleWildfireRecurringRealTime, error) {
+
+	result := &UpdateScheduleWildfireRecurringRealTime{
+		Misc: o.Misc,
+	}
+	return result, nil
 }
 
 func Versioning(vn version.Number) (Specifier, Normalizer, error) {
 	return specifyConfig, &configXmlContainer{}, nil
 }
-func specifyConfig(o *Config) (any, error) {
-	config := configXml{}
-	var nestedUpdateSchedule *UpdateScheduleXml
-	if o.UpdateSchedule != nil {
-		nestedUpdateSchedule = &UpdateScheduleXml{}
-		if _, ok := o.Misc["UpdateSchedule"]; ok {
-			nestedUpdateSchedule.Misc = o.Misc["UpdateSchedule"]
-		}
-		if o.UpdateSchedule.AntiVirus != nil {
-			nestedUpdateSchedule.AntiVirus = &UpdateScheduleAntiVirusXml{}
-			if _, ok := o.Misc["UpdateScheduleAntiVirus"]; ok {
-				nestedUpdateSchedule.AntiVirus.Misc = o.Misc["UpdateScheduleAntiVirus"]
-			}
-			if o.UpdateSchedule.AntiVirus.Recurring != nil {
-				nestedUpdateSchedule.AntiVirus.Recurring = &UpdateScheduleAntiVirusRecurringXml{}
-				if _, ok := o.Misc["UpdateScheduleAntiVirusRecurring"]; ok {
-					nestedUpdateSchedule.AntiVirus.Recurring.Misc = o.Misc["UpdateScheduleAntiVirusRecurring"]
-				}
-				if o.UpdateSchedule.AntiVirus.Recurring.SyncToPeer != nil {
-					nestedUpdateSchedule.AntiVirus.Recurring.SyncToPeer = util.YesNo(o.UpdateSchedule.AntiVirus.Recurring.SyncToPeer, nil)
-				}
-				if o.UpdateSchedule.AntiVirus.Recurring.Threshold != nil {
-					nestedUpdateSchedule.AntiVirus.Recurring.Threshold = o.UpdateSchedule.AntiVirus.Recurring.Threshold
-				}
-				if o.UpdateSchedule.AntiVirus.Recurring.Daily != nil {
-					nestedUpdateSchedule.AntiVirus.Recurring.Daily = &UpdateScheduleAntiVirusRecurringDailyXml{}
-					if _, ok := o.Misc["UpdateScheduleAntiVirusRecurringDaily"]; ok {
-						nestedUpdateSchedule.AntiVirus.Recurring.Daily.Misc = o.Misc["UpdateScheduleAntiVirusRecurringDaily"]
-					}
-					if o.UpdateSchedule.AntiVirus.Recurring.Daily.Action != nil {
-						nestedUpdateSchedule.AntiVirus.Recurring.Daily.Action = o.UpdateSchedule.AntiVirus.Recurring.Daily.Action
-					}
-					if o.UpdateSchedule.AntiVirus.Recurring.Daily.At != nil {
-						nestedUpdateSchedule.AntiVirus.Recurring.Daily.At = o.UpdateSchedule.AntiVirus.Recurring.Daily.At
-					}
-				}
-				if o.UpdateSchedule.AntiVirus.Recurring.Hourly != nil {
-					nestedUpdateSchedule.AntiVirus.Recurring.Hourly = &UpdateScheduleAntiVirusRecurringHourlyXml{}
-					if _, ok := o.Misc["UpdateScheduleAntiVirusRecurringHourly"]; ok {
-						nestedUpdateSchedule.AntiVirus.Recurring.Hourly.Misc = o.Misc["UpdateScheduleAntiVirusRecurringHourly"]
-					}
-					if o.UpdateSchedule.AntiVirus.Recurring.Hourly.Action != nil {
-						nestedUpdateSchedule.AntiVirus.Recurring.Hourly.Action = o.UpdateSchedule.AntiVirus.Recurring.Hourly.Action
-					}
-					if o.UpdateSchedule.AntiVirus.Recurring.Hourly.At != nil {
-						nestedUpdateSchedule.AntiVirus.Recurring.Hourly.At = o.UpdateSchedule.AntiVirus.Recurring.Hourly.At
-					}
-				}
-				if o.UpdateSchedule.AntiVirus.Recurring.None != nil {
-					nestedUpdateSchedule.AntiVirus.Recurring.None = &UpdateScheduleAntiVirusRecurringNoneXml{}
-					if _, ok := o.Misc["UpdateScheduleAntiVirusRecurringNone"]; ok {
-						nestedUpdateSchedule.AntiVirus.Recurring.None.Misc = o.Misc["UpdateScheduleAntiVirusRecurringNone"]
-					}
-				}
-				if o.UpdateSchedule.AntiVirus.Recurring.Weekly != nil {
-					nestedUpdateSchedule.AntiVirus.Recurring.Weekly = &UpdateScheduleAntiVirusRecurringWeeklyXml{}
-					if _, ok := o.Misc["UpdateScheduleAntiVirusRecurringWeekly"]; ok {
-						nestedUpdateSchedule.AntiVirus.Recurring.Weekly.Misc = o.Misc["UpdateScheduleAntiVirusRecurringWeekly"]
-					}
-					if o.UpdateSchedule.AntiVirus.Recurring.Weekly.Action != nil {
-						nestedUpdateSchedule.AntiVirus.Recurring.Weekly.Action = o.UpdateSchedule.AntiVirus.Recurring.Weekly.Action
-					}
-					if o.UpdateSchedule.AntiVirus.Recurring.Weekly.At != nil {
-						nestedUpdateSchedule.AntiVirus.Recurring.Weekly.At = o.UpdateSchedule.AntiVirus.Recurring.Weekly.At
-					}
-					if o.UpdateSchedule.AntiVirus.Recurring.Weekly.DayOfWeek != nil {
-						nestedUpdateSchedule.AntiVirus.Recurring.Weekly.DayOfWeek = o.UpdateSchedule.AntiVirus.Recurring.Weekly.DayOfWeek
-					}
-				}
-			}
-		}
-		if o.UpdateSchedule.AppProfile != nil {
-			nestedUpdateSchedule.AppProfile = &UpdateScheduleAppProfileXml{}
-			if _, ok := o.Misc["UpdateScheduleAppProfile"]; ok {
-				nestedUpdateSchedule.AppProfile.Misc = o.Misc["UpdateScheduleAppProfile"]
-			}
-			if o.UpdateSchedule.AppProfile.Recurring != nil {
-				nestedUpdateSchedule.AppProfile.Recurring = &UpdateScheduleAppProfileRecurringXml{}
-				if _, ok := o.Misc["UpdateScheduleAppProfileRecurring"]; ok {
-					nestedUpdateSchedule.AppProfile.Recurring.Misc = o.Misc["UpdateScheduleAppProfileRecurring"]
-				}
-				if o.UpdateSchedule.AppProfile.Recurring.SyncToPeer != nil {
-					nestedUpdateSchedule.AppProfile.Recurring.SyncToPeer = util.YesNo(o.UpdateSchedule.AppProfile.Recurring.SyncToPeer, nil)
-				}
-				if o.UpdateSchedule.AppProfile.Recurring.Threshold != nil {
-					nestedUpdateSchedule.AppProfile.Recurring.Threshold = o.UpdateSchedule.AppProfile.Recurring.Threshold
-				}
-				if o.UpdateSchedule.AppProfile.Recurring.Daily != nil {
-					nestedUpdateSchedule.AppProfile.Recurring.Daily = &UpdateScheduleAppProfileRecurringDailyXml{}
-					if _, ok := o.Misc["UpdateScheduleAppProfileRecurringDaily"]; ok {
-						nestedUpdateSchedule.AppProfile.Recurring.Daily.Misc = o.Misc["UpdateScheduleAppProfileRecurringDaily"]
-					}
-					if o.UpdateSchedule.AppProfile.Recurring.Daily.Action != nil {
-						nestedUpdateSchedule.AppProfile.Recurring.Daily.Action = o.UpdateSchedule.AppProfile.Recurring.Daily.Action
-					}
-					if o.UpdateSchedule.AppProfile.Recurring.Daily.At != nil {
-						nestedUpdateSchedule.AppProfile.Recurring.Daily.At = o.UpdateSchedule.AppProfile.Recurring.Daily.At
-					}
-				}
-				if o.UpdateSchedule.AppProfile.Recurring.None != nil {
-					nestedUpdateSchedule.AppProfile.Recurring.None = &UpdateScheduleAppProfileRecurringNoneXml{}
-					if _, ok := o.Misc["UpdateScheduleAppProfileRecurringNone"]; ok {
-						nestedUpdateSchedule.AppProfile.Recurring.None.Misc = o.Misc["UpdateScheduleAppProfileRecurringNone"]
-					}
-				}
-				if o.UpdateSchedule.AppProfile.Recurring.Weekly != nil {
-					nestedUpdateSchedule.AppProfile.Recurring.Weekly = &UpdateScheduleAppProfileRecurringWeeklyXml{}
-					if _, ok := o.Misc["UpdateScheduleAppProfileRecurringWeekly"]; ok {
-						nestedUpdateSchedule.AppProfile.Recurring.Weekly.Misc = o.Misc["UpdateScheduleAppProfileRecurringWeekly"]
-					}
-					if o.UpdateSchedule.AppProfile.Recurring.Weekly.Action != nil {
-						nestedUpdateSchedule.AppProfile.Recurring.Weekly.Action = o.UpdateSchedule.AppProfile.Recurring.Weekly.Action
-					}
-					if o.UpdateSchedule.AppProfile.Recurring.Weekly.At != nil {
-						nestedUpdateSchedule.AppProfile.Recurring.Weekly.At = o.UpdateSchedule.AppProfile.Recurring.Weekly.At
-					}
-					if o.UpdateSchedule.AppProfile.Recurring.Weekly.DayOfWeek != nil {
-						nestedUpdateSchedule.AppProfile.Recurring.Weekly.DayOfWeek = o.UpdateSchedule.AppProfile.Recurring.Weekly.DayOfWeek
-					}
-				}
-			}
-		}
-		if o.UpdateSchedule.GlobalProtectClientlessVpn != nil {
-			nestedUpdateSchedule.GlobalProtectClientlessVpn = &UpdateScheduleGlobalProtectClientlessVpnXml{}
-			if _, ok := o.Misc["UpdateScheduleGlobalProtectClientlessVpn"]; ok {
-				nestedUpdateSchedule.GlobalProtectClientlessVpn.Misc = o.Misc["UpdateScheduleGlobalProtectClientlessVpn"]
-			}
-			if o.UpdateSchedule.GlobalProtectClientlessVpn.Recurring != nil {
-				nestedUpdateSchedule.GlobalProtectClientlessVpn.Recurring = &UpdateScheduleGlobalProtectClientlessVpnRecurringXml{}
-				if _, ok := o.Misc["UpdateScheduleGlobalProtectClientlessVpnRecurring"]; ok {
-					nestedUpdateSchedule.GlobalProtectClientlessVpn.Recurring.Misc = o.Misc["UpdateScheduleGlobalProtectClientlessVpnRecurring"]
-				}
-				if o.UpdateSchedule.GlobalProtectClientlessVpn.Recurring.Daily != nil {
-					nestedUpdateSchedule.GlobalProtectClientlessVpn.Recurring.Daily = &UpdateScheduleGlobalProtectClientlessVpnRecurringDailyXml{}
-					if _, ok := o.Misc["UpdateScheduleGlobalProtectClientlessVpnRecurringDaily"]; ok {
-						nestedUpdateSchedule.GlobalProtectClientlessVpn.Recurring.Daily.Misc = o.Misc["UpdateScheduleGlobalProtectClientlessVpnRecurringDaily"]
-					}
-					if o.UpdateSchedule.GlobalProtectClientlessVpn.Recurring.Daily.Action != nil {
-						nestedUpdateSchedule.GlobalProtectClientlessVpn.Recurring.Daily.Action = o.UpdateSchedule.GlobalProtectClientlessVpn.Recurring.Daily.Action
-					}
-					if o.UpdateSchedule.GlobalProtectClientlessVpn.Recurring.Daily.At != nil {
-						nestedUpdateSchedule.GlobalProtectClientlessVpn.Recurring.Daily.At = o.UpdateSchedule.GlobalProtectClientlessVpn.Recurring.Daily.At
-					}
-				}
-				if o.UpdateSchedule.GlobalProtectClientlessVpn.Recurring.Hourly != nil {
-					nestedUpdateSchedule.GlobalProtectClientlessVpn.Recurring.Hourly = &UpdateScheduleGlobalProtectClientlessVpnRecurringHourlyXml{}
-					if _, ok := o.Misc["UpdateScheduleGlobalProtectClientlessVpnRecurringHourly"]; ok {
-						nestedUpdateSchedule.GlobalProtectClientlessVpn.Recurring.Hourly.Misc = o.Misc["UpdateScheduleGlobalProtectClientlessVpnRecurringHourly"]
-					}
-					if o.UpdateSchedule.GlobalProtectClientlessVpn.Recurring.Hourly.Action != nil {
-						nestedUpdateSchedule.GlobalProtectClientlessVpn.Recurring.Hourly.Action = o.UpdateSchedule.GlobalProtectClientlessVpn.Recurring.Hourly.Action
-					}
-					if o.UpdateSchedule.GlobalProtectClientlessVpn.Recurring.Hourly.At != nil {
-						nestedUpdateSchedule.GlobalProtectClientlessVpn.Recurring.Hourly.At = o.UpdateSchedule.GlobalProtectClientlessVpn.Recurring.Hourly.At
-					}
-				}
-				if o.UpdateSchedule.GlobalProtectClientlessVpn.Recurring.None != nil {
-					nestedUpdateSchedule.GlobalProtectClientlessVpn.Recurring.None = &UpdateScheduleGlobalProtectClientlessVpnRecurringNoneXml{}
-					if _, ok := o.Misc["UpdateScheduleGlobalProtectClientlessVpnRecurringNone"]; ok {
-						nestedUpdateSchedule.GlobalProtectClientlessVpn.Recurring.None.Misc = o.Misc["UpdateScheduleGlobalProtectClientlessVpnRecurringNone"]
-					}
-				}
-				if o.UpdateSchedule.GlobalProtectClientlessVpn.Recurring.Weekly != nil {
-					nestedUpdateSchedule.GlobalProtectClientlessVpn.Recurring.Weekly = &UpdateScheduleGlobalProtectClientlessVpnRecurringWeeklyXml{}
-					if _, ok := o.Misc["UpdateScheduleGlobalProtectClientlessVpnRecurringWeekly"]; ok {
-						nestedUpdateSchedule.GlobalProtectClientlessVpn.Recurring.Weekly.Misc = o.Misc["UpdateScheduleGlobalProtectClientlessVpnRecurringWeekly"]
-					}
-					if o.UpdateSchedule.GlobalProtectClientlessVpn.Recurring.Weekly.Action != nil {
-						nestedUpdateSchedule.GlobalProtectClientlessVpn.Recurring.Weekly.Action = o.UpdateSchedule.GlobalProtectClientlessVpn.Recurring.Weekly.Action
-					}
-					if o.UpdateSchedule.GlobalProtectClientlessVpn.Recurring.Weekly.At != nil {
-						nestedUpdateSchedule.GlobalProtectClientlessVpn.Recurring.Weekly.At = o.UpdateSchedule.GlobalProtectClientlessVpn.Recurring.Weekly.At
-					}
-					if o.UpdateSchedule.GlobalProtectClientlessVpn.Recurring.Weekly.DayOfWeek != nil {
-						nestedUpdateSchedule.GlobalProtectClientlessVpn.Recurring.Weekly.DayOfWeek = o.UpdateSchedule.GlobalProtectClientlessVpn.Recurring.Weekly.DayOfWeek
-					}
-				}
-			}
-		}
-		if o.UpdateSchedule.GlobalProtectDatafile != nil {
-			nestedUpdateSchedule.GlobalProtectDatafile = &UpdateScheduleGlobalProtectDatafileXml{}
-			if _, ok := o.Misc["UpdateScheduleGlobalProtectDatafile"]; ok {
-				nestedUpdateSchedule.GlobalProtectDatafile.Misc = o.Misc["UpdateScheduleGlobalProtectDatafile"]
-			}
-			if o.UpdateSchedule.GlobalProtectDatafile.Recurring != nil {
-				nestedUpdateSchedule.GlobalProtectDatafile.Recurring = &UpdateScheduleGlobalProtectDatafileRecurringXml{}
-				if _, ok := o.Misc["UpdateScheduleGlobalProtectDatafileRecurring"]; ok {
-					nestedUpdateSchedule.GlobalProtectDatafile.Recurring.Misc = o.Misc["UpdateScheduleGlobalProtectDatafileRecurring"]
-				}
-				if o.UpdateSchedule.GlobalProtectDatafile.Recurring.Daily != nil {
-					nestedUpdateSchedule.GlobalProtectDatafile.Recurring.Daily = &UpdateScheduleGlobalProtectDatafileRecurringDailyXml{}
-					if _, ok := o.Misc["UpdateScheduleGlobalProtectDatafileRecurringDaily"]; ok {
-						nestedUpdateSchedule.GlobalProtectDatafile.Recurring.Daily.Misc = o.Misc["UpdateScheduleGlobalProtectDatafileRecurringDaily"]
-					}
-					if o.UpdateSchedule.GlobalProtectDatafile.Recurring.Daily.Action != nil {
-						nestedUpdateSchedule.GlobalProtectDatafile.Recurring.Daily.Action = o.UpdateSchedule.GlobalProtectDatafile.Recurring.Daily.Action
-					}
-					if o.UpdateSchedule.GlobalProtectDatafile.Recurring.Daily.At != nil {
-						nestedUpdateSchedule.GlobalProtectDatafile.Recurring.Daily.At = o.UpdateSchedule.GlobalProtectDatafile.Recurring.Daily.At
-					}
-				}
-				if o.UpdateSchedule.GlobalProtectDatafile.Recurring.Hourly != nil {
-					nestedUpdateSchedule.GlobalProtectDatafile.Recurring.Hourly = &UpdateScheduleGlobalProtectDatafileRecurringHourlyXml{}
-					if _, ok := o.Misc["UpdateScheduleGlobalProtectDatafileRecurringHourly"]; ok {
-						nestedUpdateSchedule.GlobalProtectDatafile.Recurring.Hourly.Misc = o.Misc["UpdateScheduleGlobalProtectDatafileRecurringHourly"]
-					}
-					if o.UpdateSchedule.GlobalProtectDatafile.Recurring.Hourly.Action != nil {
-						nestedUpdateSchedule.GlobalProtectDatafile.Recurring.Hourly.Action = o.UpdateSchedule.GlobalProtectDatafile.Recurring.Hourly.Action
-					}
-					if o.UpdateSchedule.GlobalProtectDatafile.Recurring.Hourly.At != nil {
-						nestedUpdateSchedule.GlobalProtectDatafile.Recurring.Hourly.At = o.UpdateSchedule.GlobalProtectDatafile.Recurring.Hourly.At
-					}
-				}
-				if o.UpdateSchedule.GlobalProtectDatafile.Recurring.None != nil {
-					nestedUpdateSchedule.GlobalProtectDatafile.Recurring.None = &UpdateScheduleGlobalProtectDatafileRecurringNoneXml{}
-					if _, ok := o.Misc["UpdateScheduleGlobalProtectDatafileRecurringNone"]; ok {
-						nestedUpdateSchedule.GlobalProtectDatafile.Recurring.None.Misc = o.Misc["UpdateScheduleGlobalProtectDatafileRecurringNone"]
-					}
-				}
-				if o.UpdateSchedule.GlobalProtectDatafile.Recurring.Weekly != nil {
-					nestedUpdateSchedule.GlobalProtectDatafile.Recurring.Weekly = &UpdateScheduleGlobalProtectDatafileRecurringWeeklyXml{}
-					if _, ok := o.Misc["UpdateScheduleGlobalProtectDatafileRecurringWeekly"]; ok {
-						nestedUpdateSchedule.GlobalProtectDatafile.Recurring.Weekly.Misc = o.Misc["UpdateScheduleGlobalProtectDatafileRecurringWeekly"]
-					}
-					if o.UpdateSchedule.GlobalProtectDatafile.Recurring.Weekly.Action != nil {
-						nestedUpdateSchedule.GlobalProtectDatafile.Recurring.Weekly.Action = o.UpdateSchedule.GlobalProtectDatafile.Recurring.Weekly.Action
-					}
-					if o.UpdateSchedule.GlobalProtectDatafile.Recurring.Weekly.At != nil {
-						nestedUpdateSchedule.GlobalProtectDatafile.Recurring.Weekly.At = o.UpdateSchedule.GlobalProtectDatafile.Recurring.Weekly.At
-					}
-					if o.UpdateSchedule.GlobalProtectDatafile.Recurring.Weekly.DayOfWeek != nil {
-						nestedUpdateSchedule.GlobalProtectDatafile.Recurring.Weekly.DayOfWeek = o.UpdateSchedule.GlobalProtectDatafile.Recurring.Weekly.DayOfWeek
-					}
-				}
-			}
-		}
-		if o.UpdateSchedule.StatisticsService != nil {
-			nestedUpdateSchedule.StatisticsService = &UpdateScheduleStatisticsServiceXml{}
-			if _, ok := o.Misc["UpdateScheduleStatisticsService"]; ok {
-				nestedUpdateSchedule.StatisticsService.Misc = o.Misc["UpdateScheduleStatisticsService"]
-			}
-			if o.UpdateSchedule.StatisticsService.ApplicationReports != nil {
-				nestedUpdateSchedule.StatisticsService.ApplicationReports = util.YesNo(o.UpdateSchedule.StatisticsService.ApplicationReports, nil)
-			}
-			if o.UpdateSchedule.StatisticsService.FileIdentificationReports != nil {
-				nestedUpdateSchedule.StatisticsService.FileIdentificationReports = util.YesNo(o.UpdateSchedule.StatisticsService.FileIdentificationReports, nil)
-			}
-			if o.UpdateSchedule.StatisticsService.HealthPerformanceReports != nil {
-				nestedUpdateSchedule.StatisticsService.HealthPerformanceReports = util.YesNo(o.UpdateSchedule.StatisticsService.HealthPerformanceReports, nil)
-			}
-			if o.UpdateSchedule.StatisticsService.PassiveDnsMonitoring != nil {
-				nestedUpdateSchedule.StatisticsService.PassiveDnsMonitoring = util.YesNo(o.UpdateSchedule.StatisticsService.PassiveDnsMonitoring, nil)
-			}
-			if o.UpdateSchedule.StatisticsService.ThreatPreventionInformation != nil {
-				nestedUpdateSchedule.StatisticsService.ThreatPreventionInformation = util.YesNo(o.UpdateSchedule.StatisticsService.ThreatPreventionInformation, nil)
-			}
-			if o.UpdateSchedule.StatisticsService.ThreatPreventionPcap != nil {
-				nestedUpdateSchedule.StatisticsService.ThreatPreventionPcap = util.YesNo(o.UpdateSchedule.StatisticsService.ThreatPreventionPcap, nil)
-			}
-			if o.UpdateSchedule.StatisticsService.ThreatPreventionReports != nil {
-				nestedUpdateSchedule.StatisticsService.ThreatPreventionReports = util.YesNo(o.UpdateSchedule.StatisticsService.ThreatPreventionReports, nil)
-			}
-			if o.UpdateSchedule.StatisticsService.UrlReports != nil {
-				nestedUpdateSchedule.StatisticsService.UrlReports = util.YesNo(o.UpdateSchedule.StatisticsService.UrlReports, nil)
-			}
-		}
-		if o.UpdateSchedule.Threats != nil {
-			nestedUpdateSchedule.Threats = &UpdateScheduleThreatsXml{}
-			if _, ok := o.Misc["UpdateScheduleThreats"]; ok {
-				nestedUpdateSchedule.Threats.Misc = o.Misc["UpdateScheduleThreats"]
-			}
-			if o.UpdateSchedule.Threats.Recurring != nil {
-				nestedUpdateSchedule.Threats.Recurring = &UpdateScheduleThreatsRecurringXml{}
-				if _, ok := o.Misc["UpdateScheduleThreatsRecurring"]; ok {
-					nestedUpdateSchedule.Threats.Recurring.Misc = o.Misc["UpdateScheduleThreatsRecurring"]
-				}
-				if o.UpdateSchedule.Threats.Recurring.NewAppThreshold != nil {
-					nestedUpdateSchedule.Threats.Recurring.NewAppThreshold = o.UpdateSchedule.Threats.Recurring.NewAppThreshold
-				}
-				if o.UpdateSchedule.Threats.Recurring.SyncToPeer != nil {
-					nestedUpdateSchedule.Threats.Recurring.SyncToPeer = util.YesNo(o.UpdateSchedule.Threats.Recurring.SyncToPeer, nil)
-				}
-				if o.UpdateSchedule.Threats.Recurring.Threshold != nil {
-					nestedUpdateSchedule.Threats.Recurring.Threshold = o.UpdateSchedule.Threats.Recurring.Threshold
-				}
-				if o.UpdateSchedule.Threats.Recurring.Daily != nil {
-					nestedUpdateSchedule.Threats.Recurring.Daily = &UpdateScheduleThreatsRecurringDailyXml{}
-					if _, ok := o.Misc["UpdateScheduleThreatsRecurringDaily"]; ok {
-						nestedUpdateSchedule.Threats.Recurring.Daily.Misc = o.Misc["UpdateScheduleThreatsRecurringDaily"]
-					}
-					if o.UpdateSchedule.Threats.Recurring.Daily.Action != nil {
-						nestedUpdateSchedule.Threats.Recurring.Daily.Action = o.UpdateSchedule.Threats.Recurring.Daily.Action
-					}
-					if o.UpdateSchedule.Threats.Recurring.Daily.At != nil {
-						nestedUpdateSchedule.Threats.Recurring.Daily.At = o.UpdateSchedule.Threats.Recurring.Daily.At
-					}
-					if o.UpdateSchedule.Threats.Recurring.Daily.DisableNewContent != nil {
-						nestedUpdateSchedule.Threats.Recurring.Daily.DisableNewContent = util.YesNo(o.UpdateSchedule.Threats.Recurring.Daily.DisableNewContent, nil)
-					}
-				}
-				if o.UpdateSchedule.Threats.Recurring.Every30Mins != nil {
-					nestedUpdateSchedule.Threats.Recurring.Every30Mins = &UpdateScheduleThreatsRecurringEvery30MinsXml{}
-					if _, ok := o.Misc["UpdateScheduleThreatsRecurringEvery30Mins"]; ok {
-						nestedUpdateSchedule.Threats.Recurring.Every30Mins.Misc = o.Misc["UpdateScheduleThreatsRecurringEvery30Mins"]
-					}
-					if o.UpdateSchedule.Threats.Recurring.Every30Mins.Action != nil {
-						nestedUpdateSchedule.Threats.Recurring.Every30Mins.Action = o.UpdateSchedule.Threats.Recurring.Every30Mins.Action
-					}
-					if o.UpdateSchedule.Threats.Recurring.Every30Mins.At != nil {
-						nestedUpdateSchedule.Threats.Recurring.Every30Mins.At = o.UpdateSchedule.Threats.Recurring.Every30Mins.At
-					}
-					if o.UpdateSchedule.Threats.Recurring.Every30Mins.DisableNewContent != nil {
-						nestedUpdateSchedule.Threats.Recurring.Every30Mins.DisableNewContent = util.YesNo(o.UpdateSchedule.Threats.Recurring.Every30Mins.DisableNewContent, nil)
-					}
-				}
-				if o.UpdateSchedule.Threats.Recurring.Hourly != nil {
-					nestedUpdateSchedule.Threats.Recurring.Hourly = &UpdateScheduleThreatsRecurringHourlyXml{}
-					if _, ok := o.Misc["UpdateScheduleThreatsRecurringHourly"]; ok {
-						nestedUpdateSchedule.Threats.Recurring.Hourly.Misc = o.Misc["UpdateScheduleThreatsRecurringHourly"]
-					}
-					if o.UpdateSchedule.Threats.Recurring.Hourly.Action != nil {
-						nestedUpdateSchedule.Threats.Recurring.Hourly.Action = o.UpdateSchedule.Threats.Recurring.Hourly.Action
-					}
-					if o.UpdateSchedule.Threats.Recurring.Hourly.At != nil {
-						nestedUpdateSchedule.Threats.Recurring.Hourly.At = o.UpdateSchedule.Threats.Recurring.Hourly.At
-					}
-					if o.UpdateSchedule.Threats.Recurring.Hourly.DisableNewContent != nil {
-						nestedUpdateSchedule.Threats.Recurring.Hourly.DisableNewContent = util.YesNo(o.UpdateSchedule.Threats.Recurring.Hourly.DisableNewContent, nil)
-					}
-				}
-				if o.UpdateSchedule.Threats.Recurring.None != nil {
-					nestedUpdateSchedule.Threats.Recurring.None = &UpdateScheduleThreatsRecurringNoneXml{}
-					if _, ok := o.Misc["UpdateScheduleThreatsRecurringNone"]; ok {
-						nestedUpdateSchedule.Threats.Recurring.None.Misc = o.Misc["UpdateScheduleThreatsRecurringNone"]
-					}
-				}
-				if o.UpdateSchedule.Threats.Recurring.Weekly != nil {
-					nestedUpdateSchedule.Threats.Recurring.Weekly = &UpdateScheduleThreatsRecurringWeeklyXml{}
-					if _, ok := o.Misc["UpdateScheduleThreatsRecurringWeekly"]; ok {
-						nestedUpdateSchedule.Threats.Recurring.Weekly.Misc = o.Misc["UpdateScheduleThreatsRecurringWeekly"]
-					}
-					if o.UpdateSchedule.Threats.Recurring.Weekly.Action != nil {
-						nestedUpdateSchedule.Threats.Recurring.Weekly.Action = o.UpdateSchedule.Threats.Recurring.Weekly.Action
-					}
-					if o.UpdateSchedule.Threats.Recurring.Weekly.At != nil {
-						nestedUpdateSchedule.Threats.Recurring.Weekly.At = o.UpdateSchedule.Threats.Recurring.Weekly.At
-					}
-					if o.UpdateSchedule.Threats.Recurring.Weekly.DayOfWeek != nil {
-						nestedUpdateSchedule.Threats.Recurring.Weekly.DayOfWeek = o.UpdateSchedule.Threats.Recurring.Weekly.DayOfWeek
-					}
-					if o.UpdateSchedule.Threats.Recurring.Weekly.DisableNewContent != nil {
-						nestedUpdateSchedule.Threats.Recurring.Weekly.DisableNewContent = util.YesNo(o.UpdateSchedule.Threats.Recurring.Weekly.DisableNewContent, nil)
-					}
-				}
-			}
-		}
-		if o.UpdateSchedule.WfPrivate != nil {
-			nestedUpdateSchedule.WfPrivate = &UpdateScheduleWfPrivateXml{}
-			if _, ok := o.Misc["UpdateScheduleWfPrivate"]; ok {
-				nestedUpdateSchedule.WfPrivate.Misc = o.Misc["UpdateScheduleWfPrivate"]
-			}
-			if o.UpdateSchedule.WfPrivate.Recurring != nil {
-				nestedUpdateSchedule.WfPrivate.Recurring = &UpdateScheduleWfPrivateRecurringXml{}
-				if _, ok := o.Misc["UpdateScheduleWfPrivateRecurring"]; ok {
-					nestedUpdateSchedule.WfPrivate.Recurring.Misc = o.Misc["UpdateScheduleWfPrivateRecurring"]
-				}
-				if o.UpdateSchedule.WfPrivate.Recurring.SyncToPeer != nil {
-					nestedUpdateSchedule.WfPrivate.Recurring.SyncToPeer = util.YesNo(o.UpdateSchedule.WfPrivate.Recurring.SyncToPeer, nil)
-				}
-				if o.UpdateSchedule.WfPrivate.Recurring.Every15Mins != nil {
-					nestedUpdateSchedule.WfPrivate.Recurring.Every15Mins = &UpdateScheduleWfPrivateRecurringEvery15MinsXml{}
-					if _, ok := o.Misc["UpdateScheduleWfPrivateRecurringEvery15Mins"]; ok {
-						nestedUpdateSchedule.WfPrivate.Recurring.Every15Mins.Misc = o.Misc["UpdateScheduleWfPrivateRecurringEvery15Mins"]
-					}
-					if o.UpdateSchedule.WfPrivate.Recurring.Every15Mins.Action != nil {
-						nestedUpdateSchedule.WfPrivate.Recurring.Every15Mins.Action = o.UpdateSchedule.WfPrivate.Recurring.Every15Mins.Action
-					}
-					if o.UpdateSchedule.WfPrivate.Recurring.Every15Mins.At != nil {
-						nestedUpdateSchedule.WfPrivate.Recurring.Every15Mins.At = o.UpdateSchedule.WfPrivate.Recurring.Every15Mins.At
-					}
-				}
-				if o.UpdateSchedule.WfPrivate.Recurring.Every30Mins != nil {
-					nestedUpdateSchedule.WfPrivate.Recurring.Every30Mins = &UpdateScheduleWfPrivateRecurringEvery30MinsXml{}
-					if _, ok := o.Misc["UpdateScheduleWfPrivateRecurringEvery30Mins"]; ok {
-						nestedUpdateSchedule.WfPrivate.Recurring.Every30Mins.Misc = o.Misc["UpdateScheduleWfPrivateRecurringEvery30Mins"]
-					}
-					if o.UpdateSchedule.WfPrivate.Recurring.Every30Mins.Action != nil {
-						nestedUpdateSchedule.WfPrivate.Recurring.Every30Mins.Action = o.UpdateSchedule.WfPrivate.Recurring.Every30Mins.Action
-					}
-					if o.UpdateSchedule.WfPrivate.Recurring.Every30Mins.At != nil {
-						nestedUpdateSchedule.WfPrivate.Recurring.Every30Mins.At = o.UpdateSchedule.WfPrivate.Recurring.Every30Mins.At
-					}
-				}
-				if o.UpdateSchedule.WfPrivate.Recurring.Every5Mins != nil {
-					nestedUpdateSchedule.WfPrivate.Recurring.Every5Mins = &UpdateScheduleWfPrivateRecurringEvery5MinsXml{}
-					if _, ok := o.Misc["UpdateScheduleWfPrivateRecurringEvery5Mins"]; ok {
-						nestedUpdateSchedule.WfPrivate.Recurring.Every5Mins.Misc = o.Misc["UpdateScheduleWfPrivateRecurringEvery5Mins"]
-					}
-					if o.UpdateSchedule.WfPrivate.Recurring.Every5Mins.Action != nil {
-						nestedUpdateSchedule.WfPrivate.Recurring.Every5Mins.Action = o.UpdateSchedule.WfPrivate.Recurring.Every5Mins.Action
-					}
-					if o.UpdateSchedule.WfPrivate.Recurring.Every5Mins.At != nil {
-						nestedUpdateSchedule.WfPrivate.Recurring.Every5Mins.At = o.UpdateSchedule.WfPrivate.Recurring.Every5Mins.At
-					}
-				}
-				if o.UpdateSchedule.WfPrivate.Recurring.EveryHour != nil {
-					nestedUpdateSchedule.WfPrivate.Recurring.EveryHour = &UpdateScheduleWfPrivateRecurringEveryHourXml{}
-					if _, ok := o.Misc["UpdateScheduleWfPrivateRecurringEveryHour"]; ok {
-						nestedUpdateSchedule.WfPrivate.Recurring.EveryHour.Misc = o.Misc["UpdateScheduleWfPrivateRecurringEveryHour"]
-					}
-					if o.UpdateSchedule.WfPrivate.Recurring.EveryHour.Action != nil {
-						nestedUpdateSchedule.WfPrivate.Recurring.EveryHour.Action = o.UpdateSchedule.WfPrivate.Recurring.EveryHour.Action
-					}
-					if o.UpdateSchedule.WfPrivate.Recurring.EveryHour.At != nil {
-						nestedUpdateSchedule.WfPrivate.Recurring.EveryHour.At = o.UpdateSchedule.WfPrivate.Recurring.EveryHour.At
-					}
-				}
-				if o.UpdateSchedule.WfPrivate.Recurring.None != nil {
-					nestedUpdateSchedule.WfPrivate.Recurring.None = &UpdateScheduleWfPrivateRecurringNoneXml{}
-					if _, ok := o.Misc["UpdateScheduleWfPrivateRecurringNone"]; ok {
-						nestedUpdateSchedule.WfPrivate.Recurring.None.Misc = o.Misc["UpdateScheduleWfPrivateRecurringNone"]
-					}
-				}
-			}
-		}
-		if o.UpdateSchedule.Wildfire != nil {
-			nestedUpdateSchedule.Wildfire = &UpdateScheduleWildfireXml{}
-			if _, ok := o.Misc["UpdateScheduleWildfire"]; ok {
-				nestedUpdateSchedule.Wildfire.Misc = o.Misc["UpdateScheduleWildfire"]
-			}
-			if o.UpdateSchedule.Wildfire.Recurring != nil {
-				nestedUpdateSchedule.Wildfire.Recurring = &UpdateScheduleWildfireRecurringXml{}
-				if _, ok := o.Misc["UpdateScheduleWildfireRecurring"]; ok {
-					nestedUpdateSchedule.Wildfire.Recurring.Misc = o.Misc["UpdateScheduleWildfireRecurring"]
-				}
-				if o.UpdateSchedule.Wildfire.Recurring.Every15Mins != nil {
-					nestedUpdateSchedule.Wildfire.Recurring.Every15Mins = &UpdateScheduleWildfireRecurringEvery15MinsXml{}
-					if _, ok := o.Misc["UpdateScheduleWildfireRecurringEvery15Mins"]; ok {
-						nestedUpdateSchedule.Wildfire.Recurring.Every15Mins.Misc = o.Misc["UpdateScheduleWildfireRecurringEvery15Mins"]
-					}
-					if o.UpdateSchedule.Wildfire.Recurring.Every15Mins.Action != nil {
-						nestedUpdateSchedule.Wildfire.Recurring.Every15Mins.Action = o.UpdateSchedule.Wildfire.Recurring.Every15Mins.Action
-					}
-					if o.UpdateSchedule.Wildfire.Recurring.Every15Mins.At != nil {
-						nestedUpdateSchedule.Wildfire.Recurring.Every15Mins.At = o.UpdateSchedule.Wildfire.Recurring.Every15Mins.At
-					}
-					if o.UpdateSchedule.Wildfire.Recurring.Every15Mins.SyncToPeer != nil {
-						nestedUpdateSchedule.Wildfire.Recurring.Every15Mins.SyncToPeer = util.YesNo(o.UpdateSchedule.Wildfire.Recurring.Every15Mins.SyncToPeer, nil)
-					}
-				}
-				if o.UpdateSchedule.Wildfire.Recurring.Every30Mins != nil {
-					nestedUpdateSchedule.Wildfire.Recurring.Every30Mins = &UpdateScheduleWildfireRecurringEvery30MinsXml{}
-					if _, ok := o.Misc["UpdateScheduleWildfireRecurringEvery30Mins"]; ok {
-						nestedUpdateSchedule.Wildfire.Recurring.Every30Mins.Misc = o.Misc["UpdateScheduleWildfireRecurringEvery30Mins"]
-					}
-					if o.UpdateSchedule.Wildfire.Recurring.Every30Mins.Action != nil {
-						nestedUpdateSchedule.Wildfire.Recurring.Every30Mins.Action = o.UpdateSchedule.Wildfire.Recurring.Every30Mins.Action
-					}
-					if o.UpdateSchedule.Wildfire.Recurring.Every30Mins.At != nil {
-						nestedUpdateSchedule.Wildfire.Recurring.Every30Mins.At = o.UpdateSchedule.Wildfire.Recurring.Every30Mins.At
-					}
-					if o.UpdateSchedule.Wildfire.Recurring.Every30Mins.SyncToPeer != nil {
-						nestedUpdateSchedule.Wildfire.Recurring.Every30Mins.SyncToPeer = util.YesNo(o.UpdateSchedule.Wildfire.Recurring.Every30Mins.SyncToPeer, nil)
-					}
-				}
-				if o.UpdateSchedule.Wildfire.Recurring.EveryHour != nil {
-					nestedUpdateSchedule.Wildfire.Recurring.EveryHour = &UpdateScheduleWildfireRecurringEveryHourXml{}
-					if _, ok := o.Misc["UpdateScheduleWildfireRecurringEveryHour"]; ok {
-						nestedUpdateSchedule.Wildfire.Recurring.EveryHour.Misc = o.Misc["UpdateScheduleWildfireRecurringEveryHour"]
-					}
-					if o.UpdateSchedule.Wildfire.Recurring.EveryHour.Action != nil {
-						nestedUpdateSchedule.Wildfire.Recurring.EveryHour.Action = o.UpdateSchedule.Wildfire.Recurring.EveryHour.Action
-					}
-					if o.UpdateSchedule.Wildfire.Recurring.EveryHour.At != nil {
-						nestedUpdateSchedule.Wildfire.Recurring.EveryHour.At = o.UpdateSchedule.Wildfire.Recurring.EveryHour.At
-					}
-					if o.UpdateSchedule.Wildfire.Recurring.EveryHour.SyncToPeer != nil {
-						nestedUpdateSchedule.Wildfire.Recurring.EveryHour.SyncToPeer = util.YesNo(o.UpdateSchedule.Wildfire.Recurring.EveryHour.SyncToPeer, nil)
-					}
-				}
-				if o.UpdateSchedule.Wildfire.Recurring.EveryMin != nil {
-					nestedUpdateSchedule.Wildfire.Recurring.EveryMin = &UpdateScheduleWildfireRecurringEveryMinXml{}
-					if _, ok := o.Misc["UpdateScheduleWildfireRecurringEveryMin"]; ok {
-						nestedUpdateSchedule.Wildfire.Recurring.EveryMin.Misc = o.Misc["UpdateScheduleWildfireRecurringEveryMin"]
-					}
-					if o.UpdateSchedule.Wildfire.Recurring.EveryMin.Action != nil {
-						nestedUpdateSchedule.Wildfire.Recurring.EveryMin.Action = o.UpdateSchedule.Wildfire.Recurring.EveryMin.Action
-					}
-					if o.UpdateSchedule.Wildfire.Recurring.EveryMin.SyncToPeer != nil {
-						nestedUpdateSchedule.Wildfire.Recurring.EveryMin.SyncToPeer = util.YesNo(o.UpdateSchedule.Wildfire.Recurring.EveryMin.SyncToPeer, nil)
-					}
-				}
-				if o.UpdateSchedule.Wildfire.Recurring.None != nil {
-					nestedUpdateSchedule.Wildfire.Recurring.None = &UpdateScheduleWildfireRecurringNoneXml{}
-					if _, ok := o.Misc["UpdateScheduleWildfireRecurringNone"]; ok {
-						nestedUpdateSchedule.Wildfire.Recurring.None.Misc = o.Misc["UpdateScheduleWildfireRecurringNone"]
-					}
-				}
-				if o.UpdateSchedule.Wildfire.Recurring.RealTime != nil {
-					nestedUpdateSchedule.Wildfire.Recurring.RealTime = &UpdateScheduleWildfireRecurringRealTimeXml{}
-					if _, ok := o.Misc["UpdateScheduleWildfireRecurringRealTime"]; ok {
-						nestedUpdateSchedule.Wildfire.Recurring.RealTime.Misc = o.Misc["UpdateScheduleWildfireRecurringRealTime"]
-					}
-				}
-			}
-		}
-	}
-	config.UpdateSchedule = nestedUpdateSchedule
-
-	config.Misc = o.Misc["Config"]
-
-	return config, nil
-}
-func (c *configXmlContainer) Normalize() ([]*Config, error) {
-	configList := make([]*Config, 0, len(c.Answer))
-	for _, o := range c.Answer {
-		config := &Config{
-			Misc: make(map[string][]generic.Xml),
-		}
-		var nestedUpdateSchedule *UpdateSchedule
-		if o.UpdateSchedule != nil {
-			nestedUpdateSchedule = &UpdateSchedule{}
-			if o.UpdateSchedule.Misc != nil {
-				config.Misc["UpdateSchedule"] = o.UpdateSchedule.Misc
-			}
-			if o.UpdateSchedule.AntiVirus != nil {
-				nestedUpdateSchedule.AntiVirus = &UpdateScheduleAntiVirus{}
-				if o.UpdateSchedule.AntiVirus.Misc != nil {
-					config.Misc["UpdateScheduleAntiVirus"] = o.UpdateSchedule.AntiVirus.Misc
-				}
-				if o.UpdateSchedule.AntiVirus.Recurring != nil {
-					nestedUpdateSchedule.AntiVirus.Recurring = &UpdateScheduleAntiVirusRecurring{}
-					if o.UpdateSchedule.AntiVirus.Recurring.Misc != nil {
-						config.Misc["UpdateScheduleAntiVirusRecurring"] = o.UpdateSchedule.AntiVirus.Recurring.Misc
-					}
-					if o.UpdateSchedule.AntiVirus.Recurring.SyncToPeer != nil {
-						nestedUpdateSchedule.AntiVirus.Recurring.SyncToPeer = util.AsBool(o.UpdateSchedule.AntiVirus.Recurring.SyncToPeer, nil)
-					}
-					if o.UpdateSchedule.AntiVirus.Recurring.Threshold != nil {
-						nestedUpdateSchedule.AntiVirus.Recurring.Threshold = o.UpdateSchedule.AntiVirus.Recurring.Threshold
-					}
-					if o.UpdateSchedule.AntiVirus.Recurring.Daily != nil {
-						nestedUpdateSchedule.AntiVirus.Recurring.Daily = &UpdateScheduleAntiVirusRecurringDaily{}
-						if o.UpdateSchedule.AntiVirus.Recurring.Daily.Misc != nil {
-							config.Misc["UpdateScheduleAntiVirusRecurringDaily"] = o.UpdateSchedule.AntiVirus.Recurring.Daily.Misc
-						}
-						if o.UpdateSchedule.AntiVirus.Recurring.Daily.Action != nil {
-							nestedUpdateSchedule.AntiVirus.Recurring.Daily.Action = o.UpdateSchedule.AntiVirus.Recurring.Daily.Action
-						}
-						if o.UpdateSchedule.AntiVirus.Recurring.Daily.At != nil {
-							nestedUpdateSchedule.AntiVirus.Recurring.Daily.At = o.UpdateSchedule.AntiVirus.Recurring.Daily.At
-						}
-					}
-					if o.UpdateSchedule.AntiVirus.Recurring.Hourly != nil {
-						nestedUpdateSchedule.AntiVirus.Recurring.Hourly = &UpdateScheduleAntiVirusRecurringHourly{}
-						if o.UpdateSchedule.AntiVirus.Recurring.Hourly.Misc != nil {
-							config.Misc["UpdateScheduleAntiVirusRecurringHourly"] = o.UpdateSchedule.AntiVirus.Recurring.Hourly.Misc
-						}
-						if o.UpdateSchedule.AntiVirus.Recurring.Hourly.Action != nil {
-							nestedUpdateSchedule.AntiVirus.Recurring.Hourly.Action = o.UpdateSchedule.AntiVirus.Recurring.Hourly.Action
-						}
-						if o.UpdateSchedule.AntiVirus.Recurring.Hourly.At != nil {
-							nestedUpdateSchedule.AntiVirus.Recurring.Hourly.At = o.UpdateSchedule.AntiVirus.Recurring.Hourly.At
-						}
-					}
-					if o.UpdateSchedule.AntiVirus.Recurring.None != nil {
-						nestedUpdateSchedule.AntiVirus.Recurring.None = &UpdateScheduleAntiVirusRecurringNone{}
-						if o.UpdateSchedule.AntiVirus.Recurring.None.Misc != nil {
-							config.Misc["UpdateScheduleAntiVirusRecurringNone"] = o.UpdateSchedule.AntiVirus.Recurring.None.Misc
-						}
-					}
-					if o.UpdateSchedule.AntiVirus.Recurring.Weekly != nil {
-						nestedUpdateSchedule.AntiVirus.Recurring.Weekly = &UpdateScheduleAntiVirusRecurringWeekly{}
-						if o.UpdateSchedule.AntiVirus.Recurring.Weekly.Misc != nil {
-							config.Misc["UpdateScheduleAntiVirusRecurringWeekly"] = o.UpdateSchedule.AntiVirus.Recurring.Weekly.Misc
-						}
-						if o.UpdateSchedule.AntiVirus.Recurring.Weekly.Action != nil {
-							nestedUpdateSchedule.AntiVirus.Recurring.Weekly.Action = o.UpdateSchedule.AntiVirus.Recurring.Weekly.Action
-						}
-						if o.UpdateSchedule.AntiVirus.Recurring.Weekly.At != nil {
-							nestedUpdateSchedule.AntiVirus.Recurring.Weekly.At = o.UpdateSchedule.AntiVirus.Recurring.Weekly.At
-						}
-						if o.UpdateSchedule.AntiVirus.Recurring.Weekly.DayOfWeek != nil {
-							nestedUpdateSchedule.AntiVirus.Recurring.Weekly.DayOfWeek = o.UpdateSchedule.AntiVirus.Recurring.Weekly.DayOfWeek
-						}
-					}
-				}
-			}
-			if o.UpdateSchedule.AppProfile != nil {
-				nestedUpdateSchedule.AppProfile = &UpdateScheduleAppProfile{}
-				if o.UpdateSchedule.AppProfile.Misc != nil {
-					config.Misc["UpdateScheduleAppProfile"] = o.UpdateSchedule.AppProfile.Misc
-				}
-				if o.UpdateSchedule.AppProfile.Recurring != nil {
-					nestedUpdateSchedule.AppProfile.Recurring = &UpdateScheduleAppProfileRecurring{}
-					if o.UpdateSchedule.AppProfile.Recurring.Misc != nil {
-						config.Misc["UpdateScheduleAppProfileRecurring"] = o.UpdateSchedule.AppProfile.Recurring.Misc
-					}
-					if o.UpdateSchedule.AppProfile.Recurring.SyncToPeer != nil {
-						nestedUpdateSchedule.AppProfile.Recurring.SyncToPeer = util.AsBool(o.UpdateSchedule.AppProfile.Recurring.SyncToPeer, nil)
-					}
-					if o.UpdateSchedule.AppProfile.Recurring.Threshold != nil {
-						nestedUpdateSchedule.AppProfile.Recurring.Threshold = o.UpdateSchedule.AppProfile.Recurring.Threshold
-					}
-					if o.UpdateSchedule.AppProfile.Recurring.Daily != nil {
-						nestedUpdateSchedule.AppProfile.Recurring.Daily = &UpdateScheduleAppProfileRecurringDaily{}
-						if o.UpdateSchedule.AppProfile.Recurring.Daily.Misc != nil {
-							config.Misc["UpdateScheduleAppProfileRecurringDaily"] = o.UpdateSchedule.AppProfile.Recurring.Daily.Misc
-						}
-						if o.UpdateSchedule.AppProfile.Recurring.Daily.Action != nil {
-							nestedUpdateSchedule.AppProfile.Recurring.Daily.Action = o.UpdateSchedule.AppProfile.Recurring.Daily.Action
-						}
-						if o.UpdateSchedule.AppProfile.Recurring.Daily.At != nil {
-							nestedUpdateSchedule.AppProfile.Recurring.Daily.At = o.UpdateSchedule.AppProfile.Recurring.Daily.At
-						}
-					}
-					if o.UpdateSchedule.AppProfile.Recurring.None != nil {
-						nestedUpdateSchedule.AppProfile.Recurring.None = &UpdateScheduleAppProfileRecurringNone{}
-						if o.UpdateSchedule.AppProfile.Recurring.None.Misc != nil {
-							config.Misc["UpdateScheduleAppProfileRecurringNone"] = o.UpdateSchedule.AppProfile.Recurring.None.Misc
-						}
-					}
-					if o.UpdateSchedule.AppProfile.Recurring.Weekly != nil {
-						nestedUpdateSchedule.AppProfile.Recurring.Weekly = &UpdateScheduleAppProfileRecurringWeekly{}
-						if o.UpdateSchedule.AppProfile.Recurring.Weekly.Misc != nil {
-							config.Misc["UpdateScheduleAppProfileRecurringWeekly"] = o.UpdateSchedule.AppProfile.Recurring.Weekly.Misc
-						}
-						if o.UpdateSchedule.AppProfile.Recurring.Weekly.Action != nil {
-							nestedUpdateSchedule.AppProfile.Recurring.Weekly.Action = o.UpdateSchedule.AppProfile.Recurring.Weekly.Action
-						}
-						if o.UpdateSchedule.AppProfile.Recurring.Weekly.At != nil {
-							nestedUpdateSchedule.AppProfile.Recurring.Weekly.At = o.UpdateSchedule.AppProfile.Recurring.Weekly.At
-						}
-						if o.UpdateSchedule.AppProfile.Recurring.Weekly.DayOfWeek != nil {
-							nestedUpdateSchedule.AppProfile.Recurring.Weekly.DayOfWeek = o.UpdateSchedule.AppProfile.Recurring.Weekly.DayOfWeek
-						}
-					}
-				}
-			}
-			if o.UpdateSchedule.GlobalProtectClientlessVpn != nil {
-				nestedUpdateSchedule.GlobalProtectClientlessVpn = &UpdateScheduleGlobalProtectClientlessVpn{}
-				if o.UpdateSchedule.GlobalProtectClientlessVpn.Misc != nil {
-					config.Misc["UpdateScheduleGlobalProtectClientlessVpn"] = o.UpdateSchedule.GlobalProtectClientlessVpn.Misc
-				}
-				if o.UpdateSchedule.GlobalProtectClientlessVpn.Recurring != nil {
-					nestedUpdateSchedule.GlobalProtectClientlessVpn.Recurring = &UpdateScheduleGlobalProtectClientlessVpnRecurring{}
-					if o.UpdateSchedule.GlobalProtectClientlessVpn.Recurring.Misc != nil {
-						config.Misc["UpdateScheduleGlobalProtectClientlessVpnRecurring"] = o.UpdateSchedule.GlobalProtectClientlessVpn.Recurring.Misc
-					}
-					if o.UpdateSchedule.GlobalProtectClientlessVpn.Recurring.Daily != nil {
-						nestedUpdateSchedule.GlobalProtectClientlessVpn.Recurring.Daily = &UpdateScheduleGlobalProtectClientlessVpnRecurringDaily{}
-						if o.UpdateSchedule.GlobalProtectClientlessVpn.Recurring.Daily.Misc != nil {
-							config.Misc["UpdateScheduleGlobalProtectClientlessVpnRecurringDaily"] = o.UpdateSchedule.GlobalProtectClientlessVpn.Recurring.Daily.Misc
-						}
-						if o.UpdateSchedule.GlobalProtectClientlessVpn.Recurring.Daily.Action != nil {
-							nestedUpdateSchedule.GlobalProtectClientlessVpn.Recurring.Daily.Action = o.UpdateSchedule.GlobalProtectClientlessVpn.Recurring.Daily.Action
-						}
-						if o.UpdateSchedule.GlobalProtectClientlessVpn.Recurring.Daily.At != nil {
-							nestedUpdateSchedule.GlobalProtectClientlessVpn.Recurring.Daily.At = o.UpdateSchedule.GlobalProtectClientlessVpn.Recurring.Daily.At
-						}
-					}
-					if o.UpdateSchedule.GlobalProtectClientlessVpn.Recurring.Hourly != nil {
-						nestedUpdateSchedule.GlobalProtectClientlessVpn.Recurring.Hourly = &UpdateScheduleGlobalProtectClientlessVpnRecurringHourly{}
-						if o.UpdateSchedule.GlobalProtectClientlessVpn.Recurring.Hourly.Misc != nil {
-							config.Misc["UpdateScheduleGlobalProtectClientlessVpnRecurringHourly"] = o.UpdateSchedule.GlobalProtectClientlessVpn.Recurring.Hourly.Misc
-						}
-						if o.UpdateSchedule.GlobalProtectClientlessVpn.Recurring.Hourly.Action != nil {
-							nestedUpdateSchedule.GlobalProtectClientlessVpn.Recurring.Hourly.Action = o.UpdateSchedule.GlobalProtectClientlessVpn.Recurring.Hourly.Action
-						}
-						if o.UpdateSchedule.GlobalProtectClientlessVpn.Recurring.Hourly.At != nil {
-							nestedUpdateSchedule.GlobalProtectClientlessVpn.Recurring.Hourly.At = o.UpdateSchedule.GlobalProtectClientlessVpn.Recurring.Hourly.At
-						}
-					}
-					if o.UpdateSchedule.GlobalProtectClientlessVpn.Recurring.None != nil {
-						nestedUpdateSchedule.GlobalProtectClientlessVpn.Recurring.None = &UpdateScheduleGlobalProtectClientlessVpnRecurringNone{}
-						if o.UpdateSchedule.GlobalProtectClientlessVpn.Recurring.None.Misc != nil {
-							config.Misc["UpdateScheduleGlobalProtectClientlessVpnRecurringNone"] = o.UpdateSchedule.GlobalProtectClientlessVpn.Recurring.None.Misc
-						}
-					}
-					if o.UpdateSchedule.GlobalProtectClientlessVpn.Recurring.Weekly != nil {
-						nestedUpdateSchedule.GlobalProtectClientlessVpn.Recurring.Weekly = &UpdateScheduleGlobalProtectClientlessVpnRecurringWeekly{}
-						if o.UpdateSchedule.GlobalProtectClientlessVpn.Recurring.Weekly.Misc != nil {
-							config.Misc["UpdateScheduleGlobalProtectClientlessVpnRecurringWeekly"] = o.UpdateSchedule.GlobalProtectClientlessVpn.Recurring.Weekly.Misc
-						}
-						if o.UpdateSchedule.GlobalProtectClientlessVpn.Recurring.Weekly.Action != nil {
-							nestedUpdateSchedule.GlobalProtectClientlessVpn.Recurring.Weekly.Action = o.UpdateSchedule.GlobalProtectClientlessVpn.Recurring.Weekly.Action
-						}
-						if o.UpdateSchedule.GlobalProtectClientlessVpn.Recurring.Weekly.At != nil {
-							nestedUpdateSchedule.GlobalProtectClientlessVpn.Recurring.Weekly.At = o.UpdateSchedule.GlobalProtectClientlessVpn.Recurring.Weekly.At
-						}
-						if o.UpdateSchedule.GlobalProtectClientlessVpn.Recurring.Weekly.DayOfWeek != nil {
-							nestedUpdateSchedule.GlobalProtectClientlessVpn.Recurring.Weekly.DayOfWeek = o.UpdateSchedule.GlobalProtectClientlessVpn.Recurring.Weekly.DayOfWeek
-						}
-					}
-				}
-			}
-			if o.UpdateSchedule.GlobalProtectDatafile != nil {
-				nestedUpdateSchedule.GlobalProtectDatafile = &UpdateScheduleGlobalProtectDatafile{}
-				if o.UpdateSchedule.GlobalProtectDatafile.Misc != nil {
-					config.Misc["UpdateScheduleGlobalProtectDatafile"] = o.UpdateSchedule.GlobalProtectDatafile.Misc
-				}
-				if o.UpdateSchedule.GlobalProtectDatafile.Recurring != nil {
-					nestedUpdateSchedule.GlobalProtectDatafile.Recurring = &UpdateScheduleGlobalProtectDatafileRecurring{}
-					if o.UpdateSchedule.GlobalProtectDatafile.Recurring.Misc != nil {
-						config.Misc["UpdateScheduleGlobalProtectDatafileRecurring"] = o.UpdateSchedule.GlobalProtectDatafile.Recurring.Misc
-					}
-					if o.UpdateSchedule.GlobalProtectDatafile.Recurring.Daily != nil {
-						nestedUpdateSchedule.GlobalProtectDatafile.Recurring.Daily = &UpdateScheduleGlobalProtectDatafileRecurringDaily{}
-						if o.UpdateSchedule.GlobalProtectDatafile.Recurring.Daily.Misc != nil {
-							config.Misc["UpdateScheduleGlobalProtectDatafileRecurringDaily"] = o.UpdateSchedule.GlobalProtectDatafile.Recurring.Daily.Misc
-						}
-						if o.UpdateSchedule.GlobalProtectDatafile.Recurring.Daily.Action != nil {
-							nestedUpdateSchedule.GlobalProtectDatafile.Recurring.Daily.Action = o.UpdateSchedule.GlobalProtectDatafile.Recurring.Daily.Action
-						}
-						if o.UpdateSchedule.GlobalProtectDatafile.Recurring.Daily.At != nil {
-							nestedUpdateSchedule.GlobalProtectDatafile.Recurring.Daily.At = o.UpdateSchedule.GlobalProtectDatafile.Recurring.Daily.At
-						}
-					}
-					if o.UpdateSchedule.GlobalProtectDatafile.Recurring.Hourly != nil {
-						nestedUpdateSchedule.GlobalProtectDatafile.Recurring.Hourly = &UpdateScheduleGlobalProtectDatafileRecurringHourly{}
-						if o.UpdateSchedule.GlobalProtectDatafile.Recurring.Hourly.Misc != nil {
-							config.Misc["UpdateScheduleGlobalProtectDatafileRecurringHourly"] = o.UpdateSchedule.GlobalProtectDatafile.Recurring.Hourly.Misc
-						}
-						if o.UpdateSchedule.GlobalProtectDatafile.Recurring.Hourly.Action != nil {
-							nestedUpdateSchedule.GlobalProtectDatafile.Recurring.Hourly.Action = o.UpdateSchedule.GlobalProtectDatafile.Recurring.Hourly.Action
-						}
-						if o.UpdateSchedule.GlobalProtectDatafile.Recurring.Hourly.At != nil {
-							nestedUpdateSchedule.GlobalProtectDatafile.Recurring.Hourly.At = o.UpdateSchedule.GlobalProtectDatafile.Recurring.Hourly.At
-						}
-					}
-					if o.UpdateSchedule.GlobalProtectDatafile.Recurring.None != nil {
-						nestedUpdateSchedule.GlobalProtectDatafile.Recurring.None = &UpdateScheduleGlobalProtectDatafileRecurringNone{}
-						if o.UpdateSchedule.GlobalProtectDatafile.Recurring.None.Misc != nil {
-							config.Misc["UpdateScheduleGlobalProtectDatafileRecurringNone"] = o.UpdateSchedule.GlobalProtectDatafile.Recurring.None.Misc
-						}
-					}
-					if o.UpdateSchedule.GlobalProtectDatafile.Recurring.Weekly != nil {
-						nestedUpdateSchedule.GlobalProtectDatafile.Recurring.Weekly = &UpdateScheduleGlobalProtectDatafileRecurringWeekly{}
-						if o.UpdateSchedule.GlobalProtectDatafile.Recurring.Weekly.Misc != nil {
-							config.Misc["UpdateScheduleGlobalProtectDatafileRecurringWeekly"] = o.UpdateSchedule.GlobalProtectDatafile.Recurring.Weekly.Misc
-						}
-						if o.UpdateSchedule.GlobalProtectDatafile.Recurring.Weekly.Action != nil {
-							nestedUpdateSchedule.GlobalProtectDatafile.Recurring.Weekly.Action = o.UpdateSchedule.GlobalProtectDatafile.Recurring.Weekly.Action
-						}
-						if o.UpdateSchedule.GlobalProtectDatafile.Recurring.Weekly.At != nil {
-							nestedUpdateSchedule.GlobalProtectDatafile.Recurring.Weekly.At = o.UpdateSchedule.GlobalProtectDatafile.Recurring.Weekly.At
-						}
-						if o.UpdateSchedule.GlobalProtectDatafile.Recurring.Weekly.DayOfWeek != nil {
-							nestedUpdateSchedule.GlobalProtectDatafile.Recurring.Weekly.DayOfWeek = o.UpdateSchedule.GlobalProtectDatafile.Recurring.Weekly.DayOfWeek
-						}
-					}
-				}
-			}
-			if o.UpdateSchedule.StatisticsService != nil {
-				nestedUpdateSchedule.StatisticsService = &UpdateScheduleStatisticsService{}
-				if o.UpdateSchedule.StatisticsService.Misc != nil {
-					config.Misc["UpdateScheduleStatisticsService"] = o.UpdateSchedule.StatisticsService.Misc
-				}
-				if o.UpdateSchedule.StatisticsService.ApplicationReports != nil {
-					nestedUpdateSchedule.StatisticsService.ApplicationReports = util.AsBool(o.UpdateSchedule.StatisticsService.ApplicationReports, nil)
-				}
-				if o.UpdateSchedule.StatisticsService.FileIdentificationReports != nil {
-					nestedUpdateSchedule.StatisticsService.FileIdentificationReports = util.AsBool(o.UpdateSchedule.StatisticsService.FileIdentificationReports, nil)
-				}
-				if o.UpdateSchedule.StatisticsService.HealthPerformanceReports != nil {
-					nestedUpdateSchedule.StatisticsService.HealthPerformanceReports = util.AsBool(o.UpdateSchedule.StatisticsService.HealthPerformanceReports, nil)
-				}
-				if o.UpdateSchedule.StatisticsService.PassiveDnsMonitoring != nil {
-					nestedUpdateSchedule.StatisticsService.PassiveDnsMonitoring = util.AsBool(o.UpdateSchedule.StatisticsService.PassiveDnsMonitoring, nil)
-				}
-				if o.UpdateSchedule.StatisticsService.ThreatPreventionInformation != nil {
-					nestedUpdateSchedule.StatisticsService.ThreatPreventionInformation = util.AsBool(o.UpdateSchedule.StatisticsService.ThreatPreventionInformation, nil)
-				}
-				if o.UpdateSchedule.StatisticsService.ThreatPreventionPcap != nil {
-					nestedUpdateSchedule.StatisticsService.ThreatPreventionPcap = util.AsBool(o.UpdateSchedule.StatisticsService.ThreatPreventionPcap, nil)
-				}
-				if o.UpdateSchedule.StatisticsService.ThreatPreventionReports != nil {
-					nestedUpdateSchedule.StatisticsService.ThreatPreventionReports = util.AsBool(o.UpdateSchedule.StatisticsService.ThreatPreventionReports, nil)
-				}
-				if o.UpdateSchedule.StatisticsService.UrlReports != nil {
-					nestedUpdateSchedule.StatisticsService.UrlReports = util.AsBool(o.UpdateSchedule.StatisticsService.UrlReports, nil)
-				}
-			}
-			if o.UpdateSchedule.Threats != nil {
-				nestedUpdateSchedule.Threats = &UpdateScheduleThreats{}
-				if o.UpdateSchedule.Threats.Misc != nil {
-					config.Misc["UpdateScheduleThreats"] = o.UpdateSchedule.Threats.Misc
-				}
-				if o.UpdateSchedule.Threats.Recurring != nil {
-					nestedUpdateSchedule.Threats.Recurring = &UpdateScheduleThreatsRecurring{}
-					if o.UpdateSchedule.Threats.Recurring.Misc != nil {
-						config.Misc["UpdateScheduleThreatsRecurring"] = o.UpdateSchedule.Threats.Recurring.Misc
-					}
-					if o.UpdateSchedule.Threats.Recurring.NewAppThreshold != nil {
-						nestedUpdateSchedule.Threats.Recurring.NewAppThreshold = o.UpdateSchedule.Threats.Recurring.NewAppThreshold
-					}
-					if o.UpdateSchedule.Threats.Recurring.SyncToPeer != nil {
-						nestedUpdateSchedule.Threats.Recurring.SyncToPeer = util.AsBool(o.UpdateSchedule.Threats.Recurring.SyncToPeer, nil)
-					}
-					if o.UpdateSchedule.Threats.Recurring.Threshold != nil {
-						nestedUpdateSchedule.Threats.Recurring.Threshold = o.UpdateSchedule.Threats.Recurring.Threshold
-					}
-					if o.UpdateSchedule.Threats.Recurring.Daily != nil {
-						nestedUpdateSchedule.Threats.Recurring.Daily = &UpdateScheduleThreatsRecurringDaily{}
-						if o.UpdateSchedule.Threats.Recurring.Daily.Misc != nil {
-							config.Misc["UpdateScheduleThreatsRecurringDaily"] = o.UpdateSchedule.Threats.Recurring.Daily.Misc
-						}
-						if o.UpdateSchedule.Threats.Recurring.Daily.Action != nil {
-							nestedUpdateSchedule.Threats.Recurring.Daily.Action = o.UpdateSchedule.Threats.Recurring.Daily.Action
-						}
-						if o.UpdateSchedule.Threats.Recurring.Daily.At != nil {
-							nestedUpdateSchedule.Threats.Recurring.Daily.At = o.UpdateSchedule.Threats.Recurring.Daily.At
-						}
-						if o.UpdateSchedule.Threats.Recurring.Daily.DisableNewContent != nil {
-							nestedUpdateSchedule.Threats.Recurring.Daily.DisableNewContent = util.AsBool(o.UpdateSchedule.Threats.Recurring.Daily.DisableNewContent, nil)
-						}
-					}
-					if o.UpdateSchedule.Threats.Recurring.Every30Mins != nil {
-						nestedUpdateSchedule.Threats.Recurring.Every30Mins = &UpdateScheduleThreatsRecurringEvery30Mins{}
-						if o.UpdateSchedule.Threats.Recurring.Every30Mins.Misc != nil {
-							config.Misc["UpdateScheduleThreatsRecurringEvery30Mins"] = o.UpdateSchedule.Threats.Recurring.Every30Mins.Misc
-						}
-						if o.UpdateSchedule.Threats.Recurring.Every30Mins.Action != nil {
-							nestedUpdateSchedule.Threats.Recurring.Every30Mins.Action = o.UpdateSchedule.Threats.Recurring.Every30Mins.Action
-						}
-						if o.UpdateSchedule.Threats.Recurring.Every30Mins.At != nil {
-							nestedUpdateSchedule.Threats.Recurring.Every30Mins.At = o.UpdateSchedule.Threats.Recurring.Every30Mins.At
-						}
-						if o.UpdateSchedule.Threats.Recurring.Every30Mins.DisableNewContent != nil {
-							nestedUpdateSchedule.Threats.Recurring.Every30Mins.DisableNewContent = util.AsBool(o.UpdateSchedule.Threats.Recurring.Every30Mins.DisableNewContent, nil)
-						}
-					}
-					if o.UpdateSchedule.Threats.Recurring.Hourly != nil {
-						nestedUpdateSchedule.Threats.Recurring.Hourly = &UpdateScheduleThreatsRecurringHourly{}
-						if o.UpdateSchedule.Threats.Recurring.Hourly.Misc != nil {
-							config.Misc["UpdateScheduleThreatsRecurringHourly"] = o.UpdateSchedule.Threats.Recurring.Hourly.Misc
-						}
-						if o.UpdateSchedule.Threats.Recurring.Hourly.Action != nil {
-							nestedUpdateSchedule.Threats.Recurring.Hourly.Action = o.UpdateSchedule.Threats.Recurring.Hourly.Action
-						}
-						if o.UpdateSchedule.Threats.Recurring.Hourly.At != nil {
-							nestedUpdateSchedule.Threats.Recurring.Hourly.At = o.UpdateSchedule.Threats.Recurring.Hourly.At
-						}
-						if o.UpdateSchedule.Threats.Recurring.Hourly.DisableNewContent != nil {
-							nestedUpdateSchedule.Threats.Recurring.Hourly.DisableNewContent = util.AsBool(o.UpdateSchedule.Threats.Recurring.Hourly.DisableNewContent, nil)
-						}
-					}
-					if o.UpdateSchedule.Threats.Recurring.None != nil {
-						nestedUpdateSchedule.Threats.Recurring.None = &UpdateScheduleThreatsRecurringNone{}
-						if o.UpdateSchedule.Threats.Recurring.None.Misc != nil {
-							config.Misc["UpdateScheduleThreatsRecurringNone"] = o.UpdateSchedule.Threats.Recurring.None.Misc
-						}
-					}
-					if o.UpdateSchedule.Threats.Recurring.Weekly != nil {
-						nestedUpdateSchedule.Threats.Recurring.Weekly = &UpdateScheduleThreatsRecurringWeekly{}
-						if o.UpdateSchedule.Threats.Recurring.Weekly.Misc != nil {
-							config.Misc["UpdateScheduleThreatsRecurringWeekly"] = o.UpdateSchedule.Threats.Recurring.Weekly.Misc
-						}
-						if o.UpdateSchedule.Threats.Recurring.Weekly.Action != nil {
-							nestedUpdateSchedule.Threats.Recurring.Weekly.Action = o.UpdateSchedule.Threats.Recurring.Weekly.Action
-						}
-						if o.UpdateSchedule.Threats.Recurring.Weekly.At != nil {
-							nestedUpdateSchedule.Threats.Recurring.Weekly.At = o.UpdateSchedule.Threats.Recurring.Weekly.At
-						}
-						if o.UpdateSchedule.Threats.Recurring.Weekly.DayOfWeek != nil {
-							nestedUpdateSchedule.Threats.Recurring.Weekly.DayOfWeek = o.UpdateSchedule.Threats.Recurring.Weekly.DayOfWeek
-						}
-						if o.UpdateSchedule.Threats.Recurring.Weekly.DisableNewContent != nil {
-							nestedUpdateSchedule.Threats.Recurring.Weekly.DisableNewContent = util.AsBool(o.UpdateSchedule.Threats.Recurring.Weekly.DisableNewContent, nil)
-						}
-					}
-				}
-			}
-			if o.UpdateSchedule.WfPrivate != nil {
-				nestedUpdateSchedule.WfPrivate = &UpdateScheduleWfPrivate{}
-				if o.UpdateSchedule.WfPrivate.Misc != nil {
-					config.Misc["UpdateScheduleWfPrivate"] = o.UpdateSchedule.WfPrivate.Misc
-				}
-				if o.UpdateSchedule.WfPrivate.Recurring != nil {
-					nestedUpdateSchedule.WfPrivate.Recurring = &UpdateScheduleWfPrivateRecurring{}
-					if o.UpdateSchedule.WfPrivate.Recurring.Misc != nil {
-						config.Misc["UpdateScheduleWfPrivateRecurring"] = o.UpdateSchedule.WfPrivate.Recurring.Misc
-					}
-					if o.UpdateSchedule.WfPrivate.Recurring.SyncToPeer != nil {
-						nestedUpdateSchedule.WfPrivate.Recurring.SyncToPeer = util.AsBool(o.UpdateSchedule.WfPrivate.Recurring.SyncToPeer, nil)
-					}
-					if o.UpdateSchedule.WfPrivate.Recurring.Every15Mins != nil {
-						nestedUpdateSchedule.WfPrivate.Recurring.Every15Mins = &UpdateScheduleWfPrivateRecurringEvery15Mins{}
-						if o.UpdateSchedule.WfPrivate.Recurring.Every15Mins.Misc != nil {
-							config.Misc["UpdateScheduleWfPrivateRecurringEvery15Mins"] = o.UpdateSchedule.WfPrivate.Recurring.Every15Mins.Misc
-						}
-						if o.UpdateSchedule.WfPrivate.Recurring.Every15Mins.Action != nil {
-							nestedUpdateSchedule.WfPrivate.Recurring.Every15Mins.Action = o.UpdateSchedule.WfPrivate.Recurring.Every15Mins.Action
-						}
-						if o.UpdateSchedule.WfPrivate.Recurring.Every15Mins.At != nil {
-							nestedUpdateSchedule.WfPrivate.Recurring.Every15Mins.At = o.UpdateSchedule.WfPrivate.Recurring.Every15Mins.At
-						}
-					}
-					if o.UpdateSchedule.WfPrivate.Recurring.Every30Mins != nil {
-						nestedUpdateSchedule.WfPrivate.Recurring.Every30Mins = &UpdateScheduleWfPrivateRecurringEvery30Mins{}
-						if o.UpdateSchedule.WfPrivate.Recurring.Every30Mins.Misc != nil {
-							config.Misc["UpdateScheduleWfPrivateRecurringEvery30Mins"] = o.UpdateSchedule.WfPrivate.Recurring.Every30Mins.Misc
-						}
-						if o.UpdateSchedule.WfPrivate.Recurring.Every30Mins.Action != nil {
-							nestedUpdateSchedule.WfPrivate.Recurring.Every30Mins.Action = o.UpdateSchedule.WfPrivate.Recurring.Every30Mins.Action
-						}
-						if o.UpdateSchedule.WfPrivate.Recurring.Every30Mins.At != nil {
-							nestedUpdateSchedule.WfPrivate.Recurring.Every30Mins.At = o.UpdateSchedule.WfPrivate.Recurring.Every30Mins.At
-						}
-					}
-					if o.UpdateSchedule.WfPrivate.Recurring.Every5Mins != nil {
-						nestedUpdateSchedule.WfPrivate.Recurring.Every5Mins = &UpdateScheduleWfPrivateRecurringEvery5Mins{}
-						if o.UpdateSchedule.WfPrivate.Recurring.Every5Mins.Misc != nil {
-							config.Misc["UpdateScheduleWfPrivateRecurringEvery5Mins"] = o.UpdateSchedule.WfPrivate.Recurring.Every5Mins.Misc
-						}
-						if o.UpdateSchedule.WfPrivate.Recurring.Every5Mins.Action != nil {
-							nestedUpdateSchedule.WfPrivate.Recurring.Every5Mins.Action = o.UpdateSchedule.WfPrivate.Recurring.Every5Mins.Action
-						}
-						if o.UpdateSchedule.WfPrivate.Recurring.Every5Mins.At != nil {
-							nestedUpdateSchedule.WfPrivate.Recurring.Every5Mins.At = o.UpdateSchedule.WfPrivate.Recurring.Every5Mins.At
-						}
-					}
-					if o.UpdateSchedule.WfPrivate.Recurring.EveryHour != nil {
-						nestedUpdateSchedule.WfPrivate.Recurring.EveryHour = &UpdateScheduleWfPrivateRecurringEveryHour{}
-						if o.UpdateSchedule.WfPrivate.Recurring.EveryHour.Misc != nil {
-							config.Misc["UpdateScheduleWfPrivateRecurringEveryHour"] = o.UpdateSchedule.WfPrivate.Recurring.EveryHour.Misc
-						}
-						if o.UpdateSchedule.WfPrivate.Recurring.EveryHour.Action != nil {
-							nestedUpdateSchedule.WfPrivate.Recurring.EveryHour.Action = o.UpdateSchedule.WfPrivate.Recurring.EveryHour.Action
-						}
-						if o.UpdateSchedule.WfPrivate.Recurring.EveryHour.At != nil {
-							nestedUpdateSchedule.WfPrivate.Recurring.EveryHour.At = o.UpdateSchedule.WfPrivate.Recurring.EveryHour.At
-						}
-					}
-					if o.UpdateSchedule.WfPrivate.Recurring.None != nil {
-						nestedUpdateSchedule.WfPrivate.Recurring.None = &UpdateScheduleWfPrivateRecurringNone{}
-						if o.UpdateSchedule.WfPrivate.Recurring.None.Misc != nil {
-							config.Misc["UpdateScheduleWfPrivateRecurringNone"] = o.UpdateSchedule.WfPrivate.Recurring.None.Misc
-						}
-					}
-				}
-			}
-			if o.UpdateSchedule.Wildfire != nil {
-				nestedUpdateSchedule.Wildfire = &UpdateScheduleWildfire{}
-				if o.UpdateSchedule.Wildfire.Misc != nil {
-					config.Misc["UpdateScheduleWildfire"] = o.UpdateSchedule.Wildfire.Misc
-				}
-				if o.UpdateSchedule.Wildfire.Recurring != nil {
-					nestedUpdateSchedule.Wildfire.Recurring = &UpdateScheduleWildfireRecurring{}
-					if o.UpdateSchedule.Wildfire.Recurring.Misc != nil {
-						config.Misc["UpdateScheduleWildfireRecurring"] = o.UpdateSchedule.Wildfire.Recurring.Misc
-					}
-					if o.UpdateSchedule.Wildfire.Recurring.Every15Mins != nil {
-						nestedUpdateSchedule.Wildfire.Recurring.Every15Mins = &UpdateScheduleWildfireRecurringEvery15Mins{}
-						if o.UpdateSchedule.Wildfire.Recurring.Every15Mins.Misc != nil {
-							config.Misc["UpdateScheduleWildfireRecurringEvery15Mins"] = o.UpdateSchedule.Wildfire.Recurring.Every15Mins.Misc
-						}
-						if o.UpdateSchedule.Wildfire.Recurring.Every15Mins.Action != nil {
-							nestedUpdateSchedule.Wildfire.Recurring.Every15Mins.Action = o.UpdateSchedule.Wildfire.Recurring.Every15Mins.Action
-						}
-						if o.UpdateSchedule.Wildfire.Recurring.Every15Mins.At != nil {
-							nestedUpdateSchedule.Wildfire.Recurring.Every15Mins.At = o.UpdateSchedule.Wildfire.Recurring.Every15Mins.At
-						}
-						if o.UpdateSchedule.Wildfire.Recurring.Every15Mins.SyncToPeer != nil {
-							nestedUpdateSchedule.Wildfire.Recurring.Every15Mins.SyncToPeer = util.AsBool(o.UpdateSchedule.Wildfire.Recurring.Every15Mins.SyncToPeer, nil)
-						}
-					}
-					if o.UpdateSchedule.Wildfire.Recurring.Every30Mins != nil {
-						nestedUpdateSchedule.Wildfire.Recurring.Every30Mins = &UpdateScheduleWildfireRecurringEvery30Mins{}
-						if o.UpdateSchedule.Wildfire.Recurring.Every30Mins.Misc != nil {
-							config.Misc["UpdateScheduleWildfireRecurringEvery30Mins"] = o.UpdateSchedule.Wildfire.Recurring.Every30Mins.Misc
-						}
-						if o.UpdateSchedule.Wildfire.Recurring.Every30Mins.Action != nil {
-							nestedUpdateSchedule.Wildfire.Recurring.Every30Mins.Action = o.UpdateSchedule.Wildfire.Recurring.Every30Mins.Action
-						}
-						if o.UpdateSchedule.Wildfire.Recurring.Every30Mins.At != nil {
-							nestedUpdateSchedule.Wildfire.Recurring.Every30Mins.At = o.UpdateSchedule.Wildfire.Recurring.Every30Mins.At
-						}
-						if o.UpdateSchedule.Wildfire.Recurring.Every30Mins.SyncToPeer != nil {
-							nestedUpdateSchedule.Wildfire.Recurring.Every30Mins.SyncToPeer = util.AsBool(o.UpdateSchedule.Wildfire.Recurring.Every30Mins.SyncToPeer, nil)
-						}
-					}
-					if o.UpdateSchedule.Wildfire.Recurring.EveryHour != nil {
-						nestedUpdateSchedule.Wildfire.Recurring.EveryHour = &UpdateScheduleWildfireRecurringEveryHour{}
-						if o.UpdateSchedule.Wildfire.Recurring.EveryHour.Misc != nil {
-							config.Misc["UpdateScheduleWildfireRecurringEveryHour"] = o.UpdateSchedule.Wildfire.Recurring.EveryHour.Misc
-						}
-						if o.UpdateSchedule.Wildfire.Recurring.EveryHour.Action != nil {
-							nestedUpdateSchedule.Wildfire.Recurring.EveryHour.Action = o.UpdateSchedule.Wildfire.Recurring.EveryHour.Action
-						}
-						if o.UpdateSchedule.Wildfire.Recurring.EveryHour.At != nil {
-							nestedUpdateSchedule.Wildfire.Recurring.EveryHour.At = o.UpdateSchedule.Wildfire.Recurring.EveryHour.At
-						}
-						if o.UpdateSchedule.Wildfire.Recurring.EveryHour.SyncToPeer != nil {
-							nestedUpdateSchedule.Wildfire.Recurring.EveryHour.SyncToPeer = util.AsBool(o.UpdateSchedule.Wildfire.Recurring.EveryHour.SyncToPeer, nil)
-						}
-					}
-					if o.UpdateSchedule.Wildfire.Recurring.EveryMin != nil {
-						nestedUpdateSchedule.Wildfire.Recurring.EveryMin = &UpdateScheduleWildfireRecurringEveryMin{}
-						if o.UpdateSchedule.Wildfire.Recurring.EveryMin.Misc != nil {
-							config.Misc["UpdateScheduleWildfireRecurringEveryMin"] = o.UpdateSchedule.Wildfire.Recurring.EveryMin.Misc
-						}
-						if o.UpdateSchedule.Wildfire.Recurring.EveryMin.Action != nil {
-							nestedUpdateSchedule.Wildfire.Recurring.EveryMin.Action = o.UpdateSchedule.Wildfire.Recurring.EveryMin.Action
-						}
-						if o.UpdateSchedule.Wildfire.Recurring.EveryMin.SyncToPeer != nil {
-							nestedUpdateSchedule.Wildfire.Recurring.EveryMin.SyncToPeer = util.AsBool(o.UpdateSchedule.Wildfire.Recurring.EveryMin.SyncToPeer, nil)
-						}
-					}
-					if o.UpdateSchedule.Wildfire.Recurring.None != nil {
-						nestedUpdateSchedule.Wildfire.Recurring.None = &UpdateScheduleWildfireRecurringNone{}
-						if o.UpdateSchedule.Wildfire.Recurring.None.Misc != nil {
-							config.Misc["UpdateScheduleWildfireRecurringNone"] = o.UpdateSchedule.Wildfire.Recurring.None.Misc
-						}
-					}
-					if o.UpdateSchedule.Wildfire.Recurring.RealTime != nil {
-						nestedUpdateSchedule.Wildfire.Recurring.RealTime = &UpdateScheduleWildfireRecurringRealTime{}
-						if o.UpdateSchedule.Wildfire.Recurring.RealTime.Misc != nil {
-							config.Misc["UpdateScheduleWildfireRecurringRealTime"] = o.UpdateSchedule.Wildfire.Recurring.RealTime.Misc
-						}
-					}
-				}
-			}
-		}
-		config.UpdateSchedule = nestedUpdateSchedule
-
-		config.Misc["Config"] = o.Misc
-
-		configList = append(configList, config)
-	}
-
-	return configList, nil
-}
-
 func SpecMatches(a, b *Config) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+	if a == nil && b == nil {
 		return true
 	}
 
-	// Don't compare Name.
-	if !matchUpdateSchedule(a.UpdateSchedule, b.UpdateSchedule) {
+	if (a == nil && b != nil) || (a != nil && b == nil) {
+		return false
+	}
+
+	return a.matches(b)
+}
+
+func (o *Config) matches(other *Config) bool {
+	if o == nil && other == nil {
+		return true
+	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
+	}
+	if !o.UpdateSchedule.matches(other.UpdateSchedule) {
 		return false
 	}
 
 	return true
 }
 
-func matchUpdateScheduleAntiVirusRecurringDaily(a *UpdateScheduleAntiVirusRecurringDaily, b *UpdateScheduleAntiVirusRecurringDaily) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+func (o *UpdateSchedule) matches(other *UpdateSchedule) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.StringsMatch(a.Action, b.Action) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.StringsMatch(a.At, b.At) {
+	if !o.AntiVirus.matches(other.AntiVirus) {
 		return false
 	}
+	if !o.AppProfile.matches(other.AppProfile) {
+		return false
+	}
+	if !o.GlobalProtectClientlessVpn.matches(other.GlobalProtectClientlessVpn) {
+		return false
+	}
+	if !o.GlobalProtectDatafile.matches(other.GlobalProtectDatafile) {
+		return false
+	}
+	if !o.StatisticsService.matches(other.StatisticsService) {
+		return false
+	}
+	if !o.Threats.matches(other.Threats) {
+		return false
+	}
+	if !o.WfPrivate.matches(other.WfPrivate) {
+		return false
+	}
+	if !o.Wildfire.matches(other.Wildfire) {
+		return false
+	}
+
 	return true
 }
-func matchUpdateScheduleAntiVirusRecurringHourly(a *UpdateScheduleAntiVirusRecurringHourly, b *UpdateScheduleAntiVirusRecurringHourly) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *UpdateScheduleAntiVirus) matches(other *UpdateScheduleAntiVirus) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.StringsMatch(a.Action, b.Action) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.Ints64Match(a.At, b.At) {
+	if !o.Recurring.matches(other.Recurring) {
 		return false
 	}
+
 	return true
 }
-func matchUpdateScheduleAntiVirusRecurringNone(a *UpdateScheduleAntiVirusRecurringNone, b *UpdateScheduleAntiVirusRecurringNone) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *UpdateScheduleAntiVirusRecurring) matches(other *UpdateScheduleAntiVirusRecurring) bool {
+	if o == nil && other == nil {
 		return true
 	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
+	}
+	if !util.BoolsMatch(o.SyncToPeer, other.SyncToPeer) {
+		return false
+	}
+	if !util.Ints64Match(o.Threshold, other.Threshold) {
+		return false
+	}
+	if !o.Daily.matches(other.Daily) {
+		return false
+	}
+	if !o.Hourly.matches(other.Hourly) {
+		return false
+	}
+	if !o.None.matches(other.None) {
+		return false
+	}
+	if !o.Weekly.matches(other.Weekly) {
+		return false
+	}
+
 	return true
 }
-func matchUpdateScheduleAntiVirusRecurringWeekly(a *UpdateScheduleAntiVirusRecurringWeekly, b *UpdateScheduleAntiVirusRecurringWeekly) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *UpdateScheduleAntiVirusRecurringDaily) matches(other *UpdateScheduleAntiVirusRecurringDaily) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.StringsMatch(a.Action, b.Action) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.StringsMatch(a.At, b.At) {
+	if !util.StringsMatch(o.Action, other.Action) {
 		return false
 	}
-	if !util.StringsMatch(a.DayOfWeek, b.DayOfWeek) {
+	if !util.StringsMatch(o.At, other.At) {
 		return false
 	}
+
 	return true
 }
-func matchUpdateScheduleAntiVirusRecurring(a *UpdateScheduleAntiVirusRecurring, b *UpdateScheduleAntiVirusRecurring) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *UpdateScheduleAntiVirusRecurringHourly) matches(other *UpdateScheduleAntiVirusRecurringHourly) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.BoolsMatch(a.SyncToPeer, b.SyncToPeer) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.Ints64Match(a.Threshold, b.Threshold) {
+	if !util.StringsMatch(o.Action, other.Action) {
 		return false
 	}
-	if !matchUpdateScheduleAntiVirusRecurringDaily(a.Daily, b.Daily) {
+	if !util.Ints64Match(o.At, other.At) {
 		return false
 	}
-	if !matchUpdateScheduleAntiVirusRecurringHourly(a.Hourly, b.Hourly) {
-		return false
-	}
-	if !matchUpdateScheduleAntiVirusRecurringNone(a.None, b.None) {
-		return false
-	}
-	if !matchUpdateScheduleAntiVirusRecurringWeekly(a.Weekly, b.Weekly) {
-		return false
-	}
+
 	return true
 }
-func matchUpdateScheduleAntiVirus(a *UpdateScheduleAntiVirus, b *UpdateScheduleAntiVirus) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *UpdateScheduleAntiVirusRecurringNone) matches(other *UpdateScheduleAntiVirusRecurringNone) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !matchUpdateScheduleAntiVirusRecurring(a.Recurring, b.Recurring) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
+
 	return true
 }
-func matchUpdateScheduleAppProfileRecurringDaily(a *UpdateScheduleAppProfileRecurringDaily, b *UpdateScheduleAppProfileRecurringDaily) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *UpdateScheduleAntiVirusRecurringWeekly) matches(other *UpdateScheduleAntiVirusRecurringWeekly) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.StringsMatch(a.Action, b.Action) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.StringsMatch(a.At, b.At) {
+	if !util.StringsMatch(o.Action, other.Action) {
 		return false
 	}
+	if !util.StringsMatch(o.At, other.At) {
+		return false
+	}
+	if !util.StringsMatch(o.DayOfWeek, other.DayOfWeek) {
+		return false
+	}
+
 	return true
 }
-func matchUpdateScheduleAppProfileRecurringNone(a *UpdateScheduleAppProfileRecurringNone, b *UpdateScheduleAppProfileRecurringNone) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *UpdateScheduleAppProfile) matches(other *UpdateScheduleAppProfile) bool {
+	if o == nil && other == nil {
 		return true
 	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
+	}
+	if !o.Recurring.matches(other.Recurring) {
+		return false
+	}
+
 	return true
 }
-func matchUpdateScheduleAppProfileRecurringWeekly(a *UpdateScheduleAppProfileRecurringWeekly, b *UpdateScheduleAppProfileRecurringWeekly) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *UpdateScheduleAppProfileRecurring) matches(other *UpdateScheduleAppProfileRecurring) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.StringsMatch(a.Action, b.Action) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.StringsMatch(a.At, b.At) {
+	if !util.BoolsMatch(o.SyncToPeer, other.SyncToPeer) {
 		return false
 	}
-	if !util.StringsMatch(a.DayOfWeek, b.DayOfWeek) {
+	if !util.Ints64Match(o.Threshold, other.Threshold) {
 		return false
 	}
+	if !o.Daily.matches(other.Daily) {
+		return false
+	}
+	if !o.None.matches(other.None) {
+		return false
+	}
+	if !o.Weekly.matches(other.Weekly) {
+		return false
+	}
+
 	return true
 }
-func matchUpdateScheduleAppProfileRecurring(a *UpdateScheduleAppProfileRecurring, b *UpdateScheduleAppProfileRecurring) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *UpdateScheduleAppProfileRecurringDaily) matches(other *UpdateScheduleAppProfileRecurringDaily) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.BoolsMatch(a.SyncToPeer, b.SyncToPeer) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.Ints64Match(a.Threshold, b.Threshold) {
+	if !util.StringsMatch(o.Action, other.Action) {
 		return false
 	}
-	if !matchUpdateScheduleAppProfileRecurringDaily(a.Daily, b.Daily) {
+	if !util.StringsMatch(o.At, other.At) {
 		return false
 	}
-	if !matchUpdateScheduleAppProfileRecurringNone(a.None, b.None) {
-		return false
-	}
-	if !matchUpdateScheduleAppProfileRecurringWeekly(a.Weekly, b.Weekly) {
-		return false
-	}
+
 	return true
 }
-func matchUpdateScheduleAppProfile(a *UpdateScheduleAppProfile, b *UpdateScheduleAppProfile) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *UpdateScheduleAppProfileRecurringNone) matches(other *UpdateScheduleAppProfileRecurringNone) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !matchUpdateScheduleAppProfileRecurring(a.Recurring, b.Recurring) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
+
 	return true
 }
-func matchUpdateScheduleGlobalProtectClientlessVpnRecurringDaily(a *UpdateScheduleGlobalProtectClientlessVpnRecurringDaily, b *UpdateScheduleGlobalProtectClientlessVpnRecurringDaily) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *UpdateScheduleAppProfileRecurringWeekly) matches(other *UpdateScheduleAppProfileRecurringWeekly) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.StringsMatch(a.Action, b.Action) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.StringsMatch(a.At, b.At) {
+	if !util.StringsMatch(o.Action, other.Action) {
 		return false
 	}
+	if !util.StringsMatch(o.At, other.At) {
+		return false
+	}
+	if !util.StringsMatch(o.DayOfWeek, other.DayOfWeek) {
+		return false
+	}
+
 	return true
 }
-func matchUpdateScheduleGlobalProtectClientlessVpnRecurringHourly(a *UpdateScheduleGlobalProtectClientlessVpnRecurringHourly, b *UpdateScheduleGlobalProtectClientlessVpnRecurringHourly) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *UpdateScheduleGlobalProtectClientlessVpn) matches(other *UpdateScheduleGlobalProtectClientlessVpn) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.StringsMatch(a.Action, b.Action) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.Ints64Match(a.At, b.At) {
+	if !o.Recurring.matches(other.Recurring) {
 		return false
 	}
+
 	return true
 }
-func matchUpdateScheduleGlobalProtectClientlessVpnRecurringNone(a *UpdateScheduleGlobalProtectClientlessVpnRecurringNone, b *UpdateScheduleGlobalProtectClientlessVpnRecurringNone) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *UpdateScheduleGlobalProtectClientlessVpnRecurring) matches(other *UpdateScheduleGlobalProtectClientlessVpnRecurring) bool {
+	if o == nil && other == nil {
 		return true
 	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
+	}
+	if !o.Daily.matches(other.Daily) {
+		return false
+	}
+	if !o.Hourly.matches(other.Hourly) {
+		return false
+	}
+	if !o.None.matches(other.None) {
+		return false
+	}
+	if !o.Weekly.matches(other.Weekly) {
+		return false
+	}
+
 	return true
 }
-func matchUpdateScheduleGlobalProtectClientlessVpnRecurringWeekly(a *UpdateScheduleGlobalProtectClientlessVpnRecurringWeekly, b *UpdateScheduleGlobalProtectClientlessVpnRecurringWeekly) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *UpdateScheduleGlobalProtectClientlessVpnRecurringDaily) matches(other *UpdateScheduleGlobalProtectClientlessVpnRecurringDaily) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.StringsMatch(a.Action, b.Action) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.StringsMatch(a.At, b.At) {
+	if !util.StringsMatch(o.Action, other.Action) {
 		return false
 	}
-	if !util.StringsMatch(a.DayOfWeek, b.DayOfWeek) {
+	if !util.StringsMatch(o.At, other.At) {
 		return false
 	}
+
 	return true
 }
-func matchUpdateScheduleGlobalProtectClientlessVpnRecurring(a *UpdateScheduleGlobalProtectClientlessVpnRecurring, b *UpdateScheduleGlobalProtectClientlessVpnRecurring) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *UpdateScheduleGlobalProtectClientlessVpnRecurringHourly) matches(other *UpdateScheduleGlobalProtectClientlessVpnRecurringHourly) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !matchUpdateScheduleGlobalProtectClientlessVpnRecurringDaily(a.Daily, b.Daily) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !matchUpdateScheduleGlobalProtectClientlessVpnRecurringHourly(a.Hourly, b.Hourly) {
+	if !util.StringsMatch(o.Action, other.Action) {
 		return false
 	}
-	if !matchUpdateScheduleGlobalProtectClientlessVpnRecurringNone(a.None, b.None) {
+	if !util.Ints64Match(o.At, other.At) {
 		return false
 	}
-	if !matchUpdateScheduleGlobalProtectClientlessVpnRecurringWeekly(a.Weekly, b.Weekly) {
-		return false
-	}
+
 	return true
 }
-func matchUpdateScheduleGlobalProtectClientlessVpn(a *UpdateScheduleGlobalProtectClientlessVpn, b *UpdateScheduleGlobalProtectClientlessVpn) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *UpdateScheduleGlobalProtectClientlessVpnRecurringNone) matches(other *UpdateScheduleGlobalProtectClientlessVpnRecurringNone) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !matchUpdateScheduleGlobalProtectClientlessVpnRecurring(a.Recurring, b.Recurring) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
+
 	return true
 }
-func matchUpdateScheduleGlobalProtectDatafileRecurringDaily(a *UpdateScheduleGlobalProtectDatafileRecurringDaily, b *UpdateScheduleGlobalProtectDatafileRecurringDaily) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *UpdateScheduleGlobalProtectClientlessVpnRecurringWeekly) matches(other *UpdateScheduleGlobalProtectClientlessVpnRecurringWeekly) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.StringsMatch(a.Action, b.Action) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.StringsMatch(a.At, b.At) {
+	if !util.StringsMatch(o.Action, other.Action) {
 		return false
 	}
+	if !util.StringsMatch(o.At, other.At) {
+		return false
+	}
+	if !util.StringsMatch(o.DayOfWeek, other.DayOfWeek) {
+		return false
+	}
+
 	return true
 }
-func matchUpdateScheduleGlobalProtectDatafileRecurringHourly(a *UpdateScheduleGlobalProtectDatafileRecurringHourly, b *UpdateScheduleGlobalProtectDatafileRecurringHourly) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *UpdateScheduleGlobalProtectDatafile) matches(other *UpdateScheduleGlobalProtectDatafile) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.StringsMatch(a.Action, b.Action) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.Ints64Match(a.At, b.At) {
+	if !o.Recurring.matches(other.Recurring) {
 		return false
 	}
+
 	return true
 }
-func matchUpdateScheduleGlobalProtectDatafileRecurringNone(a *UpdateScheduleGlobalProtectDatafileRecurringNone, b *UpdateScheduleGlobalProtectDatafileRecurringNone) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *UpdateScheduleGlobalProtectDatafileRecurring) matches(other *UpdateScheduleGlobalProtectDatafileRecurring) bool {
+	if o == nil && other == nil {
 		return true
 	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
+	}
+	if !o.Daily.matches(other.Daily) {
+		return false
+	}
+	if !o.Hourly.matches(other.Hourly) {
+		return false
+	}
+	if !o.None.matches(other.None) {
+		return false
+	}
+	if !o.Weekly.matches(other.Weekly) {
+		return false
+	}
+
 	return true
 }
-func matchUpdateScheduleGlobalProtectDatafileRecurringWeekly(a *UpdateScheduleGlobalProtectDatafileRecurringWeekly, b *UpdateScheduleGlobalProtectDatafileRecurringWeekly) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *UpdateScheduleGlobalProtectDatafileRecurringDaily) matches(other *UpdateScheduleGlobalProtectDatafileRecurringDaily) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.StringsMatch(a.Action, b.Action) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.StringsMatch(a.At, b.At) {
+	if !util.StringsMatch(o.Action, other.Action) {
 		return false
 	}
-	if !util.StringsMatch(a.DayOfWeek, b.DayOfWeek) {
+	if !util.StringsMatch(o.At, other.At) {
 		return false
 	}
+
 	return true
 }
-func matchUpdateScheduleGlobalProtectDatafileRecurring(a *UpdateScheduleGlobalProtectDatafileRecurring, b *UpdateScheduleGlobalProtectDatafileRecurring) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *UpdateScheduleGlobalProtectDatafileRecurringHourly) matches(other *UpdateScheduleGlobalProtectDatafileRecurringHourly) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !matchUpdateScheduleGlobalProtectDatafileRecurringDaily(a.Daily, b.Daily) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !matchUpdateScheduleGlobalProtectDatafileRecurringHourly(a.Hourly, b.Hourly) {
+	if !util.StringsMatch(o.Action, other.Action) {
 		return false
 	}
-	if !matchUpdateScheduleGlobalProtectDatafileRecurringNone(a.None, b.None) {
+	if !util.Ints64Match(o.At, other.At) {
 		return false
 	}
-	if !matchUpdateScheduleGlobalProtectDatafileRecurringWeekly(a.Weekly, b.Weekly) {
-		return false
-	}
+
 	return true
 }
-func matchUpdateScheduleGlobalProtectDatafile(a *UpdateScheduleGlobalProtectDatafile, b *UpdateScheduleGlobalProtectDatafile) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *UpdateScheduleGlobalProtectDatafileRecurringNone) matches(other *UpdateScheduleGlobalProtectDatafileRecurringNone) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !matchUpdateScheduleGlobalProtectDatafileRecurring(a.Recurring, b.Recurring) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
+
 	return true
 }
-func matchUpdateScheduleStatisticsService(a *UpdateScheduleStatisticsService, b *UpdateScheduleStatisticsService) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *UpdateScheduleGlobalProtectDatafileRecurringWeekly) matches(other *UpdateScheduleGlobalProtectDatafileRecurringWeekly) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.BoolsMatch(a.ApplicationReports, b.ApplicationReports) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.BoolsMatch(a.FileIdentificationReports, b.FileIdentificationReports) {
+	if !util.StringsMatch(o.Action, other.Action) {
 		return false
 	}
-	if !util.BoolsMatch(a.HealthPerformanceReports, b.HealthPerformanceReports) {
+	if !util.StringsMatch(o.At, other.At) {
 		return false
 	}
-	if !util.BoolsMatch(a.PassiveDnsMonitoring, b.PassiveDnsMonitoring) {
+	if !util.StringsMatch(o.DayOfWeek, other.DayOfWeek) {
 		return false
 	}
-	if !util.BoolsMatch(a.ThreatPreventionInformation, b.ThreatPreventionInformation) {
-		return false
-	}
-	if !util.BoolsMatch(a.ThreatPreventionPcap, b.ThreatPreventionPcap) {
-		return false
-	}
-	if !util.BoolsMatch(a.ThreatPreventionReports, b.ThreatPreventionReports) {
-		return false
-	}
-	if !util.BoolsMatch(a.UrlReports, b.UrlReports) {
-		return false
-	}
+
 	return true
 }
-func matchUpdateScheduleThreatsRecurringDaily(a *UpdateScheduleThreatsRecurringDaily, b *UpdateScheduleThreatsRecurringDaily) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *UpdateScheduleStatisticsService) matches(other *UpdateScheduleStatisticsService) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.StringsMatch(a.Action, b.Action) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.StringsMatch(a.At, b.At) {
+	if !util.BoolsMatch(o.ApplicationReports, other.ApplicationReports) {
 		return false
 	}
-	if !util.BoolsMatch(a.DisableNewContent, b.DisableNewContent) {
+	if !util.BoolsMatch(o.FileIdentificationReports, other.FileIdentificationReports) {
 		return false
 	}
+	if !util.BoolsMatch(o.HealthPerformanceReports, other.HealthPerformanceReports) {
+		return false
+	}
+	if !util.BoolsMatch(o.PassiveDnsMonitoring, other.PassiveDnsMonitoring) {
+		return false
+	}
+	if !util.BoolsMatch(o.ThreatPreventionInformation, other.ThreatPreventionInformation) {
+		return false
+	}
+	if !util.BoolsMatch(o.ThreatPreventionPcap, other.ThreatPreventionPcap) {
+		return false
+	}
+	if !util.BoolsMatch(o.ThreatPreventionReports, other.ThreatPreventionReports) {
+		return false
+	}
+	if !util.BoolsMatch(o.UrlReports, other.UrlReports) {
+		return false
+	}
+
 	return true
 }
-func matchUpdateScheduleThreatsRecurringEvery30Mins(a *UpdateScheduleThreatsRecurringEvery30Mins, b *UpdateScheduleThreatsRecurringEvery30Mins) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *UpdateScheduleThreats) matches(other *UpdateScheduleThreats) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.StringsMatch(a.Action, b.Action) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.Ints64Match(a.At, b.At) {
+	if !o.Recurring.matches(other.Recurring) {
 		return false
 	}
-	if !util.BoolsMatch(a.DisableNewContent, b.DisableNewContent) {
-		return false
-	}
+
 	return true
 }
-func matchUpdateScheduleThreatsRecurringHourly(a *UpdateScheduleThreatsRecurringHourly, b *UpdateScheduleThreatsRecurringHourly) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *UpdateScheduleThreatsRecurring) matches(other *UpdateScheduleThreatsRecurring) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.StringsMatch(a.Action, b.Action) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.Ints64Match(a.At, b.At) {
+	if !util.Ints64Match(o.NewAppThreshold, other.NewAppThreshold) {
 		return false
 	}
-	if !util.BoolsMatch(a.DisableNewContent, b.DisableNewContent) {
+	if !util.BoolsMatch(o.SyncToPeer, other.SyncToPeer) {
 		return false
 	}
+	if !util.Ints64Match(o.Threshold, other.Threshold) {
+		return false
+	}
+	if !o.Daily.matches(other.Daily) {
+		return false
+	}
+	if !o.Every30Mins.matches(other.Every30Mins) {
+		return false
+	}
+	if !o.Hourly.matches(other.Hourly) {
+		return false
+	}
+	if !o.None.matches(other.None) {
+		return false
+	}
+	if !o.Weekly.matches(other.Weekly) {
+		return false
+	}
+
 	return true
 }
-func matchUpdateScheduleThreatsRecurringNone(a *UpdateScheduleThreatsRecurringNone, b *UpdateScheduleThreatsRecurringNone) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *UpdateScheduleThreatsRecurringDaily) matches(other *UpdateScheduleThreatsRecurringDaily) bool {
+	if o == nil && other == nil {
 		return true
 	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
+	}
+	if !util.StringsMatch(o.Action, other.Action) {
+		return false
+	}
+	if !util.StringsMatch(o.At, other.At) {
+		return false
+	}
+	if !util.BoolsMatch(o.DisableNewContent, other.DisableNewContent) {
+		return false
+	}
+
 	return true
 }
-func matchUpdateScheduleThreatsRecurringWeekly(a *UpdateScheduleThreatsRecurringWeekly, b *UpdateScheduleThreatsRecurringWeekly) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *UpdateScheduleThreatsRecurringEvery30Mins) matches(other *UpdateScheduleThreatsRecurringEvery30Mins) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.StringsMatch(a.Action, b.Action) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.StringsMatch(a.At, b.At) {
+	if !util.StringsMatch(o.Action, other.Action) {
 		return false
 	}
-	if !util.StringsMatch(a.DayOfWeek, b.DayOfWeek) {
+	if !util.Ints64Match(o.At, other.At) {
 		return false
 	}
-	if !util.BoolsMatch(a.DisableNewContent, b.DisableNewContent) {
+	if !util.BoolsMatch(o.DisableNewContent, other.DisableNewContent) {
 		return false
 	}
+
 	return true
 }
-func matchUpdateScheduleThreatsRecurring(a *UpdateScheduleThreatsRecurring, b *UpdateScheduleThreatsRecurring) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *UpdateScheduleThreatsRecurringHourly) matches(other *UpdateScheduleThreatsRecurringHourly) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.Ints64Match(a.NewAppThreshold, b.NewAppThreshold) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.BoolsMatch(a.SyncToPeer, b.SyncToPeer) {
+	if !util.StringsMatch(o.Action, other.Action) {
 		return false
 	}
-	if !util.Ints64Match(a.Threshold, b.Threshold) {
+	if !util.Ints64Match(o.At, other.At) {
 		return false
 	}
-	if !matchUpdateScheduleThreatsRecurringDaily(a.Daily, b.Daily) {
+	if !util.BoolsMatch(o.DisableNewContent, other.DisableNewContent) {
 		return false
 	}
-	if !matchUpdateScheduleThreatsRecurringEvery30Mins(a.Every30Mins, b.Every30Mins) {
-		return false
-	}
-	if !matchUpdateScheduleThreatsRecurringHourly(a.Hourly, b.Hourly) {
-		return false
-	}
-	if !matchUpdateScheduleThreatsRecurringNone(a.None, b.None) {
-		return false
-	}
-	if !matchUpdateScheduleThreatsRecurringWeekly(a.Weekly, b.Weekly) {
-		return false
-	}
+
 	return true
 }
-func matchUpdateScheduleThreats(a *UpdateScheduleThreats, b *UpdateScheduleThreats) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *UpdateScheduleThreatsRecurringNone) matches(other *UpdateScheduleThreatsRecurringNone) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !matchUpdateScheduleThreatsRecurring(a.Recurring, b.Recurring) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
+
 	return true
 }
-func matchUpdateScheduleWfPrivateRecurringEvery15Mins(a *UpdateScheduleWfPrivateRecurringEvery15Mins, b *UpdateScheduleWfPrivateRecurringEvery15Mins) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *UpdateScheduleThreatsRecurringWeekly) matches(other *UpdateScheduleThreatsRecurringWeekly) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.StringsMatch(a.Action, b.Action) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.Ints64Match(a.At, b.At) {
+	if !util.StringsMatch(o.Action, other.Action) {
 		return false
 	}
+	if !util.StringsMatch(o.At, other.At) {
+		return false
+	}
+	if !util.StringsMatch(o.DayOfWeek, other.DayOfWeek) {
+		return false
+	}
+	if !util.BoolsMatch(o.DisableNewContent, other.DisableNewContent) {
+		return false
+	}
+
 	return true
 }
-func matchUpdateScheduleWfPrivateRecurringEvery30Mins(a *UpdateScheduleWfPrivateRecurringEvery30Mins, b *UpdateScheduleWfPrivateRecurringEvery30Mins) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *UpdateScheduleWfPrivate) matches(other *UpdateScheduleWfPrivate) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.StringsMatch(a.Action, b.Action) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.Ints64Match(a.At, b.At) {
+	if !o.Recurring.matches(other.Recurring) {
 		return false
 	}
+
 	return true
 }
-func matchUpdateScheduleWfPrivateRecurringEvery5Mins(a *UpdateScheduleWfPrivateRecurringEvery5Mins, b *UpdateScheduleWfPrivateRecurringEvery5Mins) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *UpdateScheduleWfPrivateRecurring) matches(other *UpdateScheduleWfPrivateRecurring) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.StringsMatch(a.Action, b.Action) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.Ints64Match(a.At, b.At) {
+	if !util.BoolsMatch(o.SyncToPeer, other.SyncToPeer) {
 		return false
 	}
+	if !o.Every15Mins.matches(other.Every15Mins) {
+		return false
+	}
+	if !o.Every30Mins.matches(other.Every30Mins) {
+		return false
+	}
+	if !o.Every5Mins.matches(other.Every5Mins) {
+		return false
+	}
+	if !o.EveryHour.matches(other.EveryHour) {
+		return false
+	}
+	if !o.None.matches(other.None) {
+		return false
+	}
+
 	return true
 }
-func matchUpdateScheduleWfPrivateRecurringEveryHour(a *UpdateScheduleWfPrivateRecurringEveryHour, b *UpdateScheduleWfPrivateRecurringEveryHour) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *UpdateScheduleWfPrivateRecurringEvery15Mins) matches(other *UpdateScheduleWfPrivateRecurringEvery15Mins) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.StringsMatch(a.Action, b.Action) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.Ints64Match(a.At, b.At) {
+	if !util.StringsMatch(o.Action, other.Action) {
 		return false
 	}
+	if !util.Ints64Match(o.At, other.At) {
+		return false
+	}
+
 	return true
 }
-func matchUpdateScheduleWfPrivateRecurringNone(a *UpdateScheduleWfPrivateRecurringNone, b *UpdateScheduleWfPrivateRecurringNone) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *UpdateScheduleWfPrivateRecurringEvery30Mins) matches(other *UpdateScheduleWfPrivateRecurringEvery30Mins) bool {
+	if o == nil && other == nil {
 		return true
 	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
+	}
+	if !util.StringsMatch(o.Action, other.Action) {
+		return false
+	}
+	if !util.Ints64Match(o.At, other.At) {
+		return false
+	}
+
 	return true
 }
-func matchUpdateScheduleWfPrivateRecurring(a *UpdateScheduleWfPrivateRecurring, b *UpdateScheduleWfPrivateRecurring) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *UpdateScheduleWfPrivateRecurringEvery5Mins) matches(other *UpdateScheduleWfPrivateRecurringEvery5Mins) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.BoolsMatch(a.SyncToPeer, b.SyncToPeer) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !matchUpdateScheduleWfPrivateRecurringEvery15Mins(a.Every15Mins, b.Every15Mins) {
+	if !util.StringsMatch(o.Action, other.Action) {
 		return false
 	}
-	if !matchUpdateScheduleWfPrivateRecurringEvery30Mins(a.Every30Mins, b.Every30Mins) {
+	if !util.Ints64Match(o.At, other.At) {
 		return false
 	}
-	if !matchUpdateScheduleWfPrivateRecurringEvery5Mins(a.Every5Mins, b.Every5Mins) {
-		return false
-	}
-	if !matchUpdateScheduleWfPrivateRecurringEveryHour(a.EveryHour, b.EveryHour) {
-		return false
-	}
-	if !matchUpdateScheduleWfPrivateRecurringNone(a.None, b.None) {
-		return false
-	}
+
 	return true
 }
-func matchUpdateScheduleWfPrivate(a *UpdateScheduleWfPrivate, b *UpdateScheduleWfPrivate) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *UpdateScheduleWfPrivateRecurringEveryHour) matches(other *UpdateScheduleWfPrivateRecurringEveryHour) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !matchUpdateScheduleWfPrivateRecurring(a.Recurring, b.Recurring) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
+	if !util.StringsMatch(o.Action, other.Action) {
+		return false
+	}
+	if !util.Ints64Match(o.At, other.At) {
+		return false
+	}
+
 	return true
 }
-func matchUpdateScheduleWildfireRecurringEvery15Mins(a *UpdateScheduleWildfireRecurringEvery15Mins, b *UpdateScheduleWildfireRecurringEvery15Mins) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *UpdateScheduleWfPrivateRecurringNone) matches(other *UpdateScheduleWfPrivateRecurringNone) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.StringsMatch(a.Action, b.Action) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.Ints64Match(a.At, b.At) {
-		return false
-	}
-	if !util.BoolsMatch(a.SyncToPeer, b.SyncToPeer) {
-		return false
-	}
+
 	return true
 }
-func matchUpdateScheduleWildfireRecurringEvery30Mins(a *UpdateScheduleWildfireRecurringEvery30Mins, b *UpdateScheduleWildfireRecurringEvery30Mins) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *UpdateScheduleWildfire) matches(other *UpdateScheduleWildfire) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.StringsMatch(a.Action, b.Action) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.Ints64Match(a.At, b.At) {
+	if !o.Recurring.matches(other.Recurring) {
 		return false
 	}
-	if !util.BoolsMatch(a.SyncToPeer, b.SyncToPeer) {
-		return false
-	}
+
 	return true
 }
-func matchUpdateScheduleWildfireRecurringEveryHour(a *UpdateScheduleWildfireRecurringEveryHour, b *UpdateScheduleWildfireRecurringEveryHour) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *UpdateScheduleWildfireRecurring) matches(other *UpdateScheduleWildfireRecurring) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.StringsMatch(a.Action, b.Action) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.Ints64Match(a.At, b.At) {
+	if !o.Every15Mins.matches(other.Every15Mins) {
 		return false
 	}
-	if !util.BoolsMatch(a.SyncToPeer, b.SyncToPeer) {
+	if !o.Every30Mins.matches(other.Every30Mins) {
 		return false
 	}
+	if !o.EveryHour.matches(other.EveryHour) {
+		return false
+	}
+	if !o.EveryMin.matches(other.EveryMin) {
+		return false
+	}
+	if !o.None.matches(other.None) {
+		return false
+	}
+	if !o.RealTime.matches(other.RealTime) {
+		return false
+	}
+
 	return true
 }
-func matchUpdateScheduleWildfireRecurringEveryMin(a *UpdateScheduleWildfireRecurringEveryMin, b *UpdateScheduleWildfireRecurringEveryMin) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *UpdateScheduleWildfireRecurringEvery15Mins) matches(other *UpdateScheduleWildfireRecurringEvery15Mins) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !util.StringsMatch(a.Action, b.Action) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !util.BoolsMatch(a.SyncToPeer, b.SyncToPeer) {
+	if !util.StringsMatch(o.Action, other.Action) {
 		return false
 	}
+	if !util.Ints64Match(o.At, other.At) {
+		return false
+	}
+	if !util.BoolsMatch(o.SyncToPeer, other.SyncToPeer) {
+		return false
+	}
+
 	return true
 }
-func matchUpdateScheduleWildfireRecurringNone(a *UpdateScheduleWildfireRecurringNone, b *UpdateScheduleWildfireRecurringNone) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *UpdateScheduleWildfireRecurringEvery30Mins) matches(other *UpdateScheduleWildfireRecurringEvery30Mins) bool {
+	if o == nil && other == nil {
 		return true
 	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
+	}
+	if !util.StringsMatch(o.Action, other.Action) {
+		return false
+	}
+	if !util.Ints64Match(o.At, other.At) {
+		return false
+	}
+	if !util.BoolsMatch(o.SyncToPeer, other.SyncToPeer) {
+		return false
+	}
+
 	return true
 }
-func matchUpdateScheduleWildfireRecurringRealTime(a *UpdateScheduleWildfireRecurringRealTime, b *UpdateScheduleWildfireRecurringRealTime) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *UpdateScheduleWildfireRecurringEveryHour) matches(other *UpdateScheduleWildfireRecurringEveryHour) bool {
+	if o == nil && other == nil {
 		return true
 	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
+	}
+	if !util.StringsMatch(o.Action, other.Action) {
+		return false
+	}
+	if !util.Ints64Match(o.At, other.At) {
+		return false
+	}
+	if !util.BoolsMatch(o.SyncToPeer, other.SyncToPeer) {
+		return false
+	}
+
 	return true
 }
-func matchUpdateScheduleWildfireRecurring(a *UpdateScheduleWildfireRecurring, b *UpdateScheduleWildfireRecurring) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *UpdateScheduleWildfireRecurringEveryMin) matches(other *UpdateScheduleWildfireRecurringEveryMin) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !matchUpdateScheduleWildfireRecurringEvery15Mins(a.Every15Mins, b.Every15Mins) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !matchUpdateScheduleWildfireRecurringEvery30Mins(a.Every30Mins, b.Every30Mins) {
+	if !util.StringsMatch(o.Action, other.Action) {
 		return false
 	}
-	if !matchUpdateScheduleWildfireRecurringEveryHour(a.EveryHour, b.EveryHour) {
+	if !util.BoolsMatch(o.SyncToPeer, other.SyncToPeer) {
 		return false
 	}
-	if !matchUpdateScheduleWildfireRecurringEveryMin(a.EveryMin, b.EveryMin) {
-		return false
-	}
-	if !matchUpdateScheduleWildfireRecurringNone(a.None, b.None) {
-		return false
-	}
-	if !matchUpdateScheduleWildfireRecurringRealTime(a.RealTime, b.RealTime) {
-		return false
-	}
+
 	return true
 }
-func matchUpdateScheduleWildfire(a *UpdateScheduleWildfire, b *UpdateScheduleWildfire) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *UpdateScheduleWildfireRecurringNone) matches(other *UpdateScheduleWildfireRecurringNone) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !matchUpdateScheduleWildfireRecurring(a.Recurring, b.Recurring) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
+
 	return true
 }
-func matchUpdateSchedule(a *UpdateSchedule, b *UpdateSchedule) bool {
-	if a == nil && b != nil || a != nil && b == nil {
-		return false
-	} else if a == nil && b == nil {
+
+func (o *UpdateScheduleWildfireRecurringRealTime) matches(other *UpdateScheduleWildfireRecurringRealTime) bool {
+	if o == nil && other == nil {
 		return true
 	}
-	if !matchUpdateScheduleAntiVirus(a.AntiVirus, b.AntiVirus) {
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
 		return false
 	}
-	if !matchUpdateScheduleAppProfile(a.AppProfile, b.AppProfile) {
-		return false
-	}
-	if !matchUpdateScheduleGlobalProtectClientlessVpn(a.GlobalProtectClientlessVpn, b.GlobalProtectClientlessVpn) {
-		return false
-	}
-	if !matchUpdateScheduleGlobalProtectDatafile(a.GlobalProtectDatafile, b.GlobalProtectDatafile) {
-		return false
-	}
-	if !matchUpdateScheduleStatisticsService(a.StatisticsService, b.StatisticsService) {
-		return false
-	}
-	if !matchUpdateScheduleThreats(a.Threats, b.Threats) {
-		return false
-	}
-	if !matchUpdateScheduleWfPrivate(a.WfPrivate, b.WfPrivate) {
-		return false
-	}
-	if !matchUpdateScheduleWildfire(a.Wildfire, b.Wildfire) {
-		return false
-	}
+
 	return true
 }
