@@ -19,7 +19,7 @@ package main
 
 import (
     "log"
-    "github.com/PaloAltoNetworks/pango"
+    "github.com/PaloAltoNetworks/pango/v2"
 )
 
 func main() {
