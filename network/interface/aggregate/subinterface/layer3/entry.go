@@ -37,23 +37,27 @@ type Entry struct {
 	SdwanLinkSettings          *SdwanLinkSettings
 	Tag                        *int64
 	Misc                       []generic.Xml
+	MiscAttributes             []xml.Attr
 }
 type AdjustTcpMss struct {
 	Enable            *bool
 	Ipv4MssAdjustment *int64
 	Ipv6MssAdjustment *int64
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 type Arp struct {
-	Name      string
-	HwAddress *string
-	Misc      []generic.Xml
+	Name           string
+	HwAddress      *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Bonjour struct {
-	Enable   *bool
-	GroupId  *int64
-	TtlCheck *bool
-	Misc     []generic.Xml
+	Enable         *bool
+	GroupId        *int64
+	TtlCheck       *bool
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type DdnsConfig struct {
 	DdnsCertProfile    *string
@@ -65,11 +69,13 @@ type DdnsConfig struct {
 	DdnsVendor         *string
 	DdnsVendorConfig   []DdnsConfigDdnsVendorConfig
 	Misc               []generic.Xml
+	MiscAttributes     []xml.Attr
 }
 type DdnsConfigDdnsVendorConfig struct {
-	Name  string
-	Value *string
-	Misc  []generic.Xml
+	Name           string
+	Value          *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type DhcpClient struct {
 	CreateDefaultRoute *bool
@@ -77,16 +83,19 @@ type DhcpClient struct {
 	Enable             *bool
 	SendHostname       *DhcpClientSendHostname
 	Misc               []generic.Xml
+	MiscAttributes     []xml.Attr
 }
 type DhcpClientSendHostname struct {
-	Enable   *bool
-	Hostname *string
-	Misc     []generic.Xml
+	Enable         *bool
+	Hostname       *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Ip struct {
-	Name         string
-	SdwanGateway *string
-	Misc         []generic.Xml
+	Name           string
+	SdwanGateway   *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Ipv6 struct {
 	Address           []Ipv6Address
@@ -96,6 +105,7 @@ type Ipv6 struct {
 	InterfaceId       *string
 	NeighborDiscovery *Ipv6NeighborDiscovery
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 type Ipv6Address struct {
 	Name              string
@@ -104,12 +114,15 @@ type Ipv6Address struct {
 	Anycast           *Ipv6AddressAnycast
 	Advertise         *Ipv6AddressAdvertise
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 type Ipv6AddressPrefix struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Ipv6AddressAnycast struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Ipv6AddressAdvertise struct {
 	Enable            *bool
@@ -118,6 +131,7 @@ type Ipv6AddressAdvertise struct {
 	OnlinkFlag        *bool
 	AutoConfigFlag    *bool
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 type Ipv6DhcpClient struct {
 	AcceptRaRoute      *bool
@@ -128,6 +142,7 @@ type Ipv6DhcpClient struct {
 	PrefixDelegation   *Ipv6DhcpClientPrefixDelegation
 	V6Options          *Ipv6DhcpClientV6Options
 	Misc               []generic.Xml
+	MiscAttributes     []xml.Attr
 }
 type Ipv6DhcpClientNeighborDiscovery struct {
 	DadAttempts      *int64
@@ -139,73 +154,89 @@ type Ipv6DhcpClientNeighborDiscovery struct {
 	NsInterval       *int64
 	ReachableTime    *int64
 	Misc             []generic.Xml
+	MiscAttributes   []xml.Attr
 }
 type Ipv6DhcpClientNeighborDiscoveryDnsServer struct {
-	Enable *bool
-	Source *Ipv6DhcpClientNeighborDiscoveryDnsServerSource
-	Misc   []generic.Xml
+	Enable         *bool
+	Source         *Ipv6DhcpClientNeighborDiscoveryDnsServerSource
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Ipv6DhcpClientNeighborDiscoveryDnsServerSource struct {
-	Dhcpv6 *Ipv6DhcpClientNeighborDiscoveryDnsServerSourceDhcpv6
-	Manual *Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManual
-	Misc   []generic.Xml
+	Dhcpv6         *Ipv6DhcpClientNeighborDiscoveryDnsServerSourceDhcpv6
+	Manual         *Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManual
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Ipv6DhcpClientNeighborDiscoveryDnsServerSourceDhcpv6 struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManual struct {
-	Server []Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualServer
-	Misc   []generic.Xml
+	Server         []Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualServer
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualServer struct {
-	Name     string
-	Lifetime *int64
-	Misc     []generic.Xml
+	Name           string
+	Lifetime       *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Ipv6DhcpClientNeighborDiscoveryDnsSuffix struct {
-	Enable *bool
-	Source *Ipv6DhcpClientNeighborDiscoveryDnsSuffixSource
-	Misc   []generic.Xml
+	Enable         *bool
+	Source         *Ipv6DhcpClientNeighborDiscoveryDnsSuffixSource
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Ipv6DhcpClientNeighborDiscoveryDnsSuffixSource struct {
-	Dhcpv6 *Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceDhcpv6
-	Manual *Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManual
-	Misc   []generic.Xml
+	Dhcpv6         *Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceDhcpv6
+	Manual         *Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManual
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceDhcpv6 struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManual struct {
-	Suffix []Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffix
-	Misc   []generic.Xml
+	Suffix         []Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffix
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffix struct {
-	Name     string
-	Lifetime *int64
-	Misc     []generic.Xml
+	Name           string
+	Lifetime       *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Ipv6DhcpClientNeighborDiscoveryNeighbor struct {
-	Name      string
-	HwAddress *string
-	Misc      []generic.Xml
+	Name           string
+	HwAddress      *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Ipv6DhcpClientPrefixDelegation struct {
-	Enable *Ipv6DhcpClientPrefixDelegationEnable
-	Misc   []generic.Xml
+	Enable         *Ipv6DhcpClientPrefixDelegationEnable
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Ipv6DhcpClientPrefixDelegationEnable struct {
-	No   *Ipv6DhcpClientPrefixDelegationEnableNo
-	Yes  *Ipv6DhcpClientPrefixDelegationEnableYes
-	Misc []generic.Xml
+	No             *Ipv6DhcpClientPrefixDelegationEnableNo
+	Yes            *Ipv6DhcpClientPrefixDelegationEnableYes
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Ipv6DhcpClientPrefixDelegationEnableNo struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Ipv6DhcpClientPrefixDelegationEnableYes struct {
-	PfxPoolName   *string
-	PrefixLen     *int64
-	PrefixLenHint *bool
-	Misc          []generic.Xml
+	PfxPoolName    *string
+	PrefixLen      *int64
+	PrefixLenHint  *bool
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Ipv6DhcpClientV6Options struct {
 	DuidType            *string
@@ -213,35 +244,42 @@ type Ipv6DhcpClientV6Options struct {
 	RapidCommit         *bool
 	SupportSrvrReconfig *bool
 	Misc                []generic.Xml
+	MiscAttributes      []xml.Attr
 }
 type Ipv6DhcpClientV6OptionsEnable struct {
-	No   *Ipv6DhcpClientV6OptionsEnableNo
-	Yes  *Ipv6DhcpClientV6OptionsEnableYes
-	Misc []generic.Xml
+	No             *Ipv6DhcpClientV6OptionsEnableNo
+	Yes            *Ipv6DhcpClientV6OptionsEnableYes
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Ipv6DhcpClientV6OptionsEnableNo struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Ipv6DhcpClientV6OptionsEnableYes struct {
-	NonTempAddr *bool
-	TempAddr    *bool
-	Misc        []generic.Xml
+	NonTempAddr    *bool
+	TempAddr       *bool
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Ipv6Inherited struct {
 	AssignAddr        []Ipv6InheritedAssignAddr
 	Enable            *bool
 	NeighborDiscovery *Ipv6InheritedNeighborDiscovery
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 type Ipv6InheritedAssignAddr struct {
-	Name string
-	Type *Ipv6InheritedAssignAddrType
-	Misc []generic.Xml
+	Name           string
+	Type           *Ipv6InheritedAssignAddrType
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Ipv6InheritedAssignAddrType struct {
-	Gua  *Ipv6InheritedAssignAddrTypeGua
-	Ula  *Ipv6InheritedAssignAddrTypeUla
-	Misc []generic.Xml
+	Gua            *Ipv6InheritedAssignAddrTypeGua
+	Ula            *Ipv6InheritedAssignAddrTypeUla
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Ipv6InheritedAssignAddrTypeGua struct {
 	EnableOnInterface *bool
@@ -249,24 +287,29 @@ type Ipv6InheritedAssignAddrTypeGua struct {
 	PoolType          *Ipv6InheritedAssignAddrTypeGuaPoolType
 	Advertise         *Ipv6InheritedAssignAddrTypeGuaAdvertise
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 type Ipv6InheritedAssignAddrTypeGuaPoolType struct {
-	Dynamic   *Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamic
-	DynamicId *Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicId
-	Misc      []generic.Xml
+	Dynamic        *Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamic
+	DynamicId      *Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicId
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamic struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicId struct {
-	Identifier *int64
-	Misc       []generic.Xml
+	Identifier     *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Ipv6InheritedAssignAddrTypeGuaAdvertise struct {
 	Enable         *bool
 	OnlinkFlag     *bool
 	AutoConfigFlag *bool
 	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Ipv6InheritedAssignAddrTypeUla struct {
 	EnableOnInterface *bool
@@ -275,6 +318,7 @@ type Ipv6InheritedAssignAddrTypeUla struct {
 	Anycast           *bool
 	Advertise         *Ipv6InheritedAssignAddrTypeUlaAdvertise
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 type Ipv6InheritedAssignAddrTypeUlaAdvertise struct {
 	Enable            *bool
@@ -283,6 +327,7 @@ type Ipv6InheritedAssignAddrTypeUlaAdvertise struct {
 	OnlinkFlag        *bool
 	AutoConfigFlag    *bool
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 type Ipv6InheritedNeighborDiscovery struct {
 	DadAttempts         *int64
@@ -295,57 +340,69 @@ type Ipv6InheritedNeighborDiscovery struct {
 	ReachableTime       *int64
 	RouterAdvertisement *Ipv6InheritedNeighborDiscoveryRouterAdvertisement
 	Misc                []generic.Xml
+	MiscAttributes      []xml.Attr
 }
 type Ipv6InheritedNeighborDiscoveryDnsServer struct {
-	Enable *bool
-	Source *Ipv6InheritedNeighborDiscoveryDnsServerSource
-	Misc   []generic.Xml
+	Enable         *bool
+	Source         *Ipv6InheritedNeighborDiscoveryDnsServerSource
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Ipv6InheritedNeighborDiscoveryDnsServerSource struct {
-	Dhcpv6 *Ipv6InheritedNeighborDiscoveryDnsServerSourceDhcpv6
-	Manual *Ipv6InheritedNeighborDiscoveryDnsServerSourceManual
-	Misc   []generic.Xml
+	Dhcpv6         *Ipv6InheritedNeighborDiscoveryDnsServerSourceDhcpv6
+	Manual         *Ipv6InheritedNeighborDiscoveryDnsServerSourceManual
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Ipv6InheritedNeighborDiscoveryDnsServerSourceDhcpv6 struct {
-	PrefixPool *string
-	Misc       []generic.Xml
+	PrefixPool     *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Ipv6InheritedNeighborDiscoveryDnsServerSourceManual struct {
-	Server []Ipv6InheritedNeighborDiscoveryDnsServerSourceManualServer
-	Misc   []generic.Xml
+	Server         []Ipv6InheritedNeighborDiscoveryDnsServerSourceManualServer
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Ipv6InheritedNeighborDiscoveryDnsServerSourceManualServer struct {
-	Name     string
-	Lifetime *int64
-	Misc     []generic.Xml
+	Name           string
+	Lifetime       *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Ipv6InheritedNeighborDiscoveryDnsSuffix struct {
-	Enable *bool
-	Source *Ipv6InheritedNeighborDiscoveryDnsSuffixSource
-	Misc   []generic.Xml
+	Enable         *bool
+	Source         *Ipv6InheritedNeighborDiscoveryDnsSuffixSource
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Ipv6InheritedNeighborDiscoveryDnsSuffixSource struct {
-	Dhcpv6 *Ipv6InheritedNeighborDiscoveryDnsSuffixSourceDhcpv6
-	Manual *Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManual
-	Misc   []generic.Xml
+	Dhcpv6         *Ipv6InheritedNeighborDiscoveryDnsSuffixSourceDhcpv6
+	Manual         *Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManual
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Ipv6InheritedNeighborDiscoveryDnsSuffixSourceDhcpv6 struct {
-	PrefixPool *string
-	Misc       []generic.Xml
+	PrefixPool     *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManual struct {
-	Suffix []Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffix
-	Misc   []generic.Xml
+	Suffix         []Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffix
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffix struct {
-	Name     string
-	Lifetime *int64
-	Misc     []generic.Xml
+	Name           string
+	Lifetime       *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Ipv6InheritedNeighborDiscoveryNeighbor struct {
-	Name      string
-	HwAddress *string
-	Misc      []generic.Xml
+	Name           string
+	HwAddress      *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Ipv6InheritedNeighborDiscoveryRouterAdvertisement struct {
 	Enable                 *bool
@@ -361,6 +418,7 @@ type Ipv6InheritedNeighborDiscoveryRouterAdvertisement struct {
 	RetransmissionTimer    *string
 	RouterPreference       *string
 	Misc                   []generic.Xml
+	MiscAttributes         []xml.Attr
 }
 type Ipv6NeighborDiscovery struct {
 	DadAttempts         *int64
@@ -371,11 +429,13 @@ type Ipv6NeighborDiscovery struct {
 	ReachableTime       *int64
 	RouterAdvertisement *Ipv6NeighborDiscoveryRouterAdvertisement
 	Misc                []generic.Xml
+	MiscAttributes      []xml.Attr
 }
 type Ipv6NeighborDiscoveryNeighbor struct {
-	Name      string
-	HwAddress *string
-	Misc      []generic.Xml
+	Name           string
+	HwAddress      *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Ipv6NeighborDiscoveryRouterAdvertisement struct {
 	DnsSupport             *Ipv6NeighborDiscoveryRouterAdvertisementDnsSupport
@@ -392,52 +452,62 @@ type Ipv6NeighborDiscoveryRouterAdvertisement struct {
 	RetransmissionTimer    *string
 	RouterPreference       *string
 	Misc                   []generic.Xml
+	MiscAttributes         []xml.Attr
 }
 type Ipv6NeighborDiscoveryRouterAdvertisementDnsSupport struct {
-	Enable *bool
-	Server []Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServer
-	Suffix []Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffix
-	Misc   []generic.Xml
+	Enable         *bool
+	Server         []Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServer
+	Suffix         []Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffix
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServer struct {
-	Name     string
-	Lifetime *int64
-	Misc     []generic.Xml
+	Name           string
+	Lifetime       *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffix struct {
-	Name     string
-	Lifetime *int64
-	Misc     []generic.Xml
+	Name           string
+	Lifetime       *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type NdpProxy struct {
-	Address []NdpProxyAddress
-	Enabled *bool
-	Misc    []generic.Xml
+	Address        []NdpProxyAddress
+	Enabled        *bool
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type NdpProxyAddress struct {
-	Name   string
-	Negate *bool
-	Misc   []generic.Xml
+	Name           string
+	Negate         *bool
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type SdwanLinkSettings struct {
 	Enable                *bool
 	SdwanInterfaceProfile *string
 	UpstreamNat           *SdwanLinkSettingsUpstreamNat
 	Misc                  []generic.Xml
+	MiscAttributes        []xml.Attr
 }
 type SdwanLinkSettingsUpstreamNat struct {
-	Enable   *bool
-	Ddns     *SdwanLinkSettingsUpstreamNatDdns
-	StaticIp *SdwanLinkSettingsUpstreamNatStaticIp
-	Misc     []generic.Xml
+	Enable         *bool
+	Ddns           *SdwanLinkSettingsUpstreamNatDdns
+	StaticIp       *SdwanLinkSettingsUpstreamNatStaticIp
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type SdwanLinkSettingsUpstreamNatDdns struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type SdwanLinkSettingsUpstreamNatStaticIp struct {
-	Fqdn      *string
-	IpAddress *string
-	Misc      []generic.Xml
+	Fqdn           *string
+	IpAddress      *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 
 type entryXmlContainer struct {
@@ -504,27 +574,31 @@ type entryXml struct {
 	SdwanLinkSettings          *sdwanLinkSettingsXml `xml:"sdwan-link-settings,omitempty"`
 	Tag                        *int64                `xml:"tag,omitempty"`
 	Misc                       []generic.Xml         `xml:",any"`
+	MiscAttributes             []xml.Attr            `xml:",any,attr"`
 }
 type adjustTcpMssXml struct {
 	Enable            *string       `xml:"enable,omitempty"`
 	Ipv4MssAdjustment *int64        `xml:"ipv4-mss-adjustment,omitempty"`
 	Ipv6MssAdjustment *int64        `xml:"ipv6-mss-adjustment,omitempty"`
 	Misc              []generic.Xml `xml:",any"`
+	MiscAttributes    []xml.Attr    `xml:",any,attr"`
 }
 type arpContainerXml struct {
 	Entries []arpXml `xml:"entry"`
 }
 type arpXml struct {
-	XMLName   xml.Name      `xml:"entry"`
-	Name      string        `xml:"name,attr"`
-	HwAddress *string       `xml:"hw-address,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	HwAddress      *string       `xml:"hw-address,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type bonjourXml struct {
-	Enable   *string       `xml:"enable,omitempty"`
-	GroupId  *int64        `xml:"group-id,omitempty"`
-	TtlCheck *string       `xml:"ttl-check,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	Enable         *string       `xml:"enable,omitempty"`
+	GroupId        *int64        `xml:"group-id,omitempty"`
+	TtlCheck       *string       `xml:"ttl-check,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ddnsConfigXml struct {
 	DdnsCertProfile    *string                                 `xml:"ddns-cert-profile,omitempty"`
@@ -536,15 +610,17 @@ type ddnsConfigXml struct {
 	DdnsVendor         *string                                 `xml:"ddns-vendor,omitempty"`
 	DdnsVendorConfig   *ddnsConfigDdnsVendorConfigContainerXml `xml:"ddns-vendor-config,omitempty"`
 	Misc               []generic.Xml                           `xml:",any"`
+	MiscAttributes     []xml.Attr                              `xml:",any,attr"`
 }
 type ddnsConfigDdnsVendorConfigContainerXml struct {
 	Entries []ddnsConfigDdnsVendorConfigXml `xml:"entry"`
 }
 type ddnsConfigDdnsVendorConfigXml struct {
-	XMLName xml.Name      `xml:"entry"`
-	Name    string        `xml:"name,attr"`
-	Value   *string       `xml:"value,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Value          *string       `xml:"value,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type dhcpClientXml struct {
 	CreateDefaultRoute *string                    `xml:"create-default-route,omitempty"`
@@ -552,20 +628,23 @@ type dhcpClientXml struct {
 	Enable             *string                    `xml:"enable,omitempty"`
 	SendHostname       *dhcpClientSendHostnameXml `xml:"send-hostname,omitempty"`
 	Misc               []generic.Xml              `xml:",any"`
+	MiscAttributes     []xml.Attr                 `xml:",any,attr"`
 }
 type dhcpClientSendHostnameXml struct {
-	Enable   *string       `xml:"enable,omitempty"`
-	Hostname *string       `xml:"hostname,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	Enable         *string       `xml:"enable,omitempty"`
+	Hostname       *string       `xml:"hostname,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ipContainerXml struct {
 	Entries []ipXml `xml:"entry"`
 }
 type ipXml struct {
-	XMLName      xml.Name      `xml:"entry"`
-	Name         string        `xml:"name,attr"`
-	SdwanGateway *string       `xml:"sdwan-gateway,omitempty"`
-	Misc         []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	SdwanGateway   *string       `xml:"sdwan-gateway,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ipv6Xml struct {
 	Address           *ipv6AddressContainerXml  `xml:"address,omitempty"`
@@ -575,6 +654,7 @@ type ipv6Xml struct {
 	InterfaceId       *string                   `xml:"interface-id,omitempty"`
 	NeighborDiscovery *ipv6NeighborDiscoveryXml `xml:"neighbor-discovery,omitempty"`
 	Misc              []generic.Xml             `xml:",any"`
+	MiscAttributes    []xml.Attr                `xml:",any,attr"`
 }
 type ipv6AddressContainerXml struct {
 	Entries []ipv6AddressXml `xml:"entry"`
@@ -587,12 +667,15 @@ type ipv6AddressXml struct {
 	Anycast           *ipv6AddressAnycastXml   `xml:"anycast,omitempty"`
 	Advertise         *ipv6AddressAdvertiseXml `xml:"advertise,omitempty"`
 	Misc              []generic.Xml            `xml:",any"`
+	MiscAttributes    []xml.Attr               `xml:",any,attr"`
 }
 type ipv6AddressPrefixXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ipv6AddressAnycastXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ipv6AddressAdvertiseXml struct {
 	Enable            *string       `xml:"enable,omitempty"`
@@ -601,6 +684,7 @@ type ipv6AddressAdvertiseXml struct {
 	OnlinkFlag        *string       `xml:"onlink-flag,omitempty"`
 	AutoConfigFlag    *string       `xml:"auto-config-flag,omitempty"`
 	Misc              []generic.Xml `xml:",any"`
+	MiscAttributes    []xml.Attr    `xml:",any,attr"`
 }
 type ipv6DhcpClientXml struct {
 	AcceptRaRoute      *string                             `xml:"accept-ra-route,omitempty"`
@@ -611,6 +695,7 @@ type ipv6DhcpClientXml struct {
 	PrefixDelegation   *ipv6DhcpClientPrefixDelegationXml  `xml:"prefix-delegation,omitempty"`
 	V6Options          *ipv6DhcpClientV6OptionsXml         `xml:"v6-options,omitempty"`
 	Misc               []generic.Xml                       `xml:",any"`
+	MiscAttributes     []xml.Attr                          `xml:",any,attr"`
 }
 type ipv6DhcpClientNeighborDiscoveryXml struct {
 	DadAttempts      *int64                                               `xml:"dad-attempts,omitempty"`
@@ -622,85 +707,101 @@ type ipv6DhcpClientNeighborDiscoveryXml struct {
 	NsInterval       *int64                                               `xml:"ns-interval,omitempty"`
 	ReachableTime    *int64                                               `xml:"reachable-time,omitempty"`
 	Misc             []generic.Xml                                        `xml:",any"`
+	MiscAttributes   []xml.Attr                                           `xml:",any,attr"`
 }
 type ipv6DhcpClientNeighborDiscoveryDnsServerXml struct {
-	Enable *string                                            `xml:"enable,omitempty"`
-	Source *ipv6DhcpClientNeighborDiscoveryDnsServerSourceXml `xml:"source,omitempty"`
-	Misc   []generic.Xml                                      `xml:",any"`
+	Enable         *string                                            `xml:"enable,omitempty"`
+	Source         *ipv6DhcpClientNeighborDiscoveryDnsServerSourceXml `xml:"source,omitempty"`
+	Misc           []generic.Xml                                      `xml:",any"`
+	MiscAttributes []xml.Attr                                         `xml:",any,attr"`
 }
 type ipv6DhcpClientNeighborDiscoveryDnsServerSourceXml struct {
-	Dhcpv6 *ipv6DhcpClientNeighborDiscoveryDnsServerSourceDhcpv6Xml `xml:"dhcpv6,omitempty"`
-	Manual *ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualXml `xml:"manual,omitempty"`
-	Misc   []generic.Xml                                            `xml:",any"`
+	Dhcpv6         *ipv6DhcpClientNeighborDiscoveryDnsServerSourceDhcpv6Xml `xml:"dhcpv6,omitempty"`
+	Manual         *ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualXml `xml:"manual,omitempty"`
+	Misc           []generic.Xml                                            `xml:",any"`
+	MiscAttributes []xml.Attr                                               `xml:",any,attr"`
 }
 type ipv6DhcpClientNeighborDiscoveryDnsServerSourceDhcpv6Xml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualXml struct {
-	Server *ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualServerContainerXml `xml:"server,omitempty"`
-	Misc   []generic.Xml                                                           `xml:",any"`
+	Server         *ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualServerContainerXml `xml:"server,omitempty"`
+	Misc           []generic.Xml                                                           `xml:",any"`
+	MiscAttributes []xml.Attr                                                              `xml:",any,attr"`
 }
 type ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualServerContainerXml struct {
 	Entries []ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualServerXml `xml:"entry"`
 }
 type ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualServerXml struct {
-	XMLName  xml.Name      `xml:"entry"`
-	Name     string        `xml:"name,attr"`
-	Lifetime *int64        `xml:"lifetime,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Lifetime       *int64        `xml:"lifetime,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ipv6DhcpClientNeighborDiscoveryDnsSuffixXml struct {
-	Enable *string                                            `xml:"enable,omitempty"`
-	Source *ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceXml `xml:"source,omitempty"`
-	Misc   []generic.Xml                                      `xml:",any"`
+	Enable         *string                                            `xml:"enable,omitempty"`
+	Source         *ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceXml `xml:"source,omitempty"`
+	Misc           []generic.Xml                                      `xml:",any"`
+	MiscAttributes []xml.Attr                                         `xml:",any,attr"`
 }
 type ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceXml struct {
-	Dhcpv6 *ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceDhcpv6Xml `xml:"dhcpv6,omitempty"`
-	Manual *ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualXml `xml:"manual,omitempty"`
-	Misc   []generic.Xml                                            `xml:",any"`
+	Dhcpv6         *ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceDhcpv6Xml `xml:"dhcpv6,omitempty"`
+	Manual         *ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualXml `xml:"manual,omitempty"`
+	Misc           []generic.Xml                                            `xml:",any"`
+	MiscAttributes []xml.Attr                                               `xml:",any,attr"`
 }
 type ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceDhcpv6Xml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualXml struct {
-	Suffix *ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffixContainerXml `xml:"suffix,omitempty"`
-	Misc   []generic.Xml                                                           `xml:",any"`
+	Suffix         *ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffixContainerXml `xml:"suffix,omitempty"`
+	Misc           []generic.Xml                                                           `xml:",any"`
+	MiscAttributes []xml.Attr                                                              `xml:",any,attr"`
 }
 type ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffixContainerXml struct {
 	Entries []ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffixXml `xml:"entry"`
 }
 type ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffixXml struct {
-	XMLName  xml.Name      `xml:"entry"`
-	Name     string        `xml:"name,attr"`
-	Lifetime *int64        `xml:"lifetime,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Lifetime       *int64        `xml:"lifetime,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ipv6DhcpClientNeighborDiscoveryNeighborContainerXml struct {
 	Entries []ipv6DhcpClientNeighborDiscoveryNeighborXml `xml:"entry"`
 }
 type ipv6DhcpClientNeighborDiscoveryNeighborXml struct {
-	XMLName   xml.Name      `xml:"entry"`
-	Name      string        `xml:"name,attr"`
-	HwAddress *string       `xml:"hw-address,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	HwAddress      *string       `xml:"hw-address,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ipv6DhcpClientPrefixDelegationXml struct {
-	Enable *ipv6DhcpClientPrefixDelegationEnableXml `xml:"enable,omitempty"`
-	Misc   []generic.Xml                            `xml:",any"`
+	Enable         *ipv6DhcpClientPrefixDelegationEnableXml `xml:"enable,omitempty"`
+	Misc           []generic.Xml                            `xml:",any"`
+	MiscAttributes []xml.Attr                               `xml:",any,attr"`
 }
 type ipv6DhcpClientPrefixDelegationEnableXml struct {
-	No   *ipv6DhcpClientPrefixDelegationEnableNoXml  `xml:"no,omitempty"`
-	Yes  *ipv6DhcpClientPrefixDelegationEnableYesXml `xml:"yes,omitempty"`
-	Misc []generic.Xml                               `xml:",any"`
+	No             *ipv6DhcpClientPrefixDelegationEnableNoXml  `xml:"no,omitempty"`
+	Yes            *ipv6DhcpClientPrefixDelegationEnableYesXml `xml:"yes,omitempty"`
+	Misc           []generic.Xml                               `xml:",any"`
+	MiscAttributes []xml.Attr                                  `xml:",any,attr"`
 }
 type ipv6DhcpClientPrefixDelegationEnableNoXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ipv6DhcpClientPrefixDelegationEnableYesXml struct {
-	PfxPoolName   *string       `xml:"pfx-pool-name,omitempty"`
-	PrefixLen     *int64        `xml:"prefix-len,omitempty"`
-	PrefixLenHint *string       `xml:"prefix-len-hint,omitempty"`
-	Misc          []generic.Xml `xml:",any"`
+	PfxPoolName    *string       `xml:"pfx-pool-name,omitempty"`
+	PrefixLen      *int64        `xml:"prefix-len,omitempty"`
+	PrefixLenHint  *string       `xml:"prefix-len-hint,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ipv6DhcpClientV6OptionsXml struct {
 	DuidType            *string                           `xml:"duid-type,omitempty"`
@@ -708,39 +809,46 @@ type ipv6DhcpClientV6OptionsXml struct {
 	RapidCommit         *string                           `xml:"rapid-commit,omitempty"`
 	SupportSrvrReconfig *string                           `xml:"support-srvr-reconfig,omitempty"`
 	Misc                []generic.Xml                     `xml:",any"`
+	MiscAttributes      []xml.Attr                        `xml:",any,attr"`
 }
 type ipv6DhcpClientV6OptionsEnableXml struct {
-	No   *ipv6DhcpClientV6OptionsEnableNoXml  `xml:"no,omitempty"`
-	Yes  *ipv6DhcpClientV6OptionsEnableYesXml `xml:"yes,omitempty"`
-	Misc []generic.Xml                        `xml:",any"`
+	No             *ipv6DhcpClientV6OptionsEnableNoXml  `xml:"no,omitempty"`
+	Yes            *ipv6DhcpClientV6OptionsEnableYesXml `xml:"yes,omitempty"`
+	Misc           []generic.Xml                        `xml:",any"`
+	MiscAttributes []xml.Attr                           `xml:",any,attr"`
 }
 type ipv6DhcpClientV6OptionsEnableNoXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ipv6DhcpClientV6OptionsEnableYesXml struct {
-	NonTempAddr *string       `xml:"non-temp-addr,omitempty"`
-	TempAddr    *string       `xml:"temp-addr,omitempty"`
-	Misc        []generic.Xml `xml:",any"`
+	NonTempAddr    *string       `xml:"non-temp-addr,omitempty"`
+	TempAddr       *string       `xml:"temp-addr,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ipv6InheritedXml struct {
 	AssignAddr        *ipv6InheritedAssignAddrContainerXml `xml:"assign-addr,omitempty"`
 	Enable            *string                              `xml:"enable,omitempty"`
 	NeighborDiscovery *ipv6InheritedNeighborDiscoveryXml   `xml:"neighbor-discovery,omitempty"`
 	Misc              []generic.Xml                        `xml:",any"`
+	MiscAttributes    []xml.Attr                           `xml:",any,attr"`
 }
 type ipv6InheritedAssignAddrContainerXml struct {
 	Entries []ipv6InheritedAssignAddrXml `xml:"entry"`
 }
 type ipv6InheritedAssignAddrXml struct {
-	XMLName xml.Name                        `xml:"entry"`
-	Name    string                          `xml:"name,attr"`
-	Type    *ipv6InheritedAssignAddrTypeXml `xml:"type,omitempty"`
-	Misc    []generic.Xml                   `xml:",any"`
+	XMLName        xml.Name                        `xml:"entry"`
+	Name           string                          `xml:"name,attr"`
+	Type           *ipv6InheritedAssignAddrTypeXml `xml:"type,omitempty"`
+	Misc           []generic.Xml                   `xml:",any"`
+	MiscAttributes []xml.Attr                      `xml:",any,attr"`
 }
 type ipv6InheritedAssignAddrTypeXml struct {
-	Gua  *ipv6InheritedAssignAddrTypeGuaXml `xml:"gua,omitempty"`
-	Ula  *ipv6InheritedAssignAddrTypeUlaXml `xml:"ula,omitempty"`
-	Misc []generic.Xml                      `xml:",any"`
+	Gua            *ipv6InheritedAssignAddrTypeGuaXml `xml:"gua,omitempty"`
+	Ula            *ipv6InheritedAssignAddrTypeUlaXml `xml:"ula,omitempty"`
+	Misc           []generic.Xml                      `xml:",any"`
+	MiscAttributes []xml.Attr                         `xml:",any,attr"`
 }
 type ipv6InheritedAssignAddrTypeGuaXml struct {
 	EnableOnInterface *string                                     `xml:"enable-on-interface,omitempty"`
@@ -748,24 +856,29 @@ type ipv6InheritedAssignAddrTypeGuaXml struct {
 	PoolType          *ipv6InheritedAssignAddrTypeGuaPoolTypeXml  `xml:"pool-type,omitempty"`
 	Advertise         *ipv6InheritedAssignAddrTypeGuaAdvertiseXml `xml:"advertise,omitempty"`
 	Misc              []generic.Xml                               `xml:",any"`
+	MiscAttributes    []xml.Attr                                  `xml:",any,attr"`
 }
 type ipv6InheritedAssignAddrTypeGuaPoolTypeXml struct {
-	Dynamic   *ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicXml   `xml:"dynamic,omitempty"`
-	DynamicId *ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicIdXml `xml:"dynamic-id,omitempty"`
-	Misc      []generic.Xml                                       `xml:",any"`
+	Dynamic        *ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicXml   `xml:"dynamic,omitempty"`
+	DynamicId      *ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicIdXml `xml:"dynamic-id,omitempty"`
+	Misc           []generic.Xml                                       `xml:",any"`
+	MiscAttributes []xml.Attr                                          `xml:",any,attr"`
 }
 type ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicIdXml struct {
-	Identifier *int64        `xml:"identifier,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	Identifier     *int64        `xml:"identifier,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ipv6InheritedAssignAddrTypeGuaAdvertiseXml struct {
 	Enable         *string       `xml:"enable,omitempty"`
 	OnlinkFlag     *string       `xml:"onlink-flag,omitempty"`
 	AutoConfigFlag *string       `xml:"auto-config-flag,omitempty"`
 	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ipv6InheritedAssignAddrTypeUlaXml struct {
 	EnableOnInterface *string                                     `xml:"enable-on-interface,omitempty"`
@@ -774,6 +887,7 @@ type ipv6InheritedAssignAddrTypeUlaXml struct {
 	Anycast           *string                                     `xml:"anycast,omitempty"`
 	Advertise         *ipv6InheritedAssignAddrTypeUlaAdvertiseXml `xml:"advertise,omitempty"`
 	Misc              []generic.Xml                               `xml:",any"`
+	MiscAttributes    []xml.Attr                                  `xml:",any,attr"`
 }
 type ipv6InheritedAssignAddrTypeUlaAdvertiseXml struct {
 	Enable            *string       `xml:"enable,omitempty"`
@@ -782,6 +896,7 @@ type ipv6InheritedAssignAddrTypeUlaAdvertiseXml struct {
 	OnlinkFlag        *string       `xml:"onlink-flag,omitempty"`
 	AutoConfigFlag    *string       `xml:"auto-config-flag,omitempty"`
 	Misc              []generic.Xml `xml:",any"`
+	MiscAttributes    []xml.Attr    `xml:",any,attr"`
 }
 type ipv6InheritedNeighborDiscoveryXml struct {
 	DadAttempts         *int64                                                `xml:"dad-attempts,omitempty"`
@@ -794,69 +909,81 @@ type ipv6InheritedNeighborDiscoveryXml struct {
 	ReachableTime       *int64                                                `xml:"reachable-time,omitempty"`
 	RouterAdvertisement *ipv6InheritedNeighborDiscoveryRouterAdvertisementXml `xml:"router-advertisement,omitempty"`
 	Misc                []generic.Xml                                         `xml:",any"`
+	MiscAttributes      []xml.Attr                                            `xml:",any,attr"`
 }
 type ipv6InheritedNeighborDiscoveryDnsServerXml struct {
-	Enable *string                                           `xml:"enable,omitempty"`
-	Source *ipv6InheritedNeighborDiscoveryDnsServerSourceXml `xml:"source,omitempty"`
-	Misc   []generic.Xml                                     `xml:",any"`
+	Enable         *string                                           `xml:"enable,omitempty"`
+	Source         *ipv6InheritedNeighborDiscoveryDnsServerSourceXml `xml:"source,omitempty"`
+	Misc           []generic.Xml                                     `xml:",any"`
+	MiscAttributes []xml.Attr                                        `xml:",any,attr"`
 }
 type ipv6InheritedNeighborDiscoveryDnsServerSourceXml struct {
-	Dhcpv6 *ipv6InheritedNeighborDiscoveryDnsServerSourceDhcpv6Xml `xml:"dhcpv6,omitempty"`
-	Manual *ipv6InheritedNeighborDiscoveryDnsServerSourceManualXml `xml:"manual,omitempty"`
-	Misc   []generic.Xml                                           `xml:",any"`
+	Dhcpv6         *ipv6InheritedNeighborDiscoveryDnsServerSourceDhcpv6Xml `xml:"dhcpv6,omitempty"`
+	Manual         *ipv6InheritedNeighborDiscoveryDnsServerSourceManualXml `xml:"manual,omitempty"`
+	Misc           []generic.Xml                                           `xml:",any"`
+	MiscAttributes []xml.Attr                                              `xml:",any,attr"`
 }
 type ipv6InheritedNeighborDiscoveryDnsServerSourceDhcpv6Xml struct {
-	PrefixPool *string       `xml:"prefix-pool,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	PrefixPool     *string       `xml:"prefix-pool,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ipv6InheritedNeighborDiscoveryDnsServerSourceManualXml struct {
-	Server *ipv6InheritedNeighborDiscoveryDnsServerSourceManualServerContainerXml `xml:"server,omitempty"`
-	Misc   []generic.Xml                                                          `xml:",any"`
+	Server         *ipv6InheritedNeighborDiscoveryDnsServerSourceManualServerContainerXml `xml:"server,omitempty"`
+	Misc           []generic.Xml                                                          `xml:",any"`
+	MiscAttributes []xml.Attr                                                             `xml:",any,attr"`
 }
 type ipv6InheritedNeighborDiscoveryDnsServerSourceManualServerContainerXml struct {
 	Entries []ipv6InheritedNeighborDiscoveryDnsServerSourceManualServerXml `xml:"entry"`
 }
 type ipv6InheritedNeighborDiscoveryDnsServerSourceManualServerXml struct {
-	XMLName  xml.Name      `xml:"entry"`
-	Name     string        `xml:"name,attr"`
-	Lifetime *int64        `xml:"lifetime,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Lifetime       *int64        `xml:"lifetime,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ipv6InheritedNeighborDiscoveryDnsSuffixXml struct {
-	Enable *string                                           `xml:"enable,omitempty"`
-	Source *ipv6InheritedNeighborDiscoveryDnsSuffixSourceXml `xml:"source,omitempty"`
-	Misc   []generic.Xml                                     `xml:",any"`
+	Enable         *string                                           `xml:"enable,omitempty"`
+	Source         *ipv6InheritedNeighborDiscoveryDnsSuffixSourceXml `xml:"source,omitempty"`
+	Misc           []generic.Xml                                     `xml:",any"`
+	MiscAttributes []xml.Attr                                        `xml:",any,attr"`
 }
 type ipv6InheritedNeighborDiscoveryDnsSuffixSourceXml struct {
-	Dhcpv6 *ipv6InheritedNeighborDiscoveryDnsSuffixSourceDhcpv6Xml `xml:"dhcpv6,omitempty"`
-	Manual *ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualXml `xml:"manual,omitempty"`
-	Misc   []generic.Xml                                           `xml:",any"`
+	Dhcpv6         *ipv6InheritedNeighborDiscoveryDnsSuffixSourceDhcpv6Xml `xml:"dhcpv6,omitempty"`
+	Manual         *ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualXml `xml:"manual,omitempty"`
+	Misc           []generic.Xml                                           `xml:",any"`
+	MiscAttributes []xml.Attr                                              `xml:",any,attr"`
 }
 type ipv6InheritedNeighborDiscoveryDnsSuffixSourceDhcpv6Xml struct {
-	PrefixPool *string       `xml:"prefix-pool,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	PrefixPool     *string       `xml:"prefix-pool,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualXml struct {
-	Suffix *ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffixContainerXml `xml:"suffix,omitempty"`
-	Misc   []generic.Xml                                                          `xml:",any"`
+	Suffix         *ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffixContainerXml `xml:"suffix,omitempty"`
+	Misc           []generic.Xml                                                          `xml:",any"`
+	MiscAttributes []xml.Attr                                                             `xml:",any,attr"`
 }
 type ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffixContainerXml struct {
 	Entries []ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffixXml `xml:"entry"`
 }
 type ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffixXml struct {
-	XMLName  xml.Name      `xml:"entry"`
-	Name     string        `xml:"name,attr"`
-	Lifetime *int64        `xml:"lifetime,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Lifetime       *int64        `xml:"lifetime,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ipv6InheritedNeighborDiscoveryNeighborContainerXml struct {
 	Entries []ipv6InheritedNeighborDiscoveryNeighborXml `xml:"entry"`
 }
 type ipv6InheritedNeighborDiscoveryNeighborXml struct {
-	XMLName   xml.Name      `xml:"entry"`
-	Name      string        `xml:"name,attr"`
-	HwAddress *string       `xml:"hw-address,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	HwAddress      *string       `xml:"hw-address,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ipv6InheritedNeighborDiscoveryRouterAdvertisementXml struct {
 	Enable                 *string       `xml:"enable,omitempty"`
@@ -872,6 +999,7 @@ type ipv6InheritedNeighborDiscoveryRouterAdvertisementXml struct {
 	RetransmissionTimer    *string       `xml:"retransmission-timer,omitempty"`
 	RouterPreference       *string       `xml:"router-preference,omitempty"`
 	Misc                   []generic.Xml `xml:",any"`
+	MiscAttributes         []xml.Attr    `xml:",any,attr"`
 }
 type ipv6NeighborDiscoveryXml struct {
 	DadAttempts         *int64                                       `xml:"dad-attempts,omitempty"`
@@ -882,15 +1010,17 @@ type ipv6NeighborDiscoveryXml struct {
 	ReachableTime       *int64                                       `xml:"reachable-time,omitempty"`
 	RouterAdvertisement *ipv6NeighborDiscoveryRouterAdvertisementXml `xml:"router-advertisement,omitempty"`
 	Misc                []generic.Xml                                `xml:",any"`
+	MiscAttributes      []xml.Attr                                   `xml:",any,attr"`
 }
 type ipv6NeighborDiscoveryNeighborContainerXml struct {
 	Entries []ipv6NeighborDiscoveryNeighborXml `xml:"entry"`
 }
 type ipv6NeighborDiscoveryNeighborXml struct {
-	XMLName   xml.Name      `xml:"entry"`
-	Name      string        `xml:"name,attr"`
-	HwAddress *string       `xml:"hw-address,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	HwAddress      *string       `xml:"hw-address,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ipv6NeighborDiscoveryRouterAdvertisementXml struct {
 	DnsSupport             *ipv6NeighborDiscoveryRouterAdvertisementDnsSupportXml `xml:"dns-support,omitempty"`
@@ -907,64 +1037,74 @@ type ipv6NeighborDiscoveryRouterAdvertisementXml struct {
 	RetransmissionTimer    *string                                                `xml:"retransmission-timer,omitempty"`
 	RouterPreference       *string                                                `xml:"router-preference,omitempty"`
 	Misc                   []generic.Xml                                          `xml:",any"`
+	MiscAttributes         []xml.Attr                                             `xml:",any,attr"`
 }
 type ipv6NeighborDiscoveryRouterAdvertisementDnsSupportXml struct {
-	Enable *string                                                               `xml:"enable,omitempty"`
-	Server *ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServerContainerXml `xml:"server,omitempty"`
-	Suffix *ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffixContainerXml `xml:"suffix,omitempty"`
-	Misc   []generic.Xml                                                         `xml:",any"`
+	Enable         *string                                                               `xml:"enable,omitempty"`
+	Server         *ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServerContainerXml `xml:"server,omitempty"`
+	Suffix         *ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffixContainerXml `xml:"suffix,omitempty"`
+	Misc           []generic.Xml                                                         `xml:",any"`
+	MiscAttributes []xml.Attr                                                            `xml:",any,attr"`
 }
 type ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServerContainerXml struct {
 	Entries []ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServerXml `xml:"entry"`
 }
 type ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServerXml struct {
-	XMLName  xml.Name      `xml:"entry"`
-	Name     string        `xml:"name,attr"`
-	Lifetime *int64        `xml:"lifetime,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Lifetime       *int64        `xml:"lifetime,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffixContainerXml struct {
 	Entries []ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffixXml `xml:"entry"`
 }
 type ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffixXml struct {
-	XMLName  xml.Name      `xml:"entry"`
-	Name     string        `xml:"name,attr"`
-	Lifetime *int64        `xml:"lifetime,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Lifetime       *int64        `xml:"lifetime,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ndpProxyXml struct {
-	Address *ndpProxyAddressContainerXml `xml:"address,omitempty"`
-	Enabled *string                      `xml:"enabled,omitempty"`
-	Misc    []generic.Xml                `xml:",any"`
+	Address        *ndpProxyAddressContainerXml `xml:"address,omitempty"`
+	Enabled        *string                      `xml:"enabled,omitempty"`
+	Misc           []generic.Xml                `xml:",any"`
+	MiscAttributes []xml.Attr                   `xml:",any,attr"`
 }
 type ndpProxyAddressContainerXml struct {
 	Entries []ndpProxyAddressXml `xml:"entry"`
 }
 type ndpProxyAddressXml struct {
-	XMLName xml.Name      `xml:"entry"`
-	Name    string        `xml:"name,attr"`
-	Negate  *string       `xml:"negate,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Negate         *string       `xml:"negate,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type sdwanLinkSettingsXml struct {
 	Enable                *string                          `xml:"enable,omitempty"`
 	SdwanInterfaceProfile *string                          `xml:"sdwan-interface-profile,omitempty"`
 	UpstreamNat           *sdwanLinkSettingsUpstreamNatXml `xml:"upstream-nat,omitempty"`
 	Misc                  []generic.Xml                    `xml:",any"`
+	MiscAttributes        []xml.Attr                       `xml:",any,attr"`
 }
 type sdwanLinkSettingsUpstreamNatXml struct {
-	Enable   *string                                  `xml:"enable,omitempty"`
-	Ddns     *sdwanLinkSettingsUpstreamNatDdnsXml     `xml:"ddns,omitempty"`
-	StaticIp *sdwanLinkSettingsUpstreamNatStaticIpXml `xml:"static-ip,omitempty"`
-	Misc     []generic.Xml                            `xml:",any"`
+	Enable         *string                                  `xml:"enable,omitempty"`
+	Ddns           *sdwanLinkSettingsUpstreamNatDdnsXml     `xml:"ddns,omitempty"`
+	StaticIp       *sdwanLinkSettingsUpstreamNatStaticIpXml `xml:"static-ip,omitempty"`
+	Misc           []generic.Xml                            `xml:",any"`
+	MiscAttributes []xml.Attr                               `xml:",any,attr"`
 }
 type sdwanLinkSettingsUpstreamNatDdnsXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type sdwanLinkSettingsUpstreamNatStaticIpXml struct {
-	Fqdn      *string       `xml:"fqdn,omitempty"`
-	IpAddress *string       `xml:"ip-address,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	Fqdn           *string       `xml:"fqdn,omitempty"`
+	IpAddress      *string       `xml:"ip-address,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type entryXml_11_0_2 struct {
 	XMLName                    xml.Name                     `xml:"entry"`
@@ -986,27 +1126,31 @@ type entryXml_11_0_2 struct {
 	SdwanLinkSettings          *sdwanLinkSettingsXml_11_0_2 `xml:"sdwan-link-settings,omitempty"`
 	Tag                        *int64                       `xml:"tag,omitempty"`
 	Misc                       []generic.Xml                `xml:",any"`
+	MiscAttributes             []xml.Attr                   `xml:",any,attr"`
 }
 type adjustTcpMssXml_11_0_2 struct {
 	Enable            *string       `xml:"enable,omitempty"`
 	Ipv4MssAdjustment *int64        `xml:"ipv4-mss-adjustment,omitempty"`
 	Ipv6MssAdjustment *int64        `xml:"ipv6-mss-adjustment,omitempty"`
 	Misc              []generic.Xml `xml:",any"`
+	MiscAttributes    []xml.Attr    `xml:",any,attr"`
 }
 type arpContainerXml_11_0_2 struct {
 	Entries []arpXml_11_0_2 `xml:"entry"`
 }
 type arpXml_11_0_2 struct {
-	XMLName   xml.Name      `xml:"entry"`
-	Name      string        `xml:"name,attr"`
-	HwAddress *string       `xml:"hw-address,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	HwAddress      *string       `xml:"hw-address,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type bonjourXml_11_0_2 struct {
-	Enable   *string       `xml:"enable,omitempty"`
-	GroupId  *int64        `xml:"group-id,omitempty"`
-	TtlCheck *string       `xml:"ttl-check,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	Enable         *string       `xml:"enable,omitempty"`
+	GroupId        *int64        `xml:"group-id,omitempty"`
+	TtlCheck       *string       `xml:"ttl-check,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ddnsConfigXml_11_0_2 struct {
 	DdnsCertProfile    *string                                        `xml:"ddns-cert-profile,omitempty"`
@@ -1018,15 +1162,17 @@ type ddnsConfigXml_11_0_2 struct {
 	DdnsVendor         *string                                        `xml:"ddns-vendor,omitempty"`
 	DdnsVendorConfig   *ddnsConfigDdnsVendorConfigContainerXml_11_0_2 `xml:"ddns-vendor-config,omitempty"`
 	Misc               []generic.Xml                                  `xml:",any"`
+	MiscAttributes     []xml.Attr                                     `xml:",any,attr"`
 }
 type ddnsConfigDdnsVendorConfigContainerXml_11_0_2 struct {
 	Entries []ddnsConfigDdnsVendorConfigXml_11_0_2 `xml:"entry"`
 }
 type ddnsConfigDdnsVendorConfigXml_11_0_2 struct {
-	XMLName xml.Name      `xml:"entry"`
-	Name    string        `xml:"name,attr"`
-	Value   *string       `xml:"value,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Value          *string       `xml:"value,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type dhcpClientXml_11_0_2 struct {
 	CreateDefaultRoute *string                           `xml:"create-default-route,omitempty"`
@@ -1034,20 +1180,23 @@ type dhcpClientXml_11_0_2 struct {
 	Enable             *string                           `xml:"enable,omitempty"`
 	SendHostname       *dhcpClientSendHostnameXml_11_0_2 `xml:"send-hostname,omitempty"`
 	Misc               []generic.Xml                     `xml:",any"`
+	MiscAttributes     []xml.Attr                        `xml:",any,attr"`
 }
 type dhcpClientSendHostnameXml_11_0_2 struct {
-	Enable   *string       `xml:"enable,omitempty"`
-	Hostname *string       `xml:"hostname,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	Enable         *string       `xml:"enable,omitempty"`
+	Hostname       *string       `xml:"hostname,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ipContainerXml_11_0_2 struct {
 	Entries []ipXml_11_0_2 `xml:"entry"`
 }
 type ipXml_11_0_2 struct {
-	XMLName      xml.Name      `xml:"entry"`
-	Name         string        `xml:"name,attr"`
-	SdwanGateway *string       `xml:"sdwan-gateway,omitempty"`
-	Misc         []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	SdwanGateway   *string       `xml:"sdwan-gateway,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ipv6Xml_11_0_2 struct {
 	Address           *ipv6AddressContainerXml_11_0_2  `xml:"address,omitempty"`
@@ -1057,6 +1206,7 @@ type ipv6Xml_11_0_2 struct {
 	InterfaceId       *string                          `xml:"interface-id,omitempty"`
 	NeighborDiscovery *ipv6NeighborDiscoveryXml_11_0_2 `xml:"neighbor-discovery,omitempty"`
 	Misc              []generic.Xml                    `xml:",any"`
+	MiscAttributes    []xml.Attr                       `xml:",any,attr"`
 }
 type ipv6AddressContainerXml_11_0_2 struct {
 	Entries []ipv6AddressXml_11_0_2 `xml:"entry"`
@@ -1069,12 +1219,15 @@ type ipv6AddressXml_11_0_2 struct {
 	Anycast           *ipv6AddressAnycastXml_11_0_2   `xml:"anycast,omitempty"`
 	Advertise         *ipv6AddressAdvertiseXml_11_0_2 `xml:"advertise,omitempty"`
 	Misc              []generic.Xml                   `xml:",any"`
+	MiscAttributes    []xml.Attr                      `xml:",any,attr"`
 }
 type ipv6AddressPrefixXml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ipv6AddressAnycastXml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ipv6AddressAdvertiseXml_11_0_2 struct {
 	Enable            *string       `xml:"enable,omitempty"`
@@ -1083,6 +1236,7 @@ type ipv6AddressAdvertiseXml_11_0_2 struct {
 	OnlinkFlag        *string       `xml:"onlink-flag,omitempty"`
 	AutoConfigFlag    *string       `xml:"auto-config-flag,omitempty"`
 	Misc              []generic.Xml `xml:",any"`
+	MiscAttributes    []xml.Attr    `xml:",any,attr"`
 }
 type ipv6DhcpClientXml_11_0_2 struct {
 	AcceptRaRoute      *string                                    `xml:"accept-ra-route,omitempty"`
@@ -1093,6 +1247,7 @@ type ipv6DhcpClientXml_11_0_2 struct {
 	PrefixDelegation   *ipv6DhcpClientPrefixDelegationXml_11_0_2  `xml:"prefix-delegation,omitempty"`
 	V6Options          *ipv6DhcpClientV6OptionsXml_11_0_2         `xml:"v6-options,omitempty"`
 	Misc               []generic.Xml                              `xml:",any"`
+	MiscAttributes     []xml.Attr                                 `xml:",any,attr"`
 }
 type ipv6DhcpClientNeighborDiscoveryXml_11_0_2 struct {
 	DadAttempts      *int64                                                      `xml:"dad-attempts,omitempty"`
@@ -1104,85 +1259,101 @@ type ipv6DhcpClientNeighborDiscoveryXml_11_0_2 struct {
 	NsInterval       *int64                                                      `xml:"ns-interval,omitempty"`
 	ReachableTime    *int64                                                      `xml:"reachable-time,omitempty"`
 	Misc             []generic.Xml                                               `xml:",any"`
+	MiscAttributes   []xml.Attr                                                  `xml:",any,attr"`
 }
 type ipv6DhcpClientNeighborDiscoveryDnsServerXml_11_0_2 struct {
-	Enable *string                                                   `xml:"enable,omitempty"`
-	Source *ipv6DhcpClientNeighborDiscoveryDnsServerSourceXml_11_0_2 `xml:"source,omitempty"`
-	Misc   []generic.Xml                                             `xml:",any"`
+	Enable         *string                                                   `xml:"enable,omitempty"`
+	Source         *ipv6DhcpClientNeighborDiscoveryDnsServerSourceXml_11_0_2 `xml:"source,omitempty"`
+	Misc           []generic.Xml                                             `xml:",any"`
+	MiscAttributes []xml.Attr                                                `xml:",any,attr"`
 }
 type ipv6DhcpClientNeighborDiscoveryDnsServerSourceXml_11_0_2 struct {
-	Dhcpv6 *ipv6DhcpClientNeighborDiscoveryDnsServerSourceDhcpv6Xml_11_0_2 `xml:"dhcpv6,omitempty"`
-	Manual *ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualXml_11_0_2 `xml:"manual,omitempty"`
-	Misc   []generic.Xml                                                   `xml:",any"`
+	Dhcpv6         *ipv6DhcpClientNeighborDiscoveryDnsServerSourceDhcpv6Xml_11_0_2 `xml:"dhcpv6,omitempty"`
+	Manual         *ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualXml_11_0_2 `xml:"manual,omitempty"`
+	Misc           []generic.Xml                                                   `xml:",any"`
+	MiscAttributes []xml.Attr                                                      `xml:",any,attr"`
 }
 type ipv6DhcpClientNeighborDiscoveryDnsServerSourceDhcpv6Xml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualXml_11_0_2 struct {
-	Server *ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualServerContainerXml_11_0_2 `xml:"server,omitempty"`
-	Misc   []generic.Xml                                                                  `xml:",any"`
+	Server         *ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualServerContainerXml_11_0_2 `xml:"server,omitempty"`
+	Misc           []generic.Xml                                                                  `xml:",any"`
+	MiscAttributes []xml.Attr                                                                     `xml:",any,attr"`
 }
 type ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualServerContainerXml_11_0_2 struct {
 	Entries []ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualServerXml_11_0_2 `xml:"entry"`
 }
 type ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualServerXml_11_0_2 struct {
-	XMLName  xml.Name      `xml:"entry"`
-	Name     string        `xml:"name,attr"`
-	Lifetime *int64        `xml:"lifetime,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Lifetime       *int64        `xml:"lifetime,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ipv6DhcpClientNeighborDiscoveryDnsSuffixXml_11_0_2 struct {
-	Enable *string                                                   `xml:"enable,omitempty"`
-	Source *ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceXml_11_0_2 `xml:"source,omitempty"`
-	Misc   []generic.Xml                                             `xml:",any"`
+	Enable         *string                                                   `xml:"enable,omitempty"`
+	Source         *ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceXml_11_0_2 `xml:"source,omitempty"`
+	Misc           []generic.Xml                                             `xml:",any"`
+	MiscAttributes []xml.Attr                                                `xml:",any,attr"`
 }
 type ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceXml_11_0_2 struct {
-	Dhcpv6 *ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceDhcpv6Xml_11_0_2 `xml:"dhcpv6,omitempty"`
-	Manual *ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualXml_11_0_2 `xml:"manual,omitempty"`
-	Misc   []generic.Xml                                                   `xml:",any"`
+	Dhcpv6         *ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceDhcpv6Xml_11_0_2 `xml:"dhcpv6,omitempty"`
+	Manual         *ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualXml_11_0_2 `xml:"manual,omitempty"`
+	Misc           []generic.Xml                                                   `xml:",any"`
+	MiscAttributes []xml.Attr                                                      `xml:",any,attr"`
 }
 type ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceDhcpv6Xml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualXml_11_0_2 struct {
-	Suffix *ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffixContainerXml_11_0_2 `xml:"suffix,omitempty"`
-	Misc   []generic.Xml                                                                  `xml:",any"`
+	Suffix         *ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffixContainerXml_11_0_2 `xml:"suffix,omitempty"`
+	Misc           []generic.Xml                                                                  `xml:",any"`
+	MiscAttributes []xml.Attr                                                                     `xml:",any,attr"`
 }
 type ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffixContainerXml_11_0_2 struct {
 	Entries []ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffixXml_11_0_2 `xml:"entry"`
 }
 type ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffixXml_11_0_2 struct {
-	XMLName  xml.Name      `xml:"entry"`
-	Name     string        `xml:"name,attr"`
-	Lifetime *int64        `xml:"lifetime,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Lifetime       *int64        `xml:"lifetime,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ipv6DhcpClientNeighborDiscoveryNeighborContainerXml_11_0_2 struct {
 	Entries []ipv6DhcpClientNeighborDiscoveryNeighborXml_11_0_2 `xml:"entry"`
 }
 type ipv6DhcpClientNeighborDiscoveryNeighborXml_11_0_2 struct {
-	XMLName   xml.Name      `xml:"entry"`
-	Name      string        `xml:"name,attr"`
-	HwAddress *string       `xml:"hw-address,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	HwAddress      *string       `xml:"hw-address,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ipv6DhcpClientPrefixDelegationXml_11_0_2 struct {
-	Enable *ipv6DhcpClientPrefixDelegationEnableXml_11_0_2 `xml:"enable,omitempty"`
-	Misc   []generic.Xml                                   `xml:",any"`
+	Enable         *ipv6DhcpClientPrefixDelegationEnableXml_11_0_2 `xml:"enable,omitempty"`
+	Misc           []generic.Xml                                   `xml:",any"`
+	MiscAttributes []xml.Attr                                      `xml:",any,attr"`
 }
 type ipv6DhcpClientPrefixDelegationEnableXml_11_0_2 struct {
-	No   *ipv6DhcpClientPrefixDelegationEnableNoXml_11_0_2  `xml:"no,omitempty"`
-	Yes  *ipv6DhcpClientPrefixDelegationEnableYesXml_11_0_2 `xml:"yes,omitempty"`
-	Misc []generic.Xml                                      `xml:",any"`
+	No             *ipv6DhcpClientPrefixDelegationEnableNoXml_11_0_2  `xml:"no,omitempty"`
+	Yes            *ipv6DhcpClientPrefixDelegationEnableYesXml_11_0_2 `xml:"yes,omitempty"`
+	Misc           []generic.Xml                                      `xml:",any"`
+	MiscAttributes []xml.Attr                                         `xml:",any,attr"`
 }
 type ipv6DhcpClientPrefixDelegationEnableNoXml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ipv6DhcpClientPrefixDelegationEnableYesXml_11_0_2 struct {
-	PfxPoolName   *string       `xml:"pfx-pool-name,omitempty"`
-	PrefixLen     *int64        `xml:"prefix-len,omitempty"`
-	PrefixLenHint *string       `xml:"prefix-len-hint,omitempty"`
-	Misc          []generic.Xml `xml:",any"`
+	PfxPoolName    *string       `xml:"pfx-pool-name,omitempty"`
+	PrefixLen      *int64        `xml:"prefix-len,omitempty"`
+	PrefixLenHint  *string       `xml:"prefix-len-hint,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ipv6DhcpClientV6OptionsXml_11_0_2 struct {
 	DuidType            *string                                  `xml:"duid-type,omitempty"`
@@ -1190,39 +1361,46 @@ type ipv6DhcpClientV6OptionsXml_11_0_2 struct {
 	RapidCommit         *string                                  `xml:"rapid-commit,omitempty"`
 	SupportSrvrReconfig *string                                  `xml:"support-srvr-reconfig,omitempty"`
 	Misc                []generic.Xml                            `xml:",any"`
+	MiscAttributes      []xml.Attr                               `xml:",any,attr"`
 }
 type ipv6DhcpClientV6OptionsEnableXml_11_0_2 struct {
-	No   *ipv6DhcpClientV6OptionsEnableNoXml_11_0_2  `xml:"no,omitempty"`
-	Yes  *ipv6DhcpClientV6OptionsEnableYesXml_11_0_2 `xml:"yes,omitempty"`
-	Misc []generic.Xml                               `xml:",any"`
+	No             *ipv6DhcpClientV6OptionsEnableNoXml_11_0_2  `xml:"no,omitempty"`
+	Yes            *ipv6DhcpClientV6OptionsEnableYesXml_11_0_2 `xml:"yes,omitempty"`
+	Misc           []generic.Xml                               `xml:",any"`
+	MiscAttributes []xml.Attr                                  `xml:",any,attr"`
 }
 type ipv6DhcpClientV6OptionsEnableNoXml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ipv6DhcpClientV6OptionsEnableYesXml_11_0_2 struct {
-	NonTempAddr *string       `xml:"non-temp-addr,omitempty"`
-	TempAddr    *string       `xml:"temp-addr,omitempty"`
-	Misc        []generic.Xml `xml:",any"`
+	NonTempAddr    *string       `xml:"non-temp-addr,omitempty"`
+	TempAddr       *string       `xml:"temp-addr,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ipv6InheritedXml_11_0_2 struct {
 	AssignAddr        *ipv6InheritedAssignAddrContainerXml_11_0_2 `xml:"assign-addr,omitempty"`
 	Enable            *string                                     `xml:"enable,omitempty"`
 	NeighborDiscovery *ipv6InheritedNeighborDiscoveryXml_11_0_2   `xml:"neighbor-discovery,omitempty"`
 	Misc              []generic.Xml                               `xml:",any"`
+	MiscAttributes    []xml.Attr                                  `xml:",any,attr"`
 }
 type ipv6InheritedAssignAddrContainerXml_11_0_2 struct {
 	Entries []ipv6InheritedAssignAddrXml_11_0_2 `xml:"entry"`
 }
 type ipv6InheritedAssignAddrXml_11_0_2 struct {
-	XMLName xml.Name                               `xml:"entry"`
-	Name    string                                 `xml:"name,attr"`
-	Type    *ipv6InheritedAssignAddrTypeXml_11_0_2 `xml:"type,omitempty"`
-	Misc    []generic.Xml                          `xml:",any"`
+	XMLName        xml.Name                               `xml:"entry"`
+	Name           string                                 `xml:"name,attr"`
+	Type           *ipv6InheritedAssignAddrTypeXml_11_0_2 `xml:"type,omitempty"`
+	Misc           []generic.Xml                          `xml:",any"`
+	MiscAttributes []xml.Attr                             `xml:",any,attr"`
 }
 type ipv6InheritedAssignAddrTypeXml_11_0_2 struct {
-	Gua  *ipv6InheritedAssignAddrTypeGuaXml_11_0_2 `xml:"gua,omitempty"`
-	Ula  *ipv6InheritedAssignAddrTypeUlaXml_11_0_2 `xml:"ula,omitempty"`
-	Misc []generic.Xml                             `xml:",any"`
+	Gua            *ipv6InheritedAssignAddrTypeGuaXml_11_0_2 `xml:"gua,omitempty"`
+	Ula            *ipv6InheritedAssignAddrTypeUlaXml_11_0_2 `xml:"ula,omitempty"`
+	Misc           []generic.Xml                             `xml:",any"`
+	MiscAttributes []xml.Attr                                `xml:",any,attr"`
 }
 type ipv6InheritedAssignAddrTypeGuaXml_11_0_2 struct {
 	EnableOnInterface *string                                            `xml:"enable-on-interface,omitempty"`
@@ -1230,24 +1408,29 @@ type ipv6InheritedAssignAddrTypeGuaXml_11_0_2 struct {
 	PoolType          *ipv6InheritedAssignAddrTypeGuaPoolTypeXml_11_0_2  `xml:"pool-type,omitempty"`
 	Advertise         *ipv6InheritedAssignAddrTypeGuaAdvertiseXml_11_0_2 `xml:"advertise,omitempty"`
 	Misc              []generic.Xml                                      `xml:",any"`
+	MiscAttributes    []xml.Attr                                         `xml:",any,attr"`
 }
 type ipv6InheritedAssignAddrTypeGuaPoolTypeXml_11_0_2 struct {
-	Dynamic   *ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicXml_11_0_2   `xml:"dynamic,omitempty"`
-	DynamicId *ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicIdXml_11_0_2 `xml:"dynamic-id,omitempty"`
-	Misc      []generic.Xml                                              `xml:",any"`
+	Dynamic        *ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicXml_11_0_2   `xml:"dynamic,omitempty"`
+	DynamicId      *ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicIdXml_11_0_2 `xml:"dynamic-id,omitempty"`
+	Misc           []generic.Xml                                              `xml:",any"`
+	MiscAttributes []xml.Attr                                                 `xml:",any,attr"`
 }
 type ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicXml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicIdXml_11_0_2 struct {
-	Identifier *int64        `xml:"identifier,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	Identifier     *int64        `xml:"identifier,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ipv6InheritedAssignAddrTypeGuaAdvertiseXml_11_0_2 struct {
 	Enable         *string       `xml:"enable,omitempty"`
 	OnlinkFlag     *string       `xml:"onlink-flag,omitempty"`
 	AutoConfigFlag *string       `xml:"auto-config-flag,omitempty"`
 	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ipv6InheritedAssignAddrTypeUlaXml_11_0_2 struct {
 	EnableOnInterface *string                                            `xml:"enable-on-interface,omitempty"`
@@ -1256,6 +1439,7 @@ type ipv6InheritedAssignAddrTypeUlaXml_11_0_2 struct {
 	Anycast           *string                                            `xml:"anycast,omitempty"`
 	Advertise         *ipv6InheritedAssignAddrTypeUlaAdvertiseXml_11_0_2 `xml:"advertise,omitempty"`
 	Misc              []generic.Xml                                      `xml:",any"`
+	MiscAttributes    []xml.Attr                                         `xml:",any,attr"`
 }
 type ipv6InheritedAssignAddrTypeUlaAdvertiseXml_11_0_2 struct {
 	Enable            *string       `xml:"enable,omitempty"`
@@ -1264,6 +1448,7 @@ type ipv6InheritedAssignAddrTypeUlaAdvertiseXml_11_0_2 struct {
 	OnlinkFlag        *string       `xml:"onlink-flag,omitempty"`
 	AutoConfigFlag    *string       `xml:"auto-config-flag,omitempty"`
 	Misc              []generic.Xml `xml:",any"`
+	MiscAttributes    []xml.Attr    `xml:",any,attr"`
 }
 type ipv6InheritedNeighborDiscoveryXml_11_0_2 struct {
 	DadAttempts         *int64                                                       `xml:"dad-attempts,omitempty"`
@@ -1276,69 +1461,81 @@ type ipv6InheritedNeighborDiscoveryXml_11_0_2 struct {
 	ReachableTime       *int64                                                       `xml:"reachable-time,omitempty"`
 	RouterAdvertisement *ipv6InheritedNeighborDiscoveryRouterAdvertisementXml_11_0_2 `xml:"router-advertisement,omitempty"`
 	Misc                []generic.Xml                                                `xml:",any"`
+	MiscAttributes      []xml.Attr                                                   `xml:",any,attr"`
 }
 type ipv6InheritedNeighborDiscoveryDnsServerXml_11_0_2 struct {
-	Enable *string                                                  `xml:"enable,omitempty"`
-	Source *ipv6InheritedNeighborDiscoveryDnsServerSourceXml_11_0_2 `xml:"source,omitempty"`
-	Misc   []generic.Xml                                            `xml:",any"`
+	Enable         *string                                                  `xml:"enable,omitempty"`
+	Source         *ipv6InheritedNeighborDiscoveryDnsServerSourceXml_11_0_2 `xml:"source,omitempty"`
+	Misc           []generic.Xml                                            `xml:",any"`
+	MiscAttributes []xml.Attr                                               `xml:",any,attr"`
 }
 type ipv6InheritedNeighborDiscoveryDnsServerSourceXml_11_0_2 struct {
-	Dhcpv6 *ipv6InheritedNeighborDiscoveryDnsServerSourceDhcpv6Xml_11_0_2 `xml:"dhcpv6,omitempty"`
-	Manual *ipv6InheritedNeighborDiscoveryDnsServerSourceManualXml_11_0_2 `xml:"manual,omitempty"`
-	Misc   []generic.Xml                                                  `xml:",any"`
+	Dhcpv6         *ipv6InheritedNeighborDiscoveryDnsServerSourceDhcpv6Xml_11_0_2 `xml:"dhcpv6,omitempty"`
+	Manual         *ipv6InheritedNeighborDiscoveryDnsServerSourceManualXml_11_0_2 `xml:"manual,omitempty"`
+	Misc           []generic.Xml                                                  `xml:",any"`
+	MiscAttributes []xml.Attr                                                     `xml:",any,attr"`
 }
 type ipv6InheritedNeighborDiscoveryDnsServerSourceDhcpv6Xml_11_0_2 struct {
-	PrefixPool *string       `xml:"prefix-pool,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	PrefixPool     *string       `xml:"prefix-pool,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ipv6InheritedNeighborDiscoveryDnsServerSourceManualXml_11_0_2 struct {
-	Server *ipv6InheritedNeighborDiscoveryDnsServerSourceManualServerContainerXml_11_0_2 `xml:"server,omitempty"`
-	Misc   []generic.Xml                                                                 `xml:",any"`
+	Server         *ipv6InheritedNeighborDiscoveryDnsServerSourceManualServerContainerXml_11_0_2 `xml:"server,omitempty"`
+	Misc           []generic.Xml                                                                 `xml:",any"`
+	MiscAttributes []xml.Attr                                                                    `xml:",any,attr"`
 }
 type ipv6InheritedNeighborDiscoveryDnsServerSourceManualServerContainerXml_11_0_2 struct {
 	Entries []ipv6InheritedNeighborDiscoveryDnsServerSourceManualServerXml_11_0_2 `xml:"entry"`
 }
 type ipv6InheritedNeighborDiscoveryDnsServerSourceManualServerXml_11_0_2 struct {
-	XMLName  xml.Name      `xml:"entry"`
-	Name     string        `xml:"name,attr"`
-	Lifetime *int64        `xml:"lifetime,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Lifetime       *int64        `xml:"lifetime,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ipv6InheritedNeighborDiscoveryDnsSuffixXml_11_0_2 struct {
-	Enable *string                                                  `xml:"enable,omitempty"`
-	Source *ipv6InheritedNeighborDiscoveryDnsSuffixSourceXml_11_0_2 `xml:"source,omitempty"`
-	Misc   []generic.Xml                                            `xml:",any"`
+	Enable         *string                                                  `xml:"enable,omitempty"`
+	Source         *ipv6InheritedNeighborDiscoveryDnsSuffixSourceXml_11_0_2 `xml:"source,omitempty"`
+	Misc           []generic.Xml                                            `xml:",any"`
+	MiscAttributes []xml.Attr                                               `xml:",any,attr"`
 }
 type ipv6InheritedNeighborDiscoveryDnsSuffixSourceXml_11_0_2 struct {
-	Dhcpv6 *ipv6InheritedNeighborDiscoveryDnsSuffixSourceDhcpv6Xml_11_0_2 `xml:"dhcpv6,omitempty"`
-	Manual *ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualXml_11_0_2 `xml:"manual,omitempty"`
-	Misc   []generic.Xml                                                  `xml:",any"`
+	Dhcpv6         *ipv6InheritedNeighborDiscoveryDnsSuffixSourceDhcpv6Xml_11_0_2 `xml:"dhcpv6,omitempty"`
+	Manual         *ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualXml_11_0_2 `xml:"manual,omitempty"`
+	Misc           []generic.Xml                                                  `xml:",any"`
+	MiscAttributes []xml.Attr                                                     `xml:",any,attr"`
 }
 type ipv6InheritedNeighborDiscoveryDnsSuffixSourceDhcpv6Xml_11_0_2 struct {
-	PrefixPool *string       `xml:"prefix-pool,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	PrefixPool     *string       `xml:"prefix-pool,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualXml_11_0_2 struct {
-	Suffix *ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffixContainerXml_11_0_2 `xml:"suffix,omitempty"`
-	Misc   []generic.Xml                                                                 `xml:",any"`
+	Suffix         *ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffixContainerXml_11_0_2 `xml:"suffix,omitempty"`
+	Misc           []generic.Xml                                                                 `xml:",any"`
+	MiscAttributes []xml.Attr                                                                    `xml:",any,attr"`
 }
 type ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffixContainerXml_11_0_2 struct {
 	Entries []ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffixXml_11_0_2 `xml:"entry"`
 }
 type ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffixXml_11_0_2 struct {
-	XMLName  xml.Name      `xml:"entry"`
-	Name     string        `xml:"name,attr"`
-	Lifetime *int64        `xml:"lifetime,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Lifetime       *int64        `xml:"lifetime,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ipv6InheritedNeighborDiscoveryNeighborContainerXml_11_0_2 struct {
 	Entries []ipv6InheritedNeighborDiscoveryNeighborXml_11_0_2 `xml:"entry"`
 }
 type ipv6InheritedNeighborDiscoveryNeighborXml_11_0_2 struct {
-	XMLName   xml.Name      `xml:"entry"`
-	Name      string        `xml:"name,attr"`
-	HwAddress *string       `xml:"hw-address,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	HwAddress      *string       `xml:"hw-address,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ipv6InheritedNeighborDiscoveryRouterAdvertisementXml_11_0_2 struct {
 	Enable                 *string       `xml:"enable,omitempty"`
@@ -1354,6 +1551,7 @@ type ipv6InheritedNeighborDiscoveryRouterAdvertisementXml_11_0_2 struct {
 	RetransmissionTimer    *string       `xml:"retransmission-timer,omitempty"`
 	RouterPreference       *string       `xml:"router-preference,omitempty"`
 	Misc                   []generic.Xml `xml:",any"`
+	MiscAttributes         []xml.Attr    `xml:",any,attr"`
 }
 type ipv6NeighborDiscoveryXml_11_0_2 struct {
 	DadAttempts         *int64                                              `xml:"dad-attempts,omitempty"`
@@ -1364,15 +1562,17 @@ type ipv6NeighborDiscoveryXml_11_0_2 struct {
 	ReachableTime       *int64                                              `xml:"reachable-time,omitempty"`
 	RouterAdvertisement *ipv6NeighborDiscoveryRouterAdvertisementXml_11_0_2 `xml:"router-advertisement,omitempty"`
 	Misc                []generic.Xml                                       `xml:",any"`
+	MiscAttributes      []xml.Attr                                          `xml:",any,attr"`
 }
 type ipv6NeighborDiscoveryNeighborContainerXml_11_0_2 struct {
 	Entries []ipv6NeighborDiscoveryNeighborXml_11_0_2 `xml:"entry"`
 }
 type ipv6NeighborDiscoveryNeighborXml_11_0_2 struct {
-	XMLName   xml.Name      `xml:"entry"`
-	Name      string        `xml:"name,attr"`
-	HwAddress *string       `xml:"hw-address,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	HwAddress      *string       `xml:"hw-address,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ipv6NeighborDiscoveryRouterAdvertisementXml_11_0_2 struct {
 	DnsSupport             *ipv6NeighborDiscoveryRouterAdvertisementDnsSupportXml_11_0_2 `xml:"dns-support,omitempty"`
@@ -1389,64 +1589,74 @@ type ipv6NeighborDiscoveryRouterAdvertisementXml_11_0_2 struct {
 	RetransmissionTimer    *string                                                       `xml:"retransmission-timer,omitempty"`
 	RouterPreference       *string                                                       `xml:"router-preference,omitempty"`
 	Misc                   []generic.Xml                                                 `xml:",any"`
+	MiscAttributes         []xml.Attr                                                    `xml:",any,attr"`
 }
 type ipv6NeighborDiscoveryRouterAdvertisementDnsSupportXml_11_0_2 struct {
-	Enable *string                                                                      `xml:"enable,omitempty"`
-	Server *ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServerContainerXml_11_0_2 `xml:"server,omitempty"`
-	Suffix *ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffixContainerXml_11_0_2 `xml:"suffix,omitempty"`
-	Misc   []generic.Xml                                                                `xml:",any"`
+	Enable         *string                                                                      `xml:"enable,omitempty"`
+	Server         *ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServerContainerXml_11_0_2 `xml:"server,omitempty"`
+	Suffix         *ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffixContainerXml_11_0_2 `xml:"suffix,omitempty"`
+	Misc           []generic.Xml                                                                `xml:",any"`
+	MiscAttributes []xml.Attr                                                                   `xml:",any,attr"`
 }
 type ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServerContainerXml_11_0_2 struct {
 	Entries []ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServerXml_11_0_2 `xml:"entry"`
 }
 type ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServerXml_11_0_2 struct {
-	XMLName  xml.Name      `xml:"entry"`
-	Name     string        `xml:"name,attr"`
-	Lifetime *int64        `xml:"lifetime,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Lifetime       *int64        `xml:"lifetime,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffixContainerXml_11_0_2 struct {
 	Entries []ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffixXml_11_0_2 `xml:"entry"`
 }
 type ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffixXml_11_0_2 struct {
-	XMLName  xml.Name      `xml:"entry"`
-	Name     string        `xml:"name,attr"`
-	Lifetime *int64        `xml:"lifetime,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Lifetime       *int64        `xml:"lifetime,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ndpProxyXml_11_0_2 struct {
-	Address *ndpProxyAddressContainerXml_11_0_2 `xml:"address,omitempty"`
-	Enabled *string                             `xml:"enabled,omitempty"`
-	Misc    []generic.Xml                       `xml:",any"`
+	Address        *ndpProxyAddressContainerXml_11_0_2 `xml:"address,omitempty"`
+	Enabled        *string                             `xml:"enabled,omitempty"`
+	Misc           []generic.Xml                       `xml:",any"`
+	MiscAttributes []xml.Attr                          `xml:",any,attr"`
 }
 type ndpProxyAddressContainerXml_11_0_2 struct {
 	Entries []ndpProxyAddressXml_11_0_2 `xml:"entry"`
 }
 type ndpProxyAddressXml_11_0_2 struct {
-	XMLName xml.Name      `xml:"entry"`
-	Name    string        `xml:"name,attr"`
-	Negate  *string       `xml:"negate,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Negate         *string       `xml:"negate,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type sdwanLinkSettingsXml_11_0_2 struct {
 	Enable                *string                                 `xml:"enable,omitempty"`
 	SdwanInterfaceProfile *string                                 `xml:"sdwan-interface-profile,omitempty"`
 	UpstreamNat           *sdwanLinkSettingsUpstreamNatXml_11_0_2 `xml:"upstream-nat,omitempty"`
 	Misc                  []generic.Xml                           `xml:",any"`
+	MiscAttributes        []xml.Attr                              `xml:",any,attr"`
 }
 type sdwanLinkSettingsUpstreamNatXml_11_0_2 struct {
-	Enable   *string                                         `xml:"enable,omitempty"`
-	Ddns     *sdwanLinkSettingsUpstreamNatDdnsXml_11_0_2     `xml:"ddns,omitempty"`
-	StaticIp *sdwanLinkSettingsUpstreamNatStaticIpXml_11_0_2 `xml:"static-ip,omitempty"`
-	Misc     []generic.Xml                                   `xml:",any"`
+	Enable         *string                                         `xml:"enable,omitempty"`
+	Ddns           *sdwanLinkSettingsUpstreamNatDdnsXml_11_0_2     `xml:"ddns,omitempty"`
+	StaticIp       *sdwanLinkSettingsUpstreamNatStaticIpXml_11_0_2 `xml:"static-ip,omitempty"`
+	Misc           []generic.Xml                                   `xml:",any"`
+	MiscAttributes []xml.Attr                                      `xml:",any,attr"`
 }
 type sdwanLinkSettingsUpstreamNatDdnsXml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type sdwanLinkSettingsUpstreamNatStaticIpXml_11_0_2 struct {
-	Fqdn      *string       `xml:"fqdn,omitempty"`
-	IpAddress *string       `xml:"ip-address,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	Fqdn           *string       `xml:"fqdn,omitempty"`
+	IpAddress      *string       `xml:"ip-address,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 
 func (o *entryXml) MarshalFromObject(s Entry) {
@@ -1512,6 +1722,7 @@ func (o *entryXml) MarshalFromObject(s Entry) {
 	}
 	o.Tag = s.Tag
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o entryXml) UnmarshalToObject() (*Entry, error) {
@@ -1611,6 +1822,7 @@ func (o entryXml) UnmarshalToObject() (*Entry, error) {
 		SdwanLinkSettings:          sdwanLinkSettingsVal,
 		Tag:                        o.Tag,
 		Misc:                       o.Misc,
+		MiscAttributes:             o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1619,6 +1831,7 @@ func (o *adjustTcpMssXml) MarshalFromObject(s AdjustTcpMss) {
 	o.Ipv4MssAdjustment = s.Ipv4MssAdjustment
 	o.Ipv6MssAdjustment = s.Ipv6MssAdjustment
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o adjustTcpMssXml) UnmarshalToObject() (*AdjustTcpMss, error) {
@@ -1628,6 +1841,7 @@ func (o adjustTcpMssXml) UnmarshalToObject() (*AdjustTcpMss, error) {
 		Ipv4MssAdjustment: o.Ipv4MssAdjustment,
 		Ipv6MssAdjustment: o.Ipv6MssAdjustment,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1635,14 +1849,16 @@ func (o *arpXml) MarshalFromObject(s Arp) {
 	o.Name = s.Name
 	o.HwAddress = s.HwAddress
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o arpXml) UnmarshalToObject() (*Arp, error) {
 
 	result := &Arp{
-		Name:      o.Name,
-		HwAddress: o.HwAddress,
-		Misc:      o.Misc,
+		Name:           o.Name,
+		HwAddress:      o.HwAddress,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1651,15 +1867,17 @@ func (o *bonjourXml) MarshalFromObject(s Bonjour) {
 	o.GroupId = s.GroupId
 	o.TtlCheck = util.YesNo(s.TtlCheck, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o bonjourXml) UnmarshalToObject() (*Bonjour, error) {
 
 	result := &Bonjour{
-		Enable:   util.AsBool(o.Enable, nil),
-		GroupId:  o.GroupId,
-		TtlCheck: util.AsBool(o.TtlCheck, nil),
-		Misc:     o.Misc,
+		Enable:         util.AsBool(o.Enable, nil),
+		GroupId:        o.GroupId,
+		TtlCheck:       util.AsBool(o.TtlCheck, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1685,6 +1903,7 @@ func (o *ddnsConfigXml) MarshalFromObject(s DdnsConfig) {
 		o.DdnsVendorConfig = &ddnsConfigDdnsVendorConfigContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ddnsConfigXml) UnmarshalToObject() (*DdnsConfig, error) {
@@ -1717,6 +1936,7 @@ func (o ddnsConfigXml) UnmarshalToObject() (*DdnsConfig, error) {
 		DdnsVendor:         o.DdnsVendor,
 		DdnsVendorConfig:   ddnsVendorConfigVal,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1724,14 +1944,16 @@ func (o *ddnsConfigDdnsVendorConfigXml) MarshalFromObject(s DdnsConfigDdnsVendor
 	o.Name = s.Name
 	o.Value = s.Value
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ddnsConfigDdnsVendorConfigXml) UnmarshalToObject() (*DdnsConfigDdnsVendorConfig, error) {
 
 	result := &DdnsConfigDdnsVendorConfig{
-		Name:  o.Name,
-		Value: o.Value,
-		Misc:  o.Misc,
+		Name:           o.Name,
+		Value:          o.Value,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1745,6 +1967,7 @@ func (o *dhcpClientXml) MarshalFromObject(s DhcpClient) {
 		o.SendHostname = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o dhcpClientXml) UnmarshalToObject() (*DhcpClient, error) {
@@ -1763,6 +1986,7 @@ func (o dhcpClientXml) UnmarshalToObject() (*DhcpClient, error) {
 		Enable:             util.AsBool(o.Enable, nil),
 		SendHostname:       sendHostnameVal,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1770,14 +1994,16 @@ func (o *dhcpClientSendHostnameXml) MarshalFromObject(s DhcpClientSendHostname) 
 	o.Enable = util.YesNo(s.Enable, nil)
 	o.Hostname = s.Hostname
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o dhcpClientSendHostnameXml) UnmarshalToObject() (*DhcpClientSendHostname, error) {
 
 	result := &DhcpClientSendHostname{
-		Enable:   util.AsBool(o.Enable, nil),
-		Hostname: o.Hostname,
-		Misc:     o.Misc,
+		Enable:         util.AsBool(o.Enable, nil),
+		Hostname:       o.Hostname,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1785,14 +2011,16 @@ func (o *ipXml) MarshalFromObject(s Ip) {
 	o.Name = s.Name
 	o.SdwanGateway = s.SdwanGateway
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipXml) UnmarshalToObject() (*Ip, error) {
 
 	result := &Ip{
-		Name:         o.Name,
-		SdwanGateway: o.SdwanGateway,
-		Misc:         o.Misc,
+		Name:           o.Name,
+		SdwanGateway:   o.SdwanGateway,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1824,6 +2052,7 @@ func (o *ipv6Xml) MarshalFromObject(s Ipv6) {
 		o.NeighborDiscovery = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6Xml) UnmarshalToObject() (*Ipv6, error) {
@@ -1870,6 +2099,7 @@ func (o ipv6Xml) UnmarshalToObject() (*Ipv6, error) {
 		InterfaceId:       o.InterfaceId,
 		NeighborDiscovery: neighborDiscoveryVal,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1892,6 +2122,7 @@ func (o *ipv6AddressXml) MarshalFromObject(s Ipv6Address) {
 		o.Advertise = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6AddressXml) UnmarshalToObject() (*Ipv6Address, error) {
@@ -1927,28 +2158,33 @@ func (o ipv6AddressXml) UnmarshalToObject() (*Ipv6Address, error) {
 		Anycast:           anycastVal,
 		Advertise:         advertiseVal,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *ipv6AddressPrefixXml) MarshalFromObject(s Ipv6AddressPrefix) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6AddressPrefixXml) UnmarshalToObject() (*Ipv6AddressPrefix, error) {
 
 	result := &Ipv6AddressPrefix{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *ipv6AddressAnycastXml) MarshalFromObject(s Ipv6AddressAnycast) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6AddressAnycastXml) UnmarshalToObject() (*Ipv6AddressAnycast, error) {
 
 	result := &Ipv6AddressAnycast{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1959,6 +2195,7 @@ func (o *ipv6AddressAdvertiseXml) MarshalFromObject(s Ipv6AddressAdvertise) {
 	o.OnlinkFlag = util.YesNo(s.OnlinkFlag, nil)
 	o.AutoConfigFlag = util.YesNo(s.AutoConfigFlag, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6AddressAdvertiseXml) UnmarshalToObject() (*Ipv6AddressAdvertise, error) {
@@ -1970,6 +2207,7 @@ func (o ipv6AddressAdvertiseXml) UnmarshalToObject() (*Ipv6AddressAdvertise, err
 		OnlinkFlag:        util.AsBool(o.OnlinkFlag, nil),
 		AutoConfigFlag:    util.AsBool(o.AutoConfigFlag, nil),
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1994,6 +2232,7 @@ func (o *ipv6DhcpClientXml) MarshalFromObject(s Ipv6DhcpClient) {
 		o.V6Options = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6DhcpClientXml) UnmarshalToObject() (*Ipv6DhcpClient, error) {
@@ -2031,6 +2270,7 @@ func (o ipv6DhcpClientXml) UnmarshalToObject() (*Ipv6DhcpClient, error) {
 		PrefixDelegation:   prefixDelegationVal,
 		V6Options:          v6OptionsVal,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2060,6 +2300,7 @@ func (o *ipv6DhcpClientNeighborDiscoveryXml) MarshalFromObject(s Ipv6DhcpClientN
 	o.NsInterval = s.NsInterval
 	o.ReachableTime = s.ReachableTime
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6DhcpClientNeighborDiscoveryXml) UnmarshalToObject() (*Ipv6DhcpClientNeighborDiscovery, error) {
@@ -2100,6 +2341,7 @@ func (o ipv6DhcpClientNeighborDiscoveryXml) UnmarshalToObject() (*Ipv6DhcpClient
 		NsInterval:       o.NsInterval,
 		ReachableTime:    o.ReachableTime,
 		Misc:             o.Misc,
+		MiscAttributes:   o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2111,6 +2353,7 @@ func (o *ipv6DhcpClientNeighborDiscoveryDnsServerXml) MarshalFromObject(s Ipv6Dh
 		o.Source = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6DhcpClientNeighborDiscoveryDnsServerXml) UnmarshalToObject() (*Ipv6DhcpClientNeighborDiscoveryDnsServer, error) {
@@ -2124,9 +2367,10 @@ func (o ipv6DhcpClientNeighborDiscoveryDnsServerXml) UnmarshalToObject() (*Ipv6D
 	}
 
 	result := &Ipv6DhcpClientNeighborDiscoveryDnsServer{
-		Enable: util.AsBool(o.Enable, nil),
-		Source: sourceVal,
-		Misc:   o.Misc,
+		Enable:         util.AsBool(o.Enable, nil),
+		Source:         sourceVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2142,6 +2386,7 @@ func (o *ipv6DhcpClientNeighborDiscoveryDnsServerSourceXml) MarshalFromObject(s 
 		o.Manual = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6DhcpClientNeighborDiscoveryDnsServerSourceXml) UnmarshalToObject() (*Ipv6DhcpClientNeighborDiscoveryDnsServerSource, error) {
@@ -2163,20 +2408,23 @@ func (o ipv6DhcpClientNeighborDiscoveryDnsServerSourceXml) UnmarshalToObject() (
 	}
 
 	result := &Ipv6DhcpClientNeighborDiscoveryDnsServerSource{
-		Dhcpv6: dhcpv6Val,
-		Manual: manualVal,
-		Misc:   o.Misc,
+		Dhcpv6:         dhcpv6Val,
+		Manual:         manualVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *ipv6DhcpClientNeighborDiscoveryDnsServerSourceDhcpv6Xml) MarshalFromObject(s Ipv6DhcpClientNeighborDiscoveryDnsServerSourceDhcpv6) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6DhcpClientNeighborDiscoveryDnsServerSourceDhcpv6Xml) UnmarshalToObject() (*Ipv6DhcpClientNeighborDiscoveryDnsServerSourceDhcpv6, error) {
 
 	result := &Ipv6DhcpClientNeighborDiscoveryDnsServerSourceDhcpv6{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2191,6 +2439,7 @@ func (o *ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualXml) MarshalFromObj
 		o.Server = &ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualServerContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualXml) UnmarshalToObject() (*Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManual, error) {
@@ -2206,8 +2455,9 @@ func (o ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualXml) UnmarshalToObje
 	}
 
 	result := &Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManual{
-		Server: serverVal,
-		Misc:   o.Misc,
+		Server:         serverVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2215,14 +2465,16 @@ func (o *ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualServerXml) MarshalF
 	o.Name = s.Name
 	o.Lifetime = s.Lifetime
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualServerXml) UnmarshalToObject() (*Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualServer, error) {
 
 	result := &Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualServer{
-		Name:     o.Name,
-		Lifetime: o.Lifetime,
-		Misc:     o.Misc,
+		Name:           o.Name,
+		Lifetime:       o.Lifetime,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2234,6 +2486,7 @@ func (o *ipv6DhcpClientNeighborDiscoveryDnsSuffixXml) MarshalFromObject(s Ipv6Dh
 		o.Source = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6DhcpClientNeighborDiscoveryDnsSuffixXml) UnmarshalToObject() (*Ipv6DhcpClientNeighborDiscoveryDnsSuffix, error) {
@@ -2247,9 +2500,10 @@ func (o ipv6DhcpClientNeighborDiscoveryDnsSuffixXml) UnmarshalToObject() (*Ipv6D
 	}
 
 	result := &Ipv6DhcpClientNeighborDiscoveryDnsSuffix{
-		Enable: util.AsBool(o.Enable, nil),
-		Source: sourceVal,
-		Misc:   o.Misc,
+		Enable:         util.AsBool(o.Enable, nil),
+		Source:         sourceVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2265,6 +2519,7 @@ func (o *ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceXml) MarshalFromObject(s 
 		o.Manual = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceXml) UnmarshalToObject() (*Ipv6DhcpClientNeighborDiscoveryDnsSuffixSource, error) {
@@ -2286,20 +2541,23 @@ func (o ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceXml) UnmarshalToObject() (
 	}
 
 	result := &Ipv6DhcpClientNeighborDiscoveryDnsSuffixSource{
-		Dhcpv6: dhcpv6Val,
-		Manual: manualVal,
-		Misc:   o.Misc,
+		Dhcpv6:         dhcpv6Val,
+		Manual:         manualVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceDhcpv6Xml) MarshalFromObject(s Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceDhcpv6) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceDhcpv6Xml) UnmarshalToObject() (*Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceDhcpv6, error) {
 
 	result := &Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceDhcpv6{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2314,6 +2572,7 @@ func (o *ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualXml) MarshalFromObj
 		o.Suffix = &ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffixContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualXml) UnmarshalToObject() (*Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManual, error) {
@@ -2329,8 +2588,9 @@ func (o ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualXml) UnmarshalToObje
 	}
 
 	result := &Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManual{
-		Suffix: suffixVal,
-		Misc:   o.Misc,
+		Suffix:         suffixVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2338,14 +2598,16 @@ func (o *ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffixXml) MarshalF
 	o.Name = s.Name
 	o.Lifetime = s.Lifetime
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffixXml) UnmarshalToObject() (*Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffix, error) {
 
 	result := &Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffix{
-		Name:     o.Name,
-		Lifetime: o.Lifetime,
-		Misc:     o.Misc,
+		Name:           o.Name,
+		Lifetime:       o.Lifetime,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2353,14 +2615,16 @@ func (o *ipv6DhcpClientNeighborDiscoveryNeighborXml) MarshalFromObject(s Ipv6Dhc
 	o.Name = s.Name
 	o.HwAddress = s.HwAddress
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6DhcpClientNeighborDiscoveryNeighborXml) UnmarshalToObject() (*Ipv6DhcpClientNeighborDiscoveryNeighbor, error) {
 
 	result := &Ipv6DhcpClientNeighborDiscoveryNeighbor{
-		Name:      o.Name,
-		HwAddress: o.HwAddress,
-		Misc:      o.Misc,
+		Name:           o.Name,
+		HwAddress:      o.HwAddress,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2371,6 +2635,7 @@ func (o *ipv6DhcpClientPrefixDelegationXml) MarshalFromObject(s Ipv6DhcpClientPr
 		o.Enable = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6DhcpClientPrefixDelegationXml) UnmarshalToObject() (*Ipv6DhcpClientPrefixDelegation, error) {
@@ -2384,8 +2649,9 @@ func (o ipv6DhcpClientPrefixDelegationXml) UnmarshalToObject() (*Ipv6DhcpClientP
 	}
 
 	result := &Ipv6DhcpClientPrefixDelegation{
-		Enable: enableVal,
-		Misc:   o.Misc,
+		Enable:         enableVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2401,6 +2667,7 @@ func (o *ipv6DhcpClientPrefixDelegationEnableXml) MarshalFromObject(s Ipv6DhcpCl
 		o.Yes = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6DhcpClientPrefixDelegationEnableXml) UnmarshalToObject() (*Ipv6DhcpClientPrefixDelegationEnable, error) {
@@ -2422,20 +2689,23 @@ func (o ipv6DhcpClientPrefixDelegationEnableXml) UnmarshalToObject() (*Ipv6DhcpC
 	}
 
 	result := &Ipv6DhcpClientPrefixDelegationEnable{
-		No:   noVal,
-		Yes:  yesVal,
-		Misc: o.Misc,
+		No:             noVal,
+		Yes:            yesVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *ipv6DhcpClientPrefixDelegationEnableNoXml) MarshalFromObject(s Ipv6DhcpClientPrefixDelegationEnableNo) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6DhcpClientPrefixDelegationEnableNoXml) UnmarshalToObject() (*Ipv6DhcpClientPrefixDelegationEnableNo, error) {
 
 	result := &Ipv6DhcpClientPrefixDelegationEnableNo{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2444,15 +2714,17 @@ func (o *ipv6DhcpClientPrefixDelegationEnableYesXml) MarshalFromObject(s Ipv6Dhc
 	o.PrefixLen = s.PrefixLen
 	o.PrefixLenHint = util.YesNo(s.PrefixLenHint, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6DhcpClientPrefixDelegationEnableYesXml) UnmarshalToObject() (*Ipv6DhcpClientPrefixDelegationEnableYes, error) {
 
 	result := &Ipv6DhcpClientPrefixDelegationEnableYes{
-		PfxPoolName:   o.PfxPoolName,
-		PrefixLen:     o.PrefixLen,
-		PrefixLenHint: util.AsBool(o.PrefixLenHint, nil),
-		Misc:          o.Misc,
+		PfxPoolName:    o.PfxPoolName,
+		PrefixLen:      o.PrefixLen,
+		PrefixLenHint:  util.AsBool(o.PrefixLenHint, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2466,6 +2738,7 @@ func (o *ipv6DhcpClientV6OptionsXml) MarshalFromObject(s Ipv6DhcpClientV6Options
 	o.RapidCommit = util.YesNo(s.RapidCommit, nil)
 	o.SupportSrvrReconfig = util.YesNo(s.SupportSrvrReconfig, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6DhcpClientV6OptionsXml) UnmarshalToObject() (*Ipv6DhcpClientV6Options, error) {
@@ -2484,6 +2757,7 @@ func (o ipv6DhcpClientV6OptionsXml) UnmarshalToObject() (*Ipv6DhcpClientV6Option
 		RapidCommit:         util.AsBool(o.RapidCommit, nil),
 		SupportSrvrReconfig: util.AsBool(o.SupportSrvrReconfig, nil),
 		Misc:                o.Misc,
+		MiscAttributes:      o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2499,6 +2773,7 @@ func (o *ipv6DhcpClientV6OptionsEnableXml) MarshalFromObject(s Ipv6DhcpClientV6O
 		o.Yes = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6DhcpClientV6OptionsEnableXml) UnmarshalToObject() (*Ipv6DhcpClientV6OptionsEnable, error) {
@@ -2520,20 +2795,23 @@ func (o ipv6DhcpClientV6OptionsEnableXml) UnmarshalToObject() (*Ipv6DhcpClientV6
 	}
 
 	result := &Ipv6DhcpClientV6OptionsEnable{
-		No:   noVal,
-		Yes:  yesVal,
-		Misc: o.Misc,
+		No:             noVal,
+		Yes:            yesVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *ipv6DhcpClientV6OptionsEnableNoXml) MarshalFromObject(s Ipv6DhcpClientV6OptionsEnableNo) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6DhcpClientV6OptionsEnableNoXml) UnmarshalToObject() (*Ipv6DhcpClientV6OptionsEnableNo, error) {
 
 	result := &Ipv6DhcpClientV6OptionsEnableNo{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2541,14 +2819,16 @@ func (o *ipv6DhcpClientV6OptionsEnableYesXml) MarshalFromObject(s Ipv6DhcpClient
 	o.NonTempAddr = util.YesNo(s.NonTempAddr, nil)
 	o.TempAddr = util.YesNo(s.TempAddr, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6DhcpClientV6OptionsEnableYesXml) UnmarshalToObject() (*Ipv6DhcpClientV6OptionsEnableYes, error) {
 
 	result := &Ipv6DhcpClientV6OptionsEnableYes{
-		NonTempAddr: util.AsBool(o.NonTempAddr, nil),
-		TempAddr:    util.AsBool(o.TempAddr, nil),
-		Misc:        o.Misc,
+		NonTempAddr:    util.AsBool(o.NonTempAddr, nil),
+		TempAddr:       util.AsBool(o.TempAddr, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2569,6 +2849,7 @@ func (o *ipv6InheritedXml) MarshalFromObject(s Ipv6Inherited) {
 		o.NeighborDiscovery = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6InheritedXml) UnmarshalToObject() (*Ipv6Inherited, error) {
@@ -2596,6 +2877,7 @@ func (o ipv6InheritedXml) UnmarshalToObject() (*Ipv6Inherited, error) {
 		Enable:            util.AsBool(o.Enable, nil),
 		NeighborDiscovery: neighborDiscoveryVal,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2607,6 +2889,7 @@ func (o *ipv6InheritedAssignAddrXml) MarshalFromObject(s Ipv6InheritedAssignAddr
 		o.Type = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6InheritedAssignAddrXml) UnmarshalToObject() (*Ipv6InheritedAssignAddr, error) {
@@ -2620,9 +2903,10 @@ func (o ipv6InheritedAssignAddrXml) UnmarshalToObject() (*Ipv6InheritedAssignAdd
 	}
 
 	result := &Ipv6InheritedAssignAddr{
-		Name: o.Name,
-		Type: typeVal,
-		Misc: o.Misc,
+		Name:           o.Name,
+		Type:           typeVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2638,6 +2922,7 @@ func (o *ipv6InheritedAssignAddrTypeXml) MarshalFromObject(s Ipv6InheritedAssign
 		o.Ula = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6InheritedAssignAddrTypeXml) UnmarshalToObject() (*Ipv6InheritedAssignAddrType, error) {
@@ -2659,9 +2944,10 @@ func (o ipv6InheritedAssignAddrTypeXml) UnmarshalToObject() (*Ipv6InheritedAssig
 	}
 
 	result := &Ipv6InheritedAssignAddrType{
-		Gua:  guaVal,
-		Ula:  ulaVal,
-		Misc: o.Misc,
+		Gua:            guaVal,
+		Ula:            ulaVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2679,6 +2965,7 @@ func (o *ipv6InheritedAssignAddrTypeGuaXml) MarshalFromObject(s Ipv6InheritedAss
 		o.Advertise = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6InheritedAssignAddrTypeGuaXml) UnmarshalToObject() (*Ipv6InheritedAssignAddrTypeGua, error) {
@@ -2705,6 +2992,7 @@ func (o ipv6InheritedAssignAddrTypeGuaXml) UnmarshalToObject() (*Ipv6InheritedAs
 		PoolType:          poolTypeVal,
 		Advertise:         advertiseVal,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2720,6 +3008,7 @@ func (o *ipv6InheritedAssignAddrTypeGuaPoolTypeXml) MarshalFromObject(s Ipv6Inhe
 		o.DynamicId = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6InheritedAssignAddrTypeGuaPoolTypeXml) UnmarshalToObject() (*Ipv6InheritedAssignAddrTypeGuaPoolType, error) {
@@ -2741,33 +3030,38 @@ func (o ipv6InheritedAssignAddrTypeGuaPoolTypeXml) UnmarshalToObject() (*Ipv6Inh
 	}
 
 	result := &Ipv6InheritedAssignAddrTypeGuaPoolType{
-		Dynamic:   dynamicVal,
-		DynamicId: dynamicIdVal,
-		Misc:      o.Misc,
+		Dynamic:        dynamicVal,
+		DynamicId:      dynamicIdVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicXml) MarshalFromObject(s Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamic) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicXml) UnmarshalToObject() (*Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamic, error) {
 
 	result := &Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamic{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicIdXml) MarshalFromObject(s Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicId) {
 	o.Identifier = s.Identifier
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicIdXml) UnmarshalToObject() (*Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicId, error) {
 
 	result := &Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicId{
-		Identifier: o.Identifier,
-		Misc:       o.Misc,
+		Identifier:     o.Identifier,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2776,6 +3070,7 @@ func (o *ipv6InheritedAssignAddrTypeGuaAdvertiseXml) MarshalFromObject(s Ipv6Inh
 	o.OnlinkFlag = util.YesNo(s.OnlinkFlag, nil)
 	o.AutoConfigFlag = util.YesNo(s.AutoConfigFlag, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6InheritedAssignAddrTypeGuaAdvertiseXml) UnmarshalToObject() (*Ipv6InheritedAssignAddrTypeGuaAdvertise, error) {
@@ -2785,6 +3080,7 @@ func (o ipv6InheritedAssignAddrTypeGuaAdvertiseXml) UnmarshalToObject() (*Ipv6In
 		OnlinkFlag:     util.AsBool(o.OnlinkFlag, nil),
 		AutoConfigFlag: util.AsBool(o.AutoConfigFlag, nil),
 		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2799,6 +3095,7 @@ func (o *ipv6InheritedAssignAddrTypeUlaXml) MarshalFromObject(s Ipv6InheritedAss
 		o.Advertise = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6InheritedAssignAddrTypeUlaXml) UnmarshalToObject() (*Ipv6InheritedAssignAddrTypeUla, error) {
@@ -2818,6 +3115,7 @@ func (o ipv6InheritedAssignAddrTypeUlaXml) UnmarshalToObject() (*Ipv6InheritedAs
 		Anycast:           util.AsBool(o.Anycast, nil),
 		Advertise:         advertiseVal,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2828,6 +3126,7 @@ func (o *ipv6InheritedAssignAddrTypeUlaAdvertiseXml) MarshalFromObject(s Ipv6Inh
 	o.OnlinkFlag = util.YesNo(s.OnlinkFlag, nil)
 	o.AutoConfigFlag = util.YesNo(s.AutoConfigFlag, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6InheritedAssignAddrTypeUlaAdvertiseXml) UnmarshalToObject() (*Ipv6InheritedAssignAddrTypeUlaAdvertise, error) {
@@ -2839,6 +3138,7 @@ func (o ipv6InheritedAssignAddrTypeUlaAdvertiseXml) UnmarshalToObject() (*Ipv6In
 		OnlinkFlag:        util.AsBool(o.OnlinkFlag, nil),
 		AutoConfigFlag:    util.AsBool(o.AutoConfigFlag, nil),
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2873,6 +3173,7 @@ func (o *ipv6InheritedNeighborDiscoveryXml) MarshalFromObject(s Ipv6InheritedNei
 		o.RouterAdvertisement = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6InheritedNeighborDiscoveryXml) UnmarshalToObject() (*Ipv6InheritedNeighborDiscovery, error) {
@@ -2922,6 +3223,7 @@ func (o ipv6InheritedNeighborDiscoveryXml) UnmarshalToObject() (*Ipv6InheritedNe
 		ReachableTime:       o.ReachableTime,
 		RouterAdvertisement: routerAdvertisementVal,
 		Misc:                o.Misc,
+		MiscAttributes:      o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2933,6 +3235,7 @@ func (o *ipv6InheritedNeighborDiscoveryDnsServerXml) MarshalFromObject(s Ipv6Inh
 		o.Source = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6InheritedNeighborDiscoveryDnsServerXml) UnmarshalToObject() (*Ipv6InheritedNeighborDiscoveryDnsServer, error) {
@@ -2946,9 +3249,10 @@ func (o ipv6InheritedNeighborDiscoveryDnsServerXml) UnmarshalToObject() (*Ipv6In
 	}
 
 	result := &Ipv6InheritedNeighborDiscoveryDnsServer{
-		Enable: util.AsBool(o.Enable, nil),
-		Source: sourceVal,
-		Misc:   o.Misc,
+		Enable:         util.AsBool(o.Enable, nil),
+		Source:         sourceVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2964,6 +3268,7 @@ func (o *ipv6InheritedNeighborDiscoveryDnsServerSourceXml) MarshalFromObject(s I
 		o.Manual = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6InheritedNeighborDiscoveryDnsServerSourceXml) UnmarshalToObject() (*Ipv6InheritedNeighborDiscoveryDnsServerSource, error) {
@@ -2985,22 +3290,25 @@ func (o ipv6InheritedNeighborDiscoveryDnsServerSourceXml) UnmarshalToObject() (*
 	}
 
 	result := &Ipv6InheritedNeighborDiscoveryDnsServerSource{
-		Dhcpv6: dhcpv6Val,
-		Manual: manualVal,
-		Misc:   o.Misc,
+		Dhcpv6:         dhcpv6Val,
+		Manual:         manualVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *ipv6InheritedNeighborDiscoveryDnsServerSourceDhcpv6Xml) MarshalFromObject(s Ipv6InheritedNeighborDiscoveryDnsServerSourceDhcpv6) {
 	o.PrefixPool = s.PrefixPool
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6InheritedNeighborDiscoveryDnsServerSourceDhcpv6Xml) UnmarshalToObject() (*Ipv6InheritedNeighborDiscoveryDnsServerSourceDhcpv6, error) {
 
 	result := &Ipv6InheritedNeighborDiscoveryDnsServerSourceDhcpv6{
-		PrefixPool: o.PrefixPool,
-		Misc:       o.Misc,
+		PrefixPool:     o.PrefixPool,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3015,6 +3323,7 @@ func (o *ipv6InheritedNeighborDiscoveryDnsServerSourceManualXml) MarshalFromObje
 		o.Server = &ipv6InheritedNeighborDiscoveryDnsServerSourceManualServerContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6InheritedNeighborDiscoveryDnsServerSourceManualXml) UnmarshalToObject() (*Ipv6InheritedNeighborDiscoveryDnsServerSourceManual, error) {
@@ -3030,8 +3339,9 @@ func (o ipv6InheritedNeighborDiscoveryDnsServerSourceManualXml) UnmarshalToObjec
 	}
 
 	result := &Ipv6InheritedNeighborDiscoveryDnsServerSourceManual{
-		Server: serverVal,
-		Misc:   o.Misc,
+		Server:         serverVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3039,14 +3349,16 @@ func (o *ipv6InheritedNeighborDiscoveryDnsServerSourceManualServerXml) MarshalFr
 	o.Name = s.Name
 	o.Lifetime = s.Lifetime
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6InheritedNeighborDiscoveryDnsServerSourceManualServerXml) UnmarshalToObject() (*Ipv6InheritedNeighborDiscoveryDnsServerSourceManualServer, error) {
 
 	result := &Ipv6InheritedNeighborDiscoveryDnsServerSourceManualServer{
-		Name:     o.Name,
-		Lifetime: o.Lifetime,
-		Misc:     o.Misc,
+		Name:           o.Name,
+		Lifetime:       o.Lifetime,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3058,6 +3370,7 @@ func (o *ipv6InheritedNeighborDiscoveryDnsSuffixXml) MarshalFromObject(s Ipv6Inh
 		o.Source = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6InheritedNeighborDiscoveryDnsSuffixXml) UnmarshalToObject() (*Ipv6InheritedNeighborDiscoveryDnsSuffix, error) {
@@ -3071,9 +3384,10 @@ func (o ipv6InheritedNeighborDiscoveryDnsSuffixXml) UnmarshalToObject() (*Ipv6In
 	}
 
 	result := &Ipv6InheritedNeighborDiscoveryDnsSuffix{
-		Enable: util.AsBool(o.Enable, nil),
-		Source: sourceVal,
-		Misc:   o.Misc,
+		Enable:         util.AsBool(o.Enable, nil),
+		Source:         sourceVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3089,6 +3403,7 @@ func (o *ipv6InheritedNeighborDiscoveryDnsSuffixSourceXml) MarshalFromObject(s I
 		o.Manual = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6InheritedNeighborDiscoveryDnsSuffixSourceXml) UnmarshalToObject() (*Ipv6InheritedNeighborDiscoveryDnsSuffixSource, error) {
@@ -3110,22 +3425,25 @@ func (o ipv6InheritedNeighborDiscoveryDnsSuffixSourceXml) UnmarshalToObject() (*
 	}
 
 	result := &Ipv6InheritedNeighborDiscoveryDnsSuffixSource{
-		Dhcpv6: dhcpv6Val,
-		Manual: manualVal,
-		Misc:   o.Misc,
+		Dhcpv6:         dhcpv6Val,
+		Manual:         manualVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *ipv6InheritedNeighborDiscoveryDnsSuffixSourceDhcpv6Xml) MarshalFromObject(s Ipv6InheritedNeighborDiscoveryDnsSuffixSourceDhcpv6) {
 	o.PrefixPool = s.PrefixPool
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6InheritedNeighborDiscoveryDnsSuffixSourceDhcpv6Xml) UnmarshalToObject() (*Ipv6InheritedNeighborDiscoveryDnsSuffixSourceDhcpv6, error) {
 
 	result := &Ipv6InheritedNeighborDiscoveryDnsSuffixSourceDhcpv6{
-		PrefixPool: o.PrefixPool,
-		Misc:       o.Misc,
+		PrefixPool:     o.PrefixPool,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3140,6 +3458,7 @@ func (o *ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualXml) MarshalFromObje
 		o.Suffix = &ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffixContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualXml) UnmarshalToObject() (*Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManual, error) {
@@ -3155,8 +3474,9 @@ func (o ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualXml) UnmarshalToObjec
 	}
 
 	result := &Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManual{
-		Suffix: suffixVal,
-		Misc:   o.Misc,
+		Suffix:         suffixVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3164,14 +3484,16 @@ func (o *ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffixXml) MarshalFr
 	o.Name = s.Name
 	o.Lifetime = s.Lifetime
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffixXml) UnmarshalToObject() (*Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffix, error) {
 
 	result := &Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffix{
-		Name:     o.Name,
-		Lifetime: o.Lifetime,
-		Misc:     o.Misc,
+		Name:           o.Name,
+		Lifetime:       o.Lifetime,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3179,14 +3501,16 @@ func (o *ipv6InheritedNeighborDiscoveryNeighborXml) MarshalFromObject(s Ipv6Inhe
 	o.Name = s.Name
 	o.HwAddress = s.HwAddress
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6InheritedNeighborDiscoveryNeighborXml) UnmarshalToObject() (*Ipv6InheritedNeighborDiscoveryNeighbor, error) {
 
 	result := &Ipv6InheritedNeighborDiscoveryNeighbor{
-		Name:      o.Name,
-		HwAddress: o.HwAddress,
-		Misc:      o.Misc,
+		Name:           o.Name,
+		HwAddress:      o.HwAddress,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3204,6 +3528,7 @@ func (o *ipv6InheritedNeighborDiscoveryRouterAdvertisementXml) MarshalFromObject
 	o.RetransmissionTimer = s.RetransmissionTimer
 	o.RouterPreference = s.RouterPreference
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6InheritedNeighborDiscoveryRouterAdvertisementXml) UnmarshalToObject() (*Ipv6InheritedNeighborDiscoveryRouterAdvertisement, error) {
@@ -3222,6 +3547,7 @@ func (o ipv6InheritedNeighborDiscoveryRouterAdvertisementXml) UnmarshalToObject(
 		RetransmissionTimer:    o.RetransmissionTimer,
 		RouterPreference:       o.RouterPreference,
 		Misc:                   o.Misc,
+		MiscAttributes:         o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3246,6 +3572,7 @@ func (o *ipv6NeighborDiscoveryXml) MarshalFromObject(s Ipv6NeighborDiscovery) {
 		o.RouterAdvertisement = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6NeighborDiscoveryXml) UnmarshalToObject() (*Ipv6NeighborDiscovery, error) {
@@ -3277,6 +3604,7 @@ func (o ipv6NeighborDiscoveryXml) UnmarshalToObject() (*Ipv6NeighborDiscovery, e
 		ReachableTime:       o.ReachableTime,
 		RouterAdvertisement: routerAdvertisementVal,
 		Misc:                o.Misc,
+		MiscAttributes:      o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3284,14 +3612,16 @@ func (o *ipv6NeighborDiscoveryNeighborXml) MarshalFromObject(s Ipv6NeighborDisco
 	o.Name = s.Name
 	o.HwAddress = s.HwAddress
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6NeighborDiscoveryNeighborXml) UnmarshalToObject() (*Ipv6NeighborDiscoveryNeighbor, error) {
 
 	result := &Ipv6NeighborDiscoveryNeighbor{
-		Name:      o.Name,
-		HwAddress: o.HwAddress,
-		Misc:      o.Misc,
+		Name:           o.Name,
+		HwAddress:      o.HwAddress,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3314,6 +3644,7 @@ func (o *ipv6NeighborDiscoveryRouterAdvertisementXml) MarshalFromObject(s Ipv6Ne
 	o.RetransmissionTimer = s.RetransmissionTimer
 	o.RouterPreference = s.RouterPreference
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6NeighborDiscoveryRouterAdvertisementXml) UnmarshalToObject() (*Ipv6NeighborDiscoveryRouterAdvertisement, error) {
@@ -3341,6 +3672,7 @@ func (o ipv6NeighborDiscoveryRouterAdvertisementXml) UnmarshalToObject() (*Ipv6N
 		RetransmissionTimer:    o.RetransmissionTimer,
 		RouterPreference:       o.RouterPreference,
 		Misc:                   o.Misc,
+		MiscAttributes:         o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3365,6 +3697,7 @@ func (o *ipv6NeighborDiscoveryRouterAdvertisementDnsSupportXml) MarshalFromObjec
 		o.Suffix = &ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffixContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6NeighborDiscoveryRouterAdvertisementDnsSupportXml) UnmarshalToObject() (*Ipv6NeighborDiscoveryRouterAdvertisementDnsSupport, error) {
@@ -3390,10 +3723,11 @@ func (o ipv6NeighborDiscoveryRouterAdvertisementDnsSupportXml) UnmarshalToObject
 	}
 
 	result := &Ipv6NeighborDiscoveryRouterAdvertisementDnsSupport{
-		Enable: util.AsBool(o.Enable, nil),
-		Server: serverVal,
-		Suffix: suffixVal,
-		Misc:   o.Misc,
+		Enable:         util.AsBool(o.Enable, nil),
+		Server:         serverVal,
+		Suffix:         suffixVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3401,14 +3735,16 @@ func (o *ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServerXml) MarshalFro
 	o.Name = s.Name
 	o.Lifetime = s.Lifetime
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServerXml) UnmarshalToObject() (*Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServer, error) {
 
 	result := &Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServer{
-		Name:     o.Name,
-		Lifetime: o.Lifetime,
-		Misc:     o.Misc,
+		Name:           o.Name,
+		Lifetime:       o.Lifetime,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3416,14 +3752,16 @@ func (o *ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffixXml) MarshalFro
 	o.Name = s.Name
 	o.Lifetime = s.Lifetime
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffixXml) UnmarshalToObject() (*Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffix, error) {
 
 	result := &Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffix{
-		Name:     o.Name,
-		Lifetime: o.Lifetime,
-		Misc:     o.Misc,
+		Name:           o.Name,
+		Lifetime:       o.Lifetime,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3439,6 +3777,7 @@ func (o *ndpProxyXml) MarshalFromObject(s NdpProxy) {
 	}
 	o.Enabled = util.YesNo(s.Enabled, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ndpProxyXml) UnmarshalToObject() (*NdpProxy, error) {
@@ -3454,9 +3793,10 @@ func (o ndpProxyXml) UnmarshalToObject() (*NdpProxy, error) {
 	}
 
 	result := &NdpProxy{
-		Address: addressVal,
-		Enabled: util.AsBool(o.Enabled, nil),
-		Misc:    o.Misc,
+		Address:        addressVal,
+		Enabled:        util.AsBool(o.Enabled, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3464,14 +3804,16 @@ func (o *ndpProxyAddressXml) MarshalFromObject(s NdpProxyAddress) {
 	o.Name = s.Name
 	o.Negate = util.YesNo(s.Negate, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ndpProxyAddressXml) UnmarshalToObject() (*NdpProxyAddress, error) {
 
 	result := &NdpProxyAddress{
-		Name:   o.Name,
-		Negate: util.AsBool(o.Negate, nil),
-		Misc:   o.Misc,
+		Name:           o.Name,
+		Negate:         util.AsBool(o.Negate, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3484,6 +3826,7 @@ func (o *sdwanLinkSettingsXml) MarshalFromObject(s SdwanLinkSettings) {
 		o.UpstreamNat = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o sdwanLinkSettingsXml) UnmarshalToObject() (*SdwanLinkSettings, error) {
@@ -3501,6 +3844,7 @@ func (o sdwanLinkSettingsXml) UnmarshalToObject() (*SdwanLinkSettings, error) {
 		SdwanInterfaceProfile: o.SdwanInterfaceProfile,
 		UpstreamNat:           upstreamNatVal,
 		Misc:                  o.Misc,
+		MiscAttributes:        o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3517,6 +3861,7 @@ func (o *sdwanLinkSettingsUpstreamNatXml) MarshalFromObject(s SdwanLinkSettingsU
 		o.StaticIp = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o sdwanLinkSettingsUpstreamNatXml) UnmarshalToObject() (*SdwanLinkSettingsUpstreamNat, error) {
@@ -3538,21 +3883,24 @@ func (o sdwanLinkSettingsUpstreamNatXml) UnmarshalToObject() (*SdwanLinkSettings
 	}
 
 	result := &SdwanLinkSettingsUpstreamNat{
-		Enable:   util.AsBool(o.Enable, nil),
-		Ddns:     ddnsVal,
-		StaticIp: staticIpVal,
-		Misc:     o.Misc,
+		Enable:         util.AsBool(o.Enable, nil),
+		Ddns:           ddnsVal,
+		StaticIp:       staticIpVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *sdwanLinkSettingsUpstreamNatDdnsXml) MarshalFromObject(s SdwanLinkSettingsUpstreamNatDdns) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o sdwanLinkSettingsUpstreamNatDdnsXml) UnmarshalToObject() (*SdwanLinkSettingsUpstreamNatDdns, error) {
 
 	result := &SdwanLinkSettingsUpstreamNatDdns{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3560,14 +3908,16 @@ func (o *sdwanLinkSettingsUpstreamNatStaticIpXml) MarshalFromObject(s SdwanLinkS
 	o.Fqdn = s.Fqdn
 	o.IpAddress = s.IpAddress
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o sdwanLinkSettingsUpstreamNatStaticIpXml) UnmarshalToObject() (*SdwanLinkSettingsUpstreamNatStaticIp, error) {
 
 	result := &SdwanLinkSettingsUpstreamNatStaticIp{
-		Fqdn:      o.Fqdn,
-		IpAddress: o.IpAddress,
-		Misc:      o.Misc,
+		Fqdn:           o.Fqdn,
+		IpAddress:      o.IpAddress,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3634,6 +3984,7 @@ func (o *entryXml_11_0_2) MarshalFromObject(s Entry) {
 	}
 	o.Tag = s.Tag
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o entryXml_11_0_2) UnmarshalToObject() (*Entry, error) {
@@ -3733,6 +4084,7 @@ func (o entryXml_11_0_2) UnmarshalToObject() (*Entry, error) {
 		SdwanLinkSettings:          sdwanLinkSettingsVal,
 		Tag:                        o.Tag,
 		Misc:                       o.Misc,
+		MiscAttributes:             o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3741,6 +4093,7 @@ func (o *adjustTcpMssXml_11_0_2) MarshalFromObject(s AdjustTcpMss) {
 	o.Ipv4MssAdjustment = s.Ipv4MssAdjustment
 	o.Ipv6MssAdjustment = s.Ipv6MssAdjustment
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o adjustTcpMssXml_11_0_2) UnmarshalToObject() (*AdjustTcpMss, error) {
@@ -3750,6 +4103,7 @@ func (o adjustTcpMssXml_11_0_2) UnmarshalToObject() (*AdjustTcpMss, error) {
 		Ipv4MssAdjustment: o.Ipv4MssAdjustment,
 		Ipv6MssAdjustment: o.Ipv6MssAdjustment,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3757,14 +4111,16 @@ func (o *arpXml_11_0_2) MarshalFromObject(s Arp) {
 	o.Name = s.Name
 	o.HwAddress = s.HwAddress
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o arpXml_11_0_2) UnmarshalToObject() (*Arp, error) {
 
 	result := &Arp{
-		Name:      o.Name,
-		HwAddress: o.HwAddress,
-		Misc:      o.Misc,
+		Name:           o.Name,
+		HwAddress:      o.HwAddress,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3773,15 +4129,17 @@ func (o *bonjourXml_11_0_2) MarshalFromObject(s Bonjour) {
 	o.GroupId = s.GroupId
 	o.TtlCheck = util.YesNo(s.TtlCheck, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o bonjourXml_11_0_2) UnmarshalToObject() (*Bonjour, error) {
 
 	result := &Bonjour{
-		Enable:   util.AsBool(o.Enable, nil),
-		GroupId:  o.GroupId,
-		TtlCheck: util.AsBool(o.TtlCheck, nil),
-		Misc:     o.Misc,
+		Enable:         util.AsBool(o.Enable, nil),
+		GroupId:        o.GroupId,
+		TtlCheck:       util.AsBool(o.TtlCheck, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3807,6 +4165,7 @@ func (o *ddnsConfigXml_11_0_2) MarshalFromObject(s DdnsConfig) {
 		o.DdnsVendorConfig = &ddnsConfigDdnsVendorConfigContainerXml_11_0_2{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ddnsConfigXml_11_0_2) UnmarshalToObject() (*DdnsConfig, error) {
@@ -3839,6 +4198,7 @@ func (o ddnsConfigXml_11_0_2) UnmarshalToObject() (*DdnsConfig, error) {
 		DdnsVendor:         o.DdnsVendor,
 		DdnsVendorConfig:   ddnsVendorConfigVal,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3846,14 +4206,16 @@ func (o *ddnsConfigDdnsVendorConfigXml_11_0_2) MarshalFromObject(s DdnsConfigDdn
 	o.Name = s.Name
 	o.Value = s.Value
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ddnsConfigDdnsVendorConfigXml_11_0_2) UnmarshalToObject() (*DdnsConfigDdnsVendorConfig, error) {
 
 	result := &DdnsConfigDdnsVendorConfig{
-		Name:  o.Name,
-		Value: o.Value,
-		Misc:  o.Misc,
+		Name:           o.Name,
+		Value:          o.Value,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3867,6 +4229,7 @@ func (o *dhcpClientXml_11_0_2) MarshalFromObject(s DhcpClient) {
 		o.SendHostname = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o dhcpClientXml_11_0_2) UnmarshalToObject() (*DhcpClient, error) {
@@ -3885,6 +4248,7 @@ func (o dhcpClientXml_11_0_2) UnmarshalToObject() (*DhcpClient, error) {
 		Enable:             util.AsBool(o.Enable, nil),
 		SendHostname:       sendHostnameVal,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3892,14 +4256,16 @@ func (o *dhcpClientSendHostnameXml_11_0_2) MarshalFromObject(s DhcpClientSendHos
 	o.Enable = util.YesNo(s.Enable, nil)
 	o.Hostname = s.Hostname
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o dhcpClientSendHostnameXml_11_0_2) UnmarshalToObject() (*DhcpClientSendHostname, error) {
 
 	result := &DhcpClientSendHostname{
-		Enable:   util.AsBool(o.Enable, nil),
-		Hostname: o.Hostname,
-		Misc:     o.Misc,
+		Enable:         util.AsBool(o.Enable, nil),
+		Hostname:       o.Hostname,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3907,14 +4273,16 @@ func (o *ipXml_11_0_2) MarshalFromObject(s Ip) {
 	o.Name = s.Name
 	o.SdwanGateway = s.SdwanGateway
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipXml_11_0_2) UnmarshalToObject() (*Ip, error) {
 
 	result := &Ip{
-		Name:         o.Name,
-		SdwanGateway: o.SdwanGateway,
-		Misc:         o.Misc,
+		Name:           o.Name,
+		SdwanGateway:   o.SdwanGateway,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3946,6 +4314,7 @@ func (o *ipv6Xml_11_0_2) MarshalFromObject(s Ipv6) {
 		o.NeighborDiscovery = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6Xml_11_0_2) UnmarshalToObject() (*Ipv6, error) {
@@ -3992,6 +4361,7 @@ func (o ipv6Xml_11_0_2) UnmarshalToObject() (*Ipv6, error) {
 		InterfaceId:       o.InterfaceId,
 		NeighborDiscovery: neighborDiscoveryVal,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4014,6 +4384,7 @@ func (o *ipv6AddressXml_11_0_2) MarshalFromObject(s Ipv6Address) {
 		o.Advertise = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6AddressXml_11_0_2) UnmarshalToObject() (*Ipv6Address, error) {
@@ -4049,28 +4420,33 @@ func (o ipv6AddressXml_11_0_2) UnmarshalToObject() (*Ipv6Address, error) {
 		Anycast:           anycastVal,
 		Advertise:         advertiseVal,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *ipv6AddressPrefixXml_11_0_2) MarshalFromObject(s Ipv6AddressPrefix) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6AddressPrefixXml_11_0_2) UnmarshalToObject() (*Ipv6AddressPrefix, error) {
 
 	result := &Ipv6AddressPrefix{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *ipv6AddressAnycastXml_11_0_2) MarshalFromObject(s Ipv6AddressAnycast) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6AddressAnycastXml_11_0_2) UnmarshalToObject() (*Ipv6AddressAnycast, error) {
 
 	result := &Ipv6AddressAnycast{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4081,6 +4457,7 @@ func (o *ipv6AddressAdvertiseXml_11_0_2) MarshalFromObject(s Ipv6AddressAdvertis
 	o.OnlinkFlag = util.YesNo(s.OnlinkFlag, nil)
 	o.AutoConfigFlag = util.YesNo(s.AutoConfigFlag, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6AddressAdvertiseXml_11_0_2) UnmarshalToObject() (*Ipv6AddressAdvertise, error) {
@@ -4092,6 +4469,7 @@ func (o ipv6AddressAdvertiseXml_11_0_2) UnmarshalToObject() (*Ipv6AddressAdverti
 		OnlinkFlag:        util.AsBool(o.OnlinkFlag, nil),
 		AutoConfigFlag:    util.AsBool(o.AutoConfigFlag, nil),
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4116,6 +4494,7 @@ func (o *ipv6DhcpClientXml_11_0_2) MarshalFromObject(s Ipv6DhcpClient) {
 		o.V6Options = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6DhcpClientXml_11_0_2) UnmarshalToObject() (*Ipv6DhcpClient, error) {
@@ -4153,6 +4532,7 @@ func (o ipv6DhcpClientXml_11_0_2) UnmarshalToObject() (*Ipv6DhcpClient, error) {
 		PrefixDelegation:   prefixDelegationVal,
 		V6Options:          v6OptionsVal,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4182,6 +4562,7 @@ func (o *ipv6DhcpClientNeighborDiscoveryXml_11_0_2) MarshalFromObject(s Ipv6Dhcp
 	o.NsInterval = s.NsInterval
 	o.ReachableTime = s.ReachableTime
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6DhcpClientNeighborDiscoveryXml_11_0_2) UnmarshalToObject() (*Ipv6DhcpClientNeighborDiscovery, error) {
@@ -4222,6 +4603,7 @@ func (o ipv6DhcpClientNeighborDiscoveryXml_11_0_2) UnmarshalToObject() (*Ipv6Dhc
 		NsInterval:       o.NsInterval,
 		ReachableTime:    o.ReachableTime,
 		Misc:             o.Misc,
+		MiscAttributes:   o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4233,6 +4615,7 @@ func (o *ipv6DhcpClientNeighborDiscoveryDnsServerXml_11_0_2) MarshalFromObject(s
 		o.Source = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6DhcpClientNeighborDiscoveryDnsServerXml_11_0_2) UnmarshalToObject() (*Ipv6DhcpClientNeighborDiscoveryDnsServer, error) {
@@ -4246,9 +4629,10 @@ func (o ipv6DhcpClientNeighborDiscoveryDnsServerXml_11_0_2) UnmarshalToObject() 
 	}
 
 	result := &Ipv6DhcpClientNeighborDiscoveryDnsServer{
-		Enable: util.AsBool(o.Enable, nil),
-		Source: sourceVal,
-		Misc:   o.Misc,
+		Enable:         util.AsBool(o.Enable, nil),
+		Source:         sourceVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4264,6 +4648,7 @@ func (o *ipv6DhcpClientNeighborDiscoveryDnsServerSourceXml_11_0_2) MarshalFromOb
 		o.Manual = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6DhcpClientNeighborDiscoveryDnsServerSourceXml_11_0_2) UnmarshalToObject() (*Ipv6DhcpClientNeighborDiscoveryDnsServerSource, error) {
@@ -4285,20 +4670,23 @@ func (o ipv6DhcpClientNeighborDiscoveryDnsServerSourceXml_11_0_2) UnmarshalToObj
 	}
 
 	result := &Ipv6DhcpClientNeighborDiscoveryDnsServerSource{
-		Dhcpv6: dhcpv6Val,
-		Manual: manualVal,
-		Misc:   o.Misc,
+		Dhcpv6:         dhcpv6Val,
+		Manual:         manualVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *ipv6DhcpClientNeighborDiscoveryDnsServerSourceDhcpv6Xml_11_0_2) MarshalFromObject(s Ipv6DhcpClientNeighborDiscoveryDnsServerSourceDhcpv6) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6DhcpClientNeighborDiscoveryDnsServerSourceDhcpv6Xml_11_0_2) UnmarshalToObject() (*Ipv6DhcpClientNeighborDiscoveryDnsServerSourceDhcpv6, error) {
 
 	result := &Ipv6DhcpClientNeighborDiscoveryDnsServerSourceDhcpv6{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4313,6 +4701,7 @@ func (o *ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualXml_11_0_2) Marshal
 		o.Server = &ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualServerContainerXml_11_0_2{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualXml_11_0_2) UnmarshalToObject() (*Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManual, error) {
@@ -4328,8 +4717,9 @@ func (o ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualXml_11_0_2) Unmarsha
 	}
 
 	result := &Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManual{
-		Server: serverVal,
-		Misc:   o.Misc,
+		Server:         serverVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4337,14 +4727,16 @@ func (o *ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualServerXml_11_0_2) M
 	o.Name = s.Name
 	o.Lifetime = s.Lifetime
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualServerXml_11_0_2) UnmarshalToObject() (*Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualServer, error) {
 
 	result := &Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualServer{
-		Name:     o.Name,
-		Lifetime: o.Lifetime,
-		Misc:     o.Misc,
+		Name:           o.Name,
+		Lifetime:       o.Lifetime,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4356,6 +4748,7 @@ func (o *ipv6DhcpClientNeighborDiscoveryDnsSuffixXml_11_0_2) MarshalFromObject(s
 		o.Source = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6DhcpClientNeighborDiscoveryDnsSuffixXml_11_0_2) UnmarshalToObject() (*Ipv6DhcpClientNeighborDiscoveryDnsSuffix, error) {
@@ -4369,9 +4762,10 @@ func (o ipv6DhcpClientNeighborDiscoveryDnsSuffixXml_11_0_2) UnmarshalToObject() 
 	}
 
 	result := &Ipv6DhcpClientNeighborDiscoveryDnsSuffix{
-		Enable: util.AsBool(o.Enable, nil),
-		Source: sourceVal,
-		Misc:   o.Misc,
+		Enable:         util.AsBool(o.Enable, nil),
+		Source:         sourceVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4387,6 +4781,7 @@ func (o *ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceXml_11_0_2) MarshalFromOb
 		o.Manual = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceXml_11_0_2) UnmarshalToObject() (*Ipv6DhcpClientNeighborDiscoveryDnsSuffixSource, error) {
@@ -4408,20 +4803,23 @@ func (o ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceXml_11_0_2) UnmarshalToObj
 	}
 
 	result := &Ipv6DhcpClientNeighborDiscoveryDnsSuffixSource{
-		Dhcpv6: dhcpv6Val,
-		Manual: manualVal,
-		Misc:   o.Misc,
+		Dhcpv6:         dhcpv6Val,
+		Manual:         manualVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceDhcpv6Xml_11_0_2) MarshalFromObject(s Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceDhcpv6) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceDhcpv6Xml_11_0_2) UnmarshalToObject() (*Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceDhcpv6, error) {
 
 	result := &Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceDhcpv6{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4436,6 +4834,7 @@ func (o *ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualXml_11_0_2) Marshal
 		o.Suffix = &ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffixContainerXml_11_0_2{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualXml_11_0_2) UnmarshalToObject() (*Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManual, error) {
@@ -4451,8 +4850,9 @@ func (o ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualXml_11_0_2) Unmarsha
 	}
 
 	result := &Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManual{
-		Suffix: suffixVal,
-		Misc:   o.Misc,
+		Suffix:         suffixVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4460,14 +4860,16 @@ func (o *ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffixXml_11_0_2) M
 	o.Name = s.Name
 	o.Lifetime = s.Lifetime
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffixXml_11_0_2) UnmarshalToObject() (*Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffix, error) {
 
 	result := &Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffix{
-		Name:     o.Name,
-		Lifetime: o.Lifetime,
-		Misc:     o.Misc,
+		Name:           o.Name,
+		Lifetime:       o.Lifetime,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4475,14 +4877,16 @@ func (o *ipv6DhcpClientNeighborDiscoveryNeighborXml_11_0_2) MarshalFromObject(s 
 	o.Name = s.Name
 	o.HwAddress = s.HwAddress
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6DhcpClientNeighborDiscoveryNeighborXml_11_0_2) UnmarshalToObject() (*Ipv6DhcpClientNeighborDiscoveryNeighbor, error) {
 
 	result := &Ipv6DhcpClientNeighborDiscoveryNeighbor{
-		Name:      o.Name,
-		HwAddress: o.HwAddress,
-		Misc:      o.Misc,
+		Name:           o.Name,
+		HwAddress:      o.HwAddress,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4493,6 +4897,7 @@ func (o *ipv6DhcpClientPrefixDelegationXml_11_0_2) MarshalFromObject(s Ipv6DhcpC
 		o.Enable = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6DhcpClientPrefixDelegationXml_11_0_2) UnmarshalToObject() (*Ipv6DhcpClientPrefixDelegation, error) {
@@ -4506,8 +4911,9 @@ func (o ipv6DhcpClientPrefixDelegationXml_11_0_2) UnmarshalToObject() (*Ipv6Dhcp
 	}
 
 	result := &Ipv6DhcpClientPrefixDelegation{
-		Enable: enableVal,
-		Misc:   o.Misc,
+		Enable:         enableVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4523,6 +4929,7 @@ func (o *ipv6DhcpClientPrefixDelegationEnableXml_11_0_2) MarshalFromObject(s Ipv
 		o.Yes = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6DhcpClientPrefixDelegationEnableXml_11_0_2) UnmarshalToObject() (*Ipv6DhcpClientPrefixDelegationEnable, error) {
@@ -4544,20 +4951,23 @@ func (o ipv6DhcpClientPrefixDelegationEnableXml_11_0_2) UnmarshalToObject() (*Ip
 	}
 
 	result := &Ipv6DhcpClientPrefixDelegationEnable{
-		No:   noVal,
-		Yes:  yesVal,
-		Misc: o.Misc,
+		No:             noVal,
+		Yes:            yesVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *ipv6DhcpClientPrefixDelegationEnableNoXml_11_0_2) MarshalFromObject(s Ipv6DhcpClientPrefixDelegationEnableNo) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6DhcpClientPrefixDelegationEnableNoXml_11_0_2) UnmarshalToObject() (*Ipv6DhcpClientPrefixDelegationEnableNo, error) {
 
 	result := &Ipv6DhcpClientPrefixDelegationEnableNo{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4566,15 +4976,17 @@ func (o *ipv6DhcpClientPrefixDelegationEnableYesXml_11_0_2) MarshalFromObject(s 
 	o.PrefixLen = s.PrefixLen
 	o.PrefixLenHint = util.YesNo(s.PrefixLenHint, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6DhcpClientPrefixDelegationEnableYesXml_11_0_2) UnmarshalToObject() (*Ipv6DhcpClientPrefixDelegationEnableYes, error) {
 
 	result := &Ipv6DhcpClientPrefixDelegationEnableYes{
-		PfxPoolName:   o.PfxPoolName,
-		PrefixLen:     o.PrefixLen,
-		PrefixLenHint: util.AsBool(o.PrefixLenHint, nil),
-		Misc:          o.Misc,
+		PfxPoolName:    o.PfxPoolName,
+		PrefixLen:      o.PrefixLen,
+		PrefixLenHint:  util.AsBool(o.PrefixLenHint, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4588,6 +5000,7 @@ func (o *ipv6DhcpClientV6OptionsXml_11_0_2) MarshalFromObject(s Ipv6DhcpClientV6
 	o.RapidCommit = util.YesNo(s.RapidCommit, nil)
 	o.SupportSrvrReconfig = util.YesNo(s.SupportSrvrReconfig, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6DhcpClientV6OptionsXml_11_0_2) UnmarshalToObject() (*Ipv6DhcpClientV6Options, error) {
@@ -4606,6 +5019,7 @@ func (o ipv6DhcpClientV6OptionsXml_11_0_2) UnmarshalToObject() (*Ipv6DhcpClientV
 		RapidCommit:         util.AsBool(o.RapidCommit, nil),
 		SupportSrvrReconfig: util.AsBool(o.SupportSrvrReconfig, nil),
 		Misc:                o.Misc,
+		MiscAttributes:      o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4621,6 +5035,7 @@ func (o *ipv6DhcpClientV6OptionsEnableXml_11_0_2) MarshalFromObject(s Ipv6DhcpCl
 		o.Yes = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6DhcpClientV6OptionsEnableXml_11_0_2) UnmarshalToObject() (*Ipv6DhcpClientV6OptionsEnable, error) {
@@ -4642,20 +5057,23 @@ func (o ipv6DhcpClientV6OptionsEnableXml_11_0_2) UnmarshalToObject() (*Ipv6DhcpC
 	}
 
 	result := &Ipv6DhcpClientV6OptionsEnable{
-		No:   noVal,
-		Yes:  yesVal,
-		Misc: o.Misc,
+		No:             noVal,
+		Yes:            yesVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *ipv6DhcpClientV6OptionsEnableNoXml_11_0_2) MarshalFromObject(s Ipv6DhcpClientV6OptionsEnableNo) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6DhcpClientV6OptionsEnableNoXml_11_0_2) UnmarshalToObject() (*Ipv6DhcpClientV6OptionsEnableNo, error) {
 
 	result := &Ipv6DhcpClientV6OptionsEnableNo{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4663,14 +5081,16 @@ func (o *ipv6DhcpClientV6OptionsEnableYesXml_11_0_2) MarshalFromObject(s Ipv6Dhc
 	o.NonTempAddr = util.YesNo(s.NonTempAddr, nil)
 	o.TempAddr = util.YesNo(s.TempAddr, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6DhcpClientV6OptionsEnableYesXml_11_0_2) UnmarshalToObject() (*Ipv6DhcpClientV6OptionsEnableYes, error) {
 
 	result := &Ipv6DhcpClientV6OptionsEnableYes{
-		NonTempAddr: util.AsBool(o.NonTempAddr, nil),
-		TempAddr:    util.AsBool(o.TempAddr, nil),
-		Misc:        o.Misc,
+		NonTempAddr:    util.AsBool(o.NonTempAddr, nil),
+		TempAddr:       util.AsBool(o.TempAddr, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4691,6 +5111,7 @@ func (o *ipv6InheritedXml_11_0_2) MarshalFromObject(s Ipv6Inherited) {
 		o.NeighborDiscovery = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6InheritedXml_11_0_2) UnmarshalToObject() (*Ipv6Inherited, error) {
@@ -4718,6 +5139,7 @@ func (o ipv6InheritedXml_11_0_2) UnmarshalToObject() (*Ipv6Inherited, error) {
 		Enable:            util.AsBool(o.Enable, nil),
 		NeighborDiscovery: neighborDiscoveryVal,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4729,6 +5151,7 @@ func (o *ipv6InheritedAssignAddrXml_11_0_2) MarshalFromObject(s Ipv6InheritedAss
 		o.Type = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6InheritedAssignAddrXml_11_0_2) UnmarshalToObject() (*Ipv6InheritedAssignAddr, error) {
@@ -4742,9 +5165,10 @@ func (o ipv6InheritedAssignAddrXml_11_0_2) UnmarshalToObject() (*Ipv6InheritedAs
 	}
 
 	result := &Ipv6InheritedAssignAddr{
-		Name: o.Name,
-		Type: typeVal,
-		Misc: o.Misc,
+		Name:           o.Name,
+		Type:           typeVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4760,6 +5184,7 @@ func (o *ipv6InheritedAssignAddrTypeXml_11_0_2) MarshalFromObject(s Ipv6Inherite
 		o.Ula = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6InheritedAssignAddrTypeXml_11_0_2) UnmarshalToObject() (*Ipv6InheritedAssignAddrType, error) {
@@ -4781,9 +5206,10 @@ func (o ipv6InheritedAssignAddrTypeXml_11_0_2) UnmarshalToObject() (*Ipv6Inherit
 	}
 
 	result := &Ipv6InheritedAssignAddrType{
-		Gua:  guaVal,
-		Ula:  ulaVal,
-		Misc: o.Misc,
+		Gua:            guaVal,
+		Ula:            ulaVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4801,6 +5227,7 @@ func (o *ipv6InheritedAssignAddrTypeGuaXml_11_0_2) MarshalFromObject(s Ipv6Inher
 		o.Advertise = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6InheritedAssignAddrTypeGuaXml_11_0_2) UnmarshalToObject() (*Ipv6InheritedAssignAddrTypeGua, error) {
@@ -4827,6 +5254,7 @@ func (o ipv6InheritedAssignAddrTypeGuaXml_11_0_2) UnmarshalToObject() (*Ipv6Inhe
 		PoolType:          poolTypeVal,
 		Advertise:         advertiseVal,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4842,6 +5270,7 @@ func (o *ipv6InheritedAssignAddrTypeGuaPoolTypeXml_11_0_2) MarshalFromObject(s I
 		o.DynamicId = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6InheritedAssignAddrTypeGuaPoolTypeXml_11_0_2) UnmarshalToObject() (*Ipv6InheritedAssignAddrTypeGuaPoolType, error) {
@@ -4863,33 +5292,38 @@ func (o ipv6InheritedAssignAddrTypeGuaPoolTypeXml_11_0_2) UnmarshalToObject() (*
 	}
 
 	result := &Ipv6InheritedAssignAddrTypeGuaPoolType{
-		Dynamic:   dynamicVal,
-		DynamicId: dynamicIdVal,
-		Misc:      o.Misc,
+		Dynamic:        dynamicVal,
+		DynamicId:      dynamicIdVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicXml_11_0_2) MarshalFromObject(s Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamic) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicXml_11_0_2) UnmarshalToObject() (*Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamic, error) {
 
 	result := &Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamic{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicIdXml_11_0_2) MarshalFromObject(s Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicId) {
 	o.Identifier = s.Identifier
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicIdXml_11_0_2) UnmarshalToObject() (*Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicId, error) {
 
 	result := &Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicId{
-		Identifier: o.Identifier,
-		Misc:       o.Misc,
+		Identifier:     o.Identifier,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4898,6 +5332,7 @@ func (o *ipv6InheritedAssignAddrTypeGuaAdvertiseXml_11_0_2) MarshalFromObject(s 
 	o.OnlinkFlag = util.YesNo(s.OnlinkFlag, nil)
 	o.AutoConfigFlag = util.YesNo(s.AutoConfigFlag, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6InheritedAssignAddrTypeGuaAdvertiseXml_11_0_2) UnmarshalToObject() (*Ipv6InheritedAssignAddrTypeGuaAdvertise, error) {
@@ -4907,6 +5342,7 @@ func (o ipv6InheritedAssignAddrTypeGuaAdvertiseXml_11_0_2) UnmarshalToObject() (
 		OnlinkFlag:     util.AsBool(o.OnlinkFlag, nil),
 		AutoConfigFlag: util.AsBool(o.AutoConfigFlag, nil),
 		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4921,6 +5357,7 @@ func (o *ipv6InheritedAssignAddrTypeUlaXml_11_0_2) MarshalFromObject(s Ipv6Inher
 		o.Advertise = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6InheritedAssignAddrTypeUlaXml_11_0_2) UnmarshalToObject() (*Ipv6InheritedAssignAddrTypeUla, error) {
@@ -4940,6 +5377,7 @@ func (o ipv6InheritedAssignAddrTypeUlaXml_11_0_2) UnmarshalToObject() (*Ipv6Inhe
 		Anycast:           util.AsBool(o.Anycast, nil),
 		Advertise:         advertiseVal,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4950,6 +5388,7 @@ func (o *ipv6InheritedAssignAddrTypeUlaAdvertiseXml_11_0_2) MarshalFromObject(s 
 	o.OnlinkFlag = util.YesNo(s.OnlinkFlag, nil)
 	o.AutoConfigFlag = util.YesNo(s.AutoConfigFlag, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6InheritedAssignAddrTypeUlaAdvertiseXml_11_0_2) UnmarshalToObject() (*Ipv6InheritedAssignAddrTypeUlaAdvertise, error) {
@@ -4961,6 +5400,7 @@ func (o ipv6InheritedAssignAddrTypeUlaAdvertiseXml_11_0_2) UnmarshalToObject() (
 		OnlinkFlag:        util.AsBool(o.OnlinkFlag, nil),
 		AutoConfigFlag:    util.AsBool(o.AutoConfigFlag, nil),
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4995,6 +5435,7 @@ func (o *ipv6InheritedNeighborDiscoveryXml_11_0_2) MarshalFromObject(s Ipv6Inher
 		o.RouterAdvertisement = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6InheritedNeighborDiscoveryXml_11_0_2) UnmarshalToObject() (*Ipv6InheritedNeighborDiscovery, error) {
@@ -5044,6 +5485,7 @@ func (o ipv6InheritedNeighborDiscoveryXml_11_0_2) UnmarshalToObject() (*Ipv6Inhe
 		ReachableTime:       o.ReachableTime,
 		RouterAdvertisement: routerAdvertisementVal,
 		Misc:                o.Misc,
+		MiscAttributes:      o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5055,6 +5497,7 @@ func (o *ipv6InheritedNeighborDiscoveryDnsServerXml_11_0_2) MarshalFromObject(s 
 		o.Source = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6InheritedNeighborDiscoveryDnsServerXml_11_0_2) UnmarshalToObject() (*Ipv6InheritedNeighborDiscoveryDnsServer, error) {
@@ -5068,9 +5511,10 @@ func (o ipv6InheritedNeighborDiscoveryDnsServerXml_11_0_2) UnmarshalToObject() (
 	}
 
 	result := &Ipv6InheritedNeighborDiscoveryDnsServer{
-		Enable: util.AsBool(o.Enable, nil),
-		Source: sourceVal,
-		Misc:   o.Misc,
+		Enable:         util.AsBool(o.Enable, nil),
+		Source:         sourceVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5086,6 +5530,7 @@ func (o *ipv6InheritedNeighborDiscoveryDnsServerSourceXml_11_0_2) MarshalFromObj
 		o.Manual = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6InheritedNeighborDiscoveryDnsServerSourceXml_11_0_2) UnmarshalToObject() (*Ipv6InheritedNeighborDiscoveryDnsServerSource, error) {
@@ -5107,22 +5552,25 @@ func (o ipv6InheritedNeighborDiscoveryDnsServerSourceXml_11_0_2) UnmarshalToObje
 	}
 
 	result := &Ipv6InheritedNeighborDiscoveryDnsServerSource{
-		Dhcpv6: dhcpv6Val,
-		Manual: manualVal,
-		Misc:   o.Misc,
+		Dhcpv6:         dhcpv6Val,
+		Manual:         manualVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *ipv6InheritedNeighborDiscoveryDnsServerSourceDhcpv6Xml_11_0_2) MarshalFromObject(s Ipv6InheritedNeighborDiscoveryDnsServerSourceDhcpv6) {
 	o.PrefixPool = s.PrefixPool
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6InheritedNeighborDiscoveryDnsServerSourceDhcpv6Xml_11_0_2) UnmarshalToObject() (*Ipv6InheritedNeighborDiscoveryDnsServerSourceDhcpv6, error) {
 
 	result := &Ipv6InheritedNeighborDiscoveryDnsServerSourceDhcpv6{
-		PrefixPool: o.PrefixPool,
-		Misc:       o.Misc,
+		PrefixPool:     o.PrefixPool,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5137,6 +5585,7 @@ func (o *ipv6InheritedNeighborDiscoveryDnsServerSourceManualXml_11_0_2) MarshalF
 		o.Server = &ipv6InheritedNeighborDiscoveryDnsServerSourceManualServerContainerXml_11_0_2{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6InheritedNeighborDiscoveryDnsServerSourceManualXml_11_0_2) UnmarshalToObject() (*Ipv6InheritedNeighborDiscoveryDnsServerSourceManual, error) {
@@ -5152,8 +5601,9 @@ func (o ipv6InheritedNeighborDiscoveryDnsServerSourceManualXml_11_0_2) Unmarshal
 	}
 
 	result := &Ipv6InheritedNeighborDiscoveryDnsServerSourceManual{
-		Server: serverVal,
-		Misc:   o.Misc,
+		Server:         serverVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5161,14 +5611,16 @@ func (o *ipv6InheritedNeighborDiscoveryDnsServerSourceManualServerXml_11_0_2) Ma
 	o.Name = s.Name
 	o.Lifetime = s.Lifetime
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6InheritedNeighborDiscoveryDnsServerSourceManualServerXml_11_0_2) UnmarshalToObject() (*Ipv6InheritedNeighborDiscoveryDnsServerSourceManualServer, error) {
 
 	result := &Ipv6InheritedNeighborDiscoveryDnsServerSourceManualServer{
-		Name:     o.Name,
-		Lifetime: o.Lifetime,
-		Misc:     o.Misc,
+		Name:           o.Name,
+		Lifetime:       o.Lifetime,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5180,6 +5632,7 @@ func (o *ipv6InheritedNeighborDiscoveryDnsSuffixXml_11_0_2) MarshalFromObject(s 
 		o.Source = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6InheritedNeighborDiscoveryDnsSuffixXml_11_0_2) UnmarshalToObject() (*Ipv6InheritedNeighborDiscoveryDnsSuffix, error) {
@@ -5193,9 +5646,10 @@ func (o ipv6InheritedNeighborDiscoveryDnsSuffixXml_11_0_2) UnmarshalToObject() (
 	}
 
 	result := &Ipv6InheritedNeighborDiscoveryDnsSuffix{
-		Enable: util.AsBool(o.Enable, nil),
-		Source: sourceVal,
-		Misc:   o.Misc,
+		Enable:         util.AsBool(o.Enable, nil),
+		Source:         sourceVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5211,6 +5665,7 @@ func (o *ipv6InheritedNeighborDiscoveryDnsSuffixSourceXml_11_0_2) MarshalFromObj
 		o.Manual = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6InheritedNeighborDiscoveryDnsSuffixSourceXml_11_0_2) UnmarshalToObject() (*Ipv6InheritedNeighborDiscoveryDnsSuffixSource, error) {
@@ -5232,22 +5687,25 @@ func (o ipv6InheritedNeighborDiscoveryDnsSuffixSourceXml_11_0_2) UnmarshalToObje
 	}
 
 	result := &Ipv6InheritedNeighborDiscoveryDnsSuffixSource{
-		Dhcpv6: dhcpv6Val,
-		Manual: manualVal,
-		Misc:   o.Misc,
+		Dhcpv6:         dhcpv6Val,
+		Manual:         manualVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *ipv6InheritedNeighborDiscoveryDnsSuffixSourceDhcpv6Xml_11_0_2) MarshalFromObject(s Ipv6InheritedNeighborDiscoveryDnsSuffixSourceDhcpv6) {
 	o.PrefixPool = s.PrefixPool
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6InheritedNeighborDiscoveryDnsSuffixSourceDhcpv6Xml_11_0_2) UnmarshalToObject() (*Ipv6InheritedNeighborDiscoveryDnsSuffixSourceDhcpv6, error) {
 
 	result := &Ipv6InheritedNeighborDiscoveryDnsSuffixSourceDhcpv6{
-		PrefixPool: o.PrefixPool,
-		Misc:       o.Misc,
+		PrefixPool:     o.PrefixPool,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5262,6 +5720,7 @@ func (o *ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualXml_11_0_2) MarshalF
 		o.Suffix = &ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffixContainerXml_11_0_2{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualXml_11_0_2) UnmarshalToObject() (*Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManual, error) {
@@ -5277,8 +5736,9 @@ func (o ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualXml_11_0_2) Unmarshal
 	}
 
 	result := &Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManual{
-		Suffix: suffixVal,
-		Misc:   o.Misc,
+		Suffix:         suffixVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5286,14 +5746,16 @@ func (o *ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffixXml_11_0_2) Ma
 	o.Name = s.Name
 	o.Lifetime = s.Lifetime
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffixXml_11_0_2) UnmarshalToObject() (*Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffix, error) {
 
 	result := &Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffix{
-		Name:     o.Name,
-		Lifetime: o.Lifetime,
-		Misc:     o.Misc,
+		Name:           o.Name,
+		Lifetime:       o.Lifetime,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5301,14 +5763,16 @@ func (o *ipv6InheritedNeighborDiscoveryNeighborXml_11_0_2) MarshalFromObject(s I
 	o.Name = s.Name
 	o.HwAddress = s.HwAddress
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6InheritedNeighborDiscoveryNeighborXml_11_0_2) UnmarshalToObject() (*Ipv6InheritedNeighborDiscoveryNeighbor, error) {
 
 	result := &Ipv6InheritedNeighborDiscoveryNeighbor{
-		Name:      o.Name,
-		HwAddress: o.HwAddress,
-		Misc:      o.Misc,
+		Name:           o.Name,
+		HwAddress:      o.HwAddress,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5326,6 +5790,7 @@ func (o *ipv6InheritedNeighborDiscoveryRouterAdvertisementXml_11_0_2) MarshalFro
 	o.RetransmissionTimer = s.RetransmissionTimer
 	o.RouterPreference = s.RouterPreference
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6InheritedNeighborDiscoveryRouterAdvertisementXml_11_0_2) UnmarshalToObject() (*Ipv6InheritedNeighborDiscoveryRouterAdvertisement, error) {
@@ -5344,6 +5809,7 @@ func (o ipv6InheritedNeighborDiscoveryRouterAdvertisementXml_11_0_2) UnmarshalTo
 		RetransmissionTimer:    o.RetransmissionTimer,
 		RouterPreference:       o.RouterPreference,
 		Misc:                   o.Misc,
+		MiscAttributes:         o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5368,6 +5834,7 @@ func (o *ipv6NeighborDiscoveryXml_11_0_2) MarshalFromObject(s Ipv6NeighborDiscov
 		o.RouterAdvertisement = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6NeighborDiscoveryXml_11_0_2) UnmarshalToObject() (*Ipv6NeighborDiscovery, error) {
@@ -5399,6 +5866,7 @@ func (o ipv6NeighborDiscoveryXml_11_0_2) UnmarshalToObject() (*Ipv6NeighborDisco
 		ReachableTime:       o.ReachableTime,
 		RouterAdvertisement: routerAdvertisementVal,
 		Misc:                o.Misc,
+		MiscAttributes:      o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5406,14 +5874,16 @@ func (o *ipv6NeighborDiscoveryNeighborXml_11_0_2) MarshalFromObject(s Ipv6Neighb
 	o.Name = s.Name
 	o.HwAddress = s.HwAddress
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6NeighborDiscoveryNeighborXml_11_0_2) UnmarshalToObject() (*Ipv6NeighborDiscoveryNeighbor, error) {
 
 	result := &Ipv6NeighborDiscoveryNeighbor{
-		Name:      o.Name,
-		HwAddress: o.HwAddress,
-		Misc:      o.Misc,
+		Name:           o.Name,
+		HwAddress:      o.HwAddress,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5436,6 +5906,7 @@ func (o *ipv6NeighborDiscoveryRouterAdvertisementXml_11_0_2) MarshalFromObject(s
 	o.RetransmissionTimer = s.RetransmissionTimer
 	o.RouterPreference = s.RouterPreference
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6NeighborDiscoveryRouterAdvertisementXml_11_0_2) UnmarshalToObject() (*Ipv6NeighborDiscoveryRouterAdvertisement, error) {
@@ -5463,6 +5934,7 @@ func (o ipv6NeighborDiscoveryRouterAdvertisementXml_11_0_2) UnmarshalToObject() 
 		RetransmissionTimer:    o.RetransmissionTimer,
 		RouterPreference:       o.RouterPreference,
 		Misc:                   o.Misc,
+		MiscAttributes:         o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5487,6 +5959,7 @@ func (o *ipv6NeighborDiscoveryRouterAdvertisementDnsSupportXml_11_0_2) MarshalFr
 		o.Suffix = &ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffixContainerXml_11_0_2{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6NeighborDiscoveryRouterAdvertisementDnsSupportXml_11_0_2) UnmarshalToObject() (*Ipv6NeighborDiscoveryRouterAdvertisementDnsSupport, error) {
@@ -5512,10 +5985,11 @@ func (o ipv6NeighborDiscoveryRouterAdvertisementDnsSupportXml_11_0_2) UnmarshalT
 	}
 
 	result := &Ipv6NeighborDiscoveryRouterAdvertisementDnsSupport{
-		Enable: util.AsBool(o.Enable, nil),
-		Server: serverVal,
-		Suffix: suffixVal,
-		Misc:   o.Misc,
+		Enable:         util.AsBool(o.Enable, nil),
+		Server:         serverVal,
+		Suffix:         suffixVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5523,14 +5997,16 @@ func (o *ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServerXml_11_0_2) Mar
 	o.Name = s.Name
 	o.Lifetime = s.Lifetime
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServerXml_11_0_2) UnmarshalToObject() (*Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServer, error) {
 
 	result := &Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServer{
-		Name:     o.Name,
-		Lifetime: o.Lifetime,
-		Misc:     o.Misc,
+		Name:           o.Name,
+		Lifetime:       o.Lifetime,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5538,14 +6014,16 @@ func (o *ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffixXml_11_0_2) Mar
 	o.Name = s.Name
 	o.Lifetime = s.Lifetime
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffixXml_11_0_2) UnmarshalToObject() (*Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffix, error) {
 
 	result := &Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffix{
-		Name:     o.Name,
-		Lifetime: o.Lifetime,
-		Misc:     o.Misc,
+		Name:           o.Name,
+		Lifetime:       o.Lifetime,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5561,6 +6039,7 @@ func (o *ndpProxyXml_11_0_2) MarshalFromObject(s NdpProxy) {
 	}
 	o.Enabled = util.YesNo(s.Enabled, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ndpProxyXml_11_0_2) UnmarshalToObject() (*NdpProxy, error) {
@@ -5576,9 +6055,10 @@ func (o ndpProxyXml_11_0_2) UnmarshalToObject() (*NdpProxy, error) {
 	}
 
 	result := &NdpProxy{
-		Address: addressVal,
-		Enabled: util.AsBool(o.Enabled, nil),
-		Misc:    o.Misc,
+		Address:        addressVal,
+		Enabled:        util.AsBool(o.Enabled, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5586,14 +6066,16 @@ func (o *ndpProxyAddressXml_11_0_2) MarshalFromObject(s NdpProxyAddress) {
 	o.Name = s.Name
 	o.Negate = util.YesNo(s.Negate, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ndpProxyAddressXml_11_0_2) UnmarshalToObject() (*NdpProxyAddress, error) {
 
 	result := &NdpProxyAddress{
-		Name:   o.Name,
-		Negate: util.AsBool(o.Negate, nil),
-		Misc:   o.Misc,
+		Name:           o.Name,
+		Negate:         util.AsBool(o.Negate, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5606,6 +6088,7 @@ func (o *sdwanLinkSettingsXml_11_0_2) MarshalFromObject(s SdwanLinkSettings) {
 		o.UpstreamNat = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o sdwanLinkSettingsXml_11_0_2) UnmarshalToObject() (*SdwanLinkSettings, error) {
@@ -5623,6 +6106,7 @@ func (o sdwanLinkSettingsXml_11_0_2) UnmarshalToObject() (*SdwanLinkSettings, er
 		SdwanInterfaceProfile: o.SdwanInterfaceProfile,
 		UpstreamNat:           upstreamNatVal,
 		Misc:                  o.Misc,
+		MiscAttributes:        o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5639,6 +6123,7 @@ func (o *sdwanLinkSettingsUpstreamNatXml_11_0_2) MarshalFromObject(s SdwanLinkSe
 		o.StaticIp = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o sdwanLinkSettingsUpstreamNatXml_11_0_2) UnmarshalToObject() (*SdwanLinkSettingsUpstreamNat, error) {
@@ -5660,21 +6145,24 @@ func (o sdwanLinkSettingsUpstreamNatXml_11_0_2) UnmarshalToObject() (*SdwanLinkS
 	}
 
 	result := &SdwanLinkSettingsUpstreamNat{
-		Enable:   util.AsBool(o.Enable, nil),
-		Ddns:     ddnsVal,
-		StaticIp: staticIpVal,
-		Misc:     o.Misc,
+		Enable:         util.AsBool(o.Enable, nil),
+		Ddns:           ddnsVal,
+		StaticIp:       staticIpVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *sdwanLinkSettingsUpstreamNatDdnsXml_11_0_2) MarshalFromObject(s SdwanLinkSettingsUpstreamNatDdns) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o sdwanLinkSettingsUpstreamNatDdnsXml_11_0_2) UnmarshalToObject() (*SdwanLinkSettingsUpstreamNatDdns, error) {
 
 	result := &SdwanLinkSettingsUpstreamNatDdns{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5682,14 +6170,16 @@ func (o *sdwanLinkSettingsUpstreamNatStaticIpXml_11_0_2) MarshalFromObject(s Sdw
 	o.Fqdn = s.Fqdn
 	o.IpAddress = s.IpAddress
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o sdwanLinkSettingsUpstreamNatStaticIpXml_11_0_2) UnmarshalToObject() (*SdwanLinkSettingsUpstreamNatStaticIp, error) {
 
 	result := &SdwanLinkSettingsUpstreamNatStaticIp{
-		Fqdn:      o.Fqdn,
-		IpAddress: o.IpAddress,
-		Misc:      o.Misc,
+		Fqdn:           o.Fqdn,
+		IpAddress:      o.IpAddress,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7328,4 +7818,12 @@ func (o *Entry) EntryName() string {
 
 func (o *Entry) SetEntryName(name string) {
 	o.Name = name
+}
+
+func (o *Entry) GetMiscAttributes() []xml.Attr {
+	return o.MiscAttributes
+}
+
+func (o *Entry) SetMiscAttributes(attrs []xml.Attr) {
+	o.MiscAttributes = attrs
 }

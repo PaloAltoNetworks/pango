@@ -19,36 +19,41 @@ var (
 )
 
 type Entry struct {
-	Name     string
-	DhGroup  *string
-	Lifesize *Lifesize
-	Lifetime *Lifetime
-	Ah       *Ah
-	Esp      *Esp
-	Misc     []generic.Xml
+	Name           string
+	DhGroup        *string
+	Lifesize       *Lifesize
+	Lifetime       *Lifetime
+	Ah             *Ah
+	Esp            *Esp
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Lifesize struct {
-	Gb   *int64
-	Kb   *int64
-	Mb   *int64
-	Tb   *int64
-	Misc []generic.Xml
+	Gb             *int64
+	Kb             *int64
+	Mb             *int64
+	Tb             *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Lifetime struct {
-	Days    *int64
-	Hours   *int64
-	Minutes *int64
-	Seconds *int64
-	Misc    []generic.Xml
+	Days           *int64
+	Hours          *int64
+	Minutes        *int64
+	Seconds        *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Ah struct {
 	Authentication []string
 	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Esp struct {
 	Authentication []string
 	Encryption     []string
 	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 
 type entryXmlContainer struct {
@@ -75,37 +80,42 @@ func specifyEntry(source *Entry) (any, error) {
 }
 
 type entryXml struct {
-	XMLName  xml.Name      `xml:"entry"`
-	Name     string        `xml:"name,attr"`
-	DhGroup  *string       `xml:"dh-group,omitempty"`
-	Lifesize *lifesizeXml  `xml:"lifesize,omitempty"`
-	Lifetime *lifetimeXml  `xml:"lifetime,omitempty"`
-	Ah       *ahXml        `xml:"ah,omitempty"`
-	Esp      *espXml       `xml:"esp,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	DhGroup        *string       `xml:"dh-group,omitempty"`
+	Lifesize       *lifesizeXml  `xml:"lifesize,omitempty"`
+	Lifetime       *lifetimeXml  `xml:"lifetime,omitempty"`
+	Ah             *ahXml        `xml:"ah,omitempty"`
+	Esp            *espXml       `xml:"esp,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type lifesizeXml struct {
-	Gb   *int64        `xml:"gb,omitempty"`
-	Kb   *int64        `xml:"kb,omitempty"`
-	Mb   *int64        `xml:"mb,omitempty"`
-	Tb   *int64        `xml:"tb,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Gb             *int64        `xml:"gb,omitempty"`
+	Kb             *int64        `xml:"kb,omitempty"`
+	Mb             *int64        `xml:"mb,omitempty"`
+	Tb             *int64        `xml:"tb,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type lifetimeXml struct {
-	Days    *int64        `xml:"days,omitempty"`
-	Hours   *int64        `xml:"hours,omitempty"`
-	Minutes *int64        `xml:"minutes,omitempty"`
-	Seconds *int64        `xml:"seconds,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	Days           *int64        `xml:"days,omitempty"`
+	Hours          *int64        `xml:"hours,omitempty"`
+	Minutes        *int64        `xml:"minutes,omitempty"`
+	Seconds        *int64        `xml:"seconds,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ahXml struct {
 	Authentication *util.MemberType `xml:"authentication,omitempty"`
 	Misc           []generic.Xml    `xml:",any"`
+	MiscAttributes []xml.Attr       `xml:",any,attr"`
 }
 type espXml struct {
 	Authentication *util.MemberType `xml:"authentication,omitempty"`
 	Encryption     *util.MemberType `xml:"encryption,omitempty"`
 	Misc           []generic.Xml    `xml:",any"`
+	MiscAttributes []xml.Attr       `xml:",any,attr"`
 }
 
 func (o *entryXml) MarshalFromObject(s Entry) {
@@ -132,6 +142,7 @@ func (o *entryXml) MarshalFromObject(s Entry) {
 		o.Esp = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o entryXml) UnmarshalToObject() (*Entry, error) {
@@ -169,13 +180,14 @@ func (o entryXml) UnmarshalToObject() (*Entry, error) {
 	}
 
 	result := &Entry{
-		Name:     o.Name,
-		DhGroup:  o.DhGroup,
-		Lifesize: lifesizeVal,
-		Lifetime: lifetimeVal,
-		Ah:       ahVal,
-		Esp:      espVal,
-		Misc:     o.Misc,
+		Name:           o.Name,
+		DhGroup:        o.DhGroup,
+		Lifesize:       lifesizeVal,
+		Lifetime:       lifetimeVal,
+		Ah:             ahVal,
+		Esp:            espVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -185,16 +197,18 @@ func (o *lifesizeXml) MarshalFromObject(s Lifesize) {
 	o.Mb = s.Mb
 	o.Tb = s.Tb
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o lifesizeXml) UnmarshalToObject() (*Lifesize, error) {
 
 	result := &Lifesize{
-		Gb:   o.Gb,
-		Kb:   o.Kb,
-		Mb:   o.Mb,
-		Tb:   o.Tb,
-		Misc: o.Misc,
+		Gb:             o.Gb,
+		Kb:             o.Kb,
+		Mb:             o.Mb,
+		Tb:             o.Tb,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -204,16 +218,18 @@ func (o *lifetimeXml) MarshalFromObject(s Lifetime) {
 	o.Minutes = s.Minutes
 	o.Seconds = s.Seconds
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o lifetimeXml) UnmarshalToObject() (*Lifetime, error) {
 
 	result := &Lifetime{
-		Days:    o.Days,
-		Hours:   o.Hours,
-		Minutes: o.Minutes,
-		Seconds: o.Seconds,
-		Misc:    o.Misc,
+		Days:           o.Days,
+		Hours:          o.Hours,
+		Minutes:        o.Minutes,
+		Seconds:        o.Seconds,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -222,6 +238,7 @@ func (o *ahXml) MarshalFromObject(s Ah) {
 		o.Authentication = util.StrToMem(s.Authentication)
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ahXml) UnmarshalToObject() (*Ah, error) {
@@ -233,6 +250,7 @@ func (o ahXml) UnmarshalToObject() (*Ah, error) {
 	result := &Ah{
 		Authentication: authenticationVal,
 		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -244,6 +262,7 @@ func (o *espXml) MarshalFromObject(s Esp) {
 		o.Encryption = util.StrToMem(s.Encryption)
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o espXml) UnmarshalToObject() (*Esp, error) {
@@ -260,6 +279,7 @@ func (o espXml) UnmarshalToObject() (*Esp, error) {
 		Authentication: authenticationVal,
 		Encryption:     encryptionVal,
 		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -417,4 +437,12 @@ func (o *Entry) EntryName() string {
 
 func (o *Entry) SetEntryName(name string) {
 	o.Name = name
+}
+
+func (o *Entry) GetMiscAttributes() []xml.Attr {
+	return o.MiscAttributes
+}
+
+func (o *Entry) SetMiscAttributes(attrs []xml.Attr) {
+	o.MiscAttributes = attrs
 }

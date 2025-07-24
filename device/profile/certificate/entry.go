@@ -34,6 +34,7 @@ type Entry struct {
 	UseOcsp                         *bool
 	UsernameField                   *UsernameField
 	Misc                            []generic.Xml
+	MiscAttributes                  []xml.Attr
 }
 type Certificate struct {
 	Name                  string
@@ -41,11 +42,13 @@ type Certificate struct {
 	OcspVerifyCertificate *string
 	TemplateName          *string
 	Misc                  []generic.Xml
+	MiscAttributes        []xml.Attr
 }
 type UsernameField struct {
-	Subject    *string
-	SubjectAlt *string
-	Misc       []generic.Xml
+	Subject        *string
+	SubjectAlt     *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 
 type entryXmlContainer struct {
@@ -88,6 +91,7 @@ type entryXml struct {
 	UseOcsp                         *string                  `xml:"use-ocsp,omitempty"`
 	UsernameField                   *usernameFieldXml        `xml:"username-field,omitempty"`
 	Misc                            []generic.Xml            `xml:",any"`
+	MiscAttributes                  []xml.Attr               `xml:",any,attr"`
 }
 type certificateContainerXml struct {
 	Entries []certificateXml `xml:"entry"`
@@ -99,11 +103,13 @@ type certificateXml struct {
 	OcspVerifyCertificate *string       `xml:"ocsp-verify-cert,omitempty"`
 	TemplateName          *string       `xml:"template-name,omitempty"`
 	Misc                  []generic.Xml `xml:",any"`
+	MiscAttributes        []xml.Attr    `xml:",any,attr"`
 }
 type usernameFieldXml struct {
-	Subject    *string       `xml:"subject,omitempty"`
-	SubjectAlt *string       `xml:"subject-alt,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	Subject        *string       `xml:"subject,omitempty"`
+	SubjectAlt     *string       `xml:"subject-alt,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 
 func (o *entryXml) MarshalFromObject(s Entry) {
@@ -134,6 +140,7 @@ func (o *entryXml) MarshalFromObject(s Entry) {
 		o.UsernameField = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o entryXml) UnmarshalToObject() (*Entry, error) {
@@ -172,6 +179,7 @@ func (o entryXml) UnmarshalToObject() (*Entry, error) {
 		UseOcsp:                         util.AsBool(o.UseOcsp, nil),
 		UsernameField:                   usernameFieldVal,
 		Misc:                            o.Misc,
+		MiscAttributes:                  o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -181,6 +189,7 @@ func (o *certificateXml) MarshalFromObject(s Certificate) {
 	o.OcspVerifyCertificate = s.OcspVerifyCertificate
 	o.TemplateName = s.TemplateName
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o certificateXml) UnmarshalToObject() (*Certificate, error) {
@@ -191,6 +200,7 @@ func (o certificateXml) UnmarshalToObject() (*Certificate, error) {
 		OcspVerifyCertificate: o.OcspVerifyCertificate,
 		TemplateName:          o.TemplateName,
 		Misc:                  o.Misc,
+		MiscAttributes:        o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -198,14 +208,16 @@ func (o *usernameFieldXml) MarshalFromObject(s UsernameField) {
 	o.Subject = s.Subject
 	o.SubjectAlt = s.SubjectAlt
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o usernameFieldXml) UnmarshalToObject() (*UsernameField, error) {
 
 	result := &UsernameField{
-		Subject:    o.Subject,
-		SubjectAlt: o.SubjectAlt,
-		Misc:       o.Misc,
+		Subject:        o.Subject,
+		SubjectAlt:     o.SubjectAlt,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -380,4 +392,12 @@ func (o *Entry) EntryName() string {
 
 func (o *Entry) SetEntryName(name string) {
 	o.Name = name
+}
+
+func (o *Entry) GetMiscAttributes() []xml.Attr {
+	return o.MiscAttributes
+}
+
+func (o *Entry) SetMiscAttributes(attrs []xml.Attr) {
+	o.MiscAttributes = attrs
 }

@@ -19,84 +19,97 @@ var (
 )
 
 type Entry struct {
-	Name string
-	Vrf  []Vrf
-	Misc []generic.Xml
+	Name           string
+	Vrf            []Vrf
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Vrf struct {
-	Name         string
-	Interface    []string
-	AdminDists   *VrfAdminDists
-	RibFilter    *VrfRibFilter
-	Bgp          *VrfBgp
-	RoutingTable *VrfRoutingTable
-	Ospf         *VrfOspf
-	Ospfv3       *VrfOspfv3
-	Ecmp         *VrfEcmp
-	Multicast    *VrfMulticast
-	Rip          *VrfRip
-	Misc         []generic.Xml
+	Name           string
+	Interface      []string
+	AdminDists     *VrfAdminDists
+	RibFilter      *VrfRibFilter
+	Bgp            *VrfBgp
+	RoutingTable   *VrfRoutingTable
+	Ospf           *VrfOspf
+	Ospfv3         *VrfOspfv3
+	Ecmp           *VrfEcmp
+	Multicast      *VrfMulticast
+	Rip            *VrfRip
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfAdminDists struct {
-	Static      *int64
-	StaticIpv6  *int64
-	OspfInter   *int64
-	OspfIntra   *int64
-	OspfExt     *int64
-	Ospfv3Inter *int64
-	Ospfv3Intra *int64
-	Ospfv3Ext   *int64
-	BgpInternal *int64
-	BgpExternal *int64
-	BgpLocal    *int64
-	Rip         *int64
-	Misc        []generic.Xml
+	Static         *int64
+	StaticIpv6     *int64
+	OspfInter      *int64
+	OspfIntra      *int64
+	OspfExt        *int64
+	Ospfv3Inter    *int64
+	Ospfv3Intra    *int64
+	Ospfv3Ext      *int64
+	BgpInternal    *int64
+	BgpExternal    *int64
+	BgpLocal       *int64
+	Rip            *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfRibFilter struct {
-	Ipv4 *VrfRibFilterIpv4
-	Ipv6 *VrfRibFilterIpv6
-	Misc []generic.Xml
+	Ipv4           *VrfRibFilterIpv4
+	Ipv6           *VrfRibFilterIpv6
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfRibFilterIpv4 struct {
-	Static *VrfRibFilterIpv4Static
-	Bgp    *VrfRibFilterIpv4Bgp
-	Ospf   *VrfRibFilterIpv4Ospf
-	Rip    *VrfRibFilterIpv4Rip
-	Misc   []generic.Xml
+	Static         *VrfRibFilterIpv4Static
+	Bgp            *VrfRibFilterIpv4Bgp
+	Ospf           *VrfRibFilterIpv4Ospf
+	Rip            *VrfRibFilterIpv4Rip
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfRibFilterIpv4Static struct {
-	RouteMap *string
-	Misc     []generic.Xml
+	RouteMap       *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfRibFilterIpv4Bgp struct {
-	RouteMap *string
-	Misc     []generic.Xml
+	RouteMap       *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfRibFilterIpv4Ospf struct {
-	RouteMap *string
-	Misc     []generic.Xml
+	RouteMap       *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfRibFilterIpv4Rip struct {
-	RouteMap *string
-	Misc     []generic.Xml
+	RouteMap       *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfRibFilterIpv6 struct {
-	Static *VrfRibFilterIpv6Static
-	Bgp    *VrfRibFilterIpv6Bgp
-	Ospfv3 *VrfRibFilterIpv6Ospfv3
-	Misc   []generic.Xml
+	Static         *VrfRibFilterIpv6Static
+	Bgp            *VrfRibFilterIpv6Bgp
+	Ospfv3         *VrfRibFilterIpv6Ospfv3
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfRibFilterIpv6Static struct {
-	RouteMap *string
-	Misc     []generic.Xml
+	RouteMap       *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfRibFilterIpv6Bgp struct {
-	RouteMap *string
-	Misc     []generic.Xml
+	RouteMap       *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfRibFilterIpv6Ospfv3 struct {
-	RouteMap *string
-	Misc     []generic.Xml
+	RouteMap       *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfBgp struct {
 	Enable                      *bool
@@ -117,11 +130,13 @@ type VrfBgp struct {
 	PeerGroup                   []VrfBgpPeerGroup
 	AggregateRoutes             []VrfBgpAggregateRoutes
 	Misc                        []generic.Xml
+	MiscAttributes              []xml.Attr
 }
 type VrfBgpMed struct {
 	AlwaysCompareMed           *bool
 	DeterministicMedComparison *bool
 	Misc                       []generic.Xml
+	MiscAttributes             []xml.Attr
 }
 type VrfBgpGracefulRestart struct {
 	Enable             *bool
@@ -129,48 +144,58 @@ type VrfBgpGracefulRestart struct {
 	MaxPeerRestartTime *int64
 	LocalRestartTime   *int64
 	Misc               []generic.Xml
+	MiscAttributes     []xml.Attr
 }
 type VrfBgpGlobalBfd struct {
-	Profile *string
-	Misc    []generic.Xml
+	Profile        *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfBgpRedistributionProfile struct {
-	Ipv4 *VrfBgpRedistributionProfileIpv4
-	Ipv6 *VrfBgpRedistributionProfileIpv6
-	Misc []generic.Xml
+	Ipv4           *VrfBgpRedistributionProfileIpv4
+	Ipv6           *VrfBgpRedistributionProfileIpv6
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfBgpRedistributionProfileIpv4 struct {
-	Unicast *string
-	Misc    []generic.Xml
+	Unicast        *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfBgpRedistributionProfileIpv6 struct {
-	Unicast *string
-	Misc    []generic.Xml
+	Unicast        *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfBgpAdvertiseNetwork struct {
-	Ipv4 *VrfBgpAdvertiseNetworkIpv4
-	Ipv6 *VrfBgpAdvertiseNetworkIpv6
-	Misc []generic.Xml
+	Ipv4           *VrfBgpAdvertiseNetworkIpv4
+	Ipv6           *VrfBgpAdvertiseNetworkIpv6
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfBgpAdvertiseNetworkIpv4 struct {
-	Network []VrfBgpAdvertiseNetworkIpv4Network
-	Misc    []generic.Xml
+	Network        []VrfBgpAdvertiseNetworkIpv4Network
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfBgpAdvertiseNetworkIpv4Network struct {
-	Name      string
-	Unicast   *bool
-	Multicast *bool
-	Backdoor  *bool
-	Misc      []generic.Xml
+	Name           string
+	Unicast        *bool
+	Multicast      *bool
+	Backdoor       *bool
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfBgpAdvertiseNetworkIpv6 struct {
-	Network []VrfBgpAdvertiseNetworkIpv6Network
-	Misc    []generic.Xml
+	Network        []VrfBgpAdvertiseNetworkIpv6Network
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfBgpAdvertiseNetworkIpv6Network struct {
-	Name    string
-	Unicast *bool
-	Misc    []generic.Xml
+	Name           string
+	Unicast        *bool
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfBgpPeerGroup struct {
 	Name              string
@@ -181,27 +206,33 @@ type VrfBgpPeerGroup struct {
 	ConnectionOptions *VrfBgpPeerGroupConnectionOptions
 	Peer              []VrfBgpPeerGroupPeer
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 type VrfBgpPeerGroupType struct {
-	Ibgp *VrfBgpPeerGroupTypeIbgp
-	Ebgp *VrfBgpPeerGroupTypeEbgp
-	Misc []generic.Xml
+	Ibgp           *VrfBgpPeerGroupTypeIbgp
+	Ebgp           *VrfBgpPeerGroupTypeEbgp
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfBgpPeerGroupTypeIbgp struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfBgpPeerGroupTypeEbgp struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfBgpPeerGroupAddressFamily struct {
-	Ipv4 *string
-	Ipv6 *string
-	Misc []generic.Xml
+	Ipv4           *string
+	Ipv6           *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfBgpPeerGroupFilteringProfile struct {
-	Ipv4 *string
-	Ipv6 *string
-	Misc []generic.Xml
+	Ipv4           *string
+	Ipv6           *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfBgpPeerGroupConnectionOptions struct {
 	Timers         *string
@@ -209,6 +240,7 @@ type VrfBgpPeerGroupConnectionOptions struct {
 	Authentication *string
 	Dampening      *string
 	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfBgpPeerGroupPeer struct {
 	Name                          string
@@ -222,39 +254,47 @@ type VrfBgpPeerGroupPeer struct {
 	ConnectionOptions             *VrfBgpPeerGroupPeerConnectionOptions
 	Bfd                           *VrfBgpPeerGroupPeerBfd
 	Misc                          []generic.Xml
+	MiscAttributes                []xml.Attr
 }
 type VrfBgpPeerGroupPeerInherit struct {
-	Yes  *VrfBgpPeerGroupPeerInheritYes
-	No   *VrfBgpPeerGroupPeerInheritNo
-	Misc []generic.Xml
+	Yes            *VrfBgpPeerGroupPeerInheritYes
+	No             *VrfBgpPeerGroupPeerInheritNo
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfBgpPeerGroupPeerInheritYes struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfBgpPeerGroupPeerInheritNo struct {
 	AddressFamily    *VrfBgpPeerGroupPeerInheritNoAddressFamily
 	FilteringProfile *VrfBgpPeerGroupPeerInheritNoFilteringProfile
 	Misc             []generic.Xml
+	MiscAttributes   []xml.Attr
 }
 type VrfBgpPeerGroupPeerInheritNoAddressFamily struct {
-	Ipv4 *string
-	Ipv6 *string
-	Misc []generic.Xml
+	Ipv4           *string
+	Ipv6           *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfBgpPeerGroupPeerInheritNoFilteringProfile struct {
-	Ipv4 *string
-	Ipv6 *string
-	Misc []generic.Xml
+	Ipv4           *string
+	Ipv6           *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfBgpPeerGroupPeerLocalAddress struct {
-	Interface *string
-	Ip        *string
-	Misc      []generic.Xml
+	Interface      *string
+	Ip             *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfBgpPeerGroupPeerPeerAddress struct {
-	Ip   *string
-	Fqdn *string
-	Misc []generic.Xml
+	Ip             *string
+	Fqdn           *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfBgpPeerGroupPeerConnectionOptions struct {
 	Timers         *string
@@ -262,71 +302,83 @@ type VrfBgpPeerGroupPeerConnectionOptions struct {
 	Authentication *string
 	Dampening      *string
 	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfBgpPeerGroupPeerBfd struct {
-	Profile *string
-	Misc    []generic.Xml
+	Profile        *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfBgpAggregateRoutes struct {
-	Name        string
-	Description *string
-	Enable      *bool
-	SummaryOnly *bool
-	AsSet       *bool
-	SameMed     *bool
-	Type        *VrfBgpAggregateRoutesType
-	Misc        []generic.Xml
+	Name           string
+	Description    *string
+	Enable         *bool
+	SummaryOnly    *bool
+	AsSet          *bool
+	SameMed        *bool
+	Type           *VrfBgpAggregateRoutesType
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfBgpAggregateRoutesType struct {
-	Ipv4 *VrfBgpAggregateRoutesTypeIpv4
-	Ipv6 *VrfBgpAggregateRoutesTypeIpv6
-	Misc []generic.Xml
+	Ipv4           *VrfBgpAggregateRoutesTypeIpv4
+	Ipv6           *VrfBgpAggregateRoutesTypeIpv6
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfBgpAggregateRoutesTypeIpv4 struct {
-	SummaryPrefix *string
-	SuppressMap   *string
-	AttributeMap  *string
-	Misc          []generic.Xml
+	SummaryPrefix  *string
+	SuppressMap    *string
+	AttributeMap   *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfBgpAggregateRoutesTypeIpv6 struct {
-	SummaryPrefix *string
-	SuppressMap   *string
-	AttributeMap  *string
-	Misc          []generic.Xml
+	SummaryPrefix  *string
+	SuppressMap    *string
+	AttributeMap   *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfRoutingTable struct {
-	Ip   *VrfRoutingTableIp
-	Ipv6 *VrfRoutingTableIpv6
-	Misc []generic.Xml
+	Ip             *VrfRoutingTableIp
+	Ipv6           *VrfRoutingTableIpv6
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfRoutingTableIp struct {
-	StaticRoute []VrfRoutingTableIpStaticRoute
-	Misc        []generic.Xml
+	StaticRoute    []VrfRoutingTableIpStaticRoute
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfRoutingTableIpStaticRoute struct {
-	Name        string
-	Destination *string
-	Interface   *string
-	AdminDist   *int64
-	Metric      *int64
-	Nexthop     *VrfRoutingTableIpStaticRouteNexthop
-	Bfd         *VrfRoutingTableIpStaticRouteBfd
-	PathMonitor *VrfRoutingTableIpStaticRoutePathMonitor
-	Misc        []generic.Xml
+	Name           string
+	Destination    *string
+	Interface      *string
+	AdminDist      *int64
+	Metric         *int64
+	Nexthop        *VrfRoutingTableIpStaticRouteNexthop
+	Bfd            *VrfRoutingTableIpStaticRouteBfd
+	PathMonitor    *VrfRoutingTableIpStaticRoutePathMonitor
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfRoutingTableIpStaticRouteNexthop struct {
-	Discard   *VrfRoutingTableIpStaticRouteNexthopDiscard
-	IpAddress *string
-	NextLr    *string
-	Fqdn      *string
-	Misc      []generic.Xml
+	Discard        *VrfRoutingTableIpStaticRouteNexthopDiscard
+	IpAddress      *string
+	NextLr         *string
+	Fqdn           *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfRoutingTableIpStaticRouteNexthopDiscard struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfRoutingTableIpStaticRouteBfd struct {
-	Profile *string
-	Misc    []generic.Xml
+	Profile        *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfRoutingTableIpStaticRoutePathMonitor struct {
 	Enable              *bool
@@ -334,44 +386,51 @@ type VrfRoutingTableIpStaticRoutePathMonitor struct {
 	HoldTime            *int64
 	MonitorDestinations []VrfRoutingTableIpStaticRoutePathMonitorMonitorDestinations
 	Misc                []generic.Xml
+	MiscAttributes      []xml.Attr
 }
 type VrfRoutingTableIpStaticRoutePathMonitorMonitorDestinations struct {
-	Name        string
-	Enable      *bool
-	Source      *string
-	Destination *string
-	Interval    *int64
-	Count       *int64
-	Misc        []generic.Xml
+	Name           string
+	Enable         *bool
+	Source         *string
+	Destination    *string
+	Interval       *int64
+	Count          *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfRoutingTableIpv6 struct {
-	StaticRoute []VrfRoutingTableIpv6StaticRoute
-	Misc        []generic.Xml
+	StaticRoute    []VrfRoutingTableIpv6StaticRoute
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfRoutingTableIpv6StaticRoute struct {
-	Name        string
-	Destination *string
-	Interface   *string
-	AdminDist   *int64
-	Metric      *int64
-	Nexthop     *VrfRoutingTableIpv6StaticRouteNexthop
-	Bfd         *VrfRoutingTableIpv6StaticRouteBfd
-	PathMonitor *VrfRoutingTableIpv6StaticRoutePathMonitor
-	Misc        []generic.Xml
+	Name           string
+	Destination    *string
+	Interface      *string
+	AdminDist      *int64
+	Metric         *int64
+	Nexthop        *VrfRoutingTableIpv6StaticRouteNexthop
+	Bfd            *VrfRoutingTableIpv6StaticRouteBfd
+	PathMonitor    *VrfRoutingTableIpv6StaticRoutePathMonitor
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfRoutingTableIpv6StaticRouteNexthop struct {
-	Discard     *VrfRoutingTableIpv6StaticRouteNexthopDiscard
-	Ipv6Address *string
-	Fqdn        *string
-	NextLr      *string
-	Misc        []generic.Xml
+	Discard        *VrfRoutingTableIpv6StaticRouteNexthopDiscard
+	Ipv6Address    *string
+	Fqdn           *string
+	NextLr         *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfRoutingTableIpv6StaticRouteNexthopDiscard struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfRoutingTableIpv6StaticRouteBfd struct {
-	Profile *string
-	Misc    []generic.Xml
+	Profile        *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfRoutingTableIpv6StaticRoutePathMonitor struct {
 	Enable              *bool
@@ -379,15 +438,17 @@ type VrfRoutingTableIpv6StaticRoutePathMonitor struct {
 	HoldTime            *int64
 	MonitorDestinations []VrfRoutingTableIpv6StaticRoutePathMonitorMonitorDestinations
 	Misc                []generic.Xml
+	MiscAttributes      []xml.Attr
 }
 type VrfRoutingTableIpv6StaticRoutePathMonitorMonitorDestinations struct {
-	Name        string
-	Enable      *bool
-	Source      *string
-	Destination *string
-	Interval    *int64
-	Count       *int64
-	Misc        []generic.Xml
+	Name           string
+	Enable         *bool
+	Source         *string
+	Destination    *string
+	Interval       *int64
+	Count          *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfOspf struct {
 	RouterId              *string
@@ -400,10 +461,12 @@ type VrfOspf struct {
 	GracefulRestart       *VrfOspfGracefulRestart
 	Area                  []VrfOspfArea
 	Misc                  []generic.Xml
+	MiscAttributes        []xml.Attr
 }
 type VrfOspfGlobalBfd struct {
-	Profile *string
-	Misc    []generic.Xml
+	Profile        *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfOspfGracefulRestart struct {
 	Enable                 *bool
@@ -412,6 +475,7 @@ type VrfOspfGracefulRestart struct {
 	StrictLSAChecking      *bool
 	MaxNeighborRestartTime *int64
 	Misc                   []generic.Xml
+	MiscAttributes         []xml.Attr
 }
 type VrfOspfArea struct {
 	Name           string
@@ -421,16 +485,19 @@ type VrfOspfArea struct {
 	Interface      []VrfOspfAreaInterface
 	VirtualLink    []VrfOspfAreaVirtualLink
 	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfOspfAreaType struct {
-	Normal *VrfOspfAreaTypeNormal
-	Stub   *VrfOspfAreaTypeStub
-	Nssa   *VrfOspfAreaTypeNssa
-	Misc   []generic.Xml
+	Normal         *VrfOspfAreaTypeNormal
+	Stub           *VrfOspfAreaTypeStub
+	Nssa           *VrfOspfAreaTypeNssa
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfOspfAreaTypeNormal struct {
-	Abr  *VrfOspfAreaTypeNormalAbr
-	Misc []generic.Xml
+	Abr            *VrfOspfAreaTypeNormalAbr
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfOspfAreaTypeNormalAbr struct {
 	ImportList         *string
@@ -438,12 +505,14 @@ type VrfOspfAreaTypeNormalAbr struct {
 	InboundFilterList  *string
 	OutboundFilterList *string
 	Misc               []generic.Xml
+	MiscAttributes     []xml.Attr
 }
 type VrfOspfAreaTypeStub struct {
 	NoSummary          *bool
 	Abr                *VrfOspfAreaTypeStubAbr
 	DefaultRouteMetric *int64
 	Misc               []generic.Xml
+	MiscAttributes     []xml.Attr
 }
 type VrfOspfAreaTypeStubAbr struct {
 	ImportList         *string
@@ -451,17 +520,20 @@ type VrfOspfAreaTypeStubAbr struct {
 	InboundFilterList  *string
 	OutboundFilterList *string
 	Misc               []generic.Xml
+	MiscAttributes     []xml.Attr
 }
 type VrfOspfAreaTypeNssa struct {
 	NoSummary                   *bool
 	DefaultInformationOriginate *VrfOspfAreaTypeNssaDefaultInformationOriginate
 	Abr                         *VrfOspfAreaTypeNssaAbr
 	Misc                        []generic.Xml
+	MiscAttributes              []xml.Attr
 }
 type VrfOspfAreaTypeNssaDefaultInformationOriginate struct {
-	Metric     *int64
-	MetricType *string
-	Misc       []generic.Xml
+	Metric         *int64
+	MetricType     *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfOspfAreaTypeNssaAbr struct {
 	ImportList         *string
@@ -470,16 +542,19 @@ type VrfOspfAreaTypeNssaAbr struct {
 	OutboundFilterList *string
 	NssaExtRange       []VrfOspfAreaTypeNssaAbrNssaExtRange
 	Misc               []generic.Xml
+	MiscAttributes     []xml.Attr
 }
 type VrfOspfAreaTypeNssaAbrNssaExtRange struct {
-	Name      string
-	Advertise *bool
-	Misc      []generic.Xml
+	Name           string
+	Advertise      *bool
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfOspfAreaRange struct {
-	Name      string
-	Advertise *bool
-	Misc      []generic.Xml
+	Name           string
+	Advertise      *bool
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfOspfAreaInterface struct {
 	Name           string
@@ -493,31 +568,38 @@ type VrfOspfAreaInterface struct {
 	LinkType       *VrfOspfAreaInterfaceLinkType
 	Bfd            *VrfOspfAreaInterfaceBfd
 	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfOspfAreaInterfaceLinkType struct {
-	Broadcast *VrfOspfAreaInterfaceLinkTypeBroadcast
-	P2p       *VrfOspfAreaInterfaceLinkTypeP2p
-	P2mp      *VrfOspfAreaInterfaceLinkTypeP2mp
-	Misc      []generic.Xml
+	Broadcast      *VrfOspfAreaInterfaceLinkTypeBroadcast
+	P2p            *VrfOspfAreaInterfaceLinkTypeP2p
+	P2mp           *VrfOspfAreaInterfaceLinkTypeP2mp
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfOspfAreaInterfaceLinkTypeBroadcast struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfOspfAreaInterfaceLinkTypeP2p struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfOspfAreaInterfaceLinkTypeP2mp struct {
-	Neighbor []VrfOspfAreaInterfaceLinkTypeP2mpNeighbor
-	Misc     []generic.Xml
+	Neighbor       []VrfOspfAreaInterfaceLinkTypeP2mpNeighbor
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfOspfAreaInterfaceLinkTypeP2mpNeighbor struct {
-	Name     string
-	Priority *int64
-	Misc     []generic.Xml
+	Name           string
+	Priority       *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfOspfAreaInterfaceBfd struct {
-	Profile *string
-	Misc    []generic.Xml
+	Profile        *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfOspfAreaVirtualLink struct {
 	Name           string
@@ -529,10 +611,12 @@ type VrfOspfAreaVirtualLink struct {
 	Authentication *string
 	Bfd            *VrfOspfAreaVirtualLinkBfd
 	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfOspfAreaVirtualLinkBfd struct {
-	Profile *string
-	Misc    []generic.Xml
+	Profile        *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfOspfv3 struct {
 	Enable                *bool
@@ -545,10 +629,12 @@ type VrfOspfv3 struct {
 	GracefulRestart       *VrfOspfv3GracefulRestart
 	Area                  []VrfOspfv3Area
 	Misc                  []generic.Xml
+	MiscAttributes        []xml.Attr
 }
 type VrfOspfv3GlobalBfd struct {
-	Profile *string
-	Misc    []generic.Xml
+	Profile        *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfOspfv3GracefulRestart struct {
 	Enable                 *bool
@@ -557,6 +643,7 @@ type VrfOspfv3GracefulRestart struct {
 	StrictLSAChecking      *bool
 	MaxNeighborRestartTime *int64
 	Misc                   []generic.Xml
+	MiscAttributes         []xml.Attr
 }
 type VrfOspfv3Area struct {
 	Name           string
@@ -566,16 +653,19 @@ type VrfOspfv3Area struct {
 	Interface      []VrfOspfv3AreaInterface
 	VirtualLink    []VrfOspfv3AreaVirtualLink
 	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfOspfv3AreaType struct {
-	Normal *VrfOspfv3AreaTypeNormal
-	Stub   *VrfOspfv3AreaTypeStub
-	Nssa   *VrfOspfv3AreaTypeNssa
-	Misc   []generic.Xml
+	Normal         *VrfOspfv3AreaTypeNormal
+	Stub           *VrfOspfv3AreaTypeStub
+	Nssa           *VrfOspfv3AreaTypeNssa
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfOspfv3AreaTypeNormal struct {
-	Abr  *VrfOspfv3AreaTypeNormalAbr
-	Misc []generic.Xml
+	Abr            *VrfOspfv3AreaTypeNormalAbr
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfOspfv3AreaTypeNormalAbr struct {
 	ImportList         *string
@@ -583,12 +673,14 @@ type VrfOspfv3AreaTypeNormalAbr struct {
 	InboundFilterList  *string
 	OutboundFilterList *string
 	Misc               []generic.Xml
+	MiscAttributes     []xml.Attr
 }
 type VrfOspfv3AreaTypeStub struct {
 	NoSummary          *bool
 	Abr                *VrfOspfv3AreaTypeStubAbr
 	DefaultRouteMetric *int64
 	Misc               []generic.Xml
+	MiscAttributes     []xml.Attr
 }
 type VrfOspfv3AreaTypeStubAbr struct {
 	ImportList         *string
@@ -596,17 +688,20 @@ type VrfOspfv3AreaTypeStubAbr struct {
 	InboundFilterList  *string
 	OutboundFilterList *string
 	Misc               []generic.Xml
+	MiscAttributes     []xml.Attr
 }
 type VrfOspfv3AreaTypeNssa struct {
 	NoSummary                   *bool
 	DefaultInformationOriginate *VrfOspfv3AreaTypeNssaDefaultInformationOriginate
 	Abr                         *VrfOspfv3AreaTypeNssaAbr
 	Misc                        []generic.Xml
+	MiscAttributes              []xml.Attr
 }
 type VrfOspfv3AreaTypeNssaDefaultInformationOriginate struct {
-	Metric     *int64
-	MetricType *string
-	Misc       []generic.Xml
+	Metric         *int64
+	MetricType     *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfOspfv3AreaTypeNssaAbr struct {
 	ImportList         *string
@@ -615,16 +710,19 @@ type VrfOspfv3AreaTypeNssaAbr struct {
 	OutboundFilterList *string
 	NssaExtRange       []VrfOspfv3AreaTypeNssaAbrNssaExtRange
 	Misc               []generic.Xml
+	MiscAttributes     []xml.Attr
 }
 type VrfOspfv3AreaTypeNssaAbrNssaExtRange struct {
-	Name      string
-	Advertise *bool
-	Misc      []generic.Xml
+	Name           string
+	Advertise      *bool
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfOspfv3AreaRange struct {
-	Name      string
-	Advertise *bool
-	Misc      []generic.Xml
+	Name           string
+	Advertise      *bool
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfOspfv3AreaInterface struct {
 	Name           string
@@ -639,31 +737,38 @@ type VrfOspfv3AreaInterface struct {
 	LinkType       *VrfOspfv3AreaInterfaceLinkType
 	Bfd            *VrfOspfv3AreaInterfaceBfd
 	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfOspfv3AreaInterfaceLinkType struct {
-	Broadcast *VrfOspfv3AreaInterfaceLinkTypeBroadcast
-	P2p       *VrfOspfv3AreaInterfaceLinkTypeP2p
-	P2mp      *VrfOspfv3AreaInterfaceLinkTypeP2mp
-	Misc      []generic.Xml
+	Broadcast      *VrfOspfv3AreaInterfaceLinkTypeBroadcast
+	P2p            *VrfOspfv3AreaInterfaceLinkTypeP2p
+	P2mp           *VrfOspfv3AreaInterfaceLinkTypeP2mp
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfOspfv3AreaInterfaceLinkTypeBroadcast struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfOspfv3AreaInterfaceLinkTypeP2p struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfOspfv3AreaInterfaceLinkTypeP2mp struct {
-	Neighbor []VrfOspfv3AreaInterfaceLinkTypeP2mpNeighbor
-	Misc     []generic.Xml
+	Neighbor       []VrfOspfv3AreaInterfaceLinkTypeP2mpNeighbor
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfOspfv3AreaInterfaceLinkTypeP2mpNeighbor struct {
-	Name     string
-	Priority *int64
-	Misc     []generic.Xml
+	Name           string
+	Priority       *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfOspfv3AreaInterfaceBfd struct {
-	Profile *string
-	Misc    []generic.Xml
+	Profile        *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfOspfv3AreaVirtualLink struct {
 	Name           string
@@ -674,6 +779,7 @@ type VrfOspfv3AreaVirtualLink struct {
 	Timing         *string
 	Authentication *string
 	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfEcmp struct {
 	Enable           *bool
@@ -682,6 +788,7 @@ type VrfEcmp struct {
 	StrictSourcePath *bool
 	Algorithm        *VrfEcmpAlgorithm
 	Misc             []generic.Xml
+	MiscAttributes   []xml.Attr
 }
 type VrfEcmpAlgorithm struct {
 	IpModulo           *VrfEcmpAlgorithmIpModulo
@@ -689,47 +796,56 @@ type VrfEcmpAlgorithm struct {
 	WeightedRoundRobin *VrfEcmpAlgorithmWeightedRoundRobin
 	BalancedRoundRobin *VrfEcmpAlgorithmBalancedRoundRobin
 	Misc               []generic.Xml
+	MiscAttributes     []xml.Attr
 }
 type VrfEcmpAlgorithmIpModulo struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfEcmpAlgorithmIpHash struct {
-	SrcOnly  *bool
-	UsePort  *bool
-	HashSeed *int64
-	Misc     []generic.Xml
+	SrcOnly        *bool
+	UsePort        *bool
+	HashSeed       *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfEcmpAlgorithmWeightedRoundRobin struct {
-	Interface []VrfEcmpAlgorithmWeightedRoundRobinInterface
-	Misc      []generic.Xml
+	Interface      []VrfEcmpAlgorithmWeightedRoundRobinInterface
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfEcmpAlgorithmWeightedRoundRobinInterface struct {
-	Name   string
-	Weight *int64
-	Misc   []generic.Xml
+	Name           string
+	Weight         *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfEcmpAlgorithmBalancedRoundRobin struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfMulticast struct {
-	Enable      *bool
-	StaticRoute []VrfMulticastStaticRoute
-	Pim         *VrfMulticastPim
-	Igmp        *VrfMulticastIgmp
-	Msdp        *VrfMulticastMsdp
-	Misc        []generic.Xml
+	Enable         *bool
+	StaticRoute    []VrfMulticastStaticRoute
+	Pim            *VrfMulticastPim
+	Igmp           *VrfMulticastIgmp
+	Msdp           *VrfMulticastMsdp
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfMulticastStaticRoute struct {
-	Name        string
-	Destination *string
-	Interface   *string
-	Preference  *int64
-	Nexthop     *VrfMulticastStaticRouteNexthop
-	Misc        []generic.Xml
+	Name           string
+	Destination    *string
+	Interface      *string
+	Preference     *int64
+	Nexthop        *VrfMulticastStaticRouteNexthop
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfMulticastStaticRouteNexthop struct {
-	IpAddress *string
-	Misc      []generic.Xml
+	IpAddress      *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfMulticastPim struct {
 	Enable          *bool
@@ -742,27 +858,32 @@ type VrfMulticastPim struct {
 	SptThreshold    []VrfMulticastPimSptThreshold
 	Interface       []VrfMulticastPimInterface
 	Misc            []generic.Xml
+	MiscAttributes  []xml.Attr
 }
 type VrfMulticastPimSsmAddressSpace struct {
-	GroupList *string
-	Misc      []generic.Xml
+	GroupList      *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfMulticastPimRp struct {
-	LocalRp    *VrfMulticastPimRpLocalRp
-	ExternalRp []VrfMulticastPimRpExternalRp
-	Misc       []generic.Xml
+	LocalRp        *VrfMulticastPimRpLocalRp
+	ExternalRp     []VrfMulticastPimRpExternalRp
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfMulticastPimRpLocalRp struct {
-	StaticRp    *VrfMulticastPimRpLocalRpStaticRp
-	CandidateRp *VrfMulticastPimRpLocalRpCandidateRp
-	Misc        []generic.Xml
+	StaticRp       *VrfMulticastPimRpLocalRpStaticRp
+	CandidateRp    *VrfMulticastPimRpLocalRpCandidateRp
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfMulticastPimRpLocalRpStaticRp struct {
-	Interface *string
-	Address   *string
-	Override  *bool
-	GroupList *string
-	Misc      []generic.Xml
+	Interface      *string
+	Address        *string
+	Override       *bool
+	GroupList      *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfMulticastPimRpLocalRpCandidateRp struct {
 	Interface             *string
@@ -771,17 +892,20 @@ type VrfMulticastPimRpLocalRpCandidateRp struct {
 	AdvertisementInterval *int64
 	GroupList             *string
 	Misc                  []generic.Xml
+	MiscAttributes        []xml.Attr
 }
 type VrfMulticastPimRpExternalRp struct {
-	Name      string
-	GroupList *string
-	Override  *bool
-	Misc      []generic.Xml
+	Name           string
+	GroupList      *string
+	Override       *bool
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfMulticastPimSptThreshold struct {
-	Name      string
-	Threshold *string
-	Misc      []generic.Xml
+	Name           string
+	Threshold      *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfMulticastPimInterface struct {
 	Name           string
@@ -791,16 +915,19 @@ type VrfMulticastPimInterface struct {
 	IfTimer        *string
 	NeighborFilter *string
 	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfMulticastIgmp struct {
-	Enable  *bool
-	Dynamic *VrfMulticastIgmpDynamic
-	Static  []VrfMulticastIgmpStatic
-	Misc    []generic.Xml
+	Enable         *bool
+	Dynamic        *VrfMulticastIgmpDynamic
+	Static         []VrfMulticastIgmpStatic
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfMulticastIgmpDynamic struct {
-	Interface []VrfMulticastIgmpDynamicInterface
-	Misc      []generic.Xml
+	Interface      []VrfMulticastIgmpDynamicInterface
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfMulticastIgmpDynamicInterface struct {
 	Name                string
@@ -812,13 +939,15 @@ type VrfMulticastIgmpDynamicInterface struct {
 	QueryProfile        *string
 	RouterAlertPolicing *bool
 	Misc                []generic.Xml
+	MiscAttributes      []xml.Attr
 }
 type VrfMulticastIgmpStatic struct {
-	Name          string
-	Interface     *string
-	GroupAddress  *string
-	SourceAddress *string
-	Misc          []generic.Xml
+	Name           string
+	Interface      *string
+	GroupAddress   *string
+	SourceAddress  *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfMulticastMsdp struct {
 	Enable               *bool
@@ -827,11 +956,13 @@ type VrfMulticastMsdp struct {
 	OriginatorId         *VrfMulticastMsdpOriginatorId
 	Peer                 []VrfMulticastMsdpPeer
 	Misc                 []generic.Xml
+	MiscAttributes       []xml.Attr
 }
 type VrfMulticastMsdpOriginatorId struct {
-	Interface *string
-	Ip        *string
-	Misc      []generic.Xml
+	Interface      *string
+	Ip             *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfMulticastMsdpPeer struct {
 	Name             string
@@ -844,16 +975,19 @@ type VrfMulticastMsdpPeer struct {
 	LocalAddress     *VrfMulticastMsdpPeerLocalAddress
 	PeerAddress      *VrfMulticastMsdpPeerPeerAddress
 	Misc             []generic.Xml
+	MiscAttributes   []xml.Attr
 }
 type VrfMulticastMsdpPeerLocalAddress struct {
-	Interface *string
-	Ip        *string
-	Misc      []generic.Xml
+	Interface      *string
+	Ip             *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfMulticastMsdpPeerPeerAddress struct {
-	Ip   *string
-	Fqdn *string
-	Misc []generic.Xml
+	Ip             *string
+	Fqdn           *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfRip struct {
 	Enable                       *bool
@@ -866,18 +1000,22 @@ type VrfRip struct {
 	GlobalOutboundDistributeList *VrfRipGlobalOutboundDistributeList
 	Interface                    []VrfRipInterface
 	Misc                         []generic.Xml
+	MiscAttributes               []xml.Attr
 }
 type VrfRipGlobalBfd struct {
-	Profile *string
-	Misc    []generic.Xml
+	Profile        *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfRipGlobalInboundDistributeList struct {
-	AccessList *string
-	Misc       []generic.Xml
+	AccessList     *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfRipGlobalOutboundDistributeList struct {
-	AccessList *string
-	Misc       []generic.Xml
+	AccessList     *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfRipInterface struct {
 	Name                            string
@@ -889,20 +1027,24 @@ type VrfRipInterface struct {
 	InterfaceInboundDistributeList  *VrfRipInterfaceInterfaceInboundDistributeList
 	InterfaceOutboundDistributeList *VrfRipInterfaceInterfaceOutboundDistributeList
 	Misc                            []generic.Xml
+	MiscAttributes                  []xml.Attr
 }
 type VrfRipInterfaceBfd struct {
-	Profile *string
-	Misc    []generic.Xml
+	Profile        *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfRipInterfaceInterfaceInboundDistributeList struct {
-	AccessList *string
-	Metric     *int64
-	Misc       []generic.Xml
+	AccessList     *string
+	Metric         *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VrfRipInterfaceInterfaceOutboundDistributeList struct {
-	AccessList *string
-	Metric     *int64
-	Misc       []generic.Xml
+	AccessList     *string
+	Metric         *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 
 type entryXmlContainer struct {
@@ -950,89 +1092,102 @@ func specifyEntry_11_0_2(source *Entry) (any, error) {
 }
 
 type entryXml struct {
-	XMLName xml.Name         `xml:"entry"`
-	Name    string           `xml:"name,attr"`
-	Vrf     *vrfContainerXml `xml:"vrf,omitempty"`
-	Misc    []generic.Xml    `xml:",any"`
+	XMLName        xml.Name         `xml:"entry"`
+	Name           string           `xml:"name,attr"`
+	Vrf            *vrfContainerXml `xml:"vrf,omitempty"`
+	Misc           []generic.Xml    `xml:",any"`
+	MiscAttributes []xml.Attr       `xml:",any,attr"`
 }
 type vrfContainerXml struct {
 	Entries []vrfXml `xml:"entry"`
 }
 type vrfXml struct {
-	XMLName      xml.Name            `xml:"entry"`
-	Name         string              `xml:"name,attr"`
-	Interface    *util.MemberType    `xml:"interface,omitempty"`
-	AdminDists   *vrfAdminDistsXml   `xml:"admin-dists,omitempty"`
-	RibFilter    *vrfRibFilterXml    `xml:"rib-filter,omitempty"`
-	Bgp          *vrfBgpXml          `xml:"bgp,omitempty"`
-	RoutingTable *vrfRoutingTableXml `xml:"routing-table,omitempty"`
-	Ospf         *vrfOspfXml         `xml:"ospf,omitempty"`
-	Ospfv3       *vrfOspfv3Xml       `xml:"ospfv3,omitempty"`
-	Ecmp         *vrfEcmpXml         `xml:"ecmp,omitempty"`
-	Multicast    *vrfMulticastXml    `xml:"multicast,omitempty"`
-	Rip          *vrfRipXml          `xml:"rip,omitempty"`
-	Misc         []generic.Xml       `xml:",any"`
+	XMLName        xml.Name            `xml:"entry"`
+	Name           string              `xml:"name,attr"`
+	Interface      *util.MemberType    `xml:"interface,omitempty"`
+	AdminDists     *vrfAdminDistsXml   `xml:"admin-dists,omitempty"`
+	RibFilter      *vrfRibFilterXml    `xml:"rib-filter,omitempty"`
+	Bgp            *vrfBgpXml          `xml:"bgp,omitempty"`
+	RoutingTable   *vrfRoutingTableXml `xml:"routing-table,omitempty"`
+	Ospf           *vrfOspfXml         `xml:"ospf,omitempty"`
+	Ospfv3         *vrfOspfv3Xml       `xml:"ospfv3,omitempty"`
+	Ecmp           *vrfEcmpXml         `xml:"ecmp,omitempty"`
+	Multicast      *vrfMulticastXml    `xml:"multicast,omitempty"`
+	Rip            *vrfRipXml          `xml:"rip,omitempty"`
+	Misc           []generic.Xml       `xml:",any"`
+	MiscAttributes []xml.Attr          `xml:",any,attr"`
 }
 type vrfAdminDistsXml struct {
-	Static      *int64        `xml:"static,omitempty"`
-	StaticIpv6  *int64        `xml:"static-ipv6,omitempty"`
-	OspfInter   *int64        `xml:"ospf-inter,omitempty"`
-	OspfIntra   *int64        `xml:"ospf-intra,omitempty"`
-	OspfExt     *int64        `xml:"ospf-ext,omitempty"`
-	Ospfv3Inter *int64        `xml:"ospfv3-inter,omitempty"`
-	Ospfv3Intra *int64        `xml:"ospfv3-intra,omitempty"`
-	Ospfv3Ext   *int64        `xml:"ospfv3-ext,omitempty"`
-	BgpInternal *int64        `xml:"bgp-internal,omitempty"`
-	BgpExternal *int64        `xml:"bgp-external,omitempty"`
-	BgpLocal    *int64        `xml:"bgp-local,omitempty"`
-	Rip         *int64        `xml:"rip,omitempty"`
-	Misc        []generic.Xml `xml:",any"`
+	Static         *int64        `xml:"static,omitempty"`
+	StaticIpv6     *int64        `xml:"static-ipv6,omitempty"`
+	OspfInter      *int64        `xml:"ospf-inter,omitempty"`
+	OspfIntra      *int64        `xml:"ospf-intra,omitempty"`
+	OspfExt        *int64        `xml:"ospf-ext,omitempty"`
+	Ospfv3Inter    *int64        `xml:"ospfv3-inter,omitempty"`
+	Ospfv3Intra    *int64        `xml:"ospfv3-intra,omitempty"`
+	Ospfv3Ext      *int64        `xml:"ospfv3-ext,omitempty"`
+	BgpInternal    *int64        `xml:"bgp-internal,omitempty"`
+	BgpExternal    *int64        `xml:"bgp-external,omitempty"`
+	BgpLocal       *int64        `xml:"bgp-local,omitempty"`
+	Rip            *int64        `xml:"rip,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfRibFilterXml struct {
-	Ipv4 *vrfRibFilterIpv4Xml `xml:"ipv4,omitempty"`
-	Ipv6 *vrfRibFilterIpv6Xml `xml:"ipv6,omitempty"`
-	Misc []generic.Xml        `xml:",any"`
+	Ipv4           *vrfRibFilterIpv4Xml `xml:"ipv4,omitempty"`
+	Ipv6           *vrfRibFilterIpv6Xml `xml:"ipv6,omitempty"`
+	Misc           []generic.Xml        `xml:",any"`
+	MiscAttributes []xml.Attr           `xml:",any,attr"`
 }
 type vrfRibFilterIpv4Xml struct {
-	Static *vrfRibFilterIpv4StaticXml `xml:"static,omitempty"`
-	Bgp    *vrfRibFilterIpv4BgpXml    `xml:"bgp,omitempty"`
-	Ospf   *vrfRibFilterIpv4OspfXml   `xml:"ospf,omitempty"`
-	Rip    *vrfRibFilterIpv4RipXml    `xml:"rip,omitempty"`
-	Misc   []generic.Xml              `xml:",any"`
+	Static         *vrfRibFilterIpv4StaticXml `xml:"static,omitempty"`
+	Bgp            *vrfRibFilterIpv4BgpXml    `xml:"bgp,omitempty"`
+	Ospf           *vrfRibFilterIpv4OspfXml   `xml:"ospf,omitempty"`
+	Rip            *vrfRibFilterIpv4RipXml    `xml:"rip,omitempty"`
+	Misc           []generic.Xml              `xml:",any"`
+	MiscAttributes []xml.Attr                 `xml:",any,attr"`
 }
 type vrfRibFilterIpv4StaticXml struct {
-	RouteMap *string       `xml:"route-map,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	RouteMap       *string       `xml:"route-map,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfRibFilterIpv4BgpXml struct {
-	RouteMap *string       `xml:"route-map,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	RouteMap       *string       `xml:"route-map,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfRibFilterIpv4OspfXml struct {
-	RouteMap *string       `xml:"route-map,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	RouteMap       *string       `xml:"route-map,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfRibFilterIpv4RipXml struct {
-	RouteMap *string       `xml:"route-map,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	RouteMap       *string       `xml:"route-map,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfRibFilterIpv6Xml struct {
-	Static *vrfRibFilterIpv6StaticXml `xml:"static,omitempty"`
-	Bgp    *vrfRibFilterIpv6BgpXml    `xml:"bgp,omitempty"`
-	Ospfv3 *vrfRibFilterIpv6Ospfv3Xml `xml:"ospfv3,omitempty"`
-	Misc   []generic.Xml              `xml:",any"`
+	Static         *vrfRibFilterIpv6StaticXml `xml:"static,omitempty"`
+	Bgp            *vrfRibFilterIpv6BgpXml    `xml:"bgp,omitempty"`
+	Ospfv3         *vrfRibFilterIpv6Ospfv3Xml `xml:"ospfv3,omitempty"`
+	Misc           []generic.Xml              `xml:",any"`
+	MiscAttributes []xml.Attr                 `xml:",any,attr"`
 }
 type vrfRibFilterIpv6StaticXml struct {
-	RouteMap *string       `xml:"route-map,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	RouteMap       *string       `xml:"route-map,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfRibFilterIpv6BgpXml struct {
-	RouteMap *string       `xml:"route-map,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	RouteMap       *string       `xml:"route-map,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfRibFilterIpv6Ospfv3Xml struct {
-	RouteMap *string       `xml:"route-map,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	RouteMap       *string       `xml:"route-map,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfBgpXml struct {
 	Enable                      *string                            `xml:"enable,omitempty"`
@@ -1053,11 +1208,13 @@ type vrfBgpXml struct {
 	PeerGroup                   *vrfBgpPeerGroupContainerXml       `xml:"peer-group,omitempty"`
 	AggregateRoutes             *vrfBgpAggregateRoutesContainerXml `xml:"aggregate-routes,omitempty"`
 	Misc                        []generic.Xml                      `xml:",any"`
+	MiscAttributes              []xml.Attr                         `xml:",any,attr"`
 }
 type vrfBgpMedXml struct {
 	AlwaysCompareMed           *string       `xml:"always-compare-med,omitempty"`
 	DeterministicMedComparison *string       `xml:"deterministic-med-comparison,omitempty"`
 	Misc                       []generic.Xml `xml:",any"`
+	MiscAttributes             []xml.Attr    `xml:",any,attr"`
 }
 type vrfBgpGracefulRestartXml struct {
 	Enable             *string       `xml:"enable,omitempty"`
@@ -1065,56 +1222,66 @@ type vrfBgpGracefulRestartXml struct {
 	MaxPeerRestartTime *int64        `xml:"max-peer-restart-time,omitempty"`
 	LocalRestartTime   *int64        `xml:"local-restart-time,omitempty"`
 	Misc               []generic.Xml `xml:",any"`
+	MiscAttributes     []xml.Attr    `xml:",any,attr"`
 }
 type vrfBgpGlobalBfdXml struct {
-	Profile *string       `xml:"profile,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	Profile        *string       `xml:"profile,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfBgpRedistributionProfileXml struct {
-	Ipv4 *vrfBgpRedistributionProfileIpv4Xml `xml:"ipv4,omitempty"`
-	Ipv6 *vrfBgpRedistributionProfileIpv6Xml `xml:"ipv6,omitempty"`
-	Misc []generic.Xml                       `xml:",any"`
+	Ipv4           *vrfBgpRedistributionProfileIpv4Xml `xml:"ipv4,omitempty"`
+	Ipv6           *vrfBgpRedistributionProfileIpv6Xml `xml:"ipv6,omitempty"`
+	Misc           []generic.Xml                       `xml:",any"`
+	MiscAttributes []xml.Attr                          `xml:",any,attr"`
 }
 type vrfBgpRedistributionProfileIpv4Xml struct {
-	Unicast *string       `xml:"unicast,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	Unicast        *string       `xml:"unicast,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfBgpRedistributionProfileIpv6Xml struct {
-	Unicast *string       `xml:"unicast,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	Unicast        *string       `xml:"unicast,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfBgpAdvertiseNetworkXml struct {
-	Ipv4 *vrfBgpAdvertiseNetworkIpv4Xml `xml:"ipv4,omitempty"`
-	Ipv6 *vrfBgpAdvertiseNetworkIpv6Xml `xml:"ipv6,omitempty"`
-	Misc []generic.Xml                  `xml:",any"`
+	Ipv4           *vrfBgpAdvertiseNetworkIpv4Xml `xml:"ipv4,omitempty"`
+	Ipv6           *vrfBgpAdvertiseNetworkIpv6Xml `xml:"ipv6,omitempty"`
+	Misc           []generic.Xml                  `xml:",any"`
+	MiscAttributes []xml.Attr                     `xml:",any,attr"`
 }
 type vrfBgpAdvertiseNetworkIpv4Xml struct {
-	Network *vrfBgpAdvertiseNetworkIpv4NetworkContainerXml `xml:"network,omitempty"`
-	Misc    []generic.Xml                                  `xml:",any"`
+	Network        *vrfBgpAdvertiseNetworkIpv4NetworkContainerXml `xml:"network,omitempty"`
+	Misc           []generic.Xml                                  `xml:",any"`
+	MiscAttributes []xml.Attr                                     `xml:",any,attr"`
 }
 type vrfBgpAdvertiseNetworkIpv4NetworkContainerXml struct {
 	Entries []vrfBgpAdvertiseNetworkIpv4NetworkXml `xml:"entry"`
 }
 type vrfBgpAdvertiseNetworkIpv4NetworkXml struct {
-	XMLName   xml.Name      `xml:"entry"`
-	Name      string        `xml:"name,attr"`
-	Unicast   *string       `xml:"unicast,omitempty"`
-	Multicast *string       `xml:"multicast,omitempty"`
-	Backdoor  *string       `xml:"backdoor,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Unicast        *string       `xml:"unicast,omitempty"`
+	Multicast      *string       `xml:"multicast,omitempty"`
+	Backdoor       *string       `xml:"backdoor,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfBgpAdvertiseNetworkIpv6Xml struct {
-	Network *vrfBgpAdvertiseNetworkIpv6NetworkContainerXml `xml:"network,omitempty"`
-	Misc    []generic.Xml                                  `xml:",any"`
+	Network        *vrfBgpAdvertiseNetworkIpv6NetworkContainerXml `xml:"network,omitempty"`
+	Misc           []generic.Xml                                  `xml:",any"`
+	MiscAttributes []xml.Attr                                     `xml:",any,attr"`
 }
 type vrfBgpAdvertiseNetworkIpv6NetworkContainerXml struct {
 	Entries []vrfBgpAdvertiseNetworkIpv6NetworkXml `xml:"entry"`
 }
 type vrfBgpAdvertiseNetworkIpv6NetworkXml struct {
-	XMLName xml.Name      `xml:"entry"`
-	Name    string        `xml:"name,attr"`
-	Unicast *string       `xml:"unicast,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Unicast        *string       `xml:"unicast,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfBgpPeerGroupContainerXml struct {
 	Entries []vrfBgpPeerGroupXml `xml:"entry"`
@@ -1129,27 +1296,33 @@ type vrfBgpPeerGroupXml struct {
 	ConnectionOptions *vrfBgpPeerGroupConnectionOptionsXml `xml:"connection-options,omitempty"`
 	Peer              *vrfBgpPeerGroupPeerContainerXml     `xml:"peer,omitempty"`
 	Misc              []generic.Xml                        `xml:",any"`
+	MiscAttributes    []xml.Attr                           `xml:",any,attr"`
 }
 type vrfBgpPeerGroupTypeXml struct {
-	Ibgp *vrfBgpPeerGroupTypeIbgpXml `xml:"ibgp,omitempty"`
-	Ebgp *vrfBgpPeerGroupTypeEbgpXml `xml:"ebgp,omitempty"`
-	Misc []generic.Xml               `xml:",any"`
+	Ibgp           *vrfBgpPeerGroupTypeIbgpXml `xml:"ibgp,omitempty"`
+	Ebgp           *vrfBgpPeerGroupTypeEbgpXml `xml:"ebgp,omitempty"`
+	Misc           []generic.Xml               `xml:",any"`
+	MiscAttributes []xml.Attr                  `xml:",any,attr"`
 }
 type vrfBgpPeerGroupTypeIbgpXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfBgpPeerGroupTypeEbgpXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfBgpPeerGroupAddressFamilyXml struct {
-	Ipv4 *string       `xml:"ipv4,omitempty"`
-	Ipv6 *string       `xml:"ipv6,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Ipv4           *string       `xml:"ipv4,omitempty"`
+	Ipv6           *string       `xml:"ipv6,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfBgpPeerGroupFilteringProfileXml struct {
-	Ipv4 *string       `xml:"ipv4,omitempty"`
-	Ipv6 *string       `xml:"ipv6,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Ipv4           *string       `xml:"ipv4,omitempty"`
+	Ipv6           *string       `xml:"ipv6,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfBgpPeerGroupConnectionOptionsXml struct {
 	Timers         *string       `xml:"timers,omitempty"`
@@ -1157,6 +1330,7 @@ type vrfBgpPeerGroupConnectionOptionsXml struct {
 	Authentication *string       `xml:"authentication,omitempty"`
 	Dampening      *string       `xml:"dampening,omitempty"`
 	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfBgpPeerGroupPeerContainerXml struct {
 	Entries []vrfBgpPeerGroupPeerXml `xml:"entry"`
@@ -1174,39 +1348,47 @@ type vrfBgpPeerGroupPeerXml struct {
 	ConnectionOptions             *vrfBgpPeerGroupPeerConnectionOptionsXml `xml:"connection-options,omitempty"`
 	Bfd                           *vrfBgpPeerGroupPeerBfdXml               `xml:"bfd,omitempty"`
 	Misc                          []generic.Xml                            `xml:",any"`
+	MiscAttributes                []xml.Attr                               `xml:",any,attr"`
 }
 type vrfBgpPeerGroupPeerInheritXml struct {
-	Yes  *vrfBgpPeerGroupPeerInheritYesXml `xml:"yes,omitempty"`
-	No   *vrfBgpPeerGroupPeerInheritNoXml  `xml:"no,omitempty"`
-	Misc []generic.Xml                     `xml:",any"`
+	Yes            *vrfBgpPeerGroupPeerInheritYesXml `xml:"yes,omitempty"`
+	No             *vrfBgpPeerGroupPeerInheritNoXml  `xml:"no,omitempty"`
+	Misc           []generic.Xml                     `xml:",any"`
+	MiscAttributes []xml.Attr                        `xml:",any,attr"`
 }
 type vrfBgpPeerGroupPeerInheritYesXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfBgpPeerGroupPeerInheritNoXml struct {
 	AddressFamily    *vrfBgpPeerGroupPeerInheritNoAddressFamilyXml    `xml:"address-family,omitempty"`
 	FilteringProfile *vrfBgpPeerGroupPeerInheritNoFilteringProfileXml `xml:"filtering-profile,omitempty"`
 	Misc             []generic.Xml                                    `xml:",any"`
+	MiscAttributes   []xml.Attr                                       `xml:",any,attr"`
 }
 type vrfBgpPeerGroupPeerInheritNoAddressFamilyXml struct {
-	Ipv4 *string       `xml:"ipv4,omitempty"`
-	Ipv6 *string       `xml:"ipv6,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Ipv4           *string       `xml:"ipv4,omitempty"`
+	Ipv6           *string       `xml:"ipv6,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfBgpPeerGroupPeerInheritNoFilteringProfileXml struct {
-	Ipv4 *string       `xml:"ipv4,omitempty"`
-	Ipv6 *string       `xml:"ipv6,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Ipv4           *string       `xml:"ipv4,omitempty"`
+	Ipv6           *string       `xml:"ipv6,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfBgpPeerGroupPeerLocalAddressXml struct {
-	Interface *string       `xml:"interface,omitempty"`
-	Ip        *string       `xml:"ip,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	Interface      *string       `xml:"interface,omitempty"`
+	Ip             *string       `xml:"ip,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfBgpPeerGroupPeerPeerAddressXml struct {
-	Ip   *string       `xml:"ip,omitempty"`
-	Fqdn *string       `xml:"fqdn,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Ip             *string       `xml:"ip,omitempty"`
+	Fqdn           *string       `xml:"fqdn,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfBgpPeerGroupPeerConnectionOptionsXml struct {
 	Timers         *string       `xml:"timers,omitempty"`
@@ -1214,79 +1396,91 @@ type vrfBgpPeerGroupPeerConnectionOptionsXml struct {
 	Authentication *string       `xml:"authentication,omitempty"`
 	Dampening      *string       `xml:"dampening,omitempty"`
 	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfBgpPeerGroupPeerBfdXml struct {
-	Profile *string       `xml:"profile,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	Profile        *string       `xml:"profile,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfBgpAggregateRoutesContainerXml struct {
 	Entries []vrfBgpAggregateRoutesXml `xml:"entry"`
 }
 type vrfBgpAggregateRoutesXml struct {
-	XMLName     xml.Name                      `xml:"entry"`
-	Name        string                        `xml:"name,attr"`
-	Description *string                       `xml:"description,omitempty"`
-	Enable      *string                       `xml:"enable,omitempty"`
-	SummaryOnly *string                       `xml:"summary-only,omitempty"`
-	AsSet       *string                       `xml:"as-set,omitempty"`
-	SameMed     *string                       `xml:"same-med,omitempty"`
-	Type        *vrfBgpAggregateRoutesTypeXml `xml:"type,omitempty"`
-	Misc        []generic.Xml                 `xml:",any"`
+	XMLName        xml.Name                      `xml:"entry"`
+	Name           string                        `xml:"name,attr"`
+	Description    *string                       `xml:"description,omitempty"`
+	Enable         *string                       `xml:"enable,omitempty"`
+	SummaryOnly    *string                       `xml:"summary-only,omitempty"`
+	AsSet          *string                       `xml:"as-set,omitempty"`
+	SameMed        *string                       `xml:"same-med,omitempty"`
+	Type           *vrfBgpAggregateRoutesTypeXml `xml:"type,omitempty"`
+	Misc           []generic.Xml                 `xml:",any"`
+	MiscAttributes []xml.Attr                    `xml:",any,attr"`
 }
 type vrfBgpAggregateRoutesTypeXml struct {
-	Ipv4 *vrfBgpAggregateRoutesTypeIpv4Xml `xml:"ipv4,omitempty"`
-	Ipv6 *vrfBgpAggregateRoutesTypeIpv6Xml `xml:"ipv6,omitempty"`
-	Misc []generic.Xml                     `xml:",any"`
+	Ipv4           *vrfBgpAggregateRoutesTypeIpv4Xml `xml:"ipv4,omitempty"`
+	Ipv6           *vrfBgpAggregateRoutesTypeIpv6Xml `xml:"ipv6,omitempty"`
+	Misc           []generic.Xml                     `xml:",any"`
+	MiscAttributes []xml.Attr                        `xml:",any,attr"`
 }
 type vrfBgpAggregateRoutesTypeIpv4Xml struct {
-	SummaryPrefix *string       `xml:"summary-prefix,omitempty"`
-	SuppressMap   *string       `xml:"suppress-map,omitempty"`
-	AttributeMap  *string       `xml:"attribute-map,omitempty"`
-	Misc          []generic.Xml `xml:",any"`
+	SummaryPrefix  *string       `xml:"summary-prefix,omitempty"`
+	SuppressMap    *string       `xml:"suppress-map,omitempty"`
+	AttributeMap   *string       `xml:"attribute-map,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfBgpAggregateRoutesTypeIpv6Xml struct {
-	SummaryPrefix *string       `xml:"summary-prefix,omitempty"`
-	SuppressMap   *string       `xml:"suppress-map,omitempty"`
-	AttributeMap  *string       `xml:"attribute-map,omitempty"`
-	Misc          []generic.Xml `xml:",any"`
+	SummaryPrefix  *string       `xml:"summary-prefix,omitempty"`
+	SuppressMap    *string       `xml:"suppress-map,omitempty"`
+	AttributeMap   *string       `xml:"attribute-map,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfRoutingTableXml struct {
-	Ip   *vrfRoutingTableIpXml   `xml:"ip,omitempty"`
-	Ipv6 *vrfRoutingTableIpv6Xml `xml:"ipv6,omitempty"`
-	Misc []generic.Xml           `xml:",any"`
+	Ip             *vrfRoutingTableIpXml   `xml:"ip,omitempty"`
+	Ipv6           *vrfRoutingTableIpv6Xml `xml:"ipv6,omitempty"`
+	Misc           []generic.Xml           `xml:",any"`
+	MiscAttributes []xml.Attr              `xml:",any,attr"`
 }
 type vrfRoutingTableIpXml struct {
-	StaticRoute *vrfRoutingTableIpStaticRouteContainerXml `xml:"static-route,omitempty"`
-	Misc        []generic.Xml                             `xml:",any"`
+	StaticRoute    *vrfRoutingTableIpStaticRouteContainerXml `xml:"static-route,omitempty"`
+	Misc           []generic.Xml                             `xml:",any"`
+	MiscAttributes []xml.Attr                                `xml:",any,attr"`
 }
 type vrfRoutingTableIpStaticRouteContainerXml struct {
 	Entries []vrfRoutingTableIpStaticRouteXml `xml:"entry"`
 }
 type vrfRoutingTableIpStaticRouteXml struct {
-	XMLName     xml.Name                                    `xml:"entry"`
-	Name        string                                      `xml:"name,attr"`
-	Destination *string                                     `xml:"destination,omitempty"`
-	Interface   *string                                     `xml:"interface,omitempty"`
-	AdminDist   *int64                                      `xml:"admin-dist,omitempty"`
-	Metric      *int64                                      `xml:"metric,omitempty"`
-	Nexthop     *vrfRoutingTableIpStaticRouteNexthopXml     `xml:"nexthop,omitempty"`
-	Bfd         *vrfRoutingTableIpStaticRouteBfdXml         `xml:"bfd,omitempty"`
-	PathMonitor *vrfRoutingTableIpStaticRoutePathMonitorXml `xml:"path-monitor,omitempty"`
-	Misc        []generic.Xml                               `xml:",any"`
+	XMLName        xml.Name                                    `xml:"entry"`
+	Name           string                                      `xml:"name,attr"`
+	Destination    *string                                     `xml:"destination,omitempty"`
+	Interface      *string                                     `xml:"interface,omitempty"`
+	AdminDist      *int64                                      `xml:"admin-dist,omitempty"`
+	Metric         *int64                                      `xml:"metric,omitempty"`
+	Nexthop        *vrfRoutingTableIpStaticRouteNexthopXml     `xml:"nexthop,omitempty"`
+	Bfd            *vrfRoutingTableIpStaticRouteBfdXml         `xml:"bfd,omitempty"`
+	PathMonitor    *vrfRoutingTableIpStaticRoutePathMonitorXml `xml:"path-monitor,omitempty"`
+	Misc           []generic.Xml                               `xml:",any"`
+	MiscAttributes []xml.Attr                                  `xml:",any,attr"`
 }
 type vrfRoutingTableIpStaticRouteNexthopXml struct {
-	Discard   *vrfRoutingTableIpStaticRouteNexthopDiscardXml `xml:"discard,omitempty"`
-	IpAddress *string                                        `xml:"ip-address,omitempty"`
-	NextLr    *string                                        `xml:"next-lr,omitempty"`
-	Fqdn      *string                                        `xml:"fqdn,omitempty"`
-	Misc      []generic.Xml                                  `xml:",any"`
+	Discard        *vrfRoutingTableIpStaticRouteNexthopDiscardXml `xml:"discard,omitempty"`
+	IpAddress      *string                                        `xml:"ip-address,omitempty"`
+	NextLr         *string                                        `xml:"next-lr,omitempty"`
+	Fqdn           *string                                        `xml:"fqdn,omitempty"`
+	Misc           []generic.Xml                                  `xml:",any"`
+	MiscAttributes []xml.Attr                                     `xml:",any,attr"`
 }
 type vrfRoutingTableIpStaticRouteNexthopDiscardXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfRoutingTableIpStaticRouteBfdXml struct {
-	Profile *string       `xml:"profile,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	Profile        *string       `xml:"profile,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfRoutingTableIpStaticRoutePathMonitorXml struct {
 	Enable              *string                                                                 `xml:"enable,omitempty"`
@@ -1294,52 +1488,59 @@ type vrfRoutingTableIpStaticRoutePathMonitorXml struct {
 	HoldTime            *int64                                                                  `xml:"hold-time,omitempty"`
 	MonitorDestinations *vrfRoutingTableIpStaticRoutePathMonitorMonitorDestinationsContainerXml `xml:"monitor-destinations,omitempty"`
 	Misc                []generic.Xml                                                           `xml:",any"`
+	MiscAttributes      []xml.Attr                                                              `xml:",any,attr"`
 }
 type vrfRoutingTableIpStaticRoutePathMonitorMonitorDestinationsContainerXml struct {
 	Entries []vrfRoutingTableIpStaticRoutePathMonitorMonitorDestinationsXml `xml:"entry"`
 }
 type vrfRoutingTableIpStaticRoutePathMonitorMonitorDestinationsXml struct {
-	XMLName     xml.Name      `xml:"entry"`
-	Name        string        `xml:"name,attr"`
-	Enable      *string       `xml:"enable,omitempty"`
-	Source      *string       `xml:"source,omitempty"`
-	Destination *string       `xml:"destination,omitempty"`
-	Interval    *int64        `xml:"interval,omitempty"`
-	Count       *int64        `xml:"count,omitempty"`
-	Misc        []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Enable         *string       `xml:"enable,omitempty"`
+	Source         *string       `xml:"source,omitempty"`
+	Destination    *string       `xml:"destination,omitempty"`
+	Interval       *int64        `xml:"interval,omitempty"`
+	Count          *int64        `xml:"count,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfRoutingTableIpv6Xml struct {
-	StaticRoute *vrfRoutingTableIpv6StaticRouteContainerXml `xml:"static-route,omitempty"`
-	Misc        []generic.Xml                               `xml:",any"`
+	StaticRoute    *vrfRoutingTableIpv6StaticRouteContainerXml `xml:"static-route,omitempty"`
+	Misc           []generic.Xml                               `xml:",any"`
+	MiscAttributes []xml.Attr                                  `xml:",any,attr"`
 }
 type vrfRoutingTableIpv6StaticRouteContainerXml struct {
 	Entries []vrfRoutingTableIpv6StaticRouteXml `xml:"entry"`
 }
 type vrfRoutingTableIpv6StaticRouteXml struct {
-	XMLName     xml.Name                                      `xml:"entry"`
-	Name        string                                        `xml:"name,attr"`
-	Destination *string                                       `xml:"destination,omitempty"`
-	Interface   *string                                       `xml:"interface,omitempty"`
-	AdminDist   *int64                                        `xml:"admin-dist,omitempty"`
-	Metric      *int64                                        `xml:"metric,omitempty"`
-	Nexthop     *vrfRoutingTableIpv6StaticRouteNexthopXml     `xml:"nexthop,omitempty"`
-	Bfd         *vrfRoutingTableIpv6StaticRouteBfdXml         `xml:"bfd,omitempty"`
-	PathMonitor *vrfRoutingTableIpv6StaticRoutePathMonitorXml `xml:"path-monitor,omitempty"`
-	Misc        []generic.Xml                                 `xml:",any"`
+	XMLName        xml.Name                                      `xml:"entry"`
+	Name           string                                        `xml:"name,attr"`
+	Destination    *string                                       `xml:"destination,omitempty"`
+	Interface      *string                                       `xml:"interface,omitempty"`
+	AdminDist      *int64                                        `xml:"admin-dist,omitempty"`
+	Metric         *int64                                        `xml:"metric,omitempty"`
+	Nexthop        *vrfRoutingTableIpv6StaticRouteNexthopXml     `xml:"nexthop,omitempty"`
+	Bfd            *vrfRoutingTableIpv6StaticRouteBfdXml         `xml:"bfd,omitempty"`
+	PathMonitor    *vrfRoutingTableIpv6StaticRoutePathMonitorXml `xml:"path-monitor,omitempty"`
+	Misc           []generic.Xml                                 `xml:",any"`
+	MiscAttributes []xml.Attr                                    `xml:",any,attr"`
 }
 type vrfRoutingTableIpv6StaticRouteNexthopXml struct {
-	Discard     *vrfRoutingTableIpv6StaticRouteNexthopDiscardXml `xml:"discard,omitempty"`
-	Ipv6Address *string                                          `xml:"ipv6-address,omitempty"`
-	Fqdn        *string                                          `xml:"fqdn,omitempty"`
-	NextLr      *string                                          `xml:"next-lr,omitempty"`
-	Misc        []generic.Xml                                    `xml:",any"`
+	Discard        *vrfRoutingTableIpv6StaticRouteNexthopDiscardXml `xml:"discard,omitempty"`
+	Ipv6Address    *string                                          `xml:"ipv6-address,omitempty"`
+	Fqdn           *string                                          `xml:"fqdn,omitempty"`
+	NextLr         *string                                          `xml:"next-lr,omitempty"`
+	Misc           []generic.Xml                                    `xml:",any"`
+	MiscAttributes []xml.Attr                                       `xml:",any,attr"`
 }
 type vrfRoutingTableIpv6StaticRouteNexthopDiscardXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfRoutingTableIpv6StaticRouteBfdXml struct {
-	Profile *string       `xml:"profile,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	Profile        *string       `xml:"profile,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfRoutingTableIpv6StaticRoutePathMonitorXml struct {
 	Enable              *string                                                                   `xml:"enable,omitempty"`
@@ -1347,19 +1548,21 @@ type vrfRoutingTableIpv6StaticRoutePathMonitorXml struct {
 	HoldTime            *int64                                                                    `xml:"hold-time,omitempty"`
 	MonitorDestinations *vrfRoutingTableIpv6StaticRoutePathMonitorMonitorDestinationsContainerXml `xml:"monitor-destinations,omitempty"`
 	Misc                []generic.Xml                                                             `xml:",any"`
+	MiscAttributes      []xml.Attr                                                                `xml:",any,attr"`
 }
 type vrfRoutingTableIpv6StaticRoutePathMonitorMonitorDestinationsContainerXml struct {
 	Entries []vrfRoutingTableIpv6StaticRoutePathMonitorMonitorDestinationsXml `xml:"entry"`
 }
 type vrfRoutingTableIpv6StaticRoutePathMonitorMonitorDestinationsXml struct {
-	XMLName     xml.Name      `xml:"entry"`
-	Name        string        `xml:"name,attr"`
-	Enable      *string       `xml:"enable,omitempty"`
-	Source      *string       `xml:"source,omitempty"`
-	Destination *string       `xml:"destination,omitempty"`
-	Interval    *int64        `xml:"interval,omitempty"`
-	Count       *int64        `xml:"count,omitempty"`
-	Misc        []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Enable         *string       `xml:"enable,omitempty"`
+	Source         *string       `xml:"source,omitempty"`
+	Destination    *string       `xml:"destination,omitempty"`
+	Interval       *int64        `xml:"interval,omitempty"`
+	Count          *int64        `xml:"count,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfOspfXml struct {
 	RouterId              *string                    `xml:"router-id,omitempty"`
@@ -1372,10 +1575,12 @@ type vrfOspfXml struct {
 	GracefulRestart       *vrfOspfGracefulRestartXml `xml:"graceful-restart,omitempty"`
 	Area                  *vrfOspfAreaContainerXml   `xml:"area,omitempty"`
 	Misc                  []generic.Xml              `xml:",any"`
+	MiscAttributes        []xml.Attr                 `xml:",any,attr"`
 }
 type vrfOspfGlobalBfdXml struct {
-	Profile *string       `xml:"profile,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	Profile        *string       `xml:"profile,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfOspfGracefulRestartXml struct {
 	Enable                 *string       `xml:"enable,omitempty"`
@@ -1384,6 +1589,7 @@ type vrfOspfGracefulRestartXml struct {
 	StrictLSAChecking      *string       `xml:"strict-LSA-checking,omitempty"`
 	MaxNeighborRestartTime *int64        `xml:"max-neighbor-restart-time,omitempty"`
 	Misc                   []generic.Xml `xml:",any"`
+	MiscAttributes         []xml.Attr    `xml:",any,attr"`
 }
 type vrfOspfAreaContainerXml struct {
 	Entries []vrfOspfAreaXml `xml:"entry"`
@@ -1397,16 +1603,19 @@ type vrfOspfAreaXml struct {
 	Interface      *vrfOspfAreaInterfaceContainerXml   `xml:"interface,omitempty"`
 	VirtualLink    *vrfOspfAreaVirtualLinkContainerXml `xml:"virtual-link,omitempty"`
 	Misc           []generic.Xml                       `xml:",any"`
+	MiscAttributes []xml.Attr                          `xml:",any,attr"`
 }
 type vrfOspfAreaTypeXml struct {
-	Normal *vrfOspfAreaTypeNormalXml `xml:"normal,omitempty"`
-	Stub   *vrfOspfAreaTypeStubXml   `xml:"stub,omitempty"`
-	Nssa   *vrfOspfAreaTypeNssaXml   `xml:"nssa,omitempty"`
-	Misc   []generic.Xml             `xml:",any"`
+	Normal         *vrfOspfAreaTypeNormalXml `xml:"normal,omitempty"`
+	Stub           *vrfOspfAreaTypeStubXml   `xml:"stub,omitempty"`
+	Nssa           *vrfOspfAreaTypeNssaXml   `xml:"nssa,omitempty"`
+	Misc           []generic.Xml             `xml:",any"`
+	MiscAttributes []xml.Attr                `xml:",any,attr"`
 }
 type vrfOspfAreaTypeNormalXml struct {
-	Abr  *vrfOspfAreaTypeNormalAbrXml `xml:"abr,omitempty"`
-	Misc []generic.Xml                `xml:",any"`
+	Abr            *vrfOspfAreaTypeNormalAbrXml `xml:"abr,omitempty"`
+	Misc           []generic.Xml                `xml:",any"`
+	MiscAttributes []xml.Attr                   `xml:",any,attr"`
 }
 type vrfOspfAreaTypeNormalAbrXml struct {
 	ImportList         *string       `xml:"import-list,omitempty"`
@@ -1414,12 +1623,14 @@ type vrfOspfAreaTypeNormalAbrXml struct {
 	InboundFilterList  *string       `xml:"inbound-filter-list,omitempty"`
 	OutboundFilterList *string       `xml:"outbound-filter-list,omitempty"`
 	Misc               []generic.Xml `xml:",any"`
+	MiscAttributes     []xml.Attr    `xml:",any,attr"`
 }
 type vrfOspfAreaTypeStubXml struct {
 	NoSummary          *string                    `xml:"no-summary,omitempty"`
 	Abr                *vrfOspfAreaTypeStubAbrXml `xml:"abr,omitempty"`
 	DefaultRouteMetric *int64                     `xml:"default-route-metric,omitempty"`
 	Misc               []generic.Xml              `xml:",any"`
+	MiscAttributes     []xml.Attr                 `xml:",any,attr"`
 }
 type vrfOspfAreaTypeStubAbrXml struct {
 	ImportList         *string       `xml:"import-list,omitempty"`
@@ -1427,17 +1638,20 @@ type vrfOspfAreaTypeStubAbrXml struct {
 	InboundFilterList  *string       `xml:"inbound-filter-list,omitempty"`
 	OutboundFilterList *string       `xml:"outbound-filter-list,omitempty"`
 	Misc               []generic.Xml `xml:",any"`
+	MiscAttributes     []xml.Attr    `xml:",any,attr"`
 }
 type vrfOspfAreaTypeNssaXml struct {
 	NoSummary                   *string                                            `xml:"no-summary,omitempty"`
 	DefaultInformationOriginate *vrfOspfAreaTypeNssaDefaultInformationOriginateXml `xml:"default-information-originate,omitempty"`
 	Abr                         *vrfOspfAreaTypeNssaAbrXml                         `xml:"abr,omitempty"`
 	Misc                        []generic.Xml                                      `xml:",any"`
+	MiscAttributes              []xml.Attr                                         `xml:",any,attr"`
 }
 type vrfOspfAreaTypeNssaDefaultInformationOriginateXml struct {
-	Metric     *int64        `xml:"metric,omitempty"`
-	MetricType *string       `xml:"metric-type,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	Metric         *int64        `xml:"metric,omitempty"`
+	MetricType     *string       `xml:"metric-type,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfOspfAreaTypeNssaAbrXml struct {
 	ImportList         *string                                         `xml:"import-list,omitempty"`
@@ -1446,24 +1660,27 @@ type vrfOspfAreaTypeNssaAbrXml struct {
 	OutboundFilterList *string                                         `xml:"outbound-filter-list,omitempty"`
 	NssaExtRange       *vrfOspfAreaTypeNssaAbrNssaExtRangeContainerXml `xml:"nssa-ext-range,omitempty"`
 	Misc               []generic.Xml                                   `xml:",any"`
+	MiscAttributes     []xml.Attr                                      `xml:",any,attr"`
 }
 type vrfOspfAreaTypeNssaAbrNssaExtRangeContainerXml struct {
 	Entries []vrfOspfAreaTypeNssaAbrNssaExtRangeXml `xml:"entry"`
 }
 type vrfOspfAreaTypeNssaAbrNssaExtRangeXml struct {
-	XMLName   xml.Name      `xml:"entry"`
-	Name      string        `xml:"name,attr"`
-	Advertise *string       `xml:"advertise,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Advertise      *string       `xml:"advertise,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfOspfAreaRangeContainerXml struct {
 	Entries []vrfOspfAreaRangeXml `xml:"entry"`
 }
 type vrfOspfAreaRangeXml struct {
-	XMLName   xml.Name      `xml:"entry"`
-	Name      string        `xml:"name,attr"`
-	Advertise *string       `xml:"advertise,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Advertise      *string       `xml:"advertise,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfOspfAreaInterfaceContainerXml struct {
 	Entries []vrfOspfAreaInterfaceXml `xml:"entry"`
@@ -1481,35 +1698,42 @@ type vrfOspfAreaInterfaceXml struct {
 	LinkType       *vrfOspfAreaInterfaceLinkTypeXml `xml:"link-type,omitempty"`
 	Bfd            *vrfOspfAreaInterfaceBfdXml      `xml:"bfd,omitempty"`
 	Misc           []generic.Xml                    `xml:",any"`
+	MiscAttributes []xml.Attr                       `xml:",any,attr"`
 }
 type vrfOspfAreaInterfaceLinkTypeXml struct {
-	Broadcast *vrfOspfAreaInterfaceLinkTypeBroadcastXml `xml:"broadcast,omitempty"`
-	P2p       *vrfOspfAreaInterfaceLinkTypeP2pXml       `xml:"p2p,omitempty"`
-	P2mp      *vrfOspfAreaInterfaceLinkTypeP2mpXml      `xml:"p2mp,omitempty"`
-	Misc      []generic.Xml                             `xml:",any"`
+	Broadcast      *vrfOspfAreaInterfaceLinkTypeBroadcastXml `xml:"broadcast,omitempty"`
+	P2p            *vrfOspfAreaInterfaceLinkTypeP2pXml       `xml:"p2p,omitempty"`
+	P2mp           *vrfOspfAreaInterfaceLinkTypeP2mpXml      `xml:"p2mp,omitempty"`
+	Misc           []generic.Xml                             `xml:",any"`
+	MiscAttributes []xml.Attr                                `xml:",any,attr"`
 }
 type vrfOspfAreaInterfaceLinkTypeBroadcastXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfOspfAreaInterfaceLinkTypeP2pXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfOspfAreaInterfaceLinkTypeP2mpXml struct {
-	Neighbor *vrfOspfAreaInterfaceLinkTypeP2mpNeighborContainerXml `xml:"neighbor,omitempty"`
-	Misc     []generic.Xml                                         `xml:",any"`
+	Neighbor       *vrfOspfAreaInterfaceLinkTypeP2mpNeighborContainerXml `xml:"neighbor,omitempty"`
+	Misc           []generic.Xml                                         `xml:",any"`
+	MiscAttributes []xml.Attr                                            `xml:",any,attr"`
 }
 type vrfOspfAreaInterfaceLinkTypeP2mpNeighborContainerXml struct {
 	Entries []vrfOspfAreaInterfaceLinkTypeP2mpNeighborXml `xml:"entry"`
 }
 type vrfOspfAreaInterfaceLinkTypeP2mpNeighborXml struct {
-	XMLName  xml.Name      `xml:"entry"`
-	Name     string        `xml:"name,attr"`
-	Priority *int64        `xml:"priority,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Priority       *int64        `xml:"priority,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfOspfAreaInterfaceBfdXml struct {
-	Profile *string       `xml:"profile,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	Profile        *string       `xml:"profile,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfOspfAreaVirtualLinkContainerXml struct {
 	Entries []vrfOspfAreaVirtualLinkXml `xml:"entry"`
@@ -1525,10 +1749,12 @@ type vrfOspfAreaVirtualLinkXml struct {
 	Authentication *string                       `xml:"authentication,omitempty"`
 	Bfd            *vrfOspfAreaVirtualLinkBfdXml `xml:"bfd,omitempty"`
 	Misc           []generic.Xml                 `xml:",any"`
+	MiscAttributes []xml.Attr                    `xml:",any,attr"`
 }
 type vrfOspfAreaVirtualLinkBfdXml struct {
-	Profile *string       `xml:"profile,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	Profile        *string       `xml:"profile,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfOspfv3Xml struct {
 	Enable                *string                      `xml:"enable,omitempty"`
@@ -1541,10 +1767,12 @@ type vrfOspfv3Xml struct {
 	GracefulRestart       *vrfOspfv3GracefulRestartXml `xml:"graceful-restart,omitempty"`
 	Area                  *vrfOspfv3AreaContainerXml   `xml:"area,omitempty"`
 	Misc                  []generic.Xml                `xml:",any"`
+	MiscAttributes        []xml.Attr                   `xml:",any,attr"`
 }
 type vrfOspfv3GlobalBfdXml struct {
-	Profile *string       `xml:"profile,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	Profile        *string       `xml:"profile,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfOspfv3GracefulRestartXml struct {
 	Enable                 *string       `xml:"enable,omitempty"`
@@ -1553,6 +1781,7 @@ type vrfOspfv3GracefulRestartXml struct {
 	StrictLSAChecking      *string       `xml:"strict-LSA-checking,omitempty"`
 	MaxNeighborRestartTime *int64        `xml:"max-neighbor-restart-time,omitempty"`
 	Misc                   []generic.Xml `xml:",any"`
+	MiscAttributes         []xml.Attr    `xml:",any,attr"`
 }
 type vrfOspfv3AreaContainerXml struct {
 	Entries []vrfOspfv3AreaXml `xml:"entry"`
@@ -1566,16 +1795,19 @@ type vrfOspfv3AreaXml struct {
 	Interface      *vrfOspfv3AreaInterfaceContainerXml   `xml:"interface,omitempty"`
 	VirtualLink    *vrfOspfv3AreaVirtualLinkContainerXml `xml:"virtual-link,omitempty"`
 	Misc           []generic.Xml                         `xml:",any"`
+	MiscAttributes []xml.Attr                            `xml:",any,attr"`
 }
 type vrfOspfv3AreaTypeXml struct {
-	Normal *vrfOspfv3AreaTypeNormalXml `xml:"normal,omitempty"`
-	Stub   *vrfOspfv3AreaTypeStubXml   `xml:"stub,omitempty"`
-	Nssa   *vrfOspfv3AreaTypeNssaXml   `xml:"nssa,omitempty"`
-	Misc   []generic.Xml               `xml:",any"`
+	Normal         *vrfOspfv3AreaTypeNormalXml `xml:"normal,omitempty"`
+	Stub           *vrfOspfv3AreaTypeStubXml   `xml:"stub,omitempty"`
+	Nssa           *vrfOspfv3AreaTypeNssaXml   `xml:"nssa,omitempty"`
+	Misc           []generic.Xml               `xml:",any"`
+	MiscAttributes []xml.Attr                  `xml:",any,attr"`
 }
 type vrfOspfv3AreaTypeNormalXml struct {
-	Abr  *vrfOspfv3AreaTypeNormalAbrXml `xml:"abr,omitempty"`
-	Misc []generic.Xml                  `xml:",any"`
+	Abr            *vrfOspfv3AreaTypeNormalAbrXml `xml:"abr,omitempty"`
+	Misc           []generic.Xml                  `xml:",any"`
+	MiscAttributes []xml.Attr                     `xml:",any,attr"`
 }
 type vrfOspfv3AreaTypeNormalAbrXml struct {
 	ImportList         *string       `xml:"import-list,omitempty"`
@@ -1583,12 +1815,14 @@ type vrfOspfv3AreaTypeNormalAbrXml struct {
 	InboundFilterList  *string       `xml:"inbound-filter-list,omitempty"`
 	OutboundFilterList *string       `xml:"outbound-filter-list,omitempty"`
 	Misc               []generic.Xml `xml:",any"`
+	MiscAttributes     []xml.Attr    `xml:",any,attr"`
 }
 type vrfOspfv3AreaTypeStubXml struct {
 	NoSummary          *string                      `xml:"no-summary,omitempty"`
 	Abr                *vrfOspfv3AreaTypeStubAbrXml `xml:"abr,omitempty"`
 	DefaultRouteMetric *int64                       `xml:"default-route-metric,omitempty"`
 	Misc               []generic.Xml                `xml:",any"`
+	MiscAttributes     []xml.Attr                   `xml:",any,attr"`
 }
 type vrfOspfv3AreaTypeStubAbrXml struct {
 	ImportList         *string       `xml:"import-list,omitempty"`
@@ -1596,17 +1830,20 @@ type vrfOspfv3AreaTypeStubAbrXml struct {
 	InboundFilterList  *string       `xml:"inbound-filter-list,omitempty"`
 	OutboundFilterList *string       `xml:"outbound-filter-list,omitempty"`
 	Misc               []generic.Xml `xml:",any"`
+	MiscAttributes     []xml.Attr    `xml:",any,attr"`
 }
 type vrfOspfv3AreaTypeNssaXml struct {
 	NoSummary                   *string                                              `xml:"no-summary,omitempty"`
 	DefaultInformationOriginate *vrfOspfv3AreaTypeNssaDefaultInformationOriginateXml `xml:"default-information-originate,omitempty"`
 	Abr                         *vrfOspfv3AreaTypeNssaAbrXml                         `xml:"abr,omitempty"`
 	Misc                        []generic.Xml                                        `xml:",any"`
+	MiscAttributes              []xml.Attr                                           `xml:",any,attr"`
 }
 type vrfOspfv3AreaTypeNssaDefaultInformationOriginateXml struct {
-	Metric     *int64        `xml:"metric,omitempty"`
-	MetricType *string       `xml:"metric-type,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	Metric         *int64        `xml:"metric,omitempty"`
+	MetricType     *string       `xml:"metric-type,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfOspfv3AreaTypeNssaAbrXml struct {
 	ImportList         *string                                           `xml:"import-list,omitempty"`
@@ -1615,24 +1852,27 @@ type vrfOspfv3AreaTypeNssaAbrXml struct {
 	OutboundFilterList *string                                           `xml:"outbound-filter-list,omitempty"`
 	NssaExtRange       *vrfOspfv3AreaTypeNssaAbrNssaExtRangeContainerXml `xml:"nssa-ext-range,omitempty"`
 	Misc               []generic.Xml                                     `xml:",any"`
+	MiscAttributes     []xml.Attr                                        `xml:",any,attr"`
 }
 type vrfOspfv3AreaTypeNssaAbrNssaExtRangeContainerXml struct {
 	Entries []vrfOspfv3AreaTypeNssaAbrNssaExtRangeXml `xml:"entry"`
 }
 type vrfOspfv3AreaTypeNssaAbrNssaExtRangeXml struct {
-	XMLName   xml.Name      `xml:"entry"`
-	Name      string        `xml:"name,attr"`
-	Advertise *string       `xml:"advertise,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Advertise      *string       `xml:"advertise,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfOspfv3AreaRangeContainerXml struct {
 	Entries []vrfOspfv3AreaRangeXml `xml:"entry"`
 }
 type vrfOspfv3AreaRangeXml struct {
-	XMLName   xml.Name      `xml:"entry"`
-	Name      string        `xml:"name,attr"`
-	Advertise *string       `xml:"advertise,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Advertise      *string       `xml:"advertise,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfOspfv3AreaInterfaceContainerXml struct {
 	Entries []vrfOspfv3AreaInterfaceXml `xml:"entry"`
@@ -1651,35 +1891,42 @@ type vrfOspfv3AreaInterfaceXml struct {
 	LinkType       *vrfOspfv3AreaInterfaceLinkTypeXml `xml:"link-type,omitempty"`
 	Bfd            *vrfOspfv3AreaInterfaceBfdXml      `xml:"bfd,omitempty"`
 	Misc           []generic.Xml                      `xml:",any"`
+	MiscAttributes []xml.Attr                         `xml:",any,attr"`
 }
 type vrfOspfv3AreaInterfaceLinkTypeXml struct {
-	Broadcast *vrfOspfv3AreaInterfaceLinkTypeBroadcastXml `xml:"broadcast,omitempty"`
-	P2p       *vrfOspfv3AreaInterfaceLinkTypeP2pXml       `xml:"p2p,omitempty"`
-	P2mp      *vrfOspfv3AreaInterfaceLinkTypeP2mpXml      `xml:"p2mp,omitempty"`
-	Misc      []generic.Xml                               `xml:",any"`
+	Broadcast      *vrfOspfv3AreaInterfaceLinkTypeBroadcastXml `xml:"broadcast,omitempty"`
+	P2p            *vrfOspfv3AreaInterfaceLinkTypeP2pXml       `xml:"p2p,omitempty"`
+	P2mp           *vrfOspfv3AreaInterfaceLinkTypeP2mpXml      `xml:"p2mp,omitempty"`
+	Misc           []generic.Xml                               `xml:",any"`
+	MiscAttributes []xml.Attr                                  `xml:",any,attr"`
 }
 type vrfOspfv3AreaInterfaceLinkTypeBroadcastXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfOspfv3AreaInterfaceLinkTypeP2pXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfOspfv3AreaInterfaceLinkTypeP2mpXml struct {
-	Neighbor *vrfOspfv3AreaInterfaceLinkTypeP2mpNeighborContainerXml `xml:"neighbor,omitempty"`
-	Misc     []generic.Xml                                           `xml:",any"`
+	Neighbor       *vrfOspfv3AreaInterfaceLinkTypeP2mpNeighborContainerXml `xml:"neighbor,omitempty"`
+	Misc           []generic.Xml                                           `xml:",any"`
+	MiscAttributes []xml.Attr                                              `xml:",any,attr"`
 }
 type vrfOspfv3AreaInterfaceLinkTypeP2mpNeighborContainerXml struct {
 	Entries []vrfOspfv3AreaInterfaceLinkTypeP2mpNeighborXml `xml:"entry"`
 }
 type vrfOspfv3AreaInterfaceLinkTypeP2mpNeighborXml struct {
-	XMLName  xml.Name      `xml:"entry"`
-	Name     string        `xml:"name,attr"`
-	Priority *int64        `xml:"priority,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Priority       *int64        `xml:"priority,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfOspfv3AreaInterfaceBfdXml struct {
-	Profile *string       `xml:"profile,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	Profile        *string       `xml:"profile,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfOspfv3AreaVirtualLinkContainerXml struct {
 	Entries []vrfOspfv3AreaVirtualLinkXml `xml:"entry"`
@@ -1694,6 +1941,7 @@ type vrfOspfv3AreaVirtualLinkXml struct {
 	Timing         *string       `xml:"timing,omitempty"`
 	Authentication *string       `xml:"authentication,omitempty"`
 	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfEcmpXml struct {
 	Enable           *string              `xml:"enable,omitempty"`
@@ -1702,6 +1950,7 @@ type vrfEcmpXml struct {
 	StrictSourcePath *string              `xml:"strict-source-path,omitempty"`
 	Algorithm        *vrfEcmpAlgorithmXml `xml:"algorithm,omitempty"`
 	Misc             []generic.Xml        `xml:",any"`
+	MiscAttributes   []xml.Attr           `xml:",any,attr"`
 }
 type vrfEcmpAlgorithmXml struct {
 	IpModulo           *vrfEcmpAlgorithmIpModuloXml           `xml:"ip-modulo,omitempty"`
@@ -1709,55 +1958,64 @@ type vrfEcmpAlgorithmXml struct {
 	WeightedRoundRobin *vrfEcmpAlgorithmWeightedRoundRobinXml `xml:"weighted-round-robin,omitempty"`
 	BalancedRoundRobin *vrfEcmpAlgorithmBalancedRoundRobinXml `xml:"balanced-round-robin,omitempty"`
 	Misc               []generic.Xml                          `xml:",any"`
+	MiscAttributes     []xml.Attr                             `xml:",any,attr"`
 }
 type vrfEcmpAlgorithmIpModuloXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfEcmpAlgorithmIpHashXml struct {
-	SrcOnly  *string       `xml:"src-only,omitempty"`
-	UsePort  *string       `xml:"use-port,omitempty"`
-	HashSeed *int64        `xml:"hash-seed,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	SrcOnly        *string       `xml:"src-only,omitempty"`
+	UsePort        *string       `xml:"use-port,omitempty"`
+	HashSeed       *int64        `xml:"hash-seed,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfEcmpAlgorithmWeightedRoundRobinXml struct {
-	Interface *vrfEcmpAlgorithmWeightedRoundRobinInterfaceContainerXml `xml:"interface,omitempty"`
-	Misc      []generic.Xml                                            `xml:",any"`
+	Interface      *vrfEcmpAlgorithmWeightedRoundRobinInterfaceContainerXml `xml:"interface,omitempty"`
+	Misc           []generic.Xml                                            `xml:",any"`
+	MiscAttributes []xml.Attr                                               `xml:",any,attr"`
 }
 type vrfEcmpAlgorithmWeightedRoundRobinInterfaceContainerXml struct {
 	Entries []vrfEcmpAlgorithmWeightedRoundRobinInterfaceXml `xml:"entry"`
 }
 type vrfEcmpAlgorithmWeightedRoundRobinInterfaceXml struct {
-	XMLName xml.Name      `xml:"entry"`
-	Name    string        `xml:"name,attr"`
-	Weight  *int64        `xml:"weight,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Weight         *int64        `xml:"weight,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfEcmpAlgorithmBalancedRoundRobinXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfMulticastXml struct {
-	Enable      *string                              `xml:"enable,omitempty"`
-	StaticRoute *vrfMulticastStaticRouteContainerXml `xml:"static-route,omitempty"`
-	Pim         *vrfMulticastPimXml                  `xml:"pim,omitempty"`
-	Igmp        *vrfMulticastIgmpXml                 `xml:"igmp,omitempty"`
-	Msdp        *vrfMulticastMsdpXml                 `xml:"msdp,omitempty"`
-	Misc        []generic.Xml                        `xml:",any"`
+	Enable         *string                              `xml:"enable,omitempty"`
+	StaticRoute    *vrfMulticastStaticRouteContainerXml `xml:"static-route,omitempty"`
+	Pim            *vrfMulticastPimXml                  `xml:"pim,omitempty"`
+	Igmp           *vrfMulticastIgmpXml                 `xml:"igmp,omitempty"`
+	Msdp           *vrfMulticastMsdpXml                 `xml:"msdp,omitempty"`
+	Misc           []generic.Xml                        `xml:",any"`
+	MiscAttributes []xml.Attr                           `xml:",any,attr"`
 }
 type vrfMulticastStaticRouteContainerXml struct {
 	Entries []vrfMulticastStaticRouteXml `xml:"entry"`
 }
 type vrfMulticastStaticRouteXml struct {
-	XMLName     xml.Name                           `xml:"entry"`
-	Name        string                             `xml:"name,attr"`
-	Destination *string                            `xml:"destination,omitempty"`
-	Interface   *string                            `xml:"interface,omitempty"`
-	Preference  *int64                             `xml:"preference,omitempty"`
-	Nexthop     *vrfMulticastStaticRouteNexthopXml `xml:"nexthop,omitempty"`
-	Misc        []generic.Xml                      `xml:",any"`
+	XMLName        xml.Name                           `xml:"entry"`
+	Name           string                             `xml:"name,attr"`
+	Destination    *string                            `xml:"destination,omitempty"`
+	Interface      *string                            `xml:"interface,omitempty"`
+	Preference     *int64                             `xml:"preference,omitempty"`
+	Nexthop        *vrfMulticastStaticRouteNexthopXml `xml:"nexthop,omitempty"`
+	Misc           []generic.Xml                      `xml:",any"`
+	MiscAttributes []xml.Attr                         `xml:",any,attr"`
 }
 type vrfMulticastStaticRouteNexthopXml struct {
-	IpAddress *string       `xml:"ip-address,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	IpAddress      *string       `xml:"ip-address,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfMulticastPimXml struct {
 	Enable          *string                                  `xml:"enable,omitempty"`
@@ -1770,27 +2028,32 @@ type vrfMulticastPimXml struct {
 	SptThreshold    *vrfMulticastPimSptThresholdContainerXml `xml:"spt-threshold,omitempty"`
 	Interface       *vrfMulticastPimInterfaceContainerXml    `xml:"interface,omitempty"`
 	Misc            []generic.Xml                            `xml:",any"`
+	MiscAttributes  []xml.Attr                               `xml:",any,attr"`
 }
 type vrfMulticastPimSsmAddressSpaceXml struct {
-	GroupList *string       `xml:"group-list,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	GroupList      *string       `xml:"group-list,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfMulticastPimRpXml struct {
-	LocalRp    *vrfMulticastPimRpLocalRpXml             `xml:"local-rp,omitempty"`
-	ExternalRp *vrfMulticastPimRpExternalRpContainerXml `xml:"external-rp,omitempty"`
-	Misc       []generic.Xml                            `xml:",any"`
+	LocalRp        *vrfMulticastPimRpLocalRpXml             `xml:"local-rp,omitempty"`
+	ExternalRp     *vrfMulticastPimRpExternalRpContainerXml `xml:"external-rp,omitempty"`
+	Misc           []generic.Xml                            `xml:",any"`
+	MiscAttributes []xml.Attr                               `xml:",any,attr"`
 }
 type vrfMulticastPimRpLocalRpXml struct {
-	StaticRp    *vrfMulticastPimRpLocalRpStaticRpXml    `xml:"static-rp,omitempty"`
-	CandidateRp *vrfMulticastPimRpLocalRpCandidateRpXml `xml:"candidate-rp,omitempty"`
-	Misc        []generic.Xml                           `xml:",any"`
+	StaticRp       *vrfMulticastPimRpLocalRpStaticRpXml    `xml:"static-rp,omitempty"`
+	CandidateRp    *vrfMulticastPimRpLocalRpCandidateRpXml `xml:"candidate-rp,omitempty"`
+	Misc           []generic.Xml                           `xml:",any"`
+	MiscAttributes []xml.Attr                              `xml:",any,attr"`
 }
 type vrfMulticastPimRpLocalRpStaticRpXml struct {
-	Interface *string       `xml:"interface,omitempty"`
-	Address   *string       `xml:"address,omitempty"`
-	Override  *string       `xml:"override,omitempty"`
-	GroupList *string       `xml:"group-list,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	Interface      *string       `xml:"interface,omitempty"`
+	Address        *string       `xml:"address,omitempty"`
+	Override       *string       `xml:"override,omitempty"`
+	GroupList      *string       `xml:"group-list,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfMulticastPimRpLocalRpCandidateRpXml struct {
 	Interface             *string       `xml:"interface,omitempty"`
@@ -1799,25 +2062,28 @@ type vrfMulticastPimRpLocalRpCandidateRpXml struct {
 	AdvertisementInterval *int64        `xml:"advertisement-interval,omitempty"`
 	GroupList             *string       `xml:"group-list,omitempty"`
 	Misc                  []generic.Xml `xml:",any"`
+	MiscAttributes        []xml.Attr    `xml:",any,attr"`
 }
 type vrfMulticastPimRpExternalRpContainerXml struct {
 	Entries []vrfMulticastPimRpExternalRpXml `xml:"entry"`
 }
 type vrfMulticastPimRpExternalRpXml struct {
-	XMLName   xml.Name      `xml:"entry"`
-	Name      string        `xml:"name,attr"`
-	GroupList *string       `xml:"group-list,omitempty"`
-	Override  *string       `xml:"override,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	GroupList      *string       `xml:"group-list,omitempty"`
+	Override       *string       `xml:"override,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfMulticastPimSptThresholdContainerXml struct {
 	Entries []vrfMulticastPimSptThresholdXml `xml:"entry"`
 }
 type vrfMulticastPimSptThresholdXml struct {
-	XMLName   xml.Name      `xml:"entry"`
-	Name      string        `xml:"name,attr"`
-	Threshold *string       `xml:"threshold,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Threshold      *string       `xml:"threshold,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfMulticastPimInterfaceContainerXml struct {
 	Entries []vrfMulticastPimInterfaceXml `xml:"entry"`
@@ -1831,16 +2097,19 @@ type vrfMulticastPimInterfaceXml struct {
 	IfTimer        *string       `xml:"if-timer,omitempty"`
 	NeighborFilter *string       `xml:"neighbor-filter,omitempty"`
 	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfMulticastIgmpXml struct {
-	Enable  *string                             `xml:"enable,omitempty"`
-	Dynamic *vrfMulticastIgmpDynamicXml         `xml:"dynamic,omitempty"`
-	Static  *vrfMulticastIgmpStaticContainerXml `xml:"static,omitempty"`
-	Misc    []generic.Xml                       `xml:",any"`
+	Enable         *string                             `xml:"enable,omitempty"`
+	Dynamic        *vrfMulticastIgmpDynamicXml         `xml:"dynamic,omitempty"`
+	Static         *vrfMulticastIgmpStaticContainerXml `xml:"static,omitempty"`
+	Misc           []generic.Xml                       `xml:",any"`
+	MiscAttributes []xml.Attr                          `xml:",any,attr"`
 }
 type vrfMulticastIgmpDynamicXml struct {
-	Interface *vrfMulticastIgmpDynamicInterfaceContainerXml `xml:"interface,omitempty"`
-	Misc      []generic.Xml                                 `xml:",any"`
+	Interface      *vrfMulticastIgmpDynamicInterfaceContainerXml `xml:"interface,omitempty"`
+	Misc           []generic.Xml                                 `xml:",any"`
+	MiscAttributes []xml.Attr                                    `xml:",any,attr"`
 }
 type vrfMulticastIgmpDynamicInterfaceContainerXml struct {
 	Entries []vrfMulticastIgmpDynamicInterfaceXml `xml:"entry"`
@@ -1856,17 +2125,19 @@ type vrfMulticastIgmpDynamicInterfaceXml struct {
 	QueryProfile        *string       `xml:"query-profile,omitempty"`
 	RouterAlertPolicing *string       `xml:"router-alert-policing,omitempty"`
 	Misc                []generic.Xml `xml:",any"`
+	MiscAttributes      []xml.Attr    `xml:",any,attr"`
 }
 type vrfMulticastIgmpStaticContainerXml struct {
 	Entries []vrfMulticastIgmpStaticXml `xml:"entry"`
 }
 type vrfMulticastIgmpStaticXml struct {
-	XMLName       xml.Name      `xml:"entry"`
-	Name          string        `xml:"name,attr"`
-	Interface     *string       `xml:"interface,omitempty"`
-	GroupAddress  *string       `xml:"group-address,omitempty"`
-	SourceAddress *string       `xml:"source-address,omitempty"`
-	Misc          []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Interface      *string       `xml:"interface,omitempty"`
+	GroupAddress   *string       `xml:"group-address,omitempty"`
+	SourceAddress  *string       `xml:"source-address,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfMulticastMsdpXml struct {
 	Enable               *string                           `xml:"enable,omitempty"`
@@ -1875,11 +2146,13 @@ type vrfMulticastMsdpXml struct {
 	OriginatorId         *vrfMulticastMsdpOriginatorIdXml  `xml:"originator-id,omitempty"`
 	Peer                 *vrfMulticastMsdpPeerContainerXml `xml:"peer,omitempty"`
 	Misc                 []generic.Xml                     `xml:",any"`
+	MiscAttributes       []xml.Attr                        `xml:",any,attr"`
 }
 type vrfMulticastMsdpOriginatorIdXml struct {
-	Interface *string       `xml:"interface,omitempty"`
-	Ip        *string       `xml:"ip,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	Interface      *string       `xml:"interface,omitempty"`
+	Ip             *string       `xml:"ip,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfMulticastMsdpPeerContainerXml struct {
 	Entries []vrfMulticastMsdpPeerXml `xml:"entry"`
@@ -1896,16 +2169,19 @@ type vrfMulticastMsdpPeerXml struct {
 	LocalAddress     *vrfMulticastMsdpPeerLocalAddressXml `xml:"local-address,omitempty"`
 	PeerAddress      *vrfMulticastMsdpPeerPeerAddressXml  `xml:"peer-address,omitempty"`
 	Misc             []generic.Xml                        `xml:",any"`
+	MiscAttributes   []xml.Attr                           `xml:",any,attr"`
 }
 type vrfMulticastMsdpPeerLocalAddressXml struct {
-	Interface *string       `xml:"interface,omitempty"`
-	Ip        *string       `xml:"ip,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	Interface      *string       `xml:"interface,omitempty"`
+	Ip             *string       `xml:"ip,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfMulticastMsdpPeerPeerAddressXml struct {
-	Ip   *string       `xml:"ip,omitempty"`
-	Fqdn *string       `xml:"fqdn,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Ip             *string       `xml:"ip,omitempty"`
+	Fqdn           *string       `xml:"fqdn,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfRipXml struct {
 	Enable                       *string                                `xml:"enable,omitempty"`
@@ -1918,18 +2194,22 @@ type vrfRipXml struct {
 	GlobalOutboundDistributeList *vrfRipGlobalOutboundDistributeListXml `xml:"global-outbound-distribute-list,omitempty"`
 	Interface                    *vrfRipInterfaceContainerXml           `xml:"interface,omitempty"`
 	Misc                         []generic.Xml                          `xml:",any"`
+	MiscAttributes               []xml.Attr                             `xml:",any,attr"`
 }
 type vrfRipGlobalBfdXml struct {
-	Profile *string       `xml:"profile,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	Profile        *string       `xml:"profile,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfRipGlobalInboundDistributeListXml struct {
-	AccessList *string       `xml:"access-list,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	AccessList     *string       `xml:"access-list,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfRipGlobalOutboundDistributeListXml struct {
-	AccessList *string       `xml:"access-list,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	AccessList     *string       `xml:"access-list,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfRipInterfaceContainerXml struct {
 	Entries []vrfRipInterfaceXml `xml:"entry"`
@@ -1945,105 +2225,122 @@ type vrfRipInterfaceXml struct {
 	InterfaceInboundDistributeList  *vrfRipInterfaceInterfaceInboundDistributeListXml  `xml:"interface-inbound-distribute-list,omitempty"`
 	InterfaceOutboundDistributeList *vrfRipInterfaceInterfaceOutboundDistributeListXml `xml:"interface-outbound-distribute-list,omitempty"`
 	Misc                            []generic.Xml                                      `xml:",any"`
+	MiscAttributes                  []xml.Attr                                         `xml:",any,attr"`
 }
 type vrfRipInterfaceBfdXml struct {
-	Profile *string       `xml:"profile,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	Profile        *string       `xml:"profile,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfRipInterfaceInterfaceInboundDistributeListXml struct {
-	AccessList *string       `xml:"access-list,omitempty"`
-	Metric     *int64        `xml:"metric,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	AccessList     *string       `xml:"access-list,omitempty"`
+	Metric         *int64        `xml:"metric,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfRipInterfaceInterfaceOutboundDistributeListXml struct {
-	AccessList *string       `xml:"access-list,omitempty"`
-	Metric     *int64        `xml:"metric,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	AccessList     *string       `xml:"access-list,omitempty"`
+	Metric         *int64        `xml:"metric,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type entryXml_11_0_2 struct {
-	XMLName xml.Name                `xml:"entry"`
-	Name    string                  `xml:"name,attr"`
-	Vrf     *vrfContainerXml_11_0_2 `xml:"vrf,omitempty"`
-	Misc    []generic.Xml           `xml:",any"`
+	XMLName        xml.Name                `xml:"entry"`
+	Name           string                  `xml:"name,attr"`
+	Vrf            *vrfContainerXml_11_0_2 `xml:"vrf,omitempty"`
+	Misc           []generic.Xml           `xml:",any"`
+	MiscAttributes []xml.Attr              `xml:",any,attr"`
 }
 type vrfContainerXml_11_0_2 struct {
 	Entries []vrfXml_11_0_2 `xml:"entry"`
 }
 type vrfXml_11_0_2 struct {
-	XMLName      xml.Name                   `xml:"entry"`
-	Name         string                     `xml:"name,attr"`
-	Interface    *util.MemberType           `xml:"interface,omitempty"`
-	AdminDists   *vrfAdminDistsXml_11_0_2   `xml:"admin-dists,omitempty"`
-	RibFilter    *vrfRibFilterXml_11_0_2    `xml:"rib-filter,omitempty"`
-	Bgp          *vrfBgpXml_11_0_2          `xml:"bgp,omitempty"`
-	RoutingTable *vrfRoutingTableXml_11_0_2 `xml:"routing-table,omitempty"`
-	Ospf         *vrfOspfXml_11_0_2         `xml:"ospf,omitempty"`
-	Ospfv3       *vrfOspfv3Xml_11_0_2       `xml:"ospfv3,omitempty"`
-	Ecmp         *vrfEcmpXml_11_0_2         `xml:"ecmp,omitempty"`
-	Multicast    *vrfMulticastXml_11_0_2    `xml:"multicast,omitempty"`
-	Rip          *vrfRipXml_11_0_2          `xml:"rip,omitempty"`
-	Misc         []generic.Xml              `xml:",any"`
+	XMLName        xml.Name                   `xml:"entry"`
+	Name           string                     `xml:"name,attr"`
+	Interface      *util.MemberType           `xml:"interface,omitempty"`
+	AdminDists     *vrfAdminDistsXml_11_0_2   `xml:"admin-dists,omitempty"`
+	RibFilter      *vrfRibFilterXml_11_0_2    `xml:"rib-filter,omitempty"`
+	Bgp            *vrfBgpXml_11_0_2          `xml:"bgp,omitempty"`
+	RoutingTable   *vrfRoutingTableXml_11_0_2 `xml:"routing-table,omitempty"`
+	Ospf           *vrfOspfXml_11_0_2         `xml:"ospf,omitempty"`
+	Ospfv3         *vrfOspfv3Xml_11_0_2       `xml:"ospfv3,omitempty"`
+	Ecmp           *vrfEcmpXml_11_0_2         `xml:"ecmp,omitempty"`
+	Multicast      *vrfMulticastXml_11_0_2    `xml:"multicast,omitempty"`
+	Rip            *vrfRipXml_11_0_2          `xml:"rip,omitempty"`
+	Misc           []generic.Xml              `xml:",any"`
+	MiscAttributes []xml.Attr                 `xml:",any,attr"`
 }
 type vrfAdminDistsXml_11_0_2 struct {
-	Static      *int64        `xml:"static,omitempty"`
-	StaticIpv6  *int64        `xml:"static-ipv6,omitempty"`
-	OspfInter   *int64        `xml:"ospf-inter,omitempty"`
-	OspfIntra   *int64        `xml:"ospf-intra,omitempty"`
-	OspfExt     *int64        `xml:"ospf-ext,omitempty"`
-	Ospfv3Inter *int64        `xml:"ospfv3-inter,omitempty"`
-	Ospfv3Intra *int64        `xml:"ospfv3-intra,omitempty"`
-	Ospfv3Ext   *int64        `xml:"ospfv3-ext,omitempty"`
-	BgpInternal *int64        `xml:"bgp-internal,omitempty"`
-	BgpExternal *int64        `xml:"bgp-external,omitempty"`
-	BgpLocal    *int64        `xml:"bgp-local,omitempty"`
-	Rip         *int64        `xml:"rip,omitempty"`
-	Misc        []generic.Xml `xml:",any"`
+	Static         *int64        `xml:"static,omitempty"`
+	StaticIpv6     *int64        `xml:"static-ipv6,omitempty"`
+	OspfInter      *int64        `xml:"ospf-inter,omitempty"`
+	OspfIntra      *int64        `xml:"ospf-intra,omitempty"`
+	OspfExt        *int64        `xml:"ospf-ext,omitempty"`
+	Ospfv3Inter    *int64        `xml:"ospfv3-inter,omitempty"`
+	Ospfv3Intra    *int64        `xml:"ospfv3-intra,omitempty"`
+	Ospfv3Ext      *int64        `xml:"ospfv3-ext,omitempty"`
+	BgpInternal    *int64        `xml:"bgp-internal,omitempty"`
+	BgpExternal    *int64        `xml:"bgp-external,omitempty"`
+	BgpLocal       *int64        `xml:"bgp-local,omitempty"`
+	Rip            *int64        `xml:"rip,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfRibFilterXml_11_0_2 struct {
-	Ipv4 *vrfRibFilterIpv4Xml_11_0_2 `xml:"ipv4,omitempty"`
-	Ipv6 *vrfRibFilterIpv6Xml_11_0_2 `xml:"ipv6,omitempty"`
-	Misc []generic.Xml               `xml:",any"`
+	Ipv4           *vrfRibFilterIpv4Xml_11_0_2 `xml:"ipv4,omitempty"`
+	Ipv6           *vrfRibFilterIpv6Xml_11_0_2 `xml:"ipv6,omitempty"`
+	Misc           []generic.Xml               `xml:",any"`
+	MiscAttributes []xml.Attr                  `xml:",any,attr"`
 }
 type vrfRibFilterIpv4Xml_11_0_2 struct {
-	Static *vrfRibFilterIpv4StaticXml_11_0_2 `xml:"static,omitempty"`
-	Bgp    *vrfRibFilterIpv4BgpXml_11_0_2    `xml:"bgp,omitempty"`
-	Ospf   *vrfRibFilterIpv4OspfXml_11_0_2   `xml:"ospf,omitempty"`
-	Rip    *vrfRibFilterIpv4RipXml_11_0_2    `xml:"rip,omitempty"`
-	Misc   []generic.Xml                     `xml:",any"`
+	Static         *vrfRibFilterIpv4StaticXml_11_0_2 `xml:"static,omitempty"`
+	Bgp            *vrfRibFilterIpv4BgpXml_11_0_2    `xml:"bgp,omitempty"`
+	Ospf           *vrfRibFilterIpv4OspfXml_11_0_2   `xml:"ospf,omitempty"`
+	Rip            *vrfRibFilterIpv4RipXml_11_0_2    `xml:"rip,omitempty"`
+	Misc           []generic.Xml                     `xml:",any"`
+	MiscAttributes []xml.Attr                        `xml:",any,attr"`
 }
 type vrfRibFilterIpv4StaticXml_11_0_2 struct {
-	RouteMap *string       `xml:"route-map,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	RouteMap       *string       `xml:"route-map,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfRibFilterIpv4BgpXml_11_0_2 struct {
-	RouteMap *string       `xml:"route-map,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	RouteMap       *string       `xml:"route-map,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfRibFilterIpv4OspfXml_11_0_2 struct {
-	RouteMap *string       `xml:"route-map,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	RouteMap       *string       `xml:"route-map,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfRibFilterIpv4RipXml_11_0_2 struct {
-	RouteMap *string       `xml:"route-map,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	RouteMap       *string       `xml:"route-map,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfRibFilterIpv6Xml_11_0_2 struct {
-	Static *vrfRibFilterIpv6StaticXml_11_0_2 `xml:"static,omitempty"`
-	Bgp    *vrfRibFilterIpv6BgpXml_11_0_2    `xml:"bgp,omitempty"`
-	Ospfv3 *vrfRibFilterIpv6Ospfv3Xml_11_0_2 `xml:"ospfv3,omitempty"`
-	Misc   []generic.Xml                     `xml:",any"`
+	Static         *vrfRibFilterIpv6StaticXml_11_0_2 `xml:"static,omitempty"`
+	Bgp            *vrfRibFilterIpv6BgpXml_11_0_2    `xml:"bgp,omitempty"`
+	Ospfv3         *vrfRibFilterIpv6Ospfv3Xml_11_0_2 `xml:"ospfv3,omitempty"`
+	Misc           []generic.Xml                     `xml:",any"`
+	MiscAttributes []xml.Attr                        `xml:",any,attr"`
 }
 type vrfRibFilterIpv6StaticXml_11_0_2 struct {
-	RouteMap *string       `xml:"route-map,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	RouteMap       *string       `xml:"route-map,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfRibFilterIpv6BgpXml_11_0_2 struct {
-	RouteMap *string       `xml:"route-map,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	RouteMap       *string       `xml:"route-map,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfRibFilterIpv6Ospfv3Xml_11_0_2 struct {
-	RouteMap *string       `xml:"route-map,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	RouteMap       *string       `xml:"route-map,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfBgpXml_11_0_2 struct {
 	Enable                      *string                                   `xml:"enable,omitempty"`
@@ -2064,11 +2361,13 @@ type vrfBgpXml_11_0_2 struct {
 	PeerGroup                   *vrfBgpPeerGroupContainerXml_11_0_2       `xml:"peer-group,omitempty"`
 	AggregateRoutes             *vrfBgpAggregateRoutesContainerXml_11_0_2 `xml:"aggregate-routes,omitempty"`
 	Misc                        []generic.Xml                             `xml:",any"`
+	MiscAttributes              []xml.Attr                                `xml:",any,attr"`
 }
 type vrfBgpMedXml_11_0_2 struct {
 	AlwaysCompareMed           *string       `xml:"always-compare-med,omitempty"`
 	DeterministicMedComparison *string       `xml:"deterministic-med-comparison,omitempty"`
 	Misc                       []generic.Xml `xml:",any"`
+	MiscAttributes             []xml.Attr    `xml:",any,attr"`
 }
 type vrfBgpGracefulRestartXml_11_0_2 struct {
 	Enable             *string       `xml:"enable,omitempty"`
@@ -2076,56 +2375,66 @@ type vrfBgpGracefulRestartXml_11_0_2 struct {
 	MaxPeerRestartTime *int64        `xml:"max-peer-restart-time,omitempty"`
 	LocalRestartTime   *int64        `xml:"local-restart-time,omitempty"`
 	Misc               []generic.Xml `xml:",any"`
+	MiscAttributes     []xml.Attr    `xml:",any,attr"`
 }
 type vrfBgpGlobalBfdXml_11_0_2 struct {
-	Profile *string       `xml:"profile,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	Profile        *string       `xml:"profile,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfBgpRedistributionProfileXml_11_0_2 struct {
-	Ipv4 *vrfBgpRedistributionProfileIpv4Xml_11_0_2 `xml:"ipv4,omitempty"`
-	Ipv6 *vrfBgpRedistributionProfileIpv6Xml_11_0_2 `xml:"ipv6,omitempty"`
-	Misc []generic.Xml                              `xml:",any"`
+	Ipv4           *vrfBgpRedistributionProfileIpv4Xml_11_0_2 `xml:"ipv4,omitempty"`
+	Ipv6           *vrfBgpRedistributionProfileIpv6Xml_11_0_2 `xml:"ipv6,omitempty"`
+	Misc           []generic.Xml                              `xml:",any"`
+	MiscAttributes []xml.Attr                                 `xml:",any,attr"`
 }
 type vrfBgpRedistributionProfileIpv4Xml_11_0_2 struct {
-	Unicast *string       `xml:"unicast,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	Unicast        *string       `xml:"unicast,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfBgpRedistributionProfileIpv6Xml_11_0_2 struct {
-	Unicast *string       `xml:"unicast,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	Unicast        *string       `xml:"unicast,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfBgpAdvertiseNetworkXml_11_0_2 struct {
-	Ipv4 *vrfBgpAdvertiseNetworkIpv4Xml_11_0_2 `xml:"ipv4,omitempty"`
-	Ipv6 *vrfBgpAdvertiseNetworkIpv6Xml_11_0_2 `xml:"ipv6,omitempty"`
-	Misc []generic.Xml                         `xml:",any"`
+	Ipv4           *vrfBgpAdvertiseNetworkIpv4Xml_11_0_2 `xml:"ipv4,omitempty"`
+	Ipv6           *vrfBgpAdvertiseNetworkIpv6Xml_11_0_2 `xml:"ipv6,omitempty"`
+	Misc           []generic.Xml                         `xml:",any"`
+	MiscAttributes []xml.Attr                            `xml:",any,attr"`
 }
 type vrfBgpAdvertiseNetworkIpv4Xml_11_0_2 struct {
-	Network *vrfBgpAdvertiseNetworkIpv4NetworkContainerXml_11_0_2 `xml:"network,omitempty"`
-	Misc    []generic.Xml                                         `xml:",any"`
+	Network        *vrfBgpAdvertiseNetworkIpv4NetworkContainerXml_11_0_2 `xml:"network,omitempty"`
+	Misc           []generic.Xml                                         `xml:",any"`
+	MiscAttributes []xml.Attr                                            `xml:",any,attr"`
 }
 type vrfBgpAdvertiseNetworkIpv4NetworkContainerXml_11_0_2 struct {
 	Entries []vrfBgpAdvertiseNetworkIpv4NetworkXml_11_0_2 `xml:"entry"`
 }
 type vrfBgpAdvertiseNetworkIpv4NetworkXml_11_0_2 struct {
-	XMLName   xml.Name      `xml:"entry"`
-	Name      string        `xml:"name,attr"`
-	Unicast   *string       `xml:"unicast,omitempty"`
-	Multicast *string       `xml:"multicast,omitempty"`
-	Backdoor  *string       `xml:"backdoor,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Unicast        *string       `xml:"unicast,omitempty"`
+	Multicast      *string       `xml:"multicast,omitempty"`
+	Backdoor       *string       `xml:"backdoor,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfBgpAdvertiseNetworkIpv6Xml_11_0_2 struct {
-	Network *vrfBgpAdvertiseNetworkIpv6NetworkContainerXml_11_0_2 `xml:"network,omitempty"`
-	Misc    []generic.Xml                                         `xml:",any"`
+	Network        *vrfBgpAdvertiseNetworkIpv6NetworkContainerXml_11_0_2 `xml:"network,omitempty"`
+	Misc           []generic.Xml                                         `xml:",any"`
+	MiscAttributes []xml.Attr                                            `xml:",any,attr"`
 }
 type vrfBgpAdvertiseNetworkIpv6NetworkContainerXml_11_0_2 struct {
 	Entries []vrfBgpAdvertiseNetworkIpv6NetworkXml_11_0_2 `xml:"entry"`
 }
 type vrfBgpAdvertiseNetworkIpv6NetworkXml_11_0_2 struct {
-	XMLName xml.Name      `xml:"entry"`
-	Name    string        `xml:"name,attr"`
-	Unicast *string       `xml:"unicast,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Unicast        *string       `xml:"unicast,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfBgpPeerGroupContainerXml_11_0_2 struct {
 	Entries []vrfBgpPeerGroupXml_11_0_2 `xml:"entry"`
@@ -2140,27 +2449,33 @@ type vrfBgpPeerGroupXml_11_0_2 struct {
 	ConnectionOptions *vrfBgpPeerGroupConnectionOptionsXml_11_0_2 `xml:"connection-options,omitempty"`
 	Peer              *vrfBgpPeerGroupPeerContainerXml_11_0_2     `xml:"peer,omitempty"`
 	Misc              []generic.Xml                               `xml:",any"`
+	MiscAttributes    []xml.Attr                                  `xml:",any,attr"`
 }
 type vrfBgpPeerGroupTypeXml_11_0_2 struct {
-	Ibgp *vrfBgpPeerGroupTypeIbgpXml_11_0_2 `xml:"ibgp,omitempty"`
-	Ebgp *vrfBgpPeerGroupTypeEbgpXml_11_0_2 `xml:"ebgp,omitempty"`
-	Misc []generic.Xml                      `xml:",any"`
+	Ibgp           *vrfBgpPeerGroupTypeIbgpXml_11_0_2 `xml:"ibgp,omitempty"`
+	Ebgp           *vrfBgpPeerGroupTypeEbgpXml_11_0_2 `xml:"ebgp,omitempty"`
+	Misc           []generic.Xml                      `xml:",any"`
+	MiscAttributes []xml.Attr                         `xml:",any,attr"`
 }
 type vrfBgpPeerGroupTypeIbgpXml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfBgpPeerGroupTypeEbgpXml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfBgpPeerGroupAddressFamilyXml_11_0_2 struct {
-	Ipv4 *string       `xml:"ipv4,omitempty"`
-	Ipv6 *string       `xml:"ipv6,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Ipv4           *string       `xml:"ipv4,omitempty"`
+	Ipv6           *string       `xml:"ipv6,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfBgpPeerGroupFilteringProfileXml_11_0_2 struct {
-	Ipv4 *string       `xml:"ipv4,omitempty"`
-	Ipv6 *string       `xml:"ipv6,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Ipv4           *string       `xml:"ipv4,omitempty"`
+	Ipv6           *string       `xml:"ipv6,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfBgpPeerGroupConnectionOptionsXml_11_0_2 struct {
 	Timers         *string       `xml:"timers,omitempty"`
@@ -2168,6 +2483,7 @@ type vrfBgpPeerGroupConnectionOptionsXml_11_0_2 struct {
 	Authentication *string       `xml:"authentication,omitempty"`
 	Dampening      *string       `xml:"dampening,omitempty"`
 	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfBgpPeerGroupPeerContainerXml_11_0_2 struct {
 	Entries []vrfBgpPeerGroupPeerXml_11_0_2 `xml:"entry"`
@@ -2185,39 +2501,47 @@ type vrfBgpPeerGroupPeerXml_11_0_2 struct {
 	ConnectionOptions             *vrfBgpPeerGroupPeerConnectionOptionsXml_11_0_2 `xml:"connection-options,omitempty"`
 	Bfd                           *vrfBgpPeerGroupPeerBfdXml_11_0_2               `xml:"bfd,omitempty"`
 	Misc                          []generic.Xml                                   `xml:",any"`
+	MiscAttributes                []xml.Attr                                      `xml:",any,attr"`
 }
 type vrfBgpPeerGroupPeerInheritXml_11_0_2 struct {
-	Yes  *vrfBgpPeerGroupPeerInheritYesXml_11_0_2 `xml:"yes,omitempty"`
-	No   *vrfBgpPeerGroupPeerInheritNoXml_11_0_2  `xml:"no,omitempty"`
-	Misc []generic.Xml                            `xml:",any"`
+	Yes            *vrfBgpPeerGroupPeerInheritYesXml_11_0_2 `xml:"yes,omitempty"`
+	No             *vrfBgpPeerGroupPeerInheritNoXml_11_0_2  `xml:"no,omitempty"`
+	Misc           []generic.Xml                            `xml:",any"`
+	MiscAttributes []xml.Attr                               `xml:",any,attr"`
 }
 type vrfBgpPeerGroupPeerInheritYesXml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfBgpPeerGroupPeerInheritNoXml_11_0_2 struct {
 	AddressFamily    *vrfBgpPeerGroupPeerInheritNoAddressFamilyXml_11_0_2    `xml:"address-family,omitempty"`
 	FilteringProfile *vrfBgpPeerGroupPeerInheritNoFilteringProfileXml_11_0_2 `xml:"filtering-profile,omitempty"`
 	Misc             []generic.Xml                                           `xml:",any"`
+	MiscAttributes   []xml.Attr                                              `xml:",any,attr"`
 }
 type vrfBgpPeerGroupPeerInheritNoAddressFamilyXml_11_0_2 struct {
-	Ipv4 *string       `xml:"ipv4,omitempty"`
-	Ipv6 *string       `xml:"ipv6,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Ipv4           *string       `xml:"ipv4,omitempty"`
+	Ipv6           *string       `xml:"ipv6,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfBgpPeerGroupPeerInheritNoFilteringProfileXml_11_0_2 struct {
-	Ipv4 *string       `xml:"ipv4,omitempty"`
-	Ipv6 *string       `xml:"ipv6,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Ipv4           *string       `xml:"ipv4,omitempty"`
+	Ipv6           *string       `xml:"ipv6,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfBgpPeerGroupPeerLocalAddressXml_11_0_2 struct {
-	Interface *string       `xml:"interface,omitempty"`
-	Ip        *string       `xml:"ip,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	Interface      *string       `xml:"interface,omitempty"`
+	Ip             *string       `xml:"ip,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfBgpPeerGroupPeerPeerAddressXml_11_0_2 struct {
-	Ip   *string       `xml:"ip,omitempty"`
-	Fqdn *string       `xml:"fqdn,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Ip             *string       `xml:"ip,omitempty"`
+	Fqdn           *string       `xml:"fqdn,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfBgpPeerGroupPeerConnectionOptionsXml_11_0_2 struct {
 	Timers         *string       `xml:"timers,omitempty"`
@@ -2225,79 +2549,91 @@ type vrfBgpPeerGroupPeerConnectionOptionsXml_11_0_2 struct {
 	Authentication *string       `xml:"authentication,omitempty"`
 	Dampening      *string       `xml:"dampening,omitempty"`
 	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfBgpPeerGroupPeerBfdXml_11_0_2 struct {
-	Profile *string       `xml:"profile,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	Profile        *string       `xml:"profile,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfBgpAggregateRoutesContainerXml_11_0_2 struct {
 	Entries []vrfBgpAggregateRoutesXml_11_0_2 `xml:"entry"`
 }
 type vrfBgpAggregateRoutesXml_11_0_2 struct {
-	XMLName     xml.Name                             `xml:"entry"`
-	Name        string                               `xml:"name,attr"`
-	Description *string                              `xml:"description,omitempty"`
-	Enable      *string                              `xml:"enable,omitempty"`
-	SummaryOnly *string                              `xml:"summary-only,omitempty"`
-	AsSet       *string                              `xml:"as-set,omitempty"`
-	SameMed     *string                              `xml:"same-med,omitempty"`
-	Type        *vrfBgpAggregateRoutesTypeXml_11_0_2 `xml:"type,omitempty"`
-	Misc        []generic.Xml                        `xml:",any"`
+	XMLName        xml.Name                             `xml:"entry"`
+	Name           string                               `xml:"name,attr"`
+	Description    *string                              `xml:"description,omitempty"`
+	Enable         *string                              `xml:"enable,omitempty"`
+	SummaryOnly    *string                              `xml:"summary-only,omitempty"`
+	AsSet          *string                              `xml:"as-set,omitempty"`
+	SameMed        *string                              `xml:"same-med,omitempty"`
+	Type           *vrfBgpAggregateRoutesTypeXml_11_0_2 `xml:"type,omitempty"`
+	Misc           []generic.Xml                        `xml:",any"`
+	MiscAttributes []xml.Attr                           `xml:",any,attr"`
 }
 type vrfBgpAggregateRoutesTypeXml_11_0_2 struct {
-	Ipv4 *vrfBgpAggregateRoutesTypeIpv4Xml_11_0_2 `xml:"ipv4,omitempty"`
-	Ipv6 *vrfBgpAggregateRoutesTypeIpv6Xml_11_0_2 `xml:"ipv6,omitempty"`
-	Misc []generic.Xml                            `xml:",any"`
+	Ipv4           *vrfBgpAggregateRoutesTypeIpv4Xml_11_0_2 `xml:"ipv4,omitempty"`
+	Ipv6           *vrfBgpAggregateRoutesTypeIpv6Xml_11_0_2 `xml:"ipv6,omitempty"`
+	Misc           []generic.Xml                            `xml:",any"`
+	MiscAttributes []xml.Attr                               `xml:",any,attr"`
 }
 type vrfBgpAggregateRoutesTypeIpv4Xml_11_0_2 struct {
-	SummaryPrefix *string       `xml:"summary-prefix,omitempty"`
-	SuppressMap   *string       `xml:"suppress-map,omitempty"`
-	AttributeMap  *string       `xml:"attribute-map,omitempty"`
-	Misc          []generic.Xml `xml:",any"`
+	SummaryPrefix  *string       `xml:"summary-prefix,omitempty"`
+	SuppressMap    *string       `xml:"suppress-map,omitempty"`
+	AttributeMap   *string       `xml:"attribute-map,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfBgpAggregateRoutesTypeIpv6Xml_11_0_2 struct {
-	SummaryPrefix *string       `xml:"summary-prefix,omitempty"`
-	SuppressMap   *string       `xml:"suppress-map,omitempty"`
-	AttributeMap  *string       `xml:"attribute-map,omitempty"`
-	Misc          []generic.Xml `xml:",any"`
+	SummaryPrefix  *string       `xml:"summary-prefix,omitempty"`
+	SuppressMap    *string       `xml:"suppress-map,omitempty"`
+	AttributeMap   *string       `xml:"attribute-map,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfRoutingTableXml_11_0_2 struct {
-	Ip   *vrfRoutingTableIpXml_11_0_2   `xml:"ip,omitempty"`
-	Ipv6 *vrfRoutingTableIpv6Xml_11_0_2 `xml:"ipv6,omitempty"`
-	Misc []generic.Xml                  `xml:",any"`
+	Ip             *vrfRoutingTableIpXml_11_0_2   `xml:"ip,omitempty"`
+	Ipv6           *vrfRoutingTableIpv6Xml_11_0_2 `xml:"ipv6,omitempty"`
+	Misc           []generic.Xml                  `xml:",any"`
+	MiscAttributes []xml.Attr                     `xml:",any,attr"`
 }
 type vrfRoutingTableIpXml_11_0_2 struct {
-	StaticRoute *vrfRoutingTableIpStaticRouteContainerXml_11_0_2 `xml:"static-route,omitempty"`
-	Misc        []generic.Xml                                    `xml:",any"`
+	StaticRoute    *vrfRoutingTableIpStaticRouteContainerXml_11_0_2 `xml:"static-route,omitempty"`
+	Misc           []generic.Xml                                    `xml:",any"`
+	MiscAttributes []xml.Attr                                       `xml:",any,attr"`
 }
 type vrfRoutingTableIpStaticRouteContainerXml_11_0_2 struct {
 	Entries []vrfRoutingTableIpStaticRouteXml_11_0_2 `xml:"entry"`
 }
 type vrfRoutingTableIpStaticRouteXml_11_0_2 struct {
-	XMLName     xml.Name                                           `xml:"entry"`
-	Name        string                                             `xml:"name,attr"`
-	Destination *string                                            `xml:"destination,omitempty"`
-	Interface   *string                                            `xml:"interface,omitempty"`
-	AdminDist   *int64                                             `xml:"admin-dist,omitempty"`
-	Metric      *int64                                             `xml:"metric,omitempty"`
-	Nexthop     *vrfRoutingTableIpStaticRouteNexthopXml_11_0_2     `xml:"nexthop,omitempty"`
-	Bfd         *vrfRoutingTableIpStaticRouteBfdXml_11_0_2         `xml:"bfd,omitempty"`
-	PathMonitor *vrfRoutingTableIpStaticRoutePathMonitorXml_11_0_2 `xml:"path-monitor,omitempty"`
-	Misc        []generic.Xml                                      `xml:",any"`
+	XMLName        xml.Name                                           `xml:"entry"`
+	Name           string                                             `xml:"name,attr"`
+	Destination    *string                                            `xml:"destination,omitempty"`
+	Interface      *string                                            `xml:"interface,omitempty"`
+	AdminDist      *int64                                             `xml:"admin-dist,omitempty"`
+	Metric         *int64                                             `xml:"metric,omitempty"`
+	Nexthop        *vrfRoutingTableIpStaticRouteNexthopXml_11_0_2     `xml:"nexthop,omitempty"`
+	Bfd            *vrfRoutingTableIpStaticRouteBfdXml_11_0_2         `xml:"bfd,omitempty"`
+	PathMonitor    *vrfRoutingTableIpStaticRoutePathMonitorXml_11_0_2 `xml:"path-monitor,omitempty"`
+	Misc           []generic.Xml                                      `xml:",any"`
+	MiscAttributes []xml.Attr                                         `xml:",any,attr"`
 }
 type vrfRoutingTableIpStaticRouteNexthopXml_11_0_2 struct {
-	Discard   *vrfRoutingTableIpStaticRouteNexthopDiscardXml_11_0_2 `xml:"discard,omitempty"`
-	IpAddress *string                                               `xml:"ip-address,omitempty"`
-	NextLr    *string                                               `xml:"next-lr,omitempty"`
-	Fqdn      *string                                               `xml:"fqdn,omitempty"`
-	Misc      []generic.Xml                                         `xml:",any"`
+	Discard        *vrfRoutingTableIpStaticRouteNexthopDiscardXml_11_0_2 `xml:"discard,omitempty"`
+	IpAddress      *string                                               `xml:"ip-address,omitempty"`
+	NextLr         *string                                               `xml:"next-lr,omitempty"`
+	Fqdn           *string                                               `xml:"fqdn,omitempty"`
+	Misc           []generic.Xml                                         `xml:",any"`
+	MiscAttributes []xml.Attr                                            `xml:",any,attr"`
 }
 type vrfRoutingTableIpStaticRouteNexthopDiscardXml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfRoutingTableIpStaticRouteBfdXml_11_0_2 struct {
-	Profile *string       `xml:"profile,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	Profile        *string       `xml:"profile,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfRoutingTableIpStaticRoutePathMonitorXml_11_0_2 struct {
 	Enable              *string                                                                        `xml:"enable,omitempty"`
@@ -2305,52 +2641,59 @@ type vrfRoutingTableIpStaticRoutePathMonitorXml_11_0_2 struct {
 	HoldTime            *int64                                                                         `xml:"hold-time,omitempty"`
 	MonitorDestinations *vrfRoutingTableIpStaticRoutePathMonitorMonitorDestinationsContainerXml_11_0_2 `xml:"monitor-destinations,omitempty"`
 	Misc                []generic.Xml                                                                  `xml:",any"`
+	MiscAttributes      []xml.Attr                                                                     `xml:",any,attr"`
 }
 type vrfRoutingTableIpStaticRoutePathMonitorMonitorDestinationsContainerXml_11_0_2 struct {
 	Entries []vrfRoutingTableIpStaticRoutePathMonitorMonitorDestinationsXml_11_0_2 `xml:"entry"`
 }
 type vrfRoutingTableIpStaticRoutePathMonitorMonitorDestinationsXml_11_0_2 struct {
-	XMLName     xml.Name      `xml:"entry"`
-	Name        string        `xml:"name,attr"`
-	Enable      *string       `xml:"enable,omitempty"`
-	Source      *string       `xml:"source,omitempty"`
-	Destination *string       `xml:"destination,omitempty"`
-	Interval    *int64        `xml:"interval,omitempty"`
-	Count       *int64        `xml:"count,omitempty"`
-	Misc        []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Enable         *string       `xml:"enable,omitempty"`
+	Source         *string       `xml:"source,omitempty"`
+	Destination    *string       `xml:"destination,omitempty"`
+	Interval       *int64        `xml:"interval,omitempty"`
+	Count          *int64        `xml:"count,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfRoutingTableIpv6Xml_11_0_2 struct {
-	StaticRoute *vrfRoutingTableIpv6StaticRouteContainerXml_11_0_2 `xml:"static-route,omitempty"`
-	Misc        []generic.Xml                                      `xml:",any"`
+	StaticRoute    *vrfRoutingTableIpv6StaticRouteContainerXml_11_0_2 `xml:"static-route,omitempty"`
+	Misc           []generic.Xml                                      `xml:",any"`
+	MiscAttributes []xml.Attr                                         `xml:",any,attr"`
 }
 type vrfRoutingTableIpv6StaticRouteContainerXml_11_0_2 struct {
 	Entries []vrfRoutingTableIpv6StaticRouteXml_11_0_2 `xml:"entry"`
 }
 type vrfRoutingTableIpv6StaticRouteXml_11_0_2 struct {
-	XMLName     xml.Name                                             `xml:"entry"`
-	Name        string                                               `xml:"name,attr"`
-	Destination *string                                              `xml:"destination,omitempty"`
-	Interface   *string                                              `xml:"interface,omitempty"`
-	AdminDist   *int64                                               `xml:"admin-dist,omitempty"`
-	Metric      *int64                                               `xml:"metric,omitempty"`
-	Nexthop     *vrfRoutingTableIpv6StaticRouteNexthopXml_11_0_2     `xml:"nexthop,omitempty"`
-	Bfd         *vrfRoutingTableIpv6StaticRouteBfdXml_11_0_2         `xml:"bfd,omitempty"`
-	PathMonitor *vrfRoutingTableIpv6StaticRoutePathMonitorXml_11_0_2 `xml:"path-monitor,omitempty"`
-	Misc        []generic.Xml                                        `xml:",any"`
+	XMLName        xml.Name                                             `xml:"entry"`
+	Name           string                                               `xml:"name,attr"`
+	Destination    *string                                              `xml:"destination,omitempty"`
+	Interface      *string                                              `xml:"interface,omitempty"`
+	AdminDist      *int64                                               `xml:"admin-dist,omitempty"`
+	Metric         *int64                                               `xml:"metric,omitempty"`
+	Nexthop        *vrfRoutingTableIpv6StaticRouteNexthopXml_11_0_2     `xml:"nexthop,omitempty"`
+	Bfd            *vrfRoutingTableIpv6StaticRouteBfdXml_11_0_2         `xml:"bfd,omitempty"`
+	PathMonitor    *vrfRoutingTableIpv6StaticRoutePathMonitorXml_11_0_2 `xml:"path-monitor,omitempty"`
+	Misc           []generic.Xml                                        `xml:",any"`
+	MiscAttributes []xml.Attr                                           `xml:",any,attr"`
 }
 type vrfRoutingTableIpv6StaticRouteNexthopXml_11_0_2 struct {
-	Discard     *vrfRoutingTableIpv6StaticRouteNexthopDiscardXml_11_0_2 `xml:"discard,omitempty"`
-	Ipv6Address *string                                                 `xml:"ipv6-address,omitempty"`
-	Fqdn        *string                                                 `xml:"fqdn,omitempty"`
-	NextLr      *string                                                 `xml:"next-lr,omitempty"`
-	Misc        []generic.Xml                                           `xml:",any"`
+	Discard        *vrfRoutingTableIpv6StaticRouteNexthopDiscardXml_11_0_2 `xml:"discard,omitempty"`
+	Ipv6Address    *string                                                 `xml:"ipv6-address,omitempty"`
+	Fqdn           *string                                                 `xml:"fqdn,omitempty"`
+	NextLr         *string                                                 `xml:"next-lr,omitempty"`
+	Misc           []generic.Xml                                           `xml:",any"`
+	MiscAttributes []xml.Attr                                              `xml:",any,attr"`
 }
 type vrfRoutingTableIpv6StaticRouteNexthopDiscardXml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfRoutingTableIpv6StaticRouteBfdXml_11_0_2 struct {
-	Profile *string       `xml:"profile,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	Profile        *string       `xml:"profile,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfRoutingTableIpv6StaticRoutePathMonitorXml_11_0_2 struct {
 	Enable              *string                                                                          `xml:"enable,omitempty"`
@@ -2358,19 +2701,21 @@ type vrfRoutingTableIpv6StaticRoutePathMonitorXml_11_0_2 struct {
 	HoldTime            *int64                                                                           `xml:"hold-time,omitempty"`
 	MonitorDestinations *vrfRoutingTableIpv6StaticRoutePathMonitorMonitorDestinationsContainerXml_11_0_2 `xml:"monitor-destinations,omitempty"`
 	Misc                []generic.Xml                                                                    `xml:",any"`
+	MiscAttributes      []xml.Attr                                                                       `xml:",any,attr"`
 }
 type vrfRoutingTableIpv6StaticRoutePathMonitorMonitorDestinationsContainerXml_11_0_2 struct {
 	Entries []vrfRoutingTableIpv6StaticRoutePathMonitorMonitorDestinationsXml_11_0_2 `xml:"entry"`
 }
 type vrfRoutingTableIpv6StaticRoutePathMonitorMonitorDestinationsXml_11_0_2 struct {
-	XMLName     xml.Name      `xml:"entry"`
-	Name        string        `xml:"name,attr"`
-	Enable      *string       `xml:"enable,omitempty"`
-	Source      *string       `xml:"source,omitempty"`
-	Destination *string       `xml:"destination,omitempty"`
-	Interval    *int64        `xml:"interval,omitempty"`
-	Count       *int64        `xml:"count,omitempty"`
-	Misc        []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Enable         *string       `xml:"enable,omitempty"`
+	Source         *string       `xml:"source,omitempty"`
+	Destination    *string       `xml:"destination,omitempty"`
+	Interval       *int64        `xml:"interval,omitempty"`
+	Count          *int64        `xml:"count,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfOspfXml_11_0_2 struct {
 	RouterId              *string                           `xml:"router-id,omitempty"`
@@ -2383,10 +2728,12 @@ type vrfOspfXml_11_0_2 struct {
 	GracefulRestart       *vrfOspfGracefulRestartXml_11_0_2 `xml:"graceful-restart,omitempty"`
 	Area                  *vrfOspfAreaContainerXml_11_0_2   `xml:"area,omitempty"`
 	Misc                  []generic.Xml                     `xml:",any"`
+	MiscAttributes        []xml.Attr                        `xml:",any,attr"`
 }
 type vrfOspfGlobalBfdXml_11_0_2 struct {
-	Profile *string       `xml:"profile,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	Profile        *string       `xml:"profile,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfOspfGracefulRestartXml_11_0_2 struct {
 	Enable                 *string       `xml:"enable,omitempty"`
@@ -2395,6 +2742,7 @@ type vrfOspfGracefulRestartXml_11_0_2 struct {
 	StrictLSAChecking      *string       `xml:"strict-LSA-checking,omitempty"`
 	MaxNeighborRestartTime *int64        `xml:"max-neighbor-restart-time,omitempty"`
 	Misc                   []generic.Xml `xml:",any"`
+	MiscAttributes         []xml.Attr    `xml:",any,attr"`
 }
 type vrfOspfAreaContainerXml_11_0_2 struct {
 	Entries []vrfOspfAreaXml_11_0_2 `xml:"entry"`
@@ -2408,16 +2756,19 @@ type vrfOspfAreaXml_11_0_2 struct {
 	Interface      *vrfOspfAreaInterfaceContainerXml_11_0_2   `xml:"interface,omitempty"`
 	VirtualLink    *vrfOspfAreaVirtualLinkContainerXml_11_0_2 `xml:"virtual-link,omitempty"`
 	Misc           []generic.Xml                              `xml:",any"`
+	MiscAttributes []xml.Attr                                 `xml:",any,attr"`
 }
 type vrfOspfAreaTypeXml_11_0_2 struct {
-	Normal *vrfOspfAreaTypeNormalXml_11_0_2 `xml:"normal,omitempty"`
-	Stub   *vrfOspfAreaTypeStubXml_11_0_2   `xml:"stub,omitempty"`
-	Nssa   *vrfOspfAreaTypeNssaXml_11_0_2   `xml:"nssa,omitempty"`
-	Misc   []generic.Xml                    `xml:",any"`
+	Normal         *vrfOspfAreaTypeNormalXml_11_0_2 `xml:"normal,omitempty"`
+	Stub           *vrfOspfAreaTypeStubXml_11_0_2   `xml:"stub,omitempty"`
+	Nssa           *vrfOspfAreaTypeNssaXml_11_0_2   `xml:"nssa,omitempty"`
+	Misc           []generic.Xml                    `xml:",any"`
+	MiscAttributes []xml.Attr                       `xml:",any,attr"`
 }
 type vrfOspfAreaTypeNormalXml_11_0_2 struct {
-	Abr  *vrfOspfAreaTypeNormalAbrXml_11_0_2 `xml:"abr,omitempty"`
-	Misc []generic.Xml                       `xml:",any"`
+	Abr            *vrfOspfAreaTypeNormalAbrXml_11_0_2 `xml:"abr,omitempty"`
+	Misc           []generic.Xml                       `xml:",any"`
+	MiscAttributes []xml.Attr                          `xml:",any,attr"`
 }
 type vrfOspfAreaTypeNormalAbrXml_11_0_2 struct {
 	ImportList         *string       `xml:"import-list,omitempty"`
@@ -2425,12 +2776,14 @@ type vrfOspfAreaTypeNormalAbrXml_11_0_2 struct {
 	InboundFilterList  *string       `xml:"inbound-filter-list,omitempty"`
 	OutboundFilterList *string       `xml:"outbound-filter-list,omitempty"`
 	Misc               []generic.Xml `xml:",any"`
+	MiscAttributes     []xml.Attr    `xml:",any,attr"`
 }
 type vrfOspfAreaTypeStubXml_11_0_2 struct {
 	NoSummary          *string                           `xml:"no-summary,omitempty"`
 	Abr                *vrfOspfAreaTypeStubAbrXml_11_0_2 `xml:"abr,omitempty"`
 	DefaultRouteMetric *int64                            `xml:"default-route-metric,omitempty"`
 	Misc               []generic.Xml                     `xml:",any"`
+	MiscAttributes     []xml.Attr                        `xml:",any,attr"`
 }
 type vrfOspfAreaTypeStubAbrXml_11_0_2 struct {
 	ImportList         *string       `xml:"import-list,omitempty"`
@@ -2438,17 +2791,20 @@ type vrfOspfAreaTypeStubAbrXml_11_0_2 struct {
 	InboundFilterList  *string       `xml:"inbound-filter-list,omitempty"`
 	OutboundFilterList *string       `xml:"outbound-filter-list,omitempty"`
 	Misc               []generic.Xml `xml:",any"`
+	MiscAttributes     []xml.Attr    `xml:",any,attr"`
 }
 type vrfOspfAreaTypeNssaXml_11_0_2 struct {
 	NoSummary                   *string                                                   `xml:"no-summary,omitempty"`
 	DefaultInformationOriginate *vrfOspfAreaTypeNssaDefaultInformationOriginateXml_11_0_2 `xml:"default-information-originate,omitempty"`
 	Abr                         *vrfOspfAreaTypeNssaAbrXml_11_0_2                         `xml:"abr,omitempty"`
 	Misc                        []generic.Xml                                             `xml:",any"`
+	MiscAttributes              []xml.Attr                                                `xml:",any,attr"`
 }
 type vrfOspfAreaTypeNssaDefaultInformationOriginateXml_11_0_2 struct {
-	Metric     *int64        `xml:"metric,omitempty"`
-	MetricType *string       `xml:"metric-type,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	Metric         *int64        `xml:"metric,omitempty"`
+	MetricType     *string       `xml:"metric-type,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfOspfAreaTypeNssaAbrXml_11_0_2 struct {
 	ImportList         *string                                                `xml:"import-list,omitempty"`
@@ -2457,24 +2813,27 @@ type vrfOspfAreaTypeNssaAbrXml_11_0_2 struct {
 	OutboundFilterList *string                                                `xml:"outbound-filter-list,omitempty"`
 	NssaExtRange       *vrfOspfAreaTypeNssaAbrNssaExtRangeContainerXml_11_0_2 `xml:"nssa-ext-range,omitempty"`
 	Misc               []generic.Xml                                          `xml:",any"`
+	MiscAttributes     []xml.Attr                                             `xml:",any,attr"`
 }
 type vrfOspfAreaTypeNssaAbrNssaExtRangeContainerXml_11_0_2 struct {
 	Entries []vrfOspfAreaTypeNssaAbrNssaExtRangeXml_11_0_2 `xml:"entry"`
 }
 type vrfOspfAreaTypeNssaAbrNssaExtRangeXml_11_0_2 struct {
-	XMLName   xml.Name      `xml:"entry"`
-	Name      string        `xml:"name,attr"`
-	Advertise *string       `xml:"advertise,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Advertise      *string       `xml:"advertise,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfOspfAreaRangeContainerXml_11_0_2 struct {
 	Entries []vrfOspfAreaRangeXml_11_0_2 `xml:"entry"`
 }
 type vrfOspfAreaRangeXml_11_0_2 struct {
-	XMLName   xml.Name      `xml:"entry"`
-	Name      string        `xml:"name,attr"`
-	Advertise *string       `xml:"advertise,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Advertise      *string       `xml:"advertise,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfOspfAreaInterfaceContainerXml_11_0_2 struct {
 	Entries []vrfOspfAreaInterfaceXml_11_0_2 `xml:"entry"`
@@ -2492,35 +2851,42 @@ type vrfOspfAreaInterfaceXml_11_0_2 struct {
 	LinkType       *vrfOspfAreaInterfaceLinkTypeXml_11_0_2 `xml:"link-type,omitempty"`
 	Bfd            *vrfOspfAreaInterfaceBfdXml_11_0_2      `xml:"bfd,omitempty"`
 	Misc           []generic.Xml                           `xml:",any"`
+	MiscAttributes []xml.Attr                              `xml:",any,attr"`
 }
 type vrfOspfAreaInterfaceLinkTypeXml_11_0_2 struct {
-	Broadcast *vrfOspfAreaInterfaceLinkTypeBroadcastXml_11_0_2 `xml:"broadcast,omitempty"`
-	P2p       *vrfOspfAreaInterfaceLinkTypeP2pXml_11_0_2       `xml:"p2p,omitempty"`
-	P2mp      *vrfOspfAreaInterfaceLinkTypeP2mpXml_11_0_2      `xml:"p2mp,omitempty"`
-	Misc      []generic.Xml                                    `xml:",any"`
+	Broadcast      *vrfOspfAreaInterfaceLinkTypeBroadcastXml_11_0_2 `xml:"broadcast,omitempty"`
+	P2p            *vrfOspfAreaInterfaceLinkTypeP2pXml_11_0_2       `xml:"p2p,omitempty"`
+	P2mp           *vrfOspfAreaInterfaceLinkTypeP2mpXml_11_0_2      `xml:"p2mp,omitempty"`
+	Misc           []generic.Xml                                    `xml:",any"`
+	MiscAttributes []xml.Attr                                       `xml:",any,attr"`
 }
 type vrfOspfAreaInterfaceLinkTypeBroadcastXml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfOspfAreaInterfaceLinkTypeP2pXml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfOspfAreaInterfaceLinkTypeP2mpXml_11_0_2 struct {
-	Neighbor *vrfOspfAreaInterfaceLinkTypeP2mpNeighborContainerXml_11_0_2 `xml:"neighbor,omitempty"`
-	Misc     []generic.Xml                                                `xml:",any"`
+	Neighbor       *vrfOspfAreaInterfaceLinkTypeP2mpNeighborContainerXml_11_0_2 `xml:"neighbor,omitempty"`
+	Misc           []generic.Xml                                                `xml:",any"`
+	MiscAttributes []xml.Attr                                                   `xml:",any,attr"`
 }
 type vrfOspfAreaInterfaceLinkTypeP2mpNeighborContainerXml_11_0_2 struct {
 	Entries []vrfOspfAreaInterfaceLinkTypeP2mpNeighborXml_11_0_2 `xml:"entry"`
 }
 type vrfOspfAreaInterfaceLinkTypeP2mpNeighborXml_11_0_2 struct {
-	XMLName  xml.Name      `xml:"entry"`
-	Name     string        `xml:"name,attr"`
-	Priority *int64        `xml:"priority,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Priority       *int64        `xml:"priority,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfOspfAreaInterfaceBfdXml_11_0_2 struct {
-	Profile *string       `xml:"profile,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	Profile        *string       `xml:"profile,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfOspfAreaVirtualLinkContainerXml_11_0_2 struct {
 	Entries []vrfOspfAreaVirtualLinkXml_11_0_2 `xml:"entry"`
@@ -2536,10 +2902,12 @@ type vrfOspfAreaVirtualLinkXml_11_0_2 struct {
 	Authentication *string                              `xml:"authentication,omitempty"`
 	Bfd            *vrfOspfAreaVirtualLinkBfdXml_11_0_2 `xml:"bfd,omitempty"`
 	Misc           []generic.Xml                        `xml:",any"`
+	MiscAttributes []xml.Attr                           `xml:",any,attr"`
 }
 type vrfOspfAreaVirtualLinkBfdXml_11_0_2 struct {
-	Profile *string       `xml:"profile,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	Profile        *string       `xml:"profile,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfOspfv3Xml_11_0_2 struct {
 	Enable                *string                             `xml:"enable,omitempty"`
@@ -2552,10 +2920,12 @@ type vrfOspfv3Xml_11_0_2 struct {
 	GracefulRestart       *vrfOspfv3GracefulRestartXml_11_0_2 `xml:"graceful-restart,omitempty"`
 	Area                  *vrfOspfv3AreaContainerXml_11_0_2   `xml:"area,omitempty"`
 	Misc                  []generic.Xml                       `xml:",any"`
+	MiscAttributes        []xml.Attr                          `xml:",any,attr"`
 }
 type vrfOspfv3GlobalBfdXml_11_0_2 struct {
-	Profile *string       `xml:"profile,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	Profile        *string       `xml:"profile,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfOspfv3GracefulRestartXml_11_0_2 struct {
 	Enable                 *string       `xml:"enable,omitempty"`
@@ -2564,6 +2934,7 @@ type vrfOspfv3GracefulRestartXml_11_0_2 struct {
 	StrictLSAChecking      *string       `xml:"strict-LSA-checking,omitempty"`
 	MaxNeighborRestartTime *int64        `xml:"max-neighbor-restart-time,omitempty"`
 	Misc                   []generic.Xml `xml:",any"`
+	MiscAttributes         []xml.Attr    `xml:",any,attr"`
 }
 type vrfOspfv3AreaContainerXml_11_0_2 struct {
 	Entries []vrfOspfv3AreaXml_11_0_2 `xml:"entry"`
@@ -2577,16 +2948,19 @@ type vrfOspfv3AreaXml_11_0_2 struct {
 	Interface      *vrfOspfv3AreaInterfaceContainerXml_11_0_2   `xml:"interface,omitempty"`
 	VirtualLink    *vrfOspfv3AreaVirtualLinkContainerXml_11_0_2 `xml:"virtual-link,omitempty"`
 	Misc           []generic.Xml                                `xml:",any"`
+	MiscAttributes []xml.Attr                                   `xml:",any,attr"`
 }
 type vrfOspfv3AreaTypeXml_11_0_2 struct {
-	Normal *vrfOspfv3AreaTypeNormalXml_11_0_2 `xml:"normal,omitempty"`
-	Stub   *vrfOspfv3AreaTypeStubXml_11_0_2   `xml:"stub,omitempty"`
-	Nssa   *vrfOspfv3AreaTypeNssaXml_11_0_2   `xml:"nssa,omitempty"`
-	Misc   []generic.Xml                      `xml:",any"`
+	Normal         *vrfOspfv3AreaTypeNormalXml_11_0_2 `xml:"normal,omitempty"`
+	Stub           *vrfOspfv3AreaTypeStubXml_11_0_2   `xml:"stub,omitempty"`
+	Nssa           *vrfOspfv3AreaTypeNssaXml_11_0_2   `xml:"nssa,omitempty"`
+	Misc           []generic.Xml                      `xml:",any"`
+	MiscAttributes []xml.Attr                         `xml:",any,attr"`
 }
 type vrfOspfv3AreaTypeNormalXml_11_0_2 struct {
-	Abr  *vrfOspfv3AreaTypeNormalAbrXml_11_0_2 `xml:"abr,omitempty"`
-	Misc []generic.Xml                         `xml:",any"`
+	Abr            *vrfOspfv3AreaTypeNormalAbrXml_11_0_2 `xml:"abr,omitempty"`
+	Misc           []generic.Xml                         `xml:",any"`
+	MiscAttributes []xml.Attr                            `xml:",any,attr"`
 }
 type vrfOspfv3AreaTypeNormalAbrXml_11_0_2 struct {
 	ImportList         *string       `xml:"import-list,omitempty"`
@@ -2594,12 +2968,14 @@ type vrfOspfv3AreaTypeNormalAbrXml_11_0_2 struct {
 	InboundFilterList  *string       `xml:"inbound-filter-list,omitempty"`
 	OutboundFilterList *string       `xml:"outbound-filter-list,omitempty"`
 	Misc               []generic.Xml `xml:",any"`
+	MiscAttributes     []xml.Attr    `xml:",any,attr"`
 }
 type vrfOspfv3AreaTypeStubXml_11_0_2 struct {
 	NoSummary          *string                             `xml:"no-summary,omitempty"`
 	Abr                *vrfOspfv3AreaTypeStubAbrXml_11_0_2 `xml:"abr,omitempty"`
 	DefaultRouteMetric *int64                              `xml:"default-route-metric,omitempty"`
 	Misc               []generic.Xml                       `xml:",any"`
+	MiscAttributes     []xml.Attr                          `xml:",any,attr"`
 }
 type vrfOspfv3AreaTypeStubAbrXml_11_0_2 struct {
 	ImportList         *string       `xml:"import-list,omitempty"`
@@ -2607,17 +2983,20 @@ type vrfOspfv3AreaTypeStubAbrXml_11_0_2 struct {
 	InboundFilterList  *string       `xml:"inbound-filter-list,omitempty"`
 	OutboundFilterList *string       `xml:"outbound-filter-list,omitempty"`
 	Misc               []generic.Xml `xml:",any"`
+	MiscAttributes     []xml.Attr    `xml:",any,attr"`
 }
 type vrfOspfv3AreaTypeNssaXml_11_0_2 struct {
 	NoSummary                   *string                                                     `xml:"no-summary,omitempty"`
 	DefaultInformationOriginate *vrfOspfv3AreaTypeNssaDefaultInformationOriginateXml_11_0_2 `xml:"default-information-originate,omitempty"`
 	Abr                         *vrfOspfv3AreaTypeNssaAbrXml_11_0_2                         `xml:"abr,omitempty"`
 	Misc                        []generic.Xml                                               `xml:",any"`
+	MiscAttributes              []xml.Attr                                                  `xml:",any,attr"`
 }
 type vrfOspfv3AreaTypeNssaDefaultInformationOriginateXml_11_0_2 struct {
-	Metric     *int64        `xml:"metric,omitempty"`
-	MetricType *string       `xml:"metric-type,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	Metric         *int64        `xml:"metric,omitempty"`
+	MetricType     *string       `xml:"metric-type,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfOspfv3AreaTypeNssaAbrXml_11_0_2 struct {
 	ImportList         *string                                                  `xml:"import-list,omitempty"`
@@ -2626,24 +3005,27 @@ type vrfOspfv3AreaTypeNssaAbrXml_11_0_2 struct {
 	OutboundFilterList *string                                                  `xml:"outbound-filter-list,omitempty"`
 	NssaExtRange       *vrfOspfv3AreaTypeNssaAbrNssaExtRangeContainerXml_11_0_2 `xml:"nssa-ext-range,omitempty"`
 	Misc               []generic.Xml                                            `xml:",any"`
+	MiscAttributes     []xml.Attr                                               `xml:",any,attr"`
 }
 type vrfOspfv3AreaTypeNssaAbrNssaExtRangeContainerXml_11_0_2 struct {
 	Entries []vrfOspfv3AreaTypeNssaAbrNssaExtRangeXml_11_0_2 `xml:"entry"`
 }
 type vrfOspfv3AreaTypeNssaAbrNssaExtRangeXml_11_0_2 struct {
-	XMLName   xml.Name      `xml:"entry"`
-	Name      string        `xml:"name,attr"`
-	Advertise *string       `xml:"advertise,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Advertise      *string       `xml:"advertise,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfOspfv3AreaRangeContainerXml_11_0_2 struct {
 	Entries []vrfOspfv3AreaRangeXml_11_0_2 `xml:"entry"`
 }
 type vrfOspfv3AreaRangeXml_11_0_2 struct {
-	XMLName   xml.Name      `xml:"entry"`
-	Name      string        `xml:"name,attr"`
-	Advertise *string       `xml:"advertise,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Advertise      *string       `xml:"advertise,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfOspfv3AreaInterfaceContainerXml_11_0_2 struct {
 	Entries []vrfOspfv3AreaInterfaceXml_11_0_2 `xml:"entry"`
@@ -2662,35 +3044,42 @@ type vrfOspfv3AreaInterfaceXml_11_0_2 struct {
 	LinkType       *vrfOspfv3AreaInterfaceLinkTypeXml_11_0_2 `xml:"link-type,omitempty"`
 	Bfd            *vrfOspfv3AreaInterfaceBfdXml_11_0_2      `xml:"bfd,omitempty"`
 	Misc           []generic.Xml                             `xml:",any"`
+	MiscAttributes []xml.Attr                                `xml:",any,attr"`
 }
 type vrfOspfv3AreaInterfaceLinkTypeXml_11_0_2 struct {
-	Broadcast *vrfOspfv3AreaInterfaceLinkTypeBroadcastXml_11_0_2 `xml:"broadcast,omitempty"`
-	P2p       *vrfOspfv3AreaInterfaceLinkTypeP2pXml_11_0_2       `xml:"p2p,omitempty"`
-	P2mp      *vrfOspfv3AreaInterfaceLinkTypeP2mpXml_11_0_2      `xml:"p2mp,omitempty"`
-	Misc      []generic.Xml                                      `xml:",any"`
+	Broadcast      *vrfOspfv3AreaInterfaceLinkTypeBroadcastXml_11_0_2 `xml:"broadcast,omitempty"`
+	P2p            *vrfOspfv3AreaInterfaceLinkTypeP2pXml_11_0_2       `xml:"p2p,omitempty"`
+	P2mp           *vrfOspfv3AreaInterfaceLinkTypeP2mpXml_11_0_2      `xml:"p2mp,omitempty"`
+	Misc           []generic.Xml                                      `xml:",any"`
+	MiscAttributes []xml.Attr                                         `xml:",any,attr"`
 }
 type vrfOspfv3AreaInterfaceLinkTypeBroadcastXml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfOspfv3AreaInterfaceLinkTypeP2pXml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfOspfv3AreaInterfaceLinkTypeP2mpXml_11_0_2 struct {
-	Neighbor *vrfOspfv3AreaInterfaceLinkTypeP2mpNeighborContainerXml_11_0_2 `xml:"neighbor,omitempty"`
-	Misc     []generic.Xml                                                  `xml:",any"`
+	Neighbor       *vrfOspfv3AreaInterfaceLinkTypeP2mpNeighborContainerXml_11_0_2 `xml:"neighbor,omitempty"`
+	Misc           []generic.Xml                                                  `xml:",any"`
+	MiscAttributes []xml.Attr                                                     `xml:",any,attr"`
 }
 type vrfOspfv3AreaInterfaceLinkTypeP2mpNeighborContainerXml_11_0_2 struct {
 	Entries []vrfOspfv3AreaInterfaceLinkTypeP2mpNeighborXml_11_0_2 `xml:"entry"`
 }
 type vrfOspfv3AreaInterfaceLinkTypeP2mpNeighborXml_11_0_2 struct {
-	XMLName  xml.Name      `xml:"entry"`
-	Name     string        `xml:"name,attr"`
-	Priority *int64        `xml:"priority,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Priority       *int64        `xml:"priority,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfOspfv3AreaInterfaceBfdXml_11_0_2 struct {
-	Profile *string       `xml:"profile,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	Profile        *string       `xml:"profile,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfOspfv3AreaVirtualLinkContainerXml_11_0_2 struct {
 	Entries []vrfOspfv3AreaVirtualLinkXml_11_0_2 `xml:"entry"`
@@ -2705,6 +3094,7 @@ type vrfOspfv3AreaVirtualLinkXml_11_0_2 struct {
 	Timing         *string       `xml:"timing,omitempty"`
 	Authentication *string       `xml:"authentication,omitempty"`
 	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfEcmpXml_11_0_2 struct {
 	Enable           *string                     `xml:"enable,omitempty"`
@@ -2713,6 +3103,7 @@ type vrfEcmpXml_11_0_2 struct {
 	StrictSourcePath *string                     `xml:"strict-source-path,omitempty"`
 	Algorithm        *vrfEcmpAlgorithmXml_11_0_2 `xml:"algorithm,omitempty"`
 	Misc             []generic.Xml               `xml:",any"`
+	MiscAttributes   []xml.Attr                  `xml:",any,attr"`
 }
 type vrfEcmpAlgorithmXml_11_0_2 struct {
 	IpModulo           *vrfEcmpAlgorithmIpModuloXml_11_0_2           `xml:"ip-modulo,omitempty"`
@@ -2720,55 +3111,64 @@ type vrfEcmpAlgorithmXml_11_0_2 struct {
 	WeightedRoundRobin *vrfEcmpAlgorithmWeightedRoundRobinXml_11_0_2 `xml:"weighted-round-robin,omitempty"`
 	BalancedRoundRobin *vrfEcmpAlgorithmBalancedRoundRobinXml_11_0_2 `xml:"balanced-round-robin,omitempty"`
 	Misc               []generic.Xml                                 `xml:",any"`
+	MiscAttributes     []xml.Attr                                    `xml:",any,attr"`
 }
 type vrfEcmpAlgorithmIpModuloXml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfEcmpAlgorithmIpHashXml_11_0_2 struct {
-	SrcOnly  *string       `xml:"src-only,omitempty"`
-	UsePort  *string       `xml:"use-port,omitempty"`
-	HashSeed *int64        `xml:"hash-seed,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	SrcOnly        *string       `xml:"src-only,omitempty"`
+	UsePort        *string       `xml:"use-port,omitempty"`
+	HashSeed       *int64        `xml:"hash-seed,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfEcmpAlgorithmWeightedRoundRobinXml_11_0_2 struct {
-	Interface *vrfEcmpAlgorithmWeightedRoundRobinInterfaceContainerXml_11_0_2 `xml:"interface,omitempty"`
-	Misc      []generic.Xml                                                   `xml:",any"`
+	Interface      *vrfEcmpAlgorithmWeightedRoundRobinInterfaceContainerXml_11_0_2 `xml:"interface,omitempty"`
+	Misc           []generic.Xml                                                   `xml:",any"`
+	MiscAttributes []xml.Attr                                                      `xml:",any,attr"`
 }
 type vrfEcmpAlgorithmWeightedRoundRobinInterfaceContainerXml_11_0_2 struct {
 	Entries []vrfEcmpAlgorithmWeightedRoundRobinInterfaceXml_11_0_2 `xml:"entry"`
 }
 type vrfEcmpAlgorithmWeightedRoundRobinInterfaceXml_11_0_2 struct {
-	XMLName xml.Name      `xml:"entry"`
-	Name    string        `xml:"name,attr"`
-	Weight  *int64        `xml:"weight,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Weight         *int64        `xml:"weight,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfEcmpAlgorithmBalancedRoundRobinXml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfMulticastXml_11_0_2 struct {
-	Enable      *string                                     `xml:"enable,omitempty"`
-	StaticRoute *vrfMulticastStaticRouteContainerXml_11_0_2 `xml:"static-route,omitempty"`
-	Pim         *vrfMulticastPimXml_11_0_2                  `xml:"pim,omitempty"`
-	Igmp        *vrfMulticastIgmpXml_11_0_2                 `xml:"igmp,omitempty"`
-	Msdp        *vrfMulticastMsdpXml_11_0_2                 `xml:"msdp,omitempty"`
-	Misc        []generic.Xml                               `xml:",any"`
+	Enable         *string                                     `xml:"enable,omitempty"`
+	StaticRoute    *vrfMulticastStaticRouteContainerXml_11_0_2 `xml:"static-route,omitempty"`
+	Pim            *vrfMulticastPimXml_11_0_2                  `xml:"pim,omitempty"`
+	Igmp           *vrfMulticastIgmpXml_11_0_2                 `xml:"igmp,omitempty"`
+	Msdp           *vrfMulticastMsdpXml_11_0_2                 `xml:"msdp,omitempty"`
+	Misc           []generic.Xml                               `xml:",any"`
+	MiscAttributes []xml.Attr                                  `xml:",any,attr"`
 }
 type vrfMulticastStaticRouteContainerXml_11_0_2 struct {
 	Entries []vrfMulticastStaticRouteXml_11_0_2 `xml:"entry"`
 }
 type vrfMulticastStaticRouteXml_11_0_2 struct {
-	XMLName     xml.Name                                  `xml:"entry"`
-	Name        string                                    `xml:"name,attr"`
-	Destination *string                                   `xml:"destination,omitempty"`
-	Interface   *string                                   `xml:"interface,omitempty"`
-	Preference  *int64                                    `xml:"preference,omitempty"`
-	Nexthop     *vrfMulticastStaticRouteNexthopXml_11_0_2 `xml:"nexthop,omitempty"`
-	Misc        []generic.Xml                             `xml:",any"`
+	XMLName        xml.Name                                  `xml:"entry"`
+	Name           string                                    `xml:"name,attr"`
+	Destination    *string                                   `xml:"destination,omitempty"`
+	Interface      *string                                   `xml:"interface,omitempty"`
+	Preference     *int64                                    `xml:"preference,omitempty"`
+	Nexthop        *vrfMulticastStaticRouteNexthopXml_11_0_2 `xml:"nexthop,omitempty"`
+	Misc           []generic.Xml                             `xml:",any"`
+	MiscAttributes []xml.Attr                                `xml:",any,attr"`
 }
 type vrfMulticastStaticRouteNexthopXml_11_0_2 struct {
-	IpAddress *string       `xml:"ip-address,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	IpAddress      *string       `xml:"ip-address,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfMulticastPimXml_11_0_2 struct {
 	Enable          *string                                         `xml:"enable,omitempty"`
@@ -2781,27 +3181,32 @@ type vrfMulticastPimXml_11_0_2 struct {
 	SptThreshold    *vrfMulticastPimSptThresholdContainerXml_11_0_2 `xml:"spt-threshold,omitempty"`
 	Interface       *vrfMulticastPimInterfaceContainerXml_11_0_2    `xml:"interface,omitempty"`
 	Misc            []generic.Xml                                   `xml:",any"`
+	MiscAttributes  []xml.Attr                                      `xml:",any,attr"`
 }
 type vrfMulticastPimSsmAddressSpaceXml_11_0_2 struct {
-	GroupList *string       `xml:"group-list,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	GroupList      *string       `xml:"group-list,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfMulticastPimRpXml_11_0_2 struct {
-	LocalRp    *vrfMulticastPimRpLocalRpXml_11_0_2             `xml:"local-rp,omitempty"`
-	ExternalRp *vrfMulticastPimRpExternalRpContainerXml_11_0_2 `xml:"external-rp,omitempty"`
-	Misc       []generic.Xml                                   `xml:",any"`
+	LocalRp        *vrfMulticastPimRpLocalRpXml_11_0_2             `xml:"local-rp,omitempty"`
+	ExternalRp     *vrfMulticastPimRpExternalRpContainerXml_11_0_2 `xml:"external-rp,omitempty"`
+	Misc           []generic.Xml                                   `xml:",any"`
+	MiscAttributes []xml.Attr                                      `xml:",any,attr"`
 }
 type vrfMulticastPimRpLocalRpXml_11_0_2 struct {
-	StaticRp    *vrfMulticastPimRpLocalRpStaticRpXml_11_0_2    `xml:"static-rp,omitempty"`
-	CandidateRp *vrfMulticastPimRpLocalRpCandidateRpXml_11_0_2 `xml:"candidate-rp,omitempty"`
-	Misc        []generic.Xml                                  `xml:",any"`
+	StaticRp       *vrfMulticastPimRpLocalRpStaticRpXml_11_0_2    `xml:"static-rp,omitempty"`
+	CandidateRp    *vrfMulticastPimRpLocalRpCandidateRpXml_11_0_2 `xml:"candidate-rp,omitempty"`
+	Misc           []generic.Xml                                  `xml:",any"`
+	MiscAttributes []xml.Attr                                     `xml:",any,attr"`
 }
 type vrfMulticastPimRpLocalRpStaticRpXml_11_0_2 struct {
-	Interface *string       `xml:"interface,omitempty"`
-	Address   *string       `xml:"address,omitempty"`
-	Override  *string       `xml:"override,omitempty"`
-	GroupList *string       `xml:"group-list,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	Interface      *string       `xml:"interface,omitempty"`
+	Address        *string       `xml:"address,omitempty"`
+	Override       *string       `xml:"override,omitempty"`
+	GroupList      *string       `xml:"group-list,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfMulticastPimRpLocalRpCandidateRpXml_11_0_2 struct {
 	Interface             *string       `xml:"interface,omitempty"`
@@ -2810,25 +3215,28 @@ type vrfMulticastPimRpLocalRpCandidateRpXml_11_0_2 struct {
 	AdvertisementInterval *int64        `xml:"advertisement-interval,omitempty"`
 	GroupList             *string       `xml:"group-list,omitempty"`
 	Misc                  []generic.Xml `xml:",any"`
+	MiscAttributes        []xml.Attr    `xml:",any,attr"`
 }
 type vrfMulticastPimRpExternalRpContainerXml_11_0_2 struct {
 	Entries []vrfMulticastPimRpExternalRpXml_11_0_2 `xml:"entry"`
 }
 type vrfMulticastPimRpExternalRpXml_11_0_2 struct {
-	XMLName   xml.Name      `xml:"entry"`
-	Name      string        `xml:"name,attr"`
-	GroupList *string       `xml:"group-list,omitempty"`
-	Override  *string       `xml:"override,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	GroupList      *string       `xml:"group-list,omitempty"`
+	Override       *string       `xml:"override,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfMulticastPimSptThresholdContainerXml_11_0_2 struct {
 	Entries []vrfMulticastPimSptThresholdXml_11_0_2 `xml:"entry"`
 }
 type vrfMulticastPimSptThresholdXml_11_0_2 struct {
-	XMLName   xml.Name      `xml:"entry"`
-	Name      string        `xml:"name,attr"`
-	Threshold *string       `xml:"threshold,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Threshold      *string       `xml:"threshold,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfMulticastPimInterfaceContainerXml_11_0_2 struct {
 	Entries []vrfMulticastPimInterfaceXml_11_0_2 `xml:"entry"`
@@ -2842,16 +3250,19 @@ type vrfMulticastPimInterfaceXml_11_0_2 struct {
 	IfTimer        *string       `xml:"if-timer,omitempty"`
 	NeighborFilter *string       `xml:"neighbor-filter,omitempty"`
 	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfMulticastIgmpXml_11_0_2 struct {
-	Enable  *string                                    `xml:"enable,omitempty"`
-	Dynamic *vrfMulticastIgmpDynamicXml_11_0_2         `xml:"dynamic,omitempty"`
-	Static  *vrfMulticastIgmpStaticContainerXml_11_0_2 `xml:"static,omitempty"`
-	Misc    []generic.Xml                              `xml:",any"`
+	Enable         *string                                    `xml:"enable,omitempty"`
+	Dynamic        *vrfMulticastIgmpDynamicXml_11_0_2         `xml:"dynamic,omitempty"`
+	Static         *vrfMulticastIgmpStaticContainerXml_11_0_2 `xml:"static,omitempty"`
+	Misc           []generic.Xml                              `xml:",any"`
+	MiscAttributes []xml.Attr                                 `xml:",any,attr"`
 }
 type vrfMulticastIgmpDynamicXml_11_0_2 struct {
-	Interface *vrfMulticastIgmpDynamicInterfaceContainerXml_11_0_2 `xml:"interface,omitempty"`
-	Misc      []generic.Xml                                        `xml:",any"`
+	Interface      *vrfMulticastIgmpDynamicInterfaceContainerXml_11_0_2 `xml:"interface,omitempty"`
+	Misc           []generic.Xml                                        `xml:",any"`
+	MiscAttributes []xml.Attr                                           `xml:",any,attr"`
 }
 type vrfMulticastIgmpDynamicInterfaceContainerXml_11_0_2 struct {
 	Entries []vrfMulticastIgmpDynamicInterfaceXml_11_0_2 `xml:"entry"`
@@ -2867,17 +3278,19 @@ type vrfMulticastIgmpDynamicInterfaceXml_11_0_2 struct {
 	QueryProfile        *string       `xml:"query-profile,omitempty"`
 	RouterAlertPolicing *string       `xml:"router-alert-policing,omitempty"`
 	Misc                []generic.Xml `xml:",any"`
+	MiscAttributes      []xml.Attr    `xml:",any,attr"`
 }
 type vrfMulticastIgmpStaticContainerXml_11_0_2 struct {
 	Entries []vrfMulticastIgmpStaticXml_11_0_2 `xml:"entry"`
 }
 type vrfMulticastIgmpStaticXml_11_0_2 struct {
-	XMLName       xml.Name      `xml:"entry"`
-	Name          string        `xml:"name,attr"`
-	Interface     *string       `xml:"interface,omitempty"`
-	GroupAddress  *string       `xml:"group-address,omitempty"`
-	SourceAddress *string       `xml:"source-address,omitempty"`
-	Misc          []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Interface      *string       `xml:"interface,omitempty"`
+	GroupAddress   *string       `xml:"group-address,omitempty"`
+	SourceAddress  *string       `xml:"source-address,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfMulticastMsdpXml_11_0_2 struct {
 	Enable               *string                                  `xml:"enable,omitempty"`
@@ -2886,11 +3299,13 @@ type vrfMulticastMsdpXml_11_0_2 struct {
 	OriginatorId         *vrfMulticastMsdpOriginatorIdXml_11_0_2  `xml:"originator-id,omitempty"`
 	Peer                 *vrfMulticastMsdpPeerContainerXml_11_0_2 `xml:"peer,omitempty"`
 	Misc                 []generic.Xml                            `xml:",any"`
+	MiscAttributes       []xml.Attr                               `xml:",any,attr"`
 }
 type vrfMulticastMsdpOriginatorIdXml_11_0_2 struct {
-	Interface *string       `xml:"interface,omitempty"`
-	Ip        *string       `xml:"ip,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	Interface      *string       `xml:"interface,omitempty"`
+	Ip             *string       `xml:"ip,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfMulticastMsdpPeerContainerXml_11_0_2 struct {
 	Entries []vrfMulticastMsdpPeerXml_11_0_2 `xml:"entry"`
@@ -2907,16 +3322,19 @@ type vrfMulticastMsdpPeerXml_11_0_2 struct {
 	LocalAddress     *vrfMulticastMsdpPeerLocalAddressXml_11_0_2 `xml:"local-address,omitempty"`
 	PeerAddress      *vrfMulticastMsdpPeerPeerAddressXml_11_0_2  `xml:"peer-address,omitempty"`
 	Misc             []generic.Xml                               `xml:",any"`
+	MiscAttributes   []xml.Attr                                  `xml:",any,attr"`
 }
 type vrfMulticastMsdpPeerLocalAddressXml_11_0_2 struct {
-	Interface *string       `xml:"interface,omitempty"`
-	Ip        *string       `xml:"ip,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	Interface      *string       `xml:"interface,omitempty"`
+	Ip             *string       `xml:"ip,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfMulticastMsdpPeerPeerAddressXml_11_0_2 struct {
-	Ip   *string       `xml:"ip,omitempty"`
-	Fqdn *string       `xml:"fqdn,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Ip             *string       `xml:"ip,omitempty"`
+	Fqdn           *string       `xml:"fqdn,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfRipXml_11_0_2 struct {
 	Enable                       *string                                       `xml:"enable,omitempty"`
@@ -2929,18 +3347,22 @@ type vrfRipXml_11_0_2 struct {
 	GlobalOutboundDistributeList *vrfRipGlobalOutboundDistributeListXml_11_0_2 `xml:"global-outbound-distribute-list,omitempty"`
 	Interface                    *vrfRipInterfaceContainerXml_11_0_2           `xml:"interface,omitempty"`
 	Misc                         []generic.Xml                                 `xml:",any"`
+	MiscAttributes               []xml.Attr                                    `xml:",any,attr"`
 }
 type vrfRipGlobalBfdXml_11_0_2 struct {
-	Profile *string       `xml:"profile,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	Profile        *string       `xml:"profile,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfRipGlobalInboundDistributeListXml_11_0_2 struct {
-	AccessList *string       `xml:"access-list,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	AccessList     *string       `xml:"access-list,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfRipGlobalOutboundDistributeListXml_11_0_2 struct {
-	AccessList *string       `xml:"access-list,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	AccessList     *string       `xml:"access-list,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfRipInterfaceContainerXml_11_0_2 struct {
 	Entries []vrfRipInterfaceXml_11_0_2 `xml:"entry"`
@@ -2956,20 +3378,24 @@ type vrfRipInterfaceXml_11_0_2 struct {
 	InterfaceInboundDistributeList  *vrfRipInterfaceInterfaceInboundDistributeListXml_11_0_2  `xml:"interface-inbound-distribute-list,omitempty"`
 	InterfaceOutboundDistributeList *vrfRipInterfaceInterfaceOutboundDistributeListXml_11_0_2 `xml:"interface-outbound-distribute-list,omitempty"`
 	Misc                            []generic.Xml                                             `xml:",any"`
+	MiscAttributes                  []xml.Attr                                                `xml:",any,attr"`
 }
 type vrfRipInterfaceBfdXml_11_0_2 struct {
-	Profile *string       `xml:"profile,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	Profile        *string       `xml:"profile,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfRipInterfaceInterfaceInboundDistributeListXml_11_0_2 struct {
-	AccessList *string       `xml:"access-list,omitempty"`
-	Metric     *int64        `xml:"metric,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	AccessList     *string       `xml:"access-list,omitempty"`
+	Metric         *int64        `xml:"metric,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type vrfRipInterfaceInterfaceOutboundDistributeListXml_11_0_2 struct {
-	AccessList *string       `xml:"access-list,omitempty"`
-	Metric     *int64        `xml:"metric,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	AccessList     *string       `xml:"access-list,omitempty"`
+	Metric         *int64        `xml:"metric,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 
 func (o *entryXml) MarshalFromObject(s Entry) {
@@ -2984,6 +3410,7 @@ func (o *entryXml) MarshalFromObject(s Entry) {
 		o.Vrf = &vrfContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o entryXml) UnmarshalToObject() (*Entry, error) {
@@ -2999,9 +3426,10 @@ func (o entryXml) UnmarshalToObject() (*Entry, error) {
 	}
 
 	result := &Entry{
-		Name: o.Name,
-		Vrf:  vrfVal,
-		Misc: o.Misc,
+		Name:           o.Name,
+		Vrf:            vrfVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3056,6 +3484,7 @@ func (o *vrfXml) MarshalFromObject(s Vrf) {
 		o.Rip = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfXml) UnmarshalToObject() (*Vrf, error) {
@@ -3137,18 +3566,19 @@ func (o vrfXml) UnmarshalToObject() (*Vrf, error) {
 	}
 
 	result := &Vrf{
-		Name:         o.Name,
-		Interface:    interfaceVal,
-		AdminDists:   adminDistsVal,
-		RibFilter:    ribFilterVal,
-		Bgp:          bgpVal,
-		RoutingTable: routingTableVal,
-		Ospf:         ospfVal,
-		Ospfv3:       ospfv3Val,
-		Ecmp:         ecmpVal,
-		Multicast:    multicastVal,
-		Rip:          ripVal,
-		Misc:         o.Misc,
+		Name:           o.Name,
+		Interface:      interfaceVal,
+		AdminDists:     adminDistsVal,
+		RibFilter:      ribFilterVal,
+		Bgp:            bgpVal,
+		RoutingTable:   routingTableVal,
+		Ospf:           ospfVal,
+		Ospfv3:         ospfv3Val,
+		Ecmp:           ecmpVal,
+		Multicast:      multicastVal,
+		Rip:            ripVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3166,24 +3596,26 @@ func (o *vrfAdminDistsXml) MarshalFromObject(s VrfAdminDists) {
 	o.BgpLocal = s.BgpLocal
 	o.Rip = s.Rip
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfAdminDistsXml) UnmarshalToObject() (*VrfAdminDists, error) {
 
 	result := &VrfAdminDists{
-		Static:      o.Static,
-		StaticIpv6:  o.StaticIpv6,
-		OspfInter:   o.OspfInter,
-		OspfIntra:   o.OspfIntra,
-		OspfExt:     o.OspfExt,
-		Ospfv3Inter: o.Ospfv3Inter,
-		Ospfv3Intra: o.Ospfv3Intra,
-		Ospfv3Ext:   o.Ospfv3Ext,
-		BgpInternal: o.BgpInternal,
-		BgpExternal: o.BgpExternal,
-		BgpLocal:    o.BgpLocal,
-		Rip:         o.Rip,
-		Misc:        o.Misc,
+		Static:         o.Static,
+		StaticIpv6:     o.StaticIpv6,
+		OspfInter:      o.OspfInter,
+		OspfIntra:      o.OspfIntra,
+		OspfExt:        o.OspfExt,
+		Ospfv3Inter:    o.Ospfv3Inter,
+		Ospfv3Intra:    o.Ospfv3Intra,
+		Ospfv3Ext:      o.Ospfv3Ext,
+		BgpInternal:    o.BgpInternal,
+		BgpExternal:    o.BgpExternal,
+		BgpLocal:       o.BgpLocal,
+		Rip:            o.Rip,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3199,6 +3631,7 @@ func (o *vrfRibFilterXml) MarshalFromObject(s VrfRibFilter) {
 		o.Ipv6 = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRibFilterXml) UnmarshalToObject() (*VrfRibFilter, error) {
@@ -3220,9 +3653,10 @@ func (o vrfRibFilterXml) UnmarshalToObject() (*VrfRibFilter, error) {
 	}
 
 	result := &VrfRibFilter{
-		Ipv4: ipv4Val,
-		Ipv6: ipv6Val,
-		Misc: o.Misc,
+		Ipv4:           ipv4Val,
+		Ipv6:           ipv6Val,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3248,6 +3682,7 @@ func (o *vrfRibFilterIpv4Xml) MarshalFromObject(s VrfRibFilterIpv4) {
 		o.Rip = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRibFilterIpv4Xml) UnmarshalToObject() (*VrfRibFilterIpv4, error) {
@@ -3285,63 +3720,72 @@ func (o vrfRibFilterIpv4Xml) UnmarshalToObject() (*VrfRibFilterIpv4, error) {
 	}
 
 	result := &VrfRibFilterIpv4{
-		Static: staticVal,
-		Bgp:    bgpVal,
-		Ospf:   ospfVal,
-		Rip:    ripVal,
-		Misc:   o.Misc,
+		Static:         staticVal,
+		Bgp:            bgpVal,
+		Ospf:           ospfVal,
+		Rip:            ripVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfRibFilterIpv4StaticXml) MarshalFromObject(s VrfRibFilterIpv4Static) {
 	o.RouteMap = s.RouteMap
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRibFilterIpv4StaticXml) UnmarshalToObject() (*VrfRibFilterIpv4Static, error) {
 
 	result := &VrfRibFilterIpv4Static{
-		RouteMap: o.RouteMap,
-		Misc:     o.Misc,
+		RouteMap:       o.RouteMap,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfRibFilterIpv4BgpXml) MarshalFromObject(s VrfRibFilterIpv4Bgp) {
 	o.RouteMap = s.RouteMap
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRibFilterIpv4BgpXml) UnmarshalToObject() (*VrfRibFilterIpv4Bgp, error) {
 
 	result := &VrfRibFilterIpv4Bgp{
-		RouteMap: o.RouteMap,
-		Misc:     o.Misc,
+		RouteMap:       o.RouteMap,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfRibFilterIpv4OspfXml) MarshalFromObject(s VrfRibFilterIpv4Ospf) {
 	o.RouteMap = s.RouteMap
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRibFilterIpv4OspfXml) UnmarshalToObject() (*VrfRibFilterIpv4Ospf, error) {
 
 	result := &VrfRibFilterIpv4Ospf{
-		RouteMap: o.RouteMap,
-		Misc:     o.Misc,
+		RouteMap:       o.RouteMap,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfRibFilterIpv4RipXml) MarshalFromObject(s VrfRibFilterIpv4Rip) {
 	o.RouteMap = s.RouteMap
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRibFilterIpv4RipXml) UnmarshalToObject() (*VrfRibFilterIpv4Rip, error) {
 
 	result := &VrfRibFilterIpv4Rip{
-		RouteMap: o.RouteMap,
-		Misc:     o.Misc,
+		RouteMap:       o.RouteMap,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3362,6 +3806,7 @@ func (o *vrfRibFilterIpv6Xml) MarshalFromObject(s VrfRibFilterIpv6) {
 		o.Ospfv3 = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRibFilterIpv6Xml) UnmarshalToObject() (*VrfRibFilterIpv6, error) {
@@ -3391,49 +3836,56 @@ func (o vrfRibFilterIpv6Xml) UnmarshalToObject() (*VrfRibFilterIpv6, error) {
 	}
 
 	result := &VrfRibFilterIpv6{
-		Static: staticVal,
-		Bgp:    bgpVal,
-		Ospfv3: ospfv3Val,
-		Misc:   o.Misc,
+		Static:         staticVal,
+		Bgp:            bgpVal,
+		Ospfv3:         ospfv3Val,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfRibFilterIpv6StaticXml) MarshalFromObject(s VrfRibFilterIpv6Static) {
 	o.RouteMap = s.RouteMap
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRibFilterIpv6StaticXml) UnmarshalToObject() (*VrfRibFilterIpv6Static, error) {
 
 	result := &VrfRibFilterIpv6Static{
-		RouteMap: o.RouteMap,
-		Misc:     o.Misc,
+		RouteMap:       o.RouteMap,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfRibFilterIpv6BgpXml) MarshalFromObject(s VrfRibFilterIpv6Bgp) {
 	o.RouteMap = s.RouteMap
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRibFilterIpv6BgpXml) UnmarshalToObject() (*VrfRibFilterIpv6Bgp, error) {
 
 	result := &VrfRibFilterIpv6Bgp{
-		RouteMap: o.RouteMap,
-		Misc:     o.Misc,
+		RouteMap:       o.RouteMap,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfRibFilterIpv6Ospfv3Xml) MarshalFromObject(s VrfRibFilterIpv6Ospfv3) {
 	o.RouteMap = s.RouteMap
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRibFilterIpv6Ospfv3Xml) UnmarshalToObject() (*VrfRibFilterIpv6Ospfv3, error) {
 
 	result := &VrfRibFilterIpv6Ospfv3{
-		RouteMap: o.RouteMap,
-		Misc:     o.Misc,
+		RouteMap:       o.RouteMap,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3492,6 +3944,7 @@ func (o *vrfBgpXml) MarshalFromObject(s VrfBgp) {
 		o.AggregateRoutes = &vrfBgpAggregateRoutesContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpXml) UnmarshalToObject() (*VrfBgp, error) {
@@ -3575,6 +4028,7 @@ func (o vrfBgpXml) UnmarshalToObject() (*VrfBgp, error) {
 		PeerGroup:                   peerGroupVal,
 		AggregateRoutes:             aggregateRoutesVal,
 		Misc:                        o.Misc,
+		MiscAttributes:              o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3582,6 +4036,7 @@ func (o *vrfBgpMedXml) MarshalFromObject(s VrfBgpMed) {
 	o.AlwaysCompareMed = util.YesNo(s.AlwaysCompareMed, nil)
 	o.DeterministicMedComparison = util.YesNo(s.DeterministicMedComparison, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpMedXml) UnmarshalToObject() (*VrfBgpMed, error) {
@@ -3590,6 +4045,7 @@ func (o vrfBgpMedXml) UnmarshalToObject() (*VrfBgpMed, error) {
 		AlwaysCompareMed:           util.AsBool(o.AlwaysCompareMed, nil),
 		DeterministicMedComparison: util.AsBool(o.DeterministicMedComparison, nil),
 		Misc:                       o.Misc,
+		MiscAttributes:             o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3599,6 +4055,7 @@ func (o *vrfBgpGracefulRestartXml) MarshalFromObject(s VrfBgpGracefulRestart) {
 	o.MaxPeerRestartTime = s.MaxPeerRestartTime
 	o.LocalRestartTime = s.LocalRestartTime
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpGracefulRestartXml) UnmarshalToObject() (*VrfBgpGracefulRestart, error) {
@@ -3609,19 +4066,22 @@ func (o vrfBgpGracefulRestartXml) UnmarshalToObject() (*VrfBgpGracefulRestart, e
 		MaxPeerRestartTime: o.MaxPeerRestartTime,
 		LocalRestartTime:   o.LocalRestartTime,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfBgpGlobalBfdXml) MarshalFromObject(s VrfBgpGlobalBfd) {
 	o.Profile = s.Profile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpGlobalBfdXml) UnmarshalToObject() (*VrfBgpGlobalBfd, error) {
 
 	result := &VrfBgpGlobalBfd{
-		Profile: o.Profile,
-		Misc:    o.Misc,
+		Profile:        o.Profile,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3637,6 +4097,7 @@ func (o *vrfBgpRedistributionProfileXml) MarshalFromObject(s VrfBgpRedistributio
 		o.Ipv6 = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpRedistributionProfileXml) UnmarshalToObject() (*VrfBgpRedistributionProfile, error) {
@@ -3658,35 +4119,40 @@ func (o vrfBgpRedistributionProfileXml) UnmarshalToObject() (*VrfBgpRedistributi
 	}
 
 	result := &VrfBgpRedistributionProfile{
-		Ipv4: ipv4Val,
-		Ipv6: ipv6Val,
-		Misc: o.Misc,
+		Ipv4:           ipv4Val,
+		Ipv6:           ipv6Val,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfBgpRedistributionProfileIpv4Xml) MarshalFromObject(s VrfBgpRedistributionProfileIpv4) {
 	o.Unicast = s.Unicast
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpRedistributionProfileIpv4Xml) UnmarshalToObject() (*VrfBgpRedistributionProfileIpv4, error) {
 
 	result := &VrfBgpRedistributionProfileIpv4{
-		Unicast: o.Unicast,
-		Misc:    o.Misc,
+		Unicast:        o.Unicast,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfBgpRedistributionProfileIpv6Xml) MarshalFromObject(s VrfBgpRedistributionProfileIpv6) {
 	o.Unicast = s.Unicast
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpRedistributionProfileIpv6Xml) UnmarshalToObject() (*VrfBgpRedistributionProfileIpv6, error) {
 
 	result := &VrfBgpRedistributionProfileIpv6{
-		Unicast: o.Unicast,
-		Misc:    o.Misc,
+		Unicast:        o.Unicast,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3702,6 +4168,7 @@ func (o *vrfBgpAdvertiseNetworkXml) MarshalFromObject(s VrfBgpAdvertiseNetwork) 
 		o.Ipv6 = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpAdvertiseNetworkXml) UnmarshalToObject() (*VrfBgpAdvertiseNetwork, error) {
@@ -3723,9 +4190,10 @@ func (o vrfBgpAdvertiseNetworkXml) UnmarshalToObject() (*VrfBgpAdvertiseNetwork,
 	}
 
 	result := &VrfBgpAdvertiseNetwork{
-		Ipv4: ipv4Val,
-		Ipv6: ipv6Val,
-		Misc: o.Misc,
+		Ipv4:           ipv4Val,
+		Ipv6:           ipv6Val,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3740,6 +4208,7 @@ func (o *vrfBgpAdvertiseNetworkIpv4Xml) MarshalFromObject(s VrfBgpAdvertiseNetwo
 		o.Network = &vrfBgpAdvertiseNetworkIpv4NetworkContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpAdvertiseNetworkIpv4Xml) UnmarshalToObject() (*VrfBgpAdvertiseNetworkIpv4, error) {
@@ -3755,8 +4224,9 @@ func (o vrfBgpAdvertiseNetworkIpv4Xml) UnmarshalToObject() (*VrfBgpAdvertiseNetw
 	}
 
 	result := &VrfBgpAdvertiseNetworkIpv4{
-		Network: networkVal,
-		Misc:    o.Misc,
+		Network:        networkVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3766,16 +4236,18 @@ func (o *vrfBgpAdvertiseNetworkIpv4NetworkXml) MarshalFromObject(s VrfBgpAdverti
 	o.Multicast = util.YesNo(s.Multicast, nil)
 	o.Backdoor = util.YesNo(s.Backdoor, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpAdvertiseNetworkIpv4NetworkXml) UnmarshalToObject() (*VrfBgpAdvertiseNetworkIpv4Network, error) {
 
 	result := &VrfBgpAdvertiseNetworkIpv4Network{
-		Name:      o.Name,
-		Unicast:   util.AsBool(o.Unicast, nil),
-		Multicast: util.AsBool(o.Multicast, nil),
-		Backdoor:  util.AsBool(o.Backdoor, nil),
-		Misc:      o.Misc,
+		Name:           o.Name,
+		Unicast:        util.AsBool(o.Unicast, nil),
+		Multicast:      util.AsBool(o.Multicast, nil),
+		Backdoor:       util.AsBool(o.Backdoor, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3790,6 +4262,7 @@ func (o *vrfBgpAdvertiseNetworkIpv6Xml) MarshalFromObject(s VrfBgpAdvertiseNetwo
 		o.Network = &vrfBgpAdvertiseNetworkIpv6NetworkContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpAdvertiseNetworkIpv6Xml) UnmarshalToObject() (*VrfBgpAdvertiseNetworkIpv6, error) {
@@ -3805,8 +4278,9 @@ func (o vrfBgpAdvertiseNetworkIpv6Xml) UnmarshalToObject() (*VrfBgpAdvertiseNetw
 	}
 
 	result := &VrfBgpAdvertiseNetworkIpv6{
-		Network: networkVal,
-		Misc:    o.Misc,
+		Network:        networkVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3814,14 +4288,16 @@ func (o *vrfBgpAdvertiseNetworkIpv6NetworkXml) MarshalFromObject(s VrfBgpAdverti
 	o.Name = s.Name
 	o.Unicast = util.YesNo(s.Unicast, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpAdvertiseNetworkIpv6NetworkXml) UnmarshalToObject() (*VrfBgpAdvertiseNetworkIpv6Network, error) {
 
 	result := &VrfBgpAdvertiseNetworkIpv6Network{
-		Name:    o.Name,
-		Unicast: util.AsBool(o.Unicast, nil),
-		Misc:    o.Misc,
+		Name:           o.Name,
+		Unicast:        util.AsBool(o.Unicast, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3858,6 +4334,7 @@ func (o *vrfBgpPeerGroupXml) MarshalFromObject(s VrfBgpPeerGroup) {
 		o.Peer = &vrfBgpPeerGroupPeerContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpPeerGroupXml) UnmarshalToObject() (*VrfBgpPeerGroup, error) {
@@ -3913,6 +4390,7 @@ func (o vrfBgpPeerGroupXml) UnmarshalToObject() (*VrfBgpPeerGroup, error) {
 		ConnectionOptions: connectionOptionsVal,
 		Peer:              peerVal,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3928,6 +4406,7 @@ func (o *vrfBgpPeerGroupTypeXml) MarshalFromObject(s VrfBgpPeerGroupType) {
 		o.Ebgp = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpPeerGroupTypeXml) UnmarshalToObject() (*VrfBgpPeerGroupType, error) {
@@ -3949,31 +4428,36 @@ func (o vrfBgpPeerGroupTypeXml) UnmarshalToObject() (*VrfBgpPeerGroupType, error
 	}
 
 	result := &VrfBgpPeerGroupType{
-		Ibgp: ibgpVal,
-		Ebgp: ebgpVal,
-		Misc: o.Misc,
+		Ibgp:           ibgpVal,
+		Ebgp:           ebgpVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfBgpPeerGroupTypeIbgpXml) MarshalFromObject(s VrfBgpPeerGroupTypeIbgp) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpPeerGroupTypeIbgpXml) UnmarshalToObject() (*VrfBgpPeerGroupTypeIbgp, error) {
 
 	result := &VrfBgpPeerGroupTypeIbgp{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfBgpPeerGroupTypeEbgpXml) MarshalFromObject(s VrfBgpPeerGroupTypeEbgp) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpPeerGroupTypeEbgpXml) UnmarshalToObject() (*VrfBgpPeerGroupTypeEbgp, error) {
 
 	result := &VrfBgpPeerGroupTypeEbgp{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3981,14 +4465,16 @@ func (o *vrfBgpPeerGroupAddressFamilyXml) MarshalFromObject(s VrfBgpPeerGroupAdd
 	o.Ipv4 = s.Ipv4
 	o.Ipv6 = s.Ipv6
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpPeerGroupAddressFamilyXml) UnmarshalToObject() (*VrfBgpPeerGroupAddressFamily, error) {
 
 	result := &VrfBgpPeerGroupAddressFamily{
-		Ipv4: o.Ipv4,
-		Ipv6: o.Ipv6,
-		Misc: o.Misc,
+		Ipv4:           o.Ipv4,
+		Ipv6:           o.Ipv6,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3996,14 +4482,16 @@ func (o *vrfBgpPeerGroupFilteringProfileXml) MarshalFromObject(s VrfBgpPeerGroup
 	o.Ipv4 = s.Ipv4
 	o.Ipv6 = s.Ipv6
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpPeerGroupFilteringProfileXml) UnmarshalToObject() (*VrfBgpPeerGroupFilteringProfile, error) {
 
 	result := &VrfBgpPeerGroupFilteringProfile{
-		Ipv4: o.Ipv4,
-		Ipv6: o.Ipv6,
-		Misc: o.Misc,
+		Ipv4:           o.Ipv4,
+		Ipv6:           o.Ipv6,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4013,6 +4501,7 @@ func (o *vrfBgpPeerGroupConnectionOptionsXml) MarshalFromObject(s VrfBgpPeerGrou
 	o.Authentication = s.Authentication
 	o.Dampening = s.Dampening
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpPeerGroupConnectionOptionsXml) UnmarshalToObject() (*VrfBgpPeerGroupConnectionOptions, error) {
@@ -4023,6 +4512,7 @@ func (o vrfBgpPeerGroupConnectionOptionsXml) UnmarshalToObject() (*VrfBgpPeerGro
 		Authentication: o.Authentication,
 		Dampening:      o.Dampening,
 		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4058,6 +4548,7 @@ func (o *vrfBgpPeerGroupPeerXml) MarshalFromObject(s VrfBgpPeerGroupPeer) {
 		o.Bfd = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpPeerGroupPeerXml) UnmarshalToObject() (*VrfBgpPeerGroupPeer, error) {
@@ -4114,6 +4605,7 @@ func (o vrfBgpPeerGroupPeerXml) UnmarshalToObject() (*VrfBgpPeerGroupPeer, error
 		ConnectionOptions:             connectionOptionsVal,
 		Bfd:                           bfdVal,
 		Misc:                          o.Misc,
+		MiscAttributes:                o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4129,6 +4621,7 @@ func (o *vrfBgpPeerGroupPeerInheritXml) MarshalFromObject(s VrfBgpPeerGroupPeerI
 		o.No = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpPeerGroupPeerInheritXml) UnmarshalToObject() (*VrfBgpPeerGroupPeerInherit, error) {
@@ -4150,20 +4643,23 @@ func (o vrfBgpPeerGroupPeerInheritXml) UnmarshalToObject() (*VrfBgpPeerGroupPeer
 	}
 
 	result := &VrfBgpPeerGroupPeerInherit{
-		Yes:  yesVal,
-		No:   noVal,
-		Misc: o.Misc,
+		Yes:            yesVal,
+		No:             noVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfBgpPeerGroupPeerInheritYesXml) MarshalFromObject(s VrfBgpPeerGroupPeerInheritYes) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpPeerGroupPeerInheritYesXml) UnmarshalToObject() (*VrfBgpPeerGroupPeerInheritYes, error) {
 
 	result := &VrfBgpPeerGroupPeerInheritYes{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4179,6 +4675,7 @@ func (o *vrfBgpPeerGroupPeerInheritNoXml) MarshalFromObject(s VrfBgpPeerGroupPee
 		o.FilteringProfile = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpPeerGroupPeerInheritNoXml) UnmarshalToObject() (*VrfBgpPeerGroupPeerInheritNo, error) {
@@ -4203,6 +4700,7 @@ func (o vrfBgpPeerGroupPeerInheritNoXml) UnmarshalToObject() (*VrfBgpPeerGroupPe
 		AddressFamily:    addressFamilyVal,
 		FilteringProfile: filteringProfileVal,
 		Misc:             o.Misc,
+		MiscAttributes:   o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4210,14 +4708,16 @@ func (o *vrfBgpPeerGroupPeerInheritNoAddressFamilyXml) MarshalFromObject(s VrfBg
 	o.Ipv4 = s.Ipv4
 	o.Ipv6 = s.Ipv6
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpPeerGroupPeerInheritNoAddressFamilyXml) UnmarshalToObject() (*VrfBgpPeerGroupPeerInheritNoAddressFamily, error) {
 
 	result := &VrfBgpPeerGroupPeerInheritNoAddressFamily{
-		Ipv4: o.Ipv4,
-		Ipv6: o.Ipv6,
-		Misc: o.Misc,
+		Ipv4:           o.Ipv4,
+		Ipv6:           o.Ipv6,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4225,14 +4725,16 @@ func (o *vrfBgpPeerGroupPeerInheritNoFilteringProfileXml) MarshalFromObject(s Vr
 	o.Ipv4 = s.Ipv4
 	o.Ipv6 = s.Ipv6
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpPeerGroupPeerInheritNoFilteringProfileXml) UnmarshalToObject() (*VrfBgpPeerGroupPeerInheritNoFilteringProfile, error) {
 
 	result := &VrfBgpPeerGroupPeerInheritNoFilteringProfile{
-		Ipv4: o.Ipv4,
-		Ipv6: o.Ipv6,
-		Misc: o.Misc,
+		Ipv4:           o.Ipv4,
+		Ipv6:           o.Ipv6,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4240,14 +4742,16 @@ func (o *vrfBgpPeerGroupPeerLocalAddressXml) MarshalFromObject(s VrfBgpPeerGroup
 	o.Interface = s.Interface
 	o.Ip = s.Ip
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpPeerGroupPeerLocalAddressXml) UnmarshalToObject() (*VrfBgpPeerGroupPeerLocalAddress, error) {
 
 	result := &VrfBgpPeerGroupPeerLocalAddress{
-		Interface: o.Interface,
-		Ip:        o.Ip,
-		Misc:      o.Misc,
+		Interface:      o.Interface,
+		Ip:             o.Ip,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4255,14 +4759,16 @@ func (o *vrfBgpPeerGroupPeerPeerAddressXml) MarshalFromObject(s VrfBgpPeerGroupP
 	o.Ip = s.Ip
 	o.Fqdn = s.Fqdn
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpPeerGroupPeerPeerAddressXml) UnmarshalToObject() (*VrfBgpPeerGroupPeerPeerAddress, error) {
 
 	result := &VrfBgpPeerGroupPeerPeerAddress{
-		Ip:   o.Ip,
-		Fqdn: o.Fqdn,
-		Misc: o.Misc,
+		Ip:             o.Ip,
+		Fqdn:           o.Fqdn,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4272,6 +4778,7 @@ func (o *vrfBgpPeerGroupPeerConnectionOptionsXml) MarshalFromObject(s VrfBgpPeer
 	o.Authentication = s.Authentication
 	o.Dampening = s.Dampening
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpPeerGroupPeerConnectionOptionsXml) UnmarshalToObject() (*VrfBgpPeerGroupPeerConnectionOptions, error) {
@@ -4282,19 +4789,22 @@ func (o vrfBgpPeerGroupPeerConnectionOptionsXml) UnmarshalToObject() (*VrfBgpPee
 		Authentication: o.Authentication,
 		Dampening:      o.Dampening,
 		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfBgpPeerGroupPeerBfdXml) MarshalFromObject(s VrfBgpPeerGroupPeerBfd) {
 	o.Profile = s.Profile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpPeerGroupPeerBfdXml) UnmarshalToObject() (*VrfBgpPeerGroupPeerBfd, error) {
 
 	result := &VrfBgpPeerGroupPeerBfd{
-		Profile: o.Profile,
-		Misc:    o.Misc,
+		Profile:        o.Profile,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4311,6 +4821,7 @@ func (o *vrfBgpAggregateRoutesXml) MarshalFromObject(s VrfBgpAggregateRoutes) {
 		o.Type = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpAggregateRoutesXml) UnmarshalToObject() (*VrfBgpAggregateRoutes, error) {
@@ -4324,14 +4835,15 @@ func (o vrfBgpAggregateRoutesXml) UnmarshalToObject() (*VrfBgpAggregateRoutes, e
 	}
 
 	result := &VrfBgpAggregateRoutes{
-		Name:        o.Name,
-		Description: o.Description,
-		Enable:      util.AsBool(o.Enable, nil),
-		SummaryOnly: util.AsBool(o.SummaryOnly, nil),
-		AsSet:       util.AsBool(o.AsSet, nil),
-		SameMed:     util.AsBool(o.SameMed, nil),
-		Type:        typeVal,
-		Misc:        o.Misc,
+		Name:           o.Name,
+		Description:    o.Description,
+		Enable:         util.AsBool(o.Enable, nil),
+		SummaryOnly:    util.AsBool(o.SummaryOnly, nil),
+		AsSet:          util.AsBool(o.AsSet, nil),
+		SameMed:        util.AsBool(o.SameMed, nil),
+		Type:           typeVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4347,6 +4859,7 @@ func (o *vrfBgpAggregateRoutesTypeXml) MarshalFromObject(s VrfBgpAggregateRoutes
 		o.Ipv6 = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpAggregateRoutesTypeXml) UnmarshalToObject() (*VrfBgpAggregateRoutesType, error) {
@@ -4368,9 +4881,10 @@ func (o vrfBgpAggregateRoutesTypeXml) UnmarshalToObject() (*VrfBgpAggregateRoute
 	}
 
 	result := &VrfBgpAggregateRoutesType{
-		Ipv4: ipv4Val,
-		Ipv6: ipv6Val,
-		Misc: o.Misc,
+		Ipv4:           ipv4Val,
+		Ipv6:           ipv6Val,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4379,15 +4893,17 @@ func (o *vrfBgpAggregateRoutesTypeIpv4Xml) MarshalFromObject(s VrfBgpAggregateRo
 	o.SuppressMap = s.SuppressMap
 	o.AttributeMap = s.AttributeMap
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpAggregateRoutesTypeIpv4Xml) UnmarshalToObject() (*VrfBgpAggregateRoutesTypeIpv4, error) {
 
 	result := &VrfBgpAggregateRoutesTypeIpv4{
-		SummaryPrefix: o.SummaryPrefix,
-		SuppressMap:   o.SuppressMap,
-		AttributeMap:  o.AttributeMap,
-		Misc:          o.Misc,
+		SummaryPrefix:  o.SummaryPrefix,
+		SuppressMap:    o.SuppressMap,
+		AttributeMap:   o.AttributeMap,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4396,15 +4912,17 @@ func (o *vrfBgpAggregateRoutesTypeIpv6Xml) MarshalFromObject(s VrfBgpAggregateRo
 	o.SuppressMap = s.SuppressMap
 	o.AttributeMap = s.AttributeMap
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpAggregateRoutesTypeIpv6Xml) UnmarshalToObject() (*VrfBgpAggregateRoutesTypeIpv6, error) {
 
 	result := &VrfBgpAggregateRoutesTypeIpv6{
-		SummaryPrefix: o.SummaryPrefix,
-		SuppressMap:   o.SuppressMap,
-		AttributeMap:  o.AttributeMap,
-		Misc:          o.Misc,
+		SummaryPrefix:  o.SummaryPrefix,
+		SuppressMap:    o.SuppressMap,
+		AttributeMap:   o.AttributeMap,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4420,6 +4938,7 @@ func (o *vrfRoutingTableXml) MarshalFromObject(s VrfRoutingTable) {
 		o.Ipv6 = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRoutingTableXml) UnmarshalToObject() (*VrfRoutingTable, error) {
@@ -4441,9 +4960,10 @@ func (o vrfRoutingTableXml) UnmarshalToObject() (*VrfRoutingTable, error) {
 	}
 
 	result := &VrfRoutingTable{
-		Ip:   ipVal,
-		Ipv6: ipv6Val,
-		Misc: o.Misc,
+		Ip:             ipVal,
+		Ipv6:           ipv6Val,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4458,6 +4978,7 @@ func (o *vrfRoutingTableIpXml) MarshalFromObject(s VrfRoutingTableIp) {
 		o.StaticRoute = &vrfRoutingTableIpStaticRouteContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRoutingTableIpXml) UnmarshalToObject() (*VrfRoutingTableIp, error) {
@@ -4473,8 +4994,9 @@ func (o vrfRoutingTableIpXml) UnmarshalToObject() (*VrfRoutingTableIp, error) {
 	}
 
 	result := &VrfRoutingTableIp{
-		StaticRoute: staticRouteVal,
-		Misc:        o.Misc,
+		StaticRoute:    staticRouteVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4500,6 +5022,7 @@ func (o *vrfRoutingTableIpStaticRouteXml) MarshalFromObject(s VrfRoutingTableIpS
 		o.PathMonitor = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRoutingTableIpStaticRouteXml) UnmarshalToObject() (*VrfRoutingTableIpStaticRoute, error) {
@@ -4529,15 +5052,16 @@ func (o vrfRoutingTableIpStaticRouteXml) UnmarshalToObject() (*VrfRoutingTableIp
 	}
 
 	result := &VrfRoutingTableIpStaticRoute{
-		Name:        o.Name,
-		Destination: o.Destination,
-		Interface:   o.Interface,
-		AdminDist:   o.AdminDist,
-		Metric:      o.Metric,
-		Nexthop:     nexthopVal,
-		Bfd:         bfdVal,
-		PathMonitor: pathMonitorVal,
-		Misc:        o.Misc,
+		Name:           o.Name,
+		Destination:    o.Destination,
+		Interface:      o.Interface,
+		AdminDist:      o.AdminDist,
+		Metric:         o.Metric,
+		Nexthop:        nexthopVal,
+		Bfd:            bfdVal,
+		PathMonitor:    pathMonitorVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4551,6 +5075,7 @@ func (o *vrfRoutingTableIpStaticRouteNexthopXml) MarshalFromObject(s VrfRoutingT
 	o.NextLr = s.NextLr
 	o.Fqdn = s.Fqdn
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRoutingTableIpStaticRouteNexthopXml) UnmarshalToObject() (*VrfRoutingTableIpStaticRouteNexthop, error) {
@@ -4564,35 +5089,40 @@ func (o vrfRoutingTableIpStaticRouteNexthopXml) UnmarshalToObject() (*VrfRouting
 	}
 
 	result := &VrfRoutingTableIpStaticRouteNexthop{
-		Discard:   discardVal,
-		IpAddress: o.IpAddress,
-		NextLr:    o.NextLr,
-		Fqdn:      o.Fqdn,
-		Misc:      o.Misc,
+		Discard:        discardVal,
+		IpAddress:      o.IpAddress,
+		NextLr:         o.NextLr,
+		Fqdn:           o.Fqdn,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfRoutingTableIpStaticRouteNexthopDiscardXml) MarshalFromObject(s VrfRoutingTableIpStaticRouteNexthopDiscard) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRoutingTableIpStaticRouteNexthopDiscardXml) UnmarshalToObject() (*VrfRoutingTableIpStaticRouteNexthopDiscard, error) {
 
 	result := &VrfRoutingTableIpStaticRouteNexthopDiscard{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfRoutingTableIpStaticRouteBfdXml) MarshalFromObject(s VrfRoutingTableIpStaticRouteBfd) {
 	o.Profile = s.Profile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRoutingTableIpStaticRouteBfdXml) UnmarshalToObject() (*VrfRoutingTableIpStaticRouteBfd, error) {
 
 	result := &VrfRoutingTableIpStaticRouteBfd{
-		Profile: o.Profile,
-		Misc:    o.Misc,
+		Profile:        o.Profile,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4610,6 +5140,7 @@ func (o *vrfRoutingTableIpStaticRoutePathMonitorXml) MarshalFromObject(s VrfRout
 		o.MonitorDestinations = &vrfRoutingTableIpStaticRoutePathMonitorMonitorDestinationsContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRoutingTableIpStaticRoutePathMonitorXml) UnmarshalToObject() (*VrfRoutingTableIpStaticRoutePathMonitor, error) {
@@ -4630,6 +5161,7 @@ func (o vrfRoutingTableIpStaticRoutePathMonitorXml) UnmarshalToObject() (*VrfRou
 		HoldTime:            o.HoldTime,
 		MonitorDestinations: monitorDestinationsVal,
 		Misc:                o.Misc,
+		MiscAttributes:      o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4641,18 +5173,20 @@ func (o *vrfRoutingTableIpStaticRoutePathMonitorMonitorDestinationsXml) MarshalF
 	o.Interval = s.Interval
 	o.Count = s.Count
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRoutingTableIpStaticRoutePathMonitorMonitorDestinationsXml) UnmarshalToObject() (*VrfRoutingTableIpStaticRoutePathMonitorMonitorDestinations, error) {
 
 	result := &VrfRoutingTableIpStaticRoutePathMonitorMonitorDestinations{
-		Name:        o.Name,
-		Enable:      util.AsBool(o.Enable, nil),
-		Source:      o.Source,
-		Destination: o.Destination,
-		Interval:    o.Interval,
-		Count:       o.Count,
-		Misc:        o.Misc,
+		Name:           o.Name,
+		Enable:         util.AsBool(o.Enable, nil),
+		Source:         o.Source,
+		Destination:    o.Destination,
+		Interval:       o.Interval,
+		Count:          o.Count,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4667,6 +5201,7 @@ func (o *vrfRoutingTableIpv6Xml) MarshalFromObject(s VrfRoutingTableIpv6) {
 		o.StaticRoute = &vrfRoutingTableIpv6StaticRouteContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRoutingTableIpv6Xml) UnmarshalToObject() (*VrfRoutingTableIpv6, error) {
@@ -4682,8 +5217,9 @@ func (o vrfRoutingTableIpv6Xml) UnmarshalToObject() (*VrfRoutingTableIpv6, error
 	}
 
 	result := &VrfRoutingTableIpv6{
-		StaticRoute: staticRouteVal,
-		Misc:        o.Misc,
+		StaticRoute:    staticRouteVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4709,6 +5245,7 @@ func (o *vrfRoutingTableIpv6StaticRouteXml) MarshalFromObject(s VrfRoutingTableI
 		o.PathMonitor = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRoutingTableIpv6StaticRouteXml) UnmarshalToObject() (*VrfRoutingTableIpv6StaticRoute, error) {
@@ -4738,15 +5275,16 @@ func (o vrfRoutingTableIpv6StaticRouteXml) UnmarshalToObject() (*VrfRoutingTable
 	}
 
 	result := &VrfRoutingTableIpv6StaticRoute{
-		Name:        o.Name,
-		Destination: o.Destination,
-		Interface:   o.Interface,
-		AdminDist:   o.AdminDist,
-		Metric:      o.Metric,
-		Nexthop:     nexthopVal,
-		Bfd:         bfdVal,
-		PathMonitor: pathMonitorVal,
-		Misc:        o.Misc,
+		Name:           o.Name,
+		Destination:    o.Destination,
+		Interface:      o.Interface,
+		AdminDist:      o.AdminDist,
+		Metric:         o.Metric,
+		Nexthop:        nexthopVal,
+		Bfd:            bfdVal,
+		PathMonitor:    pathMonitorVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4760,6 +5298,7 @@ func (o *vrfRoutingTableIpv6StaticRouteNexthopXml) MarshalFromObject(s VrfRoutin
 	o.Fqdn = s.Fqdn
 	o.NextLr = s.NextLr
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRoutingTableIpv6StaticRouteNexthopXml) UnmarshalToObject() (*VrfRoutingTableIpv6StaticRouteNexthop, error) {
@@ -4773,35 +5312,40 @@ func (o vrfRoutingTableIpv6StaticRouteNexthopXml) UnmarshalToObject() (*VrfRouti
 	}
 
 	result := &VrfRoutingTableIpv6StaticRouteNexthop{
-		Discard:     discardVal,
-		Ipv6Address: o.Ipv6Address,
-		Fqdn:        o.Fqdn,
-		NextLr:      o.NextLr,
-		Misc:        o.Misc,
+		Discard:        discardVal,
+		Ipv6Address:    o.Ipv6Address,
+		Fqdn:           o.Fqdn,
+		NextLr:         o.NextLr,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfRoutingTableIpv6StaticRouteNexthopDiscardXml) MarshalFromObject(s VrfRoutingTableIpv6StaticRouteNexthopDiscard) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRoutingTableIpv6StaticRouteNexthopDiscardXml) UnmarshalToObject() (*VrfRoutingTableIpv6StaticRouteNexthopDiscard, error) {
 
 	result := &VrfRoutingTableIpv6StaticRouteNexthopDiscard{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfRoutingTableIpv6StaticRouteBfdXml) MarshalFromObject(s VrfRoutingTableIpv6StaticRouteBfd) {
 	o.Profile = s.Profile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRoutingTableIpv6StaticRouteBfdXml) UnmarshalToObject() (*VrfRoutingTableIpv6StaticRouteBfd, error) {
 
 	result := &VrfRoutingTableIpv6StaticRouteBfd{
-		Profile: o.Profile,
-		Misc:    o.Misc,
+		Profile:        o.Profile,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4819,6 +5363,7 @@ func (o *vrfRoutingTableIpv6StaticRoutePathMonitorXml) MarshalFromObject(s VrfRo
 		o.MonitorDestinations = &vrfRoutingTableIpv6StaticRoutePathMonitorMonitorDestinationsContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRoutingTableIpv6StaticRoutePathMonitorXml) UnmarshalToObject() (*VrfRoutingTableIpv6StaticRoutePathMonitor, error) {
@@ -4839,6 +5384,7 @@ func (o vrfRoutingTableIpv6StaticRoutePathMonitorXml) UnmarshalToObject() (*VrfR
 		HoldTime:            o.HoldTime,
 		MonitorDestinations: monitorDestinationsVal,
 		Misc:                o.Misc,
+		MiscAttributes:      o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4850,18 +5396,20 @@ func (o *vrfRoutingTableIpv6StaticRoutePathMonitorMonitorDestinationsXml) Marsha
 	o.Interval = s.Interval
 	o.Count = s.Count
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRoutingTableIpv6StaticRoutePathMonitorMonitorDestinationsXml) UnmarshalToObject() (*VrfRoutingTableIpv6StaticRoutePathMonitorMonitorDestinations, error) {
 
 	result := &VrfRoutingTableIpv6StaticRoutePathMonitorMonitorDestinations{
-		Name:        o.Name,
-		Enable:      util.AsBool(o.Enable, nil),
-		Source:      o.Source,
-		Destination: o.Destination,
-		Interval:    o.Interval,
-		Count:       o.Count,
-		Misc:        o.Misc,
+		Name:           o.Name,
+		Enable:         util.AsBool(o.Enable, nil),
+		Source:         o.Source,
+		Destination:    o.Destination,
+		Interval:       o.Interval,
+		Count:          o.Count,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4892,6 +5440,7 @@ func (o *vrfOspfXml) MarshalFromObject(s VrfOspf) {
 		o.Area = &vrfOspfAreaContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfXml) UnmarshalToObject() (*VrfOspf, error) {
@@ -4933,19 +5482,22 @@ func (o vrfOspfXml) UnmarshalToObject() (*VrfOspf, error) {
 		GracefulRestart:       gracefulRestartVal,
 		Area:                  areaVal,
 		Misc:                  o.Misc,
+		MiscAttributes:        o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfOspfGlobalBfdXml) MarshalFromObject(s VrfOspfGlobalBfd) {
 	o.Profile = s.Profile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfGlobalBfdXml) UnmarshalToObject() (*VrfOspfGlobalBfd, error) {
 
 	result := &VrfOspfGlobalBfd{
-		Profile: o.Profile,
-		Misc:    o.Misc,
+		Profile:        o.Profile,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4956,6 +5508,7 @@ func (o *vrfOspfGracefulRestartXml) MarshalFromObject(s VrfOspfGracefulRestart) 
 	o.StrictLSAChecking = util.YesNo(s.StrictLSAChecking, nil)
 	o.MaxNeighborRestartTime = s.MaxNeighborRestartTime
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfGracefulRestartXml) UnmarshalToObject() (*VrfOspfGracefulRestart, error) {
@@ -4967,6 +5520,7 @@ func (o vrfOspfGracefulRestartXml) UnmarshalToObject() (*VrfOspfGracefulRestart,
 		StrictLSAChecking:      util.AsBool(o.StrictLSAChecking, nil),
 		MaxNeighborRestartTime: o.MaxNeighborRestartTime,
 		Misc:                   o.Misc,
+		MiscAttributes:         o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5006,6 +5560,7 @@ func (o *vrfOspfAreaXml) MarshalFromObject(s VrfOspfArea) {
 		o.VirtualLink = &vrfOspfAreaVirtualLinkContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfAreaXml) UnmarshalToObject() (*VrfOspfArea, error) {
@@ -5056,6 +5611,7 @@ func (o vrfOspfAreaXml) UnmarshalToObject() (*VrfOspfArea, error) {
 		Interface:      interfaceVal,
 		VirtualLink:    virtualLinkVal,
 		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5076,6 +5632,7 @@ func (o *vrfOspfAreaTypeXml) MarshalFromObject(s VrfOspfAreaType) {
 		o.Nssa = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfAreaTypeXml) UnmarshalToObject() (*VrfOspfAreaType, error) {
@@ -5105,10 +5662,11 @@ func (o vrfOspfAreaTypeXml) UnmarshalToObject() (*VrfOspfAreaType, error) {
 	}
 
 	result := &VrfOspfAreaType{
-		Normal: normalVal,
-		Stub:   stubVal,
-		Nssa:   nssaVal,
-		Misc:   o.Misc,
+		Normal:         normalVal,
+		Stub:           stubVal,
+		Nssa:           nssaVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5119,6 +5677,7 @@ func (o *vrfOspfAreaTypeNormalXml) MarshalFromObject(s VrfOspfAreaTypeNormal) {
 		o.Abr = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfAreaTypeNormalXml) UnmarshalToObject() (*VrfOspfAreaTypeNormal, error) {
@@ -5132,8 +5691,9 @@ func (o vrfOspfAreaTypeNormalXml) UnmarshalToObject() (*VrfOspfAreaTypeNormal, e
 	}
 
 	result := &VrfOspfAreaTypeNormal{
-		Abr:  abrVal,
-		Misc: o.Misc,
+		Abr:            abrVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5143,6 +5703,7 @@ func (o *vrfOspfAreaTypeNormalAbrXml) MarshalFromObject(s VrfOspfAreaTypeNormalA
 	o.InboundFilterList = s.InboundFilterList
 	o.OutboundFilterList = s.OutboundFilterList
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfAreaTypeNormalAbrXml) UnmarshalToObject() (*VrfOspfAreaTypeNormalAbr, error) {
@@ -5153,6 +5714,7 @@ func (o vrfOspfAreaTypeNormalAbrXml) UnmarshalToObject() (*VrfOspfAreaTypeNormal
 		InboundFilterList:  o.InboundFilterList,
 		OutboundFilterList: o.OutboundFilterList,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5165,6 +5727,7 @@ func (o *vrfOspfAreaTypeStubXml) MarshalFromObject(s VrfOspfAreaTypeStub) {
 	}
 	o.DefaultRouteMetric = s.DefaultRouteMetric
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfAreaTypeStubXml) UnmarshalToObject() (*VrfOspfAreaTypeStub, error) {
@@ -5182,6 +5745,7 @@ func (o vrfOspfAreaTypeStubXml) UnmarshalToObject() (*VrfOspfAreaTypeStub, error
 		Abr:                abrVal,
 		DefaultRouteMetric: o.DefaultRouteMetric,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5191,6 +5755,7 @@ func (o *vrfOspfAreaTypeStubAbrXml) MarshalFromObject(s VrfOspfAreaTypeStubAbr) 
 	o.InboundFilterList = s.InboundFilterList
 	o.OutboundFilterList = s.OutboundFilterList
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfAreaTypeStubAbrXml) UnmarshalToObject() (*VrfOspfAreaTypeStubAbr, error) {
@@ -5201,6 +5766,7 @@ func (o vrfOspfAreaTypeStubAbrXml) UnmarshalToObject() (*VrfOspfAreaTypeStubAbr,
 		InboundFilterList:  o.InboundFilterList,
 		OutboundFilterList: o.OutboundFilterList,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5217,6 +5783,7 @@ func (o *vrfOspfAreaTypeNssaXml) MarshalFromObject(s VrfOspfAreaTypeNssa) {
 		o.Abr = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfAreaTypeNssaXml) UnmarshalToObject() (*VrfOspfAreaTypeNssa, error) {
@@ -5242,6 +5809,7 @@ func (o vrfOspfAreaTypeNssaXml) UnmarshalToObject() (*VrfOspfAreaTypeNssa, error
 		DefaultInformationOriginate: defaultInformationOriginateVal,
 		Abr:                         abrVal,
 		Misc:                        o.Misc,
+		MiscAttributes:              o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5249,14 +5817,16 @@ func (o *vrfOspfAreaTypeNssaDefaultInformationOriginateXml) MarshalFromObject(s 
 	o.Metric = s.Metric
 	o.MetricType = s.MetricType
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfAreaTypeNssaDefaultInformationOriginateXml) UnmarshalToObject() (*VrfOspfAreaTypeNssaDefaultInformationOriginate, error) {
 
 	result := &VrfOspfAreaTypeNssaDefaultInformationOriginate{
-		Metric:     o.Metric,
-		MetricType: o.MetricType,
-		Misc:       o.Misc,
+		Metric:         o.Metric,
+		MetricType:     o.MetricType,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5275,6 +5845,7 @@ func (o *vrfOspfAreaTypeNssaAbrXml) MarshalFromObject(s VrfOspfAreaTypeNssaAbr) 
 		o.NssaExtRange = &vrfOspfAreaTypeNssaAbrNssaExtRangeContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfAreaTypeNssaAbrXml) UnmarshalToObject() (*VrfOspfAreaTypeNssaAbr, error) {
@@ -5296,6 +5867,7 @@ func (o vrfOspfAreaTypeNssaAbrXml) UnmarshalToObject() (*VrfOspfAreaTypeNssaAbr,
 		OutboundFilterList: o.OutboundFilterList,
 		NssaExtRange:       nssaExtRangeVal,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5303,14 +5875,16 @@ func (o *vrfOspfAreaTypeNssaAbrNssaExtRangeXml) MarshalFromObject(s VrfOspfAreaT
 	o.Name = s.Name
 	o.Advertise = util.YesNo(s.Advertise, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfAreaTypeNssaAbrNssaExtRangeXml) UnmarshalToObject() (*VrfOspfAreaTypeNssaAbrNssaExtRange, error) {
 
 	result := &VrfOspfAreaTypeNssaAbrNssaExtRange{
-		Name:      o.Name,
-		Advertise: util.AsBool(o.Advertise, nil),
-		Misc:      o.Misc,
+		Name:           o.Name,
+		Advertise:      util.AsBool(o.Advertise, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5318,14 +5892,16 @@ func (o *vrfOspfAreaRangeXml) MarshalFromObject(s VrfOspfAreaRange) {
 	o.Name = s.Name
 	o.Advertise = util.YesNo(s.Advertise, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfAreaRangeXml) UnmarshalToObject() (*VrfOspfAreaRange, error) {
 
 	result := &VrfOspfAreaRange{
-		Name:      o.Name,
-		Advertise: util.AsBool(o.Advertise, nil),
-		Misc:      o.Misc,
+		Name:           o.Name,
+		Advertise:      util.AsBool(o.Advertise, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5349,6 +5925,7 @@ func (o *vrfOspfAreaInterfaceXml) MarshalFromObject(s VrfOspfAreaInterface) {
 		o.Bfd = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfAreaInterfaceXml) UnmarshalToObject() (*VrfOspfAreaInterface, error) {
@@ -5381,6 +5958,7 @@ func (o vrfOspfAreaInterfaceXml) UnmarshalToObject() (*VrfOspfAreaInterface, err
 		LinkType:       linkTypeVal,
 		Bfd:            bfdVal,
 		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5401,6 +5979,7 @@ func (o *vrfOspfAreaInterfaceLinkTypeXml) MarshalFromObject(s VrfOspfAreaInterfa
 		o.P2mp = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfAreaInterfaceLinkTypeXml) UnmarshalToObject() (*VrfOspfAreaInterfaceLinkType, error) {
@@ -5430,32 +6009,37 @@ func (o vrfOspfAreaInterfaceLinkTypeXml) UnmarshalToObject() (*VrfOspfAreaInterf
 	}
 
 	result := &VrfOspfAreaInterfaceLinkType{
-		Broadcast: broadcastVal,
-		P2p:       p2pVal,
-		P2mp:      p2mpVal,
-		Misc:      o.Misc,
+		Broadcast:      broadcastVal,
+		P2p:            p2pVal,
+		P2mp:           p2mpVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfOspfAreaInterfaceLinkTypeBroadcastXml) MarshalFromObject(s VrfOspfAreaInterfaceLinkTypeBroadcast) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfAreaInterfaceLinkTypeBroadcastXml) UnmarshalToObject() (*VrfOspfAreaInterfaceLinkTypeBroadcast, error) {
 
 	result := &VrfOspfAreaInterfaceLinkTypeBroadcast{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfOspfAreaInterfaceLinkTypeP2pXml) MarshalFromObject(s VrfOspfAreaInterfaceLinkTypeP2p) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfAreaInterfaceLinkTypeP2pXml) UnmarshalToObject() (*VrfOspfAreaInterfaceLinkTypeP2p, error) {
 
 	result := &VrfOspfAreaInterfaceLinkTypeP2p{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5470,6 +6054,7 @@ func (o *vrfOspfAreaInterfaceLinkTypeP2mpXml) MarshalFromObject(s VrfOspfAreaInt
 		o.Neighbor = &vrfOspfAreaInterfaceLinkTypeP2mpNeighborContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfAreaInterfaceLinkTypeP2mpXml) UnmarshalToObject() (*VrfOspfAreaInterfaceLinkTypeP2mp, error) {
@@ -5485,8 +6070,9 @@ func (o vrfOspfAreaInterfaceLinkTypeP2mpXml) UnmarshalToObject() (*VrfOspfAreaIn
 	}
 
 	result := &VrfOspfAreaInterfaceLinkTypeP2mp{
-		Neighbor: neighborVal,
-		Misc:     o.Misc,
+		Neighbor:       neighborVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5494,27 +6080,31 @@ func (o *vrfOspfAreaInterfaceLinkTypeP2mpNeighborXml) MarshalFromObject(s VrfOsp
 	o.Name = s.Name
 	o.Priority = s.Priority
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfAreaInterfaceLinkTypeP2mpNeighborXml) UnmarshalToObject() (*VrfOspfAreaInterfaceLinkTypeP2mpNeighbor, error) {
 
 	result := &VrfOspfAreaInterfaceLinkTypeP2mpNeighbor{
-		Name:     o.Name,
-		Priority: o.Priority,
-		Misc:     o.Misc,
+		Name:           o.Name,
+		Priority:       o.Priority,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfOspfAreaInterfaceBfdXml) MarshalFromObject(s VrfOspfAreaInterfaceBfd) {
 	o.Profile = s.Profile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfAreaInterfaceBfdXml) UnmarshalToObject() (*VrfOspfAreaInterfaceBfd, error) {
 
 	result := &VrfOspfAreaInterfaceBfd{
-		Profile: o.Profile,
-		Misc:    o.Misc,
+		Profile:        o.Profile,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5532,6 +6122,7 @@ func (o *vrfOspfAreaVirtualLinkXml) MarshalFromObject(s VrfOspfAreaVirtualLink) 
 		o.Bfd = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfAreaVirtualLinkXml) UnmarshalToObject() (*VrfOspfAreaVirtualLink, error) {
@@ -5554,19 +6145,22 @@ func (o vrfOspfAreaVirtualLinkXml) UnmarshalToObject() (*VrfOspfAreaVirtualLink,
 		Authentication: o.Authentication,
 		Bfd:            bfdVal,
 		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfOspfAreaVirtualLinkBfdXml) MarshalFromObject(s VrfOspfAreaVirtualLinkBfd) {
 	o.Profile = s.Profile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfAreaVirtualLinkBfdXml) UnmarshalToObject() (*VrfOspfAreaVirtualLinkBfd, error) {
 
 	result := &VrfOspfAreaVirtualLinkBfd{
-		Profile: o.Profile,
-		Misc:    o.Misc,
+		Profile:        o.Profile,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5597,6 +6191,7 @@ func (o *vrfOspfv3Xml) MarshalFromObject(s VrfOspfv3) {
 		o.Area = &vrfOspfv3AreaContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfv3Xml) UnmarshalToObject() (*VrfOspfv3, error) {
@@ -5638,19 +6233,22 @@ func (o vrfOspfv3Xml) UnmarshalToObject() (*VrfOspfv3, error) {
 		GracefulRestart:       gracefulRestartVal,
 		Area:                  areaVal,
 		Misc:                  o.Misc,
+		MiscAttributes:        o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfOspfv3GlobalBfdXml) MarshalFromObject(s VrfOspfv3GlobalBfd) {
 	o.Profile = s.Profile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfv3GlobalBfdXml) UnmarshalToObject() (*VrfOspfv3GlobalBfd, error) {
 
 	result := &VrfOspfv3GlobalBfd{
-		Profile: o.Profile,
-		Misc:    o.Misc,
+		Profile:        o.Profile,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5661,6 +6259,7 @@ func (o *vrfOspfv3GracefulRestartXml) MarshalFromObject(s VrfOspfv3GracefulResta
 	o.StrictLSAChecking = util.YesNo(s.StrictLSAChecking, nil)
 	o.MaxNeighborRestartTime = s.MaxNeighborRestartTime
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfv3GracefulRestartXml) UnmarshalToObject() (*VrfOspfv3GracefulRestart, error) {
@@ -5672,6 +6271,7 @@ func (o vrfOspfv3GracefulRestartXml) UnmarshalToObject() (*VrfOspfv3GracefulRest
 		StrictLSAChecking:      util.AsBool(o.StrictLSAChecking, nil),
 		MaxNeighborRestartTime: o.MaxNeighborRestartTime,
 		Misc:                   o.Misc,
+		MiscAttributes:         o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5711,6 +6311,7 @@ func (o *vrfOspfv3AreaXml) MarshalFromObject(s VrfOspfv3Area) {
 		o.VirtualLink = &vrfOspfv3AreaVirtualLinkContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfv3AreaXml) UnmarshalToObject() (*VrfOspfv3Area, error) {
@@ -5761,6 +6362,7 @@ func (o vrfOspfv3AreaXml) UnmarshalToObject() (*VrfOspfv3Area, error) {
 		Interface:      interfaceVal,
 		VirtualLink:    virtualLinkVal,
 		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5781,6 +6383,7 @@ func (o *vrfOspfv3AreaTypeXml) MarshalFromObject(s VrfOspfv3AreaType) {
 		o.Nssa = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfv3AreaTypeXml) UnmarshalToObject() (*VrfOspfv3AreaType, error) {
@@ -5810,10 +6413,11 @@ func (o vrfOspfv3AreaTypeXml) UnmarshalToObject() (*VrfOspfv3AreaType, error) {
 	}
 
 	result := &VrfOspfv3AreaType{
-		Normal: normalVal,
-		Stub:   stubVal,
-		Nssa:   nssaVal,
-		Misc:   o.Misc,
+		Normal:         normalVal,
+		Stub:           stubVal,
+		Nssa:           nssaVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5824,6 +6428,7 @@ func (o *vrfOspfv3AreaTypeNormalXml) MarshalFromObject(s VrfOspfv3AreaTypeNormal
 		o.Abr = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfv3AreaTypeNormalXml) UnmarshalToObject() (*VrfOspfv3AreaTypeNormal, error) {
@@ -5837,8 +6442,9 @@ func (o vrfOspfv3AreaTypeNormalXml) UnmarshalToObject() (*VrfOspfv3AreaTypeNorma
 	}
 
 	result := &VrfOspfv3AreaTypeNormal{
-		Abr:  abrVal,
-		Misc: o.Misc,
+		Abr:            abrVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5848,6 +6454,7 @@ func (o *vrfOspfv3AreaTypeNormalAbrXml) MarshalFromObject(s VrfOspfv3AreaTypeNor
 	o.InboundFilterList = s.InboundFilterList
 	o.OutboundFilterList = s.OutboundFilterList
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfv3AreaTypeNormalAbrXml) UnmarshalToObject() (*VrfOspfv3AreaTypeNormalAbr, error) {
@@ -5858,6 +6465,7 @@ func (o vrfOspfv3AreaTypeNormalAbrXml) UnmarshalToObject() (*VrfOspfv3AreaTypeNo
 		InboundFilterList:  o.InboundFilterList,
 		OutboundFilterList: o.OutboundFilterList,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5870,6 +6478,7 @@ func (o *vrfOspfv3AreaTypeStubXml) MarshalFromObject(s VrfOspfv3AreaTypeStub) {
 	}
 	o.DefaultRouteMetric = s.DefaultRouteMetric
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfv3AreaTypeStubXml) UnmarshalToObject() (*VrfOspfv3AreaTypeStub, error) {
@@ -5887,6 +6496,7 @@ func (o vrfOspfv3AreaTypeStubXml) UnmarshalToObject() (*VrfOspfv3AreaTypeStub, e
 		Abr:                abrVal,
 		DefaultRouteMetric: o.DefaultRouteMetric,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5896,6 +6506,7 @@ func (o *vrfOspfv3AreaTypeStubAbrXml) MarshalFromObject(s VrfOspfv3AreaTypeStubA
 	o.InboundFilterList = s.InboundFilterList
 	o.OutboundFilterList = s.OutboundFilterList
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfv3AreaTypeStubAbrXml) UnmarshalToObject() (*VrfOspfv3AreaTypeStubAbr, error) {
@@ -5906,6 +6517,7 @@ func (o vrfOspfv3AreaTypeStubAbrXml) UnmarshalToObject() (*VrfOspfv3AreaTypeStub
 		InboundFilterList:  o.InboundFilterList,
 		OutboundFilterList: o.OutboundFilterList,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5922,6 +6534,7 @@ func (o *vrfOspfv3AreaTypeNssaXml) MarshalFromObject(s VrfOspfv3AreaTypeNssa) {
 		o.Abr = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfv3AreaTypeNssaXml) UnmarshalToObject() (*VrfOspfv3AreaTypeNssa, error) {
@@ -5947,6 +6560,7 @@ func (o vrfOspfv3AreaTypeNssaXml) UnmarshalToObject() (*VrfOspfv3AreaTypeNssa, e
 		DefaultInformationOriginate: defaultInformationOriginateVal,
 		Abr:                         abrVal,
 		Misc:                        o.Misc,
+		MiscAttributes:              o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5954,14 +6568,16 @@ func (o *vrfOspfv3AreaTypeNssaDefaultInformationOriginateXml) MarshalFromObject(
 	o.Metric = s.Metric
 	o.MetricType = s.MetricType
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfv3AreaTypeNssaDefaultInformationOriginateXml) UnmarshalToObject() (*VrfOspfv3AreaTypeNssaDefaultInformationOriginate, error) {
 
 	result := &VrfOspfv3AreaTypeNssaDefaultInformationOriginate{
-		Metric:     o.Metric,
-		MetricType: o.MetricType,
-		Misc:       o.Misc,
+		Metric:         o.Metric,
+		MetricType:     o.MetricType,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5980,6 +6596,7 @@ func (o *vrfOspfv3AreaTypeNssaAbrXml) MarshalFromObject(s VrfOspfv3AreaTypeNssaA
 		o.NssaExtRange = &vrfOspfv3AreaTypeNssaAbrNssaExtRangeContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfv3AreaTypeNssaAbrXml) UnmarshalToObject() (*VrfOspfv3AreaTypeNssaAbr, error) {
@@ -6001,6 +6618,7 @@ func (o vrfOspfv3AreaTypeNssaAbrXml) UnmarshalToObject() (*VrfOspfv3AreaTypeNssa
 		OutboundFilterList: o.OutboundFilterList,
 		NssaExtRange:       nssaExtRangeVal,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6008,14 +6626,16 @@ func (o *vrfOspfv3AreaTypeNssaAbrNssaExtRangeXml) MarshalFromObject(s VrfOspfv3A
 	o.Name = s.Name
 	o.Advertise = util.YesNo(s.Advertise, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfv3AreaTypeNssaAbrNssaExtRangeXml) UnmarshalToObject() (*VrfOspfv3AreaTypeNssaAbrNssaExtRange, error) {
 
 	result := &VrfOspfv3AreaTypeNssaAbrNssaExtRange{
-		Name:      o.Name,
-		Advertise: util.AsBool(o.Advertise, nil),
-		Misc:      o.Misc,
+		Name:           o.Name,
+		Advertise:      util.AsBool(o.Advertise, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6023,14 +6643,16 @@ func (o *vrfOspfv3AreaRangeXml) MarshalFromObject(s VrfOspfv3AreaRange) {
 	o.Name = s.Name
 	o.Advertise = util.YesNo(s.Advertise, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfv3AreaRangeXml) UnmarshalToObject() (*VrfOspfv3AreaRange, error) {
 
 	result := &VrfOspfv3AreaRange{
-		Name:      o.Name,
-		Advertise: util.AsBool(o.Advertise, nil),
-		Misc:      o.Misc,
+		Name:           o.Name,
+		Advertise:      util.AsBool(o.Advertise, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6055,6 +6677,7 @@ func (o *vrfOspfv3AreaInterfaceXml) MarshalFromObject(s VrfOspfv3AreaInterface) 
 		o.Bfd = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfv3AreaInterfaceXml) UnmarshalToObject() (*VrfOspfv3AreaInterface, error) {
@@ -6088,6 +6711,7 @@ func (o vrfOspfv3AreaInterfaceXml) UnmarshalToObject() (*VrfOspfv3AreaInterface,
 		LinkType:       linkTypeVal,
 		Bfd:            bfdVal,
 		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6108,6 +6732,7 @@ func (o *vrfOspfv3AreaInterfaceLinkTypeXml) MarshalFromObject(s VrfOspfv3AreaInt
 		o.P2mp = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfv3AreaInterfaceLinkTypeXml) UnmarshalToObject() (*VrfOspfv3AreaInterfaceLinkType, error) {
@@ -6137,32 +6762,37 @@ func (o vrfOspfv3AreaInterfaceLinkTypeXml) UnmarshalToObject() (*VrfOspfv3AreaIn
 	}
 
 	result := &VrfOspfv3AreaInterfaceLinkType{
-		Broadcast: broadcastVal,
-		P2p:       p2pVal,
-		P2mp:      p2mpVal,
-		Misc:      o.Misc,
+		Broadcast:      broadcastVal,
+		P2p:            p2pVal,
+		P2mp:           p2mpVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfOspfv3AreaInterfaceLinkTypeBroadcastXml) MarshalFromObject(s VrfOspfv3AreaInterfaceLinkTypeBroadcast) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfv3AreaInterfaceLinkTypeBroadcastXml) UnmarshalToObject() (*VrfOspfv3AreaInterfaceLinkTypeBroadcast, error) {
 
 	result := &VrfOspfv3AreaInterfaceLinkTypeBroadcast{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfOspfv3AreaInterfaceLinkTypeP2pXml) MarshalFromObject(s VrfOspfv3AreaInterfaceLinkTypeP2p) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfv3AreaInterfaceLinkTypeP2pXml) UnmarshalToObject() (*VrfOspfv3AreaInterfaceLinkTypeP2p, error) {
 
 	result := &VrfOspfv3AreaInterfaceLinkTypeP2p{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6177,6 +6807,7 @@ func (o *vrfOspfv3AreaInterfaceLinkTypeP2mpXml) MarshalFromObject(s VrfOspfv3Are
 		o.Neighbor = &vrfOspfv3AreaInterfaceLinkTypeP2mpNeighborContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfv3AreaInterfaceLinkTypeP2mpXml) UnmarshalToObject() (*VrfOspfv3AreaInterfaceLinkTypeP2mp, error) {
@@ -6192,8 +6823,9 @@ func (o vrfOspfv3AreaInterfaceLinkTypeP2mpXml) UnmarshalToObject() (*VrfOspfv3Ar
 	}
 
 	result := &VrfOspfv3AreaInterfaceLinkTypeP2mp{
-		Neighbor: neighborVal,
-		Misc:     o.Misc,
+		Neighbor:       neighborVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6201,27 +6833,31 @@ func (o *vrfOspfv3AreaInterfaceLinkTypeP2mpNeighborXml) MarshalFromObject(s VrfO
 	o.Name = s.Name
 	o.Priority = s.Priority
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfv3AreaInterfaceLinkTypeP2mpNeighborXml) UnmarshalToObject() (*VrfOspfv3AreaInterfaceLinkTypeP2mpNeighbor, error) {
 
 	result := &VrfOspfv3AreaInterfaceLinkTypeP2mpNeighbor{
-		Name:     o.Name,
-		Priority: o.Priority,
-		Misc:     o.Misc,
+		Name:           o.Name,
+		Priority:       o.Priority,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfOspfv3AreaInterfaceBfdXml) MarshalFromObject(s VrfOspfv3AreaInterfaceBfd) {
 	o.Profile = s.Profile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfv3AreaInterfaceBfdXml) UnmarshalToObject() (*VrfOspfv3AreaInterfaceBfd, error) {
 
 	result := &VrfOspfv3AreaInterfaceBfd{
-		Profile: o.Profile,
-		Misc:    o.Misc,
+		Profile:        o.Profile,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6234,6 +6870,7 @@ func (o *vrfOspfv3AreaVirtualLinkXml) MarshalFromObject(s VrfOspfv3AreaVirtualLi
 	o.Timing = s.Timing
 	o.Authentication = s.Authentication
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfv3AreaVirtualLinkXml) UnmarshalToObject() (*VrfOspfv3AreaVirtualLink, error) {
@@ -6247,6 +6884,7 @@ func (o vrfOspfv3AreaVirtualLinkXml) UnmarshalToObject() (*VrfOspfv3AreaVirtualL
 		Timing:         o.Timing,
 		Authentication: o.Authentication,
 		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6261,6 +6899,7 @@ func (o *vrfEcmpXml) MarshalFromObject(s VrfEcmp) {
 		o.Algorithm = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfEcmpXml) UnmarshalToObject() (*VrfEcmp, error) {
@@ -6280,6 +6919,7 @@ func (o vrfEcmpXml) UnmarshalToObject() (*VrfEcmp, error) {
 		StrictSourcePath: util.AsBool(o.StrictSourcePath, nil),
 		Algorithm:        algorithmVal,
 		Misc:             o.Misc,
+		MiscAttributes:   o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6305,6 +6945,7 @@ func (o *vrfEcmpAlgorithmXml) MarshalFromObject(s VrfEcmpAlgorithm) {
 		o.BalancedRoundRobin = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfEcmpAlgorithmXml) UnmarshalToObject() (*VrfEcmpAlgorithm, error) {
@@ -6347,17 +6988,20 @@ func (o vrfEcmpAlgorithmXml) UnmarshalToObject() (*VrfEcmpAlgorithm, error) {
 		WeightedRoundRobin: weightedRoundRobinVal,
 		BalancedRoundRobin: balancedRoundRobinVal,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfEcmpAlgorithmIpModuloXml) MarshalFromObject(s VrfEcmpAlgorithmIpModulo) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfEcmpAlgorithmIpModuloXml) UnmarshalToObject() (*VrfEcmpAlgorithmIpModulo, error) {
 
 	result := &VrfEcmpAlgorithmIpModulo{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6366,15 +7010,17 @@ func (o *vrfEcmpAlgorithmIpHashXml) MarshalFromObject(s VrfEcmpAlgorithmIpHash) 
 	o.UsePort = util.YesNo(s.UsePort, nil)
 	o.HashSeed = s.HashSeed
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfEcmpAlgorithmIpHashXml) UnmarshalToObject() (*VrfEcmpAlgorithmIpHash, error) {
 
 	result := &VrfEcmpAlgorithmIpHash{
-		SrcOnly:  util.AsBool(o.SrcOnly, nil),
-		UsePort:  util.AsBool(o.UsePort, nil),
-		HashSeed: o.HashSeed,
-		Misc:     o.Misc,
+		SrcOnly:        util.AsBool(o.SrcOnly, nil),
+		UsePort:        util.AsBool(o.UsePort, nil),
+		HashSeed:       o.HashSeed,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6389,6 +7035,7 @@ func (o *vrfEcmpAlgorithmWeightedRoundRobinXml) MarshalFromObject(s VrfEcmpAlgor
 		o.Interface = &vrfEcmpAlgorithmWeightedRoundRobinInterfaceContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfEcmpAlgorithmWeightedRoundRobinXml) UnmarshalToObject() (*VrfEcmpAlgorithmWeightedRoundRobin, error) {
@@ -6404,8 +7051,9 @@ func (o vrfEcmpAlgorithmWeightedRoundRobinXml) UnmarshalToObject() (*VrfEcmpAlgo
 	}
 
 	result := &VrfEcmpAlgorithmWeightedRoundRobin{
-		Interface: interfaceVal,
-		Misc:      o.Misc,
+		Interface:      interfaceVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6413,25 +7061,29 @@ func (o *vrfEcmpAlgorithmWeightedRoundRobinInterfaceXml) MarshalFromObject(s Vrf
 	o.Name = s.Name
 	o.Weight = s.Weight
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfEcmpAlgorithmWeightedRoundRobinInterfaceXml) UnmarshalToObject() (*VrfEcmpAlgorithmWeightedRoundRobinInterface, error) {
 
 	result := &VrfEcmpAlgorithmWeightedRoundRobinInterface{
-		Name:   o.Name,
-		Weight: o.Weight,
-		Misc:   o.Misc,
+		Name:           o.Name,
+		Weight:         o.Weight,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfEcmpAlgorithmBalancedRoundRobinXml) MarshalFromObject(s VrfEcmpAlgorithmBalancedRoundRobin) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfEcmpAlgorithmBalancedRoundRobinXml) UnmarshalToObject() (*VrfEcmpAlgorithmBalancedRoundRobin, error) {
 
 	result := &VrfEcmpAlgorithmBalancedRoundRobin{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6462,6 +7114,7 @@ func (o *vrfMulticastXml) MarshalFromObject(s VrfMulticast) {
 		o.Msdp = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfMulticastXml) UnmarshalToObject() (*VrfMulticast, error) {
@@ -6501,12 +7154,13 @@ func (o vrfMulticastXml) UnmarshalToObject() (*VrfMulticast, error) {
 	}
 
 	result := &VrfMulticast{
-		Enable:      util.AsBool(o.Enable, nil),
-		StaticRoute: staticRouteVal,
-		Pim:         pimVal,
-		Igmp:        igmpVal,
-		Msdp:        msdpVal,
-		Misc:        o.Misc,
+		Enable:         util.AsBool(o.Enable, nil),
+		StaticRoute:    staticRouteVal,
+		Pim:            pimVal,
+		Igmp:           igmpVal,
+		Msdp:           msdpVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6521,6 +7175,7 @@ func (o *vrfMulticastStaticRouteXml) MarshalFromObject(s VrfMulticastStaticRoute
 		o.Nexthop = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfMulticastStaticRouteXml) UnmarshalToObject() (*VrfMulticastStaticRoute, error) {
@@ -6534,25 +7189,28 @@ func (o vrfMulticastStaticRouteXml) UnmarshalToObject() (*VrfMulticastStaticRout
 	}
 
 	result := &VrfMulticastStaticRoute{
-		Name:        o.Name,
-		Destination: o.Destination,
-		Interface:   o.Interface,
-		Preference:  o.Preference,
-		Nexthop:     nexthopVal,
-		Misc:        o.Misc,
+		Name:           o.Name,
+		Destination:    o.Destination,
+		Interface:      o.Interface,
+		Preference:     o.Preference,
+		Nexthop:        nexthopVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfMulticastStaticRouteNexthopXml) MarshalFromObject(s VrfMulticastStaticRouteNexthop) {
 	o.IpAddress = s.IpAddress
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfMulticastStaticRouteNexthopXml) UnmarshalToObject() (*VrfMulticastStaticRouteNexthop, error) {
 
 	result := &VrfMulticastStaticRouteNexthop{
-		IpAddress: o.IpAddress,
-		Misc:      o.Misc,
+		IpAddress:      o.IpAddress,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6591,6 +7249,7 @@ func (o *vrfMulticastPimXml) MarshalFromObject(s VrfMulticastPim) {
 		o.Interface = &vrfMulticastPimInterfaceContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfMulticastPimXml) UnmarshalToObject() (*VrfMulticastPim, error) {
@@ -6642,19 +7301,22 @@ func (o vrfMulticastPimXml) UnmarshalToObject() (*VrfMulticastPim, error) {
 		SptThreshold:    sptThresholdVal,
 		Interface:       interfaceVal,
 		Misc:            o.Misc,
+		MiscAttributes:  o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfMulticastPimSsmAddressSpaceXml) MarshalFromObject(s VrfMulticastPimSsmAddressSpace) {
 	o.GroupList = s.GroupList
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfMulticastPimSsmAddressSpaceXml) UnmarshalToObject() (*VrfMulticastPimSsmAddressSpace, error) {
 
 	result := &VrfMulticastPimSsmAddressSpace{
-		GroupList: o.GroupList,
-		Misc:      o.Misc,
+		GroupList:      o.GroupList,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6674,6 +7336,7 @@ func (o *vrfMulticastPimRpXml) MarshalFromObject(s VrfMulticastPimRp) {
 		o.ExternalRp = &vrfMulticastPimRpExternalRpContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfMulticastPimRpXml) UnmarshalToObject() (*VrfMulticastPimRp, error) {
@@ -6697,9 +7360,10 @@ func (o vrfMulticastPimRpXml) UnmarshalToObject() (*VrfMulticastPimRp, error) {
 	}
 
 	result := &VrfMulticastPimRp{
-		LocalRp:    localRpVal,
-		ExternalRp: externalRpVal,
-		Misc:       o.Misc,
+		LocalRp:        localRpVal,
+		ExternalRp:     externalRpVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6715,6 +7379,7 @@ func (o *vrfMulticastPimRpLocalRpXml) MarshalFromObject(s VrfMulticastPimRpLocal
 		o.CandidateRp = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfMulticastPimRpLocalRpXml) UnmarshalToObject() (*VrfMulticastPimRpLocalRp, error) {
@@ -6736,9 +7401,10 @@ func (o vrfMulticastPimRpLocalRpXml) UnmarshalToObject() (*VrfMulticastPimRpLoca
 	}
 
 	result := &VrfMulticastPimRpLocalRp{
-		StaticRp:    staticRpVal,
-		CandidateRp: candidateRpVal,
-		Misc:        o.Misc,
+		StaticRp:       staticRpVal,
+		CandidateRp:    candidateRpVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6748,16 +7414,18 @@ func (o *vrfMulticastPimRpLocalRpStaticRpXml) MarshalFromObject(s VrfMulticastPi
 	o.Override = util.YesNo(s.Override, nil)
 	o.GroupList = s.GroupList
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfMulticastPimRpLocalRpStaticRpXml) UnmarshalToObject() (*VrfMulticastPimRpLocalRpStaticRp, error) {
 
 	result := &VrfMulticastPimRpLocalRpStaticRp{
-		Interface: o.Interface,
-		Address:   o.Address,
-		Override:  util.AsBool(o.Override, nil),
-		GroupList: o.GroupList,
-		Misc:      o.Misc,
+		Interface:      o.Interface,
+		Address:        o.Address,
+		Override:       util.AsBool(o.Override, nil),
+		GroupList:      o.GroupList,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6768,6 +7436,7 @@ func (o *vrfMulticastPimRpLocalRpCandidateRpXml) MarshalFromObject(s VrfMulticas
 	o.AdvertisementInterval = s.AdvertisementInterval
 	o.GroupList = s.GroupList
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfMulticastPimRpLocalRpCandidateRpXml) UnmarshalToObject() (*VrfMulticastPimRpLocalRpCandidateRp, error) {
@@ -6779,6 +7448,7 @@ func (o vrfMulticastPimRpLocalRpCandidateRpXml) UnmarshalToObject() (*VrfMultica
 		AdvertisementInterval: o.AdvertisementInterval,
 		GroupList:             o.GroupList,
 		Misc:                  o.Misc,
+		MiscAttributes:        o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6787,15 +7457,17 @@ func (o *vrfMulticastPimRpExternalRpXml) MarshalFromObject(s VrfMulticastPimRpEx
 	o.GroupList = s.GroupList
 	o.Override = util.YesNo(s.Override, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfMulticastPimRpExternalRpXml) UnmarshalToObject() (*VrfMulticastPimRpExternalRp, error) {
 
 	result := &VrfMulticastPimRpExternalRp{
-		Name:      o.Name,
-		GroupList: o.GroupList,
-		Override:  util.AsBool(o.Override, nil),
-		Misc:      o.Misc,
+		Name:           o.Name,
+		GroupList:      o.GroupList,
+		Override:       util.AsBool(o.Override, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6803,14 +7475,16 @@ func (o *vrfMulticastPimSptThresholdXml) MarshalFromObject(s VrfMulticastPimSptT
 	o.Name = s.Name
 	o.Threshold = s.Threshold
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfMulticastPimSptThresholdXml) UnmarshalToObject() (*VrfMulticastPimSptThreshold, error) {
 
 	result := &VrfMulticastPimSptThreshold{
-		Name:      o.Name,
-		Threshold: o.Threshold,
-		Misc:      o.Misc,
+		Name:           o.Name,
+		Threshold:      o.Threshold,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6822,6 +7496,7 @@ func (o *vrfMulticastPimInterfaceXml) MarshalFromObject(s VrfMulticastPimInterfa
 	o.IfTimer = s.IfTimer
 	o.NeighborFilter = s.NeighborFilter
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfMulticastPimInterfaceXml) UnmarshalToObject() (*VrfMulticastPimInterface, error) {
@@ -6834,6 +7509,7 @@ func (o vrfMulticastPimInterfaceXml) UnmarshalToObject() (*VrfMulticastPimInterf
 		IfTimer:        o.IfTimer,
 		NeighborFilter: o.NeighborFilter,
 		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6854,6 +7530,7 @@ func (o *vrfMulticastIgmpXml) MarshalFromObject(s VrfMulticastIgmp) {
 		o.Static = &vrfMulticastIgmpStaticContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfMulticastIgmpXml) UnmarshalToObject() (*VrfMulticastIgmp, error) {
@@ -6877,10 +7554,11 @@ func (o vrfMulticastIgmpXml) UnmarshalToObject() (*VrfMulticastIgmp, error) {
 	}
 
 	result := &VrfMulticastIgmp{
-		Enable:  util.AsBool(o.Enable, nil),
-		Dynamic: dynamicVal,
-		Static:  staticVal,
-		Misc:    o.Misc,
+		Enable:         util.AsBool(o.Enable, nil),
+		Dynamic:        dynamicVal,
+		Static:         staticVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6895,6 +7573,7 @@ func (o *vrfMulticastIgmpDynamicXml) MarshalFromObject(s VrfMulticastIgmpDynamic
 		o.Interface = &vrfMulticastIgmpDynamicInterfaceContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfMulticastIgmpDynamicXml) UnmarshalToObject() (*VrfMulticastIgmpDynamic, error) {
@@ -6910,8 +7589,9 @@ func (o vrfMulticastIgmpDynamicXml) UnmarshalToObject() (*VrfMulticastIgmpDynami
 	}
 
 	result := &VrfMulticastIgmpDynamic{
-		Interface: interfaceVal,
-		Misc:      o.Misc,
+		Interface:      interfaceVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6925,6 +7605,7 @@ func (o *vrfMulticastIgmpDynamicInterfaceXml) MarshalFromObject(s VrfMulticastIg
 	o.QueryProfile = s.QueryProfile
 	o.RouterAlertPolicing = util.YesNo(s.RouterAlertPolicing, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfMulticastIgmpDynamicInterfaceXml) UnmarshalToObject() (*VrfMulticastIgmpDynamicInterface, error) {
@@ -6939,6 +7620,7 @@ func (o vrfMulticastIgmpDynamicInterfaceXml) UnmarshalToObject() (*VrfMulticastI
 		QueryProfile:        o.QueryProfile,
 		RouterAlertPolicing: util.AsBool(o.RouterAlertPolicing, nil),
 		Misc:                o.Misc,
+		MiscAttributes:      o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6948,16 +7630,18 @@ func (o *vrfMulticastIgmpStaticXml) MarshalFromObject(s VrfMulticastIgmpStatic) 
 	o.GroupAddress = s.GroupAddress
 	o.SourceAddress = s.SourceAddress
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfMulticastIgmpStaticXml) UnmarshalToObject() (*VrfMulticastIgmpStatic, error) {
 
 	result := &VrfMulticastIgmpStatic{
-		Name:          o.Name,
-		Interface:     o.Interface,
-		GroupAddress:  o.GroupAddress,
-		SourceAddress: o.SourceAddress,
-		Misc:          o.Misc,
+		Name:           o.Name,
+		Interface:      o.Interface,
+		GroupAddress:   o.GroupAddress,
+		SourceAddress:  o.SourceAddress,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6980,6 +7664,7 @@ func (o *vrfMulticastMsdpXml) MarshalFromObject(s VrfMulticastMsdp) {
 		o.Peer = &vrfMulticastMsdpPeerContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfMulticastMsdpXml) UnmarshalToObject() (*VrfMulticastMsdp, error) {
@@ -7009,6 +7694,7 @@ func (o vrfMulticastMsdpXml) UnmarshalToObject() (*VrfMulticastMsdp, error) {
 		OriginatorId:         originatorIdVal,
 		Peer:                 peerVal,
 		Misc:                 o.Misc,
+		MiscAttributes:       o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7016,14 +7702,16 @@ func (o *vrfMulticastMsdpOriginatorIdXml) MarshalFromObject(s VrfMulticastMsdpOr
 	o.Interface = s.Interface
 	o.Ip = s.Ip
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfMulticastMsdpOriginatorIdXml) UnmarshalToObject() (*VrfMulticastMsdpOriginatorId, error) {
 
 	result := &VrfMulticastMsdpOriginatorId{
-		Interface: o.Interface,
-		Ip:        o.Ip,
-		Misc:      o.Misc,
+		Interface:      o.Interface,
+		Ip:             o.Ip,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7046,6 +7734,7 @@ func (o *vrfMulticastMsdpPeerXml) MarshalFromObject(s VrfMulticastMsdpPeer) {
 		o.PeerAddress = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfMulticastMsdpPeerXml) UnmarshalToObject() (*VrfMulticastMsdpPeer, error) {
@@ -7077,6 +7766,7 @@ func (o vrfMulticastMsdpPeerXml) UnmarshalToObject() (*VrfMulticastMsdpPeer, err
 		LocalAddress:     localAddressVal,
 		PeerAddress:      peerAddressVal,
 		Misc:             o.Misc,
+		MiscAttributes:   o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7084,14 +7774,16 @@ func (o *vrfMulticastMsdpPeerLocalAddressXml) MarshalFromObject(s VrfMulticastMs
 	o.Interface = s.Interface
 	o.Ip = s.Ip
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfMulticastMsdpPeerLocalAddressXml) UnmarshalToObject() (*VrfMulticastMsdpPeerLocalAddress, error) {
 
 	result := &VrfMulticastMsdpPeerLocalAddress{
-		Interface: o.Interface,
-		Ip:        o.Ip,
-		Misc:      o.Misc,
+		Interface:      o.Interface,
+		Ip:             o.Ip,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7099,14 +7791,16 @@ func (o *vrfMulticastMsdpPeerPeerAddressXml) MarshalFromObject(s VrfMulticastMsd
 	o.Ip = s.Ip
 	o.Fqdn = s.Fqdn
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfMulticastMsdpPeerPeerAddressXml) UnmarshalToObject() (*VrfMulticastMsdpPeerPeerAddress, error) {
 
 	result := &VrfMulticastMsdpPeerPeerAddress{
-		Ip:   o.Ip,
-		Fqdn: o.Fqdn,
-		Misc: o.Misc,
+		Ip:             o.Ip,
+		Fqdn:           o.Fqdn,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7141,6 +7835,7 @@ func (o *vrfRipXml) MarshalFromObject(s VrfRip) {
 		o.Interface = &vrfRipInterfaceContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRipXml) UnmarshalToObject() (*VrfRip, error) {
@@ -7190,45 +7885,52 @@ func (o vrfRipXml) UnmarshalToObject() (*VrfRip, error) {
 		GlobalOutboundDistributeList: globalOutboundDistributeListVal,
 		Interface:                    interfaceVal,
 		Misc:                         o.Misc,
+		MiscAttributes:               o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfRipGlobalBfdXml) MarshalFromObject(s VrfRipGlobalBfd) {
 	o.Profile = s.Profile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRipGlobalBfdXml) UnmarshalToObject() (*VrfRipGlobalBfd, error) {
 
 	result := &VrfRipGlobalBfd{
-		Profile: o.Profile,
-		Misc:    o.Misc,
+		Profile:        o.Profile,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfRipGlobalInboundDistributeListXml) MarshalFromObject(s VrfRipGlobalInboundDistributeList) {
 	o.AccessList = s.AccessList
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRipGlobalInboundDistributeListXml) UnmarshalToObject() (*VrfRipGlobalInboundDistributeList, error) {
 
 	result := &VrfRipGlobalInboundDistributeList{
-		AccessList: o.AccessList,
-		Misc:       o.Misc,
+		AccessList:     o.AccessList,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfRipGlobalOutboundDistributeListXml) MarshalFromObject(s VrfRipGlobalOutboundDistributeList) {
 	o.AccessList = s.AccessList
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRipGlobalOutboundDistributeListXml) UnmarshalToObject() (*VrfRipGlobalOutboundDistributeList, error) {
 
 	result := &VrfRipGlobalOutboundDistributeList{
-		AccessList: o.AccessList,
-		Misc:       o.Misc,
+		AccessList:     o.AccessList,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7254,6 +7956,7 @@ func (o *vrfRipInterfaceXml) MarshalFromObject(s VrfRipInterface) {
 		o.InterfaceOutboundDistributeList = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRipInterfaceXml) UnmarshalToObject() (*VrfRipInterface, error) {
@@ -7292,19 +7995,22 @@ func (o vrfRipInterfaceXml) UnmarshalToObject() (*VrfRipInterface, error) {
 		InterfaceInboundDistributeList:  interfaceInboundDistributeListVal,
 		InterfaceOutboundDistributeList: interfaceOutboundDistributeListVal,
 		Misc:                            o.Misc,
+		MiscAttributes:                  o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfRipInterfaceBfdXml) MarshalFromObject(s VrfRipInterfaceBfd) {
 	o.Profile = s.Profile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRipInterfaceBfdXml) UnmarshalToObject() (*VrfRipInterfaceBfd, error) {
 
 	result := &VrfRipInterfaceBfd{
-		Profile: o.Profile,
-		Misc:    o.Misc,
+		Profile:        o.Profile,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7312,14 +8018,16 @@ func (o *vrfRipInterfaceInterfaceInboundDistributeListXml) MarshalFromObject(s V
 	o.AccessList = s.AccessList
 	o.Metric = s.Metric
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRipInterfaceInterfaceInboundDistributeListXml) UnmarshalToObject() (*VrfRipInterfaceInterfaceInboundDistributeList, error) {
 
 	result := &VrfRipInterfaceInterfaceInboundDistributeList{
-		AccessList: o.AccessList,
-		Metric:     o.Metric,
-		Misc:       o.Misc,
+		AccessList:     o.AccessList,
+		Metric:         o.Metric,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7327,14 +8035,16 @@ func (o *vrfRipInterfaceInterfaceOutboundDistributeListXml) MarshalFromObject(s 
 	o.AccessList = s.AccessList
 	o.Metric = s.Metric
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRipInterfaceInterfaceOutboundDistributeListXml) UnmarshalToObject() (*VrfRipInterfaceInterfaceOutboundDistributeList, error) {
 
 	result := &VrfRipInterfaceInterfaceOutboundDistributeList{
-		AccessList: o.AccessList,
-		Metric:     o.Metric,
-		Misc:       o.Misc,
+		AccessList:     o.AccessList,
+		Metric:         o.Metric,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7350,6 +8060,7 @@ func (o *entryXml_11_0_2) MarshalFromObject(s Entry) {
 		o.Vrf = &vrfContainerXml_11_0_2{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o entryXml_11_0_2) UnmarshalToObject() (*Entry, error) {
@@ -7365,9 +8076,10 @@ func (o entryXml_11_0_2) UnmarshalToObject() (*Entry, error) {
 	}
 
 	result := &Entry{
-		Name: o.Name,
-		Vrf:  vrfVal,
-		Misc: o.Misc,
+		Name:           o.Name,
+		Vrf:            vrfVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7422,6 +8134,7 @@ func (o *vrfXml_11_0_2) MarshalFromObject(s Vrf) {
 		o.Rip = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfXml_11_0_2) UnmarshalToObject() (*Vrf, error) {
@@ -7503,18 +8216,19 @@ func (o vrfXml_11_0_2) UnmarshalToObject() (*Vrf, error) {
 	}
 
 	result := &Vrf{
-		Name:         o.Name,
-		Interface:    interfaceVal,
-		AdminDists:   adminDistsVal,
-		RibFilter:    ribFilterVal,
-		Bgp:          bgpVal,
-		RoutingTable: routingTableVal,
-		Ospf:         ospfVal,
-		Ospfv3:       ospfv3Val,
-		Ecmp:         ecmpVal,
-		Multicast:    multicastVal,
-		Rip:          ripVal,
-		Misc:         o.Misc,
+		Name:           o.Name,
+		Interface:      interfaceVal,
+		AdminDists:     adminDistsVal,
+		RibFilter:      ribFilterVal,
+		Bgp:            bgpVal,
+		RoutingTable:   routingTableVal,
+		Ospf:           ospfVal,
+		Ospfv3:         ospfv3Val,
+		Ecmp:           ecmpVal,
+		Multicast:      multicastVal,
+		Rip:            ripVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7532,24 +8246,26 @@ func (o *vrfAdminDistsXml_11_0_2) MarshalFromObject(s VrfAdminDists) {
 	o.BgpLocal = s.BgpLocal
 	o.Rip = s.Rip
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfAdminDistsXml_11_0_2) UnmarshalToObject() (*VrfAdminDists, error) {
 
 	result := &VrfAdminDists{
-		Static:      o.Static,
-		StaticIpv6:  o.StaticIpv6,
-		OspfInter:   o.OspfInter,
-		OspfIntra:   o.OspfIntra,
-		OspfExt:     o.OspfExt,
-		Ospfv3Inter: o.Ospfv3Inter,
-		Ospfv3Intra: o.Ospfv3Intra,
-		Ospfv3Ext:   o.Ospfv3Ext,
-		BgpInternal: o.BgpInternal,
-		BgpExternal: o.BgpExternal,
-		BgpLocal:    o.BgpLocal,
-		Rip:         o.Rip,
-		Misc:        o.Misc,
+		Static:         o.Static,
+		StaticIpv6:     o.StaticIpv6,
+		OspfInter:      o.OspfInter,
+		OspfIntra:      o.OspfIntra,
+		OspfExt:        o.OspfExt,
+		Ospfv3Inter:    o.Ospfv3Inter,
+		Ospfv3Intra:    o.Ospfv3Intra,
+		Ospfv3Ext:      o.Ospfv3Ext,
+		BgpInternal:    o.BgpInternal,
+		BgpExternal:    o.BgpExternal,
+		BgpLocal:       o.BgpLocal,
+		Rip:            o.Rip,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7565,6 +8281,7 @@ func (o *vrfRibFilterXml_11_0_2) MarshalFromObject(s VrfRibFilter) {
 		o.Ipv6 = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRibFilterXml_11_0_2) UnmarshalToObject() (*VrfRibFilter, error) {
@@ -7586,9 +8303,10 @@ func (o vrfRibFilterXml_11_0_2) UnmarshalToObject() (*VrfRibFilter, error) {
 	}
 
 	result := &VrfRibFilter{
-		Ipv4: ipv4Val,
-		Ipv6: ipv6Val,
-		Misc: o.Misc,
+		Ipv4:           ipv4Val,
+		Ipv6:           ipv6Val,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7614,6 +8332,7 @@ func (o *vrfRibFilterIpv4Xml_11_0_2) MarshalFromObject(s VrfRibFilterIpv4) {
 		o.Rip = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRibFilterIpv4Xml_11_0_2) UnmarshalToObject() (*VrfRibFilterIpv4, error) {
@@ -7651,63 +8370,72 @@ func (o vrfRibFilterIpv4Xml_11_0_2) UnmarshalToObject() (*VrfRibFilterIpv4, erro
 	}
 
 	result := &VrfRibFilterIpv4{
-		Static: staticVal,
-		Bgp:    bgpVal,
-		Ospf:   ospfVal,
-		Rip:    ripVal,
-		Misc:   o.Misc,
+		Static:         staticVal,
+		Bgp:            bgpVal,
+		Ospf:           ospfVal,
+		Rip:            ripVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfRibFilterIpv4StaticXml_11_0_2) MarshalFromObject(s VrfRibFilterIpv4Static) {
 	o.RouteMap = s.RouteMap
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRibFilterIpv4StaticXml_11_0_2) UnmarshalToObject() (*VrfRibFilterIpv4Static, error) {
 
 	result := &VrfRibFilterIpv4Static{
-		RouteMap: o.RouteMap,
-		Misc:     o.Misc,
+		RouteMap:       o.RouteMap,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfRibFilterIpv4BgpXml_11_0_2) MarshalFromObject(s VrfRibFilterIpv4Bgp) {
 	o.RouteMap = s.RouteMap
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRibFilterIpv4BgpXml_11_0_2) UnmarshalToObject() (*VrfRibFilterIpv4Bgp, error) {
 
 	result := &VrfRibFilterIpv4Bgp{
-		RouteMap: o.RouteMap,
-		Misc:     o.Misc,
+		RouteMap:       o.RouteMap,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfRibFilterIpv4OspfXml_11_0_2) MarshalFromObject(s VrfRibFilterIpv4Ospf) {
 	o.RouteMap = s.RouteMap
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRibFilterIpv4OspfXml_11_0_2) UnmarshalToObject() (*VrfRibFilterIpv4Ospf, error) {
 
 	result := &VrfRibFilterIpv4Ospf{
-		RouteMap: o.RouteMap,
-		Misc:     o.Misc,
+		RouteMap:       o.RouteMap,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfRibFilterIpv4RipXml_11_0_2) MarshalFromObject(s VrfRibFilterIpv4Rip) {
 	o.RouteMap = s.RouteMap
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRibFilterIpv4RipXml_11_0_2) UnmarshalToObject() (*VrfRibFilterIpv4Rip, error) {
 
 	result := &VrfRibFilterIpv4Rip{
-		RouteMap: o.RouteMap,
-		Misc:     o.Misc,
+		RouteMap:       o.RouteMap,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7728,6 +8456,7 @@ func (o *vrfRibFilterIpv6Xml_11_0_2) MarshalFromObject(s VrfRibFilterIpv6) {
 		o.Ospfv3 = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRibFilterIpv6Xml_11_0_2) UnmarshalToObject() (*VrfRibFilterIpv6, error) {
@@ -7757,49 +8486,56 @@ func (o vrfRibFilterIpv6Xml_11_0_2) UnmarshalToObject() (*VrfRibFilterIpv6, erro
 	}
 
 	result := &VrfRibFilterIpv6{
-		Static: staticVal,
-		Bgp:    bgpVal,
-		Ospfv3: ospfv3Val,
-		Misc:   o.Misc,
+		Static:         staticVal,
+		Bgp:            bgpVal,
+		Ospfv3:         ospfv3Val,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfRibFilterIpv6StaticXml_11_0_2) MarshalFromObject(s VrfRibFilterIpv6Static) {
 	o.RouteMap = s.RouteMap
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRibFilterIpv6StaticXml_11_0_2) UnmarshalToObject() (*VrfRibFilterIpv6Static, error) {
 
 	result := &VrfRibFilterIpv6Static{
-		RouteMap: o.RouteMap,
-		Misc:     o.Misc,
+		RouteMap:       o.RouteMap,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfRibFilterIpv6BgpXml_11_0_2) MarshalFromObject(s VrfRibFilterIpv6Bgp) {
 	o.RouteMap = s.RouteMap
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRibFilterIpv6BgpXml_11_0_2) UnmarshalToObject() (*VrfRibFilterIpv6Bgp, error) {
 
 	result := &VrfRibFilterIpv6Bgp{
-		RouteMap: o.RouteMap,
-		Misc:     o.Misc,
+		RouteMap:       o.RouteMap,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfRibFilterIpv6Ospfv3Xml_11_0_2) MarshalFromObject(s VrfRibFilterIpv6Ospfv3) {
 	o.RouteMap = s.RouteMap
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRibFilterIpv6Ospfv3Xml_11_0_2) UnmarshalToObject() (*VrfRibFilterIpv6Ospfv3, error) {
 
 	result := &VrfRibFilterIpv6Ospfv3{
-		RouteMap: o.RouteMap,
-		Misc:     o.Misc,
+		RouteMap:       o.RouteMap,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7858,6 +8594,7 @@ func (o *vrfBgpXml_11_0_2) MarshalFromObject(s VrfBgp) {
 		o.AggregateRoutes = &vrfBgpAggregateRoutesContainerXml_11_0_2{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpXml_11_0_2) UnmarshalToObject() (*VrfBgp, error) {
@@ -7941,6 +8678,7 @@ func (o vrfBgpXml_11_0_2) UnmarshalToObject() (*VrfBgp, error) {
 		PeerGroup:                   peerGroupVal,
 		AggregateRoutes:             aggregateRoutesVal,
 		Misc:                        o.Misc,
+		MiscAttributes:              o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7948,6 +8686,7 @@ func (o *vrfBgpMedXml_11_0_2) MarshalFromObject(s VrfBgpMed) {
 	o.AlwaysCompareMed = util.YesNo(s.AlwaysCompareMed, nil)
 	o.DeterministicMedComparison = util.YesNo(s.DeterministicMedComparison, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpMedXml_11_0_2) UnmarshalToObject() (*VrfBgpMed, error) {
@@ -7956,6 +8695,7 @@ func (o vrfBgpMedXml_11_0_2) UnmarshalToObject() (*VrfBgpMed, error) {
 		AlwaysCompareMed:           util.AsBool(o.AlwaysCompareMed, nil),
 		DeterministicMedComparison: util.AsBool(o.DeterministicMedComparison, nil),
 		Misc:                       o.Misc,
+		MiscAttributes:             o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7965,6 +8705,7 @@ func (o *vrfBgpGracefulRestartXml_11_0_2) MarshalFromObject(s VrfBgpGracefulRest
 	o.MaxPeerRestartTime = s.MaxPeerRestartTime
 	o.LocalRestartTime = s.LocalRestartTime
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpGracefulRestartXml_11_0_2) UnmarshalToObject() (*VrfBgpGracefulRestart, error) {
@@ -7975,19 +8716,22 @@ func (o vrfBgpGracefulRestartXml_11_0_2) UnmarshalToObject() (*VrfBgpGracefulRes
 		MaxPeerRestartTime: o.MaxPeerRestartTime,
 		LocalRestartTime:   o.LocalRestartTime,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfBgpGlobalBfdXml_11_0_2) MarshalFromObject(s VrfBgpGlobalBfd) {
 	o.Profile = s.Profile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpGlobalBfdXml_11_0_2) UnmarshalToObject() (*VrfBgpGlobalBfd, error) {
 
 	result := &VrfBgpGlobalBfd{
-		Profile: o.Profile,
-		Misc:    o.Misc,
+		Profile:        o.Profile,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8003,6 +8747,7 @@ func (o *vrfBgpRedistributionProfileXml_11_0_2) MarshalFromObject(s VrfBgpRedist
 		o.Ipv6 = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpRedistributionProfileXml_11_0_2) UnmarshalToObject() (*VrfBgpRedistributionProfile, error) {
@@ -8024,35 +8769,40 @@ func (o vrfBgpRedistributionProfileXml_11_0_2) UnmarshalToObject() (*VrfBgpRedis
 	}
 
 	result := &VrfBgpRedistributionProfile{
-		Ipv4: ipv4Val,
-		Ipv6: ipv6Val,
-		Misc: o.Misc,
+		Ipv4:           ipv4Val,
+		Ipv6:           ipv6Val,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfBgpRedistributionProfileIpv4Xml_11_0_2) MarshalFromObject(s VrfBgpRedistributionProfileIpv4) {
 	o.Unicast = s.Unicast
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpRedistributionProfileIpv4Xml_11_0_2) UnmarshalToObject() (*VrfBgpRedistributionProfileIpv4, error) {
 
 	result := &VrfBgpRedistributionProfileIpv4{
-		Unicast: o.Unicast,
-		Misc:    o.Misc,
+		Unicast:        o.Unicast,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfBgpRedistributionProfileIpv6Xml_11_0_2) MarshalFromObject(s VrfBgpRedistributionProfileIpv6) {
 	o.Unicast = s.Unicast
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpRedistributionProfileIpv6Xml_11_0_2) UnmarshalToObject() (*VrfBgpRedistributionProfileIpv6, error) {
 
 	result := &VrfBgpRedistributionProfileIpv6{
-		Unicast: o.Unicast,
-		Misc:    o.Misc,
+		Unicast:        o.Unicast,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8068,6 +8818,7 @@ func (o *vrfBgpAdvertiseNetworkXml_11_0_2) MarshalFromObject(s VrfBgpAdvertiseNe
 		o.Ipv6 = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpAdvertiseNetworkXml_11_0_2) UnmarshalToObject() (*VrfBgpAdvertiseNetwork, error) {
@@ -8089,9 +8840,10 @@ func (o vrfBgpAdvertiseNetworkXml_11_0_2) UnmarshalToObject() (*VrfBgpAdvertiseN
 	}
 
 	result := &VrfBgpAdvertiseNetwork{
-		Ipv4: ipv4Val,
-		Ipv6: ipv6Val,
-		Misc: o.Misc,
+		Ipv4:           ipv4Val,
+		Ipv6:           ipv6Val,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8106,6 +8858,7 @@ func (o *vrfBgpAdvertiseNetworkIpv4Xml_11_0_2) MarshalFromObject(s VrfBgpAdverti
 		o.Network = &vrfBgpAdvertiseNetworkIpv4NetworkContainerXml_11_0_2{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpAdvertiseNetworkIpv4Xml_11_0_2) UnmarshalToObject() (*VrfBgpAdvertiseNetworkIpv4, error) {
@@ -8121,8 +8874,9 @@ func (o vrfBgpAdvertiseNetworkIpv4Xml_11_0_2) UnmarshalToObject() (*VrfBgpAdvert
 	}
 
 	result := &VrfBgpAdvertiseNetworkIpv4{
-		Network: networkVal,
-		Misc:    o.Misc,
+		Network:        networkVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8132,16 +8886,18 @@ func (o *vrfBgpAdvertiseNetworkIpv4NetworkXml_11_0_2) MarshalFromObject(s VrfBgp
 	o.Multicast = util.YesNo(s.Multicast, nil)
 	o.Backdoor = util.YesNo(s.Backdoor, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpAdvertiseNetworkIpv4NetworkXml_11_0_2) UnmarshalToObject() (*VrfBgpAdvertiseNetworkIpv4Network, error) {
 
 	result := &VrfBgpAdvertiseNetworkIpv4Network{
-		Name:      o.Name,
-		Unicast:   util.AsBool(o.Unicast, nil),
-		Multicast: util.AsBool(o.Multicast, nil),
-		Backdoor:  util.AsBool(o.Backdoor, nil),
-		Misc:      o.Misc,
+		Name:           o.Name,
+		Unicast:        util.AsBool(o.Unicast, nil),
+		Multicast:      util.AsBool(o.Multicast, nil),
+		Backdoor:       util.AsBool(o.Backdoor, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8156,6 +8912,7 @@ func (o *vrfBgpAdvertiseNetworkIpv6Xml_11_0_2) MarshalFromObject(s VrfBgpAdverti
 		o.Network = &vrfBgpAdvertiseNetworkIpv6NetworkContainerXml_11_0_2{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpAdvertiseNetworkIpv6Xml_11_0_2) UnmarshalToObject() (*VrfBgpAdvertiseNetworkIpv6, error) {
@@ -8171,8 +8928,9 @@ func (o vrfBgpAdvertiseNetworkIpv6Xml_11_0_2) UnmarshalToObject() (*VrfBgpAdvert
 	}
 
 	result := &VrfBgpAdvertiseNetworkIpv6{
-		Network: networkVal,
-		Misc:    o.Misc,
+		Network:        networkVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8180,14 +8938,16 @@ func (o *vrfBgpAdvertiseNetworkIpv6NetworkXml_11_0_2) MarshalFromObject(s VrfBgp
 	o.Name = s.Name
 	o.Unicast = util.YesNo(s.Unicast, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpAdvertiseNetworkIpv6NetworkXml_11_0_2) UnmarshalToObject() (*VrfBgpAdvertiseNetworkIpv6Network, error) {
 
 	result := &VrfBgpAdvertiseNetworkIpv6Network{
-		Name:    o.Name,
-		Unicast: util.AsBool(o.Unicast, nil),
-		Misc:    o.Misc,
+		Name:           o.Name,
+		Unicast:        util.AsBool(o.Unicast, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8224,6 +8984,7 @@ func (o *vrfBgpPeerGroupXml_11_0_2) MarshalFromObject(s VrfBgpPeerGroup) {
 		o.Peer = &vrfBgpPeerGroupPeerContainerXml_11_0_2{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpPeerGroupXml_11_0_2) UnmarshalToObject() (*VrfBgpPeerGroup, error) {
@@ -8279,6 +9040,7 @@ func (o vrfBgpPeerGroupXml_11_0_2) UnmarshalToObject() (*VrfBgpPeerGroup, error)
 		ConnectionOptions: connectionOptionsVal,
 		Peer:              peerVal,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8294,6 +9056,7 @@ func (o *vrfBgpPeerGroupTypeXml_11_0_2) MarshalFromObject(s VrfBgpPeerGroupType)
 		o.Ebgp = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpPeerGroupTypeXml_11_0_2) UnmarshalToObject() (*VrfBgpPeerGroupType, error) {
@@ -8315,31 +9078,36 @@ func (o vrfBgpPeerGroupTypeXml_11_0_2) UnmarshalToObject() (*VrfBgpPeerGroupType
 	}
 
 	result := &VrfBgpPeerGroupType{
-		Ibgp: ibgpVal,
-		Ebgp: ebgpVal,
-		Misc: o.Misc,
+		Ibgp:           ibgpVal,
+		Ebgp:           ebgpVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfBgpPeerGroupTypeIbgpXml_11_0_2) MarshalFromObject(s VrfBgpPeerGroupTypeIbgp) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpPeerGroupTypeIbgpXml_11_0_2) UnmarshalToObject() (*VrfBgpPeerGroupTypeIbgp, error) {
 
 	result := &VrfBgpPeerGroupTypeIbgp{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfBgpPeerGroupTypeEbgpXml_11_0_2) MarshalFromObject(s VrfBgpPeerGroupTypeEbgp) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpPeerGroupTypeEbgpXml_11_0_2) UnmarshalToObject() (*VrfBgpPeerGroupTypeEbgp, error) {
 
 	result := &VrfBgpPeerGroupTypeEbgp{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8347,14 +9115,16 @@ func (o *vrfBgpPeerGroupAddressFamilyXml_11_0_2) MarshalFromObject(s VrfBgpPeerG
 	o.Ipv4 = s.Ipv4
 	o.Ipv6 = s.Ipv6
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpPeerGroupAddressFamilyXml_11_0_2) UnmarshalToObject() (*VrfBgpPeerGroupAddressFamily, error) {
 
 	result := &VrfBgpPeerGroupAddressFamily{
-		Ipv4: o.Ipv4,
-		Ipv6: o.Ipv6,
-		Misc: o.Misc,
+		Ipv4:           o.Ipv4,
+		Ipv6:           o.Ipv6,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8362,14 +9132,16 @@ func (o *vrfBgpPeerGroupFilteringProfileXml_11_0_2) MarshalFromObject(s VrfBgpPe
 	o.Ipv4 = s.Ipv4
 	o.Ipv6 = s.Ipv6
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpPeerGroupFilteringProfileXml_11_0_2) UnmarshalToObject() (*VrfBgpPeerGroupFilteringProfile, error) {
 
 	result := &VrfBgpPeerGroupFilteringProfile{
-		Ipv4: o.Ipv4,
-		Ipv6: o.Ipv6,
-		Misc: o.Misc,
+		Ipv4:           o.Ipv4,
+		Ipv6:           o.Ipv6,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8379,6 +9151,7 @@ func (o *vrfBgpPeerGroupConnectionOptionsXml_11_0_2) MarshalFromObject(s VrfBgpP
 	o.Authentication = s.Authentication
 	o.Dampening = s.Dampening
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpPeerGroupConnectionOptionsXml_11_0_2) UnmarshalToObject() (*VrfBgpPeerGroupConnectionOptions, error) {
@@ -8389,6 +9162,7 @@ func (o vrfBgpPeerGroupConnectionOptionsXml_11_0_2) UnmarshalToObject() (*VrfBgp
 		Authentication: o.Authentication,
 		Dampening:      o.Dampening,
 		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8424,6 +9198,7 @@ func (o *vrfBgpPeerGroupPeerXml_11_0_2) MarshalFromObject(s VrfBgpPeerGroupPeer)
 		o.Bfd = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpPeerGroupPeerXml_11_0_2) UnmarshalToObject() (*VrfBgpPeerGroupPeer, error) {
@@ -8480,6 +9255,7 @@ func (o vrfBgpPeerGroupPeerXml_11_0_2) UnmarshalToObject() (*VrfBgpPeerGroupPeer
 		ConnectionOptions:             connectionOptionsVal,
 		Bfd:                           bfdVal,
 		Misc:                          o.Misc,
+		MiscAttributes:                o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8495,6 +9271,7 @@ func (o *vrfBgpPeerGroupPeerInheritXml_11_0_2) MarshalFromObject(s VrfBgpPeerGro
 		o.No = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpPeerGroupPeerInheritXml_11_0_2) UnmarshalToObject() (*VrfBgpPeerGroupPeerInherit, error) {
@@ -8516,20 +9293,23 @@ func (o vrfBgpPeerGroupPeerInheritXml_11_0_2) UnmarshalToObject() (*VrfBgpPeerGr
 	}
 
 	result := &VrfBgpPeerGroupPeerInherit{
-		Yes:  yesVal,
-		No:   noVal,
-		Misc: o.Misc,
+		Yes:            yesVal,
+		No:             noVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfBgpPeerGroupPeerInheritYesXml_11_0_2) MarshalFromObject(s VrfBgpPeerGroupPeerInheritYes) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpPeerGroupPeerInheritYesXml_11_0_2) UnmarshalToObject() (*VrfBgpPeerGroupPeerInheritYes, error) {
 
 	result := &VrfBgpPeerGroupPeerInheritYes{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8545,6 +9325,7 @@ func (o *vrfBgpPeerGroupPeerInheritNoXml_11_0_2) MarshalFromObject(s VrfBgpPeerG
 		o.FilteringProfile = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpPeerGroupPeerInheritNoXml_11_0_2) UnmarshalToObject() (*VrfBgpPeerGroupPeerInheritNo, error) {
@@ -8569,6 +9350,7 @@ func (o vrfBgpPeerGroupPeerInheritNoXml_11_0_2) UnmarshalToObject() (*VrfBgpPeer
 		AddressFamily:    addressFamilyVal,
 		FilteringProfile: filteringProfileVal,
 		Misc:             o.Misc,
+		MiscAttributes:   o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8576,14 +9358,16 @@ func (o *vrfBgpPeerGroupPeerInheritNoAddressFamilyXml_11_0_2) MarshalFromObject(
 	o.Ipv4 = s.Ipv4
 	o.Ipv6 = s.Ipv6
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpPeerGroupPeerInheritNoAddressFamilyXml_11_0_2) UnmarshalToObject() (*VrfBgpPeerGroupPeerInheritNoAddressFamily, error) {
 
 	result := &VrfBgpPeerGroupPeerInheritNoAddressFamily{
-		Ipv4: o.Ipv4,
-		Ipv6: o.Ipv6,
-		Misc: o.Misc,
+		Ipv4:           o.Ipv4,
+		Ipv6:           o.Ipv6,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8591,14 +9375,16 @@ func (o *vrfBgpPeerGroupPeerInheritNoFilteringProfileXml_11_0_2) MarshalFromObje
 	o.Ipv4 = s.Ipv4
 	o.Ipv6 = s.Ipv6
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpPeerGroupPeerInheritNoFilteringProfileXml_11_0_2) UnmarshalToObject() (*VrfBgpPeerGroupPeerInheritNoFilteringProfile, error) {
 
 	result := &VrfBgpPeerGroupPeerInheritNoFilteringProfile{
-		Ipv4: o.Ipv4,
-		Ipv6: o.Ipv6,
-		Misc: o.Misc,
+		Ipv4:           o.Ipv4,
+		Ipv6:           o.Ipv6,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8606,14 +9392,16 @@ func (o *vrfBgpPeerGroupPeerLocalAddressXml_11_0_2) MarshalFromObject(s VrfBgpPe
 	o.Interface = s.Interface
 	o.Ip = s.Ip
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpPeerGroupPeerLocalAddressXml_11_0_2) UnmarshalToObject() (*VrfBgpPeerGroupPeerLocalAddress, error) {
 
 	result := &VrfBgpPeerGroupPeerLocalAddress{
-		Interface: o.Interface,
-		Ip:        o.Ip,
-		Misc:      o.Misc,
+		Interface:      o.Interface,
+		Ip:             o.Ip,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8621,14 +9409,16 @@ func (o *vrfBgpPeerGroupPeerPeerAddressXml_11_0_2) MarshalFromObject(s VrfBgpPee
 	o.Ip = s.Ip
 	o.Fqdn = s.Fqdn
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpPeerGroupPeerPeerAddressXml_11_0_2) UnmarshalToObject() (*VrfBgpPeerGroupPeerPeerAddress, error) {
 
 	result := &VrfBgpPeerGroupPeerPeerAddress{
-		Ip:   o.Ip,
-		Fqdn: o.Fqdn,
-		Misc: o.Misc,
+		Ip:             o.Ip,
+		Fqdn:           o.Fqdn,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8638,6 +9428,7 @@ func (o *vrfBgpPeerGroupPeerConnectionOptionsXml_11_0_2) MarshalFromObject(s Vrf
 	o.Authentication = s.Authentication
 	o.Dampening = s.Dampening
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpPeerGroupPeerConnectionOptionsXml_11_0_2) UnmarshalToObject() (*VrfBgpPeerGroupPeerConnectionOptions, error) {
@@ -8648,19 +9439,22 @@ func (o vrfBgpPeerGroupPeerConnectionOptionsXml_11_0_2) UnmarshalToObject() (*Vr
 		Authentication: o.Authentication,
 		Dampening:      o.Dampening,
 		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfBgpPeerGroupPeerBfdXml_11_0_2) MarshalFromObject(s VrfBgpPeerGroupPeerBfd) {
 	o.Profile = s.Profile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpPeerGroupPeerBfdXml_11_0_2) UnmarshalToObject() (*VrfBgpPeerGroupPeerBfd, error) {
 
 	result := &VrfBgpPeerGroupPeerBfd{
-		Profile: o.Profile,
-		Misc:    o.Misc,
+		Profile:        o.Profile,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8677,6 +9471,7 @@ func (o *vrfBgpAggregateRoutesXml_11_0_2) MarshalFromObject(s VrfBgpAggregateRou
 		o.Type = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpAggregateRoutesXml_11_0_2) UnmarshalToObject() (*VrfBgpAggregateRoutes, error) {
@@ -8690,14 +9485,15 @@ func (o vrfBgpAggregateRoutesXml_11_0_2) UnmarshalToObject() (*VrfBgpAggregateRo
 	}
 
 	result := &VrfBgpAggregateRoutes{
-		Name:        o.Name,
-		Description: o.Description,
-		Enable:      util.AsBool(o.Enable, nil),
-		SummaryOnly: util.AsBool(o.SummaryOnly, nil),
-		AsSet:       util.AsBool(o.AsSet, nil),
-		SameMed:     util.AsBool(o.SameMed, nil),
-		Type:        typeVal,
-		Misc:        o.Misc,
+		Name:           o.Name,
+		Description:    o.Description,
+		Enable:         util.AsBool(o.Enable, nil),
+		SummaryOnly:    util.AsBool(o.SummaryOnly, nil),
+		AsSet:          util.AsBool(o.AsSet, nil),
+		SameMed:        util.AsBool(o.SameMed, nil),
+		Type:           typeVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8713,6 +9509,7 @@ func (o *vrfBgpAggregateRoutesTypeXml_11_0_2) MarshalFromObject(s VrfBgpAggregat
 		o.Ipv6 = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpAggregateRoutesTypeXml_11_0_2) UnmarshalToObject() (*VrfBgpAggregateRoutesType, error) {
@@ -8734,9 +9531,10 @@ func (o vrfBgpAggregateRoutesTypeXml_11_0_2) UnmarshalToObject() (*VrfBgpAggrega
 	}
 
 	result := &VrfBgpAggregateRoutesType{
-		Ipv4: ipv4Val,
-		Ipv6: ipv6Val,
-		Misc: o.Misc,
+		Ipv4:           ipv4Val,
+		Ipv6:           ipv6Val,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8745,15 +9543,17 @@ func (o *vrfBgpAggregateRoutesTypeIpv4Xml_11_0_2) MarshalFromObject(s VrfBgpAggr
 	o.SuppressMap = s.SuppressMap
 	o.AttributeMap = s.AttributeMap
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpAggregateRoutesTypeIpv4Xml_11_0_2) UnmarshalToObject() (*VrfBgpAggregateRoutesTypeIpv4, error) {
 
 	result := &VrfBgpAggregateRoutesTypeIpv4{
-		SummaryPrefix: o.SummaryPrefix,
-		SuppressMap:   o.SuppressMap,
-		AttributeMap:  o.AttributeMap,
-		Misc:          o.Misc,
+		SummaryPrefix:  o.SummaryPrefix,
+		SuppressMap:    o.SuppressMap,
+		AttributeMap:   o.AttributeMap,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8762,15 +9562,17 @@ func (o *vrfBgpAggregateRoutesTypeIpv6Xml_11_0_2) MarshalFromObject(s VrfBgpAggr
 	o.SuppressMap = s.SuppressMap
 	o.AttributeMap = s.AttributeMap
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfBgpAggregateRoutesTypeIpv6Xml_11_0_2) UnmarshalToObject() (*VrfBgpAggregateRoutesTypeIpv6, error) {
 
 	result := &VrfBgpAggregateRoutesTypeIpv6{
-		SummaryPrefix: o.SummaryPrefix,
-		SuppressMap:   o.SuppressMap,
-		AttributeMap:  o.AttributeMap,
-		Misc:          o.Misc,
+		SummaryPrefix:  o.SummaryPrefix,
+		SuppressMap:    o.SuppressMap,
+		AttributeMap:   o.AttributeMap,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8786,6 +9588,7 @@ func (o *vrfRoutingTableXml_11_0_2) MarshalFromObject(s VrfRoutingTable) {
 		o.Ipv6 = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRoutingTableXml_11_0_2) UnmarshalToObject() (*VrfRoutingTable, error) {
@@ -8807,9 +9610,10 @@ func (o vrfRoutingTableXml_11_0_2) UnmarshalToObject() (*VrfRoutingTable, error)
 	}
 
 	result := &VrfRoutingTable{
-		Ip:   ipVal,
-		Ipv6: ipv6Val,
-		Misc: o.Misc,
+		Ip:             ipVal,
+		Ipv6:           ipv6Val,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8824,6 +9628,7 @@ func (o *vrfRoutingTableIpXml_11_0_2) MarshalFromObject(s VrfRoutingTableIp) {
 		o.StaticRoute = &vrfRoutingTableIpStaticRouteContainerXml_11_0_2{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRoutingTableIpXml_11_0_2) UnmarshalToObject() (*VrfRoutingTableIp, error) {
@@ -8839,8 +9644,9 @@ func (o vrfRoutingTableIpXml_11_0_2) UnmarshalToObject() (*VrfRoutingTableIp, er
 	}
 
 	result := &VrfRoutingTableIp{
-		StaticRoute: staticRouteVal,
-		Misc:        o.Misc,
+		StaticRoute:    staticRouteVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8866,6 +9672,7 @@ func (o *vrfRoutingTableIpStaticRouteXml_11_0_2) MarshalFromObject(s VrfRoutingT
 		o.PathMonitor = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRoutingTableIpStaticRouteXml_11_0_2) UnmarshalToObject() (*VrfRoutingTableIpStaticRoute, error) {
@@ -8895,15 +9702,16 @@ func (o vrfRoutingTableIpStaticRouteXml_11_0_2) UnmarshalToObject() (*VrfRouting
 	}
 
 	result := &VrfRoutingTableIpStaticRoute{
-		Name:        o.Name,
-		Destination: o.Destination,
-		Interface:   o.Interface,
-		AdminDist:   o.AdminDist,
-		Metric:      o.Metric,
-		Nexthop:     nexthopVal,
-		Bfd:         bfdVal,
-		PathMonitor: pathMonitorVal,
-		Misc:        o.Misc,
+		Name:           o.Name,
+		Destination:    o.Destination,
+		Interface:      o.Interface,
+		AdminDist:      o.AdminDist,
+		Metric:         o.Metric,
+		Nexthop:        nexthopVal,
+		Bfd:            bfdVal,
+		PathMonitor:    pathMonitorVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8917,6 +9725,7 @@ func (o *vrfRoutingTableIpStaticRouteNexthopXml_11_0_2) MarshalFromObject(s VrfR
 	o.NextLr = s.NextLr
 	o.Fqdn = s.Fqdn
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRoutingTableIpStaticRouteNexthopXml_11_0_2) UnmarshalToObject() (*VrfRoutingTableIpStaticRouteNexthop, error) {
@@ -8930,35 +9739,40 @@ func (o vrfRoutingTableIpStaticRouteNexthopXml_11_0_2) UnmarshalToObject() (*Vrf
 	}
 
 	result := &VrfRoutingTableIpStaticRouteNexthop{
-		Discard:   discardVal,
-		IpAddress: o.IpAddress,
-		NextLr:    o.NextLr,
-		Fqdn:      o.Fqdn,
-		Misc:      o.Misc,
+		Discard:        discardVal,
+		IpAddress:      o.IpAddress,
+		NextLr:         o.NextLr,
+		Fqdn:           o.Fqdn,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfRoutingTableIpStaticRouteNexthopDiscardXml_11_0_2) MarshalFromObject(s VrfRoutingTableIpStaticRouteNexthopDiscard) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRoutingTableIpStaticRouteNexthopDiscardXml_11_0_2) UnmarshalToObject() (*VrfRoutingTableIpStaticRouteNexthopDiscard, error) {
 
 	result := &VrfRoutingTableIpStaticRouteNexthopDiscard{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfRoutingTableIpStaticRouteBfdXml_11_0_2) MarshalFromObject(s VrfRoutingTableIpStaticRouteBfd) {
 	o.Profile = s.Profile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRoutingTableIpStaticRouteBfdXml_11_0_2) UnmarshalToObject() (*VrfRoutingTableIpStaticRouteBfd, error) {
 
 	result := &VrfRoutingTableIpStaticRouteBfd{
-		Profile: o.Profile,
-		Misc:    o.Misc,
+		Profile:        o.Profile,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8976,6 +9790,7 @@ func (o *vrfRoutingTableIpStaticRoutePathMonitorXml_11_0_2) MarshalFromObject(s 
 		o.MonitorDestinations = &vrfRoutingTableIpStaticRoutePathMonitorMonitorDestinationsContainerXml_11_0_2{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRoutingTableIpStaticRoutePathMonitorXml_11_0_2) UnmarshalToObject() (*VrfRoutingTableIpStaticRoutePathMonitor, error) {
@@ -8996,6 +9811,7 @@ func (o vrfRoutingTableIpStaticRoutePathMonitorXml_11_0_2) UnmarshalToObject() (
 		HoldTime:            o.HoldTime,
 		MonitorDestinations: monitorDestinationsVal,
 		Misc:                o.Misc,
+		MiscAttributes:      o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -9007,18 +9823,20 @@ func (o *vrfRoutingTableIpStaticRoutePathMonitorMonitorDestinationsXml_11_0_2) M
 	o.Interval = s.Interval
 	o.Count = s.Count
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRoutingTableIpStaticRoutePathMonitorMonitorDestinationsXml_11_0_2) UnmarshalToObject() (*VrfRoutingTableIpStaticRoutePathMonitorMonitorDestinations, error) {
 
 	result := &VrfRoutingTableIpStaticRoutePathMonitorMonitorDestinations{
-		Name:        o.Name,
-		Enable:      util.AsBool(o.Enable, nil),
-		Source:      o.Source,
-		Destination: o.Destination,
-		Interval:    o.Interval,
-		Count:       o.Count,
-		Misc:        o.Misc,
+		Name:           o.Name,
+		Enable:         util.AsBool(o.Enable, nil),
+		Source:         o.Source,
+		Destination:    o.Destination,
+		Interval:       o.Interval,
+		Count:          o.Count,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -9033,6 +9851,7 @@ func (o *vrfRoutingTableIpv6Xml_11_0_2) MarshalFromObject(s VrfRoutingTableIpv6)
 		o.StaticRoute = &vrfRoutingTableIpv6StaticRouteContainerXml_11_0_2{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRoutingTableIpv6Xml_11_0_2) UnmarshalToObject() (*VrfRoutingTableIpv6, error) {
@@ -9048,8 +9867,9 @@ func (o vrfRoutingTableIpv6Xml_11_0_2) UnmarshalToObject() (*VrfRoutingTableIpv6
 	}
 
 	result := &VrfRoutingTableIpv6{
-		StaticRoute: staticRouteVal,
-		Misc:        o.Misc,
+		StaticRoute:    staticRouteVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -9075,6 +9895,7 @@ func (o *vrfRoutingTableIpv6StaticRouteXml_11_0_2) MarshalFromObject(s VrfRoutin
 		o.PathMonitor = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRoutingTableIpv6StaticRouteXml_11_0_2) UnmarshalToObject() (*VrfRoutingTableIpv6StaticRoute, error) {
@@ -9104,15 +9925,16 @@ func (o vrfRoutingTableIpv6StaticRouteXml_11_0_2) UnmarshalToObject() (*VrfRouti
 	}
 
 	result := &VrfRoutingTableIpv6StaticRoute{
-		Name:        o.Name,
-		Destination: o.Destination,
-		Interface:   o.Interface,
-		AdminDist:   o.AdminDist,
-		Metric:      o.Metric,
-		Nexthop:     nexthopVal,
-		Bfd:         bfdVal,
-		PathMonitor: pathMonitorVal,
-		Misc:        o.Misc,
+		Name:           o.Name,
+		Destination:    o.Destination,
+		Interface:      o.Interface,
+		AdminDist:      o.AdminDist,
+		Metric:         o.Metric,
+		Nexthop:        nexthopVal,
+		Bfd:            bfdVal,
+		PathMonitor:    pathMonitorVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -9126,6 +9948,7 @@ func (o *vrfRoutingTableIpv6StaticRouteNexthopXml_11_0_2) MarshalFromObject(s Vr
 	o.Fqdn = s.Fqdn
 	o.NextLr = s.NextLr
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRoutingTableIpv6StaticRouteNexthopXml_11_0_2) UnmarshalToObject() (*VrfRoutingTableIpv6StaticRouteNexthop, error) {
@@ -9139,35 +9962,40 @@ func (o vrfRoutingTableIpv6StaticRouteNexthopXml_11_0_2) UnmarshalToObject() (*V
 	}
 
 	result := &VrfRoutingTableIpv6StaticRouteNexthop{
-		Discard:     discardVal,
-		Ipv6Address: o.Ipv6Address,
-		Fqdn:        o.Fqdn,
-		NextLr:      o.NextLr,
-		Misc:        o.Misc,
+		Discard:        discardVal,
+		Ipv6Address:    o.Ipv6Address,
+		Fqdn:           o.Fqdn,
+		NextLr:         o.NextLr,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfRoutingTableIpv6StaticRouteNexthopDiscardXml_11_0_2) MarshalFromObject(s VrfRoutingTableIpv6StaticRouteNexthopDiscard) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRoutingTableIpv6StaticRouteNexthopDiscardXml_11_0_2) UnmarshalToObject() (*VrfRoutingTableIpv6StaticRouteNexthopDiscard, error) {
 
 	result := &VrfRoutingTableIpv6StaticRouteNexthopDiscard{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfRoutingTableIpv6StaticRouteBfdXml_11_0_2) MarshalFromObject(s VrfRoutingTableIpv6StaticRouteBfd) {
 	o.Profile = s.Profile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRoutingTableIpv6StaticRouteBfdXml_11_0_2) UnmarshalToObject() (*VrfRoutingTableIpv6StaticRouteBfd, error) {
 
 	result := &VrfRoutingTableIpv6StaticRouteBfd{
-		Profile: o.Profile,
-		Misc:    o.Misc,
+		Profile:        o.Profile,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -9185,6 +10013,7 @@ func (o *vrfRoutingTableIpv6StaticRoutePathMonitorXml_11_0_2) MarshalFromObject(
 		o.MonitorDestinations = &vrfRoutingTableIpv6StaticRoutePathMonitorMonitorDestinationsContainerXml_11_0_2{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRoutingTableIpv6StaticRoutePathMonitorXml_11_0_2) UnmarshalToObject() (*VrfRoutingTableIpv6StaticRoutePathMonitor, error) {
@@ -9205,6 +10034,7 @@ func (o vrfRoutingTableIpv6StaticRoutePathMonitorXml_11_0_2) UnmarshalToObject()
 		HoldTime:            o.HoldTime,
 		MonitorDestinations: monitorDestinationsVal,
 		Misc:                o.Misc,
+		MiscAttributes:      o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -9216,18 +10046,20 @@ func (o *vrfRoutingTableIpv6StaticRoutePathMonitorMonitorDestinationsXml_11_0_2)
 	o.Interval = s.Interval
 	o.Count = s.Count
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRoutingTableIpv6StaticRoutePathMonitorMonitorDestinationsXml_11_0_2) UnmarshalToObject() (*VrfRoutingTableIpv6StaticRoutePathMonitorMonitorDestinations, error) {
 
 	result := &VrfRoutingTableIpv6StaticRoutePathMonitorMonitorDestinations{
-		Name:        o.Name,
-		Enable:      util.AsBool(o.Enable, nil),
-		Source:      o.Source,
-		Destination: o.Destination,
-		Interval:    o.Interval,
-		Count:       o.Count,
-		Misc:        o.Misc,
+		Name:           o.Name,
+		Enable:         util.AsBool(o.Enable, nil),
+		Source:         o.Source,
+		Destination:    o.Destination,
+		Interval:       o.Interval,
+		Count:          o.Count,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -9258,6 +10090,7 @@ func (o *vrfOspfXml_11_0_2) MarshalFromObject(s VrfOspf) {
 		o.Area = &vrfOspfAreaContainerXml_11_0_2{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfXml_11_0_2) UnmarshalToObject() (*VrfOspf, error) {
@@ -9299,19 +10132,22 @@ func (o vrfOspfXml_11_0_2) UnmarshalToObject() (*VrfOspf, error) {
 		GracefulRestart:       gracefulRestartVal,
 		Area:                  areaVal,
 		Misc:                  o.Misc,
+		MiscAttributes:        o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfOspfGlobalBfdXml_11_0_2) MarshalFromObject(s VrfOspfGlobalBfd) {
 	o.Profile = s.Profile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfGlobalBfdXml_11_0_2) UnmarshalToObject() (*VrfOspfGlobalBfd, error) {
 
 	result := &VrfOspfGlobalBfd{
-		Profile: o.Profile,
-		Misc:    o.Misc,
+		Profile:        o.Profile,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -9322,6 +10158,7 @@ func (o *vrfOspfGracefulRestartXml_11_0_2) MarshalFromObject(s VrfOspfGracefulRe
 	o.StrictLSAChecking = util.YesNo(s.StrictLSAChecking, nil)
 	o.MaxNeighborRestartTime = s.MaxNeighborRestartTime
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfGracefulRestartXml_11_0_2) UnmarshalToObject() (*VrfOspfGracefulRestart, error) {
@@ -9333,6 +10170,7 @@ func (o vrfOspfGracefulRestartXml_11_0_2) UnmarshalToObject() (*VrfOspfGracefulR
 		StrictLSAChecking:      util.AsBool(o.StrictLSAChecking, nil),
 		MaxNeighborRestartTime: o.MaxNeighborRestartTime,
 		Misc:                   o.Misc,
+		MiscAttributes:         o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -9372,6 +10210,7 @@ func (o *vrfOspfAreaXml_11_0_2) MarshalFromObject(s VrfOspfArea) {
 		o.VirtualLink = &vrfOspfAreaVirtualLinkContainerXml_11_0_2{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfAreaXml_11_0_2) UnmarshalToObject() (*VrfOspfArea, error) {
@@ -9422,6 +10261,7 @@ func (o vrfOspfAreaXml_11_0_2) UnmarshalToObject() (*VrfOspfArea, error) {
 		Interface:      interfaceVal,
 		VirtualLink:    virtualLinkVal,
 		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -9442,6 +10282,7 @@ func (o *vrfOspfAreaTypeXml_11_0_2) MarshalFromObject(s VrfOspfAreaType) {
 		o.Nssa = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfAreaTypeXml_11_0_2) UnmarshalToObject() (*VrfOspfAreaType, error) {
@@ -9471,10 +10312,11 @@ func (o vrfOspfAreaTypeXml_11_0_2) UnmarshalToObject() (*VrfOspfAreaType, error)
 	}
 
 	result := &VrfOspfAreaType{
-		Normal: normalVal,
-		Stub:   stubVal,
-		Nssa:   nssaVal,
-		Misc:   o.Misc,
+		Normal:         normalVal,
+		Stub:           stubVal,
+		Nssa:           nssaVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -9485,6 +10327,7 @@ func (o *vrfOspfAreaTypeNormalXml_11_0_2) MarshalFromObject(s VrfOspfAreaTypeNor
 		o.Abr = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfAreaTypeNormalXml_11_0_2) UnmarshalToObject() (*VrfOspfAreaTypeNormal, error) {
@@ -9498,8 +10341,9 @@ func (o vrfOspfAreaTypeNormalXml_11_0_2) UnmarshalToObject() (*VrfOspfAreaTypeNo
 	}
 
 	result := &VrfOspfAreaTypeNormal{
-		Abr:  abrVal,
-		Misc: o.Misc,
+		Abr:            abrVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -9509,6 +10353,7 @@ func (o *vrfOspfAreaTypeNormalAbrXml_11_0_2) MarshalFromObject(s VrfOspfAreaType
 	o.InboundFilterList = s.InboundFilterList
 	o.OutboundFilterList = s.OutboundFilterList
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfAreaTypeNormalAbrXml_11_0_2) UnmarshalToObject() (*VrfOspfAreaTypeNormalAbr, error) {
@@ -9519,6 +10364,7 @@ func (o vrfOspfAreaTypeNormalAbrXml_11_0_2) UnmarshalToObject() (*VrfOspfAreaTyp
 		InboundFilterList:  o.InboundFilterList,
 		OutboundFilterList: o.OutboundFilterList,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -9531,6 +10377,7 @@ func (o *vrfOspfAreaTypeStubXml_11_0_2) MarshalFromObject(s VrfOspfAreaTypeStub)
 	}
 	o.DefaultRouteMetric = s.DefaultRouteMetric
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfAreaTypeStubXml_11_0_2) UnmarshalToObject() (*VrfOspfAreaTypeStub, error) {
@@ -9548,6 +10395,7 @@ func (o vrfOspfAreaTypeStubXml_11_0_2) UnmarshalToObject() (*VrfOspfAreaTypeStub
 		Abr:                abrVal,
 		DefaultRouteMetric: o.DefaultRouteMetric,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -9557,6 +10405,7 @@ func (o *vrfOspfAreaTypeStubAbrXml_11_0_2) MarshalFromObject(s VrfOspfAreaTypeSt
 	o.InboundFilterList = s.InboundFilterList
 	o.OutboundFilterList = s.OutboundFilterList
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfAreaTypeStubAbrXml_11_0_2) UnmarshalToObject() (*VrfOspfAreaTypeStubAbr, error) {
@@ -9567,6 +10416,7 @@ func (o vrfOspfAreaTypeStubAbrXml_11_0_2) UnmarshalToObject() (*VrfOspfAreaTypeS
 		InboundFilterList:  o.InboundFilterList,
 		OutboundFilterList: o.OutboundFilterList,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -9583,6 +10433,7 @@ func (o *vrfOspfAreaTypeNssaXml_11_0_2) MarshalFromObject(s VrfOspfAreaTypeNssa)
 		o.Abr = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfAreaTypeNssaXml_11_0_2) UnmarshalToObject() (*VrfOspfAreaTypeNssa, error) {
@@ -9608,6 +10459,7 @@ func (o vrfOspfAreaTypeNssaXml_11_0_2) UnmarshalToObject() (*VrfOspfAreaTypeNssa
 		DefaultInformationOriginate: defaultInformationOriginateVal,
 		Abr:                         abrVal,
 		Misc:                        o.Misc,
+		MiscAttributes:              o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -9615,14 +10467,16 @@ func (o *vrfOspfAreaTypeNssaDefaultInformationOriginateXml_11_0_2) MarshalFromOb
 	o.Metric = s.Metric
 	o.MetricType = s.MetricType
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfAreaTypeNssaDefaultInformationOriginateXml_11_0_2) UnmarshalToObject() (*VrfOspfAreaTypeNssaDefaultInformationOriginate, error) {
 
 	result := &VrfOspfAreaTypeNssaDefaultInformationOriginate{
-		Metric:     o.Metric,
-		MetricType: o.MetricType,
-		Misc:       o.Misc,
+		Metric:         o.Metric,
+		MetricType:     o.MetricType,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -9641,6 +10495,7 @@ func (o *vrfOspfAreaTypeNssaAbrXml_11_0_2) MarshalFromObject(s VrfOspfAreaTypeNs
 		o.NssaExtRange = &vrfOspfAreaTypeNssaAbrNssaExtRangeContainerXml_11_0_2{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfAreaTypeNssaAbrXml_11_0_2) UnmarshalToObject() (*VrfOspfAreaTypeNssaAbr, error) {
@@ -9662,6 +10517,7 @@ func (o vrfOspfAreaTypeNssaAbrXml_11_0_2) UnmarshalToObject() (*VrfOspfAreaTypeN
 		OutboundFilterList: o.OutboundFilterList,
 		NssaExtRange:       nssaExtRangeVal,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -9669,14 +10525,16 @@ func (o *vrfOspfAreaTypeNssaAbrNssaExtRangeXml_11_0_2) MarshalFromObject(s VrfOs
 	o.Name = s.Name
 	o.Advertise = util.YesNo(s.Advertise, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfAreaTypeNssaAbrNssaExtRangeXml_11_0_2) UnmarshalToObject() (*VrfOspfAreaTypeNssaAbrNssaExtRange, error) {
 
 	result := &VrfOspfAreaTypeNssaAbrNssaExtRange{
-		Name:      o.Name,
-		Advertise: util.AsBool(o.Advertise, nil),
-		Misc:      o.Misc,
+		Name:           o.Name,
+		Advertise:      util.AsBool(o.Advertise, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -9684,14 +10542,16 @@ func (o *vrfOspfAreaRangeXml_11_0_2) MarshalFromObject(s VrfOspfAreaRange) {
 	o.Name = s.Name
 	o.Advertise = util.YesNo(s.Advertise, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfAreaRangeXml_11_0_2) UnmarshalToObject() (*VrfOspfAreaRange, error) {
 
 	result := &VrfOspfAreaRange{
-		Name:      o.Name,
-		Advertise: util.AsBool(o.Advertise, nil),
-		Misc:      o.Misc,
+		Name:           o.Name,
+		Advertise:      util.AsBool(o.Advertise, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -9715,6 +10575,7 @@ func (o *vrfOspfAreaInterfaceXml_11_0_2) MarshalFromObject(s VrfOspfAreaInterfac
 		o.Bfd = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfAreaInterfaceXml_11_0_2) UnmarshalToObject() (*VrfOspfAreaInterface, error) {
@@ -9747,6 +10608,7 @@ func (o vrfOspfAreaInterfaceXml_11_0_2) UnmarshalToObject() (*VrfOspfAreaInterfa
 		LinkType:       linkTypeVal,
 		Bfd:            bfdVal,
 		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -9767,6 +10629,7 @@ func (o *vrfOspfAreaInterfaceLinkTypeXml_11_0_2) MarshalFromObject(s VrfOspfArea
 		o.P2mp = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfAreaInterfaceLinkTypeXml_11_0_2) UnmarshalToObject() (*VrfOspfAreaInterfaceLinkType, error) {
@@ -9796,32 +10659,37 @@ func (o vrfOspfAreaInterfaceLinkTypeXml_11_0_2) UnmarshalToObject() (*VrfOspfAre
 	}
 
 	result := &VrfOspfAreaInterfaceLinkType{
-		Broadcast: broadcastVal,
-		P2p:       p2pVal,
-		P2mp:      p2mpVal,
-		Misc:      o.Misc,
+		Broadcast:      broadcastVal,
+		P2p:            p2pVal,
+		P2mp:           p2mpVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfOspfAreaInterfaceLinkTypeBroadcastXml_11_0_2) MarshalFromObject(s VrfOspfAreaInterfaceLinkTypeBroadcast) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfAreaInterfaceLinkTypeBroadcastXml_11_0_2) UnmarshalToObject() (*VrfOspfAreaInterfaceLinkTypeBroadcast, error) {
 
 	result := &VrfOspfAreaInterfaceLinkTypeBroadcast{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfOspfAreaInterfaceLinkTypeP2pXml_11_0_2) MarshalFromObject(s VrfOspfAreaInterfaceLinkTypeP2p) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfAreaInterfaceLinkTypeP2pXml_11_0_2) UnmarshalToObject() (*VrfOspfAreaInterfaceLinkTypeP2p, error) {
 
 	result := &VrfOspfAreaInterfaceLinkTypeP2p{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -9836,6 +10704,7 @@ func (o *vrfOspfAreaInterfaceLinkTypeP2mpXml_11_0_2) MarshalFromObject(s VrfOspf
 		o.Neighbor = &vrfOspfAreaInterfaceLinkTypeP2mpNeighborContainerXml_11_0_2{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfAreaInterfaceLinkTypeP2mpXml_11_0_2) UnmarshalToObject() (*VrfOspfAreaInterfaceLinkTypeP2mp, error) {
@@ -9851,8 +10720,9 @@ func (o vrfOspfAreaInterfaceLinkTypeP2mpXml_11_0_2) UnmarshalToObject() (*VrfOsp
 	}
 
 	result := &VrfOspfAreaInterfaceLinkTypeP2mp{
-		Neighbor: neighborVal,
-		Misc:     o.Misc,
+		Neighbor:       neighborVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -9860,27 +10730,31 @@ func (o *vrfOspfAreaInterfaceLinkTypeP2mpNeighborXml_11_0_2) MarshalFromObject(s
 	o.Name = s.Name
 	o.Priority = s.Priority
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfAreaInterfaceLinkTypeP2mpNeighborXml_11_0_2) UnmarshalToObject() (*VrfOspfAreaInterfaceLinkTypeP2mpNeighbor, error) {
 
 	result := &VrfOspfAreaInterfaceLinkTypeP2mpNeighbor{
-		Name:     o.Name,
-		Priority: o.Priority,
-		Misc:     o.Misc,
+		Name:           o.Name,
+		Priority:       o.Priority,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfOspfAreaInterfaceBfdXml_11_0_2) MarshalFromObject(s VrfOspfAreaInterfaceBfd) {
 	o.Profile = s.Profile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfAreaInterfaceBfdXml_11_0_2) UnmarshalToObject() (*VrfOspfAreaInterfaceBfd, error) {
 
 	result := &VrfOspfAreaInterfaceBfd{
-		Profile: o.Profile,
-		Misc:    o.Misc,
+		Profile:        o.Profile,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -9898,6 +10772,7 @@ func (o *vrfOspfAreaVirtualLinkXml_11_0_2) MarshalFromObject(s VrfOspfAreaVirtua
 		o.Bfd = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfAreaVirtualLinkXml_11_0_2) UnmarshalToObject() (*VrfOspfAreaVirtualLink, error) {
@@ -9920,19 +10795,22 @@ func (o vrfOspfAreaVirtualLinkXml_11_0_2) UnmarshalToObject() (*VrfOspfAreaVirtu
 		Authentication: o.Authentication,
 		Bfd:            bfdVal,
 		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfOspfAreaVirtualLinkBfdXml_11_0_2) MarshalFromObject(s VrfOspfAreaVirtualLinkBfd) {
 	o.Profile = s.Profile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfAreaVirtualLinkBfdXml_11_0_2) UnmarshalToObject() (*VrfOspfAreaVirtualLinkBfd, error) {
 
 	result := &VrfOspfAreaVirtualLinkBfd{
-		Profile: o.Profile,
-		Misc:    o.Misc,
+		Profile:        o.Profile,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -9963,6 +10841,7 @@ func (o *vrfOspfv3Xml_11_0_2) MarshalFromObject(s VrfOspfv3) {
 		o.Area = &vrfOspfv3AreaContainerXml_11_0_2{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfv3Xml_11_0_2) UnmarshalToObject() (*VrfOspfv3, error) {
@@ -10004,19 +10883,22 @@ func (o vrfOspfv3Xml_11_0_2) UnmarshalToObject() (*VrfOspfv3, error) {
 		GracefulRestart:       gracefulRestartVal,
 		Area:                  areaVal,
 		Misc:                  o.Misc,
+		MiscAttributes:        o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfOspfv3GlobalBfdXml_11_0_2) MarshalFromObject(s VrfOspfv3GlobalBfd) {
 	o.Profile = s.Profile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfv3GlobalBfdXml_11_0_2) UnmarshalToObject() (*VrfOspfv3GlobalBfd, error) {
 
 	result := &VrfOspfv3GlobalBfd{
-		Profile: o.Profile,
-		Misc:    o.Misc,
+		Profile:        o.Profile,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -10027,6 +10909,7 @@ func (o *vrfOspfv3GracefulRestartXml_11_0_2) MarshalFromObject(s VrfOspfv3Gracef
 	o.StrictLSAChecking = util.YesNo(s.StrictLSAChecking, nil)
 	o.MaxNeighborRestartTime = s.MaxNeighborRestartTime
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfv3GracefulRestartXml_11_0_2) UnmarshalToObject() (*VrfOspfv3GracefulRestart, error) {
@@ -10038,6 +10921,7 @@ func (o vrfOspfv3GracefulRestartXml_11_0_2) UnmarshalToObject() (*VrfOspfv3Grace
 		StrictLSAChecking:      util.AsBool(o.StrictLSAChecking, nil),
 		MaxNeighborRestartTime: o.MaxNeighborRestartTime,
 		Misc:                   o.Misc,
+		MiscAttributes:         o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -10077,6 +10961,7 @@ func (o *vrfOspfv3AreaXml_11_0_2) MarshalFromObject(s VrfOspfv3Area) {
 		o.VirtualLink = &vrfOspfv3AreaVirtualLinkContainerXml_11_0_2{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfv3AreaXml_11_0_2) UnmarshalToObject() (*VrfOspfv3Area, error) {
@@ -10127,6 +11012,7 @@ func (o vrfOspfv3AreaXml_11_0_2) UnmarshalToObject() (*VrfOspfv3Area, error) {
 		Interface:      interfaceVal,
 		VirtualLink:    virtualLinkVal,
 		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -10147,6 +11033,7 @@ func (o *vrfOspfv3AreaTypeXml_11_0_2) MarshalFromObject(s VrfOspfv3AreaType) {
 		o.Nssa = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfv3AreaTypeXml_11_0_2) UnmarshalToObject() (*VrfOspfv3AreaType, error) {
@@ -10176,10 +11063,11 @@ func (o vrfOspfv3AreaTypeXml_11_0_2) UnmarshalToObject() (*VrfOspfv3AreaType, er
 	}
 
 	result := &VrfOspfv3AreaType{
-		Normal: normalVal,
-		Stub:   stubVal,
-		Nssa:   nssaVal,
-		Misc:   o.Misc,
+		Normal:         normalVal,
+		Stub:           stubVal,
+		Nssa:           nssaVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -10190,6 +11078,7 @@ func (o *vrfOspfv3AreaTypeNormalXml_11_0_2) MarshalFromObject(s VrfOspfv3AreaTyp
 		o.Abr = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfv3AreaTypeNormalXml_11_0_2) UnmarshalToObject() (*VrfOspfv3AreaTypeNormal, error) {
@@ -10203,8 +11092,9 @@ func (o vrfOspfv3AreaTypeNormalXml_11_0_2) UnmarshalToObject() (*VrfOspfv3AreaTy
 	}
 
 	result := &VrfOspfv3AreaTypeNormal{
-		Abr:  abrVal,
-		Misc: o.Misc,
+		Abr:            abrVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -10214,6 +11104,7 @@ func (o *vrfOspfv3AreaTypeNormalAbrXml_11_0_2) MarshalFromObject(s VrfOspfv3Area
 	o.InboundFilterList = s.InboundFilterList
 	o.OutboundFilterList = s.OutboundFilterList
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfv3AreaTypeNormalAbrXml_11_0_2) UnmarshalToObject() (*VrfOspfv3AreaTypeNormalAbr, error) {
@@ -10224,6 +11115,7 @@ func (o vrfOspfv3AreaTypeNormalAbrXml_11_0_2) UnmarshalToObject() (*VrfOspfv3Are
 		InboundFilterList:  o.InboundFilterList,
 		OutboundFilterList: o.OutboundFilterList,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -10236,6 +11128,7 @@ func (o *vrfOspfv3AreaTypeStubXml_11_0_2) MarshalFromObject(s VrfOspfv3AreaTypeS
 	}
 	o.DefaultRouteMetric = s.DefaultRouteMetric
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfv3AreaTypeStubXml_11_0_2) UnmarshalToObject() (*VrfOspfv3AreaTypeStub, error) {
@@ -10253,6 +11146,7 @@ func (o vrfOspfv3AreaTypeStubXml_11_0_2) UnmarshalToObject() (*VrfOspfv3AreaType
 		Abr:                abrVal,
 		DefaultRouteMetric: o.DefaultRouteMetric,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -10262,6 +11156,7 @@ func (o *vrfOspfv3AreaTypeStubAbrXml_11_0_2) MarshalFromObject(s VrfOspfv3AreaTy
 	o.InboundFilterList = s.InboundFilterList
 	o.OutboundFilterList = s.OutboundFilterList
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfv3AreaTypeStubAbrXml_11_0_2) UnmarshalToObject() (*VrfOspfv3AreaTypeStubAbr, error) {
@@ -10272,6 +11167,7 @@ func (o vrfOspfv3AreaTypeStubAbrXml_11_0_2) UnmarshalToObject() (*VrfOspfv3AreaT
 		InboundFilterList:  o.InboundFilterList,
 		OutboundFilterList: o.OutboundFilterList,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -10288,6 +11184,7 @@ func (o *vrfOspfv3AreaTypeNssaXml_11_0_2) MarshalFromObject(s VrfOspfv3AreaTypeN
 		o.Abr = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfv3AreaTypeNssaXml_11_0_2) UnmarshalToObject() (*VrfOspfv3AreaTypeNssa, error) {
@@ -10313,6 +11210,7 @@ func (o vrfOspfv3AreaTypeNssaXml_11_0_2) UnmarshalToObject() (*VrfOspfv3AreaType
 		DefaultInformationOriginate: defaultInformationOriginateVal,
 		Abr:                         abrVal,
 		Misc:                        o.Misc,
+		MiscAttributes:              o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -10320,14 +11218,16 @@ func (o *vrfOspfv3AreaTypeNssaDefaultInformationOriginateXml_11_0_2) MarshalFrom
 	o.Metric = s.Metric
 	o.MetricType = s.MetricType
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfv3AreaTypeNssaDefaultInformationOriginateXml_11_0_2) UnmarshalToObject() (*VrfOspfv3AreaTypeNssaDefaultInformationOriginate, error) {
 
 	result := &VrfOspfv3AreaTypeNssaDefaultInformationOriginate{
-		Metric:     o.Metric,
-		MetricType: o.MetricType,
-		Misc:       o.Misc,
+		Metric:         o.Metric,
+		MetricType:     o.MetricType,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -10346,6 +11246,7 @@ func (o *vrfOspfv3AreaTypeNssaAbrXml_11_0_2) MarshalFromObject(s VrfOspfv3AreaTy
 		o.NssaExtRange = &vrfOspfv3AreaTypeNssaAbrNssaExtRangeContainerXml_11_0_2{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfv3AreaTypeNssaAbrXml_11_0_2) UnmarshalToObject() (*VrfOspfv3AreaTypeNssaAbr, error) {
@@ -10367,6 +11268,7 @@ func (o vrfOspfv3AreaTypeNssaAbrXml_11_0_2) UnmarshalToObject() (*VrfOspfv3AreaT
 		OutboundFilterList: o.OutboundFilterList,
 		NssaExtRange:       nssaExtRangeVal,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -10374,14 +11276,16 @@ func (o *vrfOspfv3AreaTypeNssaAbrNssaExtRangeXml_11_0_2) MarshalFromObject(s Vrf
 	o.Name = s.Name
 	o.Advertise = util.YesNo(s.Advertise, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfv3AreaTypeNssaAbrNssaExtRangeXml_11_0_2) UnmarshalToObject() (*VrfOspfv3AreaTypeNssaAbrNssaExtRange, error) {
 
 	result := &VrfOspfv3AreaTypeNssaAbrNssaExtRange{
-		Name:      o.Name,
-		Advertise: util.AsBool(o.Advertise, nil),
-		Misc:      o.Misc,
+		Name:           o.Name,
+		Advertise:      util.AsBool(o.Advertise, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -10389,14 +11293,16 @@ func (o *vrfOspfv3AreaRangeXml_11_0_2) MarshalFromObject(s VrfOspfv3AreaRange) {
 	o.Name = s.Name
 	o.Advertise = util.YesNo(s.Advertise, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfv3AreaRangeXml_11_0_2) UnmarshalToObject() (*VrfOspfv3AreaRange, error) {
 
 	result := &VrfOspfv3AreaRange{
-		Name:      o.Name,
-		Advertise: util.AsBool(o.Advertise, nil),
-		Misc:      o.Misc,
+		Name:           o.Name,
+		Advertise:      util.AsBool(o.Advertise, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -10421,6 +11327,7 @@ func (o *vrfOspfv3AreaInterfaceXml_11_0_2) MarshalFromObject(s VrfOspfv3AreaInte
 		o.Bfd = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfv3AreaInterfaceXml_11_0_2) UnmarshalToObject() (*VrfOspfv3AreaInterface, error) {
@@ -10454,6 +11361,7 @@ func (o vrfOspfv3AreaInterfaceXml_11_0_2) UnmarshalToObject() (*VrfOspfv3AreaInt
 		LinkType:       linkTypeVal,
 		Bfd:            bfdVal,
 		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -10474,6 +11382,7 @@ func (o *vrfOspfv3AreaInterfaceLinkTypeXml_11_0_2) MarshalFromObject(s VrfOspfv3
 		o.P2mp = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfv3AreaInterfaceLinkTypeXml_11_0_2) UnmarshalToObject() (*VrfOspfv3AreaInterfaceLinkType, error) {
@@ -10503,32 +11412,37 @@ func (o vrfOspfv3AreaInterfaceLinkTypeXml_11_0_2) UnmarshalToObject() (*VrfOspfv
 	}
 
 	result := &VrfOspfv3AreaInterfaceLinkType{
-		Broadcast: broadcastVal,
-		P2p:       p2pVal,
-		P2mp:      p2mpVal,
-		Misc:      o.Misc,
+		Broadcast:      broadcastVal,
+		P2p:            p2pVal,
+		P2mp:           p2mpVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfOspfv3AreaInterfaceLinkTypeBroadcastXml_11_0_2) MarshalFromObject(s VrfOspfv3AreaInterfaceLinkTypeBroadcast) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfv3AreaInterfaceLinkTypeBroadcastXml_11_0_2) UnmarshalToObject() (*VrfOspfv3AreaInterfaceLinkTypeBroadcast, error) {
 
 	result := &VrfOspfv3AreaInterfaceLinkTypeBroadcast{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfOspfv3AreaInterfaceLinkTypeP2pXml_11_0_2) MarshalFromObject(s VrfOspfv3AreaInterfaceLinkTypeP2p) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfv3AreaInterfaceLinkTypeP2pXml_11_0_2) UnmarshalToObject() (*VrfOspfv3AreaInterfaceLinkTypeP2p, error) {
 
 	result := &VrfOspfv3AreaInterfaceLinkTypeP2p{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -10543,6 +11457,7 @@ func (o *vrfOspfv3AreaInterfaceLinkTypeP2mpXml_11_0_2) MarshalFromObject(s VrfOs
 		o.Neighbor = &vrfOspfv3AreaInterfaceLinkTypeP2mpNeighborContainerXml_11_0_2{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfv3AreaInterfaceLinkTypeP2mpXml_11_0_2) UnmarshalToObject() (*VrfOspfv3AreaInterfaceLinkTypeP2mp, error) {
@@ -10558,8 +11473,9 @@ func (o vrfOspfv3AreaInterfaceLinkTypeP2mpXml_11_0_2) UnmarshalToObject() (*VrfO
 	}
 
 	result := &VrfOspfv3AreaInterfaceLinkTypeP2mp{
-		Neighbor: neighborVal,
-		Misc:     o.Misc,
+		Neighbor:       neighborVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -10567,27 +11483,31 @@ func (o *vrfOspfv3AreaInterfaceLinkTypeP2mpNeighborXml_11_0_2) MarshalFromObject
 	o.Name = s.Name
 	o.Priority = s.Priority
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfv3AreaInterfaceLinkTypeP2mpNeighborXml_11_0_2) UnmarshalToObject() (*VrfOspfv3AreaInterfaceLinkTypeP2mpNeighbor, error) {
 
 	result := &VrfOspfv3AreaInterfaceLinkTypeP2mpNeighbor{
-		Name:     o.Name,
-		Priority: o.Priority,
-		Misc:     o.Misc,
+		Name:           o.Name,
+		Priority:       o.Priority,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfOspfv3AreaInterfaceBfdXml_11_0_2) MarshalFromObject(s VrfOspfv3AreaInterfaceBfd) {
 	o.Profile = s.Profile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfv3AreaInterfaceBfdXml_11_0_2) UnmarshalToObject() (*VrfOspfv3AreaInterfaceBfd, error) {
 
 	result := &VrfOspfv3AreaInterfaceBfd{
-		Profile: o.Profile,
-		Misc:    o.Misc,
+		Profile:        o.Profile,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -10600,6 +11520,7 @@ func (o *vrfOspfv3AreaVirtualLinkXml_11_0_2) MarshalFromObject(s VrfOspfv3AreaVi
 	o.Timing = s.Timing
 	o.Authentication = s.Authentication
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfOspfv3AreaVirtualLinkXml_11_0_2) UnmarshalToObject() (*VrfOspfv3AreaVirtualLink, error) {
@@ -10613,6 +11534,7 @@ func (o vrfOspfv3AreaVirtualLinkXml_11_0_2) UnmarshalToObject() (*VrfOspfv3AreaV
 		Timing:         o.Timing,
 		Authentication: o.Authentication,
 		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -10627,6 +11549,7 @@ func (o *vrfEcmpXml_11_0_2) MarshalFromObject(s VrfEcmp) {
 		o.Algorithm = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfEcmpXml_11_0_2) UnmarshalToObject() (*VrfEcmp, error) {
@@ -10646,6 +11569,7 @@ func (o vrfEcmpXml_11_0_2) UnmarshalToObject() (*VrfEcmp, error) {
 		StrictSourcePath: util.AsBool(o.StrictSourcePath, nil),
 		Algorithm:        algorithmVal,
 		Misc:             o.Misc,
+		MiscAttributes:   o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -10671,6 +11595,7 @@ func (o *vrfEcmpAlgorithmXml_11_0_2) MarshalFromObject(s VrfEcmpAlgorithm) {
 		o.BalancedRoundRobin = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfEcmpAlgorithmXml_11_0_2) UnmarshalToObject() (*VrfEcmpAlgorithm, error) {
@@ -10713,17 +11638,20 @@ func (o vrfEcmpAlgorithmXml_11_0_2) UnmarshalToObject() (*VrfEcmpAlgorithm, erro
 		WeightedRoundRobin: weightedRoundRobinVal,
 		BalancedRoundRobin: balancedRoundRobinVal,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfEcmpAlgorithmIpModuloXml_11_0_2) MarshalFromObject(s VrfEcmpAlgorithmIpModulo) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfEcmpAlgorithmIpModuloXml_11_0_2) UnmarshalToObject() (*VrfEcmpAlgorithmIpModulo, error) {
 
 	result := &VrfEcmpAlgorithmIpModulo{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -10732,15 +11660,17 @@ func (o *vrfEcmpAlgorithmIpHashXml_11_0_2) MarshalFromObject(s VrfEcmpAlgorithmI
 	o.UsePort = util.YesNo(s.UsePort, nil)
 	o.HashSeed = s.HashSeed
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfEcmpAlgorithmIpHashXml_11_0_2) UnmarshalToObject() (*VrfEcmpAlgorithmIpHash, error) {
 
 	result := &VrfEcmpAlgorithmIpHash{
-		SrcOnly:  util.AsBool(o.SrcOnly, nil),
-		UsePort:  util.AsBool(o.UsePort, nil),
-		HashSeed: o.HashSeed,
-		Misc:     o.Misc,
+		SrcOnly:        util.AsBool(o.SrcOnly, nil),
+		UsePort:        util.AsBool(o.UsePort, nil),
+		HashSeed:       o.HashSeed,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -10755,6 +11685,7 @@ func (o *vrfEcmpAlgorithmWeightedRoundRobinXml_11_0_2) MarshalFromObject(s VrfEc
 		o.Interface = &vrfEcmpAlgorithmWeightedRoundRobinInterfaceContainerXml_11_0_2{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfEcmpAlgorithmWeightedRoundRobinXml_11_0_2) UnmarshalToObject() (*VrfEcmpAlgorithmWeightedRoundRobin, error) {
@@ -10770,8 +11701,9 @@ func (o vrfEcmpAlgorithmWeightedRoundRobinXml_11_0_2) UnmarshalToObject() (*VrfE
 	}
 
 	result := &VrfEcmpAlgorithmWeightedRoundRobin{
-		Interface: interfaceVal,
-		Misc:      o.Misc,
+		Interface:      interfaceVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -10779,25 +11711,29 @@ func (o *vrfEcmpAlgorithmWeightedRoundRobinInterfaceXml_11_0_2) MarshalFromObjec
 	o.Name = s.Name
 	o.Weight = s.Weight
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfEcmpAlgorithmWeightedRoundRobinInterfaceXml_11_0_2) UnmarshalToObject() (*VrfEcmpAlgorithmWeightedRoundRobinInterface, error) {
 
 	result := &VrfEcmpAlgorithmWeightedRoundRobinInterface{
-		Name:   o.Name,
-		Weight: o.Weight,
-		Misc:   o.Misc,
+		Name:           o.Name,
+		Weight:         o.Weight,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfEcmpAlgorithmBalancedRoundRobinXml_11_0_2) MarshalFromObject(s VrfEcmpAlgorithmBalancedRoundRobin) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfEcmpAlgorithmBalancedRoundRobinXml_11_0_2) UnmarshalToObject() (*VrfEcmpAlgorithmBalancedRoundRobin, error) {
 
 	result := &VrfEcmpAlgorithmBalancedRoundRobin{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -10828,6 +11764,7 @@ func (o *vrfMulticastXml_11_0_2) MarshalFromObject(s VrfMulticast) {
 		o.Msdp = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfMulticastXml_11_0_2) UnmarshalToObject() (*VrfMulticast, error) {
@@ -10867,12 +11804,13 @@ func (o vrfMulticastXml_11_0_2) UnmarshalToObject() (*VrfMulticast, error) {
 	}
 
 	result := &VrfMulticast{
-		Enable:      util.AsBool(o.Enable, nil),
-		StaticRoute: staticRouteVal,
-		Pim:         pimVal,
-		Igmp:        igmpVal,
-		Msdp:        msdpVal,
-		Misc:        o.Misc,
+		Enable:         util.AsBool(o.Enable, nil),
+		StaticRoute:    staticRouteVal,
+		Pim:            pimVal,
+		Igmp:           igmpVal,
+		Msdp:           msdpVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -10887,6 +11825,7 @@ func (o *vrfMulticastStaticRouteXml_11_0_2) MarshalFromObject(s VrfMulticastStat
 		o.Nexthop = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfMulticastStaticRouteXml_11_0_2) UnmarshalToObject() (*VrfMulticastStaticRoute, error) {
@@ -10900,25 +11839,28 @@ func (o vrfMulticastStaticRouteXml_11_0_2) UnmarshalToObject() (*VrfMulticastSta
 	}
 
 	result := &VrfMulticastStaticRoute{
-		Name:        o.Name,
-		Destination: o.Destination,
-		Interface:   o.Interface,
-		Preference:  o.Preference,
-		Nexthop:     nexthopVal,
-		Misc:        o.Misc,
+		Name:           o.Name,
+		Destination:    o.Destination,
+		Interface:      o.Interface,
+		Preference:     o.Preference,
+		Nexthop:        nexthopVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfMulticastStaticRouteNexthopXml_11_0_2) MarshalFromObject(s VrfMulticastStaticRouteNexthop) {
 	o.IpAddress = s.IpAddress
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfMulticastStaticRouteNexthopXml_11_0_2) UnmarshalToObject() (*VrfMulticastStaticRouteNexthop, error) {
 
 	result := &VrfMulticastStaticRouteNexthop{
-		IpAddress: o.IpAddress,
-		Misc:      o.Misc,
+		IpAddress:      o.IpAddress,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -10957,6 +11899,7 @@ func (o *vrfMulticastPimXml_11_0_2) MarshalFromObject(s VrfMulticastPim) {
 		o.Interface = &vrfMulticastPimInterfaceContainerXml_11_0_2{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfMulticastPimXml_11_0_2) UnmarshalToObject() (*VrfMulticastPim, error) {
@@ -11008,19 +11951,22 @@ func (o vrfMulticastPimXml_11_0_2) UnmarshalToObject() (*VrfMulticastPim, error)
 		SptThreshold:    sptThresholdVal,
 		Interface:       interfaceVal,
 		Misc:            o.Misc,
+		MiscAttributes:  o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfMulticastPimSsmAddressSpaceXml_11_0_2) MarshalFromObject(s VrfMulticastPimSsmAddressSpace) {
 	o.GroupList = s.GroupList
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfMulticastPimSsmAddressSpaceXml_11_0_2) UnmarshalToObject() (*VrfMulticastPimSsmAddressSpace, error) {
 
 	result := &VrfMulticastPimSsmAddressSpace{
-		GroupList: o.GroupList,
-		Misc:      o.Misc,
+		GroupList:      o.GroupList,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -11040,6 +11986,7 @@ func (o *vrfMulticastPimRpXml_11_0_2) MarshalFromObject(s VrfMulticastPimRp) {
 		o.ExternalRp = &vrfMulticastPimRpExternalRpContainerXml_11_0_2{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfMulticastPimRpXml_11_0_2) UnmarshalToObject() (*VrfMulticastPimRp, error) {
@@ -11063,9 +12010,10 @@ func (o vrfMulticastPimRpXml_11_0_2) UnmarshalToObject() (*VrfMulticastPimRp, er
 	}
 
 	result := &VrfMulticastPimRp{
-		LocalRp:    localRpVal,
-		ExternalRp: externalRpVal,
-		Misc:       o.Misc,
+		LocalRp:        localRpVal,
+		ExternalRp:     externalRpVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -11081,6 +12029,7 @@ func (o *vrfMulticastPimRpLocalRpXml_11_0_2) MarshalFromObject(s VrfMulticastPim
 		o.CandidateRp = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfMulticastPimRpLocalRpXml_11_0_2) UnmarshalToObject() (*VrfMulticastPimRpLocalRp, error) {
@@ -11102,9 +12051,10 @@ func (o vrfMulticastPimRpLocalRpXml_11_0_2) UnmarshalToObject() (*VrfMulticastPi
 	}
 
 	result := &VrfMulticastPimRpLocalRp{
-		StaticRp:    staticRpVal,
-		CandidateRp: candidateRpVal,
-		Misc:        o.Misc,
+		StaticRp:       staticRpVal,
+		CandidateRp:    candidateRpVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -11114,16 +12064,18 @@ func (o *vrfMulticastPimRpLocalRpStaticRpXml_11_0_2) MarshalFromObject(s VrfMult
 	o.Override = util.YesNo(s.Override, nil)
 	o.GroupList = s.GroupList
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfMulticastPimRpLocalRpStaticRpXml_11_0_2) UnmarshalToObject() (*VrfMulticastPimRpLocalRpStaticRp, error) {
 
 	result := &VrfMulticastPimRpLocalRpStaticRp{
-		Interface: o.Interface,
-		Address:   o.Address,
-		Override:  util.AsBool(o.Override, nil),
-		GroupList: o.GroupList,
-		Misc:      o.Misc,
+		Interface:      o.Interface,
+		Address:        o.Address,
+		Override:       util.AsBool(o.Override, nil),
+		GroupList:      o.GroupList,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -11134,6 +12086,7 @@ func (o *vrfMulticastPimRpLocalRpCandidateRpXml_11_0_2) MarshalFromObject(s VrfM
 	o.AdvertisementInterval = s.AdvertisementInterval
 	o.GroupList = s.GroupList
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfMulticastPimRpLocalRpCandidateRpXml_11_0_2) UnmarshalToObject() (*VrfMulticastPimRpLocalRpCandidateRp, error) {
@@ -11145,6 +12098,7 @@ func (o vrfMulticastPimRpLocalRpCandidateRpXml_11_0_2) UnmarshalToObject() (*Vrf
 		AdvertisementInterval: o.AdvertisementInterval,
 		GroupList:             o.GroupList,
 		Misc:                  o.Misc,
+		MiscAttributes:        o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -11153,15 +12107,17 @@ func (o *vrfMulticastPimRpExternalRpXml_11_0_2) MarshalFromObject(s VrfMulticast
 	o.GroupList = s.GroupList
 	o.Override = util.YesNo(s.Override, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfMulticastPimRpExternalRpXml_11_0_2) UnmarshalToObject() (*VrfMulticastPimRpExternalRp, error) {
 
 	result := &VrfMulticastPimRpExternalRp{
-		Name:      o.Name,
-		GroupList: o.GroupList,
-		Override:  util.AsBool(o.Override, nil),
-		Misc:      o.Misc,
+		Name:           o.Name,
+		GroupList:      o.GroupList,
+		Override:       util.AsBool(o.Override, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -11169,14 +12125,16 @@ func (o *vrfMulticastPimSptThresholdXml_11_0_2) MarshalFromObject(s VrfMulticast
 	o.Name = s.Name
 	o.Threshold = s.Threshold
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfMulticastPimSptThresholdXml_11_0_2) UnmarshalToObject() (*VrfMulticastPimSptThreshold, error) {
 
 	result := &VrfMulticastPimSptThreshold{
-		Name:      o.Name,
-		Threshold: o.Threshold,
-		Misc:      o.Misc,
+		Name:           o.Name,
+		Threshold:      o.Threshold,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -11188,6 +12146,7 @@ func (o *vrfMulticastPimInterfaceXml_11_0_2) MarshalFromObject(s VrfMulticastPim
 	o.IfTimer = s.IfTimer
 	o.NeighborFilter = s.NeighborFilter
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfMulticastPimInterfaceXml_11_0_2) UnmarshalToObject() (*VrfMulticastPimInterface, error) {
@@ -11200,6 +12159,7 @@ func (o vrfMulticastPimInterfaceXml_11_0_2) UnmarshalToObject() (*VrfMulticastPi
 		IfTimer:        o.IfTimer,
 		NeighborFilter: o.NeighborFilter,
 		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -11220,6 +12180,7 @@ func (o *vrfMulticastIgmpXml_11_0_2) MarshalFromObject(s VrfMulticastIgmp) {
 		o.Static = &vrfMulticastIgmpStaticContainerXml_11_0_2{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfMulticastIgmpXml_11_0_2) UnmarshalToObject() (*VrfMulticastIgmp, error) {
@@ -11243,10 +12204,11 @@ func (o vrfMulticastIgmpXml_11_0_2) UnmarshalToObject() (*VrfMulticastIgmp, erro
 	}
 
 	result := &VrfMulticastIgmp{
-		Enable:  util.AsBool(o.Enable, nil),
-		Dynamic: dynamicVal,
-		Static:  staticVal,
-		Misc:    o.Misc,
+		Enable:         util.AsBool(o.Enable, nil),
+		Dynamic:        dynamicVal,
+		Static:         staticVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -11261,6 +12223,7 @@ func (o *vrfMulticastIgmpDynamicXml_11_0_2) MarshalFromObject(s VrfMulticastIgmp
 		o.Interface = &vrfMulticastIgmpDynamicInterfaceContainerXml_11_0_2{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfMulticastIgmpDynamicXml_11_0_2) UnmarshalToObject() (*VrfMulticastIgmpDynamic, error) {
@@ -11276,8 +12239,9 @@ func (o vrfMulticastIgmpDynamicXml_11_0_2) UnmarshalToObject() (*VrfMulticastIgm
 	}
 
 	result := &VrfMulticastIgmpDynamic{
-		Interface: interfaceVal,
-		Misc:      o.Misc,
+		Interface:      interfaceVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -11291,6 +12255,7 @@ func (o *vrfMulticastIgmpDynamicInterfaceXml_11_0_2) MarshalFromObject(s VrfMult
 	o.QueryProfile = s.QueryProfile
 	o.RouterAlertPolicing = util.YesNo(s.RouterAlertPolicing, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfMulticastIgmpDynamicInterfaceXml_11_0_2) UnmarshalToObject() (*VrfMulticastIgmpDynamicInterface, error) {
@@ -11305,6 +12270,7 @@ func (o vrfMulticastIgmpDynamicInterfaceXml_11_0_2) UnmarshalToObject() (*VrfMul
 		QueryProfile:        o.QueryProfile,
 		RouterAlertPolicing: util.AsBool(o.RouterAlertPolicing, nil),
 		Misc:                o.Misc,
+		MiscAttributes:      o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -11314,16 +12280,18 @@ func (o *vrfMulticastIgmpStaticXml_11_0_2) MarshalFromObject(s VrfMulticastIgmpS
 	o.GroupAddress = s.GroupAddress
 	o.SourceAddress = s.SourceAddress
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfMulticastIgmpStaticXml_11_0_2) UnmarshalToObject() (*VrfMulticastIgmpStatic, error) {
 
 	result := &VrfMulticastIgmpStatic{
-		Name:          o.Name,
-		Interface:     o.Interface,
-		GroupAddress:  o.GroupAddress,
-		SourceAddress: o.SourceAddress,
-		Misc:          o.Misc,
+		Name:           o.Name,
+		Interface:      o.Interface,
+		GroupAddress:   o.GroupAddress,
+		SourceAddress:  o.SourceAddress,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -11346,6 +12314,7 @@ func (o *vrfMulticastMsdpXml_11_0_2) MarshalFromObject(s VrfMulticastMsdp) {
 		o.Peer = &vrfMulticastMsdpPeerContainerXml_11_0_2{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfMulticastMsdpXml_11_0_2) UnmarshalToObject() (*VrfMulticastMsdp, error) {
@@ -11375,6 +12344,7 @@ func (o vrfMulticastMsdpXml_11_0_2) UnmarshalToObject() (*VrfMulticastMsdp, erro
 		OriginatorId:         originatorIdVal,
 		Peer:                 peerVal,
 		Misc:                 o.Misc,
+		MiscAttributes:       o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -11382,14 +12352,16 @@ func (o *vrfMulticastMsdpOriginatorIdXml_11_0_2) MarshalFromObject(s VrfMulticas
 	o.Interface = s.Interface
 	o.Ip = s.Ip
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfMulticastMsdpOriginatorIdXml_11_0_2) UnmarshalToObject() (*VrfMulticastMsdpOriginatorId, error) {
 
 	result := &VrfMulticastMsdpOriginatorId{
-		Interface: o.Interface,
-		Ip:        o.Ip,
-		Misc:      o.Misc,
+		Interface:      o.Interface,
+		Ip:             o.Ip,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -11412,6 +12384,7 @@ func (o *vrfMulticastMsdpPeerXml_11_0_2) MarshalFromObject(s VrfMulticastMsdpPee
 		o.PeerAddress = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfMulticastMsdpPeerXml_11_0_2) UnmarshalToObject() (*VrfMulticastMsdpPeer, error) {
@@ -11443,6 +12416,7 @@ func (o vrfMulticastMsdpPeerXml_11_0_2) UnmarshalToObject() (*VrfMulticastMsdpPe
 		LocalAddress:     localAddressVal,
 		PeerAddress:      peerAddressVal,
 		Misc:             o.Misc,
+		MiscAttributes:   o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -11450,14 +12424,16 @@ func (o *vrfMulticastMsdpPeerLocalAddressXml_11_0_2) MarshalFromObject(s VrfMult
 	o.Interface = s.Interface
 	o.Ip = s.Ip
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfMulticastMsdpPeerLocalAddressXml_11_0_2) UnmarshalToObject() (*VrfMulticastMsdpPeerLocalAddress, error) {
 
 	result := &VrfMulticastMsdpPeerLocalAddress{
-		Interface: o.Interface,
-		Ip:        o.Ip,
-		Misc:      o.Misc,
+		Interface:      o.Interface,
+		Ip:             o.Ip,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -11465,14 +12441,16 @@ func (o *vrfMulticastMsdpPeerPeerAddressXml_11_0_2) MarshalFromObject(s VrfMulti
 	o.Ip = s.Ip
 	o.Fqdn = s.Fqdn
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfMulticastMsdpPeerPeerAddressXml_11_0_2) UnmarshalToObject() (*VrfMulticastMsdpPeerPeerAddress, error) {
 
 	result := &VrfMulticastMsdpPeerPeerAddress{
-		Ip:   o.Ip,
-		Fqdn: o.Fqdn,
-		Misc: o.Misc,
+		Ip:             o.Ip,
+		Fqdn:           o.Fqdn,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -11507,6 +12485,7 @@ func (o *vrfRipXml_11_0_2) MarshalFromObject(s VrfRip) {
 		o.Interface = &vrfRipInterfaceContainerXml_11_0_2{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRipXml_11_0_2) UnmarshalToObject() (*VrfRip, error) {
@@ -11556,45 +12535,52 @@ func (o vrfRipXml_11_0_2) UnmarshalToObject() (*VrfRip, error) {
 		GlobalOutboundDistributeList: globalOutboundDistributeListVal,
 		Interface:                    interfaceVal,
 		Misc:                         o.Misc,
+		MiscAttributes:               o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfRipGlobalBfdXml_11_0_2) MarshalFromObject(s VrfRipGlobalBfd) {
 	o.Profile = s.Profile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRipGlobalBfdXml_11_0_2) UnmarshalToObject() (*VrfRipGlobalBfd, error) {
 
 	result := &VrfRipGlobalBfd{
-		Profile: o.Profile,
-		Misc:    o.Misc,
+		Profile:        o.Profile,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfRipGlobalInboundDistributeListXml_11_0_2) MarshalFromObject(s VrfRipGlobalInboundDistributeList) {
 	o.AccessList = s.AccessList
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRipGlobalInboundDistributeListXml_11_0_2) UnmarshalToObject() (*VrfRipGlobalInboundDistributeList, error) {
 
 	result := &VrfRipGlobalInboundDistributeList{
-		AccessList: o.AccessList,
-		Misc:       o.Misc,
+		AccessList:     o.AccessList,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfRipGlobalOutboundDistributeListXml_11_0_2) MarshalFromObject(s VrfRipGlobalOutboundDistributeList) {
 	o.AccessList = s.AccessList
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRipGlobalOutboundDistributeListXml_11_0_2) UnmarshalToObject() (*VrfRipGlobalOutboundDistributeList, error) {
 
 	result := &VrfRipGlobalOutboundDistributeList{
-		AccessList: o.AccessList,
-		Misc:       o.Misc,
+		AccessList:     o.AccessList,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -11620,6 +12606,7 @@ func (o *vrfRipInterfaceXml_11_0_2) MarshalFromObject(s VrfRipInterface) {
 		o.InterfaceOutboundDistributeList = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRipInterfaceXml_11_0_2) UnmarshalToObject() (*VrfRipInterface, error) {
@@ -11658,19 +12645,22 @@ func (o vrfRipInterfaceXml_11_0_2) UnmarshalToObject() (*VrfRipInterface, error)
 		InterfaceInboundDistributeList:  interfaceInboundDistributeListVal,
 		InterfaceOutboundDistributeList: interfaceOutboundDistributeListVal,
 		Misc:                            o.Misc,
+		MiscAttributes:                  o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *vrfRipInterfaceBfdXml_11_0_2) MarshalFromObject(s VrfRipInterfaceBfd) {
 	o.Profile = s.Profile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRipInterfaceBfdXml_11_0_2) UnmarshalToObject() (*VrfRipInterfaceBfd, error) {
 
 	result := &VrfRipInterfaceBfd{
-		Profile: o.Profile,
-		Misc:    o.Misc,
+		Profile:        o.Profile,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -11678,14 +12668,16 @@ func (o *vrfRipInterfaceInterfaceInboundDistributeListXml_11_0_2) MarshalFromObj
 	o.AccessList = s.AccessList
 	o.Metric = s.Metric
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRipInterfaceInterfaceInboundDistributeListXml_11_0_2) UnmarshalToObject() (*VrfRipInterfaceInterfaceInboundDistributeList, error) {
 
 	result := &VrfRipInterfaceInterfaceInboundDistributeList{
-		AccessList: o.AccessList,
-		Metric:     o.Metric,
-		Misc:       o.Misc,
+		AccessList:     o.AccessList,
+		Metric:         o.Metric,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -11693,14 +12685,16 @@ func (o *vrfRipInterfaceInterfaceOutboundDistributeListXml_11_0_2) MarshalFromOb
 	o.AccessList = s.AccessList
 	o.Metric = s.Metric
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o vrfRipInterfaceInterfaceOutboundDistributeListXml_11_0_2) UnmarshalToObject() (*VrfRipInterfaceInterfaceOutboundDistributeList, error) {
 
 	result := &VrfRipInterfaceInterfaceOutboundDistributeList{
-		AccessList: o.AccessList,
-		Metric:     o.Metric,
-		Misc:       o.Misc,
+		AccessList:     o.AccessList,
+		Metric:         o.Metric,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -14982,4 +15976,12 @@ func (o *Entry) EntryName() string {
 
 func (o *Entry) SetEntryName(name string) {
 	o.Name = name
+}
+
+func (o *Entry) GetMiscAttributes() []xml.Attr {
+	return o.MiscAttributes
+}
+
+func (o *Entry) SetMiscAttributes(attrs []xml.Attr) {
+	o.MiscAttributes = attrs
 }

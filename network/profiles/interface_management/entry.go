@@ -33,10 +33,12 @@ type Entry struct {
 	UseridSyslogListenerSsl *bool
 	UseridSyslogListenerUdp *bool
 	Misc                    []generic.Xml
+	MiscAttributes          []xml.Attr
 }
 type PermittedIp struct {
-	Name string
-	Misc []generic.Xml
+	Name           string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 
 type entryXmlContainer struct {
@@ -78,14 +80,16 @@ type entryXml struct {
 	UseridSyslogListenerSsl *string                  `xml:"userid-syslog-listener-ssl,omitempty"`
 	UseridSyslogListenerUdp *string                  `xml:"userid-syslog-listener-udp,omitempty"`
 	Misc                    []generic.Xml            `xml:",any"`
+	MiscAttributes          []xml.Attr               `xml:",any,attr"`
 }
 type permittedIpContainerXml struct {
 	Entries []permittedIpXml `xml:"entry"`
 }
 type permittedIpXml struct {
-	XMLName xml.Name      `xml:"entry"`
-	Name    string        `xml:"name,attr"`
-	Misc    []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 
 func (o *entryXml) MarshalFromObject(s Entry) {
@@ -111,6 +115,7 @@ func (o *entryXml) MarshalFromObject(s Entry) {
 	o.UseridSyslogListenerSsl = util.YesNo(s.UseridSyslogListenerSsl, nil)
 	o.UseridSyslogListenerUdp = util.YesNo(s.UseridSyslogListenerUdp, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o entryXml) UnmarshalToObject() (*Entry, error) {
@@ -140,19 +145,22 @@ func (o entryXml) UnmarshalToObject() (*Entry, error) {
 		UseridSyslogListenerSsl: util.AsBool(o.UseridSyslogListenerSsl, nil),
 		UseridSyslogListenerUdp: util.AsBool(o.UseridSyslogListenerUdp, nil),
 		Misc:                    o.Misc,
+		MiscAttributes:          o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *permittedIpXml) MarshalFromObject(s PermittedIp) {
 	o.Name = s.Name
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o permittedIpXml) UnmarshalToObject() (*PermittedIp, error) {
 
 	result := &PermittedIp{
-		Name: o.Name,
-		Misc: o.Misc,
+		Name:           o.Name,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -294,4 +302,12 @@ func (o *Entry) EntryName() string {
 
 func (o *Entry) SetEntryName(name string) {
 	o.Name = name
+}
+
+func (o *Entry) GetMiscAttributes() []xml.Attr {
+	return o.MiscAttributes
+}
+
+func (o *Entry) SetMiscAttributes(attrs []xml.Attr) {
+	o.MiscAttributes = attrs
 }

@@ -19,34 +19,39 @@ var (
 )
 
 type Entry struct {
-	Name        string
-	AdminDist   *int64
-	Bfd         *Bfd
-	Destination *string
-	Interface   *string
-	Metric      *int64
-	Nexthop     *Nexthop
-	PathMonitor *PathMonitor
-	RouteTable  *RouteTable
-	Misc        []generic.Xml
+	Name           string
+	AdminDist      *int64
+	Bfd            *Bfd
+	Destination    *string
+	Interface      *string
+	Metric         *int64
+	Nexthop        *Nexthop
+	PathMonitor    *PathMonitor
+	RouteTable     *RouteTable
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Bfd struct {
-	Profile *string
-	Misc    []generic.Xml
+	Profile        *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Nexthop struct {
-	Discard   *NexthopDiscard
-	Fqdn      *string
-	IpAddress *string
-	NextVr    *string
-	Receive   *NexthopReceive
-	Misc      []generic.Xml
+	Discard        *NexthopDiscard
+	Fqdn           *string
+	IpAddress      *string
+	NextVr         *string
+	Receive        *NexthopReceive
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type NexthopDiscard struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type NexthopReceive struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type PathMonitor struct {
 	Enable              *bool
@@ -54,34 +59,41 @@ type PathMonitor struct {
 	HoldTime            *int64
 	MonitorDestinations []PathMonitorMonitorDestinations
 	Misc                []generic.Xml
+	MiscAttributes      []xml.Attr
 }
 type PathMonitorMonitorDestinations struct {
-	Name        string
-	Enable      *bool
-	Source      *string
-	Destination *string
-	Interval    *int64
-	Count       *int64
-	Misc        []generic.Xml
+	Name           string
+	Enable         *bool
+	Source         *string
+	Destination    *string
+	Interval       *int64
+	Count          *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type RouteTable struct {
-	Both      *RouteTableBoth
-	Multicast *RouteTableMulticast
-	NoInstall *RouteTableNoInstall
-	Unicast   *RouteTableUnicast
-	Misc      []generic.Xml
+	Both           *RouteTableBoth
+	Multicast      *RouteTableMulticast
+	NoInstall      *RouteTableNoInstall
+	Unicast        *RouteTableUnicast
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type RouteTableBoth struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type RouteTableMulticast struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type RouteTableNoInstall struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type RouteTableUnicast struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 
 type entryXmlContainer struct {
@@ -108,35 +120,40 @@ func specifyEntry(source *Entry) (any, error) {
 }
 
 type entryXml struct {
-	XMLName     xml.Name        `xml:"entry"`
-	Name        string          `xml:"name,attr"`
-	AdminDist   *int64          `xml:"admin-dist,omitempty"`
-	Bfd         *bfdXml         `xml:"bfd,omitempty"`
-	Destination *string         `xml:"destination,omitempty"`
-	Interface   *string         `xml:"interface,omitempty"`
-	Metric      *int64          `xml:"metric,omitempty"`
-	Nexthop     *nexthopXml     `xml:"nexthop,omitempty"`
-	PathMonitor *pathMonitorXml `xml:"path-monitor,omitempty"`
-	RouteTable  *routeTableXml  `xml:"route-table,omitempty"`
-	Misc        []generic.Xml   `xml:",any"`
+	XMLName        xml.Name        `xml:"entry"`
+	Name           string          `xml:"name,attr"`
+	AdminDist      *int64          `xml:"admin-dist,omitempty"`
+	Bfd            *bfdXml         `xml:"bfd,omitempty"`
+	Destination    *string         `xml:"destination,omitempty"`
+	Interface      *string         `xml:"interface,omitempty"`
+	Metric         *int64          `xml:"metric,omitempty"`
+	Nexthop        *nexthopXml     `xml:"nexthop,omitempty"`
+	PathMonitor    *pathMonitorXml `xml:"path-monitor,omitempty"`
+	RouteTable     *routeTableXml  `xml:"route-table,omitempty"`
+	Misc           []generic.Xml   `xml:",any"`
+	MiscAttributes []xml.Attr      `xml:",any,attr"`
 }
 type bfdXml struct {
-	Profile *string       `xml:"profile,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	Profile        *string       `xml:"profile,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type nexthopXml struct {
-	Discard   *nexthopDiscardXml `xml:"discard,omitempty"`
-	Fqdn      *string            `xml:"fqdn,omitempty"`
-	IpAddress *string            `xml:"ip-address,omitempty"`
-	NextVr    *string            `xml:"next-vr,omitempty"`
-	Receive   *nexthopReceiveXml `xml:"receive,omitempty"`
-	Misc      []generic.Xml      `xml:",any"`
+	Discard        *nexthopDiscardXml `xml:"discard,omitempty"`
+	Fqdn           *string            `xml:"fqdn,omitempty"`
+	IpAddress      *string            `xml:"ip-address,omitempty"`
+	NextVr         *string            `xml:"next-vr,omitempty"`
+	Receive        *nexthopReceiveXml `xml:"receive,omitempty"`
+	Misc           []generic.Xml      `xml:",any"`
+	MiscAttributes []xml.Attr         `xml:",any,attr"`
 }
 type nexthopDiscardXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type nexthopReceiveXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type pathMonitorXml struct {
 	Enable              *string                                     `xml:"enable,omitempty"`
@@ -144,38 +161,45 @@ type pathMonitorXml struct {
 	HoldTime            *int64                                      `xml:"hold-time,omitempty"`
 	MonitorDestinations *pathMonitorMonitorDestinationsContainerXml `xml:"monitor-destinations,omitempty"`
 	Misc                []generic.Xml                               `xml:",any"`
+	MiscAttributes      []xml.Attr                                  `xml:",any,attr"`
 }
 type pathMonitorMonitorDestinationsContainerXml struct {
 	Entries []pathMonitorMonitorDestinationsXml `xml:"entry"`
 }
 type pathMonitorMonitorDestinationsXml struct {
-	XMLName     xml.Name      `xml:"entry"`
-	Name        string        `xml:"name,attr"`
-	Enable      *string       `xml:"enable,omitempty"`
-	Source      *string       `xml:"source,omitempty"`
-	Destination *string       `xml:"destination,omitempty"`
-	Interval    *int64        `xml:"interval,omitempty"`
-	Count       *int64        `xml:"count,omitempty"`
-	Misc        []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Enable         *string       `xml:"enable,omitempty"`
+	Source         *string       `xml:"source,omitempty"`
+	Destination    *string       `xml:"destination,omitempty"`
+	Interval       *int64        `xml:"interval,omitempty"`
+	Count          *int64        `xml:"count,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type routeTableXml struct {
-	Both      *routeTableBothXml      `xml:"both,omitempty"`
-	Multicast *routeTableMulticastXml `xml:"multicast,omitempty"`
-	NoInstall *routeTableNoInstallXml `xml:"no-install,omitempty"`
-	Unicast   *routeTableUnicastXml   `xml:"unicast,omitempty"`
-	Misc      []generic.Xml           `xml:",any"`
+	Both           *routeTableBothXml      `xml:"both,omitempty"`
+	Multicast      *routeTableMulticastXml `xml:"multicast,omitempty"`
+	NoInstall      *routeTableNoInstallXml `xml:"no-install,omitempty"`
+	Unicast        *routeTableUnicastXml   `xml:"unicast,omitempty"`
+	Misc           []generic.Xml           `xml:",any"`
+	MiscAttributes []xml.Attr              `xml:",any,attr"`
 }
 type routeTableBothXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type routeTableMulticastXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type routeTableNoInstallXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type routeTableUnicastXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 
 func (o *entryXml) MarshalFromObject(s Entry) {
@@ -205,6 +229,7 @@ func (o *entryXml) MarshalFromObject(s Entry) {
 		o.RouteTable = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o entryXml) UnmarshalToObject() (*Entry, error) {
@@ -242,29 +267,32 @@ func (o entryXml) UnmarshalToObject() (*Entry, error) {
 	}
 
 	result := &Entry{
-		Name:        o.Name,
-		AdminDist:   o.AdminDist,
-		Bfd:         bfdVal,
-		Destination: o.Destination,
-		Interface:   o.Interface,
-		Metric:      o.Metric,
-		Nexthop:     nexthopVal,
-		PathMonitor: pathMonitorVal,
-		RouteTable:  routeTableVal,
-		Misc:        o.Misc,
+		Name:           o.Name,
+		AdminDist:      o.AdminDist,
+		Bfd:            bfdVal,
+		Destination:    o.Destination,
+		Interface:      o.Interface,
+		Metric:         o.Metric,
+		Nexthop:        nexthopVal,
+		PathMonitor:    pathMonitorVal,
+		RouteTable:     routeTableVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *bfdXml) MarshalFromObject(s Bfd) {
 	o.Profile = s.Profile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o bfdXml) UnmarshalToObject() (*Bfd, error) {
 
 	result := &Bfd{
-		Profile: o.Profile,
-		Misc:    o.Misc,
+		Profile:        o.Profile,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -283,6 +311,7 @@ func (o *nexthopXml) MarshalFromObject(s Nexthop) {
 		o.Receive = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o nexthopXml) UnmarshalToObject() (*Nexthop, error) {
@@ -304,34 +333,39 @@ func (o nexthopXml) UnmarshalToObject() (*Nexthop, error) {
 	}
 
 	result := &Nexthop{
-		Discard:   discardVal,
-		Fqdn:      o.Fqdn,
-		IpAddress: o.IpAddress,
-		NextVr:    o.NextVr,
-		Receive:   receiveVal,
-		Misc:      o.Misc,
+		Discard:        discardVal,
+		Fqdn:           o.Fqdn,
+		IpAddress:      o.IpAddress,
+		NextVr:         o.NextVr,
+		Receive:        receiveVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *nexthopDiscardXml) MarshalFromObject(s NexthopDiscard) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o nexthopDiscardXml) UnmarshalToObject() (*NexthopDiscard, error) {
 
 	result := &NexthopDiscard{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *nexthopReceiveXml) MarshalFromObject(s NexthopReceive) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o nexthopReceiveXml) UnmarshalToObject() (*NexthopReceive, error) {
 
 	result := &NexthopReceive{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -349,6 +383,7 @@ func (o *pathMonitorXml) MarshalFromObject(s PathMonitor) {
 		o.MonitorDestinations = &pathMonitorMonitorDestinationsContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o pathMonitorXml) UnmarshalToObject() (*PathMonitor, error) {
@@ -369,6 +404,7 @@ func (o pathMonitorXml) UnmarshalToObject() (*PathMonitor, error) {
 		HoldTime:            o.HoldTime,
 		MonitorDestinations: monitorDestinationsVal,
 		Misc:                o.Misc,
+		MiscAttributes:      o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -380,18 +416,20 @@ func (o *pathMonitorMonitorDestinationsXml) MarshalFromObject(s PathMonitorMonit
 	o.Interval = s.Interval
 	o.Count = s.Count
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o pathMonitorMonitorDestinationsXml) UnmarshalToObject() (*PathMonitorMonitorDestinations, error) {
 
 	result := &PathMonitorMonitorDestinations{
-		Name:        o.Name,
-		Enable:      util.AsBool(o.Enable, nil),
-		Source:      o.Source,
-		Destination: o.Destination,
-		Interval:    o.Interval,
-		Count:       o.Count,
-		Misc:        o.Misc,
+		Name:           o.Name,
+		Enable:         util.AsBool(o.Enable, nil),
+		Source:         o.Source,
+		Destination:    o.Destination,
+		Interval:       o.Interval,
+		Count:          o.Count,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -417,6 +455,7 @@ func (o *routeTableXml) MarshalFromObject(s RouteTable) {
 		o.Unicast = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o routeTableXml) UnmarshalToObject() (*RouteTable, error) {
@@ -454,55 +493,64 @@ func (o routeTableXml) UnmarshalToObject() (*RouteTable, error) {
 	}
 
 	result := &RouteTable{
-		Both:      bothVal,
-		Multicast: multicastVal,
-		NoInstall: noInstallVal,
-		Unicast:   unicastVal,
-		Misc:      o.Misc,
+		Both:           bothVal,
+		Multicast:      multicastVal,
+		NoInstall:      noInstallVal,
+		Unicast:        unicastVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *routeTableBothXml) MarshalFromObject(s RouteTableBoth) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o routeTableBothXml) UnmarshalToObject() (*RouteTableBoth, error) {
 
 	result := &RouteTableBoth{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *routeTableMulticastXml) MarshalFromObject(s RouteTableMulticast) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o routeTableMulticastXml) UnmarshalToObject() (*RouteTableMulticast, error) {
 
 	result := &RouteTableMulticast{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *routeTableNoInstallXml) MarshalFromObject(s RouteTableNoInstall) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o routeTableNoInstallXml) UnmarshalToObject() (*RouteTableNoInstall, error) {
 
 	result := &RouteTableNoInstall{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *routeTableUnicastXml) MarshalFromObject(s RouteTableUnicast) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o routeTableUnicastXml) UnmarshalToObject() (*RouteTableUnicast, error) {
 
 	result := &RouteTableUnicast{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -794,4 +842,12 @@ func (o *Entry) EntryName() string {
 
 func (o *Entry) SetEntryName(name string) {
 	o.Name = name
+}
+
+func (o *Entry) GetMiscAttributes() []xml.Attr {
+	return o.MiscAttributes
+}
+
+func (o *Entry) SetMiscAttributes(attrs []xml.Attr) {
+	o.MiscAttributes = attrs
 }

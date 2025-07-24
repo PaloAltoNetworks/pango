@@ -19,21 +19,24 @@ var (
 )
 
 type Entry struct {
-	Name          string
-	Comment       *string
-	DecryptMirror *DecryptMirror
-	Ha            *Ha
-	Layer2        *Layer2
-	Layer3        *Layer3
-	VirtualWire   *VirtualWire
-	Misc          []generic.Xml
+	Name           string
+	Comment        *string
+	DecryptMirror  *DecryptMirror
+	Ha             *Ha
+	Layer2         *Layer2
+	Layer3         *Layer3
+	VirtualWire    *VirtualWire
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type DecryptMirror struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Ha struct {
-	Lacp *HaLacp
-	Misc []generic.Xml
+	Lacp           *HaLacp
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type HaLacp struct {
 	Enable           *bool
@@ -43,12 +46,14 @@ type HaLacp struct {
 	SystemPriority   *int64
 	TransmissionRate *string
 	Misc             []generic.Xml
+	MiscAttributes   []xml.Attr
 }
 type Layer2 struct {
 	Lacp           *Layer2Lacp
 	Lldp           *Layer2Lldp
 	NetflowProfile *string
 	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer2Lacp struct {
 	Enable           *bool
@@ -59,20 +64,24 @@ type Layer2Lacp struct {
 	SystemPriority   *int64
 	TransmissionRate *string
 	Misc             []generic.Xml
+	MiscAttributes   []xml.Attr
 }
 type Layer2LacpHighAvailability struct {
 	PassivePreNegotiation *bool
 	Misc                  []generic.Xml
+	MiscAttributes        []xml.Attr
 }
 type Layer2Lldp struct {
 	Enable           *bool
 	HighAvailability *Layer2LldpHighAvailability
 	Profile          *string
 	Misc             []generic.Xml
+	MiscAttributes   []xml.Attr
 }
 type Layer2LldpHighAvailability struct {
 	PassivePreNegotiation *bool
 	Misc                  []generic.Xml
+	MiscAttributes        []xml.Attr
 }
 type Layer3 struct {
 	AdjustTcpMss               *Layer3AdjustTcpMss
@@ -93,23 +102,27 @@ type Layer3 struct {
 	SdwanLinkSettings          *Layer3SdwanLinkSettings
 	UntaggedSubInterface       *bool
 	Misc                       []generic.Xml
+	MiscAttributes             []xml.Attr
 }
 type Layer3AdjustTcpMss struct {
 	Enable            *bool
 	Ipv4MssAdjustment *int64
 	Ipv6MssAdjustment *int64
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 type Layer3Arp struct {
-	Name      string
-	HwAddress *string
-	Misc      []generic.Xml
+	Name           string
+	HwAddress      *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3Bonjour struct {
-	Enable   *bool
-	GroupId  *int64
-	TtlCheck *bool
-	Misc     []generic.Xml
+	Enable         *bool
+	GroupId        *int64
+	TtlCheck       *bool
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3DdnsConfig struct {
 	DdnsCertProfile    *string
@@ -121,11 +134,13 @@ type Layer3DdnsConfig struct {
 	DdnsVendor         *string
 	DdnsVendorConfig   []Layer3DdnsConfigDdnsVendorConfig
 	Misc               []generic.Xml
+	MiscAttributes     []xml.Attr
 }
 type Layer3DdnsConfigDdnsVendorConfig struct {
-	Name  string
-	Value *string
-	Misc  []generic.Xml
+	Name           string
+	Value          *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3DhcpClient struct {
 	CreateDefaultRoute *bool
@@ -133,16 +148,19 @@ type Layer3DhcpClient struct {
 	Enable             *bool
 	SendHostname       *Layer3DhcpClientSendHostname
 	Misc               []generic.Xml
+	MiscAttributes     []xml.Attr
 }
 type Layer3DhcpClientSendHostname struct {
-	Enable   *bool
-	Hostname *string
-	Misc     []generic.Xml
+	Enable         *bool
+	Hostname       *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3Ip struct {
-	Name         string
-	SdwanGateway *string
-	Misc         []generic.Xml
+	Name           string
+	SdwanGateway   *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3Ipv6 struct {
 	Address           []Layer3Ipv6Address
@@ -152,6 +170,7 @@ type Layer3Ipv6 struct {
 	InterfaceId       *string
 	NeighborDiscovery *Layer3Ipv6NeighborDiscovery
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 type Layer3Ipv6Address struct {
 	Name              string
@@ -160,12 +179,15 @@ type Layer3Ipv6Address struct {
 	Anycast           *Layer3Ipv6AddressAnycast
 	Advertise         *Layer3Ipv6AddressAdvertise
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 type Layer3Ipv6AddressPrefix struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3Ipv6AddressAnycast struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3Ipv6AddressAdvertise struct {
 	Enable            *bool
@@ -174,6 +196,7 @@ type Layer3Ipv6AddressAdvertise struct {
 	OnlinkFlag        *bool
 	AutoConfigFlag    *bool
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 type Layer3Ipv6DhcpClient struct {
 	AcceptRaRoute      *bool
@@ -184,6 +207,7 @@ type Layer3Ipv6DhcpClient struct {
 	PrefixDelegation   *Layer3Ipv6DhcpClientPrefixDelegation
 	V6Options          *Layer3Ipv6DhcpClientV6Options
 	Misc               []generic.Xml
+	MiscAttributes     []xml.Attr
 }
 type Layer3Ipv6DhcpClientNeighborDiscovery struct {
 	DadAttempts      *int64
@@ -195,73 +219,89 @@ type Layer3Ipv6DhcpClientNeighborDiscovery struct {
 	NsInterval       *int64
 	ReachableTime    *int64
 	Misc             []generic.Xml
+	MiscAttributes   []xml.Attr
 }
 type Layer3Ipv6DhcpClientNeighborDiscoveryDnsServer struct {
-	Enable *bool
-	Source *Layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSource
-	Misc   []generic.Xml
+	Enable         *bool
+	Source         *Layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSource
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSource struct {
-	Dhcpv6 *Layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceDhcpv6
-	Manual *Layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManual
-	Misc   []generic.Xml
+	Dhcpv6         *Layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceDhcpv6
+	Manual         *Layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManual
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceDhcpv6 struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManual struct {
-	Server []Layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualServer
-	Misc   []generic.Xml
+	Server         []Layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualServer
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualServer struct {
-	Name     string
-	Lifetime *int64
-	Misc     []generic.Xml
+	Name           string
+	Lifetime       *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffix struct {
-	Enable *bool
-	Source *Layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSource
-	Misc   []generic.Xml
+	Enable         *bool
+	Source         *Layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSource
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSource struct {
-	Dhcpv6 *Layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceDhcpv6
-	Manual *Layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManual
-	Misc   []generic.Xml
+	Dhcpv6         *Layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceDhcpv6
+	Manual         *Layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManual
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceDhcpv6 struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManual struct {
-	Suffix []Layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffix
-	Misc   []generic.Xml
+	Suffix         []Layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffix
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffix struct {
-	Name     string
-	Lifetime *int64
-	Misc     []generic.Xml
+	Name           string
+	Lifetime       *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3Ipv6DhcpClientNeighborDiscoveryNeighbor struct {
-	Name      string
-	HwAddress *string
-	Misc      []generic.Xml
+	Name           string
+	HwAddress      *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3Ipv6DhcpClientPrefixDelegation struct {
-	Enable *Layer3Ipv6DhcpClientPrefixDelegationEnable
-	Misc   []generic.Xml
+	Enable         *Layer3Ipv6DhcpClientPrefixDelegationEnable
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3Ipv6DhcpClientPrefixDelegationEnable struct {
-	No   *Layer3Ipv6DhcpClientPrefixDelegationEnableNo
-	Yes  *Layer3Ipv6DhcpClientPrefixDelegationEnableYes
-	Misc []generic.Xml
+	No             *Layer3Ipv6DhcpClientPrefixDelegationEnableNo
+	Yes            *Layer3Ipv6DhcpClientPrefixDelegationEnableYes
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3Ipv6DhcpClientPrefixDelegationEnableNo struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3Ipv6DhcpClientPrefixDelegationEnableYes struct {
-	PfxPoolName   *string
-	PrefixLen     *int64
-	PrefixLenHint *bool
-	Misc          []generic.Xml
+	PfxPoolName    *string
+	PrefixLen      *int64
+	PrefixLenHint  *bool
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3Ipv6DhcpClientV6Options struct {
 	DuidType            *string
@@ -269,35 +309,42 @@ type Layer3Ipv6DhcpClientV6Options struct {
 	RapidCommit         *bool
 	SupportSrvrReconfig *bool
 	Misc                []generic.Xml
+	MiscAttributes      []xml.Attr
 }
 type Layer3Ipv6DhcpClientV6OptionsEnable struct {
-	No   *Layer3Ipv6DhcpClientV6OptionsEnableNo
-	Yes  *Layer3Ipv6DhcpClientV6OptionsEnableYes
-	Misc []generic.Xml
+	No             *Layer3Ipv6DhcpClientV6OptionsEnableNo
+	Yes            *Layer3Ipv6DhcpClientV6OptionsEnableYes
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3Ipv6DhcpClientV6OptionsEnableNo struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3Ipv6DhcpClientV6OptionsEnableYes struct {
-	NonTempAddr *bool
-	TempAddr    *bool
-	Misc        []generic.Xml
+	NonTempAddr    *bool
+	TempAddr       *bool
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3Ipv6Inherited struct {
 	AssignAddr        []Layer3Ipv6InheritedAssignAddr
 	Enable            *bool
 	NeighborDiscovery *Layer3Ipv6InheritedNeighborDiscovery
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 type Layer3Ipv6InheritedAssignAddr struct {
-	Name string
-	Type *Layer3Ipv6InheritedAssignAddrType
-	Misc []generic.Xml
+	Name           string
+	Type           *Layer3Ipv6InheritedAssignAddrType
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3Ipv6InheritedAssignAddrType struct {
-	Gua  *Layer3Ipv6InheritedAssignAddrTypeGua
-	Ula  *Layer3Ipv6InheritedAssignAddrTypeUla
-	Misc []generic.Xml
+	Gua            *Layer3Ipv6InheritedAssignAddrTypeGua
+	Ula            *Layer3Ipv6InheritedAssignAddrTypeUla
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3Ipv6InheritedAssignAddrTypeGua struct {
 	EnableOnInterface *bool
@@ -305,24 +352,29 @@ type Layer3Ipv6InheritedAssignAddrTypeGua struct {
 	PoolType          *Layer3Ipv6InheritedAssignAddrTypeGuaPoolType
 	Advertise         *Layer3Ipv6InheritedAssignAddrTypeGuaAdvertise
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 type Layer3Ipv6InheritedAssignAddrTypeGuaPoolType struct {
-	Dynamic   *Layer3Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamic
-	DynamicId *Layer3Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicId
-	Misc      []generic.Xml
+	Dynamic        *Layer3Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamic
+	DynamicId      *Layer3Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicId
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamic struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicId struct {
-	Identifier *int64
-	Misc       []generic.Xml
+	Identifier     *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3Ipv6InheritedAssignAddrTypeGuaAdvertise struct {
 	Enable         *bool
 	OnlinkFlag     *bool
 	AutoConfigFlag *bool
 	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3Ipv6InheritedAssignAddrTypeUla struct {
 	EnableOnInterface *bool
@@ -331,6 +383,7 @@ type Layer3Ipv6InheritedAssignAddrTypeUla struct {
 	Anycast           *bool
 	Advertise         *Layer3Ipv6InheritedAssignAddrTypeUlaAdvertise
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 type Layer3Ipv6InheritedAssignAddrTypeUlaAdvertise struct {
 	Enable            *bool
@@ -339,6 +392,7 @@ type Layer3Ipv6InheritedAssignAddrTypeUlaAdvertise struct {
 	OnlinkFlag        *bool
 	AutoConfigFlag    *bool
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 type Layer3Ipv6InheritedNeighborDiscovery struct {
 	DadAttempts         *int64
@@ -351,57 +405,69 @@ type Layer3Ipv6InheritedNeighborDiscovery struct {
 	ReachableTime       *int64
 	RouterAdvertisement *Layer3Ipv6InheritedNeighborDiscoveryRouterAdvertisement
 	Misc                []generic.Xml
+	MiscAttributes      []xml.Attr
 }
 type Layer3Ipv6InheritedNeighborDiscoveryDnsServer struct {
-	Enable *bool
-	Source *Layer3Ipv6InheritedNeighborDiscoveryDnsServerSource
-	Misc   []generic.Xml
+	Enable         *bool
+	Source         *Layer3Ipv6InheritedNeighborDiscoveryDnsServerSource
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3Ipv6InheritedNeighborDiscoveryDnsServerSource struct {
-	Dhcpv6 *Layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceDhcpv6
-	Manual *Layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceManual
-	Misc   []generic.Xml
+	Dhcpv6         *Layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceDhcpv6
+	Manual         *Layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceManual
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceDhcpv6 struct {
-	PrefixPool *string
-	Misc       []generic.Xml
+	PrefixPool     *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceManual struct {
-	Server []Layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceManualServer
-	Misc   []generic.Xml
+	Server         []Layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceManualServer
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceManualServer struct {
-	Name     string
-	Lifetime *int64
-	Misc     []generic.Xml
+	Name           string
+	Lifetime       *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3Ipv6InheritedNeighborDiscoveryDnsSuffix struct {
-	Enable *bool
-	Source *Layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSource
-	Misc   []generic.Xml
+	Enable         *bool
+	Source         *Layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSource
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSource struct {
-	Dhcpv6 *Layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceDhcpv6
-	Manual *Layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManual
-	Misc   []generic.Xml
+	Dhcpv6         *Layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceDhcpv6
+	Manual         *Layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManual
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceDhcpv6 struct {
-	PrefixPool *string
-	Misc       []generic.Xml
+	PrefixPool     *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManual struct {
-	Suffix []Layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffix
-	Misc   []generic.Xml
+	Suffix         []Layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffix
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffix struct {
-	Name     string
-	Lifetime *int64
-	Misc     []generic.Xml
+	Name           string
+	Lifetime       *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3Ipv6InheritedNeighborDiscoveryNeighbor struct {
-	Name      string
-	HwAddress *string
-	Misc      []generic.Xml
+	Name           string
+	HwAddress      *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3Ipv6InheritedNeighborDiscoveryRouterAdvertisement struct {
 	Enable                 *bool
@@ -417,6 +483,7 @@ type Layer3Ipv6InheritedNeighborDiscoveryRouterAdvertisement struct {
 	RetransmissionTimer    *string
 	RouterPreference       *string
 	Misc                   []generic.Xml
+	MiscAttributes         []xml.Attr
 }
 type Layer3Ipv6NeighborDiscovery struct {
 	DadAttempts         *int64
@@ -427,11 +494,13 @@ type Layer3Ipv6NeighborDiscovery struct {
 	ReachableTime       *int64
 	RouterAdvertisement *Layer3Ipv6NeighborDiscoveryRouterAdvertisement
 	Misc                []generic.Xml
+	MiscAttributes      []xml.Attr
 }
 type Layer3Ipv6NeighborDiscoveryNeighbor struct {
-	Name      string
-	HwAddress *string
-	Misc      []generic.Xml
+	Name           string
+	HwAddress      *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3Ipv6NeighborDiscoveryRouterAdvertisement struct {
 	DnsSupport             *Layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupport
@@ -448,22 +517,26 @@ type Layer3Ipv6NeighborDiscoveryRouterAdvertisement struct {
 	RetransmissionTimer    *string
 	RouterPreference       *string
 	Misc                   []generic.Xml
+	MiscAttributes         []xml.Attr
 }
 type Layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupport struct {
-	Enable *bool
-	Server []Layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServer
-	Suffix []Layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffix
-	Misc   []generic.Xml
+	Enable         *bool
+	Server         []Layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServer
+	Suffix         []Layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffix
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServer struct {
-	Name     string
-	Lifetime *int64
-	Misc     []generic.Xml
+	Name           string
+	Lifetime       *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffix struct {
-	Name     string
-	Lifetime *int64
-	Misc     []generic.Xml
+	Name           string
+	Lifetime       *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3Lacp struct {
 	Enable           *bool
@@ -474,65 +547,78 @@ type Layer3Lacp struct {
 	SystemPriority   *int64
 	TransmissionRate *string
 	Misc             []generic.Xml
+	MiscAttributes   []xml.Attr
 }
 type Layer3LacpHighAvailability struct {
 	PassivePreNegotiation *bool
 	Misc                  []generic.Xml
+	MiscAttributes        []xml.Attr
 }
 type Layer3Lldp struct {
 	Enable           *bool
 	HighAvailability *Layer3LldpHighAvailability
 	Profile          *string
 	Misc             []generic.Xml
+	MiscAttributes   []xml.Attr
 }
 type Layer3LldpHighAvailability struct {
 	PassivePreNegotiation *bool
 	Misc                  []generic.Xml
+	MiscAttributes        []xml.Attr
 }
 type Layer3NdpProxy struct {
-	Address []Layer3NdpProxyAddress
-	Enabled *bool
-	Misc    []generic.Xml
+	Address        []Layer3NdpProxyAddress
+	Enabled        *bool
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3NdpProxyAddress struct {
-	Name   string
-	Negate *bool
-	Misc   []generic.Xml
+	Name           string
+	Negate         *bool
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3SdwanLinkSettings struct {
 	Enable                *bool
 	SdwanInterfaceProfile *string
 	UpstreamNat           *Layer3SdwanLinkSettingsUpstreamNat
 	Misc                  []generic.Xml
+	MiscAttributes        []xml.Attr
 }
 type Layer3SdwanLinkSettingsUpstreamNat struct {
-	Enable   *bool
-	Ddns     *Layer3SdwanLinkSettingsUpstreamNatDdns
-	StaticIp *Layer3SdwanLinkSettingsUpstreamNatStaticIp
-	Misc     []generic.Xml
+	Enable         *bool
+	Ddns           *Layer3SdwanLinkSettingsUpstreamNatDdns
+	StaticIp       *Layer3SdwanLinkSettingsUpstreamNatStaticIp
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3SdwanLinkSettingsUpstreamNatDdns struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Layer3SdwanLinkSettingsUpstreamNatStaticIp struct {
-	Fqdn      *string
-	IpAddress *string
-	Misc      []generic.Xml
+	Fqdn           *string
+	IpAddress      *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VirtualWire struct {
 	Lldp           *VirtualWireLldp
 	NetflowProfile *string
 	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type VirtualWireLldp struct {
 	Enable           *bool
 	HighAvailability *VirtualWireLldpHighAvailability
 	Profile          *string
 	Misc             []generic.Xml
+	MiscAttributes   []xml.Attr
 }
 type VirtualWireLldpHighAvailability struct {
 	PassivePreNegotiation *bool
 	Misc                  []generic.Xml
+	MiscAttributes        []xml.Attr
 }
 
 type entryXmlContainer struct {
@@ -580,22 +666,25 @@ func specifyEntry_11_0_2(source *Entry) (any, error) {
 }
 
 type entryXml struct {
-	XMLName       xml.Name          `xml:"entry"`
-	Name          string            `xml:"name,attr"`
-	Comment       *string           `xml:"comment,omitempty"`
-	DecryptMirror *decryptMirrorXml `xml:"decrypt-mirror,omitempty"`
-	Ha            *haXml            `xml:"ha,omitempty"`
-	Layer2        *layer2Xml        `xml:"layer2,omitempty"`
-	Layer3        *layer3Xml        `xml:"layer3,omitempty"`
-	VirtualWire   *virtualWireXml   `xml:"virtual-wire,omitempty"`
-	Misc          []generic.Xml     `xml:",any"`
+	XMLName        xml.Name          `xml:"entry"`
+	Name           string            `xml:"name,attr"`
+	Comment        *string           `xml:"comment,omitempty"`
+	DecryptMirror  *decryptMirrorXml `xml:"decrypt-mirror,omitempty"`
+	Ha             *haXml            `xml:"ha,omitempty"`
+	Layer2         *layer2Xml        `xml:"layer2,omitempty"`
+	Layer3         *layer3Xml        `xml:"layer3,omitempty"`
+	VirtualWire    *virtualWireXml   `xml:"virtual-wire,omitempty"`
+	Misc           []generic.Xml     `xml:",any"`
+	MiscAttributes []xml.Attr        `xml:",any,attr"`
 }
 type decryptMirrorXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type haXml struct {
-	Lacp *haLacpXml    `xml:"lacp,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Lacp           *haLacpXml    `xml:"lacp,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type haLacpXml struct {
 	Enable           *string       `xml:"enable,omitempty"`
@@ -605,12 +694,14 @@ type haLacpXml struct {
 	SystemPriority   *int64        `xml:"system-priority,omitempty"`
 	TransmissionRate *string       `xml:"transmission-rate,omitempty"`
 	Misc             []generic.Xml `xml:",any"`
+	MiscAttributes   []xml.Attr    `xml:",any,attr"`
 }
 type layer2Xml struct {
 	Lacp           *layer2LacpXml `xml:"lacp,omitempty"`
 	Lldp           *layer2LldpXml `xml:"lldp,omitempty"`
 	NetflowProfile *string        `xml:"netflow-profile,omitempty"`
 	Misc           []generic.Xml  `xml:",any"`
+	MiscAttributes []xml.Attr     `xml:",any,attr"`
 }
 type layer2LacpXml struct {
 	Enable           *string                        `xml:"enable,omitempty"`
@@ -621,20 +712,24 @@ type layer2LacpXml struct {
 	SystemPriority   *int64                         `xml:"system-priority,omitempty"`
 	TransmissionRate *string                        `xml:"transmission-rate,omitempty"`
 	Misc             []generic.Xml                  `xml:",any"`
+	MiscAttributes   []xml.Attr                     `xml:",any,attr"`
 }
 type layer2LacpHighAvailabilityXml struct {
 	PassivePreNegotiation *string       `xml:"passive-pre-negotiation,omitempty"`
 	Misc                  []generic.Xml `xml:",any"`
+	MiscAttributes        []xml.Attr    `xml:",any,attr"`
 }
 type layer2LldpXml struct {
 	Enable           *string                        `xml:"enable,omitempty"`
 	HighAvailability *layer2LldpHighAvailabilityXml `xml:"high-availability,omitempty"`
 	Profile          *string                        `xml:"profile,omitempty"`
 	Misc             []generic.Xml                  `xml:",any"`
+	MiscAttributes   []xml.Attr                     `xml:",any,attr"`
 }
 type layer2LldpHighAvailabilityXml struct {
 	PassivePreNegotiation *string       `xml:"passive-pre-negotiation,omitempty"`
 	Misc                  []generic.Xml `xml:",any"`
+	MiscAttributes        []xml.Attr    `xml:",any,attr"`
 }
 type layer3Xml struct {
 	AdjustTcpMss               *layer3AdjustTcpMssXml      `xml:"adjust-tcp-mss,omitempty"`
@@ -655,27 +750,31 @@ type layer3Xml struct {
 	SdwanLinkSettings          *layer3SdwanLinkSettingsXml `xml:"sdwan-link-settings,omitempty"`
 	UntaggedSubInterface       *string                     `xml:"untagged-sub-interface,omitempty"`
 	Misc                       []generic.Xml               `xml:",any"`
+	MiscAttributes             []xml.Attr                  `xml:",any,attr"`
 }
 type layer3AdjustTcpMssXml struct {
 	Enable            *string       `xml:"enable,omitempty"`
 	Ipv4MssAdjustment *int64        `xml:"ipv4-mss-adjustment,omitempty"`
 	Ipv6MssAdjustment *int64        `xml:"ipv6-mss-adjustment,omitempty"`
 	Misc              []generic.Xml `xml:",any"`
+	MiscAttributes    []xml.Attr    `xml:",any,attr"`
 }
 type layer3ArpContainerXml struct {
 	Entries []layer3ArpXml `xml:"entry"`
 }
 type layer3ArpXml struct {
-	XMLName   xml.Name      `xml:"entry"`
-	Name      string        `xml:"name,attr"`
-	HwAddress *string       `xml:"hw-address,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	HwAddress      *string       `xml:"hw-address,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3BonjourXml struct {
-	Enable   *string       `xml:"enable,omitempty"`
-	GroupId  *int64        `xml:"group-id,omitempty"`
-	TtlCheck *string       `xml:"ttl-check,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	Enable         *string       `xml:"enable,omitempty"`
+	GroupId        *int64        `xml:"group-id,omitempty"`
+	TtlCheck       *string       `xml:"ttl-check,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3DdnsConfigXml struct {
 	DdnsCertProfile    *string                                       `xml:"ddns-cert-profile,omitempty"`
@@ -687,15 +786,17 @@ type layer3DdnsConfigXml struct {
 	DdnsVendor         *string                                       `xml:"ddns-vendor,omitempty"`
 	DdnsVendorConfig   *layer3DdnsConfigDdnsVendorConfigContainerXml `xml:"ddns-vendor-config,omitempty"`
 	Misc               []generic.Xml                                 `xml:",any"`
+	MiscAttributes     []xml.Attr                                    `xml:",any,attr"`
 }
 type layer3DdnsConfigDdnsVendorConfigContainerXml struct {
 	Entries []layer3DdnsConfigDdnsVendorConfigXml `xml:"entry"`
 }
 type layer3DdnsConfigDdnsVendorConfigXml struct {
-	XMLName xml.Name      `xml:"entry"`
-	Name    string        `xml:"name,attr"`
-	Value   *string       `xml:"value,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Value          *string       `xml:"value,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3DhcpClientXml struct {
 	CreateDefaultRoute *string                          `xml:"create-default-route,omitempty"`
@@ -703,20 +804,23 @@ type layer3DhcpClientXml struct {
 	Enable             *string                          `xml:"enable,omitempty"`
 	SendHostname       *layer3DhcpClientSendHostnameXml `xml:"send-hostname,omitempty"`
 	Misc               []generic.Xml                    `xml:",any"`
+	MiscAttributes     []xml.Attr                       `xml:",any,attr"`
 }
 type layer3DhcpClientSendHostnameXml struct {
-	Enable   *string       `xml:"enable,omitempty"`
-	Hostname *string       `xml:"hostname,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	Enable         *string       `xml:"enable,omitempty"`
+	Hostname       *string       `xml:"hostname,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3IpContainerXml struct {
 	Entries []layer3IpXml `xml:"entry"`
 }
 type layer3IpXml struct {
-	XMLName      xml.Name      `xml:"entry"`
-	Name         string        `xml:"name,attr"`
-	SdwanGateway *string       `xml:"sdwan-gateway,omitempty"`
-	Misc         []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	SdwanGateway   *string       `xml:"sdwan-gateway,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6Xml struct {
 	Address           *layer3Ipv6AddressContainerXml  `xml:"address,omitempty"`
@@ -726,6 +830,7 @@ type layer3Ipv6Xml struct {
 	InterfaceId       *string                         `xml:"interface-id,omitempty"`
 	NeighborDiscovery *layer3Ipv6NeighborDiscoveryXml `xml:"neighbor-discovery,omitempty"`
 	Misc              []generic.Xml                   `xml:",any"`
+	MiscAttributes    []xml.Attr                      `xml:",any,attr"`
 }
 type layer3Ipv6AddressContainerXml struct {
 	Entries []layer3Ipv6AddressXml `xml:"entry"`
@@ -738,12 +843,15 @@ type layer3Ipv6AddressXml struct {
 	Anycast           *layer3Ipv6AddressAnycastXml   `xml:"anycast,omitempty"`
 	Advertise         *layer3Ipv6AddressAdvertiseXml `xml:"advertise,omitempty"`
 	Misc              []generic.Xml                  `xml:",any"`
+	MiscAttributes    []xml.Attr                     `xml:",any,attr"`
 }
 type layer3Ipv6AddressPrefixXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6AddressAnycastXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6AddressAdvertiseXml struct {
 	Enable            *string       `xml:"enable,omitempty"`
@@ -752,6 +860,7 @@ type layer3Ipv6AddressAdvertiseXml struct {
 	OnlinkFlag        *string       `xml:"onlink-flag,omitempty"`
 	AutoConfigFlag    *string       `xml:"auto-config-flag,omitempty"`
 	Misc              []generic.Xml `xml:",any"`
+	MiscAttributes    []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6DhcpClientXml struct {
 	AcceptRaRoute      *string                                   `xml:"accept-ra-route,omitempty"`
@@ -762,6 +871,7 @@ type layer3Ipv6DhcpClientXml struct {
 	PrefixDelegation   *layer3Ipv6DhcpClientPrefixDelegationXml  `xml:"prefix-delegation,omitempty"`
 	V6Options          *layer3Ipv6DhcpClientV6OptionsXml         `xml:"v6-options,omitempty"`
 	Misc               []generic.Xml                             `xml:",any"`
+	MiscAttributes     []xml.Attr                                `xml:",any,attr"`
 }
 type layer3Ipv6DhcpClientNeighborDiscoveryXml struct {
 	DadAttempts      *int64                                                     `xml:"dad-attempts,omitempty"`
@@ -773,85 +883,101 @@ type layer3Ipv6DhcpClientNeighborDiscoveryXml struct {
 	NsInterval       *int64                                                     `xml:"ns-interval,omitempty"`
 	ReachableTime    *int64                                                     `xml:"reachable-time,omitempty"`
 	Misc             []generic.Xml                                              `xml:",any"`
+	MiscAttributes   []xml.Attr                                                 `xml:",any,attr"`
 }
 type layer3Ipv6DhcpClientNeighborDiscoveryDnsServerXml struct {
-	Enable *string                                                  `xml:"enable,omitempty"`
-	Source *layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceXml `xml:"source,omitempty"`
-	Misc   []generic.Xml                                            `xml:",any"`
+	Enable         *string                                                  `xml:"enable,omitempty"`
+	Source         *layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceXml `xml:"source,omitempty"`
+	Misc           []generic.Xml                                            `xml:",any"`
+	MiscAttributes []xml.Attr                                               `xml:",any,attr"`
 }
 type layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceXml struct {
-	Dhcpv6 *layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceDhcpv6Xml `xml:"dhcpv6,omitempty"`
-	Manual *layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualXml `xml:"manual,omitempty"`
-	Misc   []generic.Xml                                                  `xml:",any"`
+	Dhcpv6         *layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceDhcpv6Xml `xml:"dhcpv6,omitempty"`
+	Manual         *layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualXml `xml:"manual,omitempty"`
+	Misc           []generic.Xml                                                  `xml:",any"`
+	MiscAttributes []xml.Attr                                                     `xml:",any,attr"`
 }
 type layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceDhcpv6Xml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualXml struct {
-	Server *layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualServerContainerXml `xml:"server,omitempty"`
-	Misc   []generic.Xml                                                                 `xml:",any"`
+	Server         *layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualServerContainerXml `xml:"server,omitempty"`
+	Misc           []generic.Xml                                                                 `xml:",any"`
+	MiscAttributes []xml.Attr                                                                    `xml:",any,attr"`
 }
 type layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualServerContainerXml struct {
 	Entries []layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualServerXml `xml:"entry"`
 }
 type layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualServerXml struct {
-	XMLName  xml.Name      `xml:"entry"`
-	Name     string        `xml:"name,attr"`
-	Lifetime *int64        `xml:"lifetime,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Lifetime       *int64        `xml:"lifetime,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixXml struct {
-	Enable *string                                                  `xml:"enable,omitempty"`
-	Source *layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceXml `xml:"source,omitempty"`
-	Misc   []generic.Xml                                            `xml:",any"`
+	Enable         *string                                                  `xml:"enable,omitempty"`
+	Source         *layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceXml `xml:"source,omitempty"`
+	Misc           []generic.Xml                                            `xml:",any"`
+	MiscAttributes []xml.Attr                                               `xml:",any,attr"`
 }
 type layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceXml struct {
-	Dhcpv6 *layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceDhcpv6Xml `xml:"dhcpv6,omitempty"`
-	Manual *layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualXml `xml:"manual,omitempty"`
-	Misc   []generic.Xml                                                  `xml:",any"`
+	Dhcpv6         *layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceDhcpv6Xml `xml:"dhcpv6,omitempty"`
+	Manual         *layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualXml `xml:"manual,omitempty"`
+	Misc           []generic.Xml                                                  `xml:",any"`
+	MiscAttributes []xml.Attr                                                     `xml:",any,attr"`
 }
 type layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceDhcpv6Xml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualXml struct {
-	Suffix *layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffixContainerXml `xml:"suffix,omitempty"`
-	Misc   []generic.Xml                                                                 `xml:",any"`
+	Suffix         *layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffixContainerXml `xml:"suffix,omitempty"`
+	Misc           []generic.Xml                                                                 `xml:",any"`
+	MiscAttributes []xml.Attr                                                                    `xml:",any,attr"`
 }
 type layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffixContainerXml struct {
 	Entries []layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffixXml `xml:"entry"`
 }
 type layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffixXml struct {
-	XMLName  xml.Name      `xml:"entry"`
-	Name     string        `xml:"name,attr"`
-	Lifetime *int64        `xml:"lifetime,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Lifetime       *int64        `xml:"lifetime,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6DhcpClientNeighborDiscoveryNeighborContainerXml struct {
 	Entries []layer3Ipv6DhcpClientNeighborDiscoveryNeighborXml `xml:"entry"`
 }
 type layer3Ipv6DhcpClientNeighborDiscoveryNeighborXml struct {
-	XMLName   xml.Name      `xml:"entry"`
-	Name      string        `xml:"name,attr"`
-	HwAddress *string       `xml:"hw-address,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	HwAddress      *string       `xml:"hw-address,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6DhcpClientPrefixDelegationXml struct {
-	Enable *layer3Ipv6DhcpClientPrefixDelegationEnableXml `xml:"enable,omitempty"`
-	Misc   []generic.Xml                                  `xml:",any"`
+	Enable         *layer3Ipv6DhcpClientPrefixDelegationEnableXml `xml:"enable,omitempty"`
+	Misc           []generic.Xml                                  `xml:",any"`
+	MiscAttributes []xml.Attr                                     `xml:",any,attr"`
 }
 type layer3Ipv6DhcpClientPrefixDelegationEnableXml struct {
-	No   *layer3Ipv6DhcpClientPrefixDelegationEnableNoXml  `xml:"no,omitempty"`
-	Yes  *layer3Ipv6DhcpClientPrefixDelegationEnableYesXml `xml:"yes,omitempty"`
-	Misc []generic.Xml                                     `xml:",any"`
+	No             *layer3Ipv6DhcpClientPrefixDelegationEnableNoXml  `xml:"no,omitempty"`
+	Yes            *layer3Ipv6DhcpClientPrefixDelegationEnableYesXml `xml:"yes,omitempty"`
+	Misc           []generic.Xml                                     `xml:",any"`
+	MiscAttributes []xml.Attr                                        `xml:",any,attr"`
 }
 type layer3Ipv6DhcpClientPrefixDelegationEnableNoXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6DhcpClientPrefixDelegationEnableYesXml struct {
-	PfxPoolName   *string       `xml:"pfx-pool-name,omitempty"`
-	PrefixLen     *int64        `xml:"prefix-len,omitempty"`
-	PrefixLenHint *string       `xml:"prefix-len-hint,omitempty"`
-	Misc          []generic.Xml `xml:",any"`
+	PfxPoolName    *string       `xml:"pfx-pool-name,omitempty"`
+	PrefixLen      *int64        `xml:"prefix-len,omitempty"`
+	PrefixLenHint  *string       `xml:"prefix-len-hint,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6DhcpClientV6OptionsXml struct {
 	DuidType            *string                                 `xml:"duid-type,omitempty"`
@@ -859,39 +985,46 @@ type layer3Ipv6DhcpClientV6OptionsXml struct {
 	RapidCommit         *string                                 `xml:"rapid-commit,omitempty"`
 	SupportSrvrReconfig *string                                 `xml:"support-srvr-reconfig,omitempty"`
 	Misc                []generic.Xml                           `xml:",any"`
+	MiscAttributes      []xml.Attr                              `xml:",any,attr"`
 }
 type layer3Ipv6DhcpClientV6OptionsEnableXml struct {
-	No   *layer3Ipv6DhcpClientV6OptionsEnableNoXml  `xml:"no,omitempty"`
-	Yes  *layer3Ipv6DhcpClientV6OptionsEnableYesXml `xml:"yes,omitempty"`
-	Misc []generic.Xml                              `xml:",any"`
+	No             *layer3Ipv6DhcpClientV6OptionsEnableNoXml  `xml:"no,omitempty"`
+	Yes            *layer3Ipv6DhcpClientV6OptionsEnableYesXml `xml:"yes,omitempty"`
+	Misc           []generic.Xml                              `xml:",any"`
+	MiscAttributes []xml.Attr                                 `xml:",any,attr"`
 }
 type layer3Ipv6DhcpClientV6OptionsEnableNoXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6DhcpClientV6OptionsEnableYesXml struct {
-	NonTempAddr *string       `xml:"non-temp-addr,omitempty"`
-	TempAddr    *string       `xml:"temp-addr,omitempty"`
-	Misc        []generic.Xml `xml:",any"`
+	NonTempAddr    *string       `xml:"non-temp-addr,omitempty"`
+	TempAddr       *string       `xml:"temp-addr,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6InheritedXml struct {
 	AssignAddr        *layer3Ipv6InheritedAssignAddrContainerXml `xml:"assign-addr,omitempty"`
 	Enable            *string                                    `xml:"enable,omitempty"`
 	NeighborDiscovery *layer3Ipv6InheritedNeighborDiscoveryXml   `xml:"neighbor-discovery,omitempty"`
 	Misc              []generic.Xml                              `xml:",any"`
+	MiscAttributes    []xml.Attr                                 `xml:",any,attr"`
 }
 type layer3Ipv6InheritedAssignAddrContainerXml struct {
 	Entries []layer3Ipv6InheritedAssignAddrXml `xml:"entry"`
 }
 type layer3Ipv6InheritedAssignAddrXml struct {
-	XMLName xml.Name                              `xml:"entry"`
-	Name    string                                `xml:"name,attr"`
-	Type    *layer3Ipv6InheritedAssignAddrTypeXml `xml:"type,omitempty"`
-	Misc    []generic.Xml                         `xml:",any"`
+	XMLName        xml.Name                              `xml:"entry"`
+	Name           string                                `xml:"name,attr"`
+	Type           *layer3Ipv6InheritedAssignAddrTypeXml `xml:"type,omitempty"`
+	Misc           []generic.Xml                         `xml:",any"`
+	MiscAttributes []xml.Attr                            `xml:",any,attr"`
 }
 type layer3Ipv6InheritedAssignAddrTypeXml struct {
-	Gua  *layer3Ipv6InheritedAssignAddrTypeGuaXml `xml:"gua,omitempty"`
-	Ula  *layer3Ipv6InheritedAssignAddrTypeUlaXml `xml:"ula,omitempty"`
-	Misc []generic.Xml                            `xml:",any"`
+	Gua            *layer3Ipv6InheritedAssignAddrTypeGuaXml `xml:"gua,omitempty"`
+	Ula            *layer3Ipv6InheritedAssignAddrTypeUlaXml `xml:"ula,omitempty"`
+	Misc           []generic.Xml                            `xml:",any"`
+	MiscAttributes []xml.Attr                               `xml:",any,attr"`
 }
 type layer3Ipv6InheritedAssignAddrTypeGuaXml struct {
 	EnableOnInterface *string                                           `xml:"enable-on-interface,omitempty"`
@@ -899,24 +1032,29 @@ type layer3Ipv6InheritedAssignAddrTypeGuaXml struct {
 	PoolType          *layer3Ipv6InheritedAssignAddrTypeGuaPoolTypeXml  `xml:"pool-type,omitempty"`
 	Advertise         *layer3Ipv6InheritedAssignAddrTypeGuaAdvertiseXml `xml:"advertise,omitempty"`
 	Misc              []generic.Xml                                     `xml:",any"`
+	MiscAttributes    []xml.Attr                                        `xml:",any,attr"`
 }
 type layer3Ipv6InheritedAssignAddrTypeGuaPoolTypeXml struct {
-	Dynamic   *layer3Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicXml   `xml:"dynamic,omitempty"`
-	DynamicId *layer3Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicIdXml `xml:"dynamic-id,omitempty"`
-	Misc      []generic.Xml                                             `xml:",any"`
+	Dynamic        *layer3Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicXml   `xml:"dynamic,omitempty"`
+	DynamicId      *layer3Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicIdXml `xml:"dynamic-id,omitempty"`
+	Misc           []generic.Xml                                             `xml:",any"`
+	MiscAttributes []xml.Attr                                                `xml:",any,attr"`
 }
 type layer3Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicIdXml struct {
-	Identifier *int64        `xml:"identifier,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	Identifier     *int64        `xml:"identifier,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6InheritedAssignAddrTypeGuaAdvertiseXml struct {
 	Enable         *string       `xml:"enable,omitempty"`
 	OnlinkFlag     *string       `xml:"onlink-flag,omitempty"`
 	AutoConfigFlag *string       `xml:"auto-config-flag,omitempty"`
 	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6InheritedAssignAddrTypeUlaXml struct {
 	EnableOnInterface *string                                           `xml:"enable-on-interface,omitempty"`
@@ -925,6 +1063,7 @@ type layer3Ipv6InheritedAssignAddrTypeUlaXml struct {
 	Anycast           *string                                           `xml:"anycast,omitempty"`
 	Advertise         *layer3Ipv6InheritedAssignAddrTypeUlaAdvertiseXml `xml:"advertise,omitempty"`
 	Misc              []generic.Xml                                     `xml:",any"`
+	MiscAttributes    []xml.Attr                                        `xml:",any,attr"`
 }
 type layer3Ipv6InheritedAssignAddrTypeUlaAdvertiseXml struct {
 	Enable            *string       `xml:"enable,omitempty"`
@@ -933,6 +1072,7 @@ type layer3Ipv6InheritedAssignAddrTypeUlaAdvertiseXml struct {
 	OnlinkFlag        *string       `xml:"onlink-flag,omitempty"`
 	AutoConfigFlag    *string       `xml:"auto-config-flag,omitempty"`
 	Misc              []generic.Xml `xml:",any"`
+	MiscAttributes    []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6InheritedNeighborDiscoveryXml struct {
 	DadAttempts         *int64                                                      `xml:"dad-attempts,omitempty"`
@@ -945,69 +1085,81 @@ type layer3Ipv6InheritedNeighborDiscoveryXml struct {
 	ReachableTime       *int64                                                      `xml:"reachable-time,omitempty"`
 	RouterAdvertisement *layer3Ipv6InheritedNeighborDiscoveryRouterAdvertisementXml `xml:"router-advertisement,omitempty"`
 	Misc                []generic.Xml                                               `xml:",any"`
+	MiscAttributes      []xml.Attr                                                  `xml:",any,attr"`
 }
 type layer3Ipv6InheritedNeighborDiscoveryDnsServerXml struct {
-	Enable *string                                                 `xml:"enable,omitempty"`
-	Source *layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceXml `xml:"source,omitempty"`
-	Misc   []generic.Xml                                           `xml:",any"`
+	Enable         *string                                                 `xml:"enable,omitempty"`
+	Source         *layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceXml `xml:"source,omitempty"`
+	Misc           []generic.Xml                                           `xml:",any"`
+	MiscAttributes []xml.Attr                                              `xml:",any,attr"`
 }
 type layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceXml struct {
-	Dhcpv6 *layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceDhcpv6Xml `xml:"dhcpv6,omitempty"`
-	Manual *layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceManualXml `xml:"manual,omitempty"`
-	Misc   []generic.Xml                                                 `xml:",any"`
+	Dhcpv6         *layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceDhcpv6Xml `xml:"dhcpv6,omitempty"`
+	Manual         *layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceManualXml `xml:"manual,omitempty"`
+	Misc           []generic.Xml                                                 `xml:",any"`
+	MiscAttributes []xml.Attr                                                    `xml:",any,attr"`
 }
 type layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceDhcpv6Xml struct {
-	PrefixPool *string       `xml:"prefix-pool,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	PrefixPool     *string       `xml:"prefix-pool,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceManualXml struct {
-	Server *layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceManualServerContainerXml `xml:"server,omitempty"`
-	Misc   []generic.Xml                                                                `xml:",any"`
+	Server         *layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceManualServerContainerXml `xml:"server,omitempty"`
+	Misc           []generic.Xml                                                                `xml:",any"`
+	MiscAttributes []xml.Attr                                                                   `xml:",any,attr"`
 }
 type layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceManualServerContainerXml struct {
 	Entries []layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceManualServerXml `xml:"entry"`
 }
 type layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceManualServerXml struct {
-	XMLName  xml.Name      `xml:"entry"`
-	Name     string        `xml:"name,attr"`
-	Lifetime *int64        `xml:"lifetime,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Lifetime       *int64        `xml:"lifetime,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6InheritedNeighborDiscoveryDnsSuffixXml struct {
-	Enable *string                                                 `xml:"enable,omitempty"`
-	Source *layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceXml `xml:"source,omitempty"`
-	Misc   []generic.Xml                                           `xml:",any"`
+	Enable         *string                                                 `xml:"enable,omitempty"`
+	Source         *layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceXml `xml:"source,omitempty"`
+	Misc           []generic.Xml                                           `xml:",any"`
+	MiscAttributes []xml.Attr                                              `xml:",any,attr"`
 }
 type layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceXml struct {
-	Dhcpv6 *layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceDhcpv6Xml `xml:"dhcpv6,omitempty"`
-	Manual *layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualXml `xml:"manual,omitempty"`
-	Misc   []generic.Xml                                                 `xml:",any"`
+	Dhcpv6         *layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceDhcpv6Xml `xml:"dhcpv6,omitempty"`
+	Manual         *layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualXml `xml:"manual,omitempty"`
+	Misc           []generic.Xml                                                 `xml:",any"`
+	MiscAttributes []xml.Attr                                                    `xml:",any,attr"`
 }
 type layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceDhcpv6Xml struct {
-	PrefixPool *string       `xml:"prefix-pool,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	PrefixPool     *string       `xml:"prefix-pool,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualXml struct {
-	Suffix *layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffixContainerXml `xml:"suffix,omitempty"`
-	Misc   []generic.Xml                                                                `xml:",any"`
+	Suffix         *layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffixContainerXml `xml:"suffix,omitempty"`
+	Misc           []generic.Xml                                                                `xml:",any"`
+	MiscAttributes []xml.Attr                                                                   `xml:",any,attr"`
 }
 type layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffixContainerXml struct {
 	Entries []layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffixXml `xml:"entry"`
 }
 type layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffixXml struct {
-	XMLName  xml.Name      `xml:"entry"`
-	Name     string        `xml:"name,attr"`
-	Lifetime *int64        `xml:"lifetime,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Lifetime       *int64        `xml:"lifetime,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6InheritedNeighborDiscoveryNeighborContainerXml struct {
 	Entries []layer3Ipv6InheritedNeighborDiscoveryNeighborXml `xml:"entry"`
 }
 type layer3Ipv6InheritedNeighborDiscoveryNeighborXml struct {
-	XMLName   xml.Name      `xml:"entry"`
-	Name      string        `xml:"name,attr"`
-	HwAddress *string       `xml:"hw-address,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	HwAddress      *string       `xml:"hw-address,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6InheritedNeighborDiscoveryRouterAdvertisementXml struct {
 	Enable                 *string       `xml:"enable,omitempty"`
@@ -1023,6 +1175,7 @@ type layer3Ipv6InheritedNeighborDiscoveryRouterAdvertisementXml struct {
 	RetransmissionTimer    *string       `xml:"retransmission-timer,omitempty"`
 	RouterPreference       *string       `xml:"router-preference,omitempty"`
 	Misc                   []generic.Xml `xml:",any"`
+	MiscAttributes         []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6NeighborDiscoveryXml struct {
 	DadAttempts         *int64                                             `xml:"dad-attempts,omitempty"`
@@ -1033,15 +1186,17 @@ type layer3Ipv6NeighborDiscoveryXml struct {
 	ReachableTime       *int64                                             `xml:"reachable-time,omitempty"`
 	RouterAdvertisement *layer3Ipv6NeighborDiscoveryRouterAdvertisementXml `xml:"router-advertisement,omitempty"`
 	Misc                []generic.Xml                                      `xml:",any"`
+	MiscAttributes      []xml.Attr                                         `xml:",any,attr"`
 }
 type layer3Ipv6NeighborDiscoveryNeighborContainerXml struct {
 	Entries []layer3Ipv6NeighborDiscoveryNeighborXml `xml:"entry"`
 }
 type layer3Ipv6NeighborDiscoveryNeighborXml struct {
-	XMLName   xml.Name      `xml:"entry"`
-	Name      string        `xml:"name,attr"`
-	HwAddress *string       `xml:"hw-address,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	HwAddress      *string       `xml:"hw-address,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6NeighborDiscoveryRouterAdvertisementXml struct {
 	DnsSupport             *layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportXml `xml:"dns-support,omitempty"`
@@ -1058,30 +1213,34 @@ type layer3Ipv6NeighborDiscoveryRouterAdvertisementXml struct {
 	RetransmissionTimer    *string                                                      `xml:"retransmission-timer,omitempty"`
 	RouterPreference       *string                                                      `xml:"router-preference,omitempty"`
 	Misc                   []generic.Xml                                                `xml:",any"`
+	MiscAttributes         []xml.Attr                                                   `xml:",any,attr"`
 }
 type layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportXml struct {
-	Enable *string                                                                     `xml:"enable,omitempty"`
-	Server *layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServerContainerXml `xml:"server,omitempty"`
-	Suffix *layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffixContainerXml `xml:"suffix,omitempty"`
-	Misc   []generic.Xml                                                               `xml:",any"`
+	Enable         *string                                                                     `xml:"enable,omitempty"`
+	Server         *layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServerContainerXml `xml:"server,omitempty"`
+	Suffix         *layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffixContainerXml `xml:"suffix,omitempty"`
+	Misc           []generic.Xml                                                               `xml:",any"`
+	MiscAttributes []xml.Attr                                                                  `xml:",any,attr"`
 }
 type layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServerContainerXml struct {
 	Entries []layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServerXml `xml:"entry"`
 }
 type layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServerXml struct {
-	XMLName  xml.Name      `xml:"entry"`
-	Name     string        `xml:"name,attr"`
-	Lifetime *int64        `xml:"lifetime,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Lifetime       *int64        `xml:"lifetime,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffixContainerXml struct {
 	Entries []layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffixXml `xml:"entry"`
 }
 type layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffixXml struct {
-	XMLName  xml.Name      `xml:"entry"`
-	Name     string        `xml:"name,attr"`
-	Lifetime *int64        `xml:"lifetime,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Lifetime       *int64        `xml:"lifetime,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3LacpXml struct {
 	Enable           *string                        `xml:"enable,omitempty"`
@@ -1092,87 +1251,103 @@ type layer3LacpXml struct {
 	SystemPriority   *int64                         `xml:"system-priority,omitempty"`
 	TransmissionRate *string                        `xml:"transmission-rate,omitempty"`
 	Misc             []generic.Xml                  `xml:",any"`
+	MiscAttributes   []xml.Attr                     `xml:",any,attr"`
 }
 type layer3LacpHighAvailabilityXml struct {
 	PassivePreNegotiation *string       `xml:"passive-pre-negotiation,omitempty"`
 	Misc                  []generic.Xml `xml:",any"`
+	MiscAttributes        []xml.Attr    `xml:",any,attr"`
 }
 type layer3LldpXml struct {
 	Enable           *string                        `xml:"enable,omitempty"`
 	HighAvailability *layer3LldpHighAvailabilityXml `xml:"high-availability,omitempty"`
 	Profile          *string                        `xml:"profile,omitempty"`
 	Misc             []generic.Xml                  `xml:",any"`
+	MiscAttributes   []xml.Attr                     `xml:",any,attr"`
 }
 type layer3LldpHighAvailabilityXml struct {
 	PassivePreNegotiation *string       `xml:"passive-pre-negotiation,omitempty"`
 	Misc                  []generic.Xml `xml:",any"`
+	MiscAttributes        []xml.Attr    `xml:",any,attr"`
 }
 type layer3NdpProxyXml struct {
-	Address *layer3NdpProxyAddressContainerXml `xml:"address,omitempty"`
-	Enabled *string                            `xml:"enabled,omitempty"`
-	Misc    []generic.Xml                      `xml:",any"`
+	Address        *layer3NdpProxyAddressContainerXml `xml:"address,omitempty"`
+	Enabled        *string                            `xml:"enabled,omitempty"`
+	Misc           []generic.Xml                      `xml:",any"`
+	MiscAttributes []xml.Attr                         `xml:",any,attr"`
 }
 type layer3NdpProxyAddressContainerXml struct {
 	Entries []layer3NdpProxyAddressXml `xml:"entry"`
 }
 type layer3NdpProxyAddressXml struct {
-	XMLName xml.Name      `xml:"entry"`
-	Name    string        `xml:"name,attr"`
-	Negate  *string       `xml:"negate,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Negate         *string       `xml:"negate,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3SdwanLinkSettingsXml struct {
 	Enable                *string                                `xml:"enable,omitempty"`
 	SdwanInterfaceProfile *string                                `xml:"sdwan-interface-profile,omitempty"`
 	UpstreamNat           *layer3SdwanLinkSettingsUpstreamNatXml `xml:"upstream-nat,omitempty"`
 	Misc                  []generic.Xml                          `xml:",any"`
+	MiscAttributes        []xml.Attr                             `xml:",any,attr"`
 }
 type layer3SdwanLinkSettingsUpstreamNatXml struct {
-	Enable   *string                                        `xml:"enable,omitempty"`
-	Ddns     *layer3SdwanLinkSettingsUpstreamNatDdnsXml     `xml:"ddns,omitempty"`
-	StaticIp *layer3SdwanLinkSettingsUpstreamNatStaticIpXml `xml:"static-ip,omitempty"`
-	Misc     []generic.Xml                                  `xml:",any"`
+	Enable         *string                                        `xml:"enable,omitempty"`
+	Ddns           *layer3SdwanLinkSettingsUpstreamNatDdnsXml     `xml:"ddns,omitempty"`
+	StaticIp       *layer3SdwanLinkSettingsUpstreamNatStaticIpXml `xml:"static-ip,omitempty"`
+	Misc           []generic.Xml                                  `xml:",any"`
+	MiscAttributes []xml.Attr                                     `xml:",any,attr"`
 }
 type layer3SdwanLinkSettingsUpstreamNatDdnsXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3SdwanLinkSettingsUpstreamNatStaticIpXml struct {
-	Fqdn      *string       `xml:"fqdn,omitempty"`
-	IpAddress *string       `xml:"ip-address,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	Fqdn           *string       `xml:"fqdn,omitempty"`
+	IpAddress      *string       `xml:"ip-address,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type virtualWireXml struct {
 	Lldp           *virtualWireLldpXml `xml:"lldp,omitempty"`
 	NetflowProfile *string             `xml:"netflow-profile,omitempty"`
 	Misc           []generic.Xml       `xml:",any"`
+	MiscAttributes []xml.Attr          `xml:",any,attr"`
 }
 type virtualWireLldpXml struct {
 	Enable           *string                             `xml:"enable,omitempty"`
 	HighAvailability *virtualWireLldpHighAvailabilityXml `xml:"high-availability,omitempty"`
 	Profile          *string                             `xml:"profile,omitempty"`
 	Misc             []generic.Xml                       `xml:",any"`
+	MiscAttributes   []xml.Attr                          `xml:",any,attr"`
 }
 type virtualWireLldpHighAvailabilityXml struct {
 	PassivePreNegotiation *string       `xml:"passive-pre-negotiation,omitempty"`
 	Misc                  []generic.Xml `xml:",any"`
+	MiscAttributes        []xml.Attr    `xml:",any,attr"`
 }
 type entryXml_11_0_2 struct {
-	XMLName       xml.Name                 `xml:"entry"`
-	Name          string                   `xml:"name,attr"`
-	Comment       *string                  `xml:"comment,omitempty"`
-	DecryptMirror *decryptMirrorXml_11_0_2 `xml:"decrypt-mirror,omitempty"`
-	Ha            *haXml_11_0_2            `xml:"ha,omitempty"`
-	Layer2        *layer2Xml_11_0_2        `xml:"layer2,omitempty"`
-	Layer3        *layer3Xml_11_0_2        `xml:"layer3,omitempty"`
-	VirtualWire   *virtualWireXml_11_0_2   `xml:"virtual-wire,omitempty"`
-	Misc          []generic.Xml            `xml:",any"`
+	XMLName        xml.Name                 `xml:"entry"`
+	Name           string                   `xml:"name,attr"`
+	Comment        *string                  `xml:"comment,omitempty"`
+	DecryptMirror  *decryptMirrorXml_11_0_2 `xml:"decrypt-mirror,omitempty"`
+	Ha             *haXml_11_0_2            `xml:"ha,omitempty"`
+	Layer2         *layer2Xml_11_0_2        `xml:"layer2,omitempty"`
+	Layer3         *layer3Xml_11_0_2        `xml:"layer3,omitempty"`
+	VirtualWire    *virtualWireXml_11_0_2   `xml:"virtual-wire,omitempty"`
+	Misc           []generic.Xml            `xml:",any"`
+	MiscAttributes []xml.Attr               `xml:",any,attr"`
 }
 type decryptMirrorXml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type haXml_11_0_2 struct {
-	Lacp *haLacpXml_11_0_2 `xml:"lacp,omitempty"`
-	Misc []generic.Xml     `xml:",any"`
+	Lacp           *haLacpXml_11_0_2 `xml:"lacp,omitempty"`
+	Misc           []generic.Xml     `xml:",any"`
+	MiscAttributes []xml.Attr        `xml:",any,attr"`
 }
 type haLacpXml_11_0_2 struct {
 	Enable           *string       `xml:"enable,omitempty"`
@@ -1182,12 +1357,14 @@ type haLacpXml_11_0_2 struct {
 	SystemPriority   *int64        `xml:"system-priority,omitempty"`
 	TransmissionRate *string       `xml:"transmission-rate,omitempty"`
 	Misc             []generic.Xml `xml:",any"`
+	MiscAttributes   []xml.Attr    `xml:",any,attr"`
 }
 type layer2Xml_11_0_2 struct {
 	Lacp           *layer2LacpXml_11_0_2 `xml:"lacp,omitempty"`
 	Lldp           *layer2LldpXml_11_0_2 `xml:"lldp,omitempty"`
 	NetflowProfile *string               `xml:"netflow-profile,omitempty"`
 	Misc           []generic.Xml         `xml:",any"`
+	MiscAttributes []xml.Attr            `xml:",any,attr"`
 }
 type layer2LacpXml_11_0_2 struct {
 	Enable           *string                               `xml:"enable,omitempty"`
@@ -1198,20 +1375,24 @@ type layer2LacpXml_11_0_2 struct {
 	SystemPriority   *int64                                `xml:"system-priority,omitempty"`
 	TransmissionRate *string                               `xml:"transmission-rate,omitempty"`
 	Misc             []generic.Xml                         `xml:",any"`
+	MiscAttributes   []xml.Attr                            `xml:",any,attr"`
 }
 type layer2LacpHighAvailabilityXml_11_0_2 struct {
 	PassivePreNegotiation *string       `xml:"passive-pre-negotiation,omitempty"`
 	Misc                  []generic.Xml `xml:",any"`
+	MiscAttributes        []xml.Attr    `xml:",any,attr"`
 }
 type layer2LldpXml_11_0_2 struct {
 	Enable           *string                               `xml:"enable,omitempty"`
 	HighAvailability *layer2LldpHighAvailabilityXml_11_0_2 `xml:"high-availability,omitempty"`
 	Profile          *string                               `xml:"profile,omitempty"`
 	Misc             []generic.Xml                         `xml:",any"`
+	MiscAttributes   []xml.Attr                            `xml:",any,attr"`
 }
 type layer2LldpHighAvailabilityXml_11_0_2 struct {
 	PassivePreNegotiation *string       `xml:"passive-pre-negotiation,omitempty"`
 	Misc                  []generic.Xml `xml:",any"`
+	MiscAttributes        []xml.Attr    `xml:",any,attr"`
 }
 type layer3Xml_11_0_2 struct {
 	AdjustTcpMss               *layer3AdjustTcpMssXml_11_0_2      `xml:"adjust-tcp-mss,omitempty"`
@@ -1232,27 +1413,31 @@ type layer3Xml_11_0_2 struct {
 	SdwanLinkSettings          *layer3SdwanLinkSettingsXml_11_0_2 `xml:"sdwan-link-settings,omitempty"`
 	UntaggedSubInterface       *string                            `xml:"untagged-sub-interface,omitempty"`
 	Misc                       []generic.Xml                      `xml:",any"`
+	MiscAttributes             []xml.Attr                         `xml:",any,attr"`
 }
 type layer3AdjustTcpMssXml_11_0_2 struct {
 	Enable            *string       `xml:"enable,omitempty"`
 	Ipv4MssAdjustment *int64        `xml:"ipv4-mss-adjustment,omitempty"`
 	Ipv6MssAdjustment *int64        `xml:"ipv6-mss-adjustment,omitempty"`
 	Misc              []generic.Xml `xml:",any"`
+	MiscAttributes    []xml.Attr    `xml:",any,attr"`
 }
 type layer3ArpContainerXml_11_0_2 struct {
 	Entries []layer3ArpXml_11_0_2 `xml:"entry"`
 }
 type layer3ArpXml_11_0_2 struct {
-	XMLName   xml.Name      `xml:"entry"`
-	Name      string        `xml:"name,attr"`
-	HwAddress *string       `xml:"hw-address,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	HwAddress      *string       `xml:"hw-address,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3BonjourXml_11_0_2 struct {
-	Enable   *string       `xml:"enable,omitempty"`
-	GroupId  *int64        `xml:"group-id,omitempty"`
-	TtlCheck *string       `xml:"ttl-check,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	Enable         *string       `xml:"enable,omitempty"`
+	GroupId        *int64        `xml:"group-id,omitempty"`
+	TtlCheck       *string       `xml:"ttl-check,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3DdnsConfigXml_11_0_2 struct {
 	DdnsCertProfile    *string                                              `xml:"ddns-cert-profile,omitempty"`
@@ -1264,15 +1449,17 @@ type layer3DdnsConfigXml_11_0_2 struct {
 	DdnsVendor         *string                                              `xml:"ddns-vendor,omitempty"`
 	DdnsVendorConfig   *layer3DdnsConfigDdnsVendorConfigContainerXml_11_0_2 `xml:"ddns-vendor-config,omitempty"`
 	Misc               []generic.Xml                                        `xml:",any"`
+	MiscAttributes     []xml.Attr                                           `xml:",any,attr"`
 }
 type layer3DdnsConfigDdnsVendorConfigContainerXml_11_0_2 struct {
 	Entries []layer3DdnsConfigDdnsVendorConfigXml_11_0_2 `xml:"entry"`
 }
 type layer3DdnsConfigDdnsVendorConfigXml_11_0_2 struct {
-	XMLName xml.Name      `xml:"entry"`
-	Name    string        `xml:"name,attr"`
-	Value   *string       `xml:"value,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Value          *string       `xml:"value,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3DhcpClientXml_11_0_2 struct {
 	CreateDefaultRoute *string                                 `xml:"create-default-route,omitempty"`
@@ -1280,20 +1467,23 @@ type layer3DhcpClientXml_11_0_2 struct {
 	Enable             *string                                 `xml:"enable,omitempty"`
 	SendHostname       *layer3DhcpClientSendHostnameXml_11_0_2 `xml:"send-hostname,omitempty"`
 	Misc               []generic.Xml                           `xml:",any"`
+	MiscAttributes     []xml.Attr                              `xml:",any,attr"`
 }
 type layer3DhcpClientSendHostnameXml_11_0_2 struct {
-	Enable   *string       `xml:"enable,omitempty"`
-	Hostname *string       `xml:"hostname,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	Enable         *string       `xml:"enable,omitempty"`
+	Hostname       *string       `xml:"hostname,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3IpContainerXml_11_0_2 struct {
 	Entries []layer3IpXml_11_0_2 `xml:"entry"`
 }
 type layer3IpXml_11_0_2 struct {
-	XMLName      xml.Name      `xml:"entry"`
-	Name         string        `xml:"name,attr"`
-	SdwanGateway *string       `xml:"sdwan-gateway,omitempty"`
-	Misc         []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	SdwanGateway   *string       `xml:"sdwan-gateway,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6Xml_11_0_2 struct {
 	Address           *layer3Ipv6AddressContainerXml_11_0_2  `xml:"address,omitempty"`
@@ -1303,6 +1493,7 @@ type layer3Ipv6Xml_11_0_2 struct {
 	InterfaceId       *string                                `xml:"interface-id,omitempty"`
 	NeighborDiscovery *layer3Ipv6NeighborDiscoveryXml_11_0_2 `xml:"neighbor-discovery,omitempty"`
 	Misc              []generic.Xml                          `xml:",any"`
+	MiscAttributes    []xml.Attr                             `xml:",any,attr"`
 }
 type layer3Ipv6AddressContainerXml_11_0_2 struct {
 	Entries []layer3Ipv6AddressXml_11_0_2 `xml:"entry"`
@@ -1315,12 +1506,15 @@ type layer3Ipv6AddressXml_11_0_2 struct {
 	Anycast           *layer3Ipv6AddressAnycastXml_11_0_2   `xml:"anycast,omitempty"`
 	Advertise         *layer3Ipv6AddressAdvertiseXml_11_0_2 `xml:"advertise,omitempty"`
 	Misc              []generic.Xml                         `xml:",any"`
+	MiscAttributes    []xml.Attr                            `xml:",any,attr"`
 }
 type layer3Ipv6AddressPrefixXml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6AddressAnycastXml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6AddressAdvertiseXml_11_0_2 struct {
 	Enable            *string       `xml:"enable,omitempty"`
@@ -1329,6 +1523,7 @@ type layer3Ipv6AddressAdvertiseXml_11_0_2 struct {
 	OnlinkFlag        *string       `xml:"onlink-flag,omitempty"`
 	AutoConfigFlag    *string       `xml:"auto-config-flag,omitempty"`
 	Misc              []generic.Xml `xml:",any"`
+	MiscAttributes    []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6DhcpClientXml_11_0_2 struct {
 	AcceptRaRoute      *string                                          `xml:"accept-ra-route,omitempty"`
@@ -1339,6 +1534,7 @@ type layer3Ipv6DhcpClientXml_11_0_2 struct {
 	PrefixDelegation   *layer3Ipv6DhcpClientPrefixDelegationXml_11_0_2  `xml:"prefix-delegation,omitempty"`
 	V6Options          *layer3Ipv6DhcpClientV6OptionsXml_11_0_2         `xml:"v6-options,omitempty"`
 	Misc               []generic.Xml                                    `xml:",any"`
+	MiscAttributes     []xml.Attr                                       `xml:",any,attr"`
 }
 type layer3Ipv6DhcpClientNeighborDiscoveryXml_11_0_2 struct {
 	DadAttempts      *int64                                                            `xml:"dad-attempts,omitempty"`
@@ -1350,85 +1546,101 @@ type layer3Ipv6DhcpClientNeighborDiscoveryXml_11_0_2 struct {
 	NsInterval       *int64                                                            `xml:"ns-interval,omitempty"`
 	ReachableTime    *int64                                                            `xml:"reachable-time,omitempty"`
 	Misc             []generic.Xml                                                     `xml:",any"`
+	MiscAttributes   []xml.Attr                                                        `xml:",any,attr"`
 }
 type layer3Ipv6DhcpClientNeighborDiscoveryDnsServerXml_11_0_2 struct {
-	Enable *string                                                         `xml:"enable,omitempty"`
-	Source *layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceXml_11_0_2 `xml:"source,omitempty"`
-	Misc   []generic.Xml                                                   `xml:",any"`
+	Enable         *string                                                         `xml:"enable,omitempty"`
+	Source         *layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceXml_11_0_2 `xml:"source,omitempty"`
+	Misc           []generic.Xml                                                   `xml:",any"`
+	MiscAttributes []xml.Attr                                                      `xml:",any,attr"`
 }
 type layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceXml_11_0_2 struct {
-	Dhcpv6 *layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceDhcpv6Xml_11_0_2 `xml:"dhcpv6,omitempty"`
-	Manual *layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualXml_11_0_2 `xml:"manual,omitempty"`
-	Misc   []generic.Xml                                                         `xml:",any"`
+	Dhcpv6         *layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceDhcpv6Xml_11_0_2 `xml:"dhcpv6,omitempty"`
+	Manual         *layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualXml_11_0_2 `xml:"manual,omitempty"`
+	Misc           []generic.Xml                                                         `xml:",any"`
+	MiscAttributes []xml.Attr                                                            `xml:",any,attr"`
 }
 type layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceDhcpv6Xml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualXml_11_0_2 struct {
-	Server *layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualServerContainerXml_11_0_2 `xml:"server,omitempty"`
-	Misc   []generic.Xml                                                                        `xml:",any"`
+	Server         *layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualServerContainerXml_11_0_2 `xml:"server,omitempty"`
+	Misc           []generic.Xml                                                                        `xml:",any"`
+	MiscAttributes []xml.Attr                                                                           `xml:",any,attr"`
 }
 type layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualServerContainerXml_11_0_2 struct {
 	Entries []layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualServerXml_11_0_2 `xml:"entry"`
 }
 type layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualServerXml_11_0_2 struct {
-	XMLName  xml.Name      `xml:"entry"`
-	Name     string        `xml:"name,attr"`
-	Lifetime *int64        `xml:"lifetime,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Lifetime       *int64        `xml:"lifetime,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixXml_11_0_2 struct {
-	Enable *string                                                         `xml:"enable,omitempty"`
-	Source *layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceXml_11_0_2 `xml:"source,omitempty"`
-	Misc   []generic.Xml                                                   `xml:",any"`
+	Enable         *string                                                         `xml:"enable,omitempty"`
+	Source         *layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceXml_11_0_2 `xml:"source,omitempty"`
+	Misc           []generic.Xml                                                   `xml:",any"`
+	MiscAttributes []xml.Attr                                                      `xml:",any,attr"`
 }
 type layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceXml_11_0_2 struct {
-	Dhcpv6 *layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceDhcpv6Xml_11_0_2 `xml:"dhcpv6,omitempty"`
-	Manual *layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualXml_11_0_2 `xml:"manual,omitempty"`
-	Misc   []generic.Xml                                                         `xml:",any"`
+	Dhcpv6         *layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceDhcpv6Xml_11_0_2 `xml:"dhcpv6,omitempty"`
+	Manual         *layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualXml_11_0_2 `xml:"manual,omitempty"`
+	Misc           []generic.Xml                                                         `xml:",any"`
+	MiscAttributes []xml.Attr                                                            `xml:",any,attr"`
 }
 type layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceDhcpv6Xml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualXml_11_0_2 struct {
-	Suffix *layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffixContainerXml_11_0_2 `xml:"suffix,omitempty"`
-	Misc   []generic.Xml                                                                        `xml:",any"`
+	Suffix         *layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffixContainerXml_11_0_2 `xml:"suffix,omitempty"`
+	Misc           []generic.Xml                                                                        `xml:",any"`
+	MiscAttributes []xml.Attr                                                                           `xml:",any,attr"`
 }
 type layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffixContainerXml_11_0_2 struct {
 	Entries []layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffixXml_11_0_2 `xml:"entry"`
 }
 type layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffixXml_11_0_2 struct {
-	XMLName  xml.Name      `xml:"entry"`
-	Name     string        `xml:"name,attr"`
-	Lifetime *int64        `xml:"lifetime,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Lifetime       *int64        `xml:"lifetime,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6DhcpClientNeighborDiscoveryNeighborContainerXml_11_0_2 struct {
 	Entries []layer3Ipv6DhcpClientNeighborDiscoveryNeighborXml_11_0_2 `xml:"entry"`
 }
 type layer3Ipv6DhcpClientNeighborDiscoveryNeighborXml_11_0_2 struct {
-	XMLName   xml.Name      `xml:"entry"`
-	Name      string        `xml:"name,attr"`
-	HwAddress *string       `xml:"hw-address,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	HwAddress      *string       `xml:"hw-address,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6DhcpClientPrefixDelegationXml_11_0_2 struct {
-	Enable *layer3Ipv6DhcpClientPrefixDelegationEnableXml_11_0_2 `xml:"enable,omitempty"`
-	Misc   []generic.Xml                                         `xml:",any"`
+	Enable         *layer3Ipv6DhcpClientPrefixDelegationEnableXml_11_0_2 `xml:"enable,omitempty"`
+	Misc           []generic.Xml                                         `xml:",any"`
+	MiscAttributes []xml.Attr                                            `xml:",any,attr"`
 }
 type layer3Ipv6DhcpClientPrefixDelegationEnableXml_11_0_2 struct {
-	No   *layer3Ipv6DhcpClientPrefixDelegationEnableNoXml_11_0_2  `xml:"no,omitempty"`
-	Yes  *layer3Ipv6DhcpClientPrefixDelegationEnableYesXml_11_0_2 `xml:"yes,omitempty"`
-	Misc []generic.Xml                                            `xml:",any"`
+	No             *layer3Ipv6DhcpClientPrefixDelegationEnableNoXml_11_0_2  `xml:"no,omitempty"`
+	Yes            *layer3Ipv6DhcpClientPrefixDelegationEnableYesXml_11_0_2 `xml:"yes,omitempty"`
+	Misc           []generic.Xml                                            `xml:",any"`
+	MiscAttributes []xml.Attr                                               `xml:",any,attr"`
 }
 type layer3Ipv6DhcpClientPrefixDelegationEnableNoXml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6DhcpClientPrefixDelegationEnableYesXml_11_0_2 struct {
-	PfxPoolName   *string       `xml:"pfx-pool-name,omitempty"`
-	PrefixLen     *int64        `xml:"prefix-len,omitempty"`
-	PrefixLenHint *string       `xml:"prefix-len-hint,omitempty"`
-	Misc          []generic.Xml `xml:",any"`
+	PfxPoolName    *string       `xml:"pfx-pool-name,omitempty"`
+	PrefixLen      *int64        `xml:"prefix-len,omitempty"`
+	PrefixLenHint  *string       `xml:"prefix-len-hint,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6DhcpClientV6OptionsXml_11_0_2 struct {
 	DuidType            *string                                        `xml:"duid-type,omitempty"`
@@ -1436,39 +1648,46 @@ type layer3Ipv6DhcpClientV6OptionsXml_11_0_2 struct {
 	RapidCommit         *string                                        `xml:"rapid-commit,omitempty"`
 	SupportSrvrReconfig *string                                        `xml:"support-srvr-reconfig,omitempty"`
 	Misc                []generic.Xml                                  `xml:",any"`
+	MiscAttributes      []xml.Attr                                     `xml:",any,attr"`
 }
 type layer3Ipv6DhcpClientV6OptionsEnableXml_11_0_2 struct {
-	No   *layer3Ipv6DhcpClientV6OptionsEnableNoXml_11_0_2  `xml:"no,omitempty"`
-	Yes  *layer3Ipv6DhcpClientV6OptionsEnableYesXml_11_0_2 `xml:"yes,omitempty"`
-	Misc []generic.Xml                                     `xml:",any"`
+	No             *layer3Ipv6DhcpClientV6OptionsEnableNoXml_11_0_2  `xml:"no,omitempty"`
+	Yes            *layer3Ipv6DhcpClientV6OptionsEnableYesXml_11_0_2 `xml:"yes,omitempty"`
+	Misc           []generic.Xml                                     `xml:",any"`
+	MiscAttributes []xml.Attr                                        `xml:",any,attr"`
 }
 type layer3Ipv6DhcpClientV6OptionsEnableNoXml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6DhcpClientV6OptionsEnableYesXml_11_0_2 struct {
-	NonTempAddr *string       `xml:"non-temp-addr,omitempty"`
-	TempAddr    *string       `xml:"temp-addr,omitempty"`
-	Misc        []generic.Xml `xml:",any"`
+	NonTempAddr    *string       `xml:"non-temp-addr,omitempty"`
+	TempAddr       *string       `xml:"temp-addr,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6InheritedXml_11_0_2 struct {
 	AssignAddr        *layer3Ipv6InheritedAssignAddrContainerXml_11_0_2 `xml:"assign-addr,omitempty"`
 	Enable            *string                                           `xml:"enable,omitempty"`
 	NeighborDiscovery *layer3Ipv6InheritedNeighborDiscoveryXml_11_0_2   `xml:"neighbor-discovery,omitempty"`
 	Misc              []generic.Xml                                     `xml:",any"`
+	MiscAttributes    []xml.Attr                                        `xml:",any,attr"`
 }
 type layer3Ipv6InheritedAssignAddrContainerXml_11_0_2 struct {
 	Entries []layer3Ipv6InheritedAssignAddrXml_11_0_2 `xml:"entry"`
 }
 type layer3Ipv6InheritedAssignAddrXml_11_0_2 struct {
-	XMLName xml.Name                                     `xml:"entry"`
-	Name    string                                       `xml:"name,attr"`
-	Type    *layer3Ipv6InheritedAssignAddrTypeXml_11_0_2 `xml:"type,omitempty"`
-	Misc    []generic.Xml                                `xml:",any"`
+	XMLName        xml.Name                                     `xml:"entry"`
+	Name           string                                       `xml:"name,attr"`
+	Type           *layer3Ipv6InheritedAssignAddrTypeXml_11_0_2 `xml:"type,omitempty"`
+	Misc           []generic.Xml                                `xml:",any"`
+	MiscAttributes []xml.Attr                                   `xml:",any,attr"`
 }
 type layer3Ipv6InheritedAssignAddrTypeXml_11_0_2 struct {
-	Gua  *layer3Ipv6InheritedAssignAddrTypeGuaXml_11_0_2 `xml:"gua,omitempty"`
-	Ula  *layer3Ipv6InheritedAssignAddrTypeUlaXml_11_0_2 `xml:"ula,omitempty"`
-	Misc []generic.Xml                                   `xml:",any"`
+	Gua            *layer3Ipv6InheritedAssignAddrTypeGuaXml_11_0_2 `xml:"gua,omitempty"`
+	Ula            *layer3Ipv6InheritedAssignAddrTypeUlaXml_11_0_2 `xml:"ula,omitempty"`
+	Misc           []generic.Xml                                   `xml:",any"`
+	MiscAttributes []xml.Attr                                      `xml:",any,attr"`
 }
 type layer3Ipv6InheritedAssignAddrTypeGuaXml_11_0_2 struct {
 	EnableOnInterface *string                                                  `xml:"enable-on-interface,omitempty"`
@@ -1476,24 +1695,29 @@ type layer3Ipv6InheritedAssignAddrTypeGuaXml_11_0_2 struct {
 	PoolType          *layer3Ipv6InheritedAssignAddrTypeGuaPoolTypeXml_11_0_2  `xml:"pool-type,omitempty"`
 	Advertise         *layer3Ipv6InheritedAssignAddrTypeGuaAdvertiseXml_11_0_2 `xml:"advertise,omitempty"`
 	Misc              []generic.Xml                                            `xml:",any"`
+	MiscAttributes    []xml.Attr                                               `xml:",any,attr"`
 }
 type layer3Ipv6InheritedAssignAddrTypeGuaPoolTypeXml_11_0_2 struct {
-	Dynamic   *layer3Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicXml_11_0_2   `xml:"dynamic,omitempty"`
-	DynamicId *layer3Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicIdXml_11_0_2 `xml:"dynamic-id,omitempty"`
-	Misc      []generic.Xml                                                    `xml:",any"`
+	Dynamic        *layer3Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicXml_11_0_2   `xml:"dynamic,omitempty"`
+	DynamicId      *layer3Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicIdXml_11_0_2 `xml:"dynamic-id,omitempty"`
+	Misc           []generic.Xml                                                    `xml:",any"`
+	MiscAttributes []xml.Attr                                                       `xml:",any,attr"`
 }
 type layer3Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicXml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicIdXml_11_0_2 struct {
-	Identifier *int64        `xml:"identifier,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	Identifier     *int64        `xml:"identifier,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6InheritedAssignAddrTypeGuaAdvertiseXml_11_0_2 struct {
 	Enable         *string       `xml:"enable,omitempty"`
 	OnlinkFlag     *string       `xml:"onlink-flag,omitempty"`
 	AutoConfigFlag *string       `xml:"auto-config-flag,omitempty"`
 	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6InheritedAssignAddrTypeUlaXml_11_0_2 struct {
 	EnableOnInterface *string                                                  `xml:"enable-on-interface,omitempty"`
@@ -1502,6 +1726,7 @@ type layer3Ipv6InheritedAssignAddrTypeUlaXml_11_0_2 struct {
 	Anycast           *string                                                  `xml:"anycast,omitempty"`
 	Advertise         *layer3Ipv6InheritedAssignAddrTypeUlaAdvertiseXml_11_0_2 `xml:"advertise,omitempty"`
 	Misc              []generic.Xml                                            `xml:",any"`
+	MiscAttributes    []xml.Attr                                               `xml:",any,attr"`
 }
 type layer3Ipv6InheritedAssignAddrTypeUlaAdvertiseXml_11_0_2 struct {
 	Enable            *string       `xml:"enable,omitempty"`
@@ -1510,6 +1735,7 @@ type layer3Ipv6InheritedAssignAddrTypeUlaAdvertiseXml_11_0_2 struct {
 	OnlinkFlag        *string       `xml:"onlink-flag,omitempty"`
 	AutoConfigFlag    *string       `xml:"auto-config-flag,omitempty"`
 	Misc              []generic.Xml `xml:",any"`
+	MiscAttributes    []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6InheritedNeighborDiscoveryXml_11_0_2 struct {
 	DadAttempts         *int64                                                             `xml:"dad-attempts,omitempty"`
@@ -1522,69 +1748,81 @@ type layer3Ipv6InheritedNeighborDiscoveryXml_11_0_2 struct {
 	ReachableTime       *int64                                                             `xml:"reachable-time,omitempty"`
 	RouterAdvertisement *layer3Ipv6InheritedNeighborDiscoveryRouterAdvertisementXml_11_0_2 `xml:"router-advertisement,omitempty"`
 	Misc                []generic.Xml                                                      `xml:",any"`
+	MiscAttributes      []xml.Attr                                                         `xml:",any,attr"`
 }
 type layer3Ipv6InheritedNeighborDiscoveryDnsServerXml_11_0_2 struct {
-	Enable *string                                                        `xml:"enable,omitempty"`
-	Source *layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceXml_11_0_2 `xml:"source,omitempty"`
-	Misc   []generic.Xml                                                  `xml:",any"`
+	Enable         *string                                                        `xml:"enable,omitempty"`
+	Source         *layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceXml_11_0_2 `xml:"source,omitempty"`
+	Misc           []generic.Xml                                                  `xml:",any"`
+	MiscAttributes []xml.Attr                                                     `xml:",any,attr"`
 }
 type layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceXml_11_0_2 struct {
-	Dhcpv6 *layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceDhcpv6Xml_11_0_2 `xml:"dhcpv6,omitempty"`
-	Manual *layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceManualXml_11_0_2 `xml:"manual,omitempty"`
-	Misc   []generic.Xml                                                        `xml:",any"`
+	Dhcpv6         *layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceDhcpv6Xml_11_0_2 `xml:"dhcpv6,omitempty"`
+	Manual         *layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceManualXml_11_0_2 `xml:"manual,omitempty"`
+	Misc           []generic.Xml                                                        `xml:",any"`
+	MiscAttributes []xml.Attr                                                           `xml:",any,attr"`
 }
 type layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceDhcpv6Xml_11_0_2 struct {
-	PrefixPool *string       `xml:"prefix-pool,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	PrefixPool     *string       `xml:"prefix-pool,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceManualXml_11_0_2 struct {
-	Server *layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceManualServerContainerXml_11_0_2 `xml:"server,omitempty"`
-	Misc   []generic.Xml                                                                       `xml:",any"`
+	Server         *layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceManualServerContainerXml_11_0_2 `xml:"server,omitempty"`
+	Misc           []generic.Xml                                                                       `xml:",any"`
+	MiscAttributes []xml.Attr                                                                          `xml:",any,attr"`
 }
 type layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceManualServerContainerXml_11_0_2 struct {
 	Entries []layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceManualServerXml_11_0_2 `xml:"entry"`
 }
 type layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceManualServerXml_11_0_2 struct {
-	XMLName  xml.Name      `xml:"entry"`
-	Name     string        `xml:"name,attr"`
-	Lifetime *int64        `xml:"lifetime,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Lifetime       *int64        `xml:"lifetime,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6InheritedNeighborDiscoveryDnsSuffixXml_11_0_2 struct {
-	Enable *string                                                        `xml:"enable,omitempty"`
-	Source *layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceXml_11_0_2 `xml:"source,omitempty"`
-	Misc   []generic.Xml                                                  `xml:",any"`
+	Enable         *string                                                        `xml:"enable,omitempty"`
+	Source         *layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceXml_11_0_2 `xml:"source,omitempty"`
+	Misc           []generic.Xml                                                  `xml:",any"`
+	MiscAttributes []xml.Attr                                                     `xml:",any,attr"`
 }
 type layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceXml_11_0_2 struct {
-	Dhcpv6 *layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceDhcpv6Xml_11_0_2 `xml:"dhcpv6,omitempty"`
-	Manual *layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualXml_11_0_2 `xml:"manual,omitempty"`
-	Misc   []generic.Xml                                                        `xml:",any"`
+	Dhcpv6         *layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceDhcpv6Xml_11_0_2 `xml:"dhcpv6,omitempty"`
+	Manual         *layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualXml_11_0_2 `xml:"manual,omitempty"`
+	Misc           []generic.Xml                                                        `xml:",any"`
+	MiscAttributes []xml.Attr                                                           `xml:",any,attr"`
 }
 type layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceDhcpv6Xml_11_0_2 struct {
-	PrefixPool *string       `xml:"prefix-pool,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	PrefixPool     *string       `xml:"prefix-pool,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualXml_11_0_2 struct {
-	Suffix *layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffixContainerXml_11_0_2 `xml:"suffix,omitempty"`
-	Misc   []generic.Xml                                                                       `xml:",any"`
+	Suffix         *layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffixContainerXml_11_0_2 `xml:"suffix,omitempty"`
+	Misc           []generic.Xml                                                                       `xml:",any"`
+	MiscAttributes []xml.Attr                                                                          `xml:",any,attr"`
 }
 type layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffixContainerXml_11_0_2 struct {
 	Entries []layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffixXml_11_0_2 `xml:"entry"`
 }
 type layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffixXml_11_0_2 struct {
-	XMLName  xml.Name      `xml:"entry"`
-	Name     string        `xml:"name,attr"`
-	Lifetime *int64        `xml:"lifetime,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Lifetime       *int64        `xml:"lifetime,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6InheritedNeighborDiscoveryNeighborContainerXml_11_0_2 struct {
 	Entries []layer3Ipv6InheritedNeighborDiscoveryNeighborXml_11_0_2 `xml:"entry"`
 }
 type layer3Ipv6InheritedNeighborDiscoveryNeighborXml_11_0_2 struct {
-	XMLName   xml.Name      `xml:"entry"`
-	Name      string        `xml:"name,attr"`
-	HwAddress *string       `xml:"hw-address,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	HwAddress      *string       `xml:"hw-address,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6InheritedNeighborDiscoveryRouterAdvertisementXml_11_0_2 struct {
 	Enable                 *string       `xml:"enable,omitempty"`
@@ -1600,6 +1838,7 @@ type layer3Ipv6InheritedNeighborDiscoveryRouterAdvertisementXml_11_0_2 struct {
 	RetransmissionTimer    *string       `xml:"retransmission-timer,omitempty"`
 	RouterPreference       *string       `xml:"router-preference,omitempty"`
 	Misc                   []generic.Xml `xml:",any"`
+	MiscAttributes         []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6NeighborDiscoveryXml_11_0_2 struct {
 	DadAttempts         *int64                                                    `xml:"dad-attempts,omitempty"`
@@ -1610,15 +1849,17 @@ type layer3Ipv6NeighborDiscoveryXml_11_0_2 struct {
 	ReachableTime       *int64                                                    `xml:"reachable-time,omitempty"`
 	RouterAdvertisement *layer3Ipv6NeighborDiscoveryRouterAdvertisementXml_11_0_2 `xml:"router-advertisement,omitempty"`
 	Misc                []generic.Xml                                             `xml:",any"`
+	MiscAttributes      []xml.Attr                                                `xml:",any,attr"`
 }
 type layer3Ipv6NeighborDiscoveryNeighborContainerXml_11_0_2 struct {
 	Entries []layer3Ipv6NeighborDiscoveryNeighborXml_11_0_2 `xml:"entry"`
 }
 type layer3Ipv6NeighborDiscoveryNeighborXml_11_0_2 struct {
-	XMLName   xml.Name      `xml:"entry"`
-	Name      string        `xml:"name,attr"`
-	HwAddress *string       `xml:"hw-address,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	HwAddress      *string       `xml:"hw-address,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6NeighborDiscoveryRouterAdvertisementXml_11_0_2 struct {
 	DnsSupport             *layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportXml_11_0_2 `xml:"dns-support,omitempty"`
@@ -1635,30 +1876,34 @@ type layer3Ipv6NeighborDiscoveryRouterAdvertisementXml_11_0_2 struct {
 	RetransmissionTimer    *string                                                             `xml:"retransmission-timer,omitempty"`
 	RouterPreference       *string                                                             `xml:"router-preference,omitempty"`
 	Misc                   []generic.Xml                                                       `xml:",any"`
+	MiscAttributes         []xml.Attr                                                          `xml:",any,attr"`
 }
 type layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportXml_11_0_2 struct {
-	Enable *string                                                                            `xml:"enable,omitempty"`
-	Server *layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServerContainerXml_11_0_2 `xml:"server,omitempty"`
-	Suffix *layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffixContainerXml_11_0_2 `xml:"suffix,omitempty"`
-	Misc   []generic.Xml                                                                      `xml:",any"`
+	Enable         *string                                                                            `xml:"enable,omitempty"`
+	Server         *layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServerContainerXml_11_0_2 `xml:"server,omitempty"`
+	Suffix         *layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffixContainerXml_11_0_2 `xml:"suffix,omitempty"`
+	Misc           []generic.Xml                                                                      `xml:",any"`
+	MiscAttributes []xml.Attr                                                                         `xml:",any,attr"`
 }
 type layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServerContainerXml_11_0_2 struct {
 	Entries []layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServerXml_11_0_2 `xml:"entry"`
 }
 type layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServerXml_11_0_2 struct {
-	XMLName  xml.Name      `xml:"entry"`
-	Name     string        `xml:"name,attr"`
-	Lifetime *int64        `xml:"lifetime,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Lifetime       *int64        `xml:"lifetime,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffixContainerXml_11_0_2 struct {
 	Entries []layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffixXml_11_0_2 `xml:"entry"`
 }
 type layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffixXml_11_0_2 struct {
-	XMLName  xml.Name      `xml:"entry"`
-	Name     string        `xml:"name,attr"`
-	Lifetime *int64        `xml:"lifetime,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Lifetime       *int64        `xml:"lifetime,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3LacpXml_11_0_2 struct {
 	Enable           *string                               `xml:"enable,omitempty"`
@@ -1669,69 +1914,82 @@ type layer3LacpXml_11_0_2 struct {
 	SystemPriority   *int64                                `xml:"system-priority,omitempty"`
 	TransmissionRate *string                               `xml:"transmission-rate,omitempty"`
 	Misc             []generic.Xml                         `xml:",any"`
+	MiscAttributes   []xml.Attr                            `xml:",any,attr"`
 }
 type layer3LacpHighAvailabilityXml_11_0_2 struct {
 	PassivePreNegotiation *string       `xml:"passive-pre-negotiation,omitempty"`
 	Misc                  []generic.Xml `xml:",any"`
+	MiscAttributes        []xml.Attr    `xml:",any,attr"`
 }
 type layer3LldpXml_11_0_2 struct {
 	Enable           *string                               `xml:"enable,omitempty"`
 	HighAvailability *layer3LldpHighAvailabilityXml_11_0_2 `xml:"high-availability,omitempty"`
 	Profile          *string                               `xml:"profile,omitempty"`
 	Misc             []generic.Xml                         `xml:",any"`
+	MiscAttributes   []xml.Attr                            `xml:",any,attr"`
 }
 type layer3LldpHighAvailabilityXml_11_0_2 struct {
 	PassivePreNegotiation *string       `xml:"passive-pre-negotiation,omitempty"`
 	Misc                  []generic.Xml `xml:",any"`
+	MiscAttributes        []xml.Attr    `xml:",any,attr"`
 }
 type layer3NdpProxyXml_11_0_2 struct {
-	Address *layer3NdpProxyAddressContainerXml_11_0_2 `xml:"address,omitempty"`
-	Enabled *string                                   `xml:"enabled,omitempty"`
-	Misc    []generic.Xml                             `xml:",any"`
+	Address        *layer3NdpProxyAddressContainerXml_11_0_2 `xml:"address,omitempty"`
+	Enabled        *string                                   `xml:"enabled,omitempty"`
+	Misc           []generic.Xml                             `xml:",any"`
+	MiscAttributes []xml.Attr                                `xml:",any,attr"`
 }
 type layer3NdpProxyAddressContainerXml_11_0_2 struct {
 	Entries []layer3NdpProxyAddressXml_11_0_2 `xml:"entry"`
 }
 type layer3NdpProxyAddressXml_11_0_2 struct {
-	XMLName xml.Name      `xml:"entry"`
-	Name    string        `xml:"name,attr"`
-	Negate  *string       `xml:"negate,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Negate         *string       `xml:"negate,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3SdwanLinkSettingsXml_11_0_2 struct {
 	Enable                *string                                       `xml:"enable,omitempty"`
 	SdwanInterfaceProfile *string                                       `xml:"sdwan-interface-profile,omitempty"`
 	UpstreamNat           *layer3SdwanLinkSettingsUpstreamNatXml_11_0_2 `xml:"upstream-nat,omitempty"`
 	Misc                  []generic.Xml                                 `xml:",any"`
+	MiscAttributes        []xml.Attr                                    `xml:",any,attr"`
 }
 type layer3SdwanLinkSettingsUpstreamNatXml_11_0_2 struct {
-	Enable   *string                                               `xml:"enable,omitempty"`
-	Ddns     *layer3SdwanLinkSettingsUpstreamNatDdnsXml_11_0_2     `xml:"ddns,omitempty"`
-	StaticIp *layer3SdwanLinkSettingsUpstreamNatStaticIpXml_11_0_2 `xml:"static-ip,omitempty"`
-	Misc     []generic.Xml                                         `xml:",any"`
+	Enable         *string                                               `xml:"enable,omitempty"`
+	Ddns           *layer3SdwanLinkSettingsUpstreamNatDdnsXml_11_0_2     `xml:"ddns,omitempty"`
+	StaticIp       *layer3SdwanLinkSettingsUpstreamNatStaticIpXml_11_0_2 `xml:"static-ip,omitempty"`
+	Misc           []generic.Xml                                         `xml:",any"`
+	MiscAttributes []xml.Attr                                            `xml:",any,attr"`
 }
 type layer3SdwanLinkSettingsUpstreamNatDdnsXml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type layer3SdwanLinkSettingsUpstreamNatStaticIpXml_11_0_2 struct {
-	Fqdn      *string       `xml:"fqdn,omitempty"`
-	IpAddress *string       `xml:"ip-address,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	Fqdn           *string       `xml:"fqdn,omitempty"`
+	IpAddress      *string       `xml:"ip-address,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type virtualWireXml_11_0_2 struct {
 	Lldp           *virtualWireLldpXml_11_0_2 `xml:"lldp,omitempty"`
 	NetflowProfile *string                    `xml:"netflow-profile,omitempty"`
 	Misc           []generic.Xml              `xml:",any"`
+	MiscAttributes []xml.Attr                 `xml:",any,attr"`
 }
 type virtualWireLldpXml_11_0_2 struct {
 	Enable           *string                                    `xml:"enable,omitempty"`
 	HighAvailability *virtualWireLldpHighAvailabilityXml_11_0_2 `xml:"high-availability,omitempty"`
 	Profile          *string                                    `xml:"profile,omitempty"`
 	Misc             []generic.Xml                              `xml:",any"`
+	MiscAttributes   []xml.Attr                                 `xml:",any,attr"`
 }
 type virtualWireLldpHighAvailabilityXml_11_0_2 struct {
 	PassivePreNegotiation *string       `xml:"passive-pre-negotiation,omitempty"`
 	Misc                  []generic.Xml `xml:",any"`
+	MiscAttributes        []xml.Attr    `xml:",any,attr"`
 }
 
 func (o *entryXml) MarshalFromObject(s Entry) {
@@ -1763,6 +2021,7 @@ func (o *entryXml) MarshalFromObject(s Entry) {
 		o.VirtualWire = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o entryXml) UnmarshalToObject() (*Entry, error) {
@@ -1808,25 +2067,28 @@ func (o entryXml) UnmarshalToObject() (*Entry, error) {
 	}
 
 	result := &Entry{
-		Name:          o.Name,
-		Comment:       o.Comment,
-		DecryptMirror: decryptMirrorVal,
-		Ha:            haVal,
-		Layer2:        layer2Val,
-		Layer3:        layer3Val,
-		VirtualWire:   virtualWireVal,
-		Misc:          o.Misc,
+		Name:           o.Name,
+		Comment:        o.Comment,
+		DecryptMirror:  decryptMirrorVal,
+		Ha:             haVal,
+		Layer2:         layer2Val,
+		Layer3:         layer3Val,
+		VirtualWire:    virtualWireVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *decryptMirrorXml) MarshalFromObject(s DecryptMirror) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o decryptMirrorXml) UnmarshalToObject() (*DecryptMirror, error) {
 
 	result := &DecryptMirror{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1837,6 +2099,7 @@ func (o *haXml) MarshalFromObject(s Ha) {
 		o.Lacp = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o haXml) UnmarshalToObject() (*Ha, error) {
@@ -1850,8 +2113,9 @@ func (o haXml) UnmarshalToObject() (*Ha, error) {
 	}
 
 	result := &Ha{
-		Lacp: lacpVal,
-		Misc: o.Misc,
+		Lacp:           lacpVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1863,6 +2127,7 @@ func (o *haLacpXml) MarshalFromObject(s HaLacp) {
 	o.SystemPriority = s.SystemPriority
 	o.TransmissionRate = s.TransmissionRate
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o haLacpXml) UnmarshalToObject() (*HaLacp, error) {
@@ -1875,6 +2140,7 @@ func (o haLacpXml) UnmarshalToObject() (*HaLacp, error) {
 		SystemPriority:   o.SystemPriority,
 		TransmissionRate: o.TransmissionRate,
 		Misc:             o.Misc,
+		MiscAttributes:   o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1891,6 +2157,7 @@ func (o *layer2Xml) MarshalFromObject(s Layer2) {
 	}
 	o.NetflowProfile = s.NetflowProfile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer2Xml) UnmarshalToObject() (*Layer2, error) {
@@ -1916,6 +2183,7 @@ func (o layer2Xml) UnmarshalToObject() (*Layer2, error) {
 		Lldp:           lldpVal,
 		NetflowProfile: o.NetflowProfile,
 		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1932,6 +2200,7 @@ func (o *layer2LacpXml) MarshalFromObject(s Layer2Lacp) {
 	o.SystemPriority = s.SystemPriority
 	o.TransmissionRate = s.TransmissionRate
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer2LacpXml) UnmarshalToObject() (*Layer2Lacp, error) {
@@ -1953,12 +2222,14 @@ func (o layer2LacpXml) UnmarshalToObject() (*Layer2Lacp, error) {
 		SystemPriority:   o.SystemPriority,
 		TransmissionRate: o.TransmissionRate,
 		Misc:             o.Misc,
+		MiscAttributes:   o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *layer2LacpHighAvailabilityXml) MarshalFromObject(s Layer2LacpHighAvailability) {
 	o.PassivePreNegotiation = util.YesNo(s.PassivePreNegotiation, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer2LacpHighAvailabilityXml) UnmarshalToObject() (*Layer2LacpHighAvailability, error) {
@@ -1966,6 +2237,7 @@ func (o layer2LacpHighAvailabilityXml) UnmarshalToObject() (*Layer2LacpHighAvail
 	result := &Layer2LacpHighAvailability{
 		PassivePreNegotiation: util.AsBool(o.PassivePreNegotiation, nil),
 		Misc:                  o.Misc,
+		MiscAttributes:        o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1978,6 +2250,7 @@ func (o *layer2LldpXml) MarshalFromObject(s Layer2Lldp) {
 	}
 	o.Profile = s.Profile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer2LldpXml) UnmarshalToObject() (*Layer2Lldp, error) {
@@ -1995,12 +2268,14 @@ func (o layer2LldpXml) UnmarshalToObject() (*Layer2Lldp, error) {
 		HighAvailability: highAvailabilityVal,
 		Profile:          o.Profile,
 		Misc:             o.Misc,
+		MiscAttributes:   o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *layer2LldpHighAvailabilityXml) MarshalFromObject(s Layer2LldpHighAvailability) {
 	o.PassivePreNegotiation = util.YesNo(s.PassivePreNegotiation, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer2LldpHighAvailabilityXml) UnmarshalToObject() (*Layer2LldpHighAvailability, error) {
@@ -2008,6 +2283,7 @@ func (o layer2LldpHighAvailabilityXml) UnmarshalToObject() (*Layer2LldpHighAvail
 	result := &Layer2LldpHighAvailability{
 		PassivePreNegotiation: util.AsBool(o.PassivePreNegotiation, nil),
 		Misc:                  o.Misc,
+		MiscAttributes:        o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2082,6 +2358,7 @@ func (o *layer3Xml) MarshalFromObject(s Layer3) {
 	}
 	o.UntaggedSubInterface = util.YesNo(s.UntaggedSubInterface, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Xml) UnmarshalToObject() (*Layer3, error) {
@@ -2197,6 +2474,7 @@ func (o layer3Xml) UnmarshalToObject() (*Layer3, error) {
 		SdwanLinkSettings:          sdwanLinkSettingsVal,
 		UntaggedSubInterface:       util.AsBool(o.UntaggedSubInterface, nil),
 		Misc:                       o.Misc,
+		MiscAttributes:             o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2205,6 +2483,7 @@ func (o *layer3AdjustTcpMssXml) MarshalFromObject(s Layer3AdjustTcpMss) {
 	o.Ipv4MssAdjustment = s.Ipv4MssAdjustment
 	o.Ipv6MssAdjustment = s.Ipv6MssAdjustment
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3AdjustTcpMssXml) UnmarshalToObject() (*Layer3AdjustTcpMss, error) {
@@ -2214,6 +2493,7 @@ func (o layer3AdjustTcpMssXml) UnmarshalToObject() (*Layer3AdjustTcpMss, error) 
 		Ipv4MssAdjustment: o.Ipv4MssAdjustment,
 		Ipv6MssAdjustment: o.Ipv6MssAdjustment,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2221,14 +2501,16 @@ func (o *layer3ArpXml) MarshalFromObject(s Layer3Arp) {
 	o.Name = s.Name
 	o.HwAddress = s.HwAddress
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3ArpXml) UnmarshalToObject() (*Layer3Arp, error) {
 
 	result := &Layer3Arp{
-		Name:      o.Name,
-		HwAddress: o.HwAddress,
-		Misc:      o.Misc,
+		Name:           o.Name,
+		HwAddress:      o.HwAddress,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2237,15 +2519,17 @@ func (o *layer3BonjourXml) MarshalFromObject(s Layer3Bonjour) {
 	o.GroupId = s.GroupId
 	o.TtlCheck = util.YesNo(s.TtlCheck, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3BonjourXml) UnmarshalToObject() (*Layer3Bonjour, error) {
 
 	result := &Layer3Bonjour{
-		Enable:   util.AsBool(o.Enable, nil),
-		GroupId:  o.GroupId,
-		TtlCheck: util.AsBool(o.TtlCheck, nil),
-		Misc:     o.Misc,
+		Enable:         util.AsBool(o.Enable, nil),
+		GroupId:        o.GroupId,
+		TtlCheck:       util.AsBool(o.TtlCheck, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2271,6 +2555,7 @@ func (o *layer3DdnsConfigXml) MarshalFromObject(s Layer3DdnsConfig) {
 		o.DdnsVendorConfig = &layer3DdnsConfigDdnsVendorConfigContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3DdnsConfigXml) UnmarshalToObject() (*Layer3DdnsConfig, error) {
@@ -2303,6 +2588,7 @@ func (o layer3DdnsConfigXml) UnmarshalToObject() (*Layer3DdnsConfig, error) {
 		DdnsVendor:         o.DdnsVendor,
 		DdnsVendorConfig:   ddnsVendorConfigVal,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2310,14 +2596,16 @@ func (o *layer3DdnsConfigDdnsVendorConfigXml) MarshalFromObject(s Layer3DdnsConf
 	o.Name = s.Name
 	o.Value = s.Value
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3DdnsConfigDdnsVendorConfigXml) UnmarshalToObject() (*Layer3DdnsConfigDdnsVendorConfig, error) {
 
 	result := &Layer3DdnsConfigDdnsVendorConfig{
-		Name:  o.Name,
-		Value: o.Value,
-		Misc:  o.Misc,
+		Name:           o.Name,
+		Value:          o.Value,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2331,6 +2619,7 @@ func (o *layer3DhcpClientXml) MarshalFromObject(s Layer3DhcpClient) {
 		o.SendHostname = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3DhcpClientXml) UnmarshalToObject() (*Layer3DhcpClient, error) {
@@ -2349,6 +2638,7 @@ func (o layer3DhcpClientXml) UnmarshalToObject() (*Layer3DhcpClient, error) {
 		Enable:             util.AsBool(o.Enable, nil),
 		SendHostname:       sendHostnameVal,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2356,14 +2646,16 @@ func (o *layer3DhcpClientSendHostnameXml) MarshalFromObject(s Layer3DhcpClientSe
 	o.Enable = util.YesNo(s.Enable, nil)
 	o.Hostname = s.Hostname
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3DhcpClientSendHostnameXml) UnmarshalToObject() (*Layer3DhcpClientSendHostname, error) {
 
 	result := &Layer3DhcpClientSendHostname{
-		Enable:   util.AsBool(o.Enable, nil),
-		Hostname: o.Hostname,
-		Misc:     o.Misc,
+		Enable:         util.AsBool(o.Enable, nil),
+		Hostname:       o.Hostname,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2371,14 +2663,16 @@ func (o *layer3IpXml) MarshalFromObject(s Layer3Ip) {
 	o.Name = s.Name
 	o.SdwanGateway = s.SdwanGateway
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3IpXml) UnmarshalToObject() (*Layer3Ip, error) {
 
 	result := &Layer3Ip{
-		Name:         o.Name,
-		SdwanGateway: o.SdwanGateway,
-		Misc:         o.Misc,
+		Name:           o.Name,
+		SdwanGateway:   o.SdwanGateway,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2410,6 +2704,7 @@ func (o *layer3Ipv6Xml) MarshalFromObject(s Layer3Ipv6) {
 		o.NeighborDiscovery = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6Xml) UnmarshalToObject() (*Layer3Ipv6, error) {
@@ -2456,6 +2751,7 @@ func (o layer3Ipv6Xml) UnmarshalToObject() (*Layer3Ipv6, error) {
 		InterfaceId:       o.InterfaceId,
 		NeighborDiscovery: neighborDiscoveryVal,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2478,6 +2774,7 @@ func (o *layer3Ipv6AddressXml) MarshalFromObject(s Layer3Ipv6Address) {
 		o.Advertise = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6AddressXml) UnmarshalToObject() (*Layer3Ipv6Address, error) {
@@ -2513,28 +2810,33 @@ func (o layer3Ipv6AddressXml) UnmarshalToObject() (*Layer3Ipv6Address, error) {
 		Anycast:           anycastVal,
 		Advertise:         advertiseVal,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *layer3Ipv6AddressPrefixXml) MarshalFromObject(s Layer3Ipv6AddressPrefix) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6AddressPrefixXml) UnmarshalToObject() (*Layer3Ipv6AddressPrefix, error) {
 
 	result := &Layer3Ipv6AddressPrefix{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *layer3Ipv6AddressAnycastXml) MarshalFromObject(s Layer3Ipv6AddressAnycast) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6AddressAnycastXml) UnmarshalToObject() (*Layer3Ipv6AddressAnycast, error) {
 
 	result := &Layer3Ipv6AddressAnycast{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2545,6 +2847,7 @@ func (o *layer3Ipv6AddressAdvertiseXml) MarshalFromObject(s Layer3Ipv6AddressAdv
 	o.OnlinkFlag = util.YesNo(s.OnlinkFlag, nil)
 	o.AutoConfigFlag = util.YesNo(s.AutoConfigFlag, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6AddressAdvertiseXml) UnmarshalToObject() (*Layer3Ipv6AddressAdvertise, error) {
@@ -2556,6 +2859,7 @@ func (o layer3Ipv6AddressAdvertiseXml) UnmarshalToObject() (*Layer3Ipv6AddressAd
 		OnlinkFlag:        util.AsBool(o.OnlinkFlag, nil),
 		AutoConfigFlag:    util.AsBool(o.AutoConfigFlag, nil),
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2580,6 +2884,7 @@ func (o *layer3Ipv6DhcpClientXml) MarshalFromObject(s Layer3Ipv6DhcpClient) {
 		o.V6Options = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6DhcpClientXml) UnmarshalToObject() (*Layer3Ipv6DhcpClient, error) {
@@ -2617,6 +2922,7 @@ func (o layer3Ipv6DhcpClientXml) UnmarshalToObject() (*Layer3Ipv6DhcpClient, err
 		PrefixDelegation:   prefixDelegationVal,
 		V6Options:          v6OptionsVal,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2646,6 +2952,7 @@ func (o *layer3Ipv6DhcpClientNeighborDiscoveryXml) MarshalFromObject(s Layer3Ipv
 	o.NsInterval = s.NsInterval
 	o.ReachableTime = s.ReachableTime
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6DhcpClientNeighborDiscoveryXml) UnmarshalToObject() (*Layer3Ipv6DhcpClientNeighborDiscovery, error) {
@@ -2686,6 +2993,7 @@ func (o layer3Ipv6DhcpClientNeighborDiscoveryXml) UnmarshalToObject() (*Layer3Ip
 		NsInterval:       o.NsInterval,
 		ReachableTime:    o.ReachableTime,
 		Misc:             o.Misc,
+		MiscAttributes:   o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2697,6 +3005,7 @@ func (o *layer3Ipv6DhcpClientNeighborDiscoveryDnsServerXml) MarshalFromObject(s 
 		o.Source = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6DhcpClientNeighborDiscoveryDnsServerXml) UnmarshalToObject() (*Layer3Ipv6DhcpClientNeighborDiscoveryDnsServer, error) {
@@ -2710,9 +3019,10 @@ func (o layer3Ipv6DhcpClientNeighborDiscoveryDnsServerXml) UnmarshalToObject() (
 	}
 
 	result := &Layer3Ipv6DhcpClientNeighborDiscoveryDnsServer{
-		Enable: util.AsBool(o.Enable, nil),
-		Source: sourceVal,
-		Misc:   o.Misc,
+		Enable:         util.AsBool(o.Enable, nil),
+		Source:         sourceVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2728,6 +3038,7 @@ func (o *layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceXml) MarshalFromObj
 		o.Manual = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceXml) UnmarshalToObject() (*Layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSource, error) {
@@ -2749,20 +3060,23 @@ func (o layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceXml) UnmarshalToObje
 	}
 
 	result := &Layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSource{
-		Dhcpv6: dhcpv6Val,
-		Manual: manualVal,
-		Misc:   o.Misc,
+		Dhcpv6:         dhcpv6Val,
+		Manual:         manualVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceDhcpv6Xml) MarshalFromObject(s Layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceDhcpv6) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceDhcpv6Xml) UnmarshalToObject() (*Layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceDhcpv6, error) {
 
 	result := &Layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceDhcpv6{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2777,6 +3091,7 @@ func (o *layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualXml) MarshalF
 		o.Server = &layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualServerContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualXml) UnmarshalToObject() (*Layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManual, error) {
@@ -2792,8 +3107,9 @@ func (o layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualXml) Unmarshal
 	}
 
 	result := &Layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManual{
-		Server: serverVal,
-		Misc:   o.Misc,
+		Server:         serverVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2801,14 +3117,16 @@ func (o *layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualServerXml) Ma
 	o.Name = s.Name
 	o.Lifetime = s.Lifetime
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualServerXml) UnmarshalToObject() (*Layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualServer, error) {
 
 	result := &Layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualServer{
-		Name:     o.Name,
-		Lifetime: o.Lifetime,
-		Misc:     o.Misc,
+		Name:           o.Name,
+		Lifetime:       o.Lifetime,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2820,6 +3138,7 @@ func (o *layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixXml) MarshalFromObject(s 
 		o.Source = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixXml) UnmarshalToObject() (*Layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffix, error) {
@@ -2833,9 +3152,10 @@ func (o layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixXml) UnmarshalToObject() (
 	}
 
 	result := &Layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffix{
-		Enable: util.AsBool(o.Enable, nil),
-		Source: sourceVal,
-		Misc:   o.Misc,
+		Enable:         util.AsBool(o.Enable, nil),
+		Source:         sourceVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2851,6 +3171,7 @@ func (o *layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceXml) MarshalFromObj
 		o.Manual = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceXml) UnmarshalToObject() (*Layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSource, error) {
@@ -2872,20 +3193,23 @@ func (o layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceXml) UnmarshalToObje
 	}
 
 	result := &Layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSource{
-		Dhcpv6: dhcpv6Val,
-		Manual: manualVal,
-		Misc:   o.Misc,
+		Dhcpv6:         dhcpv6Val,
+		Manual:         manualVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceDhcpv6Xml) MarshalFromObject(s Layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceDhcpv6) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceDhcpv6Xml) UnmarshalToObject() (*Layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceDhcpv6, error) {
 
 	result := &Layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceDhcpv6{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2900,6 +3224,7 @@ func (o *layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualXml) MarshalF
 		o.Suffix = &layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffixContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualXml) UnmarshalToObject() (*Layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManual, error) {
@@ -2915,8 +3240,9 @@ func (o layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualXml) Unmarshal
 	}
 
 	result := &Layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManual{
-		Suffix: suffixVal,
-		Misc:   o.Misc,
+		Suffix:         suffixVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2924,14 +3250,16 @@ func (o *layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffixXml) Ma
 	o.Name = s.Name
 	o.Lifetime = s.Lifetime
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffixXml) UnmarshalToObject() (*Layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffix, error) {
 
 	result := &Layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffix{
-		Name:     o.Name,
-		Lifetime: o.Lifetime,
-		Misc:     o.Misc,
+		Name:           o.Name,
+		Lifetime:       o.Lifetime,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2939,14 +3267,16 @@ func (o *layer3Ipv6DhcpClientNeighborDiscoveryNeighborXml) MarshalFromObject(s L
 	o.Name = s.Name
 	o.HwAddress = s.HwAddress
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6DhcpClientNeighborDiscoveryNeighborXml) UnmarshalToObject() (*Layer3Ipv6DhcpClientNeighborDiscoveryNeighbor, error) {
 
 	result := &Layer3Ipv6DhcpClientNeighborDiscoveryNeighbor{
-		Name:      o.Name,
-		HwAddress: o.HwAddress,
-		Misc:      o.Misc,
+		Name:           o.Name,
+		HwAddress:      o.HwAddress,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2957,6 +3287,7 @@ func (o *layer3Ipv6DhcpClientPrefixDelegationXml) MarshalFromObject(s Layer3Ipv6
 		o.Enable = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6DhcpClientPrefixDelegationXml) UnmarshalToObject() (*Layer3Ipv6DhcpClientPrefixDelegation, error) {
@@ -2970,8 +3301,9 @@ func (o layer3Ipv6DhcpClientPrefixDelegationXml) UnmarshalToObject() (*Layer3Ipv
 	}
 
 	result := &Layer3Ipv6DhcpClientPrefixDelegation{
-		Enable: enableVal,
-		Misc:   o.Misc,
+		Enable:         enableVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2987,6 +3319,7 @@ func (o *layer3Ipv6DhcpClientPrefixDelegationEnableXml) MarshalFromObject(s Laye
 		o.Yes = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6DhcpClientPrefixDelegationEnableXml) UnmarshalToObject() (*Layer3Ipv6DhcpClientPrefixDelegationEnable, error) {
@@ -3008,20 +3341,23 @@ func (o layer3Ipv6DhcpClientPrefixDelegationEnableXml) UnmarshalToObject() (*Lay
 	}
 
 	result := &Layer3Ipv6DhcpClientPrefixDelegationEnable{
-		No:   noVal,
-		Yes:  yesVal,
-		Misc: o.Misc,
+		No:             noVal,
+		Yes:            yesVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *layer3Ipv6DhcpClientPrefixDelegationEnableNoXml) MarshalFromObject(s Layer3Ipv6DhcpClientPrefixDelegationEnableNo) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6DhcpClientPrefixDelegationEnableNoXml) UnmarshalToObject() (*Layer3Ipv6DhcpClientPrefixDelegationEnableNo, error) {
 
 	result := &Layer3Ipv6DhcpClientPrefixDelegationEnableNo{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3030,15 +3366,17 @@ func (o *layer3Ipv6DhcpClientPrefixDelegationEnableYesXml) MarshalFromObject(s L
 	o.PrefixLen = s.PrefixLen
 	o.PrefixLenHint = util.YesNo(s.PrefixLenHint, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6DhcpClientPrefixDelegationEnableYesXml) UnmarshalToObject() (*Layer3Ipv6DhcpClientPrefixDelegationEnableYes, error) {
 
 	result := &Layer3Ipv6DhcpClientPrefixDelegationEnableYes{
-		PfxPoolName:   o.PfxPoolName,
-		PrefixLen:     o.PrefixLen,
-		PrefixLenHint: util.AsBool(o.PrefixLenHint, nil),
-		Misc:          o.Misc,
+		PfxPoolName:    o.PfxPoolName,
+		PrefixLen:      o.PrefixLen,
+		PrefixLenHint:  util.AsBool(o.PrefixLenHint, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3052,6 +3390,7 @@ func (o *layer3Ipv6DhcpClientV6OptionsXml) MarshalFromObject(s Layer3Ipv6DhcpCli
 	o.RapidCommit = util.YesNo(s.RapidCommit, nil)
 	o.SupportSrvrReconfig = util.YesNo(s.SupportSrvrReconfig, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6DhcpClientV6OptionsXml) UnmarshalToObject() (*Layer3Ipv6DhcpClientV6Options, error) {
@@ -3070,6 +3409,7 @@ func (o layer3Ipv6DhcpClientV6OptionsXml) UnmarshalToObject() (*Layer3Ipv6DhcpCl
 		RapidCommit:         util.AsBool(o.RapidCommit, nil),
 		SupportSrvrReconfig: util.AsBool(o.SupportSrvrReconfig, nil),
 		Misc:                o.Misc,
+		MiscAttributes:      o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3085,6 +3425,7 @@ func (o *layer3Ipv6DhcpClientV6OptionsEnableXml) MarshalFromObject(s Layer3Ipv6D
 		o.Yes = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6DhcpClientV6OptionsEnableXml) UnmarshalToObject() (*Layer3Ipv6DhcpClientV6OptionsEnable, error) {
@@ -3106,20 +3447,23 @@ func (o layer3Ipv6DhcpClientV6OptionsEnableXml) UnmarshalToObject() (*Layer3Ipv6
 	}
 
 	result := &Layer3Ipv6DhcpClientV6OptionsEnable{
-		No:   noVal,
-		Yes:  yesVal,
-		Misc: o.Misc,
+		No:             noVal,
+		Yes:            yesVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *layer3Ipv6DhcpClientV6OptionsEnableNoXml) MarshalFromObject(s Layer3Ipv6DhcpClientV6OptionsEnableNo) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6DhcpClientV6OptionsEnableNoXml) UnmarshalToObject() (*Layer3Ipv6DhcpClientV6OptionsEnableNo, error) {
 
 	result := &Layer3Ipv6DhcpClientV6OptionsEnableNo{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3127,14 +3471,16 @@ func (o *layer3Ipv6DhcpClientV6OptionsEnableYesXml) MarshalFromObject(s Layer3Ip
 	o.NonTempAddr = util.YesNo(s.NonTempAddr, nil)
 	o.TempAddr = util.YesNo(s.TempAddr, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6DhcpClientV6OptionsEnableYesXml) UnmarshalToObject() (*Layer3Ipv6DhcpClientV6OptionsEnableYes, error) {
 
 	result := &Layer3Ipv6DhcpClientV6OptionsEnableYes{
-		NonTempAddr: util.AsBool(o.NonTempAddr, nil),
-		TempAddr:    util.AsBool(o.TempAddr, nil),
-		Misc:        o.Misc,
+		NonTempAddr:    util.AsBool(o.NonTempAddr, nil),
+		TempAddr:       util.AsBool(o.TempAddr, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3155,6 +3501,7 @@ func (o *layer3Ipv6InheritedXml) MarshalFromObject(s Layer3Ipv6Inherited) {
 		o.NeighborDiscovery = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6InheritedXml) UnmarshalToObject() (*Layer3Ipv6Inherited, error) {
@@ -3182,6 +3529,7 @@ func (o layer3Ipv6InheritedXml) UnmarshalToObject() (*Layer3Ipv6Inherited, error
 		Enable:            util.AsBool(o.Enable, nil),
 		NeighborDiscovery: neighborDiscoveryVal,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3193,6 +3541,7 @@ func (o *layer3Ipv6InheritedAssignAddrXml) MarshalFromObject(s Layer3Ipv6Inherit
 		o.Type = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6InheritedAssignAddrXml) UnmarshalToObject() (*Layer3Ipv6InheritedAssignAddr, error) {
@@ -3206,9 +3555,10 @@ func (o layer3Ipv6InheritedAssignAddrXml) UnmarshalToObject() (*Layer3Ipv6Inheri
 	}
 
 	result := &Layer3Ipv6InheritedAssignAddr{
-		Name: o.Name,
-		Type: typeVal,
-		Misc: o.Misc,
+		Name:           o.Name,
+		Type:           typeVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3224,6 +3574,7 @@ func (o *layer3Ipv6InheritedAssignAddrTypeXml) MarshalFromObject(s Layer3Ipv6Inh
 		o.Ula = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6InheritedAssignAddrTypeXml) UnmarshalToObject() (*Layer3Ipv6InheritedAssignAddrType, error) {
@@ -3245,9 +3596,10 @@ func (o layer3Ipv6InheritedAssignAddrTypeXml) UnmarshalToObject() (*Layer3Ipv6In
 	}
 
 	result := &Layer3Ipv6InheritedAssignAddrType{
-		Gua:  guaVal,
-		Ula:  ulaVal,
-		Misc: o.Misc,
+		Gua:            guaVal,
+		Ula:            ulaVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3265,6 +3617,7 @@ func (o *layer3Ipv6InheritedAssignAddrTypeGuaXml) MarshalFromObject(s Layer3Ipv6
 		o.Advertise = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6InheritedAssignAddrTypeGuaXml) UnmarshalToObject() (*Layer3Ipv6InheritedAssignAddrTypeGua, error) {
@@ -3291,6 +3644,7 @@ func (o layer3Ipv6InheritedAssignAddrTypeGuaXml) UnmarshalToObject() (*Layer3Ipv
 		PoolType:          poolTypeVal,
 		Advertise:         advertiseVal,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3306,6 +3660,7 @@ func (o *layer3Ipv6InheritedAssignAddrTypeGuaPoolTypeXml) MarshalFromObject(s La
 		o.DynamicId = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6InheritedAssignAddrTypeGuaPoolTypeXml) UnmarshalToObject() (*Layer3Ipv6InheritedAssignAddrTypeGuaPoolType, error) {
@@ -3327,33 +3682,38 @@ func (o layer3Ipv6InheritedAssignAddrTypeGuaPoolTypeXml) UnmarshalToObject() (*L
 	}
 
 	result := &Layer3Ipv6InheritedAssignAddrTypeGuaPoolType{
-		Dynamic:   dynamicVal,
-		DynamicId: dynamicIdVal,
-		Misc:      o.Misc,
+		Dynamic:        dynamicVal,
+		DynamicId:      dynamicIdVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *layer3Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicXml) MarshalFromObject(s Layer3Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamic) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicXml) UnmarshalToObject() (*Layer3Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamic, error) {
 
 	result := &Layer3Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamic{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *layer3Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicIdXml) MarshalFromObject(s Layer3Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicId) {
 	o.Identifier = s.Identifier
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicIdXml) UnmarshalToObject() (*Layer3Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicId, error) {
 
 	result := &Layer3Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicId{
-		Identifier: o.Identifier,
-		Misc:       o.Misc,
+		Identifier:     o.Identifier,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3362,6 +3722,7 @@ func (o *layer3Ipv6InheritedAssignAddrTypeGuaAdvertiseXml) MarshalFromObject(s L
 	o.OnlinkFlag = util.YesNo(s.OnlinkFlag, nil)
 	o.AutoConfigFlag = util.YesNo(s.AutoConfigFlag, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6InheritedAssignAddrTypeGuaAdvertiseXml) UnmarshalToObject() (*Layer3Ipv6InheritedAssignAddrTypeGuaAdvertise, error) {
@@ -3371,6 +3732,7 @@ func (o layer3Ipv6InheritedAssignAddrTypeGuaAdvertiseXml) UnmarshalToObject() (*
 		OnlinkFlag:     util.AsBool(o.OnlinkFlag, nil),
 		AutoConfigFlag: util.AsBool(o.AutoConfigFlag, nil),
 		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3385,6 +3747,7 @@ func (o *layer3Ipv6InheritedAssignAddrTypeUlaXml) MarshalFromObject(s Layer3Ipv6
 		o.Advertise = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6InheritedAssignAddrTypeUlaXml) UnmarshalToObject() (*Layer3Ipv6InheritedAssignAddrTypeUla, error) {
@@ -3404,6 +3767,7 @@ func (o layer3Ipv6InheritedAssignAddrTypeUlaXml) UnmarshalToObject() (*Layer3Ipv
 		Anycast:           util.AsBool(o.Anycast, nil),
 		Advertise:         advertiseVal,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3414,6 +3778,7 @@ func (o *layer3Ipv6InheritedAssignAddrTypeUlaAdvertiseXml) MarshalFromObject(s L
 	o.OnlinkFlag = util.YesNo(s.OnlinkFlag, nil)
 	o.AutoConfigFlag = util.YesNo(s.AutoConfigFlag, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6InheritedAssignAddrTypeUlaAdvertiseXml) UnmarshalToObject() (*Layer3Ipv6InheritedAssignAddrTypeUlaAdvertise, error) {
@@ -3425,6 +3790,7 @@ func (o layer3Ipv6InheritedAssignAddrTypeUlaAdvertiseXml) UnmarshalToObject() (*
 		OnlinkFlag:        util.AsBool(o.OnlinkFlag, nil),
 		AutoConfigFlag:    util.AsBool(o.AutoConfigFlag, nil),
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3459,6 +3825,7 @@ func (o *layer3Ipv6InheritedNeighborDiscoveryXml) MarshalFromObject(s Layer3Ipv6
 		o.RouterAdvertisement = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6InheritedNeighborDiscoveryXml) UnmarshalToObject() (*Layer3Ipv6InheritedNeighborDiscovery, error) {
@@ -3508,6 +3875,7 @@ func (o layer3Ipv6InheritedNeighborDiscoveryXml) UnmarshalToObject() (*Layer3Ipv
 		ReachableTime:       o.ReachableTime,
 		RouterAdvertisement: routerAdvertisementVal,
 		Misc:                o.Misc,
+		MiscAttributes:      o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3519,6 +3887,7 @@ func (o *layer3Ipv6InheritedNeighborDiscoveryDnsServerXml) MarshalFromObject(s L
 		o.Source = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6InheritedNeighborDiscoveryDnsServerXml) UnmarshalToObject() (*Layer3Ipv6InheritedNeighborDiscoveryDnsServer, error) {
@@ -3532,9 +3901,10 @@ func (o layer3Ipv6InheritedNeighborDiscoveryDnsServerXml) UnmarshalToObject() (*
 	}
 
 	result := &Layer3Ipv6InheritedNeighborDiscoveryDnsServer{
-		Enable: util.AsBool(o.Enable, nil),
-		Source: sourceVal,
-		Misc:   o.Misc,
+		Enable:         util.AsBool(o.Enable, nil),
+		Source:         sourceVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3550,6 +3920,7 @@ func (o *layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceXml) MarshalFromObje
 		o.Manual = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceXml) UnmarshalToObject() (*Layer3Ipv6InheritedNeighborDiscoveryDnsServerSource, error) {
@@ -3571,22 +3942,25 @@ func (o layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceXml) UnmarshalToObjec
 	}
 
 	result := &Layer3Ipv6InheritedNeighborDiscoveryDnsServerSource{
-		Dhcpv6: dhcpv6Val,
-		Manual: manualVal,
-		Misc:   o.Misc,
+		Dhcpv6:         dhcpv6Val,
+		Manual:         manualVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceDhcpv6Xml) MarshalFromObject(s Layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceDhcpv6) {
 	o.PrefixPool = s.PrefixPool
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceDhcpv6Xml) UnmarshalToObject() (*Layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceDhcpv6, error) {
 
 	result := &Layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceDhcpv6{
-		PrefixPool: o.PrefixPool,
-		Misc:       o.Misc,
+		PrefixPool:     o.PrefixPool,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3601,6 +3975,7 @@ func (o *layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceManualXml) MarshalFr
 		o.Server = &layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceManualServerContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceManualXml) UnmarshalToObject() (*Layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceManual, error) {
@@ -3616,8 +3991,9 @@ func (o layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceManualXml) UnmarshalT
 	}
 
 	result := &Layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceManual{
-		Server: serverVal,
-		Misc:   o.Misc,
+		Server:         serverVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3625,14 +4001,16 @@ func (o *layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceManualServerXml) Mar
 	o.Name = s.Name
 	o.Lifetime = s.Lifetime
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceManualServerXml) UnmarshalToObject() (*Layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceManualServer, error) {
 
 	result := &Layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceManualServer{
-		Name:     o.Name,
-		Lifetime: o.Lifetime,
-		Misc:     o.Misc,
+		Name:           o.Name,
+		Lifetime:       o.Lifetime,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3644,6 +4022,7 @@ func (o *layer3Ipv6InheritedNeighborDiscoveryDnsSuffixXml) MarshalFromObject(s L
 		o.Source = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6InheritedNeighborDiscoveryDnsSuffixXml) UnmarshalToObject() (*Layer3Ipv6InheritedNeighborDiscoveryDnsSuffix, error) {
@@ -3657,9 +4036,10 @@ func (o layer3Ipv6InheritedNeighborDiscoveryDnsSuffixXml) UnmarshalToObject() (*
 	}
 
 	result := &Layer3Ipv6InheritedNeighborDiscoveryDnsSuffix{
-		Enable: util.AsBool(o.Enable, nil),
-		Source: sourceVal,
-		Misc:   o.Misc,
+		Enable:         util.AsBool(o.Enable, nil),
+		Source:         sourceVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3675,6 +4055,7 @@ func (o *layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceXml) MarshalFromObje
 		o.Manual = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceXml) UnmarshalToObject() (*Layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSource, error) {
@@ -3696,22 +4077,25 @@ func (o layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceXml) UnmarshalToObjec
 	}
 
 	result := &Layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSource{
-		Dhcpv6: dhcpv6Val,
-		Manual: manualVal,
-		Misc:   o.Misc,
+		Dhcpv6:         dhcpv6Val,
+		Manual:         manualVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceDhcpv6Xml) MarshalFromObject(s Layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceDhcpv6) {
 	o.PrefixPool = s.PrefixPool
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceDhcpv6Xml) UnmarshalToObject() (*Layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceDhcpv6, error) {
 
 	result := &Layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceDhcpv6{
-		PrefixPool: o.PrefixPool,
-		Misc:       o.Misc,
+		PrefixPool:     o.PrefixPool,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3726,6 +4110,7 @@ func (o *layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualXml) MarshalFr
 		o.Suffix = &layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffixContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualXml) UnmarshalToObject() (*Layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManual, error) {
@@ -3741,8 +4126,9 @@ func (o layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualXml) UnmarshalT
 	}
 
 	result := &Layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManual{
-		Suffix: suffixVal,
-		Misc:   o.Misc,
+		Suffix:         suffixVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3750,14 +4136,16 @@ func (o *layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffixXml) Mar
 	o.Name = s.Name
 	o.Lifetime = s.Lifetime
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffixXml) UnmarshalToObject() (*Layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffix, error) {
 
 	result := &Layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffix{
-		Name:     o.Name,
-		Lifetime: o.Lifetime,
-		Misc:     o.Misc,
+		Name:           o.Name,
+		Lifetime:       o.Lifetime,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3765,14 +4153,16 @@ func (o *layer3Ipv6InheritedNeighborDiscoveryNeighborXml) MarshalFromObject(s La
 	o.Name = s.Name
 	o.HwAddress = s.HwAddress
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6InheritedNeighborDiscoveryNeighborXml) UnmarshalToObject() (*Layer3Ipv6InheritedNeighborDiscoveryNeighbor, error) {
 
 	result := &Layer3Ipv6InheritedNeighborDiscoveryNeighbor{
-		Name:      o.Name,
-		HwAddress: o.HwAddress,
-		Misc:      o.Misc,
+		Name:           o.Name,
+		HwAddress:      o.HwAddress,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3790,6 +4180,7 @@ func (o *layer3Ipv6InheritedNeighborDiscoveryRouterAdvertisementXml) MarshalFrom
 	o.RetransmissionTimer = s.RetransmissionTimer
 	o.RouterPreference = s.RouterPreference
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6InheritedNeighborDiscoveryRouterAdvertisementXml) UnmarshalToObject() (*Layer3Ipv6InheritedNeighborDiscoveryRouterAdvertisement, error) {
@@ -3808,6 +4199,7 @@ func (o layer3Ipv6InheritedNeighborDiscoveryRouterAdvertisementXml) UnmarshalToO
 		RetransmissionTimer:    o.RetransmissionTimer,
 		RouterPreference:       o.RouterPreference,
 		Misc:                   o.Misc,
+		MiscAttributes:         o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3832,6 +4224,7 @@ func (o *layer3Ipv6NeighborDiscoveryXml) MarshalFromObject(s Layer3Ipv6NeighborD
 		o.RouterAdvertisement = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6NeighborDiscoveryXml) UnmarshalToObject() (*Layer3Ipv6NeighborDiscovery, error) {
@@ -3863,6 +4256,7 @@ func (o layer3Ipv6NeighborDiscoveryXml) UnmarshalToObject() (*Layer3Ipv6Neighbor
 		ReachableTime:       o.ReachableTime,
 		RouterAdvertisement: routerAdvertisementVal,
 		Misc:                o.Misc,
+		MiscAttributes:      o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3870,14 +4264,16 @@ func (o *layer3Ipv6NeighborDiscoveryNeighborXml) MarshalFromObject(s Layer3Ipv6N
 	o.Name = s.Name
 	o.HwAddress = s.HwAddress
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6NeighborDiscoveryNeighborXml) UnmarshalToObject() (*Layer3Ipv6NeighborDiscoveryNeighbor, error) {
 
 	result := &Layer3Ipv6NeighborDiscoveryNeighbor{
-		Name:      o.Name,
-		HwAddress: o.HwAddress,
-		Misc:      o.Misc,
+		Name:           o.Name,
+		HwAddress:      o.HwAddress,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3900,6 +4296,7 @@ func (o *layer3Ipv6NeighborDiscoveryRouterAdvertisementXml) MarshalFromObject(s 
 	o.RetransmissionTimer = s.RetransmissionTimer
 	o.RouterPreference = s.RouterPreference
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6NeighborDiscoveryRouterAdvertisementXml) UnmarshalToObject() (*Layer3Ipv6NeighborDiscoveryRouterAdvertisement, error) {
@@ -3927,6 +4324,7 @@ func (o layer3Ipv6NeighborDiscoveryRouterAdvertisementXml) UnmarshalToObject() (
 		RetransmissionTimer:    o.RetransmissionTimer,
 		RouterPreference:       o.RouterPreference,
 		Misc:                   o.Misc,
+		MiscAttributes:         o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3951,6 +4349,7 @@ func (o *layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportXml) MarshalFro
 		o.Suffix = &layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffixContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportXml) UnmarshalToObject() (*Layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupport, error) {
@@ -3976,10 +4375,11 @@ func (o layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportXml) UnmarshalTo
 	}
 
 	result := &Layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupport{
-		Enable: util.AsBool(o.Enable, nil),
-		Server: serverVal,
-		Suffix: suffixVal,
-		Misc:   o.Misc,
+		Enable:         util.AsBool(o.Enable, nil),
+		Server:         serverVal,
+		Suffix:         suffixVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3987,14 +4387,16 @@ func (o *layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServerXml) Mars
 	o.Name = s.Name
 	o.Lifetime = s.Lifetime
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServerXml) UnmarshalToObject() (*Layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServer, error) {
 
 	result := &Layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServer{
-		Name:     o.Name,
-		Lifetime: o.Lifetime,
-		Misc:     o.Misc,
+		Name:           o.Name,
+		Lifetime:       o.Lifetime,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4002,14 +4404,16 @@ func (o *layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffixXml) Mars
 	o.Name = s.Name
 	o.Lifetime = s.Lifetime
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffixXml) UnmarshalToObject() (*Layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffix, error) {
 
 	result := &Layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffix{
-		Name:     o.Name,
-		Lifetime: o.Lifetime,
-		Misc:     o.Misc,
+		Name:           o.Name,
+		Lifetime:       o.Lifetime,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4026,6 +4430,7 @@ func (o *layer3LacpXml) MarshalFromObject(s Layer3Lacp) {
 	o.SystemPriority = s.SystemPriority
 	o.TransmissionRate = s.TransmissionRate
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3LacpXml) UnmarshalToObject() (*Layer3Lacp, error) {
@@ -4047,12 +4452,14 @@ func (o layer3LacpXml) UnmarshalToObject() (*Layer3Lacp, error) {
 		SystemPriority:   o.SystemPriority,
 		TransmissionRate: o.TransmissionRate,
 		Misc:             o.Misc,
+		MiscAttributes:   o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *layer3LacpHighAvailabilityXml) MarshalFromObject(s Layer3LacpHighAvailability) {
 	o.PassivePreNegotiation = util.YesNo(s.PassivePreNegotiation, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3LacpHighAvailabilityXml) UnmarshalToObject() (*Layer3LacpHighAvailability, error) {
@@ -4060,6 +4467,7 @@ func (o layer3LacpHighAvailabilityXml) UnmarshalToObject() (*Layer3LacpHighAvail
 	result := &Layer3LacpHighAvailability{
 		PassivePreNegotiation: util.AsBool(o.PassivePreNegotiation, nil),
 		Misc:                  o.Misc,
+		MiscAttributes:        o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4072,6 +4480,7 @@ func (o *layer3LldpXml) MarshalFromObject(s Layer3Lldp) {
 	}
 	o.Profile = s.Profile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3LldpXml) UnmarshalToObject() (*Layer3Lldp, error) {
@@ -4089,12 +4498,14 @@ func (o layer3LldpXml) UnmarshalToObject() (*Layer3Lldp, error) {
 		HighAvailability: highAvailabilityVal,
 		Profile:          o.Profile,
 		Misc:             o.Misc,
+		MiscAttributes:   o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *layer3LldpHighAvailabilityXml) MarshalFromObject(s Layer3LldpHighAvailability) {
 	o.PassivePreNegotiation = util.YesNo(s.PassivePreNegotiation, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3LldpHighAvailabilityXml) UnmarshalToObject() (*Layer3LldpHighAvailability, error) {
@@ -4102,6 +4513,7 @@ func (o layer3LldpHighAvailabilityXml) UnmarshalToObject() (*Layer3LldpHighAvail
 	result := &Layer3LldpHighAvailability{
 		PassivePreNegotiation: util.AsBool(o.PassivePreNegotiation, nil),
 		Misc:                  o.Misc,
+		MiscAttributes:        o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4117,6 +4529,7 @@ func (o *layer3NdpProxyXml) MarshalFromObject(s Layer3NdpProxy) {
 	}
 	o.Enabled = util.YesNo(s.Enabled, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3NdpProxyXml) UnmarshalToObject() (*Layer3NdpProxy, error) {
@@ -4132,9 +4545,10 @@ func (o layer3NdpProxyXml) UnmarshalToObject() (*Layer3NdpProxy, error) {
 	}
 
 	result := &Layer3NdpProxy{
-		Address: addressVal,
-		Enabled: util.AsBool(o.Enabled, nil),
-		Misc:    o.Misc,
+		Address:        addressVal,
+		Enabled:        util.AsBool(o.Enabled, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4142,14 +4556,16 @@ func (o *layer3NdpProxyAddressXml) MarshalFromObject(s Layer3NdpProxyAddress) {
 	o.Name = s.Name
 	o.Negate = util.YesNo(s.Negate, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3NdpProxyAddressXml) UnmarshalToObject() (*Layer3NdpProxyAddress, error) {
 
 	result := &Layer3NdpProxyAddress{
-		Name:   o.Name,
-		Negate: util.AsBool(o.Negate, nil),
-		Misc:   o.Misc,
+		Name:           o.Name,
+		Negate:         util.AsBool(o.Negate, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4162,6 +4578,7 @@ func (o *layer3SdwanLinkSettingsXml) MarshalFromObject(s Layer3SdwanLinkSettings
 		o.UpstreamNat = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3SdwanLinkSettingsXml) UnmarshalToObject() (*Layer3SdwanLinkSettings, error) {
@@ -4179,6 +4596,7 @@ func (o layer3SdwanLinkSettingsXml) UnmarshalToObject() (*Layer3SdwanLinkSetting
 		SdwanInterfaceProfile: o.SdwanInterfaceProfile,
 		UpstreamNat:           upstreamNatVal,
 		Misc:                  o.Misc,
+		MiscAttributes:        o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4195,6 +4613,7 @@ func (o *layer3SdwanLinkSettingsUpstreamNatXml) MarshalFromObject(s Layer3SdwanL
 		o.StaticIp = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3SdwanLinkSettingsUpstreamNatXml) UnmarshalToObject() (*Layer3SdwanLinkSettingsUpstreamNat, error) {
@@ -4216,21 +4635,24 @@ func (o layer3SdwanLinkSettingsUpstreamNatXml) UnmarshalToObject() (*Layer3Sdwan
 	}
 
 	result := &Layer3SdwanLinkSettingsUpstreamNat{
-		Enable:   util.AsBool(o.Enable, nil),
-		Ddns:     ddnsVal,
-		StaticIp: staticIpVal,
-		Misc:     o.Misc,
+		Enable:         util.AsBool(o.Enable, nil),
+		Ddns:           ddnsVal,
+		StaticIp:       staticIpVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *layer3SdwanLinkSettingsUpstreamNatDdnsXml) MarshalFromObject(s Layer3SdwanLinkSettingsUpstreamNatDdns) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3SdwanLinkSettingsUpstreamNatDdnsXml) UnmarshalToObject() (*Layer3SdwanLinkSettingsUpstreamNatDdns, error) {
 
 	result := &Layer3SdwanLinkSettingsUpstreamNatDdns{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4238,14 +4660,16 @@ func (o *layer3SdwanLinkSettingsUpstreamNatStaticIpXml) MarshalFromObject(s Laye
 	o.Fqdn = s.Fqdn
 	o.IpAddress = s.IpAddress
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3SdwanLinkSettingsUpstreamNatStaticIpXml) UnmarshalToObject() (*Layer3SdwanLinkSettingsUpstreamNatStaticIp, error) {
 
 	result := &Layer3SdwanLinkSettingsUpstreamNatStaticIp{
-		Fqdn:      o.Fqdn,
-		IpAddress: o.IpAddress,
-		Misc:      o.Misc,
+		Fqdn:           o.Fqdn,
+		IpAddress:      o.IpAddress,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4257,6 +4681,7 @@ func (o *virtualWireXml) MarshalFromObject(s VirtualWire) {
 	}
 	o.NetflowProfile = s.NetflowProfile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o virtualWireXml) UnmarshalToObject() (*VirtualWire, error) {
@@ -4273,6 +4698,7 @@ func (o virtualWireXml) UnmarshalToObject() (*VirtualWire, error) {
 		Lldp:           lldpVal,
 		NetflowProfile: o.NetflowProfile,
 		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4285,6 +4711,7 @@ func (o *virtualWireLldpXml) MarshalFromObject(s VirtualWireLldp) {
 	}
 	o.Profile = s.Profile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o virtualWireLldpXml) UnmarshalToObject() (*VirtualWireLldp, error) {
@@ -4302,12 +4729,14 @@ func (o virtualWireLldpXml) UnmarshalToObject() (*VirtualWireLldp, error) {
 		HighAvailability: highAvailabilityVal,
 		Profile:          o.Profile,
 		Misc:             o.Misc,
+		MiscAttributes:   o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *virtualWireLldpHighAvailabilityXml) MarshalFromObject(s VirtualWireLldpHighAvailability) {
 	o.PassivePreNegotiation = util.YesNo(s.PassivePreNegotiation, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o virtualWireLldpHighAvailabilityXml) UnmarshalToObject() (*VirtualWireLldpHighAvailability, error) {
@@ -4315,6 +4744,7 @@ func (o virtualWireLldpHighAvailabilityXml) UnmarshalToObject() (*VirtualWireLld
 	result := &VirtualWireLldpHighAvailability{
 		PassivePreNegotiation: util.AsBool(o.PassivePreNegotiation, nil),
 		Misc:                  o.Misc,
+		MiscAttributes:        o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4347,6 +4777,7 @@ func (o *entryXml_11_0_2) MarshalFromObject(s Entry) {
 		o.VirtualWire = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o entryXml_11_0_2) UnmarshalToObject() (*Entry, error) {
@@ -4392,25 +4823,28 @@ func (o entryXml_11_0_2) UnmarshalToObject() (*Entry, error) {
 	}
 
 	result := &Entry{
-		Name:          o.Name,
-		Comment:       o.Comment,
-		DecryptMirror: decryptMirrorVal,
-		Ha:            haVal,
-		Layer2:        layer2Val,
-		Layer3:        layer3Val,
-		VirtualWire:   virtualWireVal,
-		Misc:          o.Misc,
+		Name:           o.Name,
+		Comment:        o.Comment,
+		DecryptMirror:  decryptMirrorVal,
+		Ha:             haVal,
+		Layer2:         layer2Val,
+		Layer3:         layer3Val,
+		VirtualWire:    virtualWireVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *decryptMirrorXml_11_0_2) MarshalFromObject(s DecryptMirror) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o decryptMirrorXml_11_0_2) UnmarshalToObject() (*DecryptMirror, error) {
 
 	result := &DecryptMirror{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4421,6 +4855,7 @@ func (o *haXml_11_0_2) MarshalFromObject(s Ha) {
 		o.Lacp = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o haXml_11_0_2) UnmarshalToObject() (*Ha, error) {
@@ -4434,8 +4869,9 @@ func (o haXml_11_0_2) UnmarshalToObject() (*Ha, error) {
 	}
 
 	result := &Ha{
-		Lacp: lacpVal,
-		Misc: o.Misc,
+		Lacp:           lacpVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4447,6 +4883,7 @@ func (o *haLacpXml_11_0_2) MarshalFromObject(s HaLacp) {
 	o.SystemPriority = s.SystemPriority
 	o.TransmissionRate = s.TransmissionRate
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o haLacpXml_11_0_2) UnmarshalToObject() (*HaLacp, error) {
@@ -4459,6 +4896,7 @@ func (o haLacpXml_11_0_2) UnmarshalToObject() (*HaLacp, error) {
 		SystemPriority:   o.SystemPriority,
 		TransmissionRate: o.TransmissionRate,
 		Misc:             o.Misc,
+		MiscAttributes:   o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4475,6 +4913,7 @@ func (o *layer2Xml_11_0_2) MarshalFromObject(s Layer2) {
 	}
 	o.NetflowProfile = s.NetflowProfile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer2Xml_11_0_2) UnmarshalToObject() (*Layer2, error) {
@@ -4500,6 +4939,7 @@ func (o layer2Xml_11_0_2) UnmarshalToObject() (*Layer2, error) {
 		Lldp:           lldpVal,
 		NetflowProfile: o.NetflowProfile,
 		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4516,6 +4956,7 @@ func (o *layer2LacpXml_11_0_2) MarshalFromObject(s Layer2Lacp) {
 	o.SystemPriority = s.SystemPriority
 	o.TransmissionRate = s.TransmissionRate
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer2LacpXml_11_0_2) UnmarshalToObject() (*Layer2Lacp, error) {
@@ -4537,12 +4978,14 @@ func (o layer2LacpXml_11_0_2) UnmarshalToObject() (*Layer2Lacp, error) {
 		SystemPriority:   o.SystemPriority,
 		TransmissionRate: o.TransmissionRate,
 		Misc:             o.Misc,
+		MiscAttributes:   o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *layer2LacpHighAvailabilityXml_11_0_2) MarshalFromObject(s Layer2LacpHighAvailability) {
 	o.PassivePreNegotiation = util.YesNo(s.PassivePreNegotiation, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer2LacpHighAvailabilityXml_11_0_2) UnmarshalToObject() (*Layer2LacpHighAvailability, error) {
@@ -4550,6 +4993,7 @@ func (o layer2LacpHighAvailabilityXml_11_0_2) UnmarshalToObject() (*Layer2LacpHi
 	result := &Layer2LacpHighAvailability{
 		PassivePreNegotiation: util.AsBool(o.PassivePreNegotiation, nil),
 		Misc:                  o.Misc,
+		MiscAttributes:        o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4562,6 +5006,7 @@ func (o *layer2LldpXml_11_0_2) MarshalFromObject(s Layer2Lldp) {
 	}
 	o.Profile = s.Profile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer2LldpXml_11_0_2) UnmarshalToObject() (*Layer2Lldp, error) {
@@ -4579,12 +5024,14 @@ func (o layer2LldpXml_11_0_2) UnmarshalToObject() (*Layer2Lldp, error) {
 		HighAvailability: highAvailabilityVal,
 		Profile:          o.Profile,
 		Misc:             o.Misc,
+		MiscAttributes:   o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *layer2LldpHighAvailabilityXml_11_0_2) MarshalFromObject(s Layer2LldpHighAvailability) {
 	o.PassivePreNegotiation = util.YesNo(s.PassivePreNegotiation, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer2LldpHighAvailabilityXml_11_0_2) UnmarshalToObject() (*Layer2LldpHighAvailability, error) {
@@ -4592,6 +5039,7 @@ func (o layer2LldpHighAvailabilityXml_11_0_2) UnmarshalToObject() (*Layer2LldpHi
 	result := &Layer2LldpHighAvailability{
 		PassivePreNegotiation: util.AsBool(o.PassivePreNegotiation, nil),
 		Misc:                  o.Misc,
+		MiscAttributes:        o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4666,6 +5114,7 @@ func (o *layer3Xml_11_0_2) MarshalFromObject(s Layer3) {
 	}
 	o.UntaggedSubInterface = util.YesNo(s.UntaggedSubInterface, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Xml_11_0_2) UnmarshalToObject() (*Layer3, error) {
@@ -4781,6 +5230,7 @@ func (o layer3Xml_11_0_2) UnmarshalToObject() (*Layer3, error) {
 		SdwanLinkSettings:          sdwanLinkSettingsVal,
 		UntaggedSubInterface:       util.AsBool(o.UntaggedSubInterface, nil),
 		Misc:                       o.Misc,
+		MiscAttributes:             o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4789,6 +5239,7 @@ func (o *layer3AdjustTcpMssXml_11_0_2) MarshalFromObject(s Layer3AdjustTcpMss) {
 	o.Ipv4MssAdjustment = s.Ipv4MssAdjustment
 	o.Ipv6MssAdjustment = s.Ipv6MssAdjustment
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3AdjustTcpMssXml_11_0_2) UnmarshalToObject() (*Layer3AdjustTcpMss, error) {
@@ -4798,6 +5249,7 @@ func (o layer3AdjustTcpMssXml_11_0_2) UnmarshalToObject() (*Layer3AdjustTcpMss, 
 		Ipv4MssAdjustment: o.Ipv4MssAdjustment,
 		Ipv6MssAdjustment: o.Ipv6MssAdjustment,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4805,14 +5257,16 @@ func (o *layer3ArpXml_11_0_2) MarshalFromObject(s Layer3Arp) {
 	o.Name = s.Name
 	o.HwAddress = s.HwAddress
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3ArpXml_11_0_2) UnmarshalToObject() (*Layer3Arp, error) {
 
 	result := &Layer3Arp{
-		Name:      o.Name,
-		HwAddress: o.HwAddress,
-		Misc:      o.Misc,
+		Name:           o.Name,
+		HwAddress:      o.HwAddress,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4821,15 +5275,17 @@ func (o *layer3BonjourXml_11_0_2) MarshalFromObject(s Layer3Bonjour) {
 	o.GroupId = s.GroupId
 	o.TtlCheck = util.YesNo(s.TtlCheck, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3BonjourXml_11_0_2) UnmarshalToObject() (*Layer3Bonjour, error) {
 
 	result := &Layer3Bonjour{
-		Enable:   util.AsBool(o.Enable, nil),
-		GroupId:  o.GroupId,
-		TtlCheck: util.AsBool(o.TtlCheck, nil),
-		Misc:     o.Misc,
+		Enable:         util.AsBool(o.Enable, nil),
+		GroupId:        o.GroupId,
+		TtlCheck:       util.AsBool(o.TtlCheck, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4855,6 +5311,7 @@ func (o *layer3DdnsConfigXml_11_0_2) MarshalFromObject(s Layer3DdnsConfig) {
 		o.DdnsVendorConfig = &layer3DdnsConfigDdnsVendorConfigContainerXml_11_0_2{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3DdnsConfigXml_11_0_2) UnmarshalToObject() (*Layer3DdnsConfig, error) {
@@ -4887,6 +5344,7 @@ func (o layer3DdnsConfigXml_11_0_2) UnmarshalToObject() (*Layer3DdnsConfig, erro
 		DdnsVendor:         o.DdnsVendor,
 		DdnsVendorConfig:   ddnsVendorConfigVal,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4894,14 +5352,16 @@ func (o *layer3DdnsConfigDdnsVendorConfigXml_11_0_2) MarshalFromObject(s Layer3D
 	o.Name = s.Name
 	o.Value = s.Value
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3DdnsConfigDdnsVendorConfigXml_11_0_2) UnmarshalToObject() (*Layer3DdnsConfigDdnsVendorConfig, error) {
 
 	result := &Layer3DdnsConfigDdnsVendorConfig{
-		Name:  o.Name,
-		Value: o.Value,
-		Misc:  o.Misc,
+		Name:           o.Name,
+		Value:          o.Value,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4915,6 +5375,7 @@ func (o *layer3DhcpClientXml_11_0_2) MarshalFromObject(s Layer3DhcpClient) {
 		o.SendHostname = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3DhcpClientXml_11_0_2) UnmarshalToObject() (*Layer3DhcpClient, error) {
@@ -4933,6 +5394,7 @@ func (o layer3DhcpClientXml_11_0_2) UnmarshalToObject() (*Layer3DhcpClient, erro
 		Enable:             util.AsBool(o.Enable, nil),
 		SendHostname:       sendHostnameVal,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4940,14 +5402,16 @@ func (o *layer3DhcpClientSendHostnameXml_11_0_2) MarshalFromObject(s Layer3DhcpC
 	o.Enable = util.YesNo(s.Enable, nil)
 	o.Hostname = s.Hostname
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3DhcpClientSendHostnameXml_11_0_2) UnmarshalToObject() (*Layer3DhcpClientSendHostname, error) {
 
 	result := &Layer3DhcpClientSendHostname{
-		Enable:   util.AsBool(o.Enable, nil),
-		Hostname: o.Hostname,
-		Misc:     o.Misc,
+		Enable:         util.AsBool(o.Enable, nil),
+		Hostname:       o.Hostname,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4955,14 +5419,16 @@ func (o *layer3IpXml_11_0_2) MarshalFromObject(s Layer3Ip) {
 	o.Name = s.Name
 	o.SdwanGateway = s.SdwanGateway
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3IpXml_11_0_2) UnmarshalToObject() (*Layer3Ip, error) {
 
 	result := &Layer3Ip{
-		Name:         o.Name,
-		SdwanGateway: o.SdwanGateway,
-		Misc:         o.Misc,
+		Name:           o.Name,
+		SdwanGateway:   o.SdwanGateway,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4994,6 +5460,7 @@ func (o *layer3Ipv6Xml_11_0_2) MarshalFromObject(s Layer3Ipv6) {
 		o.NeighborDiscovery = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6Xml_11_0_2) UnmarshalToObject() (*Layer3Ipv6, error) {
@@ -5040,6 +5507,7 @@ func (o layer3Ipv6Xml_11_0_2) UnmarshalToObject() (*Layer3Ipv6, error) {
 		InterfaceId:       o.InterfaceId,
 		NeighborDiscovery: neighborDiscoveryVal,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5062,6 +5530,7 @@ func (o *layer3Ipv6AddressXml_11_0_2) MarshalFromObject(s Layer3Ipv6Address) {
 		o.Advertise = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6AddressXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6Address, error) {
@@ -5097,28 +5566,33 @@ func (o layer3Ipv6AddressXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6Address, er
 		Anycast:           anycastVal,
 		Advertise:         advertiseVal,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *layer3Ipv6AddressPrefixXml_11_0_2) MarshalFromObject(s Layer3Ipv6AddressPrefix) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6AddressPrefixXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6AddressPrefix, error) {
 
 	result := &Layer3Ipv6AddressPrefix{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *layer3Ipv6AddressAnycastXml_11_0_2) MarshalFromObject(s Layer3Ipv6AddressAnycast) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6AddressAnycastXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6AddressAnycast, error) {
 
 	result := &Layer3Ipv6AddressAnycast{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5129,6 +5603,7 @@ func (o *layer3Ipv6AddressAdvertiseXml_11_0_2) MarshalFromObject(s Layer3Ipv6Add
 	o.OnlinkFlag = util.YesNo(s.OnlinkFlag, nil)
 	o.AutoConfigFlag = util.YesNo(s.AutoConfigFlag, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6AddressAdvertiseXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6AddressAdvertise, error) {
@@ -5140,6 +5615,7 @@ func (o layer3Ipv6AddressAdvertiseXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6Ad
 		OnlinkFlag:        util.AsBool(o.OnlinkFlag, nil),
 		AutoConfigFlag:    util.AsBool(o.AutoConfigFlag, nil),
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5164,6 +5640,7 @@ func (o *layer3Ipv6DhcpClientXml_11_0_2) MarshalFromObject(s Layer3Ipv6DhcpClien
 		o.V6Options = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6DhcpClientXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6DhcpClient, error) {
@@ -5201,6 +5678,7 @@ func (o layer3Ipv6DhcpClientXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6DhcpClie
 		PrefixDelegation:   prefixDelegationVal,
 		V6Options:          v6OptionsVal,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5230,6 +5708,7 @@ func (o *layer3Ipv6DhcpClientNeighborDiscoveryXml_11_0_2) MarshalFromObject(s La
 	o.NsInterval = s.NsInterval
 	o.ReachableTime = s.ReachableTime
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6DhcpClientNeighborDiscoveryXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6DhcpClientNeighborDiscovery, error) {
@@ -5270,6 +5749,7 @@ func (o layer3Ipv6DhcpClientNeighborDiscoveryXml_11_0_2) UnmarshalToObject() (*L
 		NsInterval:       o.NsInterval,
 		ReachableTime:    o.ReachableTime,
 		Misc:             o.Misc,
+		MiscAttributes:   o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5281,6 +5761,7 @@ func (o *layer3Ipv6DhcpClientNeighborDiscoveryDnsServerXml_11_0_2) MarshalFromOb
 		o.Source = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6DhcpClientNeighborDiscoveryDnsServerXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6DhcpClientNeighborDiscoveryDnsServer, error) {
@@ -5294,9 +5775,10 @@ func (o layer3Ipv6DhcpClientNeighborDiscoveryDnsServerXml_11_0_2) UnmarshalToObj
 	}
 
 	result := &Layer3Ipv6DhcpClientNeighborDiscoveryDnsServer{
-		Enable: util.AsBool(o.Enable, nil),
-		Source: sourceVal,
-		Misc:   o.Misc,
+		Enable:         util.AsBool(o.Enable, nil),
+		Source:         sourceVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5312,6 +5794,7 @@ func (o *layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceXml_11_0_2) Marshal
 		o.Manual = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSource, error) {
@@ -5333,20 +5816,23 @@ func (o layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceXml_11_0_2) Unmarsha
 	}
 
 	result := &Layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSource{
-		Dhcpv6: dhcpv6Val,
-		Manual: manualVal,
-		Misc:   o.Misc,
+		Dhcpv6:         dhcpv6Val,
+		Manual:         manualVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceDhcpv6Xml_11_0_2) MarshalFromObject(s Layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceDhcpv6) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceDhcpv6Xml_11_0_2) UnmarshalToObject() (*Layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceDhcpv6, error) {
 
 	result := &Layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceDhcpv6{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5361,6 +5847,7 @@ func (o *layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualXml_11_0_2) M
 		o.Server = &layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualServerContainerXml_11_0_2{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManual, error) {
@@ -5376,8 +5863,9 @@ func (o layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualXml_11_0_2) Un
 	}
 
 	result := &Layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManual{
-		Server: serverVal,
-		Misc:   o.Misc,
+		Server:         serverVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5385,14 +5873,16 @@ func (o *layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualServerXml_11_
 	o.Name = s.Name
 	o.Lifetime = s.Lifetime
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualServerXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualServer, error) {
 
 	result := &Layer3Ipv6DhcpClientNeighborDiscoveryDnsServerSourceManualServer{
-		Name:     o.Name,
-		Lifetime: o.Lifetime,
-		Misc:     o.Misc,
+		Name:           o.Name,
+		Lifetime:       o.Lifetime,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5404,6 +5894,7 @@ func (o *layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixXml_11_0_2) MarshalFromOb
 		o.Source = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffix, error) {
@@ -5417,9 +5908,10 @@ func (o layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixXml_11_0_2) UnmarshalToObj
 	}
 
 	result := &Layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffix{
-		Enable: util.AsBool(o.Enable, nil),
-		Source: sourceVal,
-		Misc:   o.Misc,
+		Enable:         util.AsBool(o.Enable, nil),
+		Source:         sourceVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5435,6 +5927,7 @@ func (o *layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceXml_11_0_2) Marshal
 		o.Manual = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSource, error) {
@@ -5456,20 +5949,23 @@ func (o layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceXml_11_0_2) Unmarsha
 	}
 
 	result := &Layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSource{
-		Dhcpv6: dhcpv6Val,
-		Manual: manualVal,
-		Misc:   o.Misc,
+		Dhcpv6:         dhcpv6Val,
+		Manual:         manualVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceDhcpv6Xml_11_0_2) MarshalFromObject(s Layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceDhcpv6) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceDhcpv6Xml_11_0_2) UnmarshalToObject() (*Layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceDhcpv6, error) {
 
 	result := &Layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceDhcpv6{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5484,6 +5980,7 @@ func (o *layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualXml_11_0_2) M
 		o.Suffix = &layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffixContainerXml_11_0_2{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManual, error) {
@@ -5499,8 +5996,9 @@ func (o layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualXml_11_0_2) Un
 	}
 
 	result := &Layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManual{
-		Suffix: suffixVal,
-		Misc:   o.Misc,
+		Suffix:         suffixVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5508,14 +6006,16 @@ func (o *layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffixXml_11_
 	o.Name = s.Name
 	o.Lifetime = s.Lifetime
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffixXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffix, error) {
 
 	result := &Layer3Ipv6DhcpClientNeighborDiscoveryDnsSuffixSourceManualSuffix{
-		Name:     o.Name,
-		Lifetime: o.Lifetime,
-		Misc:     o.Misc,
+		Name:           o.Name,
+		Lifetime:       o.Lifetime,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5523,14 +6023,16 @@ func (o *layer3Ipv6DhcpClientNeighborDiscoveryNeighborXml_11_0_2) MarshalFromObj
 	o.Name = s.Name
 	o.HwAddress = s.HwAddress
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6DhcpClientNeighborDiscoveryNeighborXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6DhcpClientNeighborDiscoveryNeighbor, error) {
 
 	result := &Layer3Ipv6DhcpClientNeighborDiscoveryNeighbor{
-		Name:      o.Name,
-		HwAddress: o.HwAddress,
-		Misc:      o.Misc,
+		Name:           o.Name,
+		HwAddress:      o.HwAddress,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5541,6 +6043,7 @@ func (o *layer3Ipv6DhcpClientPrefixDelegationXml_11_0_2) MarshalFromObject(s Lay
 		o.Enable = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6DhcpClientPrefixDelegationXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6DhcpClientPrefixDelegation, error) {
@@ -5554,8 +6057,9 @@ func (o layer3Ipv6DhcpClientPrefixDelegationXml_11_0_2) UnmarshalToObject() (*La
 	}
 
 	result := &Layer3Ipv6DhcpClientPrefixDelegation{
-		Enable: enableVal,
-		Misc:   o.Misc,
+		Enable:         enableVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5571,6 +6075,7 @@ func (o *layer3Ipv6DhcpClientPrefixDelegationEnableXml_11_0_2) MarshalFromObject
 		o.Yes = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6DhcpClientPrefixDelegationEnableXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6DhcpClientPrefixDelegationEnable, error) {
@@ -5592,20 +6097,23 @@ func (o layer3Ipv6DhcpClientPrefixDelegationEnableXml_11_0_2) UnmarshalToObject(
 	}
 
 	result := &Layer3Ipv6DhcpClientPrefixDelegationEnable{
-		No:   noVal,
-		Yes:  yesVal,
-		Misc: o.Misc,
+		No:             noVal,
+		Yes:            yesVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *layer3Ipv6DhcpClientPrefixDelegationEnableNoXml_11_0_2) MarshalFromObject(s Layer3Ipv6DhcpClientPrefixDelegationEnableNo) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6DhcpClientPrefixDelegationEnableNoXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6DhcpClientPrefixDelegationEnableNo, error) {
 
 	result := &Layer3Ipv6DhcpClientPrefixDelegationEnableNo{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5614,15 +6122,17 @@ func (o *layer3Ipv6DhcpClientPrefixDelegationEnableYesXml_11_0_2) MarshalFromObj
 	o.PrefixLen = s.PrefixLen
 	o.PrefixLenHint = util.YesNo(s.PrefixLenHint, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6DhcpClientPrefixDelegationEnableYesXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6DhcpClientPrefixDelegationEnableYes, error) {
 
 	result := &Layer3Ipv6DhcpClientPrefixDelegationEnableYes{
-		PfxPoolName:   o.PfxPoolName,
-		PrefixLen:     o.PrefixLen,
-		PrefixLenHint: util.AsBool(o.PrefixLenHint, nil),
-		Misc:          o.Misc,
+		PfxPoolName:    o.PfxPoolName,
+		PrefixLen:      o.PrefixLen,
+		PrefixLenHint:  util.AsBool(o.PrefixLenHint, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5636,6 +6146,7 @@ func (o *layer3Ipv6DhcpClientV6OptionsXml_11_0_2) MarshalFromObject(s Layer3Ipv6
 	o.RapidCommit = util.YesNo(s.RapidCommit, nil)
 	o.SupportSrvrReconfig = util.YesNo(s.SupportSrvrReconfig, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6DhcpClientV6OptionsXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6DhcpClientV6Options, error) {
@@ -5654,6 +6165,7 @@ func (o layer3Ipv6DhcpClientV6OptionsXml_11_0_2) UnmarshalToObject() (*Layer3Ipv
 		RapidCommit:         util.AsBool(o.RapidCommit, nil),
 		SupportSrvrReconfig: util.AsBool(o.SupportSrvrReconfig, nil),
 		Misc:                o.Misc,
+		MiscAttributes:      o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5669,6 +6181,7 @@ func (o *layer3Ipv6DhcpClientV6OptionsEnableXml_11_0_2) MarshalFromObject(s Laye
 		o.Yes = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6DhcpClientV6OptionsEnableXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6DhcpClientV6OptionsEnable, error) {
@@ -5690,20 +6203,23 @@ func (o layer3Ipv6DhcpClientV6OptionsEnableXml_11_0_2) UnmarshalToObject() (*Lay
 	}
 
 	result := &Layer3Ipv6DhcpClientV6OptionsEnable{
-		No:   noVal,
-		Yes:  yesVal,
-		Misc: o.Misc,
+		No:             noVal,
+		Yes:            yesVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *layer3Ipv6DhcpClientV6OptionsEnableNoXml_11_0_2) MarshalFromObject(s Layer3Ipv6DhcpClientV6OptionsEnableNo) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6DhcpClientV6OptionsEnableNoXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6DhcpClientV6OptionsEnableNo, error) {
 
 	result := &Layer3Ipv6DhcpClientV6OptionsEnableNo{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5711,14 +6227,16 @@ func (o *layer3Ipv6DhcpClientV6OptionsEnableYesXml_11_0_2) MarshalFromObject(s L
 	o.NonTempAddr = util.YesNo(s.NonTempAddr, nil)
 	o.TempAddr = util.YesNo(s.TempAddr, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6DhcpClientV6OptionsEnableYesXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6DhcpClientV6OptionsEnableYes, error) {
 
 	result := &Layer3Ipv6DhcpClientV6OptionsEnableYes{
-		NonTempAddr: util.AsBool(o.NonTempAddr, nil),
-		TempAddr:    util.AsBool(o.TempAddr, nil),
-		Misc:        o.Misc,
+		NonTempAddr:    util.AsBool(o.NonTempAddr, nil),
+		TempAddr:       util.AsBool(o.TempAddr, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5739,6 +6257,7 @@ func (o *layer3Ipv6InheritedXml_11_0_2) MarshalFromObject(s Layer3Ipv6Inherited)
 		o.NeighborDiscovery = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6InheritedXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6Inherited, error) {
@@ -5766,6 +6285,7 @@ func (o layer3Ipv6InheritedXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6Inherited
 		Enable:            util.AsBool(o.Enable, nil),
 		NeighborDiscovery: neighborDiscoveryVal,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5777,6 +6297,7 @@ func (o *layer3Ipv6InheritedAssignAddrXml_11_0_2) MarshalFromObject(s Layer3Ipv6
 		o.Type = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6InheritedAssignAddrXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6InheritedAssignAddr, error) {
@@ -5790,9 +6311,10 @@ func (o layer3Ipv6InheritedAssignAddrXml_11_0_2) UnmarshalToObject() (*Layer3Ipv
 	}
 
 	result := &Layer3Ipv6InheritedAssignAddr{
-		Name: o.Name,
-		Type: typeVal,
-		Misc: o.Misc,
+		Name:           o.Name,
+		Type:           typeVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5808,6 +6330,7 @@ func (o *layer3Ipv6InheritedAssignAddrTypeXml_11_0_2) MarshalFromObject(s Layer3
 		o.Ula = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6InheritedAssignAddrTypeXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6InheritedAssignAddrType, error) {
@@ -5829,9 +6352,10 @@ func (o layer3Ipv6InheritedAssignAddrTypeXml_11_0_2) UnmarshalToObject() (*Layer
 	}
 
 	result := &Layer3Ipv6InheritedAssignAddrType{
-		Gua:  guaVal,
-		Ula:  ulaVal,
-		Misc: o.Misc,
+		Gua:            guaVal,
+		Ula:            ulaVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5849,6 +6373,7 @@ func (o *layer3Ipv6InheritedAssignAddrTypeGuaXml_11_0_2) MarshalFromObject(s Lay
 		o.Advertise = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6InheritedAssignAddrTypeGuaXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6InheritedAssignAddrTypeGua, error) {
@@ -5875,6 +6400,7 @@ func (o layer3Ipv6InheritedAssignAddrTypeGuaXml_11_0_2) UnmarshalToObject() (*La
 		PoolType:          poolTypeVal,
 		Advertise:         advertiseVal,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5890,6 +6416,7 @@ func (o *layer3Ipv6InheritedAssignAddrTypeGuaPoolTypeXml_11_0_2) MarshalFromObje
 		o.DynamicId = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6InheritedAssignAddrTypeGuaPoolTypeXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6InheritedAssignAddrTypeGuaPoolType, error) {
@@ -5911,33 +6438,38 @@ func (o layer3Ipv6InheritedAssignAddrTypeGuaPoolTypeXml_11_0_2) UnmarshalToObjec
 	}
 
 	result := &Layer3Ipv6InheritedAssignAddrTypeGuaPoolType{
-		Dynamic:   dynamicVal,
-		DynamicId: dynamicIdVal,
-		Misc:      o.Misc,
+		Dynamic:        dynamicVal,
+		DynamicId:      dynamicIdVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *layer3Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicXml_11_0_2) MarshalFromObject(s Layer3Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamic) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamic, error) {
 
 	result := &Layer3Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamic{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *layer3Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicIdXml_11_0_2) MarshalFromObject(s Layer3Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicId) {
 	o.Identifier = s.Identifier
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicIdXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicId, error) {
 
 	result := &Layer3Ipv6InheritedAssignAddrTypeGuaPoolTypeDynamicId{
-		Identifier: o.Identifier,
-		Misc:       o.Misc,
+		Identifier:     o.Identifier,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5946,6 +6478,7 @@ func (o *layer3Ipv6InheritedAssignAddrTypeGuaAdvertiseXml_11_0_2) MarshalFromObj
 	o.OnlinkFlag = util.YesNo(s.OnlinkFlag, nil)
 	o.AutoConfigFlag = util.YesNo(s.AutoConfigFlag, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6InheritedAssignAddrTypeGuaAdvertiseXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6InheritedAssignAddrTypeGuaAdvertise, error) {
@@ -5955,6 +6488,7 @@ func (o layer3Ipv6InheritedAssignAddrTypeGuaAdvertiseXml_11_0_2) UnmarshalToObje
 		OnlinkFlag:     util.AsBool(o.OnlinkFlag, nil),
 		AutoConfigFlag: util.AsBool(o.AutoConfigFlag, nil),
 		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5969,6 +6503,7 @@ func (o *layer3Ipv6InheritedAssignAddrTypeUlaXml_11_0_2) MarshalFromObject(s Lay
 		o.Advertise = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6InheritedAssignAddrTypeUlaXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6InheritedAssignAddrTypeUla, error) {
@@ -5988,6 +6523,7 @@ func (o layer3Ipv6InheritedAssignAddrTypeUlaXml_11_0_2) UnmarshalToObject() (*La
 		Anycast:           util.AsBool(o.Anycast, nil),
 		Advertise:         advertiseVal,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5998,6 +6534,7 @@ func (o *layer3Ipv6InheritedAssignAddrTypeUlaAdvertiseXml_11_0_2) MarshalFromObj
 	o.OnlinkFlag = util.YesNo(s.OnlinkFlag, nil)
 	o.AutoConfigFlag = util.YesNo(s.AutoConfigFlag, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6InheritedAssignAddrTypeUlaAdvertiseXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6InheritedAssignAddrTypeUlaAdvertise, error) {
@@ -6009,6 +6546,7 @@ func (o layer3Ipv6InheritedAssignAddrTypeUlaAdvertiseXml_11_0_2) UnmarshalToObje
 		OnlinkFlag:        util.AsBool(o.OnlinkFlag, nil),
 		AutoConfigFlag:    util.AsBool(o.AutoConfigFlag, nil),
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6043,6 +6581,7 @@ func (o *layer3Ipv6InheritedNeighborDiscoveryXml_11_0_2) MarshalFromObject(s Lay
 		o.RouterAdvertisement = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6InheritedNeighborDiscoveryXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6InheritedNeighborDiscovery, error) {
@@ -6092,6 +6631,7 @@ func (o layer3Ipv6InheritedNeighborDiscoveryXml_11_0_2) UnmarshalToObject() (*La
 		ReachableTime:       o.ReachableTime,
 		RouterAdvertisement: routerAdvertisementVal,
 		Misc:                o.Misc,
+		MiscAttributes:      o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6103,6 +6643,7 @@ func (o *layer3Ipv6InheritedNeighborDiscoveryDnsServerXml_11_0_2) MarshalFromObj
 		o.Source = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6InheritedNeighborDiscoveryDnsServerXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6InheritedNeighborDiscoveryDnsServer, error) {
@@ -6116,9 +6657,10 @@ func (o layer3Ipv6InheritedNeighborDiscoveryDnsServerXml_11_0_2) UnmarshalToObje
 	}
 
 	result := &Layer3Ipv6InheritedNeighborDiscoveryDnsServer{
-		Enable: util.AsBool(o.Enable, nil),
-		Source: sourceVal,
-		Misc:   o.Misc,
+		Enable:         util.AsBool(o.Enable, nil),
+		Source:         sourceVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6134,6 +6676,7 @@ func (o *layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceXml_11_0_2) MarshalF
 		o.Manual = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6InheritedNeighborDiscoveryDnsServerSource, error) {
@@ -6155,22 +6698,25 @@ func (o layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceXml_11_0_2) Unmarshal
 	}
 
 	result := &Layer3Ipv6InheritedNeighborDiscoveryDnsServerSource{
-		Dhcpv6: dhcpv6Val,
-		Manual: manualVal,
-		Misc:   o.Misc,
+		Dhcpv6:         dhcpv6Val,
+		Manual:         manualVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceDhcpv6Xml_11_0_2) MarshalFromObject(s Layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceDhcpv6) {
 	o.PrefixPool = s.PrefixPool
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceDhcpv6Xml_11_0_2) UnmarshalToObject() (*Layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceDhcpv6, error) {
 
 	result := &Layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceDhcpv6{
-		PrefixPool: o.PrefixPool,
-		Misc:       o.Misc,
+		PrefixPool:     o.PrefixPool,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6185,6 +6731,7 @@ func (o *layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceManualXml_11_0_2) Ma
 		o.Server = &layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceManualServerContainerXml_11_0_2{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceManualXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceManual, error) {
@@ -6200,8 +6747,9 @@ func (o layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceManualXml_11_0_2) Unm
 	}
 
 	result := &Layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceManual{
-		Server: serverVal,
-		Misc:   o.Misc,
+		Server:         serverVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6209,14 +6757,16 @@ func (o *layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceManualServerXml_11_0
 	o.Name = s.Name
 	o.Lifetime = s.Lifetime
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceManualServerXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceManualServer, error) {
 
 	result := &Layer3Ipv6InheritedNeighborDiscoveryDnsServerSourceManualServer{
-		Name:     o.Name,
-		Lifetime: o.Lifetime,
-		Misc:     o.Misc,
+		Name:           o.Name,
+		Lifetime:       o.Lifetime,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6228,6 +6778,7 @@ func (o *layer3Ipv6InheritedNeighborDiscoveryDnsSuffixXml_11_0_2) MarshalFromObj
 		o.Source = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6InheritedNeighborDiscoveryDnsSuffixXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6InheritedNeighborDiscoveryDnsSuffix, error) {
@@ -6241,9 +6792,10 @@ func (o layer3Ipv6InheritedNeighborDiscoveryDnsSuffixXml_11_0_2) UnmarshalToObje
 	}
 
 	result := &Layer3Ipv6InheritedNeighborDiscoveryDnsSuffix{
-		Enable: util.AsBool(o.Enable, nil),
-		Source: sourceVal,
-		Misc:   o.Misc,
+		Enable:         util.AsBool(o.Enable, nil),
+		Source:         sourceVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6259,6 +6811,7 @@ func (o *layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceXml_11_0_2) MarshalF
 		o.Manual = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSource, error) {
@@ -6280,22 +6833,25 @@ func (o layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceXml_11_0_2) Unmarshal
 	}
 
 	result := &Layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSource{
-		Dhcpv6: dhcpv6Val,
-		Manual: manualVal,
-		Misc:   o.Misc,
+		Dhcpv6:         dhcpv6Val,
+		Manual:         manualVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceDhcpv6Xml_11_0_2) MarshalFromObject(s Layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceDhcpv6) {
 	o.PrefixPool = s.PrefixPool
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceDhcpv6Xml_11_0_2) UnmarshalToObject() (*Layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceDhcpv6, error) {
 
 	result := &Layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceDhcpv6{
-		PrefixPool: o.PrefixPool,
-		Misc:       o.Misc,
+		PrefixPool:     o.PrefixPool,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6310,6 +6866,7 @@ func (o *layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualXml_11_0_2) Ma
 		o.Suffix = &layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffixContainerXml_11_0_2{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManual, error) {
@@ -6325,8 +6882,9 @@ func (o layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualXml_11_0_2) Unm
 	}
 
 	result := &Layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManual{
-		Suffix: suffixVal,
-		Misc:   o.Misc,
+		Suffix:         suffixVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6334,14 +6892,16 @@ func (o *layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffixXml_11_0
 	o.Name = s.Name
 	o.Lifetime = s.Lifetime
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffixXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffix, error) {
 
 	result := &Layer3Ipv6InheritedNeighborDiscoveryDnsSuffixSourceManualSuffix{
-		Name:     o.Name,
-		Lifetime: o.Lifetime,
-		Misc:     o.Misc,
+		Name:           o.Name,
+		Lifetime:       o.Lifetime,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6349,14 +6909,16 @@ func (o *layer3Ipv6InheritedNeighborDiscoveryNeighborXml_11_0_2) MarshalFromObje
 	o.Name = s.Name
 	o.HwAddress = s.HwAddress
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6InheritedNeighborDiscoveryNeighborXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6InheritedNeighborDiscoveryNeighbor, error) {
 
 	result := &Layer3Ipv6InheritedNeighborDiscoveryNeighbor{
-		Name:      o.Name,
-		HwAddress: o.HwAddress,
-		Misc:      o.Misc,
+		Name:           o.Name,
+		HwAddress:      o.HwAddress,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6374,6 +6936,7 @@ func (o *layer3Ipv6InheritedNeighborDiscoveryRouterAdvertisementXml_11_0_2) Mars
 	o.RetransmissionTimer = s.RetransmissionTimer
 	o.RouterPreference = s.RouterPreference
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6InheritedNeighborDiscoveryRouterAdvertisementXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6InheritedNeighborDiscoveryRouterAdvertisement, error) {
@@ -6392,6 +6955,7 @@ func (o layer3Ipv6InheritedNeighborDiscoveryRouterAdvertisementXml_11_0_2) Unmar
 		RetransmissionTimer:    o.RetransmissionTimer,
 		RouterPreference:       o.RouterPreference,
 		Misc:                   o.Misc,
+		MiscAttributes:         o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6416,6 +6980,7 @@ func (o *layer3Ipv6NeighborDiscoveryXml_11_0_2) MarshalFromObject(s Layer3Ipv6Ne
 		o.RouterAdvertisement = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6NeighborDiscoveryXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6NeighborDiscovery, error) {
@@ -6447,6 +7012,7 @@ func (o layer3Ipv6NeighborDiscoveryXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6N
 		ReachableTime:       o.ReachableTime,
 		RouterAdvertisement: routerAdvertisementVal,
 		Misc:                o.Misc,
+		MiscAttributes:      o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6454,14 +7020,16 @@ func (o *layer3Ipv6NeighborDiscoveryNeighborXml_11_0_2) MarshalFromObject(s Laye
 	o.Name = s.Name
 	o.HwAddress = s.HwAddress
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6NeighborDiscoveryNeighborXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6NeighborDiscoveryNeighbor, error) {
 
 	result := &Layer3Ipv6NeighborDiscoveryNeighbor{
-		Name:      o.Name,
-		HwAddress: o.HwAddress,
-		Misc:      o.Misc,
+		Name:           o.Name,
+		HwAddress:      o.HwAddress,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6484,6 +7052,7 @@ func (o *layer3Ipv6NeighborDiscoveryRouterAdvertisementXml_11_0_2) MarshalFromOb
 	o.RetransmissionTimer = s.RetransmissionTimer
 	o.RouterPreference = s.RouterPreference
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6NeighborDiscoveryRouterAdvertisementXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6NeighborDiscoveryRouterAdvertisement, error) {
@@ -6511,6 +7080,7 @@ func (o layer3Ipv6NeighborDiscoveryRouterAdvertisementXml_11_0_2) UnmarshalToObj
 		RetransmissionTimer:    o.RetransmissionTimer,
 		RouterPreference:       o.RouterPreference,
 		Misc:                   o.Misc,
+		MiscAttributes:         o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6535,6 +7105,7 @@ func (o *layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportXml_11_0_2) Mar
 		o.Suffix = &layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffixContainerXml_11_0_2{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupport, error) {
@@ -6560,10 +7131,11 @@ func (o layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportXml_11_0_2) Unma
 	}
 
 	result := &Layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupport{
-		Enable: util.AsBool(o.Enable, nil),
-		Server: serverVal,
-		Suffix: suffixVal,
-		Misc:   o.Misc,
+		Enable:         util.AsBool(o.Enable, nil),
+		Server:         serverVal,
+		Suffix:         suffixVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6571,14 +7143,16 @@ func (o *layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServerXml_11_0_
 	o.Name = s.Name
 	o.Lifetime = s.Lifetime
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServerXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServer, error) {
 
 	result := &Layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportServer{
-		Name:     o.Name,
-		Lifetime: o.Lifetime,
-		Misc:     o.Misc,
+		Name:           o.Name,
+		Lifetime:       o.Lifetime,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6586,14 +7160,16 @@ func (o *layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffixXml_11_0_
 	o.Name = s.Name
 	o.Lifetime = s.Lifetime
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffixXml_11_0_2) UnmarshalToObject() (*Layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffix, error) {
 
 	result := &Layer3Ipv6NeighborDiscoveryRouterAdvertisementDnsSupportSuffix{
-		Name:     o.Name,
-		Lifetime: o.Lifetime,
-		Misc:     o.Misc,
+		Name:           o.Name,
+		Lifetime:       o.Lifetime,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6610,6 +7186,7 @@ func (o *layer3LacpXml_11_0_2) MarshalFromObject(s Layer3Lacp) {
 	o.SystemPriority = s.SystemPriority
 	o.TransmissionRate = s.TransmissionRate
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3LacpXml_11_0_2) UnmarshalToObject() (*Layer3Lacp, error) {
@@ -6631,12 +7208,14 @@ func (o layer3LacpXml_11_0_2) UnmarshalToObject() (*Layer3Lacp, error) {
 		SystemPriority:   o.SystemPriority,
 		TransmissionRate: o.TransmissionRate,
 		Misc:             o.Misc,
+		MiscAttributes:   o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *layer3LacpHighAvailabilityXml_11_0_2) MarshalFromObject(s Layer3LacpHighAvailability) {
 	o.PassivePreNegotiation = util.YesNo(s.PassivePreNegotiation, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3LacpHighAvailabilityXml_11_0_2) UnmarshalToObject() (*Layer3LacpHighAvailability, error) {
@@ -6644,6 +7223,7 @@ func (o layer3LacpHighAvailabilityXml_11_0_2) UnmarshalToObject() (*Layer3LacpHi
 	result := &Layer3LacpHighAvailability{
 		PassivePreNegotiation: util.AsBool(o.PassivePreNegotiation, nil),
 		Misc:                  o.Misc,
+		MiscAttributes:        o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6656,6 +7236,7 @@ func (o *layer3LldpXml_11_0_2) MarshalFromObject(s Layer3Lldp) {
 	}
 	o.Profile = s.Profile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3LldpXml_11_0_2) UnmarshalToObject() (*Layer3Lldp, error) {
@@ -6673,12 +7254,14 @@ func (o layer3LldpXml_11_0_2) UnmarshalToObject() (*Layer3Lldp, error) {
 		HighAvailability: highAvailabilityVal,
 		Profile:          o.Profile,
 		Misc:             o.Misc,
+		MiscAttributes:   o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *layer3LldpHighAvailabilityXml_11_0_2) MarshalFromObject(s Layer3LldpHighAvailability) {
 	o.PassivePreNegotiation = util.YesNo(s.PassivePreNegotiation, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3LldpHighAvailabilityXml_11_0_2) UnmarshalToObject() (*Layer3LldpHighAvailability, error) {
@@ -6686,6 +7269,7 @@ func (o layer3LldpHighAvailabilityXml_11_0_2) UnmarshalToObject() (*Layer3LldpHi
 	result := &Layer3LldpHighAvailability{
 		PassivePreNegotiation: util.AsBool(o.PassivePreNegotiation, nil),
 		Misc:                  o.Misc,
+		MiscAttributes:        o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6701,6 +7285,7 @@ func (o *layer3NdpProxyXml_11_0_2) MarshalFromObject(s Layer3NdpProxy) {
 	}
 	o.Enabled = util.YesNo(s.Enabled, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3NdpProxyXml_11_0_2) UnmarshalToObject() (*Layer3NdpProxy, error) {
@@ -6716,9 +7301,10 @@ func (o layer3NdpProxyXml_11_0_2) UnmarshalToObject() (*Layer3NdpProxy, error) {
 	}
 
 	result := &Layer3NdpProxy{
-		Address: addressVal,
-		Enabled: util.AsBool(o.Enabled, nil),
-		Misc:    o.Misc,
+		Address:        addressVal,
+		Enabled:        util.AsBool(o.Enabled, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6726,14 +7312,16 @@ func (o *layer3NdpProxyAddressXml_11_0_2) MarshalFromObject(s Layer3NdpProxyAddr
 	o.Name = s.Name
 	o.Negate = util.YesNo(s.Negate, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3NdpProxyAddressXml_11_0_2) UnmarshalToObject() (*Layer3NdpProxyAddress, error) {
 
 	result := &Layer3NdpProxyAddress{
-		Name:   o.Name,
-		Negate: util.AsBool(o.Negate, nil),
-		Misc:   o.Misc,
+		Name:           o.Name,
+		Negate:         util.AsBool(o.Negate, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6746,6 +7334,7 @@ func (o *layer3SdwanLinkSettingsXml_11_0_2) MarshalFromObject(s Layer3SdwanLinkS
 		o.UpstreamNat = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3SdwanLinkSettingsXml_11_0_2) UnmarshalToObject() (*Layer3SdwanLinkSettings, error) {
@@ -6763,6 +7352,7 @@ func (o layer3SdwanLinkSettingsXml_11_0_2) UnmarshalToObject() (*Layer3SdwanLink
 		SdwanInterfaceProfile: o.SdwanInterfaceProfile,
 		UpstreamNat:           upstreamNatVal,
 		Misc:                  o.Misc,
+		MiscAttributes:        o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6779,6 +7369,7 @@ func (o *layer3SdwanLinkSettingsUpstreamNatXml_11_0_2) MarshalFromObject(s Layer
 		o.StaticIp = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3SdwanLinkSettingsUpstreamNatXml_11_0_2) UnmarshalToObject() (*Layer3SdwanLinkSettingsUpstreamNat, error) {
@@ -6800,21 +7391,24 @@ func (o layer3SdwanLinkSettingsUpstreamNatXml_11_0_2) UnmarshalToObject() (*Laye
 	}
 
 	result := &Layer3SdwanLinkSettingsUpstreamNat{
-		Enable:   util.AsBool(o.Enable, nil),
-		Ddns:     ddnsVal,
-		StaticIp: staticIpVal,
-		Misc:     o.Misc,
+		Enable:         util.AsBool(o.Enable, nil),
+		Ddns:           ddnsVal,
+		StaticIp:       staticIpVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *layer3SdwanLinkSettingsUpstreamNatDdnsXml_11_0_2) MarshalFromObject(s Layer3SdwanLinkSettingsUpstreamNatDdns) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3SdwanLinkSettingsUpstreamNatDdnsXml_11_0_2) UnmarshalToObject() (*Layer3SdwanLinkSettingsUpstreamNatDdns, error) {
 
 	result := &Layer3SdwanLinkSettingsUpstreamNatDdns{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6822,14 +7416,16 @@ func (o *layer3SdwanLinkSettingsUpstreamNatStaticIpXml_11_0_2) MarshalFromObject
 	o.Fqdn = s.Fqdn
 	o.IpAddress = s.IpAddress
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o layer3SdwanLinkSettingsUpstreamNatStaticIpXml_11_0_2) UnmarshalToObject() (*Layer3SdwanLinkSettingsUpstreamNatStaticIp, error) {
 
 	result := &Layer3SdwanLinkSettingsUpstreamNatStaticIp{
-		Fqdn:      o.Fqdn,
-		IpAddress: o.IpAddress,
-		Misc:      o.Misc,
+		Fqdn:           o.Fqdn,
+		IpAddress:      o.IpAddress,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6841,6 +7437,7 @@ func (o *virtualWireXml_11_0_2) MarshalFromObject(s VirtualWire) {
 	}
 	o.NetflowProfile = s.NetflowProfile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o virtualWireXml_11_0_2) UnmarshalToObject() (*VirtualWire, error) {
@@ -6857,6 +7454,7 @@ func (o virtualWireXml_11_0_2) UnmarshalToObject() (*VirtualWire, error) {
 		Lldp:           lldpVal,
 		NetflowProfile: o.NetflowProfile,
 		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6869,6 +7467,7 @@ func (o *virtualWireLldpXml_11_0_2) MarshalFromObject(s VirtualWireLldp) {
 	}
 	o.Profile = s.Profile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o virtualWireLldpXml_11_0_2) UnmarshalToObject() (*VirtualWireLldp, error) {
@@ -6886,12 +7485,14 @@ func (o virtualWireLldpXml_11_0_2) UnmarshalToObject() (*VirtualWireLldp, error)
 		HighAvailability: highAvailabilityVal,
 		Profile:          o.Profile,
 		Misc:             o.Misc,
+		MiscAttributes:   o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *virtualWireLldpHighAvailabilityXml_11_0_2) MarshalFromObject(s VirtualWireLldpHighAvailability) {
 	o.PassivePreNegotiation = util.YesNo(s.PassivePreNegotiation, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o virtualWireLldpHighAvailabilityXml_11_0_2) UnmarshalToObject() (*VirtualWireLldpHighAvailability, error) {
@@ -6899,6 +7500,7 @@ func (o virtualWireLldpHighAvailabilityXml_11_0_2) UnmarshalToObject() (*Virtual
 	result := &VirtualWireLldpHighAvailability{
 		PassivePreNegotiation: util.AsBool(o.PassivePreNegotiation, nil),
 		Misc:                  o.Misc,
+		MiscAttributes:        o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8834,4 +9436,12 @@ func (o *Entry) EntryName() string {
 
 func (o *Entry) SetEntryName(name string) {
 	o.Name = name
+}
+
+func (o *Entry) GetMiscAttributes() []xml.Attr {
+	return o.MiscAttributes
+}
+
+func (o *Entry) SetMiscAttributes(attrs []xml.Attr) {
+	o.MiscAttributes = attrs
 }

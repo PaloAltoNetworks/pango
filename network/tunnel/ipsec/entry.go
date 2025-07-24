@@ -35,6 +35,7 @@ type Entry struct {
 	GlobalProtectSatellite *GlobalProtectSatellite
 	ManualKey              *ManualKey
 	Misc                   []generic.Xml
+	MiscAttributes         []xml.Attr
 }
 type TunnelMonitor struct {
 	DestinationIp        *string
@@ -42,6 +43,7 @@ type TunnelMonitor struct {
 	ProxyId              *string
 	TunnelMonitorProfile *string
 	Misc                 []generic.Xml
+	MiscAttributes       []xml.Attr
 }
 type AutoKey struct {
 	IkeGateway         []AutoKeyIkeGateway
@@ -49,64 +51,76 @@ type AutoKey struct {
 	ProxyId            []AutoKeyProxyId
 	ProxyIdV6          []AutoKeyProxyIdV6
 	Misc               []generic.Xml
+	MiscAttributes     []xml.Attr
 }
 type AutoKeyIkeGateway struct {
-	Name string
-	Misc []generic.Xml
+	Name           string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type AutoKeyProxyId struct {
-	Name     string
-	Local    *string
-	Remote   *string
-	Protocol *AutoKeyProxyIdProtocol
-	Misc     []generic.Xml
+	Name           string
+	Local          *string
+	Remote         *string
+	Protocol       *AutoKeyProxyIdProtocol
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type AutoKeyProxyIdProtocol struct {
-	Number *int64
-	Any    *AutoKeyProxyIdProtocolAny
-	Tcp    *AutoKeyProxyIdProtocolTcp
-	Udp    *AutoKeyProxyIdProtocolUdp
-	Misc   []generic.Xml
+	Number         *int64
+	Any            *AutoKeyProxyIdProtocolAny
+	Tcp            *AutoKeyProxyIdProtocolTcp
+	Udp            *AutoKeyProxyIdProtocolUdp
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type AutoKeyProxyIdProtocolAny struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type AutoKeyProxyIdProtocolTcp struct {
-	LocalPort  *int64
-	RemotePort *int64
-	Misc       []generic.Xml
+	LocalPort      *int64
+	RemotePort     *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type AutoKeyProxyIdProtocolUdp struct {
-	LocalPort  *int64
-	RemotePort *int64
-	Misc       []generic.Xml
+	LocalPort      *int64
+	RemotePort     *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type AutoKeyProxyIdV6 struct {
-	Name     string
-	Local    *string
-	Remote   *string
-	Protocol *AutoKeyProxyIdV6Protocol
-	Misc     []generic.Xml
+	Name           string
+	Local          *string
+	Remote         *string
+	Protocol       *AutoKeyProxyIdV6Protocol
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type AutoKeyProxyIdV6Protocol struct {
-	Number *int64
-	Any    *AutoKeyProxyIdV6ProtocolAny
-	Tcp    *AutoKeyProxyIdV6ProtocolTcp
-	Udp    *AutoKeyProxyIdV6ProtocolUdp
-	Misc   []generic.Xml
+	Number         *int64
+	Any            *AutoKeyProxyIdV6ProtocolAny
+	Tcp            *AutoKeyProxyIdV6ProtocolTcp
+	Udp            *AutoKeyProxyIdV6ProtocolUdp
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type AutoKeyProxyIdV6ProtocolAny struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type AutoKeyProxyIdV6ProtocolTcp struct {
-	LocalPort  *int64
-	RemotePort *int64
-	Misc       []generic.Xml
+	LocalPort      *int64
+	RemotePort     *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type AutoKeyProxyIdV6ProtocolUdp struct {
-	LocalPort  *int64
-	RemotePort *int64
-	Misc       []generic.Xml
+	LocalPort      *int64
+	RemotePort     *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type GlobalProtectSatellite struct {
 	ExternalCa             *GlobalProtectSatelliteExternalCa
@@ -116,120 +130,144 @@ type GlobalProtectSatellite struct {
 	PublishConnectedRoutes *GlobalProtectSatellitePublishConnectedRoutes
 	PublishRoutes          []string
 	Misc                   []generic.Xml
+	MiscAttributes         []xml.Attr
 }
 type GlobalProtectSatelliteExternalCa struct {
 	CertificateProfile *string
 	LocalCertificate   *string
 	Misc               []generic.Xml
+	MiscAttributes     []xml.Attr
 }
 type GlobalProtectSatelliteLocalAddress struct {
-	Interface  *string
-	FloatingIp *GlobalProtectSatelliteLocalAddressFloatingIp
-	Ip         *GlobalProtectSatelliteLocalAddressIp
-	Misc       []generic.Xml
+	Interface      *string
+	FloatingIp     *GlobalProtectSatelliteLocalAddressFloatingIp
+	Ip             *GlobalProtectSatelliteLocalAddressIp
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type GlobalProtectSatelliteLocalAddressFloatingIp struct {
-	Ipv4 *string
-	Ipv6 *string
-	Misc []generic.Xml
+	Ipv4           *string
+	Ipv6           *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type GlobalProtectSatelliteLocalAddressIp struct {
-	Ipv4 *string
-	Ipv6 *string
-	Misc []generic.Xml
+	Ipv4           *string
+	Ipv6           *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type GlobalProtectSatellitePublishConnectedRoutes struct {
-	Enable *bool
-	Misc   []generic.Xml
+	Enable         *bool
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ManualKey struct {
-	LocalAddress *ManualKeyLocalAddress
-	LocalSpi     *string
-	PeerAddress  *ManualKeyPeerAddress
-	RemoteSpi    *string
-	Ah           *ManualKeyAh
-	Esp          *ManualKeyEsp
-	Misc         []generic.Xml
+	LocalAddress   *ManualKeyLocalAddress
+	LocalSpi       *string
+	PeerAddress    *ManualKeyPeerAddress
+	RemoteSpi      *string
+	Ah             *ManualKeyAh
+	Esp            *ManualKeyEsp
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ManualKeyLocalAddress struct {
-	Interface  *string
-	FloatingIp *string
-	Ip         *string
-	Misc       []generic.Xml
+	Interface      *string
+	FloatingIp     *string
+	Ip             *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ManualKeyPeerAddress struct {
-	Ip   *string
-	Misc []generic.Xml
+	Ip             *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ManualKeyAh struct {
-	Md5    *ManualKeyAhMd5
-	Sha1   *ManualKeyAhSha1
-	Sha256 *ManualKeyAhSha256
-	Sha384 *ManualKeyAhSha384
-	Sha512 *ManualKeyAhSha512
-	Misc   []generic.Xml
+	Md5            *ManualKeyAhMd5
+	Sha1           *ManualKeyAhSha1
+	Sha256         *ManualKeyAhSha256
+	Sha384         *ManualKeyAhSha384
+	Sha512         *ManualKeyAhSha512
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ManualKeyAhMd5 struct {
-	Key  *string
-	Misc []generic.Xml
+	Key            *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ManualKeyAhSha1 struct {
-	Key  *string
-	Misc []generic.Xml
+	Key            *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ManualKeyAhSha256 struct {
-	Key  *string
-	Misc []generic.Xml
+	Key            *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ManualKeyAhSha384 struct {
-	Key  *string
-	Misc []generic.Xml
+	Key            *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ManualKeyAhSha512 struct {
-	Key  *string
-	Misc []generic.Xml
+	Key            *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ManualKeyEsp struct {
 	Authentication *ManualKeyEspAuthentication
 	Encryption     *ManualKeyEspEncryption
 	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ManualKeyEspAuthentication struct {
-	Md5    *ManualKeyEspAuthenticationMd5
-	None   *ManualKeyEspAuthenticationNone
-	Sha1   *ManualKeyEspAuthenticationSha1
-	Sha256 *ManualKeyEspAuthenticationSha256
-	Sha384 *ManualKeyEspAuthenticationSha384
-	Sha512 *ManualKeyEspAuthenticationSha512
-	Misc   []generic.Xml
+	Md5            *ManualKeyEspAuthenticationMd5
+	None           *ManualKeyEspAuthenticationNone
+	Sha1           *ManualKeyEspAuthenticationSha1
+	Sha256         *ManualKeyEspAuthenticationSha256
+	Sha384         *ManualKeyEspAuthenticationSha384
+	Sha512         *ManualKeyEspAuthenticationSha512
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ManualKeyEspAuthenticationMd5 struct {
-	Key  *string
-	Misc []generic.Xml
+	Key            *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ManualKeyEspAuthenticationNone struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ManualKeyEspAuthenticationSha1 struct {
-	Key  *string
-	Misc []generic.Xml
+	Key            *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ManualKeyEspAuthenticationSha256 struct {
-	Key  *string
-	Misc []generic.Xml
+	Key            *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ManualKeyEspAuthenticationSha384 struct {
-	Key  *string
-	Misc []generic.Xml
+	Key            *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ManualKeyEspAuthenticationSha512 struct {
-	Key  *string
-	Misc []generic.Xml
+	Key            *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ManualKeyEspEncryption struct {
-	Algorithm *string
-	Key       *string
-	Misc      []generic.Xml
+	Algorithm      *string
+	Key            *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 
 type entryXmlContainer struct {
@@ -294,6 +332,7 @@ type entryXml struct {
 	GlobalProtectSatellite *globalProtectSatelliteXml `xml:"global-protect-satellite,omitempty"`
 	ManualKey              *manualKeyXml              `xml:"manual-key,omitempty"`
 	Misc                   []generic.Xml              `xml:",any"`
+	MiscAttributes         []xml.Attr                 `xml:",any,attr"`
 }
 type tunnelMonitorXml struct {
 	DestinationIp        *string       `xml:"destination-ip,omitempty"`
@@ -301,6 +340,7 @@ type tunnelMonitorXml struct {
 	ProxyId              *string       `xml:"proxy-id,omitempty"`
 	TunnelMonitorProfile *string       `xml:"tunnel-monitor-profile,omitempty"`
 	Misc                 []generic.Xml `xml:",any"`
+	MiscAttributes       []xml.Attr    `xml:",any,attr"`
 }
 type autoKeyXml struct {
 	IkeGateway         *autoKeyIkeGatewayContainerXml `xml:"ike-gateway,omitempty"`
@@ -308,76 +348,88 @@ type autoKeyXml struct {
 	ProxyId            *autoKeyProxyIdContainerXml    `xml:"proxy-id,omitempty"`
 	ProxyIdV6          *autoKeyProxyIdV6ContainerXml  `xml:"proxy-id-v6,omitempty"`
 	Misc               []generic.Xml                  `xml:",any"`
+	MiscAttributes     []xml.Attr                     `xml:",any,attr"`
 }
 type autoKeyIkeGatewayContainerXml struct {
 	Entries []autoKeyIkeGatewayXml `xml:"entry"`
 }
 type autoKeyIkeGatewayXml struct {
-	XMLName xml.Name      `xml:"entry"`
-	Name    string        `xml:"name,attr"`
-	Misc    []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type autoKeyProxyIdContainerXml struct {
 	Entries []autoKeyProxyIdXml `xml:"entry"`
 }
 type autoKeyProxyIdXml struct {
-	XMLName  xml.Name                   `xml:"entry"`
-	Name     string                     `xml:"name,attr"`
-	Local    *string                    `xml:"local,omitempty"`
-	Remote   *string                    `xml:"remote,omitempty"`
-	Protocol *autoKeyProxyIdProtocolXml `xml:"protocol,omitempty"`
-	Misc     []generic.Xml              `xml:",any"`
+	XMLName        xml.Name                   `xml:"entry"`
+	Name           string                     `xml:"name,attr"`
+	Local          *string                    `xml:"local,omitempty"`
+	Remote         *string                    `xml:"remote,omitempty"`
+	Protocol       *autoKeyProxyIdProtocolXml `xml:"protocol,omitempty"`
+	Misc           []generic.Xml              `xml:",any"`
+	MiscAttributes []xml.Attr                 `xml:",any,attr"`
 }
 type autoKeyProxyIdProtocolXml struct {
-	Number *int64                        `xml:"number,omitempty"`
-	Any    *autoKeyProxyIdProtocolAnyXml `xml:"any,omitempty"`
-	Tcp    *autoKeyProxyIdProtocolTcpXml `xml:"tcp,omitempty"`
-	Udp    *autoKeyProxyIdProtocolUdpXml `xml:"udp,omitempty"`
-	Misc   []generic.Xml                 `xml:",any"`
+	Number         *int64                        `xml:"number,omitempty"`
+	Any            *autoKeyProxyIdProtocolAnyXml `xml:"any,omitempty"`
+	Tcp            *autoKeyProxyIdProtocolTcpXml `xml:"tcp,omitempty"`
+	Udp            *autoKeyProxyIdProtocolUdpXml `xml:"udp,omitempty"`
+	Misc           []generic.Xml                 `xml:",any"`
+	MiscAttributes []xml.Attr                    `xml:",any,attr"`
 }
 type autoKeyProxyIdProtocolAnyXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type autoKeyProxyIdProtocolTcpXml struct {
-	LocalPort  *int64        `xml:"local-port,omitempty"`
-	RemotePort *int64        `xml:"remote-port,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	LocalPort      *int64        `xml:"local-port,omitempty"`
+	RemotePort     *int64        `xml:"remote-port,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type autoKeyProxyIdProtocolUdpXml struct {
-	LocalPort  *int64        `xml:"local-port,omitempty"`
-	RemotePort *int64        `xml:"remote-port,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	LocalPort      *int64        `xml:"local-port,omitempty"`
+	RemotePort     *int64        `xml:"remote-port,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type autoKeyProxyIdV6ContainerXml struct {
 	Entries []autoKeyProxyIdV6Xml `xml:"entry"`
 }
 type autoKeyProxyIdV6Xml struct {
-	XMLName  xml.Name                     `xml:"entry"`
-	Name     string                       `xml:"name,attr"`
-	Local    *string                      `xml:"local,omitempty"`
-	Remote   *string                      `xml:"remote,omitempty"`
-	Protocol *autoKeyProxyIdV6ProtocolXml `xml:"protocol,omitempty"`
-	Misc     []generic.Xml                `xml:",any"`
+	XMLName        xml.Name                     `xml:"entry"`
+	Name           string                       `xml:"name,attr"`
+	Local          *string                      `xml:"local,omitempty"`
+	Remote         *string                      `xml:"remote,omitempty"`
+	Protocol       *autoKeyProxyIdV6ProtocolXml `xml:"protocol,omitempty"`
+	Misc           []generic.Xml                `xml:",any"`
+	MiscAttributes []xml.Attr                   `xml:",any,attr"`
 }
 type autoKeyProxyIdV6ProtocolXml struct {
-	Number *int64                          `xml:"number,omitempty"`
-	Any    *autoKeyProxyIdV6ProtocolAnyXml `xml:"any,omitempty"`
-	Tcp    *autoKeyProxyIdV6ProtocolTcpXml `xml:"tcp,omitempty"`
-	Udp    *autoKeyProxyIdV6ProtocolUdpXml `xml:"udp,omitempty"`
-	Misc   []generic.Xml                   `xml:",any"`
+	Number         *int64                          `xml:"number,omitempty"`
+	Any            *autoKeyProxyIdV6ProtocolAnyXml `xml:"any,omitempty"`
+	Tcp            *autoKeyProxyIdV6ProtocolTcpXml `xml:"tcp,omitempty"`
+	Udp            *autoKeyProxyIdV6ProtocolUdpXml `xml:"udp,omitempty"`
+	Misc           []generic.Xml                   `xml:",any"`
+	MiscAttributes []xml.Attr                      `xml:",any,attr"`
 }
 type autoKeyProxyIdV6ProtocolAnyXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type autoKeyProxyIdV6ProtocolTcpXml struct {
-	LocalPort  *int64        `xml:"local-port,omitempty"`
-	RemotePort *int64        `xml:"remote-port,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	LocalPort      *int64        `xml:"local-port,omitempty"`
+	RemotePort     *int64        `xml:"remote-port,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type autoKeyProxyIdV6ProtocolUdpXml struct {
-	LocalPort  *int64        `xml:"local-port,omitempty"`
-	RemotePort *int64        `xml:"remote-port,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	LocalPort      *int64        `xml:"local-port,omitempty"`
+	RemotePort     *int64        `xml:"remote-port,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type globalProtectSatelliteXml struct {
 	ExternalCa             *globalProtectSatelliteExternalCaXml             `xml:"external-ca,omitempty"`
@@ -387,120 +439,144 @@ type globalProtectSatelliteXml struct {
 	PublishConnectedRoutes *globalProtectSatellitePublishConnectedRoutesXml `xml:"publish-connected-routes,omitempty"`
 	PublishRoutes          *util.MemberType                                 `xml:"publish-routes,omitempty"`
 	Misc                   []generic.Xml                                    `xml:",any"`
+	MiscAttributes         []xml.Attr                                       `xml:",any,attr"`
 }
 type globalProtectSatelliteExternalCaXml struct {
 	CertificateProfile *string       `xml:"certificate-profile,omitempty"`
 	LocalCertificate   *string       `xml:"local-certificate,omitempty"`
 	Misc               []generic.Xml `xml:",any"`
+	MiscAttributes     []xml.Attr    `xml:",any,attr"`
 }
 type globalProtectSatelliteLocalAddressXml struct {
-	Interface  *string                                          `xml:"interface,omitempty"`
-	FloatingIp *globalProtectSatelliteLocalAddressFloatingIpXml `xml:"floating-ip,omitempty"`
-	Ip         *globalProtectSatelliteLocalAddressIpXml         `xml:"ip,omitempty"`
-	Misc       []generic.Xml                                    `xml:",any"`
+	Interface      *string                                          `xml:"interface,omitempty"`
+	FloatingIp     *globalProtectSatelliteLocalAddressFloatingIpXml `xml:"floating-ip,omitempty"`
+	Ip             *globalProtectSatelliteLocalAddressIpXml         `xml:"ip,omitempty"`
+	Misc           []generic.Xml                                    `xml:",any"`
+	MiscAttributes []xml.Attr                                       `xml:",any,attr"`
 }
 type globalProtectSatelliteLocalAddressFloatingIpXml struct {
-	Ipv4 *string       `xml:"ipv4,omitempty"`
-	Ipv6 *string       `xml:"ipv6,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Ipv4           *string       `xml:"ipv4,omitempty"`
+	Ipv6           *string       `xml:"ipv6,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type globalProtectSatelliteLocalAddressIpXml struct {
-	Ipv4 *string       `xml:"ipv4,omitempty"`
-	Ipv6 *string       `xml:"ipv6,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Ipv4           *string       `xml:"ipv4,omitempty"`
+	Ipv6           *string       `xml:"ipv6,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type globalProtectSatellitePublishConnectedRoutesXml struct {
-	Enable *string       `xml:"enable,omitempty"`
-	Misc   []generic.Xml `xml:",any"`
+	Enable         *string       `xml:"enable,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type manualKeyXml struct {
-	LocalAddress *manualKeyLocalAddressXml `xml:"local-address,omitempty"`
-	LocalSpi     *string                   `xml:"local-spi,omitempty"`
-	PeerAddress  *manualKeyPeerAddressXml  `xml:"peer-address,omitempty"`
-	RemoteSpi    *string                   `xml:"remote-spi,omitempty"`
-	Ah           *manualKeyAhXml           `xml:"ah,omitempty"`
-	Esp          *manualKeyEspXml          `xml:"esp,omitempty"`
-	Misc         []generic.Xml             `xml:",any"`
+	LocalAddress   *manualKeyLocalAddressXml `xml:"local-address,omitempty"`
+	LocalSpi       *string                   `xml:"local-spi,omitempty"`
+	PeerAddress    *manualKeyPeerAddressXml  `xml:"peer-address,omitempty"`
+	RemoteSpi      *string                   `xml:"remote-spi,omitempty"`
+	Ah             *manualKeyAhXml           `xml:"ah,omitempty"`
+	Esp            *manualKeyEspXml          `xml:"esp,omitempty"`
+	Misc           []generic.Xml             `xml:",any"`
+	MiscAttributes []xml.Attr                `xml:",any,attr"`
 }
 type manualKeyLocalAddressXml struct {
-	Interface  *string       `xml:"interface,omitempty"`
-	FloatingIp *string       `xml:"floating-ip,omitempty"`
-	Ip         *string       `xml:"ip,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	Interface      *string       `xml:"interface,omitempty"`
+	FloatingIp     *string       `xml:"floating-ip,omitempty"`
+	Ip             *string       `xml:"ip,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type manualKeyPeerAddressXml struct {
-	Ip   *string       `xml:"ip,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Ip             *string       `xml:"ip,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type manualKeyAhXml struct {
-	Md5    *manualKeyAhMd5Xml    `xml:"md5,omitempty"`
-	Sha1   *manualKeyAhSha1Xml   `xml:"sha1,omitempty"`
-	Sha256 *manualKeyAhSha256Xml `xml:"sha256,omitempty"`
-	Sha384 *manualKeyAhSha384Xml `xml:"sha384,omitempty"`
-	Sha512 *manualKeyAhSha512Xml `xml:"sha512,omitempty"`
-	Misc   []generic.Xml         `xml:",any"`
+	Md5            *manualKeyAhMd5Xml    `xml:"md5,omitempty"`
+	Sha1           *manualKeyAhSha1Xml   `xml:"sha1,omitempty"`
+	Sha256         *manualKeyAhSha256Xml `xml:"sha256,omitempty"`
+	Sha384         *manualKeyAhSha384Xml `xml:"sha384,omitempty"`
+	Sha512         *manualKeyAhSha512Xml `xml:"sha512,omitempty"`
+	Misc           []generic.Xml         `xml:",any"`
+	MiscAttributes []xml.Attr            `xml:",any,attr"`
 }
 type manualKeyAhMd5Xml struct {
-	Key  *string       `xml:"key,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Key            *string       `xml:"key,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type manualKeyAhSha1Xml struct {
-	Key  *string       `xml:"key,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Key            *string       `xml:"key,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type manualKeyAhSha256Xml struct {
-	Key  *string       `xml:"key,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Key            *string       `xml:"key,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type manualKeyAhSha384Xml struct {
-	Key  *string       `xml:"key,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Key            *string       `xml:"key,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type manualKeyAhSha512Xml struct {
-	Key  *string       `xml:"key,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Key            *string       `xml:"key,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type manualKeyEspXml struct {
 	Authentication *manualKeyEspAuthenticationXml `xml:"authentication,omitempty"`
 	Encryption     *manualKeyEspEncryptionXml     `xml:"encryption,omitempty"`
 	Misc           []generic.Xml                  `xml:",any"`
+	MiscAttributes []xml.Attr                     `xml:",any,attr"`
 }
 type manualKeyEspAuthenticationXml struct {
-	Md5    *manualKeyEspAuthenticationMd5Xml    `xml:"md5,omitempty"`
-	None   *manualKeyEspAuthenticationNoneXml   `xml:"none,omitempty"`
-	Sha1   *manualKeyEspAuthenticationSha1Xml   `xml:"sha1,omitempty"`
-	Sha256 *manualKeyEspAuthenticationSha256Xml `xml:"sha256,omitempty"`
-	Sha384 *manualKeyEspAuthenticationSha384Xml `xml:"sha384,omitempty"`
-	Sha512 *manualKeyEspAuthenticationSha512Xml `xml:"sha512,omitempty"`
-	Misc   []generic.Xml                        `xml:",any"`
+	Md5            *manualKeyEspAuthenticationMd5Xml    `xml:"md5,omitempty"`
+	None           *manualKeyEspAuthenticationNoneXml   `xml:"none,omitempty"`
+	Sha1           *manualKeyEspAuthenticationSha1Xml   `xml:"sha1,omitempty"`
+	Sha256         *manualKeyEspAuthenticationSha256Xml `xml:"sha256,omitempty"`
+	Sha384         *manualKeyEspAuthenticationSha384Xml `xml:"sha384,omitempty"`
+	Sha512         *manualKeyEspAuthenticationSha512Xml `xml:"sha512,omitempty"`
+	Misc           []generic.Xml                        `xml:",any"`
+	MiscAttributes []xml.Attr                           `xml:",any,attr"`
 }
 type manualKeyEspAuthenticationMd5Xml struct {
-	Key  *string       `xml:"key,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Key            *string       `xml:"key,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type manualKeyEspAuthenticationNoneXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type manualKeyEspAuthenticationSha1Xml struct {
-	Key  *string       `xml:"key,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Key            *string       `xml:"key,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type manualKeyEspAuthenticationSha256Xml struct {
-	Key  *string       `xml:"key,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Key            *string       `xml:"key,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type manualKeyEspAuthenticationSha384Xml struct {
-	Key  *string       `xml:"key,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Key            *string       `xml:"key,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type manualKeyEspAuthenticationSha512Xml struct {
-	Key  *string       `xml:"key,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Key            *string       `xml:"key,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type manualKeyEspEncryptionXml struct {
-	Algorithm *string       `xml:"algorithm,omitempty"`
-	Key       *string       `xml:"key,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	Algorithm      *string       `xml:"algorithm,omitempty"`
+	Key            *string       `xml:"key,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type entryXml_11_0_2 struct {
 	XMLName                xml.Name                          `xml:"entry"`
@@ -520,6 +596,7 @@ type entryXml_11_0_2 struct {
 	GlobalProtectSatellite *globalProtectSatelliteXml_11_0_2 `xml:"global-protect-satellite,omitempty"`
 	ManualKey              *manualKeyXml_11_0_2              `xml:"manual-key,omitempty"`
 	Misc                   []generic.Xml                     `xml:",any"`
+	MiscAttributes         []xml.Attr                        `xml:",any,attr"`
 }
 type tunnelMonitorXml_11_0_2 struct {
 	DestinationIp        *string       `xml:"destination-ip,omitempty"`
@@ -527,6 +604,7 @@ type tunnelMonitorXml_11_0_2 struct {
 	ProxyId              *string       `xml:"proxy-id,omitempty"`
 	TunnelMonitorProfile *string       `xml:"tunnel-monitor-profile,omitempty"`
 	Misc                 []generic.Xml `xml:",any"`
+	MiscAttributes       []xml.Attr    `xml:",any,attr"`
 }
 type autoKeyXml_11_0_2 struct {
 	IkeGateway         *autoKeyIkeGatewayContainerXml_11_0_2 `xml:"ike-gateway,omitempty"`
@@ -534,76 +612,88 @@ type autoKeyXml_11_0_2 struct {
 	ProxyId            *autoKeyProxyIdContainerXml_11_0_2    `xml:"proxy-id,omitempty"`
 	ProxyIdV6          *autoKeyProxyIdV6ContainerXml_11_0_2  `xml:"proxy-id-v6,omitempty"`
 	Misc               []generic.Xml                         `xml:",any"`
+	MiscAttributes     []xml.Attr                            `xml:",any,attr"`
 }
 type autoKeyIkeGatewayContainerXml_11_0_2 struct {
 	Entries []autoKeyIkeGatewayXml_11_0_2 `xml:"entry"`
 }
 type autoKeyIkeGatewayXml_11_0_2 struct {
-	XMLName xml.Name      `xml:"entry"`
-	Name    string        `xml:"name,attr"`
-	Misc    []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type autoKeyProxyIdContainerXml_11_0_2 struct {
 	Entries []autoKeyProxyIdXml_11_0_2 `xml:"entry"`
 }
 type autoKeyProxyIdXml_11_0_2 struct {
-	XMLName  xml.Name                          `xml:"entry"`
-	Name     string                            `xml:"name,attr"`
-	Local    *string                           `xml:"local,omitempty"`
-	Remote   *string                           `xml:"remote,omitempty"`
-	Protocol *autoKeyProxyIdProtocolXml_11_0_2 `xml:"protocol,omitempty"`
-	Misc     []generic.Xml                     `xml:",any"`
+	XMLName        xml.Name                          `xml:"entry"`
+	Name           string                            `xml:"name,attr"`
+	Local          *string                           `xml:"local,omitempty"`
+	Remote         *string                           `xml:"remote,omitempty"`
+	Protocol       *autoKeyProxyIdProtocolXml_11_0_2 `xml:"protocol,omitempty"`
+	Misc           []generic.Xml                     `xml:",any"`
+	MiscAttributes []xml.Attr                        `xml:",any,attr"`
 }
 type autoKeyProxyIdProtocolXml_11_0_2 struct {
-	Number *int64                               `xml:"number,omitempty"`
-	Any    *autoKeyProxyIdProtocolAnyXml_11_0_2 `xml:"any,omitempty"`
-	Tcp    *autoKeyProxyIdProtocolTcpXml_11_0_2 `xml:"tcp,omitempty"`
-	Udp    *autoKeyProxyIdProtocolUdpXml_11_0_2 `xml:"udp,omitempty"`
-	Misc   []generic.Xml                        `xml:",any"`
+	Number         *int64                               `xml:"number,omitempty"`
+	Any            *autoKeyProxyIdProtocolAnyXml_11_0_2 `xml:"any,omitempty"`
+	Tcp            *autoKeyProxyIdProtocolTcpXml_11_0_2 `xml:"tcp,omitempty"`
+	Udp            *autoKeyProxyIdProtocolUdpXml_11_0_2 `xml:"udp,omitempty"`
+	Misc           []generic.Xml                        `xml:",any"`
+	MiscAttributes []xml.Attr                           `xml:",any,attr"`
 }
 type autoKeyProxyIdProtocolAnyXml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type autoKeyProxyIdProtocolTcpXml_11_0_2 struct {
-	LocalPort  *int64        `xml:"local-port,omitempty"`
-	RemotePort *int64        `xml:"remote-port,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	LocalPort      *int64        `xml:"local-port,omitempty"`
+	RemotePort     *int64        `xml:"remote-port,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type autoKeyProxyIdProtocolUdpXml_11_0_2 struct {
-	LocalPort  *int64        `xml:"local-port,omitempty"`
-	RemotePort *int64        `xml:"remote-port,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	LocalPort      *int64        `xml:"local-port,omitempty"`
+	RemotePort     *int64        `xml:"remote-port,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type autoKeyProxyIdV6ContainerXml_11_0_2 struct {
 	Entries []autoKeyProxyIdV6Xml_11_0_2 `xml:"entry"`
 }
 type autoKeyProxyIdV6Xml_11_0_2 struct {
-	XMLName  xml.Name                            `xml:"entry"`
-	Name     string                              `xml:"name,attr"`
-	Local    *string                             `xml:"local,omitempty"`
-	Remote   *string                             `xml:"remote,omitempty"`
-	Protocol *autoKeyProxyIdV6ProtocolXml_11_0_2 `xml:"protocol,omitempty"`
-	Misc     []generic.Xml                       `xml:",any"`
+	XMLName        xml.Name                            `xml:"entry"`
+	Name           string                              `xml:"name,attr"`
+	Local          *string                             `xml:"local,omitempty"`
+	Remote         *string                             `xml:"remote,omitempty"`
+	Protocol       *autoKeyProxyIdV6ProtocolXml_11_0_2 `xml:"protocol,omitempty"`
+	Misc           []generic.Xml                       `xml:",any"`
+	MiscAttributes []xml.Attr                          `xml:",any,attr"`
 }
 type autoKeyProxyIdV6ProtocolXml_11_0_2 struct {
-	Number *int64                                 `xml:"number,omitempty"`
-	Any    *autoKeyProxyIdV6ProtocolAnyXml_11_0_2 `xml:"any,omitempty"`
-	Tcp    *autoKeyProxyIdV6ProtocolTcpXml_11_0_2 `xml:"tcp,omitempty"`
-	Udp    *autoKeyProxyIdV6ProtocolUdpXml_11_0_2 `xml:"udp,omitempty"`
-	Misc   []generic.Xml                          `xml:",any"`
+	Number         *int64                                 `xml:"number,omitempty"`
+	Any            *autoKeyProxyIdV6ProtocolAnyXml_11_0_2 `xml:"any,omitempty"`
+	Tcp            *autoKeyProxyIdV6ProtocolTcpXml_11_0_2 `xml:"tcp,omitempty"`
+	Udp            *autoKeyProxyIdV6ProtocolUdpXml_11_0_2 `xml:"udp,omitempty"`
+	Misc           []generic.Xml                          `xml:",any"`
+	MiscAttributes []xml.Attr                             `xml:",any,attr"`
 }
 type autoKeyProxyIdV6ProtocolAnyXml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type autoKeyProxyIdV6ProtocolTcpXml_11_0_2 struct {
-	LocalPort  *int64        `xml:"local-port,omitempty"`
-	RemotePort *int64        `xml:"remote-port,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	LocalPort      *int64        `xml:"local-port,omitempty"`
+	RemotePort     *int64        `xml:"remote-port,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type autoKeyProxyIdV6ProtocolUdpXml_11_0_2 struct {
-	LocalPort  *int64        `xml:"local-port,omitempty"`
-	RemotePort *int64        `xml:"remote-port,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	LocalPort      *int64        `xml:"local-port,omitempty"`
+	RemotePort     *int64        `xml:"remote-port,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type globalProtectSatelliteXml_11_0_2 struct {
 	ExternalCa             *globalProtectSatelliteExternalCaXml_11_0_2             `xml:"external-ca,omitempty"`
@@ -613,120 +703,144 @@ type globalProtectSatelliteXml_11_0_2 struct {
 	PublishConnectedRoutes *globalProtectSatellitePublishConnectedRoutesXml_11_0_2 `xml:"publish-connected-routes,omitempty"`
 	PublishRoutes          *util.MemberType                                        `xml:"publish-routes,omitempty"`
 	Misc                   []generic.Xml                                           `xml:",any"`
+	MiscAttributes         []xml.Attr                                              `xml:",any,attr"`
 }
 type globalProtectSatelliteExternalCaXml_11_0_2 struct {
 	CertificateProfile *string       `xml:"certificate-profile,omitempty"`
 	LocalCertificate   *string       `xml:"local-certificate,omitempty"`
 	Misc               []generic.Xml `xml:",any"`
+	MiscAttributes     []xml.Attr    `xml:",any,attr"`
 }
 type globalProtectSatelliteLocalAddressXml_11_0_2 struct {
-	Interface  *string                                                 `xml:"interface,omitempty"`
-	FloatingIp *globalProtectSatelliteLocalAddressFloatingIpXml_11_0_2 `xml:"floating-ip,omitempty"`
-	Ip         *globalProtectSatelliteLocalAddressIpXml_11_0_2         `xml:"ip,omitempty"`
-	Misc       []generic.Xml                                           `xml:",any"`
+	Interface      *string                                                 `xml:"interface,omitempty"`
+	FloatingIp     *globalProtectSatelliteLocalAddressFloatingIpXml_11_0_2 `xml:"floating-ip,omitempty"`
+	Ip             *globalProtectSatelliteLocalAddressIpXml_11_0_2         `xml:"ip,omitempty"`
+	Misc           []generic.Xml                                           `xml:",any"`
+	MiscAttributes []xml.Attr                                              `xml:",any,attr"`
 }
 type globalProtectSatelliteLocalAddressFloatingIpXml_11_0_2 struct {
-	Ipv4 *string       `xml:"ipv4,omitempty"`
-	Ipv6 *string       `xml:"ipv6,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Ipv4           *string       `xml:"ipv4,omitempty"`
+	Ipv6           *string       `xml:"ipv6,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type globalProtectSatelliteLocalAddressIpXml_11_0_2 struct {
-	Ipv4 *string       `xml:"ipv4,omitempty"`
-	Ipv6 *string       `xml:"ipv6,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Ipv4           *string       `xml:"ipv4,omitempty"`
+	Ipv6           *string       `xml:"ipv6,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type globalProtectSatellitePublishConnectedRoutesXml_11_0_2 struct {
-	Enable *string       `xml:"enable,omitempty"`
-	Misc   []generic.Xml `xml:",any"`
+	Enable         *string       `xml:"enable,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type manualKeyXml_11_0_2 struct {
-	LocalAddress *manualKeyLocalAddressXml_11_0_2 `xml:"local-address,omitempty"`
-	LocalSpi     *string                          `xml:"local-spi,omitempty"`
-	PeerAddress  *manualKeyPeerAddressXml_11_0_2  `xml:"peer-address,omitempty"`
-	RemoteSpi    *string                          `xml:"remote-spi,omitempty"`
-	Ah           *manualKeyAhXml_11_0_2           `xml:"ah,omitempty"`
-	Esp          *manualKeyEspXml_11_0_2          `xml:"esp,omitempty"`
-	Misc         []generic.Xml                    `xml:",any"`
+	LocalAddress   *manualKeyLocalAddressXml_11_0_2 `xml:"local-address,omitempty"`
+	LocalSpi       *string                          `xml:"local-spi,omitempty"`
+	PeerAddress    *manualKeyPeerAddressXml_11_0_2  `xml:"peer-address,omitempty"`
+	RemoteSpi      *string                          `xml:"remote-spi,omitempty"`
+	Ah             *manualKeyAhXml_11_0_2           `xml:"ah,omitempty"`
+	Esp            *manualKeyEspXml_11_0_2          `xml:"esp,omitempty"`
+	Misc           []generic.Xml                    `xml:",any"`
+	MiscAttributes []xml.Attr                       `xml:",any,attr"`
 }
 type manualKeyLocalAddressXml_11_0_2 struct {
-	Interface  *string       `xml:"interface,omitempty"`
-	FloatingIp *string       `xml:"floating-ip,omitempty"`
-	Ip         *string       `xml:"ip,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	Interface      *string       `xml:"interface,omitempty"`
+	FloatingIp     *string       `xml:"floating-ip,omitempty"`
+	Ip             *string       `xml:"ip,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type manualKeyPeerAddressXml_11_0_2 struct {
-	Ip   *string       `xml:"ip,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Ip             *string       `xml:"ip,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type manualKeyAhXml_11_0_2 struct {
-	Md5    *manualKeyAhMd5Xml_11_0_2    `xml:"md5,omitempty"`
-	Sha1   *manualKeyAhSha1Xml_11_0_2   `xml:"sha1,omitempty"`
-	Sha256 *manualKeyAhSha256Xml_11_0_2 `xml:"sha256,omitempty"`
-	Sha384 *manualKeyAhSha384Xml_11_0_2 `xml:"sha384,omitempty"`
-	Sha512 *manualKeyAhSha512Xml_11_0_2 `xml:"sha512,omitempty"`
-	Misc   []generic.Xml                `xml:",any"`
+	Md5            *manualKeyAhMd5Xml_11_0_2    `xml:"md5,omitempty"`
+	Sha1           *manualKeyAhSha1Xml_11_0_2   `xml:"sha1,omitempty"`
+	Sha256         *manualKeyAhSha256Xml_11_0_2 `xml:"sha256,omitempty"`
+	Sha384         *manualKeyAhSha384Xml_11_0_2 `xml:"sha384,omitempty"`
+	Sha512         *manualKeyAhSha512Xml_11_0_2 `xml:"sha512,omitempty"`
+	Misc           []generic.Xml                `xml:",any"`
+	MiscAttributes []xml.Attr                   `xml:",any,attr"`
 }
 type manualKeyAhMd5Xml_11_0_2 struct {
-	Key  *string       `xml:"key,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Key            *string       `xml:"key,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type manualKeyAhSha1Xml_11_0_2 struct {
-	Key  *string       `xml:"key,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Key            *string       `xml:"key,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type manualKeyAhSha256Xml_11_0_2 struct {
-	Key  *string       `xml:"key,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Key            *string       `xml:"key,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type manualKeyAhSha384Xml_11_0_2 struct {
-	Key  *string       `xml:"key,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Key            *string       `xml:"key,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type manualKeyAhSha512Xml_11_0_2 struct {
-	Key  *string       `xml:"key,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Key            *string       `xml:"key,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type manualKeyEspXml_11_0_2 struct {
 	Authentication *manualKeyEspAuthenticationXml_11_0_2 `xml:"authentication,omitempty"`
 	Encryption     *manualKeyEspEncryptionXml_11_0_2     `xml:"encryption,omitempty"`
 	Misc           []generic.Xml                         `xml:",any"`
+	MiscAttributes []xml.Attr                            `xml:",any,attr"`
 }
 type manualKeyEspAuthenticationXml_11_0_2 struct {
-	Md5    *manualKeyEspAuthenticationMd5Xml_11_0_2    `xml:"md5,omitempty"`
-	None   *manualKeyEspAuthenticationNoneXml_11_0_2   `xml:"none,omitempty"`
-	Sha1   *manualKeyEspAuthenticationSha1Xml_11_0_2   `xml:"sha1,omitempty"`
-	Sha256 *manualKeyEspAuthenticationSha256Xml_11_0_2 `xml:"sha256,omitempty"`
-	Sha384 *manualKeyEspAuthenticationSha384Xml_11_0_2 `xml:"sha384,omitempty"`
-	Sha512 *manualKeyEspAuthenticationSha512Xml_11_0_2 `xml:"sha512,omitempty"`
-	Misc   []generic.Xml                               `xml:",any"`
+	Md5            *manualKeyEspAuthenticationMd5Xml_11_0_2    `xml:"md5,omitempty"`
+	None           *manualKeyEspAuthenticationNoneXml_11_0_2   `xml:"none,omitempty"`
+	Sha1           *manualKeyEspAuthenticationSha1Xml_11_0_2   `xml:"sha1,omitempty"`
+	Sha256         *manualKeyEspAuthenticationSha256Xml_11_0_2 `xml:"sha256,omitempty"`
+	Sha384         *manualKeyEspAuthenticationSha384Xml_11_0_2 `xml:"sha384,omitempty"`
+	Sha512         *manualKeyEspAuthenticationSha512Xml_11_0_2 `xml:"sha512,omitempty"`
+	Misc           []generic.Xml                               `xml:",any"`
+	MiscAttributes []xml.Attr                                  `xml:",any,attr"`
 }
 type manualKeyEspAuthenticationMd5Xml_11_0_2 struct {
-	Key  *string       `xml:"key,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Key            *string       `xml:"key,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type manualKeyEspAuthenticationNoneXml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type manualKeyEspAuthenticationSha1Xml_11_0_2 struct {
-	Key  *string       `xml:"key,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Key            *string       `xml:"key,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type manualKeyEspAuthenticationSha256Xml_11_0_2 struct {
-	Key  *string       `xml:"key,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Key            *string       `xml:"key,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type manualKeyEspAuthenticationSha384Xml_11_0_2 struct {
-	Key  *string       `xml:"key,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Key            *string       `xml:"key,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type manualKeyEspAuthenticationSha512Xml_11_0_2 struct {
-	Key  *string       `xml:"key,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Key            *string       `xml:"key,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type manualKeyEspEncryptionXml_11_0_2 struct {
-	Algorithm *string       `xml:"algorithm,omitempty"`
-	Key       *string       `xml:"key,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	Algorithm      *string       `xml:"algorithm,omitempty"`
+	Key            *string       `xml:"key,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 
 func (o *entryXml) MarshalFromObject(s Entry) {
@@ -762,6 +876,7 @@ func (o *entryXml) MarshalFromObject(s Entry) {
 		o.ManualKey = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o entryXml) UnmarshalToObject() (*Entry, error) {
@@ -815,6 +930,7 @@ func (o entryXml) UnmarshalToObject() (*Entry, error) {
 		GlobalProtectSatellite: globalProtectSatelliteVal,
 		ManualKey:              manualKeyVal,
 		Misc:                   o.Misc,
+		MiscAttributes:         o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -824,6 +940,7 @@ func (o *tunnelMonitorXml) MarshalFromObject(s TunnelMonitor) {
 	o.ProxyId = s.ProxyId
 	o.TunnelMonitorProfile = s.TunnelMonitorProfile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o tunnelMonitorXml) UnmarshalToObject() (*TunnelMonitor, error) {
@@ -834,6 +951,7 @@ func (o tunnelMonitorXml) UnmarshalToObject() (*TunnelMonitor, error) {
 		ProxyId:              o.ProxyId,
 		TunnelMonitorProfile: o.TunnelMonitorProfile,
 		Misc:                 o.Misc,
+		MiscAttributes:       o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -867,6 +985,7 @@ func (o *autoKeyXml) MarshalFromObject(s AutoKey) {
 		o.ProxyIdV6 = &autoKeyProxyIdV6ContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o autoKeyXml) UnmarshalToObject() (*AutoKey, error) {
@@ -907,19 +1026,22 @@ func (o autoKeyXml) UnmarshalToObject() (*AutoKey, error) {
 		ProxyId:            proxyIdVal,
 		ProxyIdV6:          proxyIdV6Val,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *autoKeyIkeGatewayXml) MarshalFromObject(s AutoKeyIkeGateway) {
 	o.Name = s.Name
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o autoKeyIkeGatewayXml) UnmarshalToObject() (*AutoKeyIkeGateway, error) {
 
 	result := &AutoKeyIkeGateway{
-		Name: o.Name,
-		Misc: o.Misc,
+		Name:           o.Name,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -933,6 +1055,7 @@ func (o *autoKeyProxyIdXml) MarshalFromObject(s AutoKeyProxyId) {
 		o.Protocol = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o autoKeyProxyIdXml) UnmarshalToObject() (*AutoKeyProxyId, error) {
@@ -946,11 +1069,12 @@ func (o autoKeyProxyIdXml) UnmarshalToObject() (*AutoKeyProxyId, error) {
 	}
 
 	result := &AutoKeyProxyId{
-		Name:     o.Name,
-		Local:    o.Local,
-		Remote:   o.Remote,
-		Protocol: protocolVal,
-		Misc:     o.Misc,
+		Name:           o.Name,
+		Local:          o.Local,
+		Remote:         o.Remote,
+		Protocol:       protocolVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -972,6 +1096,7 @@ func (o *autoKeyProxyIdProtocolXml) MarshalFromObject(s AutoKeyProxyIdProtocol) 
 		o.Udp = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o autoKeyProxyIdProtocolXml) UnmarshalToObject() (*AutoKeyProxyIdProtocol, error) {
@@ -1001,22 +1126,25 @@ func (o autoKeyProxyIdProtocolXml) UnmarshalToObject() (*AutoKeyProxyIdProtocol,
 	}
 
 	result := &AutoKeyProxyIdProtocol{
-		Number: o.Number,
-		Any:    anyVal,
-		Tcp:    tcpVal,
-		Udp:    udpVal,
-		Misc:   o.Misc,
+		Number:         o.Number,
+		Any:            anyVal,
+		Tcp:            tcpVal,
+		Udp:            udpVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *autoKeyProxyIdProtocolAnyXml) MarshalFromObject(s AutoKeyProxyIdProtocolAny) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o autoKeyProxyIdProtocolAnyXml) UnmarshalToObject() (*AutoKeyProxyIdProtocolAny, error) {
 
 	result := &AutoKeyProxyIdProtocolAny{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1024,14 +1152,16 @@ func (o *autoKeyProxyIdProtocolTcpXml) MarshalFromObject(s AutoKeyProxyIdProtoco
 	o.LocalPort = s.LocalPort
 	o.RemotePort = s.RemotePort
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o autoKeyProxyIdProtocolTcpXml) UnmarshalToObject() (*AutoKeyProxyIdProtocolTcp, error) {
 
 	result := &AutoKeyProxyIdProtocolTcp{
-		LocalPort:  o.LocalPort,
-		RemotePort: o.RemotePort,
-		Misc:       o.Misc,
+		LocalPort:      o.LocalPort,
+		RemotePort:     o.RemotePort,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1039,14 +1169,16 @@ func (o *autoKeyProxyIdProtocolUdpXml) MarshalFromObject(s AutoKeyProxyIdProtoco
 	o.LocalPort = s.LocalPort
 	o.RemotePort = s.RemotePort
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o autoKeyProxyIdProtocolUdpXml) UnmarshalToObject() (*AutoKeyProxyIdProtocolUdp, error) {
 
 	result := &AutoKeyProxyIdProtocolUdp{
-		LocalPort:  o.LocalPort,
-		RemotePort: o.RemotePort,
-		Misc:       o.Misc,
+		LocalPort:      o.LocalPort,
+		RemotePort:     o.RemotePort,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1060,6 +1192,7 @@ func (o *autoKeyProxyIdV6Xml) MarshalFromObject(s AutoKeyProxyIdV6) {
 		o.Protocol = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o autoKeyProxyIdV6Xml) UnmarshalToObject() (*AutoKeyProxyIdV6, error) {
@@ -1073,11 +1206,12 @@ func (o autoKeyProxyIdV6Xml) UnmarshalToObject() (*AutoKeyProxyIdV6, error) {
 	}
 
 	result := &AutoKeyProxyIdV6{
-		Name:     o.Name,
-		Local:    o.Local,
-		Remote:   o.Remote,
-		Protocol: protocolVal,
-		Misc:     o.Misc,
+		Name:           o.Name,
+		Local:          o.Local,
+		Remote:         o.Remote,
+		Protocol:       protocolVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1099,6 +1233,7 @@ func (o *autoKeyProxyIdV6ProtocolXml) MarshalFromObject(s AutoKeyProxyIdV6Protoc
 		o.Udp = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o autoKeyProxyIdV6ProtocolXml) UnmarshalToObject() (*AutoKeyProxyIdV6Protocol, error) {
@@ -1128,22 +1263,25 @@ func (o autoKeyProxyIdV6ProtocolXml) UnmarshalToObject() (*AutoKeyProxyIdV6Proto
 	}
 
 	result := &AutoKeyProxyIdV6Protocol{
-		Number: o.Number,
-		Any:    anyVal,
-		Tcp:    tcpVal,
-		Udp:    udpVal,
-		Misc:   o.Misc,
+		Number:         o.Number,
+		Any:            anyVal,
+		Tcp:            tcpVal,
+		Udp:            udpVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *autoKeyProxyIdV6ProtocolAnyXml) MarshalFromObject(s AutoKeyProxyIdV6ProtocolAny) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o autoKeyProxyIdV6ProtocolAnyXml) UnmarshalToObject() (*AutoKeyProxyIdV6ProtocolAny, error) {
 
 	result := &AutoKeyProxyIdV6ProtocolAny{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1151,14 +1289,16 @@ func (o *autoKeyProxyIdV6ProtocolTcpXml) MarshalFromObject(s AutoKeyProxyIdV6Pro
 	o.LocalPort = s.LocalPort
 	o.RemotePort = s.RemotePort
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o autoKeyProxyIdV6ProtocolTcpXml) UnmarshalToObject() (*AutoKeyProxyIdV6ProtocolTcp, error) {
 
 	result := &AutoKeyProxyIdV6ProtocolTcp{
-		LocalPort:  o.LocalPort,
-		RemotePort: o.RemotePort,
-		Misc:       o.Misc,
+		LocalPort:      o.LocalPort,
+		RemotePort:     o.RemotePort,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1166,14 +1306,16 @@ func (o *autoKeyProxyIdV6ProtocolUdpXml) MarshalFromObject(s AutoKeyProxyIdV6Pro
 	o.LocalPort = s.LocalPort
 	o.RemotePort = s.RemotePort
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o autoKeyProxyIdV6ProtocolUdpXml) UnmarshalToObject() (*AutoKeyProxyIdV6ProtocolUdp, error) {
 
 	result := &AutoKeyProxyIdV6ProtocolUdp{
-		LocalPort:  o.LocalPort,
-		RemotePort: o.RemotePort,
-		Misc:       o.Misc,
+		LocalPort:      o.LocalPort,
+		RemotePort:     o.RemotePort,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1199,6 +1341,7 @@ func (o *globalProtectSatelliteXml) MarshalFromObject(s GlobalProtectSatellite) 
 		o.PublishRoutes = util.StrToMem(s.PublishRoutes)
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o globalProtectSatelliteXml) UnmarshalToObject() (*GlobalProtectSatellite, error) {
@@ -1239,6 +1382,7 @@ func (o globalProtectSatelliteXml) UnmarshalToObject() (*GlobalProtectSatellite,
 		PublishConnectedRoutes: publishConnectedRoutesVal,
 		PublishRoutes:          publishRoutesVal,
 		Misc:                   o.Misc,
+		MiscAttributes:         o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1246,6 +1390,7 @@ func (o *globalProtectSatelliteExternalCaXml) MarshalFromObject(s GlobalProtectS
 	o.CertificateProfile = s.CertificateProfile
 	o.LocalCertificate = s.LocalCertificate
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o globalProtectSatelliteExternalCaXml) UnmarshalToObject() (*GlobalProtectSatelliteExternalCa, error) {
@@ -1254,6 +1399,7 @@ func (o globalProtectSatelliteExternalCaXml) UnmarshalToObject() (*GlobalProtect
 		CertificateProfile: o.CertificateProfile,
 		LocalCertificate:   o.LocalCertificate,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1270,6 +1416,7 @@ func (o *globalProtectSatelliteLocalAddressXml) MarshalFromObject(s GlobalProtec
 		o.Ip = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o globalProtectSatelliteLocalAddressXml) UnmarshalToObject() (*GlobalProtectSatelliteLocalAddress, error) {
@@ -1291,10 +1438,11 @@ func (o globalProtectSatelliteLocalAddressXml) UnmarshalToObject() (*GlobalProte
 	}
 
 	result := &GlobalProtectSatelliteLocalAddress{
-		Interface:  o.Interface,
-		FloatingIp: floatingIpVal,
-		Ip:         ipVal,
-		Misc:       o.Misc,
+		Interface:      o.Interface,
+		FloatingIp:     floatingIpVal,
+		Ip:             ipVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1302,14 +1450,16 @@ func (o *globalProtectSatelliteLocalAddressFloatingIpXml) MarshalFromObject(s Gl
 	o.Ipv4 = s.Ipv4
 	o.Ipv6 = s.Ipv6
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o globalProtectSatelliteLocalAddressFloatingIpXml) UnmarshalToObject() (*GlobalProtectSatelliteLocalAddressFloatingIp, error) {
 
 	result := &GlobalProtectSatelliteLocalAddressFloatingIp{
-		Ipv4: o.Ipv4,
-		Ipv6: o.Ipv6,
-		Misc: o.Misc,
+		Ipv4:           o.Ipv4,
+		Ipv6:           o.Ipv6,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1317,27 +1467,31 @@ func (o *globalProtectSatelliteLocalAddressIpXml) MarshalFromObject(s GlobalProt
 	o.Ipv4 = s.Ipv4
 	o.Ipv6 = s.Ipv6
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o globalProtectSatelliteLocalAddressIpXml) UnmarshalToObject() (*GlobalProtectSatelliteLocalAddressIp, error) {
 
 	result := &GlobalProtectSatelliteLocalAddressIp{
-		Ipv4: o.Ipv4,
-		Ipv6: o.Ipv6,
-		Misc: o.Misc,
+		Ipv4:           o.Ipv4,
+		Ipv6:           o.Ipv6,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *globalProtectSatellitePublishConnectedRoutesXml) MarshalFromObject(s GlobalProtectSatellitePublishConnectedRoutes) {
 	o.Enable = util.YesNo(s.Enable, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o globalProtectSatellitePublishConnectedRoutesXml) UnmarshalToObject() (*GlobalProtectSatellitePublishConnectedRoutes, error) {
 
 	result := &GlobalProtectSatellitePublishConnectedRoutes{
-		Enable: util.AsBool(o.Enable, nil),
-		Misc:   o.Misc,
+		Enable:         util.AsBool(o.Enable, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1365,6 +1519,7 @@ func (o *manualKeyXml) MarshalFromObject(s ManualKey) {
 		o.Esp = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o manualKeyXml) UnmarshalToObject() (*ManualKey, error) {
@@ -1402,13 +1557,14 @@ func (o manualKeyXml) UnmarshalToObject() (*ManualKey, error) {
 	}
 
 	result := &ManualKey{
-		LocalAddress: localAddressVal,
-		LocalSpi:     o.LocalSpi,
-		PeerAddress:  peerAddressVal,
-		RemoteSpi:    o.RemoteSpi,
-		Ah:           ahVal,
-		Esp:          espVal,
-		Misc:         o.Misc,
+		LocalAddress:   localAddressVal,
+		LocalSpi:       o.LocalSpi,
+		PeerAddress:    peerAddressVal,
+		RemoteSpi:      o.RemoteSpi,
+		Ah:             ahVal,
+		Esp:            espVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1417,28 +1573,32 @@ func (o *manualKeyLocalAddressXml) MarshalFromObject(s ManualKeyLocalAddress) {
 	o.FloatingIp = s.FloatingIp
 	o.Ip = s.Ip
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o manualKeyLocalAddressXml) UnmarshalToObject() (*ManualKeyLocalAddress, error) {
 
 	result := &ManualKeyLocalAddress{
-		Interface:  o.Interface,
-		FloatingIp: o.FloatingIp,
-		Ip:         o.Ip,
-		Misc:       o.Misc,
+		Interface:      o.Interface,
+		FloatingIp:     o.FloatingIp,
+		Ip:             o.Ip,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *manualKeyPeerAddressXml) MarshalFromObject(s ManualKeyPeerAddress) {
 	o.Ip = s.Ip
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o manualKeyPeerAddressXml) UnmarshalToObject() (*ManualKeyPeerAddress, error) {
 
 	result := &ManualKeyPeerAddress{
-		Ip:   o.Ip,
-		Misc: o.Misc,
+		Ip:             o.Ip,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1469,6 +1629,7 @@ func (o *manualKeyAhXml) MarshalFromObject(s ManualKeyAh) {
 		o.Sha512 = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o manualKeyAhXml) UnmarshalToObject() (*ManualKeyAh, error) {
@@ -1514,77 +1675,88 @@ func (o manualKeyAhXml) UnmarshalToObject() (*ManualKeyAh, error) {
 	}
 
 	result := &ManualKeyAh{
-		Md5:    md5Val,
-		Sha1:   sha1Val,
-		Sha256: sha256Val,
-		Sha384: sha384Val,
-		Sha512: sha512Val,
-		Misc:   o.Misc,
+		Md5:            md5Val,
+		Sha1:           sha1Val,
+		Sha256:         sha256Val,
+		Sha384:         sha384Val,
+		Sha512:         sha512Val,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *manualKeyAhMd5Xml) MarshalFromObject(s ManualKeyAhMd5) {
 	o.Key = s.Key
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o manualKeyAhMd5Xml) UnmarshalToObject() (*ManualKeyAhMd5, error) {
 
 	result := &ManualKeyAhMd5{
-		Key:  o.Key,
-		Misc: o.Misc,
+		Key:            o.Key,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *manualKeyAhSha1Xml) MarshalFromObject(s ManualKeyAhSha1) {
 	o.Key = s.Key
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o manualKeyAhSha1Xml) UnmarshalToObject() (*ManualKeyAhSha1, error) {
 
 	result := &ManualKeyAhSha1{
-		Key:  o.Key,
-		Misc: o.Misc,
+		Key:            o.Key,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *manualKeyAhSha256Xml) MarshalFromObject(s ManualKeyAhSha256) {
 	o.Key = s.Key
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o manualKeyAhSha256Xml) UnmarshalToObject() (*ManualKeyAhSha256, error) {
 
 	result := &ManualKeyAhSha256{
-		Key:  o.Key,
-		Misc: o.Misc,
+		Key:            o.Key,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *manualKeyAhSha384Xml) MarshalFromObject(s ManualKeyAhSha384) {
 	o.Key = s.Key
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o manualKeyAhSha384Xml) UnmarshalToObject() (*ManualKeyAhSha384, error) {
 
 	result := &ManualKeyAhSha384{
-		Key:  o.Key,
-		Misc: o.Misc,
+		Key:            o.Key,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *manualKeyAhSha512Xml) MarshalFromObject(s ManualKeyAhSha512) {
 	o.Key = s.Key
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o manualKeyAhSha512Xml) UnmarshalToObject() (*ManualKeyAhSha512, error) {
 
 	result := &ManualKeyAhSha512{
-		Key:  o.Key,
-		Misc: o.Misc,
+		Key:            o.Key,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1600,6 +1772,7 @@ func (o *manualKeyEspXml) MarshalFromObject(s ManualKeyEsp) {
 		o.Encryption = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o manualKeyEspXml) UnmarshalToObject() (*ManualKeyEsp, error) {
@@ -1624,6 +1797,7 @@ func (o manualKeyEspXml) UnmarshalToObject() (*ManualKeyEsp, error) {
 		Authentication: authenticationVal,
 		Encryption:     encryptionVal,
 		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1659,6 +1833,7 @@ func (o *manualKeyEspAuthenticationXml) MarshalFromObject(s ManualKeyEspAuthenti
 		o.Sha512 = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o manualKeyEspAuthenticationXml) UnmarshalToObject() (*ManualKeyEspAuthentication, error) {
@@ -1712,89 +1887,102 @@ func (o manualKeyEspAuthenticationXml) UnmarshalToObject() (*ManualKeyEspAuthent
 	}
 
 	result := &ManualKeyEspAuthentication{
-		Md5:    md5Val,
-		None:   noneVal,
-		Sha1:   sha1Val,
-		Sha256: sha256Val,
-		Sha384: sha384Val,
-		Sha512: sha512Val,
-		Misc:   o.Misc,
+		Md5:            md5Val,
+		None:           noneVal,
+		Sha1:           sha1Val,
+		Sha256:         sha256Val,
+		Sha384:         sha384Val,
+		Sha512:         sha512Val,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *manualKeyEspAuthenticationMd5Xml) MarshalFromObject(s ManualKeyEspAuthenticationMd5) {
 	o.Key = s.Key
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o manualKeyEspAuthenticationMd5Xml) UnmarshalToObject() (*ManualKeyEspAuthenticationMd5, error) {
 
 	result := &ManualKeyEspAuthenticationMd5{
-		Key:  o.Key,
-		Misc: o.Misc,
+		Key:            o.Key,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *manualKeyEspAuthenticationNoneXml) MarshalFromObject(s ManualKeyEspAuthenticationNone) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o manualKeyEspAuthenticationNoneXml) UnmarshalToObject() (*ManualKeyEspAuthenticationNone, error) {
 
 	result := &ManualKeyEspAuthenticationNone{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *manualKeyEspAuthenticationSha1Xml) MarshalFromObject(s ManualKeyEspAuthenticationSha1) {
 	o.Key = s.Key
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o manualKeyEspAuthenticationSha1Xml) UnmarshalToObject() (*ManualKeyEspAuthenticationSha1, error) {
 
 	result := &ManualKeyEspAuthenticationSha1{
-		Key:  o.Key,
-		Misc: o.Misc,
+		Key:            o.Key,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *manualKeyEspAuthenticationSha256Xml) MarshalFromObject(s ManualKeyEspAuthenticationSha256) {
 	o.Key = s.Key
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o manualKeyEspAuthenticationSha256Xml) UnmarshalToObject() (*ManualKeyEspAuthenticationSha256, error) {
 
 	result := &ManualKeyEspAuthenticationSha256{
-		Key:  o.Key,
-		Misc: o.Misc,
+		Key:            o.Key,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *manualKeyEspAuthenticationSha384Xml) MarshalFromObject(s ManualKeyEspAuthenticationSha384) {
 	o.Key = s.Key
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o manualKeyEspAuthenticationSha384Xml) UnmarshalToObject() (*ManualKeyEspAuthenticationSha384, error) {
 
 	result := &ManualKeyEspAuthenticationSha384{
-		Key:  o.Key,
-		Misc: o.Misc,
+		Key:            o.Key,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *manualKeyEspAuthenticationSha512Xml) MarshalFromObject(s ManualKeyEspAuthenticationSha512) {
 	o.Key = s.Key
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o manualKeyEspAuthenticationSha512Xml) UnmarshalToObject() (*ManualKeyEspAuthenticationSha512, error) {
 
 	result := &ManualKeyEspAuthenticationSha512{
-		Key:  o.Key,
-		Misc: o.Misc,
+		Key:            o.Key,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1802,14 +1990,16 @@ func (o *manualKeyEspEncryptionXml) MarshalFromObject(s ManualKeyEspEncryption) 
 	o.Algorithm = s.Algorithm
 	o.Key = s.Key
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o manualKeyEspEncryptionXml) UnmarshalToObject() (*ManualKeyEspEncryption, error) {
 
 	result := &ManualKeyEspEncryption{
-		Algorithm: o.Algorithm,
-		Key:       o.Key,
-		Misc:      o.Misc,
+		Algorithm:      o.Algorithm,
+		Key:            o.Key,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1846,6 +2036,7 @@ func (o *entryXml_11_0_2) MarshalFromObject(s Entry) {
 		o.ManualKey = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o entryXml_11_0_2) UnmarshalToObject() (*Entry, error) {
@@ -1899,6 +2090,7 @@ func (o entryXml_11_0_2) UnmarshalToObject() (*Entry, error) {
 		GlobalProtectSatellite: globalProtectSatelliteVal,
 		ManualKey:              manualKeyVal,
 		Misc:                   o.Misc,
+		MiscAttributes:         o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1908,6 +2100,7 @@ func (o *tunnelMonitorXml_11_0_2) MarshalFromObject(s TunnelMonitor) {
 	o.ProxyId = s.ProxyId
 	o.TunnelMonitorProfile = s.TunnelMonitorProfile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o tunnelMonitorXml_11_0_2) UnmarshalToObject() (*TunnelMonitor, error) {
@@ -1918,6 +2111,7 @@ func (o tunnelMonitorXml_11_0_2) UnmarshalToObject() (*TunnelMonitor, error) {
 		ProxyId:              o.ProxyId,
 		TunnelMonitorProfile: o.TunnelMonitorProfile,
 		Misc:                 o.Misc,
+		MiscAttributes:       o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1951,6 +2145,7 @@ func (o *autoKeyXml_11_0_2) MarshalFromObject(s AutoKey) {
 		o.ProxyIdV6 = &autoKeyProxyIdV6ContainerXml_11_0_2{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o autoKeyXml_11_0_2) UnmarshalToObject() (*AutoKey, error) {
@@ -1991,19 +2186,22 @@ func (o autoKeyXml_11_0_2) UnmarshalToObject() (*AutoKey, error) {
 		ProxyId:            proxyIdVal,
 		ProxyIdV6:          proxyIdV6Val,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *autoKeyIkeGatewayXml_11_0_2) MarshalFromObject(s AutoKeyIkeGateway) {
 	o.Name = s.Name
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o autoKeyIkeGatewayXml_11_0_2) UnmarshalToObject() (*AutoKeyIkeGateway, error) {
 
 	result := &AutoKeyIkeGateway{
-		Name: o.Name,
-		Misc: o.Misc,
+		Name:           o.Name,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2017,6 +2215,7 @@ func (o *autoKeyProxyIdXml_11_0_2) MarshalFromObject(s AutoKeyProxyId) {
 		o.Protocol = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o autoKeyProxyIdXml_11_0_2) UnmarshalToObject() (*AutoKeyProxyId, error) {
@@ -2030,11 +2229,12 @@ func (o autoKeyProxyIdXml_11_0_2) UnmarshalToObject() (*AutoKeyProxyId, error) {
 	}
 
 	result := &AutoKeyProxyId{
-		Name:     o.Name,
-		Local:    o.Local,
-		Remote:   o.Remote,
-		Protocol: protocolVal,
-		Misc:     o.Misc,
+		Name:           o.Name,
+		Local:          o.Local,
+		Remote:         o.Remote,
+		Protocol:       protocolVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2056,6 +2256,7 @@ func (o *autoKeyProxyIdProtocolXml_11_0_2) MarshalFromObject(s AutoKeyProxyIdPro
 		o.Udp = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o autoKeyProxyIdProtocolXml_11_0_2) UnmarshalToObject() (*AutoKeyProxyIdProtocol, error) {
@@ -2085,22 +2286,25 @@ func (o autoKeyProxyIdProtocolXml_11_0_2) UnmarshalToObject() (*AutoKeyProxyIdPr
 	}
 
 	result := &AutoKeyProxyIdProtocol{
-		Number: o.Number,
-		Any:    anyVal,
-		Tcp:    tcpVal,
-		Udp:    udpVal,
-		Misc:   o.Misc,
+		Number:         o.Number,
+		Any:            anyVal,
+		Tcp:            tcpVal,
+		Udp:            udpVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *autoKeyProxyIdProtocolAnyXml_11_0_2) MarshalFromObject(s AutoKeyProxyIdProtocolAny) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o autoKeyProxyIdProtocolAnyXml_11_0_2) UnmarshalToObject() (*AutoKeyProxyIdProtocolAny, error) {
 
 	result := &AutoKeyProxyIdProtocolAny{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2108,14 +2312,16 @@ func (o *autoKeyProxyIdProtocolTcpXml_11_0_2) MarshalFromObject(s AutoKeyProxyId
 	o.LocalPort = s.LocalPort
 	o.RemotePort = s.RemotePort
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o autoKeyProxyIdProtocolTcpXml_11_0_2) UnmarshalToObject() (*AutoKeyProxyIdProtocolTcp, error) {
 
 	result := &AutoKeyProxyIdProtocolTcp{
-		LocalPort:  o.LocalPort,
-		RemotePort: o.RemotePort,
-		Misc:       o.Misc,
+		LocalPort:      o.LocalPort,
+		RemotePort:     o.RemotePort,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2123,14 +2329,16 @@ func (o *autoKeyProxyIdProtocolUdpXml_11_0_2) MarshalFromObject(s AutoKeyProxyId
 	o.LocalPort = s.LocalPort
 	o.RemotePort = s.RemotePort
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o autoKeyProxyIdProtocolUdpXml_11_0_2) UnmarshalToObject() (*AutoKeyProxyIdProtocolUdp, error) {
 
 	result := &AutoKeyProxyIdProtocolUdp{
-		LocalPort:  o.LocalPort,
-		RemotePort: o.RemotePort,
-		Misc:       o.Misc,
+		LocalPort:      o.LocalPort,
+		RemotePort:     o.RemotePort,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2144,6 +2352,7 @@ func (o *autoKeyProxyIdV6Xml_11_0_2) MarshalFromObject(s AutoKeyProxyIdV6) {
 		o.Protocol = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o autoKeyProxyIdV6Xml_11_0_2) UnmarshalToObject() (*AutoKeyProxyIdV6, error) {
@@ -2157,11 +2366,12 @@ func (o autoKeyProxyIdV6Xml_11_0_2) UnmarshalToObject() (*AutoKeyProxyIdV6, erro
 	}
 
 	result := &AutoKeyProxyIdV6{
-		Name:     o.Name,
-		Local:    o.Local,
-		Remote:   o.Remote,
-		Protocol: protocolVal,
-		Misc:     o.Misc,
+		Name:           o.Name,
+		Local:          o.Local,
+		Remote:         o.Remote,
+		Protocol:       protocolVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2183,6 +2393,7 @@ func (o *autoKeyProxyIdV6ProtocolXml_11_0_2) MarshalFromObject(s AutoKeyProxyIdV
 		o.Udp = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o autoKeyProxyIdV6ProtocolXml_11_0_2) UnmarshalToObject() (*AutoKeyProxyIdV6Protocol, error) {
@@ -2212,22 +2423,25 @@ func (o autoKeyProxyIdV6ProtocolXml_11_0_2) UnmarshalToObject() (*AutoKeyProxyId
 	}
 
 	result := &AutoKeyProxyIdV6Protocol{
-		Number: o.Number,
-		Any:    anyVal,
-		Tcp:    tcpVal,
-		Udp:    udpVal,
-		Misc:   o.Misc,
+		Number:         o.Number,
+		Any:            anyVal,
+		Tcp:            tcpVal,
+		Udp:            udpVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *autoKeyProxyIdV6ProtocolAnyXml_11_0_2) MarshalFromObject(s AutoKeyProxyIdV6ProtocolAny) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o autoKeyProxyIdV6ProtocolAnyXml_11_0_2) UnmarshalToObject() (*AutoKeyProxyIdV6ProtocolAny, error) {
 
 	result := &AutoKeyProxyIdV6ProtocolAny{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2235,14 +2449,16 @@ func (o *autoKeyProxyIdV6ProtocolTcpXml_11_0_2) MarshalFromObject(s AutoKeyProxy
 	o.LocalPort = s.LocalPort
 	o.RemotePort = s.RemotePort
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o autoKeyProxyIdV6ProtocolTcpXml_11_0_2) UnmarshalToObject() (*AutoKeyProxyIdV6ProtocolTcp, error) {
 
 	result := &AutoKeyProxyIdV6ProtocolTcp{
-		LocalPort:  o.LocalPort,
-		RemotePort: o.RemotePort,
-		Misc:       o.Misc,
+		LocalPort:      o.LocalPort,
+		RemotePort:     o.RemotePort,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2250,14 +2466,16 @@ func (o *autoKeyProxyIdV6ProtocolUdpXml_11_0_2) MarshalFromObject(s AutoKeyProxy
 	o.LocalPort = s.LocalPort
 	o.RemotePort = s.RemotePort
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o autoKeyProxyIdV6ProtocolUdpXml_11_0_2) UnmarshalToObject() (*AutoKeyProxyIdV6ProtocolUdp, error) {
 
 	result := &AutoKeyProxyIdV6ProtocolUdp{
-		LocalPort:  o.LocalPort,
-		RemotePort: o.RemotePort,
-		Misc:       o.Misc,
+		LocalPort:      o.LocalPort,
+		RemotePort:     o.RemotePort,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2283,6 +2501,7 @@ func (o *globalProtectSatelliteXml_11_0_2) MarshalFromObject(s GlobalProtectSate
 		o.PublishRoutes = util.StrToMem(s.PublishRoutes)
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o globalProtectSatelliteXml_11_0_2) UnmarshalToObject() (*GlobalProtectSatellite, error) {
@@ -2323,6 +2542,7 @@ func (o globalProtectSatelliteXml_11_0_2) UnmarshalToObject() (*GlobalProtectSat
 		PublishConnectedRoutes: publishConnectedRoutesVal,
 		PublishRoutes:          publishRoutesVal,
 		Misc:                   o.Misc,
+		MiscAttributes:         o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2330,6 +2550,7 @@ func (o *globalProtectSatelliteExternalCaXml_11_0_2) MarshalFromObject(s GlobalP
 	o.CertificateProfile = s.CertificateProfile
 	o.LocalCertificate = s.LocalCertificate
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o globalProtectSatelliteExternalCaXml_11_0_2) UnmarshalToObject() (*GlobalProtectSatelliteExternalCa, error) {
@@ -2338,6 +2559,7 @@ func (o globalProtectSatelliteExternalCaXml_11_0_2) UnmarshalToObject() (*Global
 		CertificateProfile: o.CertificateProfile,
 		LocalCertificate:   o.LocalCertificate,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2354,6 +2576,7 @@ func (o *globalProtectSatelliteLocalAddressXml_11_0_2) MarshalFromObject(s Globa
 		o.Ip = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o globalProtectSatelliteLocalAddressXml_11_0_2) UnmarshalToObject() (*GlobalProtectSatelliteLocalAddress, error) {
@@ -2375,10 +2598,11 @@ func (o globalProtectSatelliteLocalAddressXml_11_0_2) UnmarshalToObject() (*Glob
 	}
 
 	result := &GlobalProtectSatelliteLocalAddress{
-		Interface:  o.Interface,
-		FloatingIp: floatingIpVal,
-		Ip:         ipVal,
-		Misc:       o.Misc,
+		Interface:      o.Interface,
+		FloatingIp:     floatingIpVal,
+		Ip:             ipVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2386,14 +2610,16 @@ func (o *globalProtectSatelliteLocalAddressFloatingIpXml_11_0_2) MarshalFromObje
 	o.Ipv4 = s.Ipv4
 	o.Ipv6 = s.Ipv6
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o globalProtectSatelliteLocalAddressFloatingIpXml_11_0_2) UnmarshalToObject() (*GlobalProtectSatelliteLocalAddressFloatingIp, error) {
 
 	result := &GlobalProtectSatelliteLocalAddressFloatingIp{
-		Ipv4: o.Ipv4,
-		Ipv6: o.Ipv6,
-		Misc: o.Misc,
+		Ipv4:           o.Ipv4,
+		Ipv6:           o.Ipv6,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2401,27 +2627,31 @@ func (o *globalProtectSatelliteLocalAddressIpXml_11_0_2) MarshalFromObject(s Glo
 	o.Ipv4 = s.Ipv4
 	o.Ipv6 = s.Ipv6
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o globalProtectSatelliteLocalAddressIpXml_11_0_2) UnmarshalToObject() (*GlobalProtectSatelliteLocalAddressIp, error) {
 
 	result := &GlobalProtectSatelliteLocalAddressIp{
-		Ipv4: o.Ipv4,
-		Ipv6: o.Ipv6,
-		Misc: o.Misc,
+		Ipv4:           o.Ipv4,
+		Ipv6:           o.Ipv6,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *globalProtectSatellitePublishConnectedRoutesXml_11_0_2) MarshalFromObject(s GlobalProtectSatellitePublishConnectedRoutes) {
 	o.Enable = util.YesNo(s.Enable, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o globalProtectSatellitePublishConnectedRoutesXml_11_0_2) UnmarshalToObject() (*GlobalProtectSatellitePublishConnectedRoutes, error) {
 
 	result := &GlobalProtectSatellitePublishConnectedRoutes{
-		Enable: util.AsBool(o.Enable, nil),
-		Misc:   o.Misc,
+		Enable:         util.AsBool(o.Enable, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2449,6 +2679,7 @@ func (o *manualKeyXml_11_0_2) MarshalFromObject(s ManualKey) {
 		o.Esp = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o manualKeyXml_11_0_2) UnmarshalToObject() (*ManualKey, error) {
@@ -2486,13 +2717,14 @@ func (o manualKeyXml_11_0_2) UnmarshalToObject() (*ManualKey, error) {
 	}
 
 	result := &ManualKey{
-		LocalAddress: localAddressVal,
-		LocalSpi:     o.LocalSpi,
-		PeerAddress:  peerAddressVal,
-		RemoteSpi:    o.RemoteSpi,
-		Ah:           ahVal,
-		Esp:          espVal,
-		Misc:         o.Misc,
+		LocalAddress:   localAddressVal,
+		LocalSpi:       o.LocalSpi,
+		PeerAddress:    peerAddressVal,
+		RemoteSpi:      o.RemoteSpi,
+		Ah:             ahVal,
+		Esp:            espVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2501,28 +2733,32 @@ func (o *manualKeyLocalAddressXml_11_0_2) MarshalFromObject(s ManualKeyLocalAddr
 	o.FloatingIp = s.FloatingIp
 	o.Ip = s.Ip
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o manualKeyLocalAddressXml_11_0_2) UnmarshalToObject() (*ManualKeyLocalAddress, error) {
 
 	result := &ManualKeyLocalAddress{
-		Interface:  o.Interface,
-		FloatingIp: o.FloatingIp,
-		Ip:         o.Ip,
-		Misc:       o.Misc,
+		Interface:      o.Interface,
+		FloatingIp:     o.FloatingIp,
+		Ip:             o.Ip,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *manualKeyPeerAddressXml_11_0_2) MarshalFromObject(s ManualKeyPeerAddress) {
 	o.Ip = s.Ip
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o manualKeyPeerAddressXml_11_0_2) UnmarshalToObject() (*ManualKeyPeerAddress, error) {
 
 	result := &ManualKeyPeerAddress{
-		Ip:   o.Ip,
-		Misc: o.Misc,
+		Ip:             o.Ip,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2553,6 +2789,7 @@ func (o *manualKeyAhXml_11_0_2) MarshalFromObject(s ManualKeyAh) {
 		o.Sha512 = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o manualKeyAhXml_11_0_2) UnmarshalToObject() (*ManualKeyAh, error) {
@@ -2598,77 +2835,88 @@ func (o manualKeyAhXml_11_0_2) UnmarshalToObject() (*ManualKeyAh, error) {
 	}
 
 	result := &ManualKeyAh{
-		Md5:    md5Val,
-		Sha1:   sha1Val,
-		Sha256: sha256Val,
-		Sha384: sha384Val,
-		Sha512: sha512Val,
-		Misc:   o.Misc,
+		Md5:            md5Val,
+		Sha1:           sha1Val,
+		Sha256:         sha256Val,
+		Sha384:         sha384Val,
+		Sha512:         sha512Val,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *manualKeyAhMd5Xml_11_0_2) MarshalFromObject(s ManualKeyAhMd5) {
 	o.Key = s.Key
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o manualKeyAhMd5Xml_11_0_2) UnmarshalToObject() (*ManualKeyAhMd5, error) {
 
 	result := &ManualKeyAhMd5{
-		Key:  o.Key,
-		Misc: o.Misc,
+		Key:            o.Key,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *manualKeyAhSha1Xml_11_0_2) MarshalFromObject(s ManualKeyAhSha1) {
 	o.Key = s.Key
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o manualKeyAhSha1Xml_11_0_2) UnmarshalToObject() (*ManualKeyAhSha1, error) {
 
 	result := &ManualKeyAhSha1{
-		Key:  o.Key,
-		Misc: o.Misc,
+		Key:            o.Key,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *manualKeyAhSha256Xml_11_0_2) MarshalFromObject(s ManualKeyAhSha256) {
 	o.Key = s.Key
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o manualKeyAhSha256Xml_11_0_2) UnmarshalToObject() (*ManualKeyAhSha256, error) {
 
 	result := &ManualKeyAhSha256{
-		Key:  o.Key,
-		Misc: o.Misc,
+		Key:            o.Key,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *manualKeyAhSha384Xml_11_0_2) MarshalFromObject(s ManualKeyAhSha384) {
 	o.Key = s.Key
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o manualKeyAhSha384Xml_11_0_2) UnmarshalToObject() (*ManualKeyAhSha384, error) {
 
 	result := &ManualKeyAhSha384{
-		Key:  o.Key,
-		Misc: o.Misc,
+		Key:            o.Key,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *manualKeyAhSha512Xml_11_0_2) MarshalFromObject(s ManualKeyAhSha512) {
 	o.Key = s.Key
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o manualKeyAhSha512Xml_11_0_2) UnmarshalToObject() (*ManualKeyAhSha512, error) {
 
 	result := &ManualKeyAhSha512{
-		Key:  o.Key,
-		Misc: o.Misc,
+		Key:            o.Key,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2684,6 +2932,7 @@ func (o *manualKeyEspXml_11_0_2) MarshalFromObject(s ManualKeyEsp) {
 		o.Encryption = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o manualKeyEspXml_11_0_2) UnmarshalToObject() (*ManualKeyEsp, error) {
@@ -2708,6 +2957,7 @@ func (o manualKeyEspXml_11_0_2) UnmarshalToObject() (*ManualKeyEsp, error) {
 		Authentication: authenticationVal,
 		Encryption:     encryptionVal,
 		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2743,6 +2993,7 @@ func (o *manualKeyEspAuthenticationXml_11_0_2) MarshalFromObject(s ManualKeyEspA
 		o.Sha512 = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o manualKeyEspAuthenticationXml_11_0_2) UnmarshalToObject() (*ManualKeyEspAuthentication, error) {
@@ -2796,89 +3047,102 @@ func (o manualKeyEspAuthenticationXml_11_0_2) UnmarshalToObject() (*ManualKeyEsp
 	}
 
 	result := &ManualKeyEspAuthentication{
-		Md5:    md5Val,
-		None:   noneVal,
-		Sha1:   sha1Val,
-		Sha256: sha256Val,
-		Sha384: sha384Val,
-		Sha512: sha512Val,
-		Misc:   o.Misc,
+		Md5:            md5Val,
+		None:           noneVal,
+		Sha1:           sha1Val,
+		Sha256:         sha256Val,
+		Sha384:         sha384Val,
+		Sha512:         sha512Val,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *manualKeyEspAuthenticationMd5Xml_11_0_2) MarshalFromObject(s ManualKeyEspAuthenticationMd5) {
 	o.Key = s.Key
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o manualKeyEspAuthenticationMd5Xml_11_0_2) UnmarshalToObject() (*ManualKeyEspAuthenticationMd5, error) {
 
 	result := &ManualKeyEspAuthenticationMd5{
-		Key:  o.Key,
-		Misc: o.Misc,
+		Key:            o.Key,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *manualKeyEspAuthenticationNoneXml_11_0_2) MarshalFromObject(s ManualKeyEspAuthenticationNone) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o manualKeyEspAuthenticationNoneXml_11_0_2) UnmarshalToObject() (*ManualKeyEspAuthenticationNone, error) {
 
 	result := &ManualKeyEspAuthenticationNone{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *manualKeyEspAuthenticationSha1Xml_11_0_2) MarshalFromObject(s ManualKeyEspAuthenticationSha1) {
 	o.Key = s.Key
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o manualKeyEspAuthenticationSha1Xml_11_0_2) UnmarshalToObject() (*ManualKeyEspAuthenticationSha1, error) {
 
 	result := &ManualKeyEspAuthenticationSha1{
-		Key:  o.Key,
-		Misc: o.Misc,
+		Key:            o.Key,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *manualKeyEspAuthenticationSha256Xml_11_0_2) MarshalFromObject(s ManualKeyEspAuthenticationSha256) {
 	o.Key = s.Key
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o manualKeyEspAuthenticationSha256Xml_11_0_2) UnmarshalToObject() (*ManualKeyEspAuthenticationSha256, error) {
 
 	result := &ManualKeyEspAuthenticationSha256{
-		Key:  o.Key,
-		Misc: o.Misc,
+		Key:            o.Key,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *manualKeyEspAuthenticationSha384Xml_11_0_2) MarshalFromObject(s ManualKeyEspAuthenticationSha384) {
 	o.Key = s.Key
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o manualKeyEspAuthenticationSha384Xml_11_0_2) UnmarshalToObject() (*ManualKeyEspAuthenticationSha384, error) {
 
 	result := &ManualKeyEspAuthenticationSha384{
-		Key:  o.Key,
-		Misc: o.Misc,
+		Key:            o.Key,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *manualKeyEspAuthenticationSha512Xml_11_0_2) MarshalFromObject(s ManualKeyEspAuthenticationSha512) {
 	o.Key = s.Key
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o manualKeyEspAuthenticationSha512Xml_11_0_2) UnmarshalToObject() (*ManualKeyEspAuthenticationSha512, error) {
 
 	result := &ManualKeyEspAuthenticationSha512{
-		Key:  o.Key,
-		Misc: o.Misc,
+		Key:            o.Key,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2886,14 +3150,16 @@ func (o *manualKeyEspEncryptionXml_11_0_2) MarshalFromObject(s ManualKeyEspEncry
 	o.Algorithm = s.Algorithm
 	o.Key = s.Key
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o manualKeyEspEncryptionXml_11_0_2) UnmarshalToObject() (*ManualKeyEspEncryption, error) {
 
 	result := &ManualKeyEspEncryption{
-		Algorithm: o.Algorithm,
-		Key:       o.Key,
-		Misc:      o.Misc,
+		Algorithm:      o.Algorithm,
+		Key:            o.Key,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3740,4 +4006,12 @@ func (o *Entry) EntryName() string {
 
 func (o *Entry) SetEntryName(name string) {
 	o.Name = name
+}
+
+func (o *Entry) GetMiscAttributes() []xml.Attr {
+	return o.MiscAttributes
+}
+
+func (o *Entry) SetMiscAttributes(attrs []xml.Attr) {
+	o.MiscAttributes = attrs
 }

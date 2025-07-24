@@ -38,75 +38,89 @@ type Entry struct {
 	DestinationTranslation        *DestinationTranslation
 	DynamicDestinationTranslation *DynamicDestinationTranslation
 	Misc                          []generic.Xml
+	MiscAttributes                []xml.Attr
 }
 type SourceTranslation struct {
 	DynamicIp        *SourceTranslationDynamicIp
 	DynamicIpAndPort *SourceTranslationDynamicIpAndPort
 	StaticIp         *SourceTranslationStaticIp
 	Misc             []generic.Xml
+	MiscAttributes   []xml.Attr
 }
 type SourceTranslationDynamicIp struct {
 	Fallback          *SourceTranslationDynamicIpFallback
 	TranslatedAddress []string
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 type SourceTranslationDynamicIpFallback struct {
 	InterfaceAddress  *SourceTranslationDynamicIpFallbackInterfaceAddress
 	TranslatedAddress []string
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 type SourceTranslationDynamicIpFallbackInterfaceAddress struct {
-	Interface  *string
-	FloatingIp *string
-	Ip         *string
-	Misc       []generic.Xml
+	Interface      *string
+	FloatingIp     *string
+	Ip             *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type SourceTranslationDynamicIpAndPort struct {
 	InterfaceAddress  *SourceTranslationDynamicIpAndPortInterfaceAddress
 	TranslatedAddress []string
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 type SourceTranslationDynamicIpAndPortInterfaceAddress struct {
-	Interface  *string
-	FloatingIp *string
-	Ip         *string
-	Misc       []generic.Xml
+	Interface      *string
+	FloatingIp     *string
+	Ip             *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type SourceTranslationStaticIp struct {
 	BiDirectional     *string
 	TranslatedAddress *string
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 type Target struct {
-	Devices []TargetDevices
-	Negate  *bool
-	Tags    []string
-	Misc    []generic.Xml
+	Devices        []TargetDevices
+	Negate         *bool
+	Tags           []string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type TargetDevices struct {
-	Name string
-	Vsys []TargetDevicesVsys
-	Misc []generic.Xml
+	Name           string
+	Vsys           []TargetDevicesVsys
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type TargetDevicesVsys struct {
-	Name string
-	Misc []generic.Xml
+	Name           string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type DestinationTranslation struct {
 	DnsRewrite        *DestinationTranslationDnsRewrite
 	TranslatedAddress *string
 	TranslatedPort    *int64
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 type DestinationTranslationDnsRewrite struct {
-	Direction *string
-	Misc      []generic.Xml
+	Direction      *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type DynamicDestinationTranslation struct {
 	Distribution      *string
 	TranslatedAddress *string
 	TranslatedPort    *int64
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 
 type entryXmlContainer struct {
@@ -153,83 +167,97 @@ type entryXml struct {
 	DestinationTranslation        *destinationTranslationXml        `xml:"destination-translation,omitempty"`
 	DynamicDestinationTranslation *dynamicDestinationTranslationXml `xml:"dynamic-destination-translation,omitempty"`
 	Misc                          []generic.Xml                     `xml:",any"`
+	MiscAttributes                []xml.Attr                        `xml:",any,attr"`
 }
 type sourceTranslationXml struct {
 	DynamicIp        *sourceTranslationDynamicIpXml        `xml:"dynamic-ip,omitempty"`
 	DynamicIpAndPort *sourceTranslationDynamicIpAndPortXml `xml:"dynamic-ip-and-port,omitempty"`
 	StaticIp         *sourceTranslationStaticIpXml         `xml:"static-ip,omitempty"`
 	Misc             []generic.Xml                         `xml:",any"`
+	MiscAttributes   []xml.Attr                            `xml:",any,attr"`
 }
 type sourceTranslationDynamicIpXml struct {
 	Fallback          *sourceTranslationDynamicIpFallbackXml `xml:"fallback,omitempty"`
 	TranslatedAddress *util.MemberType                       `xml:"translated-address,omitempty"`
 	Misc              []generic.Xml                          `xml:",any"`
+	MiscAttributes    []xml.Attr                             `xml:",any,attr"`
 }
 type sourceTranslationDynamicIpFallbackXml struct {
 	InterfaceAddress  *sourceTranslationDynamicIpFallbackInterfaceAddressXml `xml:"interface-address,omitempty"`
 	TranslatedAddress *util.MemberType                                       `xml:"translated-address,omitempty"`
 	Misc              []generic.Xml                                          `xml:",any"`
+	MiscAttributes    []xml.Attr                                             `xml:",any,attr"`
 }
 type sourceTranslationDynamicIpFallbackInterfaceAddressXml struct {
-	Interface  *string       `xml:"interface,omitempty"`
-	FloatingIp *string       `xml:"floating-ip,omitempty"`
-	Ip         *string       `xml:"ip,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	Interface      *string       `xml:"interface,omitempty"`
+	FloatingIp     *string       `xml:"floating-ip,omitempty"`
+	Ip             *string       `xml:"ip,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type sourceTranslationDynamicIpAndPortXml struct {
 	InterfaceAddress  *sourceTranslationDynamicIpAndPortInterfaceAddressXml `xml:"interface-address,omitempty"`
 	TranslatedAddress *util.MemberType                                      `xml:"translated-address,omitempty"`
 	Misc              []generic.Xml                                         `xml:",any"`
+	MiscAttributes    []xml.Attr                                            `xml:",any,attr"`
 }
 type sourceTranslationDynamicIpAndPortInterfaceAddressXml struct {
-	Interface  *string       `xml:"interface,omitempty"`
-	FloatingIp *string       `xml:"floating-ip,omitempty"`
-	Ip         *string       `xml:"ip,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	Interface      *string       `xml:"interface,omitempty"`
+	FloatingIp     *string       `xml:"floating-ip,omitempty"`
+	Ip             *string       `xml:"ip,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type sourceTranslationStaticIpXml struct {
 	BiDirectional     *string       `xml:"bi-directional,omitempty"`
 	TranslatedAddress *string       `xml:"translated-address,omitempty"`
 	Misc              []generic.Xml `xml:",any"`
+	MiscAttributes    []xml.Attr    `xml:",any,attr"`
 }
 type targetXml struct {
-	Devices *targetDevicesContainerXml `xml:"devices,omitempty"`
-	Negate  *string                    `xml:"negate,omitempty"`
-	Tags    *util.MemberType           `xml:"tags,omitempty"`
-	Misc    []generic.Xml              `xml:",any"`
+	Devices        *targetDevicesContainerXml `xml:"devices,omitempty"`
+	Negate         *string                    `xml:"negate,omitempty"`
+	Tags           *util.MemberType           `xml:"tags,omitempty"`
+	Misc           []generic.Xml              `xml:",any"`
+	MiscAttributes []xml.Attr                 `xml:",any,attr"`
 }
 type targetDevicesContainerXml struct {
 	Entries []targetDevicesXml `xml:"entry"`
 }
 type targetDevicesXml struct {
-	XMLName xml.Name                       `xml:"entry"`
-	Name    string                         `xml:"name,attr"`
-	Vsys    *targetDevicesVsysContainerXml `xml:"vsys,omitempty"`
-	Misc    []generic.Xml                  `xml:",any"`
+	XMLName        xml.Name                       `xml:"entry"`
+	Name           string                         `xml:"name,attr"`
+	Vsys           *targetDevicesVsysContainerXml `xml:"vsys,omitempty"`
+	Misc           []generic.Xml                  `xml:",any"`
+	MiscAttributes []xml.Attr                     `xml:",any,attr"`
 }
 type targetDevicesVsysContainerXml struct {
 	Entries []targetDevicesVsysXml `xml:"entry"`
 }
 type targetDevicesVsysXml struct {
-	XMLName xml.Name      `xml:"entry"`
-	Name    string        `xml:"name,attr"`
-	Misc    []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type destinationTranslationXml struct {
 	DnsRewrite        *destinationTranslationDnsRewriteXml `xml:"dns-rewrite,omitempty"`
 	TranslatedAddress *string                              `xml:"translated-address,omitempty"`
 	TranslatedPort    *int64                               `xml:"translated-port,omitempty"`
 	Misc              []generic.Xml                        `xml:",any"`
+	MiscAttributes    []xml.Attr                           `xml:",any,attr"`
 }
 type destinationTranslationDnsRewriteXml struct {
-	Direction *string       `xml:"direction,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	Direction      *string       `xml:"direction,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type dynamicDestinationTranslationXml struct {
 	Distribution      *string       `xml:"distribution,omitempty"`
 	TranslatedAddress *string       `xml:"translated-address,omitempty"`
 	TranslatedPort    *int64        `xml:"translated-port,omitempty"`
 	Misc              []generic.Xml `xml:",any"`
+	MiscAttributes    []xml.Attr    `xml:",any,attr"`
 }
 
 func (o *entryXml) MarshalFromObject(s Entry) {
@@ -278,6 +306,7 @@ func (o *entryXml) MarshalFromObject(s Entry) {
 		o.DynamicDestinationTranslation = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o entryXml) UnmarshalToObject() (*Entry, error) {
@@ -354,6 +383,7 @@ func (o entryXml) UnmarshalToObject() (*Entry, error) {
 		DestinationTranslation:        destinationTranslationVal,
 		DynamicDestinationTranslation: dynamicDestinationTranslationVal,
 		Misc:                          o.Misc,
+		MiscAttributes:                o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -374,6 +404,7 @@ func (o *sourceTranslationXml) MarshalFromObject(s SourceTranslation) {
 		o.StaticIp = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o sourceTranslationXml) UnmarshalToObject() (*SourceTranslation, error) {
@@ -407,6 +438,7 @@ func (o sourceTranslationXml) UnmarshalToObject() (*SourceTranslation, error) {
 		DynamicIpAndPort: dynamicIpAndPortVal,
 		StaticIp:         staticIpVal,
 		Misc:             o.Misc,
+		MiscAttributes:   o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -420,6 +452,7 @@ func (o *sourceTranslationDynamicIpXml) MarshalFromObject(s SourceTranslationDyn
 		o.TranslatedAddress = util.StrToMem(s.TranslatedAddress)
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o sourceTranslationDynamicIpXml) UnmarshalToObject() (*SourceTranslationDynamicIp, error) {
@@ -440,6 +473,7 @@ func (o sourceTranslationDynamicIpXml) UnmarshalToObject() (*SourceTranslationDy
 		Fallback:          fallbackVal,
 		TranslatedAddress: translatedAddressVal,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -453,6 +487,7 @@ func (o *sourceTranslationDynamicIpFallbackXml) MarshalFromObject(s SourceTransl
 		o.TranslatedAddress = util.StrToMem(s.TranslatedAddress)
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o sourceTranslationDynamicIpFallbackXml) UnmarshalToObject() (*SourceTranslationDynamicIpFallback, error) {
@@ -473,6 +508,7 @@ func (o sourceTranslationDynamicIpFallbackXml) UnmarshalToObject() (*SourceTrans
 		InterfaceAddress:  interfaceAddressVal,
 		TranslatedAddress: translatedAddressVal,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -481,15 +517,17 @@ func (o *sourceTranslationDynamicIpFallbackInterfaceAddressXml) MarshalFromObjec
 	o.FloatingIp = s.FloatingIp
 	o.Ip = s.Ip
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o sourceTranslationDynamicIpFallbackInterfaceAddressXml) UnmarshalToObject() (*SourceTranslationDynamicIpFallbackInterfaceAddress, error) {
 
 	result := &SourceTranslationDynamicIpFallbackInterfaceAddress{
-		Interface:  o.Interface,
-		FloatingIp: o.FloatingIp,
-		Ip:         o.Ip,
-		Misc:       o.Misc,
+		Interface:      o.Interface,
+		FloatingIp:     o.FloatingIp,
+		Ip:             o.Ip,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -503,6 +541,7 @@ func (o *sourceTranslationDynamicIpAndPortXml) MarshalFromObject(s SourceTransla
 		o.TranslatedAddress = util.StrToMem(s.TranslatedAddress)
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o sourceTranslationDynamicIpAndPortXml) UnmarshalToObject() (*SourceTranslationDynamicIpAndPort, error) {
@@ -523,6 +562,7 @@ func (o sourceTranslationDynamicIpAndPortXml) UnmarshalToObject() (*SourceTransl
 		InterfaceAddress:  interfaceAddressVal,
 		TranslatedAddress: translatedAddressVal,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -531,15 +571,17 @@ func (o *sourceTranslationDynamicIpAndPortInterfaceAddressXml) MarshalFromObject
 	o.FloatingIp = s.FloatingIp
 	o.Ip = s.Ip
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o sourceTranslationDynamicIpAndPortInterfaceAddressXml) UnmarshalToObject() (*SourceTranslationDynamicIpAndPortInterfaceAddress, error) {
 
 	result := &SourceTranslationDynamicIpAndPortInterfaceAddress{
-		Interface:  o.Interface,
-		FloatingIp: o.FloatingIp,
-		Ip:         o.Ip,
-		Misc:       o.Misc,
+		Interface:      o.Interface,
+		FloatingIp:     o.FloatingIp,
+		Ip:             o.Ip,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -547,6 +589,7 @@ func (o *sourceTranslationStaticIpXml) MarshalFromObject(s SourceTranslationStat
 	o.BiDirectional = s.BiDirectional
 	o.TranslatedAddress = s.TranslatedAddress
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o sourceTranslationStaticIpXml) UnmarshalToObject() (*SourceTranslationStaticIp, error) {
@@ -555,6 +598,7 @@ func (o sourceTranslationStaticIpXml) UnmarshalToObject() (*SourceTranslationSta
 		BiDirectional:     o.BiDirectional,
 		TranslatedAddress: o.TranslatedAddress,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -573,6 +617,7 @@ func (o *targetXml) MarshalFromObject(s Target) {
 		o.Tags = util.StrToMem(s.Tags)
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o targetXml) UnmarshalToObject() (*Target, error) {
@@ -592,10 +637,11 @@ func (o targetXml) UnmarshalToObject() (*Target, error) {
 	}
 
 	result := &Target{
-		Devices: devicesVal,
-		Negate:  util.AsBool(o.Negate, nil),
-		Tags:    tagsVal,
-		Misc:    o.Misc,
+		Devices:        devicesVal,
+		Negate:         util.AsBool(o.Negate, nil),
+		Tags:           tagsVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -611,6 +657,7 @@ func (o *targetDevicesXml) MarshalFromObject(s TargetDevices) {
 		o.Vsys = &targetDevicesVsysContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o targetDevicesXml) UnmarshalToObject() (*TargetDevices, error) {
@@ -626,22 +673,25 @@ func (o targetDevicesXml) UnmarshalToObject() (*TargetDevices, error) {
 	}
 
 	result := &TargetDevices{
-		Name: o.Name,
-		Vsys: vsysVal,
-		Misc: o.Misc,
+		Name:           o.Name,
+		Vsys:           vsysVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *targetDevicesVsysXml) MarshalFromObject(s TargetDevicesVsys) {
 	o.Name = s.Name
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o targetDevicesVsysXml) UnmarshalToObject() (*TargetDevicesVsys, error) {
 
 	result := &TargetDevicesVsys{
-		Name: o.Name,
-		Misc: o.Misc,
+		Name:           o.Name,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -654,6 +704,7 @@ func (o *destinationTranslationXml) MarshalFromObject(s DestinationTranslation) 
 	o.TranslatedAddress = s.TranslatedAddress
 	o.TranslatedPort = s.TranslatedPort
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o destinationTranslationXml) UnmarshalToObject() (*DestinationTranslation, error) {
@@ -671,19 +722,22 @@ func (o destinationTranslationXml) UnmarshalToObject() (*DestinationTranslation,
 		TranslatedAddress: o.TranslatedAddress,
 		TranslatedPort:    o.TranslatedPort,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *destinationTranslationDnsRewriteXml) MarshalFromObject(s DestinationTranslationDnsRewrite) {
 	o.Direction = s.Direction
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o destinationTranslationDnsRewriteXml) UnmarshalToObject() (*DestinationTranslationDnsRewrite, error) {
 
 	result := &DestinationTranslationDnsRewrite{
-		Direction: o.Direction,
-		Misc:      o.Misc,
+		Direction:      o.Direction,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -692,6 +746,7 @@ func (o *dynamicDestinationTranslationXml) MarshalFromObject(s DynamicDestinatio
 	o.TranslatedAddress = s.TranslatedAddress
 	o.TranslatedPort = s.TranslatedPort
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o dynamicDestinationTranslationXml) UnmarshalToObject() (*DynamicDestinationTranslation, error) {
@@ -701,6 +756,7 @@ func (o dynamicDestinationTranslationXml) UnmarshalToObject() (*DynamicDestinati
 		TranslatedAddress: o.TranslatedAddress,
 		TranslatedPort:    o.TranslatedPort,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1120,6 +1176,14 @@ func (o *Entry) EntryName() string {
 
 func (o *Entry) SetEntryName(name string) {
 	o.Name = name
+}
+
+func (o *Entry) GetMiscAttributes() []xml.Attr {
+	return o.MiscAttributes
+}
+
+func (o *Entry) SetMiscAttributes(attrs []xml.Attr) {
+	o.MiscAttributes = attrs
 }
 func (o *Entry) EntryUuid() *string {
 	return o.Uuid

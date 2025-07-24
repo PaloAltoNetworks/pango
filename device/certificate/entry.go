@@ -38,20 +38,24 @@ type Entry struct {
 	PrivateKeyOnHsm *bool
 	PublicKey       *string
 	Misc            []generic.Xml
+	MiscAttributes  []xml.Attr
 }
 type CloudResourceId struct {
-	Aws   *CloudResourceIdAws
-	Azure *CloudResourceIdAzure
-	Misc  []generic.Xml
+	Aws            *CloudResourceIdAws
+	Azure          *CloudResourceIdAzure
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type CloudResourceIdAws struct {
-	Secret *string
-	Misc   []generic.Xml
+	Secret         *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type CloudResourceIdAzure struct {
-	KeyVaultUri *string
-	Secret      *string
-	Misc        []generic.Xml
+	KeyVaultUri    *string
+	Secret         *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 
 type entryXmlContainer struct {
@@ -119,20 +123,24 @@ type entryXml struct {
 	PrivateKeyOnHsm *string             `xml:"private-key-on-hsm,omitempty"`
 	PublicKey       *string             `xml:"public-key,omitempty"`
 	Misc            []generic.Xml       `xml:",any"`
+	MiscAttributes  []xml.Attr          `xml:",any,attr"`
 }
 type cloudResourceIdXml struct {
-	Aws   *cloudResourceIdAwsXml   `xml:"aws,omitempty"`
-	Azure *cloudResourceIdAzureXml `xml:"azure,omitempty"`
-	Misc  []generic.Xml            `xml:",any"`
+	Aws            *cloudResourceIdAwsXml   `xml:"aws,omitempty"`
+	Azure          *cloudResourceIdAzureXml `xml:"azure,omitempty"`
+	Misc           []generic.Xml            `xml:",any"`
+	MiscAttributes []xml.Attr               `xml:",any,attr"`
 }
 type cloudResourceIdAwsXml struct {
-	Secret *string       `xml:"secret,omitempty"`
-	Misc   []generic.Xml `xml:",any"`
+	Secret         *string       `xml:"secret,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type cloudResourceIdAzureXml struct {
-	KeyVaultUri *string       `xml:"key-vault-uri,omitempty"`
-	Secret      *string       `xml:"secret,omitempty"`
-	Misc        []generic.Xml `xml:",any"`
+	KeyVaultUri    *string       `xml:"key-vault-uri,omitempty"`
+	Secret         *string       `xml:"secret,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type entryXml_11_0_2 struct {
 	XMLName         xml.Name                   `xml:"entry"`
@@ -155,20 +163,24 @@ type entryXml_11_0_2 struct {
 	PrivateKeyOnHsm *string                    `xml:"private-key-on-hsm,omitempty"`
 	PublicKey       *string                    `xml:"public-key,omitempty"`
 	Misc            []generic.Xml              `xml:",any"`
+	MiscAttributes  []xml.Attr                 `xml:",any,attr"`
 }
 type cloudResourceIdXml_11_0_2 struct {
-	Aws   *cloudResourceIdAwsXml_11_0_2   `xml:"aws,omitempty"`
-	Azure *cloudResourceIdAzureXml_11_0_2 `xml:"azure,omitempty"`
-	Misc  []generic.Xml                   `xml:",any"`
+	Aws            *cloudResourceIdAwsXml_11_0_2   `xml:"aws,omitempty"`
+	Azure          *cloudResourceIdAzureXml_11_0_2 `xml:"azure,omitempty"`
+	Misc           []generic.Xml                   `xml:",any"`
+	MiscAttributes []xml.Attr                      `xml:",any,attr"`
 }
 type cloudResourceIdAwsXml_11_0_2 struct {
-	Secret *string       `xml:"secret,omitempty"`
-	Misc   []generic.Xml `xml:",any"`
+	Secret         *string       `xml:"secret,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type cloudResourceIdAzureXml_11_0_2 struct {
-	KeyVaultUri *string       `xml:"key-vault-uri,omitempty"`
-	Secret      *string       `xml:"secret,omitempty"`
-	Misc        []generic.Xml `xml:",any"`
+	KeyVaultUri    *string       `xml:"key-vault-uri,omitempty"`
+	Secret         *string       `xml:"secret,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 
 func (o *entryXml) MarshalFromObject(s Entry) {
@@ -195,6 +207,7 @@ func (o *entryXml) MarshalFromObject(s Entry) {
 	o.PrivateKeyOnHsm = util.YesNo(s.PrivateKeyOnHsm, nil)
 	o.PublicKey = s.PublicKey
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o entryXml) UnmarshalToObject() (*Entry, error) {
@@ -227,6 +240,7 @@ func (o entryXml) UnmarshalToObject() (*Entry, error) {
 		PrivateKeyOnHsm: util.AsBool(o.PrivateKeyOnHsm, nil),
 		PublicKey:       o.PublicKey,
 		Misc:            o.Misc,
+		MiscAttributes:  o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -242,6 +256,7 @@ func (o *cloudResourceIdXml) MarshalFromObject(s CloudResourceId) {
 		o.Azure = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o cloudResourceIdXml) UnmarshalToObject() (*CloudResourceId, error) {
@@ -263,22 +278,25 @@ func (o cloudResourceIdXml) UnmarshalToObject() (*CloudResourceId, error) {
 	}
 
 	result := &CloudResourceId{
-		Aws:   awsVal,
-		Azure: azureVal,
-		Misc:  o.Misc,
+		Aws:            awsVal,
+		Azure:          azureVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *cloudResourceIdAwsXml) MarshalFromObject(s CloudResourceIdAws) {
 	o.Secret = s.Secret
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o cloudResourceIdAwsXml) UnmarshalToObject() (*CloudResourceIdAws, error) {
 
 	result := &CloudResourceIdAws{
-		Secret: o.Secret,
-		Misc:   o.Misc,
+		Secret:         o.Secret,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -286,14 +304,16 @@ func (o *cloudResourceIdAzureXml) MarshalFromObject(s CloudResourceIdAzure) {
 	o.KeyVaultUri = s.KeyVaultUri
 	o.Secret = s.Secret
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o cloudResourceIdAzureXml) UnmarshalToObject() (*CloudResourceIdAzure, error) {
 
 	result := &CloudResourceIdAzure{
-		KeyVaultUri: o.KeyVaultUri,
-		Secret:      o.Secret,
-		Misc:        o.Misc,
+		KeyVaultUri:    o.KeyVaultUri,
+		Secret:         o.Secret,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -321,6 +341,7 @@ func (o *entryXml_11_0_2) MarshalFromObject(s Entry) {
 	o.PrivateKeyOnHsm = util.YesNo(s.PrivateKeyOnHsm, nil)
 	o.PublicKey = s.PublicKey
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o entryXml_11_0_2) UnmarshalToObject() (*Entry, error) {
@@ -353,6 +374,7 @@ func (o entryXml_11_0_2) UnmarshalToObject() (*Entry, error) {
 		PrivateKeyOnHsm: util.AsBool(o.PrivateKeyOnHsm, nil),
 		PublicKey:       o.PublicKey,
 		Misc:            o.Misc,
+		MiscAttributes:  o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -368,6 +390,7 @@ func (o *cloudResourceIdXml_11_0_2) MarshalFromObject(s CloudResourceId) {
 		o.Azure = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o cloudResourceIdXml_11_0_2) UnmarshalToObject() (*CloudResourceId, error) {
@@ -389,22 +412,25 @@ func (o cloudResourceIdXml_11_0_2) UnmarshalToObject() (*CloudResourceId, error)
 	}
 
 	result := &CloudResourceId{
-		Aws:   awsVal,
-		Azure: azureVal,
-		Misc:  o.Misc,
+		Aws:            awsVal,
+		Azure:          azureVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *cloudResourceIdAwsXml_11_0_2) MarshalFromObject(s CloudResourceIdAws) {
 	o.Secret = s.Secret
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o cloudResourceIdAwsXml_11_0_2) UnmarshalToObject() (*CloudResourceIdAws, error) {
 
 	result := &CloudResourceIdAws{
-		Secret: o.Secret,
-		Misc:   o.Misc,
+		Secret:         o.Secret,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -412,14 +438,16 @@ func (o *cloudResourceIdAzureXml_11_0_2) MarshalFromObject(s CloudResourceIdAzur
 	o.KeyVaultUri = s.KeyVaultUri
 	o.Secret = s.Secret
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o cloudResourceIdAzureXml_11_0_2) UnmarshalToObject() (*CloudResourceIdAzure, error) {
 
 	result := &CloudResourceIdAzure{
-		KeyVaultUri: o.KeyVaultUri,
-		Secret:      o.Secret,
-		Misc:        o.Misc,
+		KeyVaultUri:    o.KeyVaultUri,
+		Secret:         o.Secret,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -624,4 +652,12 @@ func (o *Entry) EntryName() string {
 
 func (o *Entry) SetEntryName(name string) {
 	o.Name = name
+}
+
+func (o *Entry) GetMiscAttributes() []xml.Attr {
+	return o.MiscAttributes
+}
+
+func (o *Entry) SetMiscAttributes(attrs []xml.Attr) {
+	o.MiscAttributes = attrs
 }

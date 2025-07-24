@@ -310,6 +310,32 @@ func (s *Service) ListWithXpath(ctx context.Context, xpath string, action, filte
 	return filtered, nil
 }
 
+func (s *Service) filterEntriesByLocation(location Location, entries []*Entry) []*Entry {
+	filter := location.LocationFilter()
+	if filter == nil {
+		return entries
+	}
+
+	getLocAttribute := func(entry *Entry) *string {
+		for _, elt := range entry.GetMiscAttributes() {
+			if elt.Name.Local == "loc" {
+				return &elt.Value
+			}
+		}
+		return nil
+	}
+
+	var filtered []*Entry
+	for _, elt := range entries {
+		location := getLocAttribute(elt)
+		if location == nil || *location == *filter {
+			filtered = append(filtered, elt)
+		}
+	}
+
+	return filtered
+}
+
 // MoveGroup arranges the given rules in the order specified.
 // Any rule with a UUID specified is ignored.
 // Only the rule names are considered for the purposes of the rule placement.
@@ -324,6 +350,8 @@ func (s *Service) MoveGroup(ctx context.Context, loc Location, position movement
 	} else if len(existing) == 0 {
 		return fmt.Errorf("no rules present")
 	}
+
+	existing = s.filterEntriesByLocation(loc, existing)
 
 	movements, err := movement.MoveGroup(position, entries, existing)
 	if err != nil {

@@ -19,25 +19,27 @@ var (
 )
 
 type Entry struct {
-	Name       string
-	AdminDists *AdminDists
-	Ecmp       *Ecmp
-	Interface  []string
-	Multicast  *Multicast
-	Protocol   *Protocol
-	Misc       []generic.Xml
+	Name           string
+	AdminDists     *AdminDists
+	Ecmp           *Ecmp
+	Interface      []string
+	Multicast      *Multicast
+	Protocol       *Protocol
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type AdminDists struct {
-	Ebgp       *int64
-	Ibgp       *int64
-	OspfExt    *int64
-	OspfInt    *int64
-	Ospfv3Ext  *int64
-	Ospfv3Int  *int64
-	Rip        *int64
-	Static     *int64
-	StaticIpv6 *int64
-	Misc       []generic.Xml
+	Ebgp           *int64
+	Ibgp           *int64
+	OspfExt        *int64
+	OspfInt        *int64
+	Ospfv3Ext      *int64
+	Ospfv3Int      *int64
+	Rip            *int64
+	Static         *int64
+	StaticIpv6     *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Ecmp struct {
 	Algorithm        *EcmpAlgorithm
@@ -46,6 +48,7 @@ type Ecmp struct {
 	StrictSourcePath *bool
 	SymmetricReturn  *bool
 	Misc             []generic.Xml
+	MiscAttributes   []xml.Attr
 }
 type EcmpAlgorithm struct {
 	BalancedRoundRobin *EcmpAlgorithmBalancedRoundRobin
@@ -53,27 +56,33 @@ type EcmpAlgorithm struct {
 	IpModulo           *EcmpAlgorithmIpModulo
 	WeightedRoundRobin *EcmpAlgorithmWeightedRoundRobin
 	Misc               []generic.Xml
+	MiscAttributes     []xml.Attr
 }
 type EcmpAlgorithmBalancedRoundRobin struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type EcmpAlgorithmIpHash struct {
-	HashSeed *int64
-	SrcOnly  *bool
-	UsePort  *bool
-	Misc     []generic.Xml
+	HashSeed       *int64
+	SrcOnly        *bool
+	UsePort        *bool
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type EcmpAlgorithmIpModulo struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type EcmpAlgorithmWeightedRoundRobin struct {
-	Interface []EcmpAlgorithmWeightedRoundRobinInterface
-	Misc      []generic.Xml
+	Interface      []EcmpAlgorithmWeightedRoundRobinInterface
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type EcmpAlgorithmWeightedRoundRobinInterface struct {
-	Name   string
-	Weight *int64
-	Misc   []generic.Xml
+	Name           string
+	Weight         *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Multicast struct {
 	Enable          *bool
@@ -83,6 +92,7 @@ type Multicast struct {
 	SptThreshold    []MulticastSptThreshold
 	SsmAddressSpace []MulticastSsmAddressSpace
 	Misc            []generic.Xml
+	MiscAttributes  []xml.Attr
 }
 type MulticastInterfaceGroup struct {
 	Name            string
@@ -92,24 +102,28 @@ type MulticastInterfaceGroup struct {
 	Igmp            *MulticastInterfaceGroupIgmp
 	Pim             *MulticastInterfaceGroupPim
 	Misc            []generic.Xml
+	MiscAttributes  []xml.Attr
 }
 type MulticastInterfaceGroupGroupPermission struct {
 	AnySourceMulticast      []MulticastInterfaceGroupGroupPermissionAnySourceMulticast
 	SourceSpecificMulticast []MulticastInterfaceGroupGroupPermissionSourceSpecificMulticast
 	Misc                    []generic.Xml
+	MiscAttributes          []xml.Attr
 }
 type MulticastInterfaceGroupGroupPermissionAnySourceMulticast struct {
-	Name         string
-	GroupAddress *string
-	Included     *bool
-	Misc         []generic.Xml
+	Name           string
+	GroupAddress   *string
+	Included       *bool
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type MulticastInterfaceGroupGroupPermissionSourceSpecificMulticast struct {
-	Name          string
-	GroupAddress  *string
-	SourceAddress *string
-	Included      *bool
-	Misc          []generic.Xml
+	Name           string
+	GroupAddress   *string
+	SourceAddress  *string
+	Included       *bool
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type MulticastInterfaceGroupIgmp struct {
 	Enable                  *bool
@@ -123,6 +137,7 @@ type MulticastInterfaceGroupIgmp struct {
 	MaxSources              *string
 	RouterAlertPolicing     *bool
 	Misc                    []generic.Xml
+	MiscAttributes          []xml.Attr
 }
 type MulticastInterfaceGroupPim struct {
 	Enable            *bool
@@ -133,26 +148,31 @@ type MulticastInterfaceGroupPim struct {
 	BsrBorder         *bool
 	AllowedNeighbors  []MulticastInterfaceGroupPimAllowedNeighbors
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 type MulticastInterfaceGroupPimAllowedNeighbors struct {
-	Name string
-	Misc []generic.Xml
+	Name           string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type MulticastRp struct {
-	ExternalRp []MulticastRpExternalRp
-	LocalRp    *MulticastRpLocalRp
-	Misc       []generic.Xml
+	ExternalRp     []MulticastRpExternalRp
+	LocalRp        *MulticastRpLocalRp
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type MulticastRpExternalRp struct {
 	Name           string
 	GroupAddresses []string
 	Override       *bool
 	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type MulticastRpLocalRp struct {
-	CandidateRp *MulticastRpLocalRpCandidateRp
-	StaticRp    *MulticastRpLocalRpStaticRp
-	Misc        []generic.Xml
+	CandidateRp    *MulticastRpLocalRpCandidateRp
+	StaticRp       *MulticastRpLocalRpStaticRp
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type MulticastRpLocalRpCandidateRp struct {
 	Address               *string
@@ -161,6 +181,7 @@ type MulticastRpLocalRpCandidateRp struct {
 	Interface             *string
 	Priority              *int64
 	Misc                  []generic.Xml
+	MiscAttributes        []xml.Attr
 }
 type MulticastRpLocalRpStaticRp struct {
 	Address        *string
@@ -168,17 +189,20 @@ type MulticastRpLocalRpStaticRp struct {
 	Interface      *string
 	Override       *bool
 	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type MulticastSptThreshold struct {
-	Name      string
-	Threshold *string
-	Misc      []generic.Xml
+	Name           string
+	Threshold      *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type MulticastSsmAddressSpace struct {
-	Name         string
-	GroupAddress *string
-	Included     *bool
-	Misc         []generic.Xml
+	Name           string
+	GroupAddress   *string
+	Included       *bool
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Protocol struct {
 	Bgp               *ProtocolBgp
@@ -188,6 +212,7 @@ type Protocol struct {
 	RedistProfileIpv6 []ProtocolRedistProfileIpv6
 	Rip               *ProtocolRip
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 type ProtocolBgp struct {
 	AllowRedistDefaultRoute *bool
@@ -206,11 +231,13 @@ type ProtocolBgp struct {
 	RouterId                *string
 	RoutingOptions          *ProtocolBgpRoutingOptions
 	Misc                    []generic.Xml
+	MiscAttributes          []xml.Attr
 }
 type ProtocolBgpAuthProfile struct {
-	Name   string
-	Secret *string
-	Misc   []generic.Xml
+	Name           string
+	Secret         *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpDampeningProfile struct {
 	Name                     string
@@ -221,10 +248,12 @@ type ProtocolBgpDampeningProfile struct {
 	DecayHalfLifeReachable   *int64
 	DecayHalfLifeUnreachable *int64
 	Misc                     []generic.Xml
+	MiscAttributes           []xml.Attr
 }
 type ProtocolBgpGlobalBfd struct {
-	Profile *string
-	Misc    []generic.Xml
+	Profile        *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPeerGroup struct {
 	Name                    string
@@ -234,31 +263,37 @@ type ProtocolBgpPeerGroup struct {
 	Type                    *ProtocolBgpPeerGroupType
 	Peer                    []ProtocolBgpPeerGroupPeer
 	Misc                    []generic.Xml
+	MiscAttributes          []xml.Attr
 }
 type ProtocolBgpPeerGroupType struct {
-	Ibgp       *ProtocolBgpPeerGroupTypeIbgp
-	EbgpConfed *ProtocolBgpPeerGroupTypeEbgpConfed
-	IbgpConfed *ProtocolBgpPeerGroupTypeIbgpConfed
-	Ebgp       *ProtocolBgpPeerGroupTypeEbgp
-	Misc       []generic.Xml
+	Ibgp           *ProtocolBgpPeerGroupTypeIbgp
+	EbgpConfed     *ProtocolBgpPeerGroupTypeEbgpConfed
+	IbgpConfed     *ProtocolBgpPeerGroupTypeIbgpConfed
+	Ebgp           *ProtocolBgpPeerGroupTypeEbgp
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPeerGroupTypeIbgp struct {
-	ExportNexthop *string
-	Misc          []generic.Xml
+	ExportNexthop  *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPeerGroupTypeEbgpConfed struct {
-	ExportNexthop *string
-	Misc          []generic.Xml
+	ExportNexthop  *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPeerGroupTypeIbgpConfed struct {
-	ExportNexthop *string
-	Misc          []generic.Xml
+	ExportNexthop  *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPeerGroupTypeEbgp struct {
 	ImportNexthop   *string
 	ExportNexthop   *string
 	RemovePrivateAs *bool
 	Misc            []generic.Xml
+	MiscAttributes  []xml.Attr
 }
 type ProtocolBgpPeerGroupPeer struct {
 	Name                              string
@@ -276,21 +311,25 @@ type ProtocolBgpPeerGroupPeer struct {
 	ConnectionOptions                 *ProtocolBgpPeerGroupPeerConnectionOptions
 	Bfd                               *ProtocolBgpPeerGroupPeerBfd
 	Misc                              []generic.Xml
+	MiscAttributes                    []xml.Attr
 }
 type ProtocolBgpPeerGroupPeerSubsequentAddressFamilyIdentifier struct {
-	Unicast   *bool
-	Multicast *bool
-	Misc      []generic.Xml
+	Unicast        *bool
+	Multicast      *bool
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPeerGroupPeerLocalAddress struct {
-	Interface *string
-	Ip        *string
-	Misc      []generic.Xml
+	Interface      *string
+	Ip             *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPeerGroupPeerPeerAddress struct {
-	Ip   *string
-	Fqdn *string
-	Misc []generic.Xml
+	Ip             *string
+	Fqdn           *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPeerGroupPeerConnectionOptions struct {
 	Authentication        *string
@@ -303,20 +342,24 @@ type ProtocolBgpPeerGroupPeerConnectionOptions struct {
 	IncomingBgpConnection *ProtocolBgpPeerGroupPeerConnectionOptionsIncomingBgpConnection
 	OutgoingBgpConnection *ProtocolBgpPeerGroupPeerConnectionOptionsOutgoingBgpConnection
 	Misc                  []generic.Xml
+	MiscAttributes        []xml.Attr
 }
 type ProtocolBgpPeerGroupPeerConnectionOptionsIncomingBgpConnection struct {
-	RemotePort *int64
-	Allow      *bool
-	Misc       []generic.Xml
+	RemotePort     *int64
+	Allow          *bool
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPeerGroupPeerConnectionOptionsOutgoingBgpConnection struct {
-	LocalPort *int64
-	Allow     *bool
-	Misc      []generic.Xml
+	LocalPort      *int64
+	Allow          *bool
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPeerGroupPeerBfd struct {
-	Profile *string
-	Misc    []generic.Xml
+	Profile        *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicy struct {
 	Aggregation              *ProtocolBgpPolicyAggregation
@@ -324,10 +367,12 @@ type ProtocolBgpPolicy struct {
 	Export                   *ProtocolBgpPolicyExport
 	Import                   *ProtocolBgpPolicyImport
 	Misc                     []generic.Xml
+	MiscAttributes           []xml.Attr
 }
 type ProtocolBgpPolicyAggregation struct {
-	Address []ProtocolBgpPolicyAggregationAddress
-	Misc    []generic.Xml
+	Address        []ProtocolBgpPolicyAggregationAddress
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyAggregationAddress struct {
 	Name                     string
@@ -339,6 +384,7 @@ type ProtocolBgpPolicyAggregationAddress struct {
 	SuppressFilters          []ProtocolBgpPolicyAggregationAddressSuppressFilters
 	AdvertiseFilters         []ProtocolBgpPolicyAggregationAddressAdvertiseFilters
 	Misc                     []generic.Xml
+	MiscAttributes           []xml.Attr
 }
 type ProtocolBgpPolicyAggregationAddressAggregateRouteAttributes struct {
 	LocalPreference   *int64
@@ -351,48 +397,58 @@ type ProtocolBgpPolicyAggregationAddressAggregateRouteAttributes struct {
 	Community         *ProtocolBgpPolicyAggregationAddressAggregateRouteAttributesCommunity
 	ExtendedCommunity *ProtocolBgpPolicyAggregationAddressAggregateRouteAttributesExtendedCommunity
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 type ProtocolBgpPolicyAggregationAddressAggregateRouteAttributesAsPath struct {
-	None    *ProtocolBgpPolicyAggregationAddressAggregateRouteAttributesAsPathNone
-	Prepend *int64
-	Misc    []generic.Xml
+	None           *ProtocolBgpPolicyAggregationAddressAggregateRouteAttributesAsPathNone
+	Prepend        *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyAggregationAddressAggregateRouteAttributesAsPathNone struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyAggregationAddressAggregateRouteAttributesCommunity struct {
-	None        *ProtocolBgpPolicyAggregationAddressAggregateRouteAttributesCommunityNone
-	RemoveAll   *ProtocolBgpPolicyAggregationAddressAggregateRouteAttributesCommunityRemoveAll
-	RemoveRegex *string
-	Append      []string
-	Overwrite   []string
-	Misc        []generic.Xml
+	None           *ProtocolBgpPolicyAggregationAddressAggregateRouteAttributesCommunityNone
+	RemoveAll      *ProtocolBgpPolicyAggregationAddressAggregateRouteAttributesCommunityRemoveAll
+	RemoveRegex    *string
+	Append         []string
+	Overwrite      []string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyAggregationAddressAggregateRouteAttributesCommunityNone struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyAggregationAddressAggregateRouteAttributesCommunityRemoveAll struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyAggregationAddressAggregateRouteAttributesExtendedCommunity struct {
-	None        *ProtocolBgpPolicyAggregationAddressAggregateRouteAttributesExtendedCommunityNone
-	RemoveAll   *ProtocolBgpPolicyAggregationAddressAggregateRouteAttributesExtendedCommunityRemoveAll
-	RemoveRegex *string
-	Append      []string
-	Overwrite   []string
-	Misc        []generic.Xml
+	None           *ProtocolBgpPolicyAggregationAddressAggregateRouteAttributesExtendedCommunityNone
+	RemoveAll      *ProtocolBgpPolicyAggregationAddressAggregateRouteAttributesExtendedCommunityRemoveAll
+	RemoveRegex    *string
+	Append         []string
+	Overwrite      []string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyAggregationAddressAggregateRouteAttributesExtendedCommunityNone struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyAggregationAddressAggregateRouteAttributesExtendedCommunityRemoveAll struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyAggregationAddressSuppressFilters struct {
-	Name   string
-	Enable *bool
-	Match  *ProtocolBgpPolicyAggregationAddressSuppressFiltersMatch
-	Misc   []generic.Xml
+	Name           string
+	Enable         *bool
+	Match          *ProtocolBgpPolicyAggregationAddressSuppressFiltersMatch
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyAggregationAddressSuppressFiltersMatch struct {
 	RouteTable        *string
@@ -404,29 +460,35 @@ type ProtocolBgpPolicyAggregationAddressSuppressFiltersMatch struct {
 	Community         *ProtocolBgpPolicyAggregationAddressSuppressFiltersMatchCommunity
 	ExtendedCommunity *ProtocolBgpPolicyAggregationAddressSuppressFiltersMatchExtendedCommunity
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 type ProtocolBgpPolicyAggregationAddressSuppressFiltersMatchAddressPrefix struct {
-	Name  string
-	Exact *bool
-	Misc  []generic.Xml
+	Name           string
+	Exact          *bool
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyAggregationAddressSuppressFiltersMatchAsPath struct {
-	Regex *string
-	Misc  []generic.Xml
+	Regex          *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyAggregationAddressSuppressFiltersMatchCommunity struct {
-	Regex *string
-	Misc  []generic.Xml
+	Regex          *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyAggregationAddressSuppressFiltersMatchExtendedCommunity struct {
-	Regex *string
-	Misc  []generic.Xml
+	Regex          *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyAggregationAddressAdvertiseFilters struct {
-	Name   string
-	Enable *bool
-	Match  *ProtocolBgpPolicyAggregationAddressAdvertiseFiltersMatch
-	Misc   []generic.Xml
+	Name           string
+	Enable         *bool
+	Match          *ProtocolBgpPolicyAggregationAddressAdvertiseFiltersMatch
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyAggregationAddressAdvertiseFiltersMatch struct {
 	RouteTable        *string
@@ -438,27 +500,33 @@ type ProtocolBgpPolicyAggregationAddressAdvertiseFiltersMatch struct {
 	Community         *ProtocolBgpPolicyAggregationAddressAdvertiseFiltersMatchCommunity
 	ExtendedCommunity *ProtocolBgpPolicyAggregationAddressAdvertiseFiltersMatchExtendedCommunity
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 type ProtocolBgpPolicyAggregationAddressAdvertiseFiltersMatchAddressPrefix struct {
-	Name  string
-	Exact *bool
-	Misc  []generic.Xml
+	Name           string
+	Exact          *bool
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyAggregationAddressAdvertiseFiltersMatchAsPath struct {
-	Regex *string
-	Misc  []generic.Xml
+	Regex          *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyAggregationAddressAdvertiseFiltersMatchCommunity struct {
-	Regex *string
-	Misc  []generic.Xml
+	Regex          *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyAggregationAddressAdvertiseFiltersMatchExtendedCommunity struct {
-	Regex *string
-	Misc  []generic.Xml
+	Regex          *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyConditionalAdvertisement struct {
-	Policy []ProtocolBgpPolicyConditionalAdvertisementPolicy
-	Misc   []generic.Xml
+	Policy         []ProtocolBgpPolicyConditionalAdvertisementPolicy
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyConditionalAdvertisementPolicy struct {
 	Name             string
@@ -467,12 +535,14 @@ type ProtocolBgpPolicyConditionalAdvertisementPolicy struct {
 	NonExistFilters  []ProtocolBgpPolicyConditionalAdvertisementPolicyNonExistFilters
 	AdvertiseFilters []ProtocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFilters
 	Misc             []generic.Xml
+	MiscAttributes   []xml.Attr
 }
 type ProtocolBgpPolicyConditionalAdvertisementPolicyNonExistFilters struct {
-	Name   string
-	Enable *bool
-	Match  *ProtocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersMatch
-	Misc   []generic.Xml
+	Name           string
+	Enable         *bool
+	Match          *ProtocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersMatch
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersMatch struct {
 	RouteTable        *string
@@ -484,28 +554,34 @@ type ProtocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersMatch struct 
 	Community         *ProtocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersMatchCommunity
 	ExtendedCommunity *ProtocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersMatchExtendedCommunity
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 type ProtocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersMatchAddressPrefix struct {
-	Name string
-	Misc []generic.Xml
+	Name           string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersMatchAsPath struct {
-	Regex *string
-	Misc  []generic.Xml
+	Regex          *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersMatchCommunity struct {
-	Regex *string
-	Misc  []generic.Xml
+	Regex          *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersMatchExtendedCommunity struct {
-	Regex *string
-	Misc  []generic.Xml
+	Regex          *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFilters struct {
-	Name   string
-	Enable *bool
-	Match  *ProtocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersMatch
-	Misc   []generic.Xml
+	Name           string
+	Enable         *bool
+	Match          *ProtocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersMatch
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersMatch struct {
 	RouteTable        *string
@@ -517,34 +593,41 @@ type ProtocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersMatch struct
 	Community         *ProtocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersMatchCommunity
 	ExtendedCommunity *ProtocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersMatchExtendedCommunity
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 type ProtocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersMatchAddressPrefix struct {
-	Name string
-	Misc []generic.Xml
+	Name           string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersMatchAsPath struct {
-	Regex *string
-	Misc  []generic.Xml
+	Regex          *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersMatchCommunity struct {
-	Regex *string
-	Misc  []generic.Xml
+	Regex          *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersMatchExtendedCommunity struct {
-	Regex *string
-	Misc  []generic.Xml
+	Regex          *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyExport struct {
-	Rules []ProtocolBgpPolicyExportRules
-	Misc  []generic.Xml
+	Rules          []ProtocolBgpPolicyExportRules
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyExportRules struct {
-	Name   string
-	Enable *bool
-	UsedBy []string
-	Match  *ProtocolBgpPolicyExportRulesMatch
-	Action *ProtocolBgpPolicyExportRulesAction
-	Misc   []generic.Xml
+	Name           string
+	Enable         *bool
+	UsedBy         []string
+	Match          *ProtocolBgpPolicyExportRulesMatch
+	Action         *ProtocolBgpPolicyExportRulesAction
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyExportRulesMatch struct {
 	RouteTable        *string
@@ -556,35 +639,43 @@ type ProtocolBgpPolicyExportRulesMatch struct {
 	Community         *ProtocolBgpPolicyExportRulesMatchCommunity
 	ExtendedCommunity *ProtocolBgpPolicyExportRulesMatchExtendedCommunity
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 type ProtocolBgpPolicyExportRulesMatchAddressPrefix struct {
-	Name  string
-	Exact *bool
-	Misc  []generic.Xml
+	Name           string
+	Exact          *bool
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyExportRulesMatchAsPath struct {
-	Regex *string
-	Misc  []generic.Xml
+	Regex          *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyExportRulesMatchCommunity struct {
-	Regex *string
-	Misc  []generic.Xml
+	Regex          *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyExportRulesMatchExtendedCommunity struct {
-	Regex *string
-	Misc  []generic.Xml
+	Regex          *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyExportRulesAction struct {
-	Deny  *ProtocolBgpPolicyExportRulesActionDeny
-	Allow *ProtocolBgpPolicyExportRulesActionAllow
-	Misc  []generic.Xml
+	Deny           *ProtocolBgpPolicyExportRulesActionDeny
+	Allow          *ProtocolBgpPolicyExportRulesActionAllow
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyExportRulesActionDeny struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyExportRulesActionAllow struct {
-	Update *ProtocolBgpPolicyExportRulesActionAllowUpdate
-	Misc   []generic.Xml
+	Update         *ProtocolBgpPolicyExportRulesActionAllowUpdate
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyExportRulesActionAllowUpdate struct {
 	LocalPreference   *int64
@@ -596,6 +687,7 @@ type ProtocolBgpPolicyExportRulesActionAllowUpdate struct {
 	Community         *ProtocolBgpPolicyExportRulesActionAllowUpdateCommunity
 	ExtendedCommunity *ProtocolBgpPolicyExportRulesActionAllowUpdateExtendedCommunity
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 type ProtocolBgpPolicyExportRulesActionAllowUpdateAsPath struct {
 	None             *ProtocolBgpPolicyExportRulesActionAllowUpdateAsPathNone
@@ -603,52 +695,63 @@ type ProtocolBgpPolicyExportRulesActionAllowUpdateAsPath struct {
 	Prepend          *int64
 	RemoveAndPrepend *int64
 	Misc             []generic.Xml
+	MiscAttributes   []xml.Attr
 }
 type ProtocolBgpPolicyExportRulesActionAllowUpdateAsPathNone struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyExportRulesActionAllowUpdateAsPathRemove struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyExportRulesActionAllowUpdateCommunity struct {
-	None        *ProtocolBgpPolicyExportRulesActionAllowUpdateCommunityNone
-	RemoveAll   *ProtocolBgpPolicyExportRulesActionAllowUpdateCommunityRemoveAll
-	RemoveRegex *string
-	Append      []string
-	Overwrite   []string
-	Misc        []generic.Xml
+	None           *ProtocolBgpPolicyExportRulesActionAllowUpdateCommunityNone
+	RemoveAll      *ProtocolBgpPolicyExportRulesActionAllowUpdateCommunityRemoveAll
+	RemoveRegex    *string
+	Append         []string
+	Overwrite      []string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyExportRulesActionAllowUpdateCommunityNone struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyExportRulesActionAllowUpdateCommunityRemoveAll struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyExportRulesActionAllowUpdateExtendedCommunity struct {
-	None        *ProtocolBgpPolicyExportRulesActionAllowUpdateExtendedCommunityNone
-	RemoveAll   *ProtocolBgpPolicyExportRulesActionAllowUpdateExtendedCommunityRemoveAll
-	RemoveRegex *string
-	Append      []string
-	Overwrite   []string
-	Misc        []generic.Xml
+	None           *ProtocolBgpPolicyExportRulesActionAllowUpdateExtendedCommunityNone
+	RemoveAll      *ProtocolBgpPolicyExportRulesActionAllowUpdateExtendedCommunityRemoveAll
+	RemoveRegex    *string
+	Append         []string
+	Overwrite      []string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyExportRulesActionAllowUpdateExtendedCommunityNone struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyExportRulesActionAllowUpdateExtendedCommunityRemoveAll struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyImport struct {
-	Rules []ProtocolBgpPolicyImportRules
-	Misc  []generic.Xml
+	Rules          []ProtocolBgpPolicyImportRules
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyImportRules struct {
-	Name   string
-	Enable *bool
-	UsedBy []string
-	Match  *ProtocolBgpPolicyImportRulesMatch
-	Action *ProtocolBgpPolicyImportRulesAction
-	Misc   []generic.Xml
+	Name           string
+	Enable         *bool
+	UsedBy         []string
+	Match          *ProtocolBgpPolicyImportRulesMatch
+	Action         *ProtocolBgpPolicyImportRulesAction
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyImportRulesMatch struct {
 	RouteTable        *string
@@ -660,36 +763,44 @@ type ProtocolBgpPolicyImportRulesMatch struct {
 	Community         *ProtocolBgpPolicyImportRulesMatchCommunity
 	ExtendedCommunity *ProtocolBgpPolicyImportRulesMatchExtendedCommunity
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 type ProtocolBgpPolicyImportRulesMatchAddressPrefix struct {
-	Name  string
-	Exact *bool
-	Misc  []generic.Xml
+	Name           string
+	Exact          *bool
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyImportRulesMatchAsPath struct {
-	Regex *string
-	Misc  []generic.Xml
+	Regex          *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyImportRulesMatchCommunity struct {
-	Regex *string
-	Misc  []generic.Xml
+	Regex          *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyImportRulesMatchExtendedCommunity struct {
-	Regex *string
-	Misc  []generic.Xml
+	Regex          *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyImportRulesAction struct {
-	Deny  *ProtocolBgpPolicyImportRulesActionDeny
-	Allow *ProtocolBgpPolicyImportRulesActionAllow
-	Misc  []generic.Xml
+	Deny           *ProtocolBgpPolicyImportRulesActionDeny
+	Allow          *ProtocolBgpPolicyImportRulesActionAllow
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyImportRulesActionDeny struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyImportRulesActionAllow struct {
-	Dampening *string
-	Update    *ProtocolBgpPolicyImportRulesActionAllowUpdate
-	Misc      []generic.Xml
+	Dampening      *string
+	Update         *ProtocolBgpPolicyImportRulesActionAllowUpdate
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyImportRulesActionAllowUpdate struct {
 	LocalPreference   *int64
@@ -702,45 +813,55 @@ type ProtocolBgpPolicyImportRulesActionAllowUpdate struct {
 	Community         *ProtocolBgpPolicyImportRulesActionAllowUpdateCommunity
 	ExtendedCommunity *ProtocolBgpPolicyImportRulesActionAllowUpdateExtendedCommunity
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 type ProtocolBgpPolicyImportRulesActionAllowUpdateAsPath struct {
-	None   *ProtocolBgpPolicyImportRulesActionAllowUpdateAsPathNone
-	Remove *ProtocolBgpPolicyImportRulesActionAllowUpdateAsPathRemove
-	Misc   []generic.Xml
+	None           *ProtocolBgpPolicyImportRulesActionAllowUpdateAsPathNone
+	Remove         *ProtocolBgpPolicyImportRulesActionAllowUpdateAsPathRemove
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyImportRulesActionAllowUpdateAsPathNone struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyImportRulesActionAllowUpdateAsPathRemove struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyImportRulesActionAllowUpdateCommunity struct {
-	None        *ProtocolBgpPolicyImportRulesActionAllowUpdateCommunityNone
-	RemoveAll   *ProtocolBgpPolicyImportRulesActionAllowUpdateCommunityRemoveAll
-	RemoveRegex *string
-	Append      []string
-	Overwrite   []string
-	Misc        []generic.Xml
+	None           *ProtocolBgpPolicyImportRulesActionAllowUpdateCommunityNone
+	RemoveAll      *ProtocolBgpPolicyImportRulesActionAllowUpdateCommunityRemoveAll
+	RemoveRegex    *string
+	Append         []string
+	Overwrite      []string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyImportRulesActionAllowUpdateCommunityNone struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyImportRulesActionAllowUpdateCommunityRemoveAll struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyImportRulesActionAllowUpdateExtendedCommunity struct {
-	None        *ProtocolBgpPolicyImportRulesActionAllowUpdateExtendedCommunityNone
-	RemoveAll   *ProtocolBgpPolicyImportRulesActionAllowUpdateExtendedCommunityRemoveAll
-	RemoveRegex *string
-	Append      []string
-	Overwrite   []string
-	Misc        []generic.Xml
+	None           *ProtocolBgpPolicyImportRulesActionAllowUpdateExtendedCommunityNone
+	RemoveAll      *ProtocolBgpPolicyImportRulesActionAllowUpdateExtendedCommunityRemoveAll
+	RemoveRegex    *string
+	Append         []string
+	Overwrite      []string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyImportRulesActionAllowUpdateExtendedCommunityNone struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpPolicyImportRulesActionAllowUpdateExtendedCommunityRemoveAll struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpRedistRules struct {
 	Name                    string
@@ -755,6 +876,7 @@ type ProtocolBgpRedistRules struct {
 	SetCommunity            []string
 	SetExtendedCommunity    []string
 	Misc                    []generic.Xml
+	MiscAttributes          []xml.Attr
 }
 type ProtocolBgpRoutingOptions struct {
 	Aggregate              *ProtocolBgpRoutingOptionsAggregate
@@ -765,10 +887,12 @@ type ProtocolBgpRoutingOptions struct {
 	Med                    *ProtocolBgpRoutingOptionsMed
 	ReflectorClusterId     *string
 	Misc                   []generic.Xml
+	MiscAttributes         []xml.Attr
 }
 type ProtocolBgpRoutingOptionsAggregate struct {
-	AggregateMed *bool
-	Misc         []generic.Xml
+	AggregateMed   *bool
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolBgpRoutingOptionsGracefulRestart struct {
 	Enable             *bool
@@ -776,11 +900,13 @@ type ProtocolBgpRoutingOptionsGracefulRestart struct {
 	MaxPeerRestartTime *int64
 	StaleRouteTime     *int64
 	Misc               []generic.Xml
+	MiscAttributes     []xml.Attr
 }
 type ProtocolBgpRoutingOptionsMed struct {
 	AlwaysCompareMed           *bool
 	DeterministicMedComparison *bool
 	Misc                       []generic.Xml
+	MiscAttributes             []xml.Attr
 }
 type ProtocolOspf struct {
 	AllowRedistDefaultRoute *bool
@@ -795,83 +921,101 @@ type ProtocolOspf struct {
 	RouterId                *string
 	Timers                  *ProtocolOspfTimers
 	Misc                    []generic.Xml
+	MiscAttributes          []xml.Attr
 }
 type ProtocolOspfArea struct {
-	Name        string
-	Type        *ProtocolOspfAreaType
-	Range       []ProtocolOspfAreaRange
-	Interface   []ProtocolOspfAreaInterface
-	VirtualLink []ProtocolOspfAreaVirtualLink
-	Misc        []generic.Xml
+	Name           string
+	Type           *ProtocolOspfAreaType
+	Range          []ProtocolOspfAreaRange
+	Interface      []ProtocolOspfAreaInterface
+	VirtualLink    []ProtocolOspfAreaVirtualLink
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfAreaType struct {
-	Normal *ProtocolOspfAreaTypeNormal
-	Stub   *ProtocolOspfAreaTypeStub
-	Nssa   *ProtocolOspfAreaTypeNssa
-	Misc   []generic.Xml
+	Normal         *ProtocolOspfAreaTypeNormal
+	Stub           *ProtocolOspfAreaTypeStub
+	Nssa           *ProtocolOspfAreaTypeNssa
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfAreaTypeNormal struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfAreaTypeStub struct {
-	AcceptSummary *bool
-	DefaultRoute  *ProtocolOspfAreaTypeStubDefaultRoute
-	Misc          []generic.Xml
+	AcceptSummary  *bool
+	DefaultRoute   *ProtocolOspfAreaTypeStubDefaultRoute
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfAreaTypeStubDefaultRoute struct {
-	Disable   *ProtocolOspfAreaTypeStubDefaultRouteDisable
-	Advertise *ProtocolOspfAreaTypeStubDefaultRouteAdvertise
-	Misc      []generic.Xml
+	Disable        *ProtocolOspfAreaTypeStubDefaultRouteDisable
+	Advertise      *ProtocolOspfAreaTypeStubDefaultRouteAdvertise
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfAreaTypeStubDefaultRouteDisable struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfAreaTypeStubDefaultRouteAdvertise struct {
-	Metric *int64
-	Misc   []generic.Xml
+	Metric         *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfAreaTypeNssa struct {
-	AcceptSummary *bool
-	DefaultRoute  *ProtocolOspfAreaTypeNssaDefaultRoute
-	NssaExtRange  []ProtocolOspfAreaTypeNssaNssaExtRange
-	Misc          []generic.Xml
+	AcceptSummary  *bool
+	DefaultRoute   *ProtocolOspfAreaTypeNssaDefaultRoute
+	NssaExtRange   []ProtocolOspfAreaTypeNssaNssaExtRange
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfAreaTypeNssaDefaultRoute struct {
-	Disable   *ProtocolOspfAreaTypeNssaDefaultRouteDisable
-	Advertise *ProtocolOspfAreaTypeNssaDefaultRouteAdvertise
-	Misc      []generic.Xml
+	Disable        *ProtocolOspfAreaTypeNssaDefaultRouteDisable
+	Advertise      *ProtocolOspfAreaTypeNssaDefaultRouteAdvertise
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfAreaTypeNssaDefaultRouteDisable struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfAreaTypeNssaDefaultRouteAdvertise struct {
-	Metric *int64
-	Type   *string
-	Misc   []generic.Xml
+	Metric         *int64
+	Type           *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfAreaTypeNssaNssaExtRange struct {
-	Name      string
-	Advertise *ProtocolOspfAreaTypeNssaNssaExtRangeAdvertise
-	Suppress  *ProtocolOspfAreaTypeNssaNssaExtRangeSuppress
-	Misc      []generic.Xml
+	Name           string
+	Advertise      *ProtocolOspfAreaTypeNssaNssaExtRangeAdvertise
+	Suppress       *ProtocolOspfAreaTypeNssaNssaExtRangeSuppress
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfAreaTypeNssaNssaExtRangeAdvertise struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfAreaTypeNssaNssaExtRangeSuppress struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfAreaRange struct {
-	Name      string
-	Advertise *ProtocolOspfAreaRangeAdvertise
-	Suppress  *ProtocolOspfAreaRangeSuppress
-	Misc      []generic.Xml
+	Name           string
+	Advertise      *ProtocolOspfAreaRangeAdvertise
+	Suppress       *ProtocolOspfAreaRangeSuppress
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfAreaRangeAdvertise struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfAreaRangeSuppress struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfAreaInterface struct {
 	Name               string
@@ -889,29 +1033,36 @@ type ProtocolOspfAreaInterface struct {
 	Neighbor           []ProtocolOspfAreaInterfaceNeighbor
 	Bfd                *ProtocolOspfAreaInterfaceBfd
 	Misc               []generic.Xml
+	MiscAttributes     []xml.Attr
 }
 type ProtocolOspfAreaInterfaceLinkType struct {
-	Broadcast *ProtocolOspfAreaInterfaceLinkTypeBroadcast
-	P2p       *ProtocolOspfAreaInterfaceLinkTypeP2p
-	P2mp      *ProtocolOspfAreaInterfaceLinkTypeP2mp
-	Misc      []generic.Xml
+	Broadcast      *ProtocolOspfAreaInterfaceLinkTypeBroadcast
+	P2p            *ProtocolOspfAreaInterfaceLinkTypeP2p
+	P2mp           *ProtocolOspfAreaInterfaceLinkTypeP2mp
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfAreaInterfaceLinkTypeBroadcast struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfAreaInterfaceLinkTypeP2p struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfAreaInterfaceLinkTypeP2mp struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfAreaInterfaceNeighbor struct {
-	Name string
-	Misc []generic.Xml
+	Name           string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfAreaInterfaceBfd struct {
-	Profile *string
-	Misc    []generic.Xml
+	Profile        *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfAreaVirtualLink struct {
 	Name               string
@@ -925,33 +1076,39 @@ type ProtocolOspfAreaVirtualLink struct {
 	Authentication     *string
 	Bfd                *ProtocolOspfAreaVirtualLinkBfd
 	Misc               []generic.Xml
+	MiscAttributes     []xml.Attr
 }
 type ProtocolOspfAreaVirtualLinkBfd struct {
-	Profile *string
-	Misc    []generic.Xml
+	Profile        *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfAuthProfile struct {
-	Name     string
-	Password *string
-	Md5      []ProtocolOspfAuthProfileMd5
-	Misc     []generic.Xml
+	Name           string
+	Password       *string
+	Md5            []ProtocolOspfAuthProfileMd5
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfAuthProfileMd5 struct {
-	Name      string
-	Key       *string
-	Preferred *bool
-	Misc      []generic.Xml
+	Name           string
+	Key            *string
+	Preferred      *bool
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfExportRules struct {
-	Name        string
-	NewPathType *string
-	NewTag      *string
-	Metric      *int64
-	Misc        []generic.Xml
+	Name           string
+	NewPathType    *string
+	NewTag         *string
+	Metric         *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfGlobalBfd struct {
-	Profile *string
-	Misc    []generic.Xml
+	Profile        *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfGracefulRestart struct {
 	Enable                 *bool
@@ -960,11 +1117,13 @@ type ProtocolOspfGracefulRestart struct {
 	MaxNeighborRestartTime *int64
 	StrictLSAChecking      *bool
 	Misc                   []generic.Xml
+	MiscAttributes         []xml.Attr
 }
 type ProtocolOspfTimers struct {
 	LsaInterval         *float64
 	SpfCalculationDelay *float64
 	Misc                []generic.Xml
+	MiscAttributes      []xml.Attr
 }
 type ProtocolOspfv3 struct {
 	AllowRedistDefaultRoute *bool
@@ -979,6 +1138,7 @@ type ProtocolOspfv3 struct {
 	RouterId                *string
 	Timers                  *ProtocolOspfv3Timers
 	Misc                    []generic.Xml
+	MiscAttributes          []xml.Attr
 }
 type ProtocolOspfv3Area struct {
 	Name           string
@@ -988,75 +1148,92 @@ type ProtocolOspfv3Area struct {
 	Interface      []ProtocolOspfv3AreaInterface
 	VirtualLink    []ProtocolOspfv3AreaVirtualLink
 	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfv3AreaType struct {
-	Normal *ProtocolOspfv3AreaTypeNormal
-	Stub   *ProtocolOspfv3AreaTypeStub
-	Nssa   *ProtocolOspfv3AreaTypeNssa
-	Misc   []generic.Xml
+	Normal         *ProtocolOspfv3AreaTypeNormal
+	Stub           *ProtocolOspfv3AreaTypeStub
+	Nssa           *ProtocolOspfv3AreaTypeNssa
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfv3AreaTypeNormal struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfv3AreaTypeStub struct {
-	AcceptSummary *bool
-	DefaultRoute  *ProtocolOspfv3AreaTypeStubDefaultRoute
-	Misc          []generic.Xml
+	AcceptSummary  *bool
+	DefaultRoute   *ProtocolOspfv3AreaTypeStubDefaultRoute
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfv3AreaTypeStubDefaultRoute struct {
-	Disable   *ProtocolOspfv3AreaTypeStubDefaultRouteDisable
-	Advertise *ProtocolOspfv3AreaTypeStubDefaultRouteAdvertise
-	Misc      []generic.Xml
+	Disable        *ProtocolOspfv3AreaTypeStubDefaultRouteDisable
+	Advertise      *ProtocolOspfv3AreaTypeStubDefaultRouteAdvertise
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfv3AreaTypeStubDefaultRouteDisable struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfv3AreaTypeStubDefaultRouteAdvertise struct {
-	Metric *int64
-	Misc   []generic.Xml
+	Metric         *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfv3AreaTypeNssa struct {
-	AcceptSummary *bool
-	DefaultRoute  *ProtocolOspfv3AreaTypeNssaDefaultRoute
-	NssaExtRange  []ProtocolOspfv3AreaTypeNssaNssaExtRange
-	Misc          []generic.Xml
+	AcceptSummary  *bool
+	DefaultRoute   *ProtocolOspfv3AreaTypeNssaDefaultRoute
+	NssaExtRange   []ProtocolOspfv3AreaTypeNssaNssaExtRange
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfv3AreaTypeNssaDefaultRoute struct {
-	Disable   *ProtocolOspfv3AreaTypeNssaDefaultRouteDisable
-	Advertise *ProtocolOspfv3AreaTypeNssaDefaultRouteAdvertise
-	Misc      []generic.Xml
+	Disable        *ProtocolOspfv3AreaTypeNssaDefaultRouteDisable
+	Advertise      *ProtocolOspfv3AreaTypeNssaDefaultRouteAdvertise
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfv3AreaTypeNssaDefaultRouteDisable struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfv3AreaTypeNssaDefaultRouteAdvertise struct {
-	Metric *int64
-	Type   *string
-	Misc   []generic.Xml
+	Metric         *int64
+	Type           *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfv3AreaTypeNssaNssaExtRange struct {
-	Name      string
-	Advertise *ProtocolOspfv3AreaTypeNssaNssaExtRangeAdvertise
-	Suppress  *ProtocolOspfv3AreaTypeNssaNssaExtRangeSuppress
-	Misc      []generic.Xml
+	Name           string
+	Advertise      *ProtocolOspfv3AreaTypeNssaNssaExtRangeAdvertise
+	Suppress       *ProtocolOspfv3AreaTypeNssaNssaExtRangeSuppress
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfv3AreaTypeNssaNssaExtRangeAdvertise struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfv3AreaTypeNssaNssaExtRangeSuppress struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfv3AreaRange struct {
-	Name      string
-	Advertise *ProtocolOspfv3AreaRangeAdvertise
-	Suppress  *ProtocolOspfv3AreaRangeSuppress
-	Misc      []generic.Xml
+	Name           string
+	Advertise      *ProtocolOspfv3AreaRangeAdvertise
+	Suppress       *ProtocolOspfv3AreaRangeSuppress
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfv3AreaRangeAdvertise struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfv3AreaRangeSuppress struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfv3AreaInterface struct {
 	Name               string
@@ -1075,29 +1252,36 @@ type ProtocolOspfv3AreaInterface struct {
 	Neighbor           []ProtocolOspfv3AreaInterfaceNeighbor
 	Bfd                *ProtocolOspfv3AreaInterfaceBfd
 	Misc               []generic.Xml
+	MiscAttributes     []xml.Attr
 }
 type ProtocolOspfv3AreaInterfaceLinkType struct {
-	Broadcast *ProtocolOspfv3AreaInterfaceLinkTypeBroadcast
-	P2p       *ProtocolOspfv3AreaInterfaceLinkTypeP2p
-	P2mp      *ProtocolOspfv3AreaInterfaceLinkTypeP2mp
-	Misc      []generic.Xml
+	Broadcast      *ProtocolOspfv3AreaInterfaceLinkTypeBroadcast
+	P2p            *ProtocolOspfv3AreaInterfaceLinkTypeP2p
+	P2mp           *ProtocolOspfv3AreaInterfaceLinkTypeP2mp
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfv3AreaInterfaceLinkTypeBroadcast struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfv3AreaInterfaceLinkTypeP2p struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfv3AreaInterfaceLinkTypeP2mp struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfv3AreaInterfaceNeighbor struct {
-	Name string
-	Misc []generic.Xml
+	Name           string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfv3AreaInterfaceBfd struct {
-	Profile *string
-	Misc    []generic.Xml
+	Profile        *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfv3AreaVirtualLink struct {
 	Name               string
@@ -1112,98 +1296,118 @@ type ProtocolOspfv3AreaVirtualLink struct {
 	Authentication     *string
 	Bfd                *ProtocolOspfv3AreaVirtualLinkBfd
 	Misc               []generic.Xml
+	MiscAttributes     []xml.Attr
 }
 type ProtocolOspfv3AreaVirtualLinkBfd struct {
-	Profile *string
-	Misc    []generic.Xml
+	Profile        *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfv3AuthProfile struct {
-	Name string
-	Spi  *string
-	Esp  *ProtocolOspfv3AuthProfileEsp
-	Ah   *ProtocolOspfv3AuthProfileAh
-	Misc []generic.Xml
+	Name           string
+	Spi            *string
+	Esp            *ProtocolOspfv3AuthProfileEsp
+	Ah             *ProtocolOspfv3AuthProfileAh
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfv3AuthProfileEsp struct {
 	Authentication *ProtocolOspfv3AuthProfileEspAuthentication
 	Encryption     *ProtocolOspfv3AuthProfileEspEncryption
 	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfv3AuthProfileEspAuthentication struct {
-	Md5    *ProtocolOspfv3AuthProfileEspAuthenticationMd5
-	Sha1   *ProtocolOspfv3AuthProfileEspAuthenticationSha1
-	Sha256 *ProtocolOspfv3AuthProfileEspAuthenticationSha256
-	Sha384 *ProtocolOspfv3AuthProfileEspAuthenticationSha384
-	Sha512 *ProtocolOspfv3AuthProfileEspAuthenticationSha512
-	None   *ProtocolOspfv3AuthProfileEspAuthenticationNone
-	Misc   []generic.Xml
+	Md5            *ProtocolOspfv3AuthProfileEspAuthenticationMd5
+	Sha1           *ProtocolOspfv3AuthProfileEspAuthenticationSha1
+	Sha256         *ProtocolOspfv3AuthProfileEspAuthenticationSha256
+	Sha384         *ProtocolOspfv3AuthProfileEspAuthenticationSha384
+	Sha512         *ProtocolOspfv3AuthProfileEspAuthenticationSha512
+	None           *ProtocolOspfv3AuthProfileEspAuthenticationNone
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfv3AuthProfileEspAuthenticationMd5 struct {
-	Key  *string
-	Misc []generic.Xml
+	Key            *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfv3AuthProfileEspAuthenticationSha1 struct {
-	Key  *string
-	Misc []generic.Xml
+	Key            *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfv3AuthProfileEspAuthenticationSha256 struct {
-	Key  *string
-	Misc []generic.Xml
+	Key            *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfv3AuthProfileEspAuthenticationSha384 struct {
-	Key  *string
-	Misc []generic.Xml
+	Key            *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfv3AuthProfileEspAuthenticationSha512 struct {
-	Key  *string
-	Misc []generic.Xml
+	Key            *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfv3AuthProfileEspAuthenticationNone struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfv3AuthProfileEspEncryption struct {
-	Algorithm *string
-	Key       *string
-	Misc      []generic.Xml
+	Algorithm      *string
+	Key            *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfv3AuthProfileAh struct {
-	Md5    *ProtocolOspfv3AuthProfileAhMd5
-	Sha1   *ProtocolOspfv3AuthProfileAhSha1
-	Sha256 *ProtocolOspfv3AuthProfileAhSha256
-	Sha384 *ProtocolOspfv3AuthProfileAhSha384
-	Sha512 *ProtocolOspfv3AuthProfileAhSha512
-	Misc   []generic.Xml
+	Md5            *ProtocolOspfv3AuthProfileAhMd5
+	Sha1           *ProtocolOspfv3AuthProfileAhSha1
+	Sha256         *ProtocolOspfv3AuthProfileAhSha256
+	Sha384         *ProtocolOspfv3AuthProfileAhSha384
+	Sha512         *ProtocolOspfv3AuthProfileAhSha512
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfv3AuthProfileAhMd5 struct {
-	Key  *string
-	Misc []generic.Xml
+	Key            *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfv3AuthProfileAhSha1 struct {
-	Key  *string
-	Misc []generic.Xml
+	Key            *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfv3AuthProfileAhSha256 struct {
-	Key  *string
-	Misc []generic.Xml
+	Key            *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfv3AuthProfileAhSha384 struct {
-	Key  *string
-	Misc []generic.Xml
+	Key            *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfv3AuthProfileAhSha512 struct {
-	Key  *string
-	Misc []generic.Xml
+	Key            *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfv3ExportRules struct {
-	Name        string
-	NewPathType *string
-	NewTag      *string
-	Metric      *int64
-	Misc        []generic.Xml
+	Name           string
+	NewPathType    *string
+	NewTag         *string
+	Metric         *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfv3GlobalBfd struct {
-	Profile *string
-	Misc    []generic.Xml
+	Profile        *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolOspfv3GracefulRestart struct {
 	Enable                 *bool
@@ -1212,87 +1416,103 @@ type ProtocolOspfv3GracefulRestart struct {
 	MaxNeighborRestartTime *int64
 	StrictLSAChecking      *bool
 	Misc                   []generic.Xml
+	MiscAttributes         []xml.Attr
 }
 type ProtocolOspfv3Timers struct {
 	LsaInterval         *float64
 	SpfCalculationDelay *float64
 	Misc                []generic.Xml
+	MiscAttributes      []xml.Attr
 }
 type ProtocolRedistProfile struct {
-	Name     string
-	Priority *int64
-	Filter   *ProtocolRedistProfileFilter
-	Action   *ProtocolRedistProfileAction
-	Misc     []generic.Xml
+	Name           string
+	Priority       *int64
+	Filter         *ProtocolRedistProfileFilter
+	Action         *ProtocolRedistProfileAction
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolRedistProfileFilter struct {
-	Type        []string
-	Interface   []string
-	Destination []string
-	Nexthop     []string
-	Ospf        *ProtocolRedistProfileFilterOspf
-	Bgp         *ProtocolRedistProfileFilterBgp
-	Misc        []generic.Xml
+	Type           []string
+	Interface      []string
+	Destination    []string
+	Nexthop        []string
+	Ospf           *ProtocolRedistProfileFilterOspf
+	Bgp            *ProtocolRedistProfileFilterBgp
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolRedistProfileFilterOspf struct {
-	PathType []string
-	Area     []string
-	Tag      []string
-	Misc     []generic.Xml
+	PathType       []string
+	Area           []string
+	Tag            []string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolRedistProfileFilterBgp struct {
 	Community         []string
 	ExtendedCommunity []string
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 type ProtocolRedistProfileAction struct {
-	NoRedist *ProtocolRedistProfileActionNoRedist
-	Redist   *ProtocolRedistProfileActionRedist
-	Misc     []generic.Xml
+	NoRedist       *ProtocolRedistProfileActionNoRedist
+	Redist         *ProtocolRedistProfileActionRedist
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolRedistProfileActionNoRedist struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolRedistProfileActionRedist struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolRedistProfileIpv6 struct {
-	Name     string
-	Priority *int64
-	Filter   *ProtocolRedistProfileIpv6Filter
-	Action   *ProtocolRedistProfileIpv6Action
-	Misc     []generic.Xml
+	Name           string
+	Priority       *int64
+	Filter         *ProtocolRedistProfileIpv6Filter
+	Action         *ProtocolRedistProfileIpv6Action
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolRedistProfileIpv6Filter struct {
-	Type        []string
-	Interface   []string
-	Destination []string
-	Nexthop     []string
-	Ospfv3      *ProtocolRedistProfileIpv6FilterOspfv3
-	Bgp         *ProtocolRedistProfileIpv6FilterBgp
-	Misc        []generic.Xml
+	Type           []string
+	Interface      []string
+	Destination    []string
+	Nexthop        []string
+	Ospfv3         *ProtocolRedistProfileIpv6FilterOspfv3
+	Bgp            *ProtocolRedistProfileIpv6FilterBgp
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolRedistProfileIpv6FilterOspfv3 struct {
-	PathType []string
-	Area     []string
-	Tag      []string
-	Misc     []generic.Xml
+	PathType       []string
+	Area           []string
+	Tag            []string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolRedistProfileIpv6FilterBgp struct {
 	Community         []string
 	ExtendedCommunity []string
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 type ProtocolRedistProfileIpv6Action struct {
-	NoRedist *ProtocolRedistProfileIpv6ActionNoRedist
-	Redist   *ProtocolRedistProfileIpv6ActionRedist
-	Misc     []generic.Xml
+	NoRedist       *ProtocolRedistProfileIpv6ActionNoRedist
+	Redist         *ProtocolRedistProfileIpv6ActionRedist
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolRedistProfileIpv6ActionNoRedist struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolRedistProfileIpv6ActionRedist struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolRip struct {
 	AllowRedistDefaultRoute *bool
@@ -1304,27 +1524,32 @@ type ProtocolRip struct {
 	RejectDefaultRoute      *bool
 	Timers                  *ProtocolRipTimers
 	Misc                    []generic.Xml
+	MiscAttributes          []xml.Attr
 }
 type ProtocolRipAuthProfile struct {
-	Name     string
-	Password *string
-	Md5      []ProtocolRipAuthProfileMd5
-	Misc     []generic.Xml
+	Name           string
+	Password       *string
+	Md5            []ProtocolRipAuthProfileMd5
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolRipAuthProfileMd5 struct {
-	Name      string
-	Key       *string
-	Preferred *bool
-	Misc      []generic.Xml
+	Name           string
+	Key            *string
+	Preferred      *bool
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolRipExportRules struct {
-	Name   string
-	Metric *int64
-	Misc   []generic.Xml
+	Name           string
+	Metric         *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolRipGlobalBfd struct {
-	Profile *string
-	Misc    []generic.Xml
+	Profile        *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolRipInterface struct {
 	Name           string
@@ -1334,22 +1559,27 @@ type ProtocolRipInterface struct {
 	DefaultRoute   *ProtocolRipInterfaceDefaultRoute
 	Bfd            *ProtocolRipInterfaceBfd
 	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolRipInterfaceDefaultRoute struct {
-	Disable   *ProtocolRipInterfaceDefaultRouteDisable
-	Advertise *ProtocolRipInterfaceDefaultRouteAdvertise
-	Misc      []generic.Xml
+	Disable        *ProtocolRipInterfaceDefaultRouteDisable
+	Advertise      *ProtocolRipInterfaceDefaultRouteAdvertise
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolRipInterfaceDefaultRouteDisable struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolRipInterfaceDefaultRouteAdvertise struct {
-	Metric *int64
-	Misc   []generic.Xml
+	Metric         *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolRipInterfaceBfd struct {
-	Profile *string
-	Misc    []generic.Xml
+	Profile        *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolRipTimers struct {
 	DeleteIntervals *int64
@@ -1357,6 +1587,7 @@ type ProtocolRipTimers struct {
 	IntervalSeconds *int64
 	UpdateIntervals *int64
 	Misc            []generic.Xml
+	MiscAttributes  []xml.Attr
 }
 
 type entryXmlContainer struct {
@@ -1383,26 +1614,28 @@ func specifyEntry(source *Entry) (any, error) {
 }
 
 type entryXml struct {
-	XMLName    xml.Name         `xml:"entry"`
-	Name       string           `xml:"name,attr"`
-	AdminDists *adminDistsXml   `xml:"admin-dists,omitempty"`
-	Ecmp       *ecmpXml         `xml:"ecmp,omitempty"`
-	Interface  *util.MemberType `xml:"interface,omitempty"`
-	Multicast  *multicastXml    `xml:"multicast,omitempty"`
-	Protocol   *protocolXml     `xml:"protocol,omitempty"`
-	Misc       []generic.Xml    `xml:",any"`
+	XMLName        xml.Name         `xml:"entry"`
+	Name           string           `xml:"name,attr"`
+	AdminDists     *adminDistsXml   `xml:"admin-dists,omitempty"`
+	Ecmp           *ecmpXml         `xml:"ecmp,omitempty"`
+	Interface      *util.MemberType `xml:"interface,omitempty"`
+	Multicast      *multicastXml    `xml:"multicast,omitempty"`
+	Protocol       *protocolXml     `xml:"protocol,omitempty"`
+	Misc           []generic.Xml    `xml:",any"`
+	MiscAttributes []xml.Attr       `xml:",any,attr"`
 }
 type adminDistsXml struct {
-	Ebgp       *int64        `xml:"ebgp,omitempty"`
-	Ibgp       *int64        `xml:"ibgp,omitempty"`
-	OspfExt    *int64        `xml:"ospf-ext,omitempty"`
-	OspfInt    *int64        `xml:"ospf-int,omitempty"`
-	Ospfv3Ext  *int64        `xml:"ospfv3-ext,omitempty"`
-	Ospfv3Int  *int64        `xml:"ospfv3-int,omitempty"`
-	Rip        *int64        `xml:"rip,omitempty"`
-	Static     *int64        `xml:"static,omitempty"`
-	StaticIpv6 *int64        `xml:"static-ipv6,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	Ebgp           *int64        `xml:"ebgp,omitempty"`
+	Ibgp           *int64        `xml:"ibgp,omitempty"`
+	OspfExt        *int64        `xml:"ospf-ext,omitempty"`
+	OspfInt        *int64        `xml:"ospf-int,omitempty"`
+	Ospfv3Ext      *int64        `xml:"ospfv3-ext,omitempty"`
+	Ospfv3Int      *int64        `xml:"ospfv3-int,omitempty"`
+	Rip            *int64        `xml:"rip,omitempty"`
+	Static         *int64        `xml:"static,omitempty"`
+	StaticIpv6     *int64        `xml:"static-ipv6,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ecmpXml struct {
 	Algorithm        *ecmpAlgorithmXml `xml:"algorithm,omitempty"`
@@ -1411,6 +1644,7 @@ type ecmpXml struct {
 	StrictSourcePath *string           `xml:"strict-source-path,omitempty"`
 	SymmetricReturn  *string           `xml:"symmetric-return,omitempty"`
 	Misc             []generic.Xml     `xml:",any"`
+	MiscAttributes   []xml.Attr        `xml:",any,attr"`
 }
 type ecmpAlgorithmXml struct {
 	BalancedRoundRobin *ecmpAlgorithmBalancedRoundRobinXml `xml:"balanced-round-robin,omitempty"`
@@ -1418,31 +1652,37 @@ type ecmpAlgorithmXml struct {
 	IpModulo           *ecmpAlgorithmIpModuloXml           `xml:"ip-modulo,omitempty"`
 	WeightedRoundRobin *ecmpAlgorithmWeightedRoundRobinXml `xml:"weighted-round-robin,omitempty"`
 	Misc               []generic.Xml                       `xml:",any"`
+	MiscAttributes     []xml.Attr                          `xml:",any,attr"`
 }
 type ecmpAlgorithmBalancedRoundRobinXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ecmpAlgorithmIpHashXml struct {
-	HashSeed *int64        `xml:"hash-seed,omitempty"`
-	SrcOnly  *string       `xml:"src-only,omitempty"`
-	UsePort  *string       `xml:"use-port,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	HashSeed       *int64        `xml:"hash-seed,omitempty"`
+	SrcOnly        *string       `xml:"src-only,omitempty"`
+	UsePort        *string       `xml:"use-port,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ecmpAlgorithmIpModuloXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ecmpAlgorithmWeightedRoundRobinXml struct {
-	Interface *ecmpAlgorithmWeightedRoundRobinInterfaceContainerXml `xml:"interface,omitempty"`
-	Misc      []generic.Xml                                         `xml:",any"`
+	Interface      *ecmpAlgorithmWeightedRoundRobinInterfaceContainerXml `xml:"interface,omitempty"`
+	Misc           []generic.Xml                                         `xml:",any"`
+	MiscAttributes []xml.Attr                                            `xml:",any,attr"`
 }
 type ecmpAlgorithmWeightedRoundRobinInterfaceContainerXml struct {
 	Entries []ecmpAlgorithmWeightedRoundRobinInterfaceXml `xml:"entry"`
 }
 type ecmpAlgorithmWeightedRoundRobinInterfaceXml struct {
-	XMLName xml.Name      `xml:"entry"`
-	Name    string        `xml:"name,attr"`
-	Weight  *int64        `xml:"weight,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Weight         *int64        `xml:"weight,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type multicastXml struct {
 	Enable          *string                               `xml:"enable,omitempty"`
@@ -1452,6 +1692,7 @@ type multicastXml struct {
 	SptThreshold    *multicastSptThresholdContainerXml    `xml:"spt-threshold,omitempty"`
 	SsmAddressSpace *multicastSsmAddressSpaceContainerXml `xml:"ssm-address-space,omitempty"`
 	Misc            []generic.Xml                         `xml:",any"`
+	MiscAttributes  []xml.Attr                            `xml:",any,attr"`
 }
 type multicastInterfaceGroupContainerXml struct {
 	Entries []multicastInterfaceGroupXml `xml:"entry"`
@@ -1465,32 +1706,36 @@ type multicastInterfaceGroupXml struct {
 	Igmp            *multicastInterfaceGroupIgmpXml            `xml:"igmp,omitempty"`
 	Pim             *multicastInterfaceGroupPimXml             `xml:"pim,omitempty"`
 	Misc            []generic.Xml                              `xml:",any"`
+	MiscAttributes  []xml.Attr                                 `xml:",any,attr"`
 }
 type multicastInterfaceGroupGroupPermissionXml struct {
 	AnySourceMulticast      *multicastInterfaceGroupGroupPermissionAnySourceMulticastContainerXml      `xml:"any-source-multicast,omitempty"`
 	SourceSpecificMulticast *multicastInterfaceGroupGroupPermissionSourceSpecificMulticastContainerXml `xml:"source-specific-multicast,omitempty"`
 	Misc                    []generic.Xml                                                              `xml:",any"`
+	MiscAttributes          []xml.Attr                                                                 `xml:",any,attr"`
 }
 type multicastInterfaceGroupGroupPermissionAnySourceMulticastContainerXml struct {
 	Entries []multicastInterfaceGroupGroupPermissionAnySourceMulticastXml `xml:"entry"`
 }
 type multicastInterfaceGroupGroupPermissionAnySourceMulticastXml struct {
-	XMLName      xml.Name      `xml:"entry"`
-	Name         string        `xml:"name,attr"`
-	GroupAddress *string       `xml:"group-address,omitempty"`
-	Included     *string       `xml:"included,omitempty"`
-	Misc         []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	GroupAddress   *string       `xml:"group-address,omitempty"`
+	Included       *string       `xml:"included,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type multicastInterfaceGroupGroupPermissionSourceSpecificMulticastContainerXml struct {
 	Entries []multicastInterfaceGroupGroupPermissionSourceSpecificMulticastXml `xml:"entry"`
 }
 type multicastInterfaceGroupGroupPermissionSourceSpecificMulticastXml struct {
-	XMLName       xml.Name      `xml:"entry"`
-	Name          string        `xml:"name,attr"`
-	GroupAddress  *string       `xml:"group-address,omitempty"`
-	SourceAddress *string       `xml:"source-address,omitempty"`
-	Included      *string       `xml:"included,omitempty"`
-	Misc          []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	GroupAddress   *string       `xml:"group-address,omitempty"`
+	SourceAddress  *string       `xml:"source-address,omitempty"`
+	Included       *string       `xml:"included,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type multicastInterfaceGroupIgmpXml struct {
 	Enable                  *string       `xml:"enable,omitempty"`
@@ -1504,6 +1749,7 @@ type multicastInterfaceGroupIgmpXml struct {
 	MaxSources              *string       `xml:"max-sources,omitempty"`
 	RouterAlertPolicing     *string       `xml:"router-alert-policing,omitempty"`
 	Misc                    []generic.Xml `xml:",any"`
+	MiscAttributes          []xml.Attr    `xml:",any,attr"`
 }
 type multicastInterfaceGroupPimXml struct {
 	Enable            *string                                                 `xml:"enable,omitempty"`
@@ -1514,19 +1760,22 @@ type multicastInterfaceGroupPimXml struct {
 	BsrBorder         *string                                                 `xml:"bsr-border,omitempty"`
 	AllowedNeighbors  *multicastInterfaceGroupPimAllowedNeighborsContainerXml `xml:"allowed-neighbors,omitempty"`
 	Misc              []generic.Xml                                           `xml:",any"`
+	MiscAttributes    []xml.Attr                                              `xml:",any,attr"`
 }
 type multicastInterfaceGroupPimAllowedNeighborsContainerXml struct {
 	Entries []multicastInterfaceGroupPimAllowedNeighborsXml `xml:"entry"`
 }
 type multicastInterfaceGroupPimAllowedNeighborsXml struct {
-	XMLName xml.Name      `xml:"entry"`
-	Name    string        `xml:"name,attr"`
-	Misc    []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type multicastRpXml struct {
-	ExternalRp *multicastRpExternalRpContainerXml `xml:"external-rp,omitempty"`
-	LocalRp    *multicastRpLocalRpXml             `xml:"local-rp,omitempty"`
-	Misc       []generic.Xml                      `xml:",any"`
+	ExternalRp     *multicastRpExternalRpContainerXml `xml:"external-rp,omitempty"`
+	LocalRp        *multicastRpLocalRpXml             `xml:"local-rp,omitempty"`
+	Misc           []generic.Xml                      `xml:",any"`
+	MiscAttributes []xml.Attr                         `xml:",any,attr"`
 }
 type multicastRpExternalRpContainerXml struct {
 	Entries []multicastRpExternalRpXml `xml:"entry"`
@@ -1537,11 +1786,13 @@ type multicastRpExternalRpXml struct {
 	GroupAddresses *util.MemberType `xml:"group-addresses,omitempty"`
 	Override       *string          `xml:"override,omitempty"`
 	Misc           []generic.Xml    `xml:",any"`
+	MiscAttributes []xml.Attr       `xml:",any,attr"`
 }
 type multicastRpLocalRpXml struct {
-	CandidateRp *multicastRpLocalRpCandidateRpXml `xml:"candidate-rp,omitempty"`
-	StaticRp    *multicastRpLocalRpStaticRpXml    `xml:"static-rp,omitempty"`
-	Misc        []generic.Xml                     `xml:",any"`
+	CandidateRp    *multicastRpLocalRpCandidateRpXml `xml:"candidate-rp,omitempty"`
+	StaticRp       *multicastRpLocalRpStaticRpXml    `xml:"static-rp,omitempty"`
+	Misc           []generic.Xml                     `xml:",any"`
+	MiscAttributes []xml.Attr                        `xml:",any,attr"`
 }
 type multicastRpLocalRpCandidateRpXml struct {
 	Address               *string          `xml:"address,omitempty"`
@@ -1550,6 +1801,7 @@ type multicastRpLocalRpCandidateRpXml struct {
 	Interface             *string          `xml:"interface,omitempty"`
 	Priority              *int64           `xml:"priority,omitempty"`
 	Misc                  []generic.Xml    `xml:",any"`
+	MiscAttributes        []xml.Attr       `xml:",any,attr"`
 }
 type multicastRpLocalRpStaticRpXml struct {
 	Address        *string          `xml:"address,omitempty"`
@@ -1557,25 +1809,28 @@ type multicastRpLocalRpStaticRpXml struct {
 	Interface      *string          `xml:"interface,omitempty"`
 	Override       *string          `xml:"override,omitempty"`
 	Misc           []generic.Xml    `xml:",any"`
+	MiscAttributes []xml.Attr       `xml:",any,attr"`
 }
 type multicastSptThresholdContainerXml struct {
 	Entries []multicastSptThresholdXml `xml:"entry"`
 }
 type multicastSptThresholdXml struct {
-	XMLName   xml.Name      `xml:"entry"`
-	Name      string        `xml:"name,attr"`
-	Threshold *string       `xml:"threshold,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Threshold      *string       `xml:"threshold,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type multicastSsmAddressSpaceContainerXml struct {
 	Entries []multicastSsmAddressSpaceXml `xml:"entry"`
 }
 type multicastSsmAddressSpaceXml struct {
-	XMLName      xml.Name      `xml:"entry"`
-	Name         string        `xml:"name,attr"`
-	GroupAddress *string       `xml:"group-address,omitempty"`
-	Included     *string       `xml:"included,omitempty"`
-	Misc         []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	GroupAddress   *string       `xml:"group-address,omitempty"`
+	Included       *string       `xml:"included,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolXml struct {
 	Bgp               *protocolBgpXml                        `xml:"bgp,omitempty"`
@@ -1585,6 +1840,7 @@ type protocolXml struct {
 	RedistProfileIpv6 *protocolRedistProfileIpv6ContainerXml `xml:"redist-profile-ipv6,omitempty"`
 	Rip               *protocolRipXml                        `xml:"rip,omitempty"`
 	Misc              []generic.Xml                          `xml:",any"`
+	MiscAttributes    []xml.Attr                             `xml:",any,attr"`
 }
 type protocolBgpXml struct {
 	AllowRedistDefaultRoute *string                                  `xml:"allow-redist-default-route,omitempty"`
@@ -1603,15 +1859,17 @@ type protocolBgpXml struct {
 	RouterId                *string                                  `xml:"router-id,omitempty"`
 	RoutingOptions          *protocolBgpRoutingOptionsXml            `xml:"routing-options,omitempty"`
 	Misc                    []generic.Xml                            `xml:",any"`
+	MiscAttributes          []xml.Attr                               `xml:",any,attr"`
 }
 type protocolBgpAuthProfileContainerXml struct {
 	Entries []protocolBgpAuthProfileXml `xml:"entry"`
 }
 type protocolBgpAuthProfileXml struct {
-	XMLName xml.Name      `xml:"entry"`
-	Name    string        `xml:"name,attr"`
-	Secret  *string       `xml:"secret,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Secret         *string       `xml:"secret,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpDampeningProfileContainerXml struct {
 	Entries []protocolBgpDampeningProfileXml `xml:"entry"`
@@ -1626,10 +1884,12 @@ type protocolBgpDampeningProfileXml struct {
 	DecayHalfLifeReachable   *int64        `xml:"decay-half-life-reachable,omitempty"`
 	DecayHalfLifeUnreachable *int64        `xml:"decay-half-life-unreachable,omitempty"`
 	Misc                     []generic.Xml `xml:",any"`
+	MiscAttributes           []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpGlobalBfdXml struct {
-	Profile *string       `xml:"profile,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	Profile        *string       `xml:"profile,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPeerGroupContainerXml struct {
 	Entries []protocolBgpPeerGroupXml `xml:"entry"`
@@ -1643,31 +1903,37 @@ type protocolBgpPeerGroupXml struct {
 	Type                    *protocolBgpPeerGroupTypeXml          `xml:"type,omitempty"`
 	Peer                    *protocolBgpPeerGroupPeerContainerXml `xml:"peer,omitempty"`
 	Misc                    []generic.Xml                         `xml:",any"`
+	MiscAttributes          []xml.Attr                            `xml:",any,attr"`
 }
 type protocolBgpPeerGroupTypeXml struct {
-	Ibgp       *protocolBgpPeerGroupTypeIbgpXml       `xml:"ibgp,omitempty"`
-	EbgpConfed *protocolBgpPeerGroupTypeEbgpConfedXml `xml:"ebgp-confed,omitempty"`
-	IbgpConfed *protocolBgpPeerGroupTypeIbgpConfedXml `xml:"ibgp-confed,omitempty"`
-	Ebgp       *protocolBgpPeerGroupTypeEbgpXml       `xml:"ebgp,omitempty"`
-	Misc       []generic.Xml                          `xml:",any"`
+	Ibgp           *protocolBgpPeerGroupTypeIbgpXml       `xml:"ibgp,omitempty"`
+	EbgpConfed     *protocolBgpPeerGroupTypeEbgpConfedXml `xml:"ebgp-confed,omitempty"`
+	IbgpConfed     *protocolBgpPeerGroupTypeIbgpConfedXml `xml:"ibgp-confed,omitempty"`
+	Ebgp           *protocolBgpPeerGroupTypeEbgpXml       `xml:"ebgp,omitempty"`
+	Misc           []generic.Xml                          `xml:",any"`
+	MiscAttributes []xml.Attr                             `xml:",any,attr"`
 }
 type protocolBgpPeerGroupTypeIbgpXml struct {
-	ExportNexthop *string       `xml:"export-nexthop,omitempty"`
-	Misc          []generic.Xml `xml:",any"`
+	ExportNexthop  *string       `xml:"export-nexthop,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPeerGroupTypeEbgpConfedXml struct {
-	ExportNexthop *string       `xml:"export-nexthop,omitempty"`
-	Misc          []generic.Xml `xml:",any"`
+	ExportNexthop  *string       `xml:"export-nexthop,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPeerGroupTypeIbgpConfedXml struct {
-	ExportNexthop *string       `xml:"export-nexthop,omitempty"`
-	Misc          []generic.Xml `xml:",any"`
+	ExportNexthop  *string       `xml:"export-nexthop,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPeerGroupTypeEbgpXml struct {
 	ImportNexthop   *string       `xml:"import-nexthop,omitempty"`
 	ExportNexthop   *string       `xml:"export-nexthop,omitempty"`
 	RemovePrivateAs *string       `xml:"remove-private-as,omitempty"`
 	Misc            []generic.Xml `xml:",any"`
+	MiscAttributes  []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPeerGroupPeerContainerXml struct {
 	Entries []protocolBgpPeerGroupPeerXml `xml:"entry"`
@@ -1689,21 +1955,25 @@ type protocolBgpPeerGroupPeerXml struct {
 	ConnectionOptions                 *protocolBgpPeerGroupPeerConnectionOptionsXml                 `xml:"connection-options,omitempty"`
 	Bfd                               *protocolBgpPeerGroupPeerBfdXml                               `xml:"bfd,omitempty"`
 	Misc                              []generic.Xml                                                 `xml:",any"`
+	MiscAttributes                    []xml.Attr                                                    `xml:",any,attr"`
 }
 type protocolBgpPeerGroupPeerSubsequentAddressFamilyIdentifierXml struct {
-	Unicast   *string       `xml:"unicast,omitempty"`
-	Multicast *string       `xml:"multicast,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	Unicast        *string       `xml:"unicast,omitempty"`
+	Multicast      *string       `xml:"multicast,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPeerGroupPeerLocalAddressXml struct {
-	Interface *string       `xml:"interface,omitempty"`
-	Ip        *string       `xml:"ip,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	Interface      *string       `xml:"interface,omitempty"`
+	Ip             *string       `xml:"ip,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPeerGroupPeerPeerAddressXml struct {
-	Ip   *string       `xml:"ip,omitempty"`
-	Fqdn *string       `xml:"fqdn,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Ip             *string       `xml:"ip,omitempty"`
+	Fqdn           *string       `xml:"fqdn,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPeerGroupPeerConnectionOptionsXml struct {
 	Authentication        *string                                                            `xml:"authentication,omitempty"`
@@ -1716,20 +1986,24 @@ type protocolBgpPeerGroupPeerConnectionOptionsXml struct {
 	IncomingBgpConnection *protocolBgpPeerGroupPeerConnectionOptionsIncomingBgpConnectionXml `xml:"incoming-bgp-connection,omitempty"`
 	OutgoingBgpConnection *protocolBgpPeerGroupPeerConnectionOptionsOutgoingBgpConnectionXml `xml:"outgoing-bgp-connection,omitempty"`
 	Misc                  []generic.Xml                                                      `xml:",any"`
+	MiscAttributes        []xml.Attr                                                         `xml:",any,attr"`
 }
 type protocolBgpPeerGroupPeerConnectionOptionsIncomingBgpConnectionXml struct {
-	RemotePort *int64        `xml:"remote-port,omitempty"`
-	Allow      *string       `xml:"allow,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	RemotePort     *int64        `xml:"remote-port,omitempty"`
+	Allow          *string       `xml:"allow,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPeerGroupPeerConnectionOptionsOutgoingBgpConnectionXml struct {
-	LocalPort *int64        `xml:"local-port,omitempty"`
-	Allow     *string       `xml:"allow,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	LocalPort      *int64        `xml:"local-port,omitempty"`
+	Allow          *string       `xml:"allow,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPeerGroupPeerBfdXml struct {
-	Profile *string       `xml:"profile,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	Profile        *string       `xml:"profile,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPolicyXml struct {
 	Aggregation              *protocolBgpPolicyAggregationXml              `xml:"aggregation,omitempty"`
@@ -1737,10 +2011,12 @@ type protocolBgpPolicyXml struct {
 	Export                   *protocolBgpPolicyExportXml                   `xml:"export,omitempty"`
 	Import                   *protocolBgpPolicyImportXml                   `xml:"import,omitempty"`
 	Misc                     []generic.Xml                                 `xml:",any"`
+	MiscAttributes           []xml.Attr                                    `xml:",any,attr"`
 }
 type protocolBgpPolicyAggregationXml struct {
-	Address *protocolBgpPolicyAggregationAddressContainerXml `xml:"address,omitempty"`
-	Misc    []generic.Xml                                    `xml:",any"`
+	Address        *protocolBgpPolicyAggregationAddressContainerXml `xml:"address,omitempty"`
+	Misc           []generic.Xml                                    `xml:",any"`
+	MiscAttributes []xml.Attr                                       `xml:",any,attr"`
 }
 type protocolBgpPolicyAggregationAddressContainerXml struct {
 	Entries []protocolBgpPolicyAggregationAddressXml `xml:"entry"`
@@ -1756,6 +2032,7 @@ type protocolBgpPolicyAggregationAddressXml struct {
 	SuppressFilters          *protocolBgpPolicyAggregationAddressSuppressFiltersContainerXml  `xml:"suppress-filters,omitempty"`
 	AdvertiseFilters         *protocolBgpPolicyAggregationAddressAdvertiseFiltersContainerXml `xml:"advertise-filters,omitempty"`
 	Misc                     []generic.Xml                                                    `xml:",any"`
+	MiscAttributes           []xml.Attr                                                       `xml:",any,attr"`
 }
 type protocolBgpPolicyAggregationAddressAggregateRouteAttributesXml struct {
 	LocalPreference   *int64                                                                           `xml:"local-preference,omitempty"`
@@ -1768,52 +2045,62 @@ type protocolBgpPolicyAggregationAddressAggregateRouteAttributesXml struct {
 	Community         *protocolBgpPolicyAggregationAddressAggregateRouteAttributesCommunityXml         `xml:"community,omitempty"`
 	ExtendedCommunity *protocolBgpPolicyAggregationAddressAggregateRouteAttributesExtendedCommunityXml `xml:"extended-community,omitempty"`
 	Misc              []generic.Xml                                                                    `xml:",any"`
+	MiscAttributes    []xml.Attr                                                                       `xml:",any,attr"`
 }
 type protocolBgpPolicyAggregationAddressAggregateRouteAttributesAsPathXml struct {
-	None    *protocolBgpPolicyAggregationAddressAggregateRouteAttributesAsPathNoneXml `xml:"none,omitempty"`
-	Prepend *int64                                                                    `xml:"prepend,omitempty"`
-	Misc    []generic.Xml                                                             `xml:",any"`
+	None           *protocolBgpPolicyAggregationAddressAggregateRouteAttributesAsPathNoneXml `xml:"none,omitempty"`
+	Prepend        *int64                                                                    `xml:"prepend,omitempty"`
+	Misc           []generic.Xml                                                             `xml:",any"`
+	MiscAttributes []xml.Attr                                                                `xml:",any,attr"`
 }
 type protocolBgpPolicyAggregationAddressAggregateRouteAttributesAsPathNoneXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPolicyAggregationAddressAggregateRouteAttributesCommunityXml struct {
-	None        *protocolBgpPolicyAggregationAddressAggregateRouteAttributesCommunityNoneXml      `xml:"none,omitempty"`
-	RemoveAll   *protocolBgpPolicyAggregationAddressAggregateRouteAttributesCommunityRemoveAllXml `xml:"remove-all,omitempty"`
-	RemoveRegex *string                                                                           `xml:"remove-regex,omitempty"`
-	Append      *util.MemberType                                                                  `xml:"append,omitempty"`
-	Overwrite   *util.MemberType                                                                  `xml:"overwrite,omitempty"`
-	Misc        []generic.Xml                                                                     `xml:",any"`
+	None           *protocolBgpPolicyAggregationAddressAggregateRouteAttributesCommunityNoneXml      `xml:"none,omitempty"`
+	RemoveAll      *protocolBgpPolicyAggregationAddressAggregateRouteAttributesCommunityRemoveAllXml `xml:"remove-all,omitempty"`
+	RemoveRegex    *string                                                                           `xml:"remove-regex,omitempty"`
+	Append         *util.MemberType                                                                  `xml:"append,omitempty"`
+	Overwrite      *util.MemberType                                                                  `xml:"overwrite,omitempty"`
+	Misc           []generic.Xml                                                                     `xml:",any"`
+	MiscAttributes []xml.Attr                                                                        `xml:",any,attr"`
 }
 type protocolBgpPolicyAggregationAddressAggregateRouteAttributesCommunityNoneXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPolicyAggregationAddressAggregateRouteAttributesCommunityRemoveAllXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPolicyAggregationAddressAggregateRouteAttributesExtendedCommunityXml struct {
-	None        *protocolBgpPolicyAggregationAddressAggregateRouteAttributesExtendedCommunityNoneXml      `xml:"none,omitempty"`
-	RemoveAll   *protocolBgpPolicyAggregationAddressAggregateRouteAttributesExtendedCommunityRemoveAllXml `xml:"remove-all,omitempty"`
-	RemoveRegex *string                                                                                   `xml:"remove-regex,omitempty"`
-	Append      *util.MemberType                                                                          `xml:"append,omitempty"`
-	Overwrite   *util.MemberType                                                                          `xml:"overwrite,omitempty"`
-	Misc        []generic.Xml                                                                             `xml:",any"`
+	None           *protocolBgpPolicyAggregationAddressAggregateRouteAttributesExtendedCommunityNoneXml      `xml:"none,omitempty"`
+	RemoveAll      *protocolBgpPolicyAggregationAddressAggregateRouteAttributesExtendedCommunityRemoveAllXml `xml:"remove-all,omitempty"`
+	RemoveRegex    *string                                                                                   `xml:"remove-regex,omitempty"`
+	Append         *util.MemberType                                                                          `xml:"append,omitempty"`
+	Overwrite      *util.MemberType                                                                          `xml:"overwrite,omitempty"`
+	Misc           []generic.Xml                                                                             `xml:",any"`
+	MiscAttributes []xml.Attr                                                                                `xml:",any,attr"`
 }
 type protocolBgpPolicyAggregationAddressAggregateRouteAttributesExtendedCommunityNoneXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPolicyAggregationAddressAggregateRouteAttributesExtendedCommunityRemoveAllXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPolicyAggregationAddressSuppressFiltersContainerXml struct {
 	Entries []protocolBgpPolicyAggregationAddressSuppressFiltersXml `xml:"entry"`
 }
 type protocolBgpPolicyAggregationAddressSuppressFiltersXml struct {
-	XMLName xml.Name                                                    `xml:"entry"`
-	Name    string                                                      `xml:"name,attr"`
-	Enable  *string                                                     `xml:"enable,omitempty"`
-	Match   *protocolBgpPolicyAggregationAddressSuppressFiltersMatchXml `xml:"match,omitempty"`
-	Misc    []generic.Xml                                               `xml:",any"`
+	XMLName        xml.Name                                                    `xml:"entry"`
+	Name           string                                                      `xml:"name,attr"`
+	Enable         *string                                                     `xml:"enable,omitempty"`
+	Match          *protocolBgpPolicyAggregationAddressSuppressFiltersMatchXml `xml:"match,omitempty"`
+	Misc           []generic.Xml                                               `xml:",any"`
+	MiscAttributes []xml.Attr                                                  `xml:",any,attr"`
 }
 type protocolBgpPolicyAggregationAddressSuppressFiltersMatchXml struct {
 	RouteTable        *string                                                                           `xml:"route-table,omitempty"`
@@ -1825,37 +2112,43 @@ type protocolBgpPolicyAggregationAddressSuppressFiltersMatchXml struct {
 	Community         *protocolBgpPolicyAggregationAddressSuppressFiltersMatchCommunityXml              `xml:"community,omitempty"`
 	ExtendedCommunity *protocolBgpPolicyAggregationAddressSuppressFiltersMatchExtendedCommunityXml      `xml:"extended-community,omitempty"`
 	Misc              []generic.Xml                                                                     `xml:",any"`
+	MiscAttributes    []xml.Attr                                                                        `xml:",any,attr"`
 }
 type protocolBgpPolicyAggregationAddressSuppressFiltersMatchAddressPrefixContainerXml struct {
 	Entries []protocolBgpPolicyAggregationAddressSuppressFiltersMatchAddressPrefixXml `xml:"entry"`
 }
 type protocolBgpPolicyAggregationAddressSuppressFiltersMatchAddressPrefixXml struct {
-	XMLName xml.Name      `xml:"entry"`
-	Name    string        `xml:"name,attr"`
-	Exact   *string       `xml:"exact,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Exact          *string       `xml:"exact,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPolicyAggregationAddressSuppressFiltersMatchAsPathXml struct {
-	Regex *string       `xml:"regex,omitempty"`
-	Misc  []generic.Xml `xml:",any"`
+	Regex          *string       `xml:"regex,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPolicyAggregationAddressSuppressFiltersMatchCommunityXml struct {
-	Regex *string       `xml:"regex,omitempty"`
-	Misc  []generic.Xml `xml:",any"`
+	Regex          *string       `xml:"regex,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPolicyAggregationAddressSuppressFiltersMatchExtendedCommunityXml struct {
-	Regex *string       `xml:"regex,omitempty"`
-	Misc  []generic.Xml `xml:",any"`
+	Regex          *string       `xml:"regex,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPolicyAggregationAddressAdvertiseFiltersContainerXml struct {
 	Entries []protocolBgpPolicyAggregationAddressAdvertiseFiltersXml `xml:"entry"`
 }
 type protocolBgpPolicyAggregationAddressAdvertiseFiltersXml struct {
-	XMLName xml.Name                                                     `xml:"entry"`
-	Name    string                                                       `xml:"name,attr"`
-	Enable  *string                                                      `xml:"enable,omitempty"`
-	Match   *protocolBgpPolicyAggregationAddressAdvertiseFiltersMatchXml `xml:"match,omitempty"`
-	Misc    []generic.Xml                                                `xml:",any"`
+	XMLName        xml.Name                                                     `xml:"entry"`
+	Name           string                                                       `xml:"name,attr"`
+	Enable         *string                                                      `xml:"enable,omitempty"`
+	Match          *protocolBgpPolicyAggregationAddressAdvertiseFiltersMatchXml `xml:"match,omitempty"`
+	Misc           []generic.Xml                                                `xml:",any"`
+	MiscAttributes []xml.Attr                                                   `xml:",any,attr"`
 }
 type protocolBgpPolicyAggregationAddressAdvertiseFiltersMatchXml struct {
 	RouteTable        *string                                                                            `xml:"route-table,omitempty"`
@@ -1867,31 +2160,37 @@ type protocolBgpPolicyAggregationAddressAdvertiseFiltersMatchXml struct {
 	Community         *protocolBgpPolicyAggregationAddressAdvertiseFiltersMatchCommunityXml              `xml:"community,omitempty"`
 	ExtendedCommunity *protocolBgpPolicyAggregationAddressAdvertiseFiltersMatchExtendedCommunityXml      `xml:"extended-community,omitempty"`
 	Misc              []generic.Xml                                                                      `xml:",any"`
+	MiscAttributes    []xml.Attr                                                                         `xml:",any,attr"`
 }
 type protocolBgpPolicyAggregationAddressAdvertiseFiltersMatchAddressPrefixContainerXml struct {
 	Entries []protocolBgpPolicyAggregationAddressAdvertiseFiltersMatchAddressPrefixXml `xml:"entry"`
 }
 type protocolBgpPolicyAggregationAddressAdvertiseFiltersMatchAddressPrefixXml struct {
-	XMLName xml.Name      `xml:"entry"`
-	Name    string        `xml:"name,attr"`
-	Exact   *string       `xml:"exact,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Exact          *string       `xml:"exact,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPolicyAggregationAddressAdvertiseFiltersMatchAsPathXml struct {
-	Regex *string       `xml:"regex,omitempty"`
-	Misc  []generic.Xml `xml:",any"`
+	Regex          *string       `xml:"regex,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPolicyAggregationAddressAdvertiseFiltersMatchCommunityXml struct {
-	Regex *string       `xml:"regex,omitempty"`
-	Misc  []generic.Xml `xml:",any"`
+	Regex          *string       `xml:"regex,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPolicyAggregationAddressAdvertiseFiltersMatchExtendedCommunityXml struct {
-	Regex *string       `xml:"regex,omitempty"`
-	Misc  []generic.Xml `xml:",any"`
+	Regex          *string       `xml:"regex,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPolicyConditionalAdvertisementXml struct {
-	Policy *protocolBgpPolicyConditionalAdvertisementPolicyContainerXml `xml:"policy,omitempty"`
-	Misc   []generic.Xml                                                `xml:",any"`
+	Policy         *protocolBgpPolicyConditionalAdvertisementPolicyContainerXml `xml:"policy,omitempty"`
+	Misc           []generic.Xml                                                `xml:",any"`
+	MiscAttributes []xml.Attr                                                   `xml:",any,attr"`
 }
 type protocolBgpPolicyConditionalAdvertisementPolicyContainerXml struct {
 	Entries []protocolBgpPolicyConditionalAdvertisementPolicyXml `xml:"entry"`
@@ -1904,16 +2203,18 @@ type protocolBgpPolicyConditionalAdvertisementPolicyXml struct {
 	NonExistFilters  *protocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersContainerXml  `xml:"non-exist-filters,omitempty"`
 	AdvertiseFilters *protocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersContainerXml `xml:"advertise-filters,omitempty"`
 	Misc             []generic.Xml                                                                `xml:",any"`
+	MiscAttributes   []xml.Attr                                                                   `xml:",any,attr"`
 }
 type protocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersContainerXml struct {
 	Entries []protocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersXml `xml:"entry"`
 }
 type protocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersXml struct {
-	XMLName xml.Name                                                                `xml:"entry"`
-	Name    string                                                                  `xml:"name,attr"`
-	Enable  *string                                                                 `xml:"enable,omitempty"`
-	Match   *protocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersMatchXml `xml:"match,omitempty"`
-	Misc    []generic.Xml                                                           `xml:",any"`
+	XMLName        xml.Name                                                                `xml:"entry"`
+	Name           string                                                                  `xml:"name,attr"`
+	Enable         *string                                                                 `xml:"enable,omitempty"`
+	Match          *protocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersMatchXml `xml:"match,omitempty"`
+	Misc           []generic.Xml                                                           `xml:",any"`
+	MiscAttributes []xml.Attr                                                              `xml:",any,attr"`
 }
 type protocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersMatchXml struct {
 	RouteTable        *string                                                                                       `xml:"route-table,omitempty"`
@@ -1925,36 +2226,42 @@ type protocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersMatchXml stru
 	Community         *protocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersMatchCommunityXml              `xml:"community,omitempty"`
 	ExtendedCommunity *protocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersMatchExtendedCommunityXml      `xml:"extended-community,omitempty"`
 	Misc              []generic.Xml                                                                                 `xml:",any"`
+	MiscAttributes    []xml.Attr                                                                                    `xml:",any,attr"`
 }
 type protocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersMatchAddressPrefixContainerXml struct {
 	Entries []protocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersMatchAddressPrefixXml `xml:"entry"`
 }
 type protocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersMatchAddressPrefixXml struct {
-	XMLName xml.Name      `xml:"entry"`
-	Name    string        `xml:"name,attr"`
-	Misc    []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersMatchAsPathXml struct {
-	Regex *string       `xml:"regex,omitempty"`
-	Misc  []generic.Xml `xml:",any"`
+	Regex          *string       `xml:"regex,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersMatchCommunityXml struct {
-	Regex *string       `xml:"regex,omitempty"`
-	Misc  []generic.Xml `xml:",any"`
+	Regex          *string       `xml:"regex,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersMatchExtendedCommunityXml struct {
-	Regex *string       `xml:"regex,omitempty"`
-	Misc  []generic.Xml `xml:",any"`
+	Regex          *string       `xml:"regex,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersContainerXml struct {
 	Entries []protocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersXml `xml:"entry"`
 }
 type protocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersXml struct {
-	XMLName xml.Name                                                                 `xml:"entry"`
-	Name    string                                                                   `xml:"name,attr"`
-	Enable  *string                                                                  `xml:"enable,omitempty"`
-	Match   *protocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersMatchXml `xml:"match,omitempty"`
-	Misc    []generic.Xml                                                            `xml:",any"`
+	XMLName        xml.Name                                                                 `xml:"entry"`
+	Name           string                                                                   `xml:"name,attr"`
+	Enable         *string                                                                  `xml:"enable,omitempty"`
+	Match          *protocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersMatchXml `xml:"match,omitempty"`
+	Misc           []generic.Xml                                                            `xml:",any"`
+	MiscAttributes []xml.Attr                                                               `xml:",any,attr"`
 }
 type protocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersMatchXml struct {
 	RouteTable        *string                                                                                        `xml:"route-table,omitempty"`
@@ -1966,42 +2273,49 @@ type protocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersMatchXml str
 	Community         *protocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersMatchCommunityXml              `xml:"community,omitempty"`
 	ExtendedCommunity *protocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersMatchExtendedCommunityXml      `xml:"extended-community,omitempty"`
 	Misc              []generic.Xml                                                                                  `xml:",any"`
+	MiscAttributes    []xml.Attr                                                                                     `xml:",any,attr"`
 }
 type protocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersMatchAddressPrefixContainerXml struct {
 	Entries []protocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersMatchAddressPrefixXml `xml:"entry"`
 }
 type protocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersMatchAddressPrefixXml struct {
-	XMLName xml.Name      `xml:"entry"`
-	Name    string        `xml:"name,attr"`
-	Misc    []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersMatchAsPathXml struct {
-	Regex *string       `xml:"regex,omitempty"`
-	Misc  []generic.Xml `xml:",any"`
+	Regex          *string       `xml:"regex,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersMatchCommunityXml struct {
-	Regex *string       `xml:"regex,omitempty"`
-	Misc  []generic.Xml `xml:",any"`
+	Regex          *string       `xml:"regex,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersMatchExtendedCommunityXml struct {
-	Regex *string       `xml:"regex,omitempty"`
-	Misc  []generic.Xml `xml:",any"`
+	Regex          *string       `xml:"regex,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPolicyExportXml struct {
-	Rules *protocolBgpPolicyExportRulesContainerXml `xml:"rules,omitempty"`
-	Misc  []generic.Xml                             `xml:",any"`
+	Rules          *protocolBgpPolicyExportRulesContainerXml `xml:"rules,omitempty"`
+	Misc           []generic.Xml                             `xml:",any"`
+	MiscAttributes []xml.Attr                                `xml:",any,attr"`
 }
 type protocolBgpPolicyExportRulesContainerXml struct {
 	Entries []protocolBgpPolicyExportRulesXml `xml:"entry"`
 }
 type protocolBgpPolicyExportRulesXml struct {
-	XMLName xml.Name                               `xml:"entry"`
-	Name    string                                 `xml:"name,attr"`
-	Enable  *string                                `xml:"enable,omitempty"`
-	UsedBy  *util.MemberType                       `xml:"used-by,omitempty"`
-	Match   *protocolBgpPolicyExportRulesMatchXml  `xml:"match,omitempty"`
-	Action  *protocolBgpPolicyExportRulesActionXml `xml:"action,omitempty"`
-	Misc    []generic.Xml                          `xml:",any"`
+	XMLName        xml.Name                               `xml:"entry"`
+	Name           string                                 `xml:"name,attr"`
+	Enable         *string                                `xml:"enable,omitempty"`
+	UsedBy         *util.MemberType                       `xml:"used-by,omitempty"`
+	Match          *protocolBgpPolicyExportRulesMatchXml  `xml:"match,omitempty"`
+	Action         *protocolBgpPolicyExportRulesActionXml `xml:"action,omitempty"`
+	Misc           []generic.Xml                          `xml:",any"`
+	MiscAttributes []xml.Attr                             `xml:",any,attr"`
 }
 type protocolBgpPolicyExportRulesMatchXml struct {
 	RouteTable        *string                                                     `xml:"route-table,omitempty"`
@@ -2013,39 +2327,47 @@ type protocolBgpPolicyExportRulesMatchXml struct {
 	Community         *protocolBgpPolicyExportRulesMatchCommunityXml              `xml:"community,omitempty"`
 	ExtendedCommunity *protocolBgpPolicyExportRulesMatchExtendedCommunityXml      `xml:"extended-community,omitempty"`
 	Misc              []generic.Xml                                               `xml:",any"`
+	MiscAttributes    []xml.Attr                                                  `xml:",any,attr"`
 }
 type protocolBgpPolicyExportRulesMatchAddressPrefixContainerXml struct {
 	Entries []protocolBgpPolicyExportRulesMatchAddressPrefixXml `xml:"entry"`
 }
 type protocolBgpPolicyExportRulesMatchAddressPrefixXml struct {
-	XMLName xml.Name      `xml:"entry"`
-	Name    string        `xml:"name,attr"`
-	Exact   *string       `xml:"exact,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Exact          *string       `xml:"exact,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPolicyExportRulesMatchAsPathXml struct {
-	Regex *string       `xml:"regex,omitempty"`
-	Misc  []generic.Xml `xml:",any"`
+	Regex          *string       `xml:"regex,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPolicyExportRulesMatchCommunityXml struct {
-	Regex *string       `xml:"regex,omitempty"`
-	Misc  []generic.Xml `xml:",any"`
+	Regex          *string       `xml:"regex,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPolicyExportRulesMatchExtendedCommunityXml struct {
-	Regex *string       `xml:"regex,omitempty"`
-	Misc  []generic.Xml `xml:",any"`
+	Regex          *string       `xml:"regex,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPolicyExportRulesActionXml struct {
-	Deny  *protocolBgpPolicyExportRulesActionDenyXml  `xml:"deny,omitempty"`
-	Allow *protocolBgpPolicyExportRulesActionAllowXml `xml:"allow,omitempty"`
-	Misc  []generic.Xml                               `xml:",any"`
+	Deny           *protocolBgpPolicyExportRulesActionDenyXml  `xml:"deny,omitempty"`
+	Allow          *protocolBgpPolicyExportRulesActionAllowXml `xml:"allow,omitempty"`
+	Misc           []generic.Xml                               `xml:",any"`
+	MiscAttributes []xml.Attr                                  `xml:",any,attr"`
 }
 type protocolBgpPolicyExportRulesActionDenyXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPolicyExportRulesActionAllowXml struct {
-	Update *protocolBgpPolicyExportRulesActionAllowUpdateXml `xml:"update,omitempty"`
-	Misc   []generic.Xml                                     `xml:",any"`
+	Update         *protocolBgpPolicyExportRulesActionAllowUpdateXml `xml:"update,omitempty"`
+	Misc           []generic.Xml                                     `xml:",any"`
+	MiscAttributes []xml.Attr                                        `xml:",any,attr"`
 }
 type protocolBgpPolicyExportRulesActionAllowUpdateXml struct {
 	LocalPreference   *int64                                                             `xml:"local-preference,omitempty"`
@@ -2057,6 +2379,7 @@ type protocolBgpPolicyExportRulesActionAllowUpdateXml struct {
 	Community         *protocolBgpPolicyExportRulesActionAllowUpdateCommunityXml         `xml:"community,omitempty"`
 	ExtendedCommunity *protocolBgpPolicyExportRulesActionAllowUpdateExtendedCommunityXml `xml:"extended-community,omitempty"`
 	Misc              []generic.Xml                                                      `xml:",any"`
+	MiscAttributes    []xml.Attr                                                         `xml:",any,attr"`
 }
 type protocolBgpPolicyExportRulesActionAllowUpdateAsPathXml struct {
 	None             *protocolBgpPolicyExportRulesActionAllowUpdateAsPathNoneXml   `xml:"none,omitempty"`
@@ -2064,56 +2387,67 @@ type protocolBgpPolicyExportRulesActionAllowUpdateAsPathXml struct {
 	Prepend          *int64                                                        `xml:"prepend,omitempty"`
 	RemoveAndPrepend *int64                                                        `xml:"remove-and-prepend,omitempty"`
 	Misc             []generic.Xml                                                 `xml:",any"`
+	MiscAttributes   []xml.Attr                                                    `xml:",any,attr"`
 }
 type protocolBgpPolicyExportRulesActionAllowUpdateAsPathNoneXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPolicyExportRulesActionAllowUpdateAsPathRemoveXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPolicyExportRulesActionAllowUpdateCommunityXml struct {
-	None        *protocolBgpPolicyExportRulesActionAllowUpdateCommunityNoneXml      `xml:"none,omitempty"`
-	RemoveAll   *protocolBgpPolicyExportRulesActionAllowUpdateCommunityRemoveAllXml `xml:"remove-all,omitempty"`
-	RemoveRegex *string                                                             `xml:"remove-regex,omitempty"`
-	Append      *util.MemberType                                                    `xml:"append,omitempty"`
-	Overwrite   *util.MemberType                                                    `xml:"overwrite,omitempty"`
-	Misc        []generic.Xml                                                       `xml:",any"`
+	None           *protocolBgpPolicyExportRulesActionAllowUpdateCommunityNoneXml      `xml:"none,omitempty"`
+	RemoveAll      *protocolBgpPolicyExportRulesActionAllowUpdateCommunityRemoveAllXml `xml:"remove-all,omitempty"`
+	RemoveRegex    *string                                                             `xml:"remove-regex,omitempty"`
+	Append         *util.MemberType                                                    `xml:"append,omitempty"`
+	Overwrite      *util.MemberType                                                    `xml:"overwrite,omitempty"`
+	Misc           []generic.Xml                                                       `xml:",any"`
+	MiscAttributes []xml.Attr                                                          `xml:",any,attr"`
 }
 type protocolBgpPolicyExportRulesActionAllowUpdateCommunityNoneXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPolicyExportRulesActionAllowUpdateCommunityRemoveAllXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPolicyExportRulesActionAllowUpdateExtendedCommunityXml struct {
-	None        *protocolBgpPolicyExportRulesActionAllowUpdateExtendedCommunityNoneXml      `xml:"none,omitempty"`
-	RemoveAll   *protocolBgpPolicyExportRulesActionAllowUpdateExtendedCommunityRemoveAllXml `xml:"remove-all,omitempty"`
-	RemoveRegex *string                                                                     `xml:"remove-regex,omitempty"`
-	Append      *util.MemberType                                                            `xml:"append,omitempty"`
-	Overwrite   *util.MemberType                                                            `xml:"overwrite,omitempty"`
-	Misc        []generic.Xml                                                               `xml:",any"`
+	None           *protocolBgpPolicyExportRulesActionAllowUpdateExtendedCommunityNoneXml      `xml:"none,omitempty"`
+	RemoveAll      *protocolBgpPolicyExportRulesActionAllowUpdateExtendedCommunityRemoveAllXml `xml:"remove-all,omitempty"`
+	RemoveRegex    *string                                                                     `xml:"remove-regex,omitempty"`
+	Append         *util.MemberType                                                            `xml:"append,omitempty"`
+	Overwrite      *util.MemberType                                                            `xml:"overwrite,omitempty"`
+	Misc           []generic.Xml                                                               `xml:",any"`
+	MiscAttributes []xml.Attr                                                                  `xml:",any,attr"`
 }
 type protocolBgpPolicyExportRulesActionAllowUpdateExtendedCommunityNoneXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPolicyExportRulesActionAllowUpdateExtendedCommunityRemoveAllXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPolicyImportXml struct {
-	Rules *protocolBgpPolicyImportRulesContainerXml `xml:"rules,omitempty"`
-	Misc  []generic.Xml                             `xml:",any"`
+	Rules          *protocolBgpPolicyImportRulesContainerXml `xml:"rules,omitempty"`
+	Misc           []generic.Xml                             `xml:",any"`
+	MiscAttributes []xml.Attr                                `xml:",any,attr"`
 }
 type protocolBgpPolicyImportRulesContainerXml struct {
 	Entries []protocolBgpPolicyImportRulesXml `xml:"entry"`
 }
 type protocolBgpPolicyImportRulesXml struct {
-	XMLName xml.Name                               `xml:"entry"`
-	Name    string                                 `xml:"name,attr"`
-	Enable  *string                                `xml:"enable,omitempty"`
-	UsedBy  *util.MemberType                       `xml:"used-by,omitempty"`
-	Match   *protocolBgpPolicyImportRulesMatchXml  `xml:"match,omitempty"`
-	Action  *protocolBgpPolicyImportRulesActionXml `xml:"action,omitempty"`
-	Misc    []generic.Xml                          `xml:",any"`
+	XMLName        xml.Name                               `xml:"entry"`
+	Name           string                                 `xml:"name,attr"`
+	Enable         *string                                `xml:"enable,omitempty"`
+	UsedBy         *util.MemberType                       `xml:"used-by,omitempty"`
+	Match          *protocolBgpPolicyImportRulesMatchXml  `xml:"match,omitempty"`
+	Action         *protocolBgpPolicyImportRulesActionXml `xml:"action,omitempty"`
+	Misc           []generic.Xml                          `xml:",any"`
+	MiscAttributes []xml.Attr                             `xml:",any,attr"`
 }
 type protocolBgpPolicyImportRulesMatchXml struct {
 	RouteTable        *string                                                     `xml:"route-table,omitempty"`
@@ -2125,40 +2459,48 @@ type protocolBgpPolicyImportRulesMatchXml struct {
 	Community         *protocolBgpPolicyImportRulesMatchCommunityXml              `xml:"community,omitempty"`
 	ExtendedCommunity *protocolBgpPolicyImportRulesMatchExtendedCommunityXml      `xml:"extended-community,omitempty"`
 	Misc              []generic.Xml                                               `xml:",any"`
+	MiscAttributes    []xml.Attr                                                  `xml:",any,attr"`
 }
 type protocolBgpPolicyImportRulesMatchAddressPrefixContainerXml struct {
 	Entries []protocolBgpPolicyImportRulesMatchAddressPrefixXml `xml:"entry"`
 }
 type protocolBgpPolicyImportRulesMatchAddressPrefixXml struct {
-	XMLName xml.Name      `xml:"entry"`
-	Name    string        `xml:"name,attr"`
-	Exact   *string       `xml:"exact,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Exact          *string       `xml:"exact,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPolicyImportRulesMatchAsPathXml struct {
-	Regex *string       `xml:"regex,omitempty"`
-	Misc  []generic.Xml `xml:",any"`
+	Regex          *string       `xml:"regex,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPolicyImportRulesMatchCommunityXml struct {
-	Regex *string       `xml:"regex,omitempty"`
-	Misc  []generic.Xml `xml:",any"`
+	Regex          *string       `xml:"regex,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPolicyImportRulesMatchExtendedCommunityXml struct {
-	Regex *string       `xml:"regex,omitempty"`
-	Misc  []generic.Xml `xml:",any"`
+	Regex          *string       `xml:"regex,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPolicyImportRulesActionXml struct {
-	Deny  *protocolBgpPolicyImportRulesActionDenyXml  `xml:"deny,omitempty"`
-	Allow *protocolBgpPolicyImportRulesActionAllowXml `xml:"allow,omitempty"`
-	Misc  []generic.Xml                               `xml:",any"`
+	Deny           *protocolBgpPolicyImportRulesActionDenyXml  `xml:"deny,omitempty"`
+	Allow          *protocolBgpPolicyImportRulesActionAllowXml `xml:"allow,omitempty"`
+	Misc           []generic.Xml                               `xml:",any"`
+	MiscAttributes []xml.Attr                                  `xml:",any,attr"`
 }
 type protocolBgpPolicyImportRulesActionDenyXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPolicyImportRulesActionAllowXml struct {
-	Dampening *string                                           `xml:"dampening,omitempty"`
-	Update    *protocolBgpPolicyImportRulesActionAllowUpdateXml `xml:"update,omitempty"`
-	Misc      []generic.Xml                                     `xml:",any"`
+	Dampening      *string                                           `xml:"dampening,omitempty"`
+	Update         *protocolBgpPolicyImportRulesActionAllowUpdateXml `xml:"update,omitempty"`
+	Misc           []generic.Xml                                     `xml:",any"`
+	MiscAttributes []xml.Attr                                        `xml:",any,attr"`
 }
 type protocolBgpPolicyImportRulesActionAllowUpdateXml struct {
 	LocalPreference   *int64                                                             `xml:"local-preference,omitempty"`
@@ -2171,45 +2513,55 @@ type protocolBgpPolicyImportRulesActionAllowUpdateXml struct {
 	Community         *protocolBgpPolicyImportRulesActionAllowUpdateCommunityXml         `xml:"community,omitempty"`
 	ExtendedCommunity *protocolBgpPolicyImportRulesActionAllowUpdateExtendedCommunityXml `xml:"extended-community,omitempty"`
 	Misc              []generic.Xml                                                      `xml:",any"`
+	MiscAttributes    []xml.Attr                                                         `xml:",any,attr"`
 }
 type protocolBgpPolicyImportRulesActionAllowUpdateAsPathXml struct {
-	None   *protocolBgpPolicyImportRulesActionAllowUpdateAsPathNoneXml   `xml:"none,omitempty"`
-	Remove *protocolBgpPolicyImportRulesActionAllowUpdateAsPathRemoveXml `xml:"remove,omitempty"`
-	Misc   []generic.Xml                                                 `xml:",any"`
+	None           *protocolBgpPolicyImportRulesActionAllowUpdateAsPathNoneXml   `xml:"none,omitempty"`
+	Remove         *protocolBgpPolicyImportRulesActionAllowUpdateAsPathRemoveXml `xml:"remove,omitempty"`
+	Misc           []generic.Xml                                                 `xml:",any"`
+	MiscAttributes []xml.Attr                                                    `xml:",any,attr"`
 }
 type protocolBgpPolicyImportRulesActionAllowUpdateAsPathNoneXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPolicyImportRulesActionAllowUpdateAsPathRemoveXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPolicyImportRulesActionAllowUpdateCommunityXml struct {
-	None        *protocolBgpPolicyImportRulesActionAllowUpdateCommunityNoneXml      `xml:"none,omitempty"`
-	RemoveAll   *protocolBgpPolicyImportRulesActionAllowUpdateCommunityRemoveAllXml `xml:"remove-all,omitempty"`
-	RemoveRegex *string                                                             `xml:"remove-regex,omitempty"`
-	Append      *util.MemberType                                                    `xml:"append,omitempty"`
-	Overwrite   *util.MemberType                                                    `xml:"overwrite,omitempty"`
-	Misc        []generic.Xml                                                       `xml:",any"`
+	None           *protocolBgpPolicyImportRulesActionAllowUpdateCommunityNoneXml      `xml:"none,omitempty"`
+	RemoveAll      *protocolBgpPolicyImportRulesActionAllowUpdateCommunityRemoveAllXml `xml:"remove-all,omitempty"`
+	RemoveRegex    *string                                                             `xml:"remove-regex,omitempty"`
+	Append         *util.MemberType                                                    `xml:"append,omitempty"`
+	Overwrite      *util.MemberType                                                    `xml:"overwrite,omitempty"`
+	Misc           []generic.Xml                                                       `xml:",any"`
+	MiscAttributes []xml.Attr                                                          `xml:",any,attr"`
 }
 type protocolBgpPolicyImportRulesActionAllowUpdateCommunityNoneXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPolicyImportRulesActionAllowUpdateCommunityRemoveAllXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPolicyImportRulesActionAllowUpdateExtendedCommunityXml struct {
-	None        *protocolBgpPolicyImportRulesActionAllowUpdateExtendedCommunityNoneXml      `xml:"none,omitempty"`
-	RemoveAll   *protocolBgpPolicyImportRulesActionAllowUpdateExtendedCommunityRemoveAllXml `xml:"remove-all,omitempty"`
-	RemoveRegex *string                                                                     `xml:"remove-regex,omitempty"`
-	Append      *util.MemberType                                                            `xml:"append,omitempty"`
-	Overwrite   *util.MemberType                                                            `xml:"overwrite,omitempty"`
-	Misc        []generic.Xml                                                               `xml:",any"`
+	None           *protocolBgpPolicyImportRulesActionAllowUpdateExtendedCommunityNoneXml      `xml:"none,omitempty"`
+	RemoveAll      *protocolBgpPolicyImportRulesActionAllowUpdateExtendedCommunityRemoveAllXml `xml:"remove-all,omitempty"`
+	RemoveRegex    *string                                                                     `xml:"remove-regex,omitempty"`
+	Append         *util.MemberType                                                            `xml:"append,omitempty"`
+	Overwrite      *util.MemberType                                                            `xml:"overwrite,omitempty"`
+	Misc           []generic.Xml                                                               `xml:",any"`
+	MiscAttributes []xml.Attr                                                                  `xml:",any,attr"`
 }
 type protocolBgpPolicyImportRulesActionAllowUpdateExtendedCommunityNoneXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpPolicyImportRulesActionAllowUpdateExtendedCommunityRemoveAllXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpRedistRulesContainerXml struct {
 	Entries []protocolBgpRedistRulesXml `xml:"entry"`
@@ -2228,6 +2580,7 @@ type protocolBgpRedistRulesXml struct {
 	SetCommunity            *util.MemberType `xml:"set-community,omitempty"`
 	SetExtendedCommunity    *util.MemberType `xml:"set-extended-community,omitempty"`
 	Misc                    []generic.Xml    `xml:",any"`
+	MiscAttributes          []xml.Attr       `xml:",any,attr"`
 }
 type protocolBgpRoutingOptionsXml struct {
 	Aggregate              *protocolBgpRoutingOptionsAggregateXml       `xml:"aggregate,omitempty"`
@@ -2238,10 +2591,12 @@ type protocolBgpRoutingOptionsXml struct {
 	Med                    *protocolBgpRoutingOptionsMedXml             `xml:"med,omitempty"`
 	ReflectorClusterId     *string                                      `xml:"reflector-cluster-id,omitempty"`
 	Misc                   []generic.Xml                                `xml:",any"`
+	MiscAttributes         []xml.Attr                                   `xml:",any,attr"`
 }
 type protocolBgpRoutingOptionsAggregateXml struct {
-	AggregateMed *string       `xml:"aggregate-med,omitempty"`
-	Misc         []generic.Xml `xml:",any"`
+	AggregateMed   *string       `xml:"aggregate-med,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpRoutingOptionsGracefulRestartXml struct {
 	Enable             *string       `xml:"enable,omitempty"`
@@ -2249,11 +2604,13 @@ type protocolBgpRoutingOptionsGracefulRestartXml struct {
 	MaxPeerRestartTime *int64        `xml:"max-peer-restart-time,omitempty"`
 	StaleRouteTime     *int64        `xml:"stale-route-time,omitempty"`
 	Misc               []generic.Xml `xml:",any"`
+	MiscAttributes     []xml.Attr    `xml:",any,attr"`
 }
 type protocolBgpRoutingOptionsMedXml struct {
 	AlwaysCompareMed           *string       `xml:"always-compare-med,omitempty"`
 	DeterministicMedComparison *string       `xml:"deterministic-med-comparison,omitempty"`
 	Misc                       []generic.Xml `xml:",any"`
+	MiscAttributes             []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfXml struct {
 	AllowRedistDefaultRoute *string                              `xml:"allow-redist-default-route,omitempty"`
@@ -2268,95 +2625,113 @@ type protocolOspfXml struct {
 	RouterId                *string                              `xml:"router-id,omitempty"`
 	Timers                  *protocolOspfTimersXml               `xml:"timers,omitempty"`
 	Misc                    []generic.Xml                        `xml:",any"`
+	MiscAttributes          []xml.Attr                           `xml:",any,attr"`
 }
 type protocolOspfAreaContainerXml struct {
 	Entries []protocolOspfAreaXml `xml:"entry"`
 }
 type protocolOspfAreaXml struct {
-	XMLName     xml.Name                                 `xml:"entry"`
-	Name        string                                   `xml:"name,attr"`
-	Type        *protocolOspfAreaTypeXml                 `xml:"type,omitempty"`
-	Range       *protocolOspfAreaRangeContainerXml       `xml:"range,omitempty"`
-	Interface   *protocolOspfAreaInterfaceContainerXml   `xml:"interface,omitempty"`
-	VirtualLink *protocolOspfAreaVirtualLinkContainerXml `xml:"virtual-link,omitempty"`
-	Misc        []generic.Xml                            `xml:",any"`
+	XMLName        xml.Name                                 `xml:"entry"`
+	Name           string                                   `xml:"name,attr"`
+	Type           *protocolOspfAreaTypeXml                 `xml:"type,omitempty"`
+	Range          *protocolOspfAreaRangeContainerXml       `xml:"range,omitempty"`
+	Interface      *protocolOspfAreaInterfaceContainerXml   `xml:"interface,omitempty"`
+	VirtualLink    *protocolOspfAreaVirtualLinkContainerXml `xml:"virtual-link,omitempty"`
+	Misc           []generic.Xml                            `xml:",any"`
+	MiscAttributes []xml.Attr                               `xml:",any,attr"`
 }
 type protocolOspfAreaTypeXml struct {
-	Normal *protocolOspfAreaTypeNormalXml `xml:"normal,omitempty"`
-	Stub   *protocolOspfAreaTypeStubXml   `xml:"stub,omitempty"`
-	Nssa   *protocolOspfAreaTypeNssaXml   `xml:"nssa,omitempty"`
-	Misc   []generic.Xml                  `xml:",any"`
+	Normal         *protocolOspfAreaTypeNormalXml `xml:"normal,omitempty"`
+	Stub           *protocolOspfAreaTypeStubXml   `xml:"stub,omitempty"`
+	Nssa           *protocolOspfAreaTypeNssaXml   `xml:"nssa,omitempty"`
+	Misc           []generic.Xml                  `xml:",any"`
+	MiscAttributes []xml.Attr                     `xml:",any,attr"`
 }
 type protocolOspfAreaTypeNormalXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfAreaTypeStubXml struct {
-	AcceptSummary *string                                  `xml:"accept-summary,omitempty"`
-	DefaultRoute  *protocolOspfAreaTypeStubDefaultRouteXml `xml:"default-route,omitempty"`
-	Misc          []generic.Xml                            `xml:",any"`
+	AcceptSummary  *string                                  `xml:"accept-summary,omitempty"`
+	DefaultRoute   *protocolOspfAreaTypeStubDefaultRouteXml `xml:"default-route,omitempty"`
+	Misc           []generic.Xml                            `xml:",any"`
+	MiscAttributes []xml.Attr                               `xml:",any,attr"`
 }
 type protocolOspfAreaTypeStubDefaultRouteXml struct {
-	Disable   *protocolOspfAreaTypeStubDefaultRouteDisableXml   `xml:"disable,omitempty"`
-	Advertise *protocolOspfAreaTypeStubDefaultRouteAdvertiseXml `xml:"advertise,omitempty"`
-	Misc      []generic.Xml                                     `xml:",any"`
+	Disable        *protocolOspfAreaTypeStubDefaultRouteDisableXml   `xml:"disable,omitempty"`
+	Advertise      *protocolOspfAreaTypeStubDefaultRouteAdvertiseXml `xml:"advertise,omitempty"`
+	Misc           []generic.Xml                                     `xml:",any"`
+	MiscAttributes []xml.Attr                                        `xml:",any,attr"`
 }
 type protocolOspfAreaTypeStubDefaultRouteDisableXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfAreaTypeStubDefaultRouteAdvertiseXml struct {
-	Metric *int64        `xml:"metric,omitempty"`
-	Misc   []generic.Xml `xml:",any"`
+	Metric         *int64        `xml:"metric,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfAreaTypeNssaXml struct {
-	AcceptSummary *string                                           `xml:"accept-summary,omitempty"`
-	DefaultRoute  *protocolOspfAreaTypeNssaDefaultRouteXml          `xml:"default-route,omitempty"`
-	NssaExtRange  *protocolOspfAreaTypeNssaNssaExtRangeContainerXml `xml:"nssa-ext-range,omitempty"`
-	Misc          []generic.Xml                                     `xml:",any"`
+	AcceptSummary  *string                                           `xml:"accept-summary,omitempty"`
+	DefaultRoute   *protocolOspfAreaTypeNssaDefaultRouteXml          `xml:"default-route,omitempty"`
+	NssaExtRange   *protocolOspfAreaTypeNssaNssaExtRangeContainerXml `xml:"nssa-ext-range,omitempty"`
+	Misc           []generic.Xml                                     `xml:",any"`
+	MiscAttributes []xml.Attr                                        `xml:",any,attr"`
 }
 type protocolOspfAreaTypeNssaDefaultRouteXml struct {
-	Disable   *protocolOspfAreaTypeNssaDefaultRouteDisableXml   `xml:"disable,omitempty"`
-	Advertise *protocolOspfAreaTypeNssaDefaultRouteAdvertiseXml `xml:"advertise,omitempty"`
-	Misc      []generic.Xml                                     `xml:",any"`
+	Disable        *protocolOspfAreaTypeNssaDefaultRouteDisableXml   `xml:"disable,omitempty"`
+	Advertise      *protocolOspfAreaTypeNssaDefaultRouteAdvertiseXml `xml:"advertise,omitempty"`
+	Misc           []generic.Xml                                     `xml:",any"`
+	MiscAttributes []xml.Attr                                        `xml:",any,attr"`
 }
 type protocolOspfAreaTypeNssaDefaultRouteDisableXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfAreaTypeNssaDefaultRouteAdvertiseXml struct {
-	Metric *int64        `xml:"metric,omitempty"`
-	Type   *string       `xml:"type,omitempty"`
-	Misc   []generic.Xml `xml:",any"`
+	Metric         *int64        `xml:"metric,omitempty"`
+	Type           *string       `xml:"type,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfAreaTypeNssaNssaExtRangeContainerXml struct {
 	Entries []protocolOspfAreaTypeNssaNssaExtRangeXml `xml:"entry"`
 }
 type protocolOspfAreaTypeNssaNssaExtRangeXml struct {
-	XMLName   xml.Name                                          `xml:"entry"`
-	Name      string                                            `xml:"name,attr"`
-	Advertise *protocolOspfAreaTypeNssaNssaExtRangeAdvertiseXml `xml:"advertise,omitempty"`
-	Suppress  *protocolOspfAreaTypeNssaNssaExtRangeSuppressXml  `xml:"suppress,omitempty"`
-	Misc      []generic.Xml                                     `xml:",any"`
+	XMLName        xml.Name                                          `xml:"entry"`
+	Name           string                                            `xml:"name,attr"`
+	Advertise      *protocolOspfAreaTypeNssaNssaExtRangeAdvertiseXml `xml:"advertise,omitempty"`
+	Suppress       *protocolOspfAreaTypeNssaNssaExtRangeSuppressXml  `xml:"suppress,omitempty"`
+	Misc           []generic.Xml                                     `xml:",any"`
+	MiscAttributes []xml.Attr                                        `xml:",any,attr"`
 }
 type protocolOspfAreaTypeNssaNssaExtRangeAdvertiseXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfAreaTypeNssaNssaExtRangeSuppressXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfAreaRangeContainerXml struct {
 	Entries []protocolOspfAreaRangeXml `xml:"entry"`
 }
 type protocolOspfAreaRangeXml struct {
-	XMLName   xml.Name                           `xml:"entry"`
-	Name      string                             `xml:"name,attr"`
-	Advertise *protocolOspfAreaRangeAdvertiseXml `xml:"advertise,omitempty"`
-	Suppress  *protocolOspfAreaRangeSuppressXml  `xml:"suppress,omitempty"`
-	Misc      []generic.Xml                      `xml:",any"`
+	XMLName        xml.Name                           `xml:"entry"`
+	Name           string                             `xml:"name,attr"`
+	Advertise      *protocolOspfAreaRangeAdvertiseXml `xml:"advertise,omitempty"`
+	Suppress       *protocolOspfAreaRangeSuppressXml  `xml:"suppress,omitempty"`
+	Misc           []generic.Xml                      `xml:",any"`
+	MiscAttributes []xml.Attr                         `xml:",any,attr"`
 }
 type protocolOspfAreaRangeAdvertiseXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfAreaRangeSuppressXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfAreaInterfaceContainerXml struct {
 	Entries []protocolOspfAreaInterfaceXml `xml:"entry"`
@@ -2378,33 +2753,40 @@ type protocolOspfAreaInterfaceXml struct {
 	Neighbor           *protocolOspfAreaInterfaceNeighborContainerXml `xml:"neighbor,omitempty"`
 	Bfd                *protocolOspfAreaInterfaceBfdXml               `xml:"bfd,omitempty"`
 	Misc               []generic.Xml                                  `xml:",any"`
+	MiscAttributes     []xml.Attr                                     `xml:",any,attr"`
 }
 type protocolOspfAreaInterfaceLinkTypeXml struct {
-	Broadcast *protocolOspfAreaInterfaceLinkTypeBroadcastXml `xml:"broadcast,omitempty"`
-	P2p       *protocolOspfAreaInterfaceLinkTypeP2pXml       `xml:"p2p,omitempty"`
-	P2mp      *protocolOspfAreaInterfaceLinkTypeP2mpXml      `xml:"p2mp,omitempty"`
-	Misc      []generic.Xml                                  `xml:",any"`
+	Broadcast      *protocolOspfAreaInterfaceLinkTypeBroadcastXml `xml:"broadcast,omitempty"`
+	P2p            *protocolOspfAreaInterfaceLinkTypeP2pXml       `xml:"p2p,omitempty"`
+	P2mp           *protocolOspfAreaInterfaceLinkTypeP2mpXml      `xml:"p2mp,omitempty"`
+	Misc           []generic.Xml                                  `xml:",any"`
+	MiscAttributes []xml.Attr                                     `xml:",any,attr"`
 }
 type protocolOspfAreaInterfaceLinkTypeBroadcastXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfAreaInterfaceLinkTypeP2pXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfAreaInterfaceLinkTypeP2mpXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfAreaInterfaceNeighborContainerXml struct {
 	Entries []protocolOspfAreaInterfaceNeighborXml `xml:"entry"`
 }
 type protocolOspfAreaInterfaceNeighborXml struct {
-	XMLName xml.Name      `xml:"entry"`
-	Name    string        `xml:"name,attr"`
-	Misc    []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfAreaInterfaceBfdXml struct {
-	Profile *string       `xml:"profile,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	Profile        *string       `xml:"profile,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfAreaVirtualLinkContainerXml struct {
 	Entries []protocolOspfAreaVirtualLinkXml `xml:"entry"`
@@ -2422,45 +2804,51 @@ type protocolOspfAreaVirtualLinkXml struct {
 	Authentication     *string                            `xml:"authentication,omitempty"`
 	Bfd                *protocolOspfAreaVirtualLinkBfdXml `xml:"bfd,omitempty"`
 	Misc               []generic.Xml                      `xml:",any"`
+	MiscAttributes     []xml.Attr                         `xml:",any,attr"`
 }
 type protocolOspfAreaVirtualLinkBfdXml struct {
-	Profile *string       `xml:"profile,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	Profile        *string       `xml:"profile,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfAuthProfileContainerXml struct {
 	Entries []protocolOspfAuthProfileXml `xml:"entry"`
 }
 type protocolOspfAuthProfileXml struct {
-	XMLName  xml.Name                                `xml:"entry"`
-	Name     string                                  `xml:"name,attr"`
-	Password *string                                 `xml:"password,omitempty"`
-	Md5      *protocolOspfAuthProfileMd5ContainerXml `xml:"md5,omitempty"`
-	Misc     []generic.Xml                           `xml:",any"`
+	XMLName        xml.Name                                `xml:"entry"`
+	Name           string                                  `xml:"name,attr"`
+	Password       *string                                 `xml:"password,omitempty"`
+	Md5            *protocolOspfAuthProfileMd5ContainerXml `xml:"md5,omitempty"`
+	Misc           []generic.Xml                           `xml:",any"`
+	MiscAttributes []xml.Attr                              `xml:",any,attr"`
 }
 type protocolOspfAuthProfileMd5ContainerXml struct {
 	Entries []protocolOspfAuthProfileMd5Xml `xml:"entry"`
 }
 type protocolOspfAuthProfileMd5Xml struct {
-	XMLName   xml.Name      `xml:"entry"`
-	Name      string        `xml:"name,attr"`
-	Key       *string       `xml:"key,omitempty"`
-	Preferred *string       `xml:"preferred,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Key            *string       `xml:"key,omitempty"`
+	Preferred      *string       `xml:"preferred,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfExportRulesContainerXml struct {
 	Entries []protocolOspfExportRulesXml `xml:"entry"`
 }
 type protocolOspfExportRulesXml struct {
-	XMLName     xml.Name      `xml:"entry"`
-	Name        string        `xml:"name,attr"`
-	NewPathType *string       `xml:"new-path-type,omitempty"`
-	NewTag      *string       `xml:"new-tag,omitempty"`
-	Metric      *int64        `xml:"metric,omitempty"`
-	Misc        []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	NewPathType    *string       `xml:"new-path-type,omitempty"`
+	NewTag         *string       `xml:"new-tag,omitempty"`
+	Metric         *int64        `xml:"metric,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfGlobalBfdXml struct {
-	Profile *string       `xml:"profile,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	Profile        *string       `xml:"profile,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfGracefulRestartXml struct {
 	Enable                 *string       `xml:"enable,omitempty"`
@@ -2469,11 +2857,13 @@ type protocolOspfGracefulRestartXml struct {
 	MaxNeighborRestartTime *int64        `xml:"max-neighbor-restart-time,omitempty"`
 	StrictLSAChecking      *string       `xml:"strict-LSA-checking,omitempty"`
 	Misc                   []generic.Xml `xml:",any"`
+	MiscAttributes         []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfTimersXml struct {
 	LsaInterval         *float64      `xml:"lsa-interval,omitempty"`
 	SpfCalculationDelay *float64      `xml:"spf-calculation-delay,omitempty"`
 	Misc                []generic.Xml `xml:",any"`
+	MiscAttributes      []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfv3Xml struct {
 	AllowRedistDefaultRoute *string                                `xml:"allow-redist-default-route,omitempty"`
@@ -2488,6 +2878,7 @@ type protocolOspfv3Xml struct {
 	RouterId                *string                                `xml:"router-id,omitempty"`
 	Timers                  *protocolOspfv3TimersXml               `xml:"timers,omitempty"`
 	Misc                    []generic.Xml                          `xml:",any"`
+	MiscAttributes          []xml.Attr                             `xml:",any,attr"`
 }
 type protocolOspfv3AreaContainerXml struct {
 	Entries []protocolOspfv3AreaXml `xml:"entry"`
@@ -2501,83 +2892,100 @@ type protocolOspfv3AreaXml struct {
 	Interface      *protocolOspfv3AreaInterfaceContainerXml   `xml:"interface,omitempty"`
 	VirtualLink    *protocolOspfv3AreaVirtualLinkContainerXml `xml:"virtual-link,omitempty"`
 	Misc           []generic.Xml                              `xml:",any"`
+	MiscAttributes []xml.Attr                                 `xml:",any,attr"`
 }
 type protocolOspfv3AreaTypeXml struct {
-	Normal *protocolOspfv3AreaTypeNormalXml `xml:"normal,omitempty"`
-	Stub   *protocolOspfv3AreaTypeStubXml   `xml:"stub,omitempty"`
-	Nssa   *protocolOspfv3AreaTypeNssaXml   `xml:"nssa,omitempty"`
-	Misc   []generic.Xml                    `xml:",any"`
+	Normal         *protocolOspfv3AreaTypeNormalXml `xml:"normal,omitempty"`
+	Stub           *protocolOspfv3AreaTypeStubXml   `xml:"stub,omitempty"`
+	Nssa           *protocolOspfv3AreaTypeNssaXml   `xml:"nssa,omitempty"`
+	Misc           []generic.Xml                    `xml:",any"`
+	MiscAttributes []xml.Attr                       `xml:",any,attr"`
 }
 type protocolOspfv3AreaTypeNormalXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfv3AreaTypeStubXml struct {
-	AcceptSummary *string                                    `xml:"accept-summary,omitempty"`
-	DefaultRoute  *protocolOspfv3AreaTypeStubDefaultRouteXml `xml:"default-route,omitempty"`
-	Misc          []generic.Xml                              `xml:",any"`
+	AcceptSummary  *string                                    `xml:"accept-summary,omitempty"`
+	DefaultRoute   *protocolOspfv3AreaTypeStubDefaultRouteXml `xml:"default-route,omitempty"`
+	Misc           []generic.Xml                              `xml:",any"`
+	MiscAttributes []xml.Attr                                 `xml:",any,attr"`
 }
 type protocolOspfv3AreaTypeStubDefaultRouteXml struct {
-	Disable   *protocolOspfv3AreaTypeStubDefaultRouteDisableXml   `xml:"disable,omitempty"`
-	Advertise *protocolOspfv3AreaTypeStubDefaultRouteAdvertiseXml `xml:"advertise,omitempty"`
-	Misc      []generic.Xml                                       `xml:",any"`
+	Disable        *protocolOspfv3AreaTypeStubDefaultRouteDisableXml   `xml:"disable,omitempty"`
+	Advertise      *protocolOspfv3AreaTypeStubDefaultRouteAdvertiseXml `xml:"advertise,omitempty"`
+	Misc           []generic.Xml                                       `xml:",any"`
+	MiscAttributes []xml.Attr                                          `xml:",any,attr"`
 }
 type protocolOspfv3AreaTypeStubDefaultRouteDisableXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfv3AreaTypeStubDefaultRouteAdvertiseXml struct {
-	Metric *int64        `xml:"metric,omitempty"`
-	Misc   []generic.Xml `xml:",any"`
+	Metric         *int64        `xml:"metric,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfv3AreaTypeNssaXml struct {
-	AcceptSummary *string                                             `xml:"accept-summary,omitempty"`
-	DefaultRoute  *protocolOspfv3AreaTypeNssaDefaultRouteXml          `xml:"default-route,omitempty"`
-	NssaExtRange  *protocolOspfv3AreaTypeNssaNssaExtRangeContainerXml `xml:"nssa-ext-range,omitempty"`
-	Misc          []generic.Xml                                       `xml:",any"`
+	AcceptSummary  *string                                             `xml:"accept-summary,omitempty"`
+	DefaultRoute   *protocolOspfv3AreaTypeNssaDefaultRouteXml          `xml:"default-route,omitempty"`
+	NssaExtRange   *protocolOspfv3AreaTypeNssaNssaExtRangeContainerXml `xml:"nssa-ext-range,omitempty"`
+	Misc           []generic.Xml                                       `xml:",any"`
+	MiscAttributes []xml.Attr                                          `xml:",any,attr"`
 }
 type protocolOspfv3AreaTypeNssaDefaultRouteXml struct {
-	Disable   *protocolOspfv3AreaTypeNssaDefaultRouteDisableXml   `xml:"disable,omitempty"`
-	Advertise *protocolOspfv3AreaTypeNssaDefaultRouteAdvertiseXml `xml:"advertise,omitempty"`
-	Misc      []generic.Xml                                       `xml:",any"`
+	Disable        *protocolOspfv3AreaTypeNssaDefaultRouteDisableXml   `xml:"disable,omitempty"`
+	Advertise      *protocolOspfv3AreaTypeNssaDefaultRouteAdvertiseXml `xml:"advertise,omitempty"`
+	Misc           []generic.Xml                                       `xml:",any"`
+	MiscAttributes []xml.Attr                                          `xml:",any,attr"`
 }
 type protocolOspfv3AreaTypeNssaDefaultRouteDisableXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfv3AreaTypeNssaDefaultRouteAdvertiseXml struct {
-	Metric *int64        `xml:"metric,omitempty"`
-	Type   *string       `xml:"type,omitempty"`
-	Misc   []generic.Xml `xml:",any"`
+	Metric         *int64        `xml:"metric,omitempty"`
+	Type           *string       `xml:"type,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfv3AreaTypeNssaNssaExtRangeContainerXml struct {
 	Entries []protocolOspfv3AreaTypeNssaNssaExtRangeXml `xml:"entry"`
 }
 type protocolOspfv3AreaTypeNssaNssaExtRangeXml struct {
-	XMLName   xml.Name                                            `xml:"entry"`
-	Name      string                                              `xml:"name,attr"`
-	Advertise *protocolOspfv3AreaTypeNssaNssaExtRangeAdvertiseXml `xml:"advertise,omitempty"`
-	Suppress  *protocolOspfv3AreaTypeNssaNssaExtRangeSuppressXml  `xml:"suppress,omitempty"`
-	Misc      []generic.Xml                                       `xml:",any"`
+	XMLName        xml.Name                                            `xml:"entry"`
+	Name           string                                              `xml:"name,attr"`
+	Advertise      *protocolOspfv3AreaTypeNssaNssaExtRangeAdvertiseXml `xml:"advertise,omitempty"`
+	Suppress       *protocolOspfv3AreaTypeNssaNssaExtRangeSuppressXml  `xml:"suppress,omitempty"`
+	Misc           []generic.Xml                                       `xml:",any"`
+	MiscAttributes []xml.Attr                                          `xml:",any,attr"`
 }
 type protocolOspfv3AreaTypeNssaNssaExtRangeAdvertiseXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfv3AreaTypeNssaNssaExtRangeSuppressXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfv3AreaRangeContainerXml struct {
 	Entries []protocolOspfv3AreaRangeXml `xml:"entry"`
 }
 type protocolOspfv3AreaRangeXml struct {
-	XMLName   xml.Name                             `xml:"entry"`
-	Name      string                               `xml:"name,attr"`
-	Advertise *protocolOspfv3AreaRangeAdvertiseXml `xml:"advertise,omitempty"`
-	Suppress  *protocolOspfv3AreaRangeSuppressXml  `xml:"suppress,omitempty"`
-	Misc      []generic.Xml                        `xml:",any"`
+	XMLName        xml.Name                             `xml:"entry"`
+	Name           string                               `xml:"name,attr"`
+	Advertise      *protocolOspfv3AreaRangeAdvertiseXml `xml:"advertise,omitempty"`
+	Suppress       *protocolOspfv3AreaRangeSuppressXml  `xml:"suppress,omitempty"`
+	Misc           []generic.Xml                        `xml:",any"`
+	MiscAttributes []xml.Attr                           `xml:",any,attr"`
 }
 type protocolOspfv3AreaRangeAdvertiseXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfv3AreaRangeSuppressXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfv3AreaInterfaceContainerXml struct {
 	Entries []protocolOspfv3AreaInterfaceXml `xml:"entry"`
@@ -2600,33 +3008,40 @@ type protocolOspfv3AreaInterfaceXml struct {
 	Neighbor           *protocolOspfv3AreaInterfaceNeighborContainerXml `xml:"neighbor,omitempty"`
 	Bfd                *protocolOspfv3AreaInterfaceBfdXml               `xml:"bfd,omitempty"`
 	Misc               []generic.Xml                                    `xml:",any"`
+	MiscAttributes     []xml.Attr                                       `xml:",any,attr"`
 }
 type protocolOspfv3AreaInterfaceLinkTypeXml struct {
-	Broadcast *protocolOspfv3AreaInterfaceLinkTypeBroadcastXml `xml:"broadcast,omitempty"`
-	P2p       *protocolOspfv3AreaInterfaceLinkTypeP2pXml       `xml:"p2p,omitempty"`
-	P2mp      *protocolOspfv3AreaInterfaceLinkTypeP2mpXml      `xml:"p2mp,omitempty"`
-	Misc      []generic.Xml                                    `xml:",any"`
+	Broadcast      *protocolOspfv3AreaInterfaceLinkTypeBroadcastXml `xml:"broadcast,omitempty"`
+	P2p            *protocolOspfv3AreaInterfaceLinkTypeP2pXml       `xml:"p2p,omitempty"`
+	P2mp           *protocolOspfv3AreaInterfaceLinkTypeP2mpXml      `xml:"p2mp,omitempty"`
+	Misc           []generic.Xml                                    `xml:",any"`
+	MiscAttributes []xml.Attr                                       `xml:",any,attr"`
 }
 type protocolOspfv3AreaInterfaceLinkTypeBroadcastXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfv3AreaInterfaceLinkTypeP2pXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfv3AreaInterfaceLinkTypeP2mpXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfv3AreaInterfaceNeighborContainerXml struct {
 	Entries []protocolOspfv3AreaInterfaceNeighborXml `xml:"entry"`
 }
 type protocolOspfv3AreaInterfaceNeighborXml struct {
-	XMLName xml.Name      `xml:"entry"`
-	Name    string        `xml:"name,attr"`
-	Misc    []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfv3AreaInterfaceBfdXml struct {
-	Profile *string       `xml:"profile,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	Profile        *string       `xml:"profile,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfv3AreaVirtualLinkContainerXml struct {
 	Entries []protocolOspfv3AreaVirtualLinkXml `xml:"entry"`
@@ -2645,106 +3060,126 @@ type protocolOspfv3AreaVirtualLinkXml struct {
 	Authentication     *string                              `xml:"authentication,omitempty"`
 	Bfd                *protocolOspfv3AreaVirtualLinkBfdXml `xml:"bfd,omitempty"`
 	Misc               []generic.Xml                        `xml:",any"`
+	MiscAttributes     []xml.Attr                           `xml:",any,attr"`
 }
 type protocolOspfv3AreaVirtualLinkBfdXml struct {
-	Profile *string       `xml:"profile,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	Profile        *string       `xml:"profile,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfv3AuthProfileContainerXml struct {
 	Entries []protocolOspfv3AuthProfileXml `xml:"entry"`
 }
 type protocolOspfv3AuthProfileXml struct {
-	XMLName xml.Name                         `xml:"entry"`
-	Name    string                           `xml:"name,attr"`
-	Spi     *string                          `xml:"spi,omitempty"`
-	Esp     *protocolOspfv3AuthProfileEspXml `xml:"esp,omitempty"`
-	Ah      *protocolOspfv3AuthProfileAhXml  `xml:"ah,omitempty"`
-	Misc    []generic.Xml                    `xml:",any"`
+	XMLName        xml.Name                         `xml:"entry"`
+	Name           string                           `xml:"name,attr"`
+	Spi            *string                          `xml:"spi,omitempty"`
+	Esp            *protocolOspfv3AuthProfileEspXml `xml:"esp,omitempty"`
+	Ah             *protocolOspfv3AuthProfileAhXml  `xml:"ah,omitempty"`
+	Misc           []generic.Xml                    `xml:",any"`
+	MiscAttributes []xml.Attr                       `xml:",any,attr"`
 }
 type protocolOspfv3AuthProfileEspXml struct {
 	Authentication *protocolOspfv3AuthProfileEspAuthenticationXml `xml:"authentication,omitempty"`
 	Encryption     *protocolOspfv3AuthProfileEspEncryptionXml     `xml:"encryption,omitempty"`
 	Misc           []generic.Xml                                  `xml:",any"`
+	MiscAttributes []xml.Attr                                     `xml:",any,attr"`
 }
 type protocolOspfv3AuthProfileEspAuthenticationXml struct {
-	Md5    *protocolOspfv3AuthProfileEspAuthenticationMd5Xml    `xml:"md5,omitempty"`
-	Sha1   *protocolOspfv3AuthProfileEspAuthenticationSha1Xml   `xml:"sha1,omitempty"`
-	Sha256 *protocolOspfv3AuthProfileEspAuthenticationSha256Xml `xml:"sha256,omitempty"`
-	Sha384 *protocolOspfv3AuthProfileEspAuthenticationSha384Xml `xml:"sha384,omitempty"`
-	Sha512 *protocolOspfv3AuthProfileEspAuthenticationSha512Xml `xml:"sha512,omitempty"`
-	None   *protocolOspfv3AuthProfileEspAuthenticationNoneXml   `xml:"none,omitempty"`
-	Misc   []generic.Xml                                        `xml:",any"`
+	Md5            *protocolOspfv3AuthProfileEspAuthenticationMd5Xml    `xml:"md5,omitempty"`
+	Sha1           *protocolOspfv3AuthProfileEspAuthenticationSha1Xml   `xml:"sha1,omitempty"`
+	Sha256         *protocolOspfv3AuthProfileEspAuthenticationSha256Xml `xml:"sha256,omitempty"`
+	Sha384         *protocolOspfv3AuthProfileEspAuthenticationSha384Xml `xml:"sha384,omitempty"`
+	Sha512         *protocolOspfv3AuthProfileEspAuthenticationSha512Xml `xml:"sha512,omitempty"`
+	None           *protocolOspfv3AuthProfileEspAuthenticationNoneXml   `xml:"none,omitempty"`
+	Misc           []generic.Xml                                        `xml:",any"`
+	MiscAttributes []xml.Attr                                           `xml:",any,attr"`
 }
 type protocolOspfv3AuthProfileEspAuthenticationMd5Xml struct {
-	Key  *string       `xml:"key,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Key            *string       `xml:"key,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfv3AuthProfileEspAuthenticationSha1Xml struct {
-	Key  *string       `xml:"key,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Key            *string       `xml:"key,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfv3AuthProfileEspAuthenticationSha256Xml struct {
-	Key  *string       `xml:"key,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Key            *string       `xml:"key,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfv3AuthProfileEspAuthenticationSha384Xml struct {
-	Key  *string       `xml:"key,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Key            *string       `xml:"key,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfv3AuthProfileEspAuthenticationSha512Xml struct {
-	Key  *string       `xml:"key,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Key            *string       `xml:"key,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfv3AuthProfileEspAuthenticationNoneXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfv3AuthProfileEspEncryptionXml struct {
-	Algorithm *string       `xml:"algorithm,omitempty"`
-	Key       *string       `xml:"key,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	Algorithm      *string       `xml:"algorithm,omitempty"`
+	Key            *string       `xml:"key,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfv3AuthProfileAhXml struct {
-	Md5    *protocolOspfv3AuthProfileAhMd5Xml    `xml:"md5,omitempty"`
-	Sha1   *protocolOspfv3AuthProfileAhSha1Xml   `xml:"sha1,omitempty"`
-	Sha256 *protocolOspfv3AuthProfileAhSha256Xml `xml:"sha256,omitempty"`
-	Sha384 *protocolOspfv3AuthProfileAhSha384Xml `xml:"sha384,omitempty"`
-	Sha512 *protocolOspfv3AuthProfileAhSha512Xml `xml:"sha512,omitempty"`
-	Misc   []generic.Xml                         `xml:",any"`
+	Md5            *protocolOspfv3AuthProfileAhMd5Xml    `xml:"md5,omitempty"`
+	Sha1           *protocolOspfv3AuthProfileAhSha1Xml   `xml:"sha1,omitempty"`
+	Sha256         *protocolOspfv3AuthProfileAhSha256Xml `xml:"sha256,omitempty"`
+	Sha384         *protocolOspfv3AuthProfileAhSha384Xml `xml:"sha384,omitempty"`
+	Sha512         *protocolOspfv3AuthProfileAhSha512Xml `xml:"sha512,omitempty"`
+	Misc           []generic.Xml                         `xml:",any"`
+	MiscAttributes []xml.Attr                            `xml:",any,attr"`
 }
 type protocolOspfv3AuthProfileAhMd5Xml struct {
-	Key  *string       `xml:"key,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Key            *string       `xml:"key,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfv3AuthProfileAhSha1Xml struct {
-	Key  *string       `xml:"key,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Key            *string       `xml:"key,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfv3AuthProfileAhSha256Xml struct {
-	Key  *string       `xml:"key,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Key            *string       `xml:"key,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfv3AuthProfileAhSha384Xml struct {
-	Key  *string       `xml:"key,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Key            *string       `xml:"key,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfv3AuthProfileAhSha512Xml struct {
-	Key  *string       `xml:"key,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Key            *string       `xml:"key,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfv3ExportRulesContainerXml struct {
 	Entries []protocolOspfv3ExportRulesXml `xml:"entry"`
 }
 type protocolOspfv3ExportRulesXml struct {
-	XMLName     xml.Name      `xml:"entry"`
-	Name        string        `xml:"name,attr"`
-	NewPathType *string       `xml:"new-path-type,omitempty"`
-	NewTag      *string       `xml:"new-tag,omitempty"`
-	Metric      *int64        `xml:"metric,omitempty"`
-	Misc        []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	NewPathType    *string       `xml:"new-path-type,omitempty"`
+	NewTag         *string       `xml:"new-tag,omitempty"`
+	Metric         *int64        `xml:"metric,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfv3GlobalBfdXml struct {
-	Profile *string       `xml:"profile,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	Profile        *string       `xml:"profile,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfv3GracefulRestartXml struct {
 	Enable                 *string       `xml:"enable,omitempty"`
@@ -2753,95 +3188,111 @@ type protocolOspfv3GracefulRestartXml struct {
 	MaxNeighborRestartTime *int64        `xml:"max-neighbor-restart-time,omitempty"`
 	StrictLSAChecking      *string       `xml:"strict-LSA-checking,omitempty"`
 	Misc                   []generic.Xml `xml:",any"`
+	MiscAttributes         []xml.Attr    `xml:",any,attr"`
 }
 type protocolOspfv3TimersXml struct {
 	LsaInterval         *float64      `xml:"lsa-interval,omitempty"`
 	SpfCalculationDelay *float64      `xml:"spf-calculation-delay,omitempty"`
 	Misc                []generic.Xml `xml:",any"`
+	MiscAttributes      []xml.Attr    `xml:",any,attr"`
 }
 type protocolRedistProfileContainerXml struct {
 	Entries []protocolRedistProfileXml `xml:"entry"`
 }
 type protocolRedistProfileXml struct {
-	XMLName  xml.Name                        `xml:"entry"`
-	Name     string                          `xml:"name,attr"`
-	Priority *int64                          `xml:"priority,omitempty"`
-	Filter   *protocolRedistProfileFilterXml `xml:"filter,omitempty"`
-	Action   *protocolRedistProfileActionXml `xml:"action,omitempty"`
-	Misc     []generic.Xml                   `xml:",any"`
+	XMLName        xml.Name                        `xml:"entry"`
+	Name           string                          `xml:"name,attr"`
+	Priority       *int64                          `xml:"priority,omitempty"`
+	Filter         *protocolRedistProfileFilterXml `xml:"filter,omitempty"`
+	Action         *protocolRedistProfileActionXml `xml:"action,omitempty"`
+	Misc           []generic.Xml                   `xml:",any"`
+	MiscAttributes []xml.Attr                      `xml:",any,attr"`
 }
 type protocolRedistProfileFilterXml struct {
-	Type        *util.MemberType                    `xml:"type,omitempty"`
-	Interface   *util.MemberType                    `xml:"interface,omitempty"`
-	Destination *util.MemberType                    `xml:"destination,omitempty"`
-	Nexthop     *util.MemberType                    `xml:"nexthop,omitempty"`
-	Ospf        *protocolRedistProfileFilterOspfXml `xml:"ospf,omitempty"`
-	Bgp         *protocolRedistProfileFilterBgpXml  `xml:"bgp,omitempty"`
-	Misc        []generic.Xml                       `xml:",any"`
+	Type           *util.MemberType                    `xml:"type,omitempty"`
+	Interface      *util.MemberType                    `xml:"interface,omitempty"`
+	Destination    *util.MemberType                    `xml:"destination,omitempty"`
+	Nexthop        *util.MemberType                    `xml:"nexthop,omitempty"`
+	Ospf           *protocolRedistProfileFilterOspfXml `xml:"ospf,omitempty"`
+	Bgp            *protocolRedistProfileFilterBgpXml  `xml:"bgp,omitempty"`
+	Misc           []generic.Xml                       `xml:",any"`
+	MiscAttributes []xml.Attr                          `xml:",any,attr"`
 }
 type protocolRedistProfileFilterOspfXml struct {
-	PathType *util.MemberType `xml:"path-type,omitempty"`
-	Area     *util.MemberType `xml:"area,omitempty"`
-	Tag      *util.MemberType `xml:"tag,omitempty"`
-	Misc     []generic.Xml    `xml:",any"`
+	PathType       *util.MemberType `xml:"path-type,omitempty"`
+	Area           *util.MemberType `xml:"area,omitempty"`
+	Tag            *util.MemberType `xml:"tag,omitempty"`
+	Misc           []generic.Xml    `xml:",any"`
+	MiscAttributes []xml.Attr       `xml:",any,attr"`
 }
 type protocolRedistProfileFilterBgpXml struct {
 	Community         *util.MemberType `xml:"community,omitempty"`
 	ExtendedCommunity *util.MemberType `xml:"extended-community,omitempty"`
 	Misc              []generic.Xml    `xml:",any"`
+	MiscAttributes    []xml.Attr       `xml:",any,attr"`
 }
 type protocolRedistProfileActionXml struct {
-	NoRedist *protocolRedistProfileActionNoRedistXml `xml:"no-redist,omitempty"`
-	Redist   *protocolRedistProfileActionRedistXml   `xml:"redist,omitempty"`
-	Misc     []generic.Xml                           `xml:",any"`
+	NoRedist       *protocolRedistProfileActionNoRedistXml `xml:"no-redist,omitempty"`
+	Redist         *protocolRedistProfileActionRedistXml   `xml:"redist,omitempty"`
+	Misc           []generic.Xml                           `xml:",any"`
+	MiscAttributes []xml.Attr                              `xml:",any,attr"`
 }
 type protocolRedistProfileActionNoRedistXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolRedistProfileActionRedistXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolRedistProfileIpv6ContainerXml struct {
 	Entries []protocolRedistProfileIpv6Xml `xml:"entry"`
 }
 type protocolRedistProfileIpv6Xml struct {
-	XMLName  xml.Name                            `xml:"entry"`
-	Name     string                              `xml:"name,attr"`
-	Priority *int64                              `xml:"priority,omitempty"`
-	Filter   *protocolRedistProfileIpv6FilterXml `xml:"filter,omitempty"`
-	Action   *protocolRedistProfileIpv6ActionXml `xml:"action,omitempty"`
-	Misc     []generic.Xml                       `xml:",any"`
+	XMLName        xml.Name                            `xml:"entry"`
+	Name           string                              `xml:"name,attr"`
+	Priority       *int64                              `xml:"priority,omitempty"`
+	Filter         *protocolRedistProfileIpv6FilterXml `xml:"filter,omitempty"`
+	Action         *protocolRedistProfileIpv6ActionXml `xml:"action,omitempty"`
+	Misc           []generic.Xml                       `xml:",any"`
+	MiscAttributes []xml.Attr                          `xml:",any,attr"`
 }
 type protocolRedistProfileIpv6FilterXml struct {
-	Type        *util.MemberType                          `xml:"type,omitempty"`
-	Interface   *util.MemberType                          `xml:"interface,omitempty"`
-	Destination *util.MemberType                          `xml:"destination,omitempty"`
-	Nexthop     *util.MemberType                          `xml:"nexthop,omitempty"`
-	Ospfv3      *protocolRedistProfileIpv6FilterOspfv3Xml `xml:"ospfv3,omitempty"`
-	Bgp         *protocolRedistProfileIpv6FilterBgpXml    `xml:"bgp,omitempty"`
-	Misc        []generic.Xml                             `xml:",any"`
+	Type           *util.MemberType                          `xml:"type,omitempty"`
+	Interface      *util.MemberType                          `xml:"interface,omitempty"`
+	Destination    *util.MemberType                          `xml:"destination,omitempty"`
+	Nexthop        *util.MemberType                          `xml:"nexthop,omitempty"`
+	Ospfv3         *protocolRedistProfileIpv6FilterOspfv3Xml `xml:"ospfv3,omitempty"`
+	Bgp            *protocolRedistProfileIpv6FilterBgpXml    `xml:"bgp,omitempty"`
+	Misc           []generic.Xml                             `xml:",any"`
+	MiscAttributes []xml.Attr                                `xml:",any,attr"`
 }
 type protocolRedistProfileIpv6FilterOspfv3Xml struct {
-	PathType *util.MemberType `xml:"path-type,omitempty"`
-	Area     *util.MemberType `xml:"area,omitempty"`
-	Tag      *util.MemberType `xml:"tag,omitempty"`
-	Misc     []generic.Xml    `xml:",any"`
+	PathType       *util.MemberType `xml:"path-type,omitempty"`
+	Area           *util.MemberType `xml:"area,omitempty"`
+	Tag            *util.MemberType `xml:"tag,omitempty"`
+	Misc           []generic.Xml    `xml:",any"`
+	MiscAttributes []xml.Attr       `xml:",any,attr"`
 }
 type protocolRedistProfileIpv6FilterBgpXml struct {
 	Community         *util.MemberType `xml:"community,omitempty"`
 	ExtendedCommunity *util.MemberType `xml:"extended-community,omitempty"`
 	Misc              []generic.Xml    `xml:",any"`
+	MiscAttributes    []xml.Attr       `xml:",any,attr"`
 }
 type protocolRedistProfileIpv6ActionXml struct {
-	NoRedist *protocolRedistProfileIpv6ActionNoRedistXml `xml:"no-redist,omitempty"`
-	Redist   *protocolRedistProfileIpv6ActionRedistXml   `xml:"redist,omitempty"`
-	Misc     []generic.Xml                               `xml:",any"`
+	NoRedist       *protocolRedistProfileIpv6ActionNoRedistXml `xml:"no-redist,omitempty"`
+	Redist         *protocolRedistProfileIpv6ActionRedistXml   `xml:"redist,omitempty"`
+	Misc           []generic.Xml                               `xml:",any"`
+	MiscAttributes []xml.Attr                                  `xml:",any,attr"`
 }
 type protocolRedistProfileIpv6ActionNoRedistXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolRedistProfileIpv6ActionRedistXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolRipXml struct {
 	AllowRedistDefaultRoute *string                             `xml:"allow-redist-default-route,omitempty"`
@@ -2853,39 +3304,44 @@ type protocolRipXml struct {
 	RejectDefaultRoute      *string                             `xml:"reject-default-route,omitempty"`
 	Timers                  *protocolRipTimersXml               `xml:"timers,omitempty"`
 	Misc                    []generic.Xml                       `xml:",any"`
+	MiscAttributes          []xml.Attr                          `xml:",any,attr"`
 }
 type protocolRipAuthProfileContainerXml struct {
 	Entries []protocolRipAuthProfileXml `xml:"entry"`
 }
 type protocolRipAuthProfileXml struct {
-	XMLName  xml.Name                               `xml:"entry"`
-	Name     string                                 `xml:"name,attr"`
-	Password *string                                `xml:"password,omitempty"`
-	Md5      *protocolRipAuthProfileMd5ContainerXml `xml:"md5,omitempty"`
-	Misc     []generic.Xml                          `xml:",any"`
+	XMLName        xml.Name                               `xml:"entry"`
+	Name           string                                 `xml:"name,attr"`
+	Password       *string                                `xml:"password,omitempty"`
+	Md5            *protocolRipAuthProfileMd5ContainerXml `xml:"md5,omitempty"`
+	Misc           []generic.Xml                          `xml:",any"`
+	MiscAttributes []xml.Attr                             `xml:",any,attr"`
 }
 type protocolRipAuthProfileMd5ContainerXml struct {
 	Entries []protocolRipAuthProfileMd5Xml `xml:"entry"`
 }
 type protocolRipAuthProfileMd5Xml struct {
-	XMLName   xml.Name      `xml:"entry"`
-	Name      string        `xml:"name,attr"`
-	Key       *string       `xml:"key,omitempty"`
-	Preferred *string       `xml:"preferred,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Key            *string       `xml:"key,omitempty"`
+	Preferred      *string       `xml:"preferred,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolRipExportRulesContainerXml struct {
 	Entries []protocolRipExportRulesXml `xml:"entry"`
 }
 type protocolRipExportRulesXml struct {
-	XMLName xml.Name      `xml:"entry"`
-	Name    string        `xml:"name,attr"`
-	Metric  *int64        `xml:"metric,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Metric         *int64        `xml:"metric,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolRipGlobalBfdXml struct {
-	Profile *string       `xml:"profile,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	Profile        *string       `xml:"profile,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolRipInterfaceContainerXml struct {
 	Entries []protocolRipInterfaceXml `xml:"entry"`
@@ -2899,22 +3355,27 @@ type protocolRipInterfaceXml struct {
 	DefaultRoute   *protocolRipInterfaceDefaultRouteXml `xml:"default-route,omitempty"`
 	Bfd            *protocolRipInterfaceBfdXml          `xml:"bfd,omitempty"`
 	Misc           []generic.Xml                        `xml:",any"`
+	MiscAttributes []xml.Attr                           `xml:",any,attr"`
 }
 type protocolRipInterfaceDefaultRouteXml struct {
-	Disable   *protocolRipInterfaceDefaultRouteDisableXml   `xml:"disable,omitempty"`
-	Advertise *protocolRipInterfaceDefaultRouteAdvertiseXml `xml:"advertise,omitempty"`
-	Misc      []generic.Xml                                 `xml:",any"`
+	Disable        *protocolRipInterfaceDefaultRouteDisableXml   `xml:"disable,omitempty"`
+	Advertise      *protocolRipInterfaceDefaultRouteAdvertiseXml `xml:"advertise,omitempty"`
+	Misc           []generic.Xml                                 `xml:",any"`
+	MiscAttributes []xml.Attr                                    `xml:",any,attr"`
 }
 type protocolRipInterfaceDefaultRouteDisableXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolRipInterfaceDefaultRouteAdvertiseXml struct {
-	Metric *int64        `xml:"metric,omitempty"`
-	Misc   []generic.Xml `xml:",any"`
+	Metric         *int64        `xml:"metric,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolRipInterfaceBfdXml struct {
-	Profile *string       `xml:"profile,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	Profile        *string       `xml:"profile,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolRipTimersXml struct {
 	DeleteIntervals *int64        `xml:"delete-intervals,omitempty"`
@@ -2922,6 +3383,7 @@ type protocolRipTimersXml struct {
 	IntervalSeconds *int64        `xml:"interval-seconds,omitempty"`
 	UpdateIntervals *int64        `xml:"update-intervals,omitempty"`
 	Misc            []generic.Xml `xml:",any"`
+	MiscAttributes  []xml.Attr    `xml:",any,attr"`
 }
 
 func (o *entryXml) MarshalFromObject(s Entry) {
@@ -2950,6 +3412,7 @@ func (o *entryXml) MarshalFromObject(s Entry) {
 		o.Protocol = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o entryXml) UnmarshalToObject() (*Entry, error) {
@@ -2991,13 +3454,14 @@ func (o entryXml) UnmarshalToObject() (*Entry, error) {
 	}
 
 	result := &Entry{
-		Name:       o.Name,
-		AdminDists: adminDistsVal,
-		Ecmp:       ecmpVal,
-		Interface:  interfaceVal,
-		Multicast:  multicastVal,
-		Protocol:   protocolVal,
-		Misc:       o.Misc,
+		Name:           o.Name,
+		AdminDists:     adminDistsVal,
+		Ecmp:           ecmpVal,
+		Interface:      interfaceVal,
+		Multicast:      multicastVal,
+		Protocol:       protocolVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3012,21 +3476,23 @@ func (o *adminDistsXml) MarshalFromObject(s AdminDists) {
 	o.Static = s.Static
 	o.StaticIpv6 = s.StaticIpv6
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o adminDistsXml) UnmarshalToObject() (*AdminDists, error) {
 
 	result := &AdminDists{
-		Ebgp:       o.Ebgp,
-		Ibgp:       o.Ibgp,
-		OspfExt:    o.OspfExt,
-		OspfInt:    o.OspfInt,
-		Ospfv3Ext:  o.Ospfv3Ext,
-		Ospfv3Int:  o.Ospfv3Int,
-		Rip:        o.Rip,
-		Static:     o.Static,
-		StaticIpv6: o.StaticIpv6,
-		Misc:       o.Misc,
+		Ebgp:           o.Ebgp,
+		Ibgp:           o.Ibgp,
+		OspfExt:        o.OspfExt,
+		OspfInt:        o.OspfInt,
+		Ospfv3Ext:      o.Ospfv3Ext,
+		Ospfv3Int:      o.Ospfv3Int,
+		Rip:            o.Rip,
+		Static:         o.Static,
+		StaticIpv6:     o.StaticIpv6,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3041,6 +3507,7 @@ func (o *ecmpXml) MarshalFromObject(s Ecmp) {
 	o.StrictSourcePath = util.YesNo(s.StrictSourcePath, nil)
 	o.SymmetricReturn = util.YesNo(s.SymmetricReturn, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ecmpXml) UnmarshalToObject() (*Ecmp, error) {
@@ -3060,6 +3527,7 @@ func (o ecmpXml) UnmarshalToObject() (*Ecmp, error) {
 		StrictSourcePath: util.AsBool(o.StrictSourcePath, nil),
 		SymmetricReturn:  util.AsBool(o.SymmetricReturn, nil),
 		Misc:             o.Misc,
+		MiscAttributes:   o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3085,6 +3553,7 @@ func (o *ecmpAlgorithmXml) MarshalFromObject(s EcmpAlgorithm) {
 		o.WeightedRoundRobin = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ecmpAlgorithmXml) UnmarshalToObject() (*EcmpAlgorithm, error) {
@@ -3127,17 +3596,20 @@ func (o ecmpAlgorithmXml) UnmarshalToObject() (*EcmpAlgorithm, error) {
 		IpModulo:           ipModuloVal,
 		WeightedRoundRobin: weightedRoundRobinVal,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *ecmpAlgorithmBalancedRoundRobinXml) MarshalFromObject(s EcmpAlgorithmBalancedRoundRobin) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ecmpAlgorithmBalancedRoundRobinXml) UnmarshalToObject() (*EcmpAlgorithmBalancedRoundRobin, error) {
 
 	result := &EcmpAlgorithmBalancedRoundRobin{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3146,26 +3618,30 @@ func (o *ecmpAlgorithmIpHashXml) MarshalFromObject(s EcmpAlgorithmIpHash) {
 	o.SrcOnly = util.YesNo(s.SrcOnly, nil)
 	o.UsePort = util.YesNo(s.UsePort, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ecmpAlgorithmIpHashXml) UnmarshalToObject() (*EcmpAlgorithmIpHash, error) {
 
 	result := &EcmpAlgorithmIpHash{
-		HashSeed: o.HashSeed,
-		SrcOnly:  util.AsBool(o.SrcOnly, nil),
-		UsePort:  util.AsBool(o.UsePort, nil),
-		Misc:     o.Misc,
+		HashSeed:       o.HashSeed,
+		SrcOnly:        util.AsBool(o.SrcOnly, nil),
+		UsePort:        util.AsBool(o.UsePort, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *ecmpAlgorithmIpModuloXml) MarshalFromObject(s EcmpAlgorithmIpModulo) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ecmpAlgorithmIpModuloXml) UnmarshalToObject() (*EcmpAlgorithmIpModulo, error) {
 
 	result := &EcmpAlgorithmIpModulo{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3180,6 +3656,7 @@ func (o *ecmpAlgorithmWeightedRoundRobinXml) MarshalFromObject(s EcmpAlgorithmWe
 		o.Interface = &ecmpAlgorithmWeightedRoundRobinInterfaceContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ecmpAlgorithmWeightedRoundRobinXml) UnmarshalToObject() (*EcmpAlgorithmWeightedRoundRobin, error) {
@@ -3195,8 +3672,9 @@ func (o ecmpAlgorithmWeightedRoundRobinXml) UnmarshalToObject() (*EcmpAlgorithmW
 	}
 
 	result := &EcmpAlgorithmWeightedRoundRobin{
-		Interface: interfaceVal,
-		Misc:      o.Misc,
+		Interface:      interfaceVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3204,14 +3682,16 @@ func (o *ecmpAlgorithmWeightedRoundRobinInterfaceXml) MarshalFromObject(s EcmpAl
 	o.Name = s.Name
 	o.Weight = s.Weight
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ecmpAlgorithmWeightedRoundRobinInterfaceXml) UnmarshalToObject() (*EcmpAlgorithmWeightedRoundRobinInterface, error) {
 
 	result := &EcmpAlgorithmWeightedRoundRobinInterface{
-		Name:   o.Name,
-		Weight: o.Weight,
-		Misc:   o.Misc,
+		Name:           o.Name,
+		Weight:         o.Weight,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3251,6 +3731,7 @@ func (o *multicastXml) MarshalFromObject(s Multicast) {
 		o.SsmAddressSpace = &multicastSsmAddressSpaceContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o multicastXml) UnmarshalToObject() (*Multicast, error) {
@@ -3301,6 +3782,7 @@ func (o multicastXml) UnmarshalToObject() (*Multicast, error) {
 		SptThreshold:    sptThresholdVal,
 		SsmAddressSpace: ssmAddressSpaceVal,
 		Misc:            o.Misc,
+		MiscAttributes:  o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3326,6 +3808,7 @@ func (o *multicastInterfaceGroupXml) MarshalFromObject(s MulticastInterfaceGroup
 		o.Pim = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o multicastInterfaceGroupXml) UnmarshalToObject() (*MulticastInterfaceGroup, error) {
@@ -3366,6 +3849,7 @@ func (o multicastInterfaceGroupXml) UnmarshalToObject() (*MulticastInterfaceGrou
 		Igmp:            igmpVal,
 		Pim:             pimVal,
 		Misc:            o.Misc,
+		MiscAttributes:  o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3389,6 +3873,7 @@ func (o *multicastInterfaceGroupGroupPermissionXml) MarshalFromObject(s Multicas
 		o.SourceSpecificMulticast = &multicastInterfaceGroupGroupPermissionSourceSpecificMulticastContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o multicastInterfaceGroupGroupPermissionXml) UnmarshalToObject() (*MulticastInterfaceGroupGroupPermission, error) {
@@ -3417,6 +3902,7 @@ func (o multicastInterfaceGroupGroupPermissionXml) UnmarshalToObject() (*Multica
 		AnySourceMulticast:      anySourceMulticastVal,
 		SourceSpecificMulticast: sourceSpecificMulticastVal,
 		Misc:                    o.Misc,
+		MiscAttributes:          o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3425,15 +3911,17 @@ func (o *multicastInterfaceGroupGroupPermissionAnySourceMulticastXml) MarshalFro
 	o.GroupAddress = s.GroupAddress
 	o.Included = util.YesNo(s.Included, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o multicastInterfaceGroupGroupPermissionAnySourceMulticastXml) UnmarshalToObject() (*MulticastInterfaceGroupGroupPermissionAnySourceMulticast, error) {
 
 	result := &MulticastInterfaceGroupGroupPermissionAnySourceMulticast{
-		Name:         o.Name,
-		GroupAddress: o.GroupAddress,
-		Included:     util.AsBool(o.Included, nil),
-		Misc:         o.Misc,
+		Name:           o.Name,
+		GroupAddress:   o.GroupAddress,
+		Included:       util.AsBool(o.Included, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3443,16 +3931,18 @@ func (o *multicastInterfaceGroupGroupPermissionSourceSpecificMulticastXml) Marsh
 	o.SourceAddress = s.SourceAddress
 	o.Included = util.YesNo(s.Included, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o multicastInterfaceGroupGroupPermissionSourceSpecificMulticastXml) UnmarshalToObject() (*MulticastInterfaceGroupGroupPermissionSourceSpecificMulticast, error) {
 
 	result := &MulticastInterfaceGroupGroupPermissionSourceSpecificMulticast{
-		Name:          o.Name,
-		GroupAddress:  o.GroupAddress,
-		SourceAddress: o.SourceAddress,
-		Included:      util.AsBool(o.Included, nil),
-		Misc:          o.Misc,
+		Name:           o.Name,
+		GroupAddress:   o.GroupAddress,
+		SourceAddress:  o.SourceAddress,
+		Included:       util.AsBool(o.Included, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3468,6 +3958,7 @@ func (o *multicastInterfaceGroupIgmpXml) MarshalFromObject(s MulticastInterfaceG
 	o.MaxSources = s.MaxSources
 	o.RouterAlertPolicing = util.YesNo(s.RouterAlertPolicing, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o multicastInterfaceGroupIgmpXml) UnmarshalToObject() (*MulticastInterfaceGroupIgmp, error) {
@@ -3484,6 +3975,7 @@ func (o multicastInterfaceGroupIgmpXml) UnmarshalToObject() (*MulticastInterface
 		MaxSources:              o.MaxSources,
 		RouterAlertPolicing:     util.AsBool(o.RouterAlertPolicing, nil),
 		Misc:                    o.Misc,
+		MiscAttributes:          o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3504,6 +3996,7 @@ func (o *multicastInterfaceGroupPimXml) MarshalFromObject(s MulticastInterfaceGr
 		o.AllowedNeighbors = &multicastInterfaceGroupPimAllowedNeighborsContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o multicastInterfaceGroupPimXml) UnmarshalToObject() (*MulticastInterfaceGroupPim, error) {
@@ -3527,19 +4020,22 @@ func (o multicastInterfaceGroupPimXml) UnmarshalToObject() (*MulticastInterfaceG
 		BsrBorder:         util.AsBool(o.BsrBorder, nil),
 		AllowedNeighbors:  allowedNeighborsVal,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *multicastInterfaceGroupPimAllowedNeighborsXml) MarshalFromObject(s MulticastInterfaceGroupPimAllowedNeighbors) {
 	o.Name = s.Name
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o multicastInterfaceGroupPimAllowedNeighborsXml) UnmarshalToObject() (*MulticastInterfaceGroupPimAllowedNeighbors, error) {
 
 	result := &MulticastInterfaceGroupPimAllowedNeighbors{
-		Name: o.Name,
-		Misc: o.Misc,
+		Name:           o.Name,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3559,6 +4055,7 @@ func (o *multicastRpXml) MarshalFromObject(s MulticastRp) {
 		o.LocalRp = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o multicastRpXml) UnmarshalToObject() (*MulticastRp, error) {
@@ -3582,9 +4079,10 @@ func (o multicastRpXml) UnmarshalToObject() (*MulticastRp, error) {
 	}
 
 	result := &MulticastRp{
-		ExternalRp: externalRpVal,
-		LocalRp:    localRpVal,
-		Misc:       o.Misc,
+		ExternalRp:     externalRpVal,
+		LocalRp:        localRpVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3595,6 +4093,7 @@ func (o *multicastRpExternalRpXml) MarshalFromObject(s MulticastRpExternalRp) {
 	}
 	o.Override = util.YesNo(s.Override, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o multicastRpExternalRpXml) UnmarshalToObject() (*MulticastRpExternalRp, error) {
@@ -3608,6 +4107,7 @@ func (o multicastRpExternalRpXml) UnmarshalToObject() (*MulticastRpExternalRp, e
 		GroupAddresses: groupAddressesVal,
 		Override:       util.AsBool(o.Override, nil),
 		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3623,6 +4123,7 @@ func (o *multicastRpLocalRpXml) MarshalFromObject(s MulticastRpLocalRp) {
 		o.StaticRp = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o multicastRpLocalRpXml) UnmarshalToObject() (*MulticastRpLocalRp, error) {
@@ -3644,9 +4145,10 @@ func (o multicastRpLocalRpXml) UnmarshalToObject() (*MulticastRpLocalRp, error) 
 	}
 
 	result := &MulticastRpLocalRp{
-		CandidateRp: candidateRpVal,
-		StaticRp:    staticRpVal,
-		Misc:        o.Misc,
+		CandidateRp:    candidateRpVal,
+		StaticRp:       staticRpVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3659,6 +4161,7 @@ func (o *multicastRpLocalRpCandidateRpXml) MarshalFromObject(s MulticastRpLocalR
 	o.Interface = s.Interface
 	o.Priority = s.Priority
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o multicastRpLocalRpCandidateRpXml) UnmarshalToObject() (*MulticastRpLocalRpCandidateRp, error) {
@@ -3674,6 +4177,7 @@ func (o multicastRpLocalRpCandidateRpXml) UnmarshalToObject() (*MulticastRpLocal
 		Interface:             o.Interface,
 		Priority:              o.Priority,
 		Misc:                  o.Misc,
+		MiscAttributes:        o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3685,6 +4189,7 @@ func (o *multicastRpLocalRpStaticRpXml) MarshalFromObject(s MulticastRpLocalRpSt
 	o.Interface = s.Interface
 	o.Override = util.YesNo(s.Override, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o multicastRpLocalRpStaticRpXml) UnmarshalToObject() (*MulticastRpLocalRpStaticRp, error) {
@@ -3699,6 +4204,7 @@ func (o multicastRpLocalRpStaticRpXml) UnmarshalToObject() (*MulticastRpLocalRpS
 		Interface:      o.Interface,
 		Override:       util.AsBool(o.Override, nil),
 		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3706,14 +4212,16 @@ func (o *multicastSptThresholdXml) MarshalFromObject(s MulticastSptThreshold) {
 	o.Name = s.Name
 	o.Threshold = s.Threshold
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o multicastSptThresholdXml) UnmarshalToObject() (*MulticastSptThreshold, error) {
 
 	result := &MulticastSptThreshold{
-		Name:      o.Name,
-		Threshold: o.Threshold,
-		Misc:      o.Misc,
+		Name:           o.Name,
+		Threshold:      o.Threshold,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3722,15 +4230,17 @@ func (o *multicastSsmAddressSpaceXml) MarshalFromObject(s MulticastSsmAddressSpa
 	o.GroupAddress = s.GroupAddress
 	o.Included = util.YesNo(s.Included, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o multicastSsmAddressSpaceXml) UnmarshalToObject() (*MulticastSsmAddressSpace, error) {
 
 	result := &MulticastSsmAddressSpace{
-		Name:         o.Name,
-		GroupAddress: o.GroupAddress,
-		Included:     util.AsBool(o.Included, nil),
-		Misc:         o.Misc,
+		Name:           o.Name,
+		GroupAddress:   o.GroupAddress,
+		Included:       util.AsBool(o.Included, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3774,6 +4284,7 @@ func (o *protocolXml) MarshalFromObject(s Protocol) {
 		o.Rip = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolXml) UnmarshalToObject() (*Protocol, error) {
@@ -3838,6 +4349,7 @@ func (o protocolXml) UnmarshalToObject() (*Protocol, error) {
 		RedistProfileIpv6: redistProfileIpv6Val,
 		Rip:               ripVal,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3902,6 +4414,7 @@ func (o *protocolBgpXml) MarshalFromObject(s ProtocolBgp) {
 		o.RoutingOptions = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpXml) UnmarshalToObject() (*ProtocolBgp, error) {
@@ -3987,6 +4500,7 @@ func (o protocolBgpXml) UnmarshalToObject() (*ProtocolBgp, error) {
 		RouterId:                o.RouterId,
 		RoutingOptions:          routingOptionsVal,
 		Misc:                    o.Misc,
+		MiscAttributes:          o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3994,14 +4508,16 @@ func (o *protocolBgpAuthProfileXml) MarshalFromObject(s ProtocolBgpAuthProfile) 
 	o.Name = s.Name
 	o.Secret = s.Secret
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpAuthProfileXml) UnmarshalToObject() (*ProtocolBgpAuthProfile, error) {
 
 	result := &ProtocolBgpAuthProfile{
-		Name:   o.Name,
-		Secret: o.Secret,
-		Misc:   o.Misc,
+		Name:           o.Name,
+		Secret:         o.Secret,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4014,6 +4530,7 @@ func (o *protocolBgpDampeningProfileXml) MarshalFromObject(s ProtocolBgpDampenin
 	o.DecayHalfLifeReachable = s.DecayHalfLifeReachable
 	o.DecayHalfLifeUnreachable = s.DecayHalfLifeUnreachable
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpDampeningProfileXml) UnmarshalToObject() (*ProtocolBgpDampeningProfile, error) {
@@ -4027,19 +4544,22 @@ func (o protocolBgpDampeningProfileXml) UnmarshalToObject() (*ProtocolBgpDampeni
 		DecayHalfLifeReachable:   o.DecayHalfLifeReachable,
 		DecayHalfLifeUnreachable: o.DecayHalfLifeUnreachable,
 		Misc:                     o.Misc,
+		MiscAttributes:           o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolBgpGlobalBfdXml) MarshalFromObject(s ProtocolBgpGlobalBfd) {
 	o.Profile = s.Profile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpGlobalBfdXml) UnmarshalToObject() (*ProtocolBgpGlobalBfd, error) {
 
 	result := &ProtocolBgpGlobalBfd{
-		Profile: o.Profile,
-		Misc:    o.Misc,
+		Profile:        o.Profile,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4063,6 +4583,7 @@ func (o *protocolBgpPeerGroupXml) MarshalFromObject(s ProtocolBgpPeerGroup) {
 		o.Peer = &protocolBgpPeerGroupPeerContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPeerGroupXml) UnmarshalToObject() (*ProtocolBgpPeerGroup, error) {
@@ -4093,6 +4614,7 @@ func (o protocolBgpPeerGroupXml) UnmarshalToObject() (*ProtocolBgpPeerGroup, err
 		Type:                    typeVal,
 		Peer:                    peerVal,
 		Misc:                    o.Misc,
+		MiscAttributes:          o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4118,6 +4640,7 @@ func (o *protocolBgpPeerGroupTypeXml) MarshalFromObject(s ProtocolBgpPeerGroupTy
 		o.Ebgp = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPeerGroupTypeXml) UnmarshalToObject() (*ProtocolBgpPeerGroupType, error) {
@@ -4155,50 +4678,57 @@ func (o protocolBgpPeerGroupTypeXml) UnmarshalToObject() (*ProtocolBgpPeerGroupT
 	}
 
 	result := &ProtocolBgpPeerGroupType{
-		Ibgp:       ibgpVal,
-		EbgpConfed: ebgpConfedVal,
-		IbgpConfed: ibgpConfedVal,
-		Ebgp:       ebgpVal,
-		Misc:       o.Misc,
+		Ibgp:           ibgpVal,
+		EbgpConfed:     ebgpConfedVal,
+		IbgpConfed:     ibgpConfedVal,
+		Ebgp:           ebgpVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolBgpPeerGroupTypeIbgpXml) MarshalFromObject(s ProtocolBgpPeerGroupTypeIbgp) {
 	o.ExportNexthop = s.ExportNexthop
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPeerGroupTypeIbgpXml) UnmarshalToObject() (*ProtocolBgpPeerGroupTypeIbgp, error) {
 
 	result := &ProtocolBgpPeerGroupTypeIbgp{
-		ExportNexthop: o.ExportNexthop,
-		Misc:          o.Misc,
+		ExportNexthop:  o.ExportNexthop,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolBgpPeerGroupTypeEbgpConfedXml) MarshalFromObject(s ProtocolBgpPeerGroupTypeEbgpConfed) {
 	o.ExportNexthop = s.ExportNexthop
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPeerGroupTypeEbgpConfedXml) UnmarshalToObject() (*ProtocolBgpPeerGroupTypeEbgpConfed, error) {
 
 	result := &ProtocolBgpPeerGroupTypeEbgpConfed{
-		ExportNexthop: o.ExportNexthop,
-		Misc:          o.Misc,
+		ExportNexthop:  o.ExportNexthop,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolBgpPeerGroupTypeIbgpConfedXml) MarshalFromObject(s ProtocolBgpPeerGroupTypeIbgpConfed) {
 	o.ExportNexthop = s.ExportNexthop
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPeerGroupTypeIbgpConfedXml) UnmarshalToObject() (*ProtocolBgpPeerGroupTypeIbgpConfed, error) {
 
 	result := &ProtocolBgpPeerGroupTypeIbgpConfed{
-		ExportNexthop: o.ExportNexthop,
-		Misc:          o.Misc,
+		ExportNexthop:  o.ExportNexthop,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4207,6 +4737,7 @@ func (o *protocolBgpPeerGroupTypeEbgpXml) MarshalFromObject(s ProtocolBgpPeerGro
 	o.ExportNexthop = s.ExportNexthop
 	o.RemovePrivateAs = util.YesNo(s.RemovePrivateAs, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPeerGroupTypeEbgpXml) UnmarshalToObject() (*ProtocolBgpPeerGroupTypeEbgp, error) {
@@ -4216,6 +4747,7 @@ func (o protocolBgpPeerGroupTypeEbgpXml) UnmarshalToObject() (*ProtocolBgpPeerGr
 		ExportNexthop:   o.ExportNexthop,
 		RemovePrivateAs: util.AsBool(o.RemovePrivateAs, nil),
 		Misc:            o.Misc,
+		MiscAttributes:  o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4255,6 +4787,7 @@ func (o *protocolBgpPeerGroupPeerXml) MarshalFromObject(s ProtocolBgpPeerGroupPe
 		o.Bfd = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPeerGroupPeerXml) UnmarshalToObject() (*ProtocolBgpPeerGroupPeer, error) {
@@ -4315,6 +4848,7 @@ func (o protocolBgpPeerGroupPeerXml) UnmarshalToObject() (*ProtocolBgpPeerGroupP
 		ConnectionOptions:                 connectionOptionsVal,
 		Bfd:                               bfdVal,
 		Misc:                              o.Misc,
+		MiscAttributes:                    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4322,14 +4856,16 @@ func (o *protocolBgpPeerGroupPeerSubsequentAddressFamilyIdentifierXml) MarshalFr
 	o.Unicast = util.YesNo(s.Unicast, nil)
 	o.Multicast = util.YesNo(s.Multicast, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPeerGroupPeerSubsequentAddressFamilyIdentifierXml) UnmarshalToObject() (*ProtocolBgpPeerGroupPeerSubsequentAddressFamilyIdentifier, error) {
 
 	result := &ProtocolBgpPeerGroupPeerSubsequentAddressFamilyIdentifier{
-		Unicast:   util.AsBool(o.Unicast, nil),
-		Multicast: util.AsBool(o.Multicast, nil),
-		Misc:      o.Misc,
+		Unicast:        util.AsBool(o.Unicast, nil),
+		Multicast:      util.AsBool(o.Multicast, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4337,14 +4873,16 @@ func (o *protocolBgpPeerGroupPeerLocalAddressXml) MarshalFromObject(s ProtocolBg
 	o.Interface = s.Interface
 	o.Ip = s.Ip
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPeerGroupPeerLocalAddressXml) UnmarshalToObject() (*ProtocolBgpPeerGroupPeerLocalAddress, error) {
 
 	result := &ProtocolBgpPeerGroupPeerLocalAddress{
-		Interface: o.Interface,
-		Ip:        o.Ip,
-		Misc:      o.Misc,
+		Interface:      o.Interface,
+		Ip:             o.Ip,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4352,14 +4890,16 @@ func (o *protocolBgpPeerGroupPeerPeerAddressXml) MarshalFromObject(s ProtocolBgp
 	o.Ip = s.Ip
 	o.Fqdn = s.Fqdn
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPeerGroupPeerPeerAddressXml) UnmarshalToObject() (*ProtocolBgpPeerGroupPeerPeerAddress, error) {
 
 	result := &ProtocolBgpPeerGroupPeerPeerAddress{
-		Ip:   o.Ip,
-		Fqdn: o.Fqdn,
-		Misc: o.Misc,
+		Ip:             o.Ip,
+		Fqdn:           o.Fqdn,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4382,6 +4922,7 @@ func (o *protocolBgpPeerGroupPeerConnectionOptionsXml) MarshalFromObject(s Proto
 		o.OutgoingBgpConnection = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPeerGroupPeerConnectionOptionsXml) UnmarshalToObject() (*ProtocolBgpPeerGroupPeerConnectionOptions, error) {
@@ -4413,6 +4954,7 @@ func (o protocolBgpPeerGroupPeerConnectionOptionsXml) UnmarshalToObject() (*Prot
 		IncomingBgpConnection: incomingBgpConnectionVal,
 		OutgoingBgpConnection: outgoingBgpConnectionVal,
 		Misc:                  o.Misc,
+		MiscAttributes:        o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4420,14 +4962,16 @@ func (o *protocolBgpPeerGroupPeerConnectionOptionsIncomingBgpConnectionXml) Mars
 	o.RemotePort = s.RemotePort
 	o.Allow = util.YesNo(s.Allow, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPeerGroupPeerConnectionOptionsIncomingBgpConnectionXml) UnmarshalToObject() (*ProtocolBgpPeerGroupPeerConnectionOptionsIncomingBgpConnection, error) {
 
 	result := &ProtocolBgpPeerGroupPeerConnectionOptionsIncomingBgpConnection{
-		RemotePort: o.RemotePort,
-		Allow:      util.AsBool(o.Allow, nil),
-		Misc:       o.Misc,
+		RemotePort:     o.RemotePort,
+		Allow:          util.AsBool(o.Allow, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4435,27 +4979,31 @@ func (o *protocolBgpPeerGroupPeerConnectionOptionsOutgoingBgpConnectionXml) Mars
 	o.LocalPort = s.LocalPort
 	o.Allow = util.YesNo(s.Allow, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPeerGroupPeerConnectionOptionsOutgoingBgpConnectionXml) UnmarshalToObject() (*ProtocolBgpPeerGroupPeerConnectionOptionsOutgoingBgpConnection, error) {
 
 	result := &ProtocolBgpPeerGroupPeerConnectionOptionsOutgoingBgpConnection{
-		LocalPort: o.LocalPort,
-		Allow:     util.AsBool(o.Allow, nil),
-		Misc:      o.Misc,
+		LocalPort:      o.LocalPort,
+		Allow:          util.AsBool(o.Allow, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolBgpPeerGroupPeerBfdXml) MarshalFromObject(s ProtocolBgpPeerGroupPeerBfd) {
 	o.Profile = s.Profile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPeerGroupPeerBfdXml) UnmarshalToObject() (*ProtocolBgpPeerGroupPeerBfd, error) {
 
 	result := &ProtocolBgpPeerGroupPeerBfd{
-		Profile: o.Profile,
-		Misc:    o.Misc,
+		Profile:        o.Profile,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4481,6 +5029,7 @@ func (o *protocolBgpPolicyXml) MarshalFromObject(s ProtocolBgpPolicy) {
 		o.Import = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyXml) UnmarshalToObject() (*ProtocolBgpPolicy, error) {
@@ -4523,6 +5072,7 @@ func (o protocolBgpPolicyXml) UnmarshalToObject() (*ProtocolBgpPolicy, error) {
 		Export:                   exportVal,
 		Import:                   importVal,
 		Misc:                     o.Misc,
+		MiscAttributes:           o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4537,6 +5087,7 @@ func (o *protocolBgpPolicyAggregationXml) MarshalFromObject(s ProtocolBgpPolicyA
 		o.Address = &protocolBgpPolicyAggregationAddressContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyAggregationXml) UnmarshalToObject() (*ProtocolBgpPolicyAggregation, error) {
@@ -4552,8 +5103,9 @@ func (o protocolBgpPolicyAggregationXml) UnmarshalToObject() (*ProtocolBgpPolicy
 	}
 
 	result := &ProtocolBgpPolicyAggregation{
-		Address: addressVal,
-		Misc:    o.Misc,
+		Address:        addressVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4587,6 +5139,7 @@ func (o *protocolBgpPolicyAggregationAddressXml) MarshalFromObject(s ProtocolBgp
 		o.AdvertiseFilters = &protocolBgpPolicyAggregationAddressAdvertiseFiltersContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyAggregationAddressXml) UnmarshalToObject() (*ProtocolBgpPolicyAggregationAddress, error) {
@@ -4629,6 +5182,7 @@ func (o protocolBgpPolicyAggregationAddressXml) UnmarshalToObject() (*ProtocolBg
 		SuppressFilters:          suppressFiltersVal,
 		AdvertiseFilters:         advertiseFiltersVal,
 		Misc:                     o.Misc,
+		MiscAttributes:           o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4655,6 +5209,7 @@ func (o *protocolBgpPolicyAggregationAddressAggregateRouteAttributesXml) Marshal
 		o.ExtendedCommunity = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyAggregationAddressAggregateRouteAttributesXml) UnmarshalToObject() (*ProtocolBgpPolicyAggregationAddressAggregateRouteAttributes, error) {
@@ -4694,6 +5249,7 @@ func (o protocolBgpPolicyAggregationAddressAggregateRouteAttributesXml) Unmarsha
 		Community:         communityVal,
 		ExtendedCommunity: extendedCommunityVal,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4705,6 +5261,7 @@ func (o *protocolBgpPolicyAggregationAddressAggregateRouteAttributesAsPathXml) M
 	}
 	o.Prepend = s.Prepend
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyAggregationAddressAggregateRouteAttributesAsPathXml) UnmarshalToObject() (*ProtocolBgpPolicyAggregationAddressAggregateRouteAttributesAsPath, error) {
@@ -4718,20 +5275,23 @@ func (o protocolBgpPolicyAggregationAddressAggregateRouteAttributesAsPathXml) Un
 	}
 
 	result := &ProtocolBgpPolicyAggregationAddressAggregateRouteAttributesAsPath{
-		None:    noneVal,
-		Prepend: o.Prepend,
-		Misc:    o.Misc,
+		None:           noneVal,
+		Prepend:        o.Prepend,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolBgpPolicyAggregationAddressAggregateRouteAttributesAsPathNoneXml) MarshalFromObject(s ProtocolBgpPolicyAggregationAddressAggregateRouteAttributesAsPathNone) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyAggregationAddressAggregateRouteAttributesAsPathNoneXml) UnmarshalToObject() (*ProtocolBgpPolicyAggregationAddressAggregateRouteAttributesAsPathNone, error) {
 
 	result := &ProtocolBgpPolicyAggregationAddressAggregateRouteAttributesAsPathNone{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4754,6 +5314,7 @@ func (o *protocolBgpPolicyAggregationAddressAggregateRouteAttributesCommunityXml
 		o.Overwrite = util.StrToMem(s.Overwrite)
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyAggregationAddressAggregateRouteAttributesCommunityXml) UnmarshalToObject() (*ProtocolBgpPolicyAggregationAddressAggregateRouteAttributesCommunity, error) {
@@ -4783,34 +5344,39 @@ func (o protocolBgpPolicyAggregationAddressAggregateRouteAttributesCommunityXml)
 	}
 
 	result := &ProtocolBgpPolicyAggregationAddressAggregateRouteAttributesCommunity{
-		None:        noneVal,
-		RemoveAll:   removeAllVal,
-		RemoveRegex: o.RemoveRegex,
-		Append:      appendVal,
-		Overwrite:   overwriteVal,
-		Misc:        o.Misc,
+		None:           noneVal,
+		RemoveAll:      removeAllVal,
+		RemoveRegex:    o.RemoveRegex,
+		Append:         appendVal,
+		Overwrite:      overwriteVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolBgpPolicyAggregationAddressAggregateRouteAttributesCommunityNoneXml) MarshalFromObject(s ProtocolBgpPolicyAggregationAddressAggregateRouteAttributesCommunityNone) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyAggregationAddressAggregateRouteAttributesCommunityNoneXml) UnmarshalToObject() (*ProtocolBgpPolicyAggregationAddressAggregateRouteAttributesCommunityNone, error) {
 
 	result := &ProtocolBgpPolicyAggregationAddressAggregateRouteAttributesCommunityNone{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolBgpPolicyAggregationAddressAggregateRouteAttributesCommunityRemoveAllXml) MarshalFromObject(s ProtocolBgpPolicyAggregationAddressAggregateRouteAttributesCommunityRemoveAll) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyAggregationAddressAggregateRouteAttributesCommunityRemoveAllXml) UnmarshalToObject() (*ProtocolBgpPolicyAggregationAddressAggregateRouteAttributesCommunityRemoveAll, error) {
 
 	result := &ProtocolBgpPolicyAggregationAddressAggregateRouteAttributesCommunityRemoveAll{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4833,6 +5399,7 @@ func (o *protocolBgpPolicyAggregationAddressAggregateRouteAttributesExtendedComm
 		o.Overwrite = util.StrToMem(s.Overwrite)
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyAggregationAddressAggregateRouteAttributesExtendedCommunityXml) UnmarshalToObject() (*ProtocolBgpPolicyAggregationAddressAggregateRouteAttributesExtendedCommunity, error) {
@@ -4862,34 +5429,39 @@ func (o protocolBgpPolicyAggregationAddressAggregateRouteAttributesExtendedCommu
 	}
 
 	result := &ProtocolBgpPolicyAggregationAddressAggregateRouteAttributesExtendedCommunity{
-		None:        noneVal,
-		RemoveAll:   removeAllVal,
-		RemoveRegex: o.RemoveRegex,
-		Append:      appendVal,
-		Overwrite:   overwriteVal,
-		Misc:        o.Misc,
+		None:           noneVal,
+		RemoveAll:      removeAllVal,
+		RemoveRegex:    o.RemoveRegex,
+		Append:         appendVal,
+		Overwrite:      overwriteVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolBgpPolicyAggregationAddressAggregateRouteAttributesExtendedCommunityNoneXml) MarshalFromObject(s ProtocolBgpPolicyAggregationAddressAggregateRouteAttributesExtendedCommunityNone) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyAggregationAddressAggregateRouteAttributesExtendedCommunityNoneXml) UnmarshalToObject() (*ProtocolBgpPolicyAggregationAddressAggregateRouteAttributesExtendedCommunityNone, error) {
 
 	result := &ProtocolBgpPolicyAggregationAddressAggregateRouteAttributesExtendedCommunityNone{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolBgpPolicyAggregationAddressAggregateRouteAttributesExtendedCommunityRemoveAllXml) MarshalFromObject(s ProtocolBgpPolicyAggregationAddressAggregateRouteAttributesExtendedCommunityRemoveAll) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyAggregationAddressAggregateRouteAttributesExtendedCommunityRemoveAllXml) UnmarshalToObject() (*ProtocolBgpPolicyAggregationAddressAggregateRouteAttributesExtendedCommunityRemoveAll, error) {
 
 	result := &ProtocolBgpPolicyAggregationAddressAggregateRouteAttributesExtendedCommunityRemoveAll{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4902,6 +5474,7 @@ func (o *protocolBgpPolicyAggregationAddressSuppressFiltersXml) MarshalFromObjec
 		o.Match = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyAggregationAddressSuppressFiltersXml) UnmarshalToObject() (*ProtocolBgpPolicyAggregationAddressSuppressFilters, error) {
@@ -4915,10 +5488,11 @@ func (o protocolBgpPolicyAggregationAddressSuppressFiltersXml) UnmarshalToObject
 	}
 
 	result := &ProtocolBgpPolicyAggregationAddressSuppressFilters{
-		Name:   o.Name,
-		Enable: util.AsBool(o.Enable, nil),
-		Match:  matchVal,
-		Misc:   o.Misc,
+		Name:           o.Name,
+		Enable:         util.AsBool(o.Enable, nil),
+		Match:          matchVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4956,6 +5530,7 @@ func (o *protocolBgpPolicyAggregationAddressSuppressFiltersMatchXml) MarshalFrom
 		o.ExtendedCommunity = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyAggregationAddressSuppressFiltersMatchXml) UnmarshalToObject() (*ProtocolBgpPolicyAggregationAddressSuppressFiltersMatch, error) {
@@ -5012,6 +5587,7 @@ func (o protocolBgpPolicyAggregationAddressSuppressFiltersMatchXml) UnmarshalToO
 		Community:         communityVal,
 		ExtendedCommunity: extendedCommunityVal,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5019,53 +5595,61 @@ func (o *protocolBgpPolicyAggregationAddressSuppressFiltersMatchAddressPrefixXml
 	o.Name = s.Name
 	o.Exact = util.YesNo(s.Exact, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyAggregationAddressSuppressFiltersMatchAddressPrefixXml) UnmarshalToObject() (*ProtocolBgpPolicyAggregationAddressSuppressFiltersMatchAddressPrefix, error) {
 
 	result := &ProtocolBgpPolicyAggregationAddressSuppressFiltersMatchAddressPrefix{
-		Name:  o.Name,
-		Exact: util.AsBool(o.Exact, nil),
-		Misc:  o.Misc,
+		Name:           o.Name,
+		Exact:          util.AsBool(o.Exact, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolBgpPolicyAggregationAddressSuppressFiltersMatchAsPathXml) MarshalFromObject(s ProtocolBgpPolicyAggregationAddressSuppressFiltersMatchAsPath) {
 	o.Regex = s.Regex
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyAggregationAddressSuppressFiltersMatchAsPathXml) UnmarshalToObject() (*ProtocolBgpPolicyAggregationAddressSuppressFiltersMatchAsPath, error) {
 
 	result := &ProtocolBgpPolicyAggregationAddressSuppressFiltersMatchAsPath{
-		Regex: o.Regex,
-		Misc:  o.Misc,
+		Regex:          o.Regex,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolBgpPolicyAggregationAddressSuppressFiltersMatchCommunityXml) MarshalFromObject(s ProtocolBgpPolicyAggregationAddressSuppressFiltersMatchCommunity) {
 	o.Regex = s.Regex
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyAggregationAddressSuppressFiltersMatchCommunityXml) UnmarshalToObject() (*ProtocolBgpPolicyAggregationAddressSuppressFiltersMatchCommunity, error) {
 
 	result := &ProtocolBgpPolicyAggregationAddressSuppressFiltersMatchCommunity{
-		Regex: o.Regex,
-		Misc:  o.Misc,
+		Regex:          o.Regex,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolBgpPolicyAggregationAddressSuppressFiltersMatchExtendedCommunityXml) MarshalFromObject(s ProtocolBgpPolicyAggregationAddressSuppressFiltersMatchExtendedCommunity) {
 	o.Regex = s.Regex
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyAggregationAddressSuppressFiltersMatchExtendedCommunityXml) UnmarshalToObject() (*ProtocolBgpPolicyAggregationAddressSuppressFiltersMatchExtendedCommunity, error) {
 
 	result := &ProtocolBgpPolicyAggregationAddressSuppressFiltersMatchExtendedCommunity{
-		Regex: o.Regex,
-		Misc:  o.Misc,
+		Regex:          o.Regex,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5078,6 +5662,7 @@ func (o *protocolBgpPolicyAggregationAddressAdvertiseFiltersXml) MarshalFromObje
 		o.Match = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyAggregationAddressAdvertiseFiltersXml) UnmarshalToObject() (*ProtocolBgpPolicyAggregationAddressAdvertiseFilters, error) {
@@ -5091,10 +5676,11 @@ func (o protocolBgpPolicyAggregationAddressAdvertiseFiltersXml) UnmarshalToObjec
 	}
 
 	result := &ProtocolBgpPolicyAggregationAddressAdvertiseFilters{
-		Name:   o.Name,
-		Enable: util.AsBool(o.Enable, nil),
-		Match:  matchVal,
-		Misc:   o.Misc,
+		Name:           o.Name,
+		Enable:         util.AsBool(o.Enable, nil),
+		Match:          matchVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5132,6 +5718,7 @@ func (o *protocolBgpPolicyAggregationAddressAdvertiseFiltersMatchXml) MarshalFro
 		o.ExtendedCommunity = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyAggregationAddressAdvertiseFiltersMatchXml) UnmarshalToObject() (*ProtocolBgpPolicyAggregationAddressAdvertiseFiltersMatch, error) {
@@ -5188,6 +5775,7 @@ func (o protocolBgpPolicyAggregationAddressAdvertiseFiltersMatchXml) UnmarshalTo
 		Community:         communityVal,
 		ExtendedCommunity: extendedCommunityVal,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5195,53 +5783,61 @@ func (o *protocolBgpPolicyAggregationAddressAdvertiseFiltersMatchAddressPrefixXm
 	o.Name = s.Name
 	o.Exact = util.YesNo(s.Exact, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyAggregationAddressAdvertiseFiltersMatchAddressPrefixXml) UnmarshalToObject() (*ProtocolBgpPolicyAggregationAddressAdvertiseFiltersMatchAddressPrefix, error) {
 
 	result := &ProtocolBgpPolicyAggregationAddressAdvertiseFiltersMatchAddressPrefix{
-		Name:  o.Name,
-		Exact: util.AsBool(o.Exact, nil),
-		Misc:  o.Misc,
+		Name:           o.Name,
+		Exact:          util.AsBool(o.Exact, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolBgpPolicyAggregationAddressAdvertiseFiltersMatchAsPathXml) MarshalFromObject(s ProtocolBgpPolicyAggregationAddressAdvertiseFiltersMatchAsPath) {
 	o.Regex = s.Regex
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyAggregationAddressAdvertiseFiltersMatchAsPathXml) UnmarshalToObject() (*ProtocolBgpPolicyAggregationAddressAdvertiseFiltersMatchAsPath, error) {
 
 	result := &ProtocolBgpPolicyAggregationAddressAdvertiseFiltersMatchAsPath{
-		Regex: o.Regex,
-		Misc:  o.Misc,
+		Regex:          o.Regex,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolBgpPolicyAggregationAddressAdvertiseFiltersMatchCommunityXml) MarshalFromObject(s ProtocolBgpPolicyAggregationAddressAdvertiseFiltersMatchCommunity) {
 	o.Regex = s.Regex
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyAggregationAddressAdvertiseFiltersMatchCommunityXml) UnmarshalToObject() (*ProtocolBgpPolicyAggregationAddressAdvertiseFiltersMatchCommunity, error) {
 
 	result := &ProtocolBgpPolicyAggregationAddressAdvertiseFiltersMatchCommunity{
-		Regex: o.Regex,
-		Misc:  o.Misc,
+		Regex:          o.Regex,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolBgpPolicyAggregationAddressAdvertiseFiltersMatchExtendedCommunityXml) MarshalFromObject(s ProtocolBgpPolicyAggregationAddressAdvertiseFiltersMatchExtendedCommunity) {
 	o.Regex = s.Regex
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyAggregationAddressAdvertiseFiltersMatchExtendedCommunityXml) UnmarshalToObject() (*ProtocolBgpPolicyAggregationAddressAdvertiseFiltersMatchExtendedCommunity, error) {
 
 	result := &ProtocolBgpPolicyAggregationAddressAdvertiseFiltersMatchExtendedCommunity{
-		Regex: o.Regex,
-		Misc:  o.Misc,
+		Regex:          o.Regex,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5256,6 +5852,7 @@ func (o *protocolBgpPolicyConditionalAdvertisementXml) MarshalFromObject(s Proto
 		o.Policy = &protocolBgpPolicyConditionalAdvertisementPolicyContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyConditionalAdvertisementXml) UnmarshalToObject() (*ProtocolBgpPolicyConditionalAdvertisement, error) {
@@ -5271,8 +5868,9 @@ func (o protocolBgpPolicyConditionalAdvertisementXml) UnmarshalToObject() (*Prot
 	}
 
 	result := &ProtocolBgpPolicyConditionalAdvertisement{
-		Policy: policyVal,
-		Misc:   o.Misc,
+		Policy:         policyVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5301,6 +5899,7 @@ func (o *protocolBgpPolicyConditionalAdvertisementPolicyXml) MarshalFromObject(s
 		o.AdvertiseFilters = &protocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyConditionalAdvertisementPolicyXml) UnmarshalToObject() (*ProtocolBgpPolicyConditionalAdvertisementPolicy, error) {
@@ -5336,6 +5935,7 @@ func (o protocolBgpPolicyConditionalAdvertisementPolicyXml) UnmarshalToObject() 
 		NonExistFilters:  nonExistFiltersVal,
 		AdvertiseFilters: advertiseFiltersVal,
 		Misc:             o.Misc,
+		MiscAttributes:   o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5348,6 +5948,7 @@ func (o *protocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersXml) Mars
 		o.Match = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersXml) UnmarshalToObject() (*ProtocolBgpPolicyConditionalAdvertisementPolicyNonExistFilters, error) {
@@ -5361,10 +5962,11 @@ func (o protocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersXml) Unmar
 	}
 
 	result := &ProtocolBgpPolicyConditionalAdvertisementPolicyNonExistFilters{
-		Name:   o.Name,
-		Enable: util.AsBool(o.Enable, nil),
-		Match:  matchVal,
-		Misc:   o.Misc,
+		Name:           o.Name,
+		Enable:         util.AsBool(o.Enable, nil),
+		Match:          matchVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5402,6 +6004,7 @@ func (o *protocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersMatchXml)
 		o.ExtendedCommunity = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersMatchXml) UnmarshalToObject() (*ProtocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersMatch, error) {
@@ -5458,58 +6061,67 @@ func (o protocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersMatchXml) 
 		Community:         communityVal,
 		ExtendedCommunity: extendedCommunityVal,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersMatchAddressPrefixXml) MarshalFromObject(s ProtocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersMatchAddressPrefix) {
 	o.Name = s.Name
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersMatchAddressPrefixXml) UnmarshalToObject() (*ProtocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersMatchAddressPrefix, error) {
 
 	result := &ProtocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersMatchAddressPrefix{
-		Name: o.Name,
-		Misc: o.Misc,
+		Name:           o.Name,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersMatchAsPathXml) MarshalFromObject(s ProtocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersMatchAsPath) {
 	o.Regex = s.Regex
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersMatchAsPathXml) UnmarshalToObject() (*ProtocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersMatchAsPath, error) {
 
 	result := &ProtocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersMatchAsPath{
-		Regex: o.Regex,
-		Misc:  o.Misc,
+		Regex:          o.Regex,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersMatchCommunityXml) MarshalFromObject(s ProtocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersMatchCommunity) {
 	o.Regex = s.Regex
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersMatchCommunityXml) UnmarshalToObject() (*ProtocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersMatchCommunity, error) {
 
 	result := &ProtocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersMatchCommunity{
-		Regex: o.Regex,
-		Misc:  o.Misc,
+		Regex:          o.Regex,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersMatchExtendedCommunityXml) MarshalFromObject(s ProtocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersMatchExtendedCommunity) {
 	o.Regex = s.Regex
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersMatchExtendedCommunityXml) UnmarshalToObject() (*ProtocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersMatchExtendedCommunity, error) {
 
 	result := &ProtocolBgpPolicyConditionalAdvertisementPolicyNonExistFiltersMatchExtendedCommunity{
-		Regex: o.Regex,
-		Misc:  o.Misc,
+		Regex:          o.Regex,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5522,6 +6134,7 @@ func (o *protocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersXml) Mar
 		o.Match = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersXml) UnmarshalToObject() (*ProtocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFilters, error) {
@@ -5535,10 +6148,11 @@ func (o protocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersXml) Unma
 	}
 
 	result := &ProtocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFilters{
-		Name:   o.Name,
-		Enable: util.AsBool(o.Enable, nil),
-		Match:  matchVal,
-		Misc:   o.Misc,
+		Name:           o.Name,
+		Enable:         util.AsBool(o.Enable, nil),
+		Match:          matchVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5576,6 +6190,7 @@ func (o *protocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersMatchXml
 		o.ExtendedCommunity = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersMatchXml) UnmarshalToObject() (*ProtocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersMatch, error) {
@@ -5632,58 +6247,67 @@ func (o protocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersMatchXml)
 		Community:         communityVal,
 		ExtendedCommunity: extendedCommunityVal,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersMatchAddressPrefixXml) MarshalFromObject(s ProtocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersMatchAddressPrefix) {
 	o.Name = s.Name
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersMatchAddressPrefixXml) UnmarshalToObject() (*ProtocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersMatchAddressPrefix, error) {
 
 	result := &ProtocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersMatchAddressPrefix{
-		Name: o.Name,
-		Misc: o.Misc,
+		Name:           o.Name,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersMatchAsPathXml) MarshalFromObject(s ProtocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersMatchAsPath) {
 	o.Regex = s.Regex
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersMatchAsPathXml) UnmarshalToObject() (*ProtocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersMatchAsPath, error) {
 
 	result := &ProtocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersMatchAsPath{
-		Regex: o.Regex,
-		Misc:  o.Misc,
+		Regex:          o.Regex,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersMatchCommunityXml) MarshalFromObject(s ProtocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersMatchCommunity) {
 	o.Regex = s.Regex
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersMatchCommunityXml) UnmarshalToObject() (*ProtocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersMatchCommunity, error) {
 
 	result := &ProtocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersMatchCommunity{
-		Regex: o.Regex,
-		Misc:  o.Misc,
+		Regex:          o.Regex,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersMatchExtendedCommunityXml) MarshalFromObject(s ProtocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersMatchExtendedCommunity) {
 	o.Regex = s.Regex
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersMatchExtendedCommunityXml) UnmarshalToObject() (*ProtocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersMatchExtendedCommunity, error) {
 
 	result := &ProtocolBgpPolicyConditionalAdvertisementPolicyAdvertiseFiltersMatchExtendedCommunity{
-		Regex: o.Regex,
-		Misc:  o.Misc,
+		Regex:          o.Regex,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5698,6 +6322,7 @@ func (o *protocolBgpPolicyExportXml) MarshalFromObject(s ProtocolBgpPolicyExport
 		o.Rules = &protocolBgpPolicyExportRulesContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyExportXml) UnmarshalToObject() (*ProtocolBgpPolicyExport, error) {
@@ -5713,8 +6338,9 @@ func (o protocolBgpPolicyExportXml) UnmarshalToObject() (*ProtocolBgpPolicyExpor
 	}
 
 	result := &ProtocolBgpPolicyExport{
-		Rules: rulesVal,
-		Misc:  o.Misc,
+		Rules:          rulesVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5735,6 +6361,7 @@ func (o *protocolBgpPolicyExportRulesXml) MarshalFromObject(s ProtocolBgpPolicyE
 		o.Action = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyExportRulesXml) UnmarshalToObject() (*ProtocolBgpPolicyExportRules, error) {
@@ -5760,12 +6387,13 @@ func (o protocolBgpPolicyExportRulesXml) UnmarshalToObject() (*ProtocolBgpPolicy
 	}
 
 	result := &ProtocolBgpPolicyExportRules{
-		Name:   o.Name,
-		Enable: util.AsBool(o.Enable, nil),
-		UsedBy: usedByVal,
-		Match:  matchVal,
-		Action: actionVal,
-		Misc:   o.Misc,
+		Name:           o.Name,
+		Enable:         util.AsBool(o.Enable, nil),
+		UsedBy:         usedByVal,
+		Match:          matchVal,
+		Action:         actionVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5803,6 +6431,7 @@ func (o *protocolBgpPolicyExportRulesMatchXml) MarshalFromObject(s ProtocolBgpPo
 		o.ExtendedCommunity = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyExportRulesMatchXml) UnmarshalToObject() (*ProtocolBgpPolicyExportRulesMatch, error) {
@@ -5859,6 +6488,7 @@ func (o protocolBgpPolicyExportRulesMatchXml) UnmarshalToObject() (*ProtocolBgpP
 		Community:         communityVal,
 		ExtendedCommunity: extendedCommunityVal,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5866,53 +6496,61 @@ func (o *protocolBgpPolicyExportRulesMatchAddressPrefixXml) MarshalFromObject(s 
 	o.Name = s.Name
 	o.Exact = util.YesNo(s.Exact, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyExportRulesMatchAddressPrefixXml) UnmarshalToObject() (*ProtocolBgpPolicyExportRulesMatchAddressPrefix, error) {
 
 	result := &ProtocolBgpPolicyExportRulesMatchAddressPrefix{
-		Name:  o.Name,
-		Exact: util.AsBool(o.Exact, nil),
-		Misc:  o.Misc,
+		Name:           o.Name,
+		Exact:          util.AsBool(o.Exact, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolBgpPolicyExportRulesMatchAsPathXml) MarshalFromObject(s ProtocolBgpPolicyExportRulesMatchAsPath) {
 	o.Regex = s.Regex
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyExportRulesMatchAsPathXml) UnmarshalToObject() (*ProtocolBgpPolicyExportRulesMatchAsPath, error) {
 
 	result := &ProtocolBgpPolicyExportRulesMatchAsPath{
-		Regex: o.Regex,
-		Misc:  o.Misc,
+		Regex:          o.Regex,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolBgpPolicyExportRulesMatchCommunityXml) MarshalFromObject(s ProtocolBgpPolicyExportRulesMatchCommunity) {
 	o.Regex = s.Regex
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyExportRulesMatchCommunityXml) UnmarshalToObject() (*ProtocolBgpPolicyExportRulesMatchCommunity, error) {
 
 	result := &ProtocolBgpPolicyExportRulesMatchCommunity{
-		Regex: o.Regex,
-		Misc:  o.Misc,
+		Regex:          o.Regex,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolBgpPolicyExportRulesMatchExtendedCommunityXml) MarshalFromObject(s ProtocolBgpPolicyExportRulesMatchExtendedCommunity) {
 	o.Regex = s.Regex
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyExportRulesMatchExtendedCommunityXml) UnmarshalToObject() (*ProtocolBgpPolicyExportRulesMatchExtendedCommunity, error) {
 
 	result := &ProtocolBgpPolicyExportRulesMatchExtendedCommunity{
-		Regex: o.Regex,
-		Misc:  o.Misc,
+		Regex:          o.Regex,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5928,6 +6566,7 @@ func (o *protocolBgpPolicyExportRulesActionXml) MarshalFromObject(s ProtocolBgpP
 		o.Allow = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyExportRulesActionXml) UnmarshalToObject() (*ProtocolBgpPolicyExportRulesAction, error) {
@@ -5949,20 +6588,23 @@ func (o protocolBgpPolicyExportRulesActionXml) UnmarshalToObject() (*ProtocolBgp
 	}
 
 	result := &ProtocolBgpPolicyExportRulesAction{
-		Deny:  denyVal,
-		Allow: allowVal,
-		Misc:  o.Misc,
+		Deny:           denyVal,
+		Allow:          allowVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolBgpPolicyExportRulesActionDenyXml) MarshalFromObject(s ProtocolBgpPolicyExportRulesActionDeny) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyExportRulesActionDenyXml) UnmarshalToObject() (*ProtocolBgpPolicyExportRulesActionDeny, error) {
 
 	result := &ProtocolBgpPolicyExportRulesActionDeny{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5973,6 +6615,7 @@ func (o *protocolBgpPolicyExportRulesActionAllowXml) MarshalFromObject(s Protoco
 		o.Update = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyExportRulesActionAllowXml) UnmarshalToObject() (*ProtocolBgpPolicyExportRulesActionAllow, error) {
@@ -5986,8 +6629,9 @@ func (o protocolBgpPolicyExportRulesActionAllowXml) UnmarshalToObject() (*Protoc
 	}
 
 	result := &ProtocolBgpPolicyExportRulesActionAllow{
-		Update: updateVal,
-		Misc:   o.Misc,
+		Update:         updateVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6013,6 +6657,7 @@ func (o *protocolBgpPolicyExportRulesActionAllowUpdateXml) MarshalFromObject(s P
 		o.ExtendedCommunity = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyExportRulesActionAllowUpdateXml) UnmarshalToObject() (*ProtocolBgpPolicyExportRulesActionAllowUpdate, error) {
@@ -6051,6 +6696,7 @@ func (o protocolBgpPolicyExportRulesActionAllowUpdateXml) UnmarshalToObject() (*
 		Community:         communityVal,
 		ExtendedCommunity: extendedCommunityVal,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6068,6 +6714,7 @@ func (o *protocolBgpPolicyExportRulesActionAllowUpdateAsPathXml) MarshalFromObje
 	o.Prepend = s.Prepend
 	o.RemoveAndPrepend = s.RemoveAndPrepend
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyExportRulesActionAllowUpdateAsPathXml) UnmarshalToObject() (*ProtocolBgpPolicyExportRulesActionAllowUpdateAsPath, error) {
@@ -6094,28 +6741,33 @@ func (o protocolBgpPolicyExportRulesActionAllowUpdateAsPathXml) UnmarshalToObjec
 		Prepend:          o.Prepend,
 		RemoveAndPrepend: o.RemoveAndPrepend,
 		Misc:             o.Misc,
+		MiscAttributes:   o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolBgpPolicyExportRulesActionAllowUpdateAsPathNoneXml) MarshalFromObject(s ProtocolBgpPolicyExportRulesActionAllowUpdateAsPathNone) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyExportRulesActionAllowUpdateAsPathNoneXml) UnmarshalToObject() (*ProtocolBgpPolicyExportRulesActionAllowUpdateAsPathNone, error) {
 
 	result := &ProtocolBgpPolicyExportRulesActionAllowUpdateAsPathNone{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolBgpPolicyExportRulesActionAllowUpdateAsPathRemoveXml) MarshalFromObject(s ProtocolBgpPolicyExportRulesActionAllowUpdateAsPathRemove) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyExportRulesActionAllowUpdateAsPathRemoveXml) UnmarshalToObject() (*ProtocolBgpPolicyExportRulesActionAllowUpdateAsPathRemove, error) {
 
 	result := &ProtocolBgpPolicyExportRulesActionAllowUpdateAsPathRemove{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6138,6 +6790,7 @@ func (o *protocolBgpPolicyExportRulesActionAllowUpdateCommunityXml) MarshalFromO
 		o.Overwrite = util.StrToMem(s.Overwrite)
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyExportRulesActionAllowUpdateCommunityXml) UnmarshalToObject() (*ProtocolBgpPolicyExportRulesActionAllowUpdateCommunity, error) {
@@ -6167,34 +6820,39 @@ func (o protocolBgpPolicyExportRulesActionAllowUpdateCommunityXml) UnmarshalToOb
 	}
 
 	result := &ProtocolBgpPolicyExportRulesActionAllowUpdateCommunity{
-		None:        noneVal,
-		RemoveAll:   removeAllVal,
-		RemoveRegex: o.RemoveRegex,
-		Append:      appendVal,
-		Overwrite:   overwriteVal,
-		Misc:        o.Misc,
+		None:           noneVal,
+		RemoveAll:      removeAllVal,
+		RemoveRegex:    o.RemoveRegex,
+		Append:         appendVal,
+		Overwrite:      overwriteVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolBgpPolicyExportRulesActionAllowUpdateCommunityNoneXml) MarshalFromObject(s ProtocolBgpPolicyExportRulesActionAllowUpdateCommunityNone) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyExportRulesActionAllowUpdateCommunityNoneXml) UnmarshalToObject() (*ProtocolBgpPolicyExportRulesActionAllowUpdateCommunityNone, error) {
 
 	result := &ProtocolBgpPolicyExportRulesActionAllowUpdateCommunityNone{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolBgpPolicyExportRulesActionAllowUpdateCommunityRemoveAllXml) MarshalFromObject(s ProtocolBgpPolicyExportRulesActionAllowUpdateCommunityRemoveAll) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyExportRulesActionAllowUpdateCommunityRemoveAllXml) UnmarshalToObject() (*ProtocolBgpPolicyExportRulesActionAllowUpdateCommunityRemoveAll, error) {
 
 	result := &ProtocolBgpPolicyExportRulesActionAllowUpdateCommunityRemoveAll{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6217,6 +6875,7 @@ func (o *protocolBgpPolicyExportRulesActionAllowUpdateExtendedCommunityXml) Mars
 		o.Overwrite = util.StrToMem(s.Overwrite)
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyExportRulesActionAllowUpdateExtendedCommunityXml) UnmarshalToObject() (*ProtocolBgpPolicyExportRulesActionAllowUpdateExtendedCommunity, error) {
@@ -6246,34 +6905,39 @@ func (o protocolBgpPolicyExportRulesActionAllowUpdateExtendedCommunityXml) Unmar
 	}
 
 	result := &ProtocolBgpPolicyExportRulesActionAllowUpdateExtendedCommunity{
-		None:        noneVal,
-		RemoveAll:   removeAllVal,
-		RemoveRegex: o.RemoveRegex,
-		Append:      appendVal,
-		Overwrite:   overwriteVal,
-		Misc:        o.Misc,
+		None:           noneVal,
+		RemoveAll:      removeAllVal,
+		RemoveRegex:    o.RemoveRegex,
+		Append:         appendVal,
+		Overwrite:      overwriteVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolBgpPolicyExportRulesActionAllowUpdateExtendedCommunityNoneXml) MarshalFromObject(s ProtocolBgpPolicyExportRulesActionAllowUpdateExtendedCommunityNone) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyExportRulesActionAllowUpdateExtendedCommunityNoneXml) UnmarshalToObject() (*ProtocolBgpPolicyExportRulesActionAllowUpdateExtendedCommunityNone, error) {
 
 	result := &ProtocolBgpPolicyExportRulesActionAllowUpdateExtendedCommunityNone{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolBgpPolicyExportRulesActionAllowUpdateExtendedCommunityRemoveAllXml) MarshalFromObject(s ProtocolBgpPolicyExportRulesActionAllowUpdateExtendedCommunityRemoveAll) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyExportRulesActionAllowUpdateExtendedCommunityRemoveAllXml) UnmarshalToObject() (*ProtocolBgpPolicyExportRulesActionAllowUpdateExtendedCommunityRemoveAll, error) {
 
 	result := &ProtocolBgpPolicyExportRulesActionAllowUpdateExtendedCommunityRemoveAll{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6288,6 +6952,7 @@ func (o *protocolBgpPolicyImportXml) MarshalFromObject(s ProtocolBgpPolicyImport
 		o.Rules = &protocolBgpPolicyImportRulesContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyImportXml) UnmarshalToObject() (*ProtocolBgpPolicyImport, error) {
@@ -6303,8 +6968,9 @@ func (o protocolBgpPolicyImportXml) UnmarshalToObject() (*ProtocolBgpPolicyImpor
 	}
 
 	result := &ProtocolBgpPolicyImport{
-		Rules: rulesVal,
-		Misc:  o.Misc,
+		Rules:          rulesVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6325,6 +6991,7 @@ func (o *protocolBgpPolicyImportRulesXml) MarshalFromObject(s ProtocolBgpPolicyI
 		o.Action = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyImportRulesXml) UnmarshalToObject() (*ProtocolBgpPolicyImportRules, error) {
@@ -6350,12 +7017,13 @@ func (o protocolBgpPolicyImportRulesXml) UnmarshalToObject() (*ProtocolBgpPolicy
 	}
 
 	result := &ProtocolBgpPolicyImportRules{
-		Name:   o.Name,
-		Enable: util.AsBool(o.Enable, nil),
-		UsedBy: usedByVal,
-		Match:  matchVal,
-		Action: actionVal,
-		Misc:   o.Misc,
+		Name:           o.Name,
+		Enable:         util.AsBool(o.Enable, nil),
+		UsedBy:         usedByVal,
+		Match:          matchVal,
+		Action:         actionVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6393,6 +7061,7 @@ func (o *protocolBgpPolicyImportRulesMatchXml) MarshalFromObject(s ProtocolBgpPo
 		o.ExtendedCommunity = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyImportRulesMatchXml) UnmarshalToObject() (*ProtocolBgpPolicyImportRulesMatch, error) {
@@ -6449,6 +7118,7 @@ func (o protocolBgpPolicyImportRulesMatchXml) UnmarshalToObject() (*ProtocolBgpP
 		Community:         communityVal,
 		ExtendedCommunity: extendedCommunityVal,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6456,53 +7126,61 @@ func (o *protocolBgpPolicyImportRulesMatchAddressPrefixXml) MarshalFromObject(s 
 	o.Name = s.Name
 	o.Exact = util.YesNo(s.Exact, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyImportRulesMatchAddressPrefixXml) UnmarshalToObject() (*ProtocolBgpPolicyImportRulesMatchAddressPrefix, error) {
 
 	result := &ProtocolBgpPolicyImportRulesMatchAddressPrefix{
-		Name:  o.Name,
-		Exact: util.AsBool(o.Exact, nil),
-		Misc:  o.Misc,
+		Name:           o.Name,
+		Exact:          util.AsBool(o.Exact, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolBgpPolicyImportRulesMatchAsPathXml) MarshalFromObject(s ProtocolBgpPolicyImportRulesMatchAsPath) {
 	o.Regex = s.Regex
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyImportRulesMatchAsPathXml) UnmarshalToObject() (*ProtocolBgpPolicyImportRulesMatchAsPath, error) {
 
 	result := &ProtocolBgpPolicyImportRulesMatchAsPath{
-		Regex: o.Regex,
-		Misc:  o.Misc,
+		Regex:          o.Regex,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolBgpPolicyImportRulesMatchCommunityXml) MarshalFromObject(s ProtocolBgpPolicyImportRulesMatchCommunity) {
 	o.Regex = s.Regex
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyImportRulesMatchCommunityXml) UnmarshalToObject() (*ProtocolBgpPolicyImportRulesMatchCommunity, error) {
 
 	result := &ProtocolBgpPolicyImportRulesMatchCommunity{
-		Regex: o.Regex,
-		Misc:  o.Misc,
+		Regex:          o.Regex,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolBgpPolicyImportRulesMatchExtendedCommunityXml) MarshalFromObject(s ProtocolBgpPolicyImportRulesMatchExtendedCommunity) {
 	o.Regex = s.Regex
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyImportRulesMatchExtendedCommunityXml) UnmarshalToObject() (*ProtocolBgpPolicyImportRulesMatchExtendedCommunity, error) {
 
 	result := &ProtocolBgpPolicyImportRulesMatchExtendedCommunity{
-		Regex: o.Regex,
-		Misc:  o.Misc,
+		Regex:          o.Regex,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6518,6 +7196,7 @@ func (o *protocolBgpPolicyImportRulesActionXml) MarshalFromObject(s ProtocolBgpP
 		o.Allow = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyImportRulesActionXml) UnmarshalToObject() (*ProtocolBgpPolicyImportRulesAction, error) {
@@ -6539,20 +7218,23 @@ func (o protocolBgpPolicyImportRulesActionXml) UnmarshalToObject() (*ProtocolBgp
 	}
 
 	result := &ProtocolBgpPolicyImportRulesAction{
-		Deny:  denyVal,
-		Allow: allowVal,
-		Misc:  o.Misc,
+		Deny:           denyVal,
+		Allow:          allowVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolBgpPolicyImportRulesActionDenyXml) MarshalFromObject(s ProtocolBgpPolicyImportRulesActionDeny) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyImportRulesActionDenyXml) UnmarshalToObject() (*ProtocolBgpPolicyImportRulesActionDeny, error) {
 
 	result := &ProtocolBgpPolicyImportRulesActionDeny{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6564,6 +7246,7 @@ func (o *protocolBgpPolicyImportRulesActionAllowXml) MarshalFromObject(s Protoco
 		o.Update = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyImportRulesActionAllowXml) UnmarshalToObject() (*ProtocolBgpPolicyImportRulesActionAllow, error) {
@@ -6577,9 +7260,10 @@ func (o protocolBgpPolicyImportRulesActionAllowXml) UnmarshalToObject() (*Protoc
 	}
 
 	result := &ProtocolBgpPolicyImportRulesActionAllow{
-		Dampening: o.Dampening,
-		Update:    updateVal,
-		Misc:      o.Misc,
+		Dampening:      o.Dampening,
+		Update:         updateVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6606,6 +7290,7 @@ func (o *protocolBgpPolicyImportRulesActionAllowUpdateXml) MarshalFromObject(s P
 		o.ExtendedCommunity = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyImportRulesActionAllowUpdateXml) UnmarshalToObject() (*ProtocolBgpPolicyImportRulesActionAllowUpdate, error) {
@@ -6645,6 +7330,7 @@ func (o protocolBgpPolicyImportRulesActionAllowUpdateXml) UnmarshalToObject() (*
 		Community:         communityVal,
 		ExtendedCommunity: extendedCommunityVal,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6660,6 +7346,7 @@ func (o *protocolBgpPolicyImportRulesActionAllowUpdateAsPathXml) MarshalFromObje
 		o.Remove = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyImportRulesActionAllowUpdateAsPathXml) UnmarshalToObject() (*ProtocolBgpPolicyImportRulesActionAllowUpdateAsPath, error) {
@@ -6681,31 +7368,36 @@ func (o protocolBgpPolicyImportRulesActionAllowUpdateAsPathXml) UnmarshalToObjec
 	}
 
 	result := &ProtocolBgpPolicyImportRulesActionAllowUpdateAsPath{
-		None:   noneVal,
-		Remove: removeVal,
-		Misc:   o.Misc,
+		None:           noneVal,
+		Remove:         removeVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolBgpPolicyImportRulesActionAllowUpdateAsPathNoneXml) MarshalFromObject(s ProtocolBgpPolicyImportRulesActionAllowUpdateAsPathNone) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyImportRulesActionAllowUpdateAsPathNoneXml) UnmarshalToObject() (*ProtocolBgpPolicyImportRulesActionAllowUpdateAsPathNone, error) {
 
 	result := &ProtocolBgpPolicyImportRulesActionAllowUpdateAsPathNone{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolBgpPolicyImportRulesActionAllowUpdateAsPathRemoveXml) MarshalFromObject(s ProtocolBgpPolicyImportRulesActionAllowUpdateAsPathRemove) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyImportRulesActionAllowUpdateAsPathRemoveXml) UnmarshalToObject() (*ProtocolBgpPolicyImportRulesActionAllowUpdateAsPathRemove, error) {
 
 	result := &ProtocolBgpPolicyImportRulesActionAllowUpdateAsPathRemove{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6728,6 +7420,7 @@ func (o *protocolBgpPolicyImportRulesActionAllowUpdateCommunityXml) MarshalFromO
 		o.Overwrite = util.StrToMem(s.Overwrite)
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyImportRulesActionAllowUpdateCommunityXml) UnmarshalToObject() (*ProtocolBgpPolicyImportRulesActionAllowUpdateCommunity, error) {
@@ -6757,34 +7450,39 @@ func (o protocolBgpPolicyImportRulesActionAllowUpdateCommunityXml) UnmarshalToOb
 	}
 
 	result := &ProtocolBgpPolicyImportRulesActionAllowUpdateCommunity{
-		None:        noneVal,
-		RemoveAll:   removeAllVal,
-		RemoveRegex: o.RemoveRegex,
-		Append:      appendVal,
-		Overwrite:   overwriteVal,
-		Misc:        o.Misc,
+		None:           noneVal,
+		RemoveAll:      removeAllVal,
+		RemoveRegex:    o.RemoveRegex,
+		Append:         appendVal,
+		Overwrite:      overwriteVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolBgpPolicyImportRulesActionAllowUpdateCommunityNoneXml) MarshalFromObject(s ProtocolBgpPolicyImportRulesActionAllowUpdateCommunityNone) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyImportRulesActionAllowUpdateCommunityNoneXml) UnmarshalToObject() (*ProtocolBgpPolicyImportRulesActionAllowUpdateCommunityNone, error) {
 
 	result := &ProtocolBgpPolicyImportRulesActionAllowUpdateCommunityNone{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolBgpPolicyImportRulesActionAllowUpdateCommunityRemoveAllXml) MarshalFromObject(s ProtocolBgpPolicyImportRulesActionAllowUpdateCommunityRemoveAll) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyImportRulesActionAllowUpdateCommunityRemoveAllXml) UnmarshalToObject() (*ProtocolBgpPolicyImportRulesActionAllowUpdateCommunityRemoveAll, error) {
 
 	result := &ProtocolBgpPolicyImportRulesActionAllowUpdateCommunityRemoveAll{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6807,6 +7505,7 @@ func (o *protocolBgpPolicyImportRulesActionAllowUpdateExtendedCommunityXml) Mars
 		o.Overwrite = util.StrToMem(s.Overwrite)
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyImportRulesActionAllowUpdateExtendedCommunityXml) UnmarshalToObject() (*ProtocolBgpPolicyImportRulesActionAllowUpdateExtendedCommunity, error) {
@@ -6836,34 +7535,39 @@ func (o protocolBgpPolicyImportRulesActionAllowUpdateExtendedCommunityXml) Unmar
 	}
 
 	result := &ProtocolBgpPolicyImportRulesActionAllowUpdateExtendedCommunity{
-		None:        noneVal,
-		RemoveAll:   removeAllVal,
-		RemoveRegex: o.RemoveRegex,
-		Append:      appendVal,
-		Overwrite:   overwriteVal,
-		Misc:        o.Misc,
+		None:           noneVal,
+		RemoveAll:      removeAllVal,
+		RemoveRegex:    o.RemoveRegex,
+		Append:         appendVal,
+		Overwrite:      overwriteVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolBgpPolicyImportRulesActionAllowUpdateExtendedCommunityNoneXml) MarshalFromObject(s ProtocolBgpPolicyImportRulesActionAllowUpdateExtendedCommunityNone) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyImportRulesActionAllowUpdateExtendedCommunityNoneXml) UnmarshalToObject() (*ProtocolBgpPolicyImportRulesActionAllowUpdateExtendedCommunityNone, error) {
 
 	result := &ProtocolBgpPolicyImportRulesActionAllowUpdateExtendedCommunityNone{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolBgpPolicyImportRulesActionAllowUpdateExtendedCommunityRemoveAllXml) MarshalFromObject(s ProtocolBgpPolicyImportRulesActionAllowUpdateExtendedCommunityRemoveAll) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpPolicyImportRulesActionAllowUpdateExtendedCommunityRemoveAllXml) UnmarshalToObject() (*ProtocolBgpPolicyImportRulesActionAllowUpdateExtendedCommunityRemoveAll, error) {
 
 	result := &ProtocolBgpPolicyImportRulesActionAllowUpdateExtendedCommunityRemoveAll{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6884,6 +7588,7 @@ func (o *protocolBgpRedistRulesXml) MarshalFromObject(s ProtocolBgpRedistRules) 
 		o.SetExtendedCommunity = util.StrToMem(s.SetExtendedCommunity)
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpRedistRulesXml) UnmarshalToObject() (*ProtocolBgpRedistRules, error) {
@@ -6909,6 +7614,7 @@ func (o protocolBgpRedistRulesXml) UnmarshalToObject() (*ProtocolBgpRedistRules,
 		SetCommunity:            setCommunityVal,
 		SetExtendedCommunity:    setExtendedCommunityVal,
 		Misc:                    o.Misc,
+		MiscAttributes:          o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6933,6 +7639,7 @@ func (o *protocolBgpRoutingOptionsXml) MarshalFromObject(s ProtocolBgpRoutingOpt
 	}
 	o.ReflectorClusterId = s.ReflectorClusterId
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpRoutingOptionsXml) UnmarshalToObject() (*ProtocolBgpRoutingOptions, error) {
@@ -6970,19 +7677,22 @@ func (o protocolBgpRoutingOptionsXml) UnmarshalToObject() (*ProtocolBgpRoutingOp
 		Med:                    medVal,
 		ReflectorClusterId:     o.ReflectorClusterId,
 		Misc:                   o.Misc,
+		MiscAttributes:         o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolBgpRoutingOptionsAggregateXml) MarshalFromObject(s ProtocolBgpRoutingOptionsAggregate) {
 	o.AggregateMed = util.YesNo(s.AggregateMed, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpRoutingOptionsAggregateXml) UnmarshalToObject() (*ProtocolBgpRoutingOptionsAggregate, error) {
 
 	result := &ProtocolBgpRoutingOptionsAggregate{
-		AggregateMed: util.AsBool(o.AggregateMed, nil),
-		Misc:         o.Misc,
+		AggregateMed:   util.AsBool(o.AggregateMed, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6992,6 +7702,7 @@ func (o *protocolBgpRoutingOptionsGracefulRestartXml) MarshalFromObject(s Protoc
 	o.MaxPeerRestartTime = s.MaxPeerRestartTime
 	o.StaleRouteTime = s.StaleRouteTime
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpRoutingOptionsGracefulRestartXml) UnmarshalToObject() (*ProtocolBgpRoutingOptionsGracefulRestart, error) {
@@ -7002,6 +7713,7 @@ func (o protocolBgpRoutingOptionsGracefulRestartXml) UnmarshalToObject() (*Proto
 		MaxPeerRestartTime: o.MaxPeerRestartTime,
 		StaleRouteTime:     o.StaleRouteTime,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7009,6 +7721,7 @@ func (o *protocolBgpRoutingOptionsMedXml) MarshalFromObject(s ProtocolBgpRouting
 	o.AlwaysCompareMed = util.YesNo(s.AlwaysCompareMed, nil)
 	o.DeterministicMedComparison = util.YesNo(s.DeterministicMedComparison, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolBgpRoutingOptionsMedXml) UnmarshalToObject() (*ProtocolBgpRoutingOptionsMed, error) {
@@ -7017,6 +7730,7 @@ func (o protocolBgpRoutingOptionsMedXml) UnmarshalToObject() (*ProtocolBgpRoutin
 		AlwaysCompareMed:           util.AsBool(o.AlwaysCompareMed, nil),
 		DeterministicMedComparison: util.AsBool(o.DeterministicMedComparison, nil),
 		Misc:                       o.Misc,
+		MiscAttributes:             o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7069,6 +7783,7 @@ func (o *protocolOspfXml) MarshalFromObject(s ProtocolOspf) {
 		o.Timers = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfXml) UnmarshalToObject() (*ProtocolOspf, error) {
@@ -7140,6 +7855,7 @@ func (o protocolOspfXml) UnmarshalToObject() (*ProtocolOspf, error) {
 		RouterId:                o.RouterId,
 		Timers:                  timersVal,
 		Misc:                    o.Misc,
+		MiscAttributes:          o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7178,6 +7894,7 @@ func (o *protocolOspfAreaXml) MarshalFromObject(s ProtocolOspfArea) {
 		o.VirtualLink = &protocolOspfAreaVirtualLinkContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfAreaXml) UnmarshalToObject() (*ProtocolOspfArea, error) {
@@ -7221,12 +7938,13 @@ func (o protocolOspfAreaXml) UnmarshalToObject() (*ProtocolOspfArea, error) {
 	}
 
 	result := &ProtocolOspfArea{
-		Name:        o.Name,
-		Type:        typeVal,
-		Range:       rangeVal,
-		Interface:   interfaceVal,
-		VirtualLink: virtualLinkVal,
-		Misc:        o.Misc,
+		Name:           o.Name,
+		Type:           typeVal,
+		Range:          rangeVal,
+		Interface:      interfaceVal,
+		VirtualLink:    virtualLinkVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7247,6 +7965,7 @@ func (o *protocolOspfAreaTypeXml) MarshalFromObject(s ProtocolOspfAreaType) {
 		o.Nssa = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfAreaTypeXml) UnmarshalToObject() (*ProtocolOspfAreaType, error) {
@@ -7276,21 +7995,24 @@ func (o protocolOspfAreaTypeXml) UnmarshalToObject() (*ProtocolOspfAreaType, err
 	}
 
 	result := &ProtocolOspfAreaType{
-		Normal: normalVal,
-		Stub:   stubVal,
-		Nssa:   nssaVal,
-		Misc:   o.Misc,
+		Normal:         normalVal,
+		Stub:           stubVal,
+		Nssa:           nssaVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolOspfAreaTypeNormalXml) MarshalFromObject(s ProtocolOspfAreaTypeNormal) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfAreaTypeNormalXml) UnmarshalToObject() (*ProtocolOspfAreaTypeNormal, error) {
 
 	result := &ProtocolOspfAreaTypeNormal{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7302,6 +8024,7 @@ func (o *protocolOspfAreaTypeStubXml) MarshalFromObject(s ProtocolOspfAreaTypeSt
 		o.DefaultRoute = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfAreaTypeStubXml) UnmarshalToObject() (*ProtocolOspfAreaTypeStub, error) {
@@ -7315,9 +8038,10 @@ func (o protocolOspfAreaTypeStubXml) UnmarshalToObject() (*ProtocolOspfAreaTypeS
 	}
 
 	result := &ProtocolOspfAreaTypeStub{
-		AcceptSummary: util.AsBool(o.AcceptSummary, nil),
-		DefaultRoute:  defaultRouteVal,
-		Misc:          o.Misc,
+		AcceptSummary:  util.AsBool(o.AcceptSummary, nil),
+		DefaultRoute:   defaultRouteVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7333,6 +8057,7 @@ func (o *protocolOspfAreaTypeStubDefaultRouteXml) MarshalFromObject(s ProtocolOs
 		o.Advertise = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfAreaTypeStubDefaultRouteXml) UnmarshalToObject() (*ProtocolOspfAreaTypeStubDefaultRoute, error) {
@@ -7354,33 +8079,38 @@ func (o protocolOspfAreaTypeStubDefaultRouteXml) UnmarshalToObject() (*ProtocolO
 	}
 
 	result := &ProtocolOspfAreaTypeStubDefaultRoute{
-		Disable:   disableVal,
-		Advertise: advertiseVal,
-		Misc:      o.Misc,
+		Disable:        disableVal,
+		Advertise:      advertiseVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolOspfAreaTypeStubDefaultRouteDisableXml) MarshalFromObject(s ProtocolOspfAreaTypeStubDefaultRouteDisable) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfAreaTypeStubDefaultRouteDisableXml) UnmarshalToObject() (*ProtocolOspfAreaTypeStubDefaultRouteDisable, error) {
 
 	result := &ProtocolOspfAreaTypeStubDefaultRouteDisable{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolOspfAreaTypeStubDefaultRouteAdvertiseXml) MarshalFromObject(s ProtocolOspfAreaTypeStubDefaultRouteAdvertise) {
 	o.Metric = s.Metric
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfAreaTypeStubDefaultRouteAdvertiseXml) UnmarshalToObject() (*ProtocolOspfAreaTypeStubDefaultRouteAdvertise, error) {
 
 	result := &ProtocolOspfAreaTypeStubDefaultRouteAdvertise{
-		Metric: o.Metric,
-		Misc:   o.Misc,
+		Metric:         o.Metric,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7401,6 +8131,7 @@ func (o *protocolOspfAreaTypeNssaXml) MarshalFromObject(s ProtocolOspfAreaTypeNs
 		o.NssaExtRange = &protocolOspfAreaTypeNssaNssaExtRangeContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfAreaTypeNssaXml) UnmarshalToObject() (*ProtocolOspfAreaTypeNssa, error) {
@@ -7424,10 +8155,11 @@ func (o protocolOspfAreaTypeNssaXml) UnmarshalToObject() (*ProtocolOspfAreaTypeN
 	}
 
 	result := &ProtocolOspfAreaTypeNssa{
-		AcceptSummary: util.AsBool(o.AcceptSummary, nil),
-		DefaultRoute:  defaultRouteVal,
-		NssaExtRange:  nssaExtRangeVal,
-		Misc:          o.Misc,
+		AcceptSummary:  util.AsBool(o.AcceptSummary, nil),
+		DefaultRoute:   defaultRouteVal,
+		NssaExtRange:   nssaExtRangeVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7443,6 +8175,7 @@ func (o *protocolOspfAreaTypeNssaDefaultRouteXml) MarshalFromObject(s ProtocolOs
 		o.Advertise = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfAreaTypeNssaDefaultRouteXml) UnmarshalToObject() (*ProtocolOspfAreaTypeNssaDefaultRoute, error) {
@@ -7464,20 +8197,23 @@ func (o protocolOspfAreaTypeNssaDefaultRouteXml) UnmarshalToObject() (*ProtocolO
 	}
 
 	result := &ProtocolOspfAreaTypeNssaDefaultRoute{
-		Disable:   disableVal,
-		Advertise: advertiseVal,
-		Misc:      o.Misc,
+		Disable:        disableVal,
+		Advertise:      advertiseVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolOspfAreaTypeNssaDefaultRouteDisableXml) MarshalFromObject(s ProtocolOspfAreaTypeNssaDefaultRouteDisable) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfAreaTypeNssaDefaultRouteDisableXml) UnmarshalToObject() (*ProtocolOspfAreaTypeNssaDefaultRouteDisable, error) {
 
 	result := &ProtocolOspfAreaTypeNssaDefaultRouteDisable{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7485,14 +8221,16 @@ func (o *protocolOspfAreaTypeNssaDefaultRouteAdvertiseXml) MarshalFromObject(s P
 	o.Metric = s.Metric
 	o.Type = s.Type
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfAreaTypeNssaDefaultRouteAdvertiseXml) UnmarshalToObject() (*ProtocolOspfAreaTypeNssaDefaultRouteAdvertise, error) {
 
 	result := &ProtocolOspfAreaTypeNssaDefaultRouteAdvertise{
-		Metric: o.Metric,
-		Type:   o.Type,
-		Misc:   o.Misc,
+		Metric:         o.Metric,
+		Type:           o.Type,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7509,6 +8247,7 @@ func (o *protocolOspfAreaTypeNssaNssaExtRangeXml) MarshalFromObject(s ProtocolOs
 		o.Suppress = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfAreaTypeNssaNssaExtRangeXml) UnmarshalToObject() (*ProtocolOspfAreaTypeNssaNssaExtRange, error) {
@@ -7530,32 +8269,37 @@ func (o protocolOspfAreaTypeNssaNssaExtRangeXml) UnmarshalToObject() (*ProtocolO
 	}
 
 	result := &ProtocolOspfAreaTypeNssaNssaExtRange{
-		Name:      o.Name,
-		Advertise: advertiseVal,
-		Suppress:  suppressVal,
-		Misc:      o.Misc,
+		Name:           o.Name,
+		Advertise:      advertiseVal,
+		Suppress:       suppressVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolOspfAreaTypeNssaNssaExtRangeAdvertiseXml) MarshalFromObject(s ProtocolOspfAreaTypeNssaNssaExtRangeAdvertise) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfAreaTypeNssaNssaExtRangeAdvertiseXml) UnmarshalToObject() (*ProtocolOspfAreaTypeNssaNssaExtRangeAdvertise, error) {
 
 	result := &ProtocolOspfAreaTypeNssaNssaExtRangeAdvertise{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolOspfAreaTypeNssaNssaExtRangeSuppressXml) MarshalFromObject(s ProtocolOspfAreaTypeNssaNssaExtRangeSuppress) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfAreaTypeNssaNssaExtRangeSuppressXml) UnmarshalToObject() (*ProtocolOspfAreaTypeNssaNssaExtRangeSuppress, error) {
 
 	result := &ProtocolOspfAreaTypeNssaNssaExtRangeSuppress{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7572,6 +8316,7 @@ func (o *protocolOspfAreaRangeXml) MarshalFromObject(s ProtocolOspfAreaRange) {
 		o.Suppress = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfAreaRangeXml) UnmarshalToObject() (*ProtocolOspfAreaRange, error) {
@@ -7593,32 +8338,37 @@ func (o protocolOspfAreaRangeXml) UnmarshalToObject() (*ProtocolOspfAreaRange, e
 	}
 
 	result := &ProtocolOspfAreaRange{
-		Name:      o.Name,
-		Advertise: advertiseVal,
-		Suppress:  suppressVal,
-		Misc:      o.Misc,
+		Name:           o.Name,
+		Advertise:      advertiseVal,
+		Suppress:       suppressVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolOspfAreaRangeAdvertiseXml) MarshalFromObject(s ProtocolOspfAreaRangeAdvertise) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfAreaRangeAdvertiseXml) UnmarshalToObject() (*ProtocolOspfAreaRangeAdvertise, error) {
 
 	result := &ProtocolOspfAreaRangeAdvertise{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolOspfAreaRangeSuppressXml) MarshalFromObject(s ProtocolOspfAreaRangeSuppress) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfAreaRangeSuppressXml) UnmarshalToObject() (*ProtocolOspfAreaRangeSuppress, error) {
 
 	result := &ProtocolOspfAreaRangeSuppress{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7654,6 +8404,7 @@ func (o *protocolOspfAreaInterfaceXml) MarshalFromObject(s ProtocolOspfAreaInter
 		o.Bfd = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfAreaInterfaceXml) UnmarshalToObject() (*ProtocolOspfAreaInterface, error) {
@@ -7700,6 +8451,7 @@ func (o protocolOspfAreaInterfaceXml) UnmarshalToObject() (*ProtocolOspfAreaInte
 		Neighbor:           neighborVal,
 		Bfd:                bfdVal,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7720,6 +8472,7 @@ func (o *protocolOspfAreaInterfaceLinkTypeXml) MarshalFromObject(s ProtocolOspfA
 		o.P2mp = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfAreaInterfaceLinkTypeXml) UnmarshalToObject() (*ProtocolOspfAreaInterfaceLinkType, error) {
@@ -7749,69 +8502,80 @@ func (o protocolOspfAreaInterfaceLinkTypeXml) UnmarshalToObject() (*ProtocolOspf
 	}
 
 	result := &ProtocolOspfAreaInterfaceLinkType{
-		Broadcast: broadcastVal,
-		P2p:       p2pVal,
-		P2mp:      p2mpVal,
-		Misc:      o.Misc,
+		Broadcast:      broadcastVal,
+		P2p:            p2pVal,
+		P2mp:           p2mpVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolOspfAreaInterfaceLinkTypeBroadcastXml) MarshalFromObject(s ProtocolOspfAreaInterfaceLinkTypeBroadcast) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfAreaInterfaceLinkTypeBroadcastXml) UnmarshalToObject() (*ProtocolOspfAreaInterfaceLinkTypeBroadcast, error) {
 
 	result := &ProtocolOspfAreaInterfaceLinkTypeBroadcast{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolOspfAreaInterfaceLinkTypeP2pXml) MarshalFromObject(s ProtocolOspfAreaInterfaceLinkTypeP2p) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfAreaInterfaceLinkTypeP2pXml) UnmarshalToObject() (*ProtocolOspfAreaInterfaceLinkTypeP2p, error) {
 
 	result := &ProtocolOspfAreaInterfaceLinkTypeP2p{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolOspfAreaInterfaceLinkTypeP2mpXml) MarshalFromObject(s ProtocolOspfAreaInterfaceLinkTypeP2mp) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfAreaInterfaceLinkTypeP2mpXml) UnmarshalToObject() (*ProtocolOspfAreaInterfaceLinkTypeP2mp, error) {
 
 	result := &ProtocolOspfAreaInterfaceLinkTypeP2mp{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolOspfAreaInterfaceNeighborXml) MarshalFromObject(s ProtocolOspfAreaInterfaceNeighbor) {
 	o.Name = s.Name
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfAreaInterfaceNeighborXml) UnmarshalToObject() (*ProtocolOspfAreaInterfaceNeighbor, error) {
 
 	result := &ProtocolOspfAreaInterfaceNeighbor{
-		Name: o.Name,
-		Misc: o.Misc,
+		Name:           o.Name,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolOspfAreaInterfaceBfdXml) MarshalFromObject(s ProtocolOspfAreaInterfaceBfd) {
 	o.Profile = s.Profile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfAreaInterfaceBfdXml) UnmarshalToObject() (*ProtocolOspfAreaInterfaceBfd, error) {
 
 	result := &ProtocolOspfAreaInterfaceBfd{
-		Profile: o.Profile,
-		Misc:    o.Misc,
+		Profile:        o.Profile,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7831,6 +8595,7 @@ func (o *protocolOspfAreaVirtualLinkXml) MarshalFromObject(s ProtocolOspfAreaVir
 		o.Bfd = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfAreaVirtualLinkXml) UnmarshalToObject() (*ProtocolOspfAreaVirtualLink, error) {
@@ -7855,19 +8620,22 @@ func (o protocolOspfAreaVirtualLinkXml) UnmarshalToObject() (*ProtocolOspfAreaVi
 		Authentication:     o.Authentication,
 		Bfd:                bfdVal,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolOspfAreaVirtualLinkBfdXml) MarshalFromObject(s ProtocolOspfAreaVirtualLinkBfd) {
 	o.Profile = s.Profile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfAreaVirtualLinkBfdXml) UnmarshalToObject() (*ProtocolOspfAreaVirtualLinkBfd, error) {
 
 	result := &ProtocolOspfAreaVirtualLinkBfd{
-		Profile: o.Profile,
-		Misc:    o.Misc,
+		Profile:        o.Profile,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7884,6 +8652,7 @@ func (o *protocolOspfAuthProfileXml) MarshalFromObject(s ProtocolOspfAuthProfile
 		o.Md5 = &protocolOspfAuthProfileMd5ContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfAuthProfileXml) UnmarshalToObject() (*ProtocolOspfAuthProfile, error) {
@@ -7899,10 +8668,11 @@ func (o protocolOspfAuthProfileXml) UnmarshalToObject() (*ProtocolOspfAuthProfil
 	}
 
 	result := &ProtocolOspfAuthProfile{
-		Name:     o.Name,
-		Password: o.Password,
-		Md5:      md5Val,
-		Misc:     o.Misc,
+		Name:           o.Name,
+		Password:       o.Password,
+		Md5:            md5Val,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7911,15 +8681,17 @@ func (o *protocolOspfAuthProfileMd5Xml) MarshalFromObject(s ProtocolOspfAuthProf
 	o.Key = s.Key
 	o.Preferred = util.YesNo(s.Preferred, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfAuthProfileMd5Xml) UnmarshalToObject() (*ProtocolOspfAuthProfileMd5, error) {
 
 	result := &ProtocolOspfAuthProfileMd5{
-		Name:      o.Name,
-		Key:       o.Key,
-		Preferred: util.AsBool(o.Preferred, nil),
-		Misc:      o.Misc,
+		Name:           o.Name,
+		Key:            o.Key,
+		Preferred:      util.AsBool(o.Preferred, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7929,29 +8701,33 @@ func (o *protocolOspfExportRulesXml) MarshalFromObject(s ProtocolOspfExportRules
 	o.NewTag = s.NewTag
 	o.Metric = s.Metric
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfExportRulesXml) UnmarshalToObject() (*ProtocolOspfExportRules, error) {
 
 	result := &ProtocolOspfExportRules{
-		Name:        o.Name,
-		NewPathType: o.NewPathType,
-		NewTag:      o.NewTag,
-		Metric:      o.Metric,
-		Misc:        o.Misc,
+		Name:           o.Name,
+		NewPathType:    o.NewPathType,
+		NewTag:         o.NewTag,
+		Metric:         o.Metric,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolOspfGlobalBfdXml) MarshalFromObject(s ProtocolOspfGlobalBfd) {
 	o.Profile = s.Profile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfGlobalBfdXml) UnmarshalToObject() (*ProtocolOspfGlobalBfd, error) {
 
 	result := &ProtocolOspfGlobalBfd{
-		Profile: o.Profile,
-		Misc:    o.Misc,
+		Profile:        o.Profile,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7962,6 +8738,7 @@ func (o *protocolOspfGracefulRestartXml) MarshalFromObject(s ProtocolOspfGracefu
 	o.MaxNeighborRestartTime = s.MaxNeighborRestartTime
 	o.StrictLSAChecking = util.YesNo(s.StrictLSAChecking, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfGracefulRestartXml) UnmarshalToObject() (*ProtocolOspfGracefulRestart, error) {
@@ -7973,6 +8750,7 @@ func (o protocolOspfGracefulRestartXml) UnmarshalToObject() (*ProtocolOspfGracef
 		MaxNeighborRestartTime: o.MaxNeighborRestartTime,
 		StrictLSAChecking:      util.AsBool(o.StrictLSAChecking, nil),
 		Misc:                   o.Misc,
+		MiscAttributes:         o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7980,6 +8758,7 @@ func (o *protocolOspfTimersXml) MarshalFromObject(s ProtocolOspfTimers) {
 	o.LsaInterval = s.LsaInterval
 	o.SpfCalculationDelay = s.SpfCalculationDelay
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfTimersXml) UnmarshalToObject() (*ProtocolOspfTimers, error) {
@@ -7988,6 +8767,7 @@ func (o protocolOspfTimersXml) UnmarshalToObject() (*ProtocolOspfTimers, error) 
 		LsaInterval:         o.LsaInterval,
 		SpfCalculationDelay: o.SpfCalculationDelay,
 		Misc:                o.Misc,
+		MiscAttributes:      o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8040,6 +8820,7 @@ func (o *protocolOspfv3Xml) MarshalFromObject(s ProtocolOspfv3) {
 		o.Timers = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfv3Xml) UnmarshalToObject() (*ProtocolOspfv3, error) {
@@ -8111,6 +8892,7 @@ func (o protocolOspfv3Xml) UnmarshalToObject() (*ProtocolOspfv3, error) {
 		RouterId:                o.RouterId,
 		Timers:                  timersVal,
 		Misc:                    o.Misc,
+		MiscAttributes:          o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8150,6 +8932,7 @@ func (o *protocolOspfv3AreaXml) MarshalFromObject(s ProtocolOspfv3Area) {
 		o.VirtualLink = &protocolOspfv3AreaVirtualLinkContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfv3AreaXml) UnmarshalToObject() (*ProtocolOspfv3Area, error) {
@@ -8200,6 +8983,7 @@ func (o protocolOspfv3AreaXml) UnmarshalToObject() (*ProtocolOspfv3Area, error) 
 		Interface:      interfaceVal,
 		VirtualLink:    virtualLinkVal,
 		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8220,6 +9004,7 @@ func (o *protocolOspfv3AreaTypeXml) MarshalFromObject(s ProtocolOspfv3AreaType) 
 		o.Nssa = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfv3AreaTypeXml) UnmarshalToObject() (*ProtocolOspfv3AreaType, error) {
@@ -8249,21 +9034,24 @@ func (o protocolOspfv3AreaTypeXml) UnmarshalToObject() (*ProtocolOspfv3AreaType,
 	}
 
 	result := &ProtocolOspfv3AreaType{
-		Normal: normalVal,
-		Stub:   stubVal,
-		Nssa:   nssaVal,
-		Misc:   o.Misc,
+		Normal:         normalVal,
+		Stub:           stubVal,
+		Nssa:           nssaVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolOspfv3AreaTypeNormalXml) MarshalFromObject(s ProtocolOspfv3AreaTypeNormal) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfv3AreaTypeNormalXml) UnmarshalToObject() (*ProtocolOspfv3AreaTypeNormal, error) {
 
 	result := &ProtocolOspfv3AreaTypeNormal{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8275,6 +9063,7 @@ func (o *protocolOspfv3AreaTypeStubXml) MarshalFromObject(s ProtocolOspfv3AreaTy
 		o.DefaultRoute = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfv3AreaTypeStubXml) UnmarshalToObject() (*ProtocolOspfv3AreaTypeStub, error) {
@@ -8288,9 +9077,10 @@ func (o protocolOspfv3AreaTypeStubXml) UnmarshalToObject() (*ProtocolOspfv3AreaT
 	}
 
 	result := &ProtocolOspfv3AreaTypeStub{
-		AcceptSummary: util.AsBool(o.AcceptSummary, nil),
-		DefaultRoute:  defaultRouteVal,
-		Misc:          o.Misc,
+		AcceptSummary:  util.AsBool(o.AcceptSummary, nil),
+		DefaultRoute:   defaultRouteVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8306,6 +9096,7 @@ func (o *protocolOspfv3AreaTypeStubDefaultRouteXml) MarshalFromObject(s Protocol
 		o.Advertise = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfv3AreaTypeStubDefaultRouteXml) UnmarshalToObject() (*ProtocolOspfv3AreaTypeStubDefaultRoute, error) {
@@ -8327,33 +9118,38 @@ func (o protocolOspfv3AreaTypeStubDefaultRouteXml) UnmarshalToObject() (*Protoco
 	}
 
 	result := &ProtocolOspfv3AreaTypeStubDefaultRoute{
-		Disable:   disableVal,
-		Advertise: advertiseVal,
-		Misc:      o.Misc,
+		Disable:        disableVal,
+		Advertise:      advertiseVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolOspfv3AreaTypeStubDefaultRouteDisableXml) MarshalFromObject(s ProtocolOspfv3AreaTypeStubDefaultRouteDisable) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfv3AreaTypeStubDefaultRouteDisableXml) UnmarshalToObject() (*ProtocolOspfv3AreaTypeStubDefaultRouteDisable, error) {
 
 	result := &ProtocolOspfv3AreaTypeStubDefaultRouteDisable{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolOspfv3AreaTypeStubDefaultRouteAdvertiseXml) MarshalFromObject(s ProtocolOspfv3AreaTypeStubDefaultRouteAdvertise) {
 	o.Metric = s.Metric
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfv3AreaTypeStubDefaultRouteAdvertiseXml) UnmarshalToObject() (*ProtocolOspfv3AreaTypeStubDefaultRouteAdvertise, error) {
 
 	result := &ProtocolOspfv3AreaTypeStubDefaultRouteAdvertise{
-		Metric: o.Metric,
-		Misc:   o.Misc,
+		Metric:         o.Metric,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8374,6 +9170,7 @@ func (o *protocolOspfv3AreaTypeNssaXml) MarshalFromObject(s ProtocolOspfv3AreaTy
 		o.NssaExtRange = &protocolOspfv3AreaTypeNssaNssaExtRangeContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfv3AreaTypeNssaXml) UnmarshalToObject() (*ProtocolOspfv3AreaTypeNssa, error) {
@@ -8397,10 +9194,11 @@ func (o protocolOspfv3AreaTypeNssaXml) UnmarshalToObject() (*ProtocolOspfv3AreaT
 	}
 
 	result := &ProtocolOspfv3AreaTypeNssa{
-		AcceptSummary: util.AsBool(o.AcceptSummary, nil),
-		DefaultRoute:  defaultRouteVal,
-		NssaExtRange:  nssaExtRangeVal,
-		Misc:          o.Misc,
+		AcceptSummary:  util.AsBool(o.AcceptSummary, nil),
+		DefaultRoute:   defaultRouteVal,
+		NssaExtRange:   nssaExtRangeVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8416,6 +9214,7 @@ func (o *protocolOspfv3AreaTypeNssaDefaultRouteXml) MarshalFromObject(s Protocol
 		o.Advertise = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfv3AreaTypeNssaDefaultRouteXml) UnmarshalToObject() (*ProtocolOspfv3AreaTypeNssaDefaultRoute, error) {
@@ -8437,20 +9236,23 @@ func (o protocolOspfv3AreaTypeNssaDefaultRouteXml) UnmarshalToObject() (*Protoco
 	}
 
 	result := &ProtocolOspfv3AreaTypeNssaDefaultRoute{
-		Disable:   disableVal,
-		Advertise: advertiseVal,
-		Misc:      o.Misc,
+		Disable:        disableVal,
+		Advertise:      advertiseVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolOspfv3AreaTypeNssaDefaultRouteDisableXml) MarshalFromObject(s ProtocolOspfv3AreaTypeNssaDefaultRouteDisable) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfv3AreaTypeNssaDefaultRouteDisableXml) UnmarshalToObject() (*ProtocolOspfv3AreaTypeNssaDefaultRouteDisable, error) {
 
 	result := &ProtocolOspfv3AreaTypeNssaDefaultRouteDisable{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8458,14 +9260,16 @@ func (o *protocolOspfv3AreaTypeNssaDefaultRouteAdvertiseXml) MarshalFromObject(s
 	o.Metric = s.Metric
 	o.Type = s.Type
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfv3AreaTypeNssaDefaultRouteAdvertiseXml) UnmarshalToObject() (*ProtocolOspfv3AreaTypeNssaDefaultRouteAdvertise, error) {
 
 	result := &ProtocolOspfv3AreaTypeNssaDefaultRouteAdvertise{
-		Metric: o.Metric,
-		Type:   o.Type,
-		Misc:   o.Misc,
+		Metric:         o.Metric,
+		Type:           o.Type,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8482,6 +9286,7 @@ func (o *protocolOspfv3AreaTypeNssaNssaExtRangeXml) MarshalFromObject(s Protocol
 		o.Suppress = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfv3AreaTypeNssaNssaExtRangeXml) UnmarshalToObject() (*ProtocolOspfv3AreaTypeNssaNssaExtRange, error) {
@@ -8503,32 +9308,37 @@ func (o protocolOspfv3AreaTypeNssaNssaExtRangeXml) UnmarshalToObject() (*Protoco
 	}
 
 	result := &ProtocolOspfv3AreaTypeNssaNssaExtRange{
-		Name:      o.Name,
-		Advertise: advertiseVal,
-		Suppress:  suppressVal,
-		Misc:      o.Misc,
+		Name:           o.Name,
+		Advertise:      advertiseVal,
+		Suppress:       suppressVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolOspfv3AreaTypeNssaNssaExtRangeAdvertiseXml) MarshalFromObject(s ProtocolOspfv3AreaTypeNssaNssaExtRangeAdvertise) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfv3AreaTypeNssaNssaExtRangeAdvertiseXml) UnmarshalToObject() (*ProtocolOspfv3AreaTypeNssaNssaExtRangeAdvertise, error) {
 
 	result := &ProtocolOspfv3AreaTypeNssaNssaExtRangeAdvertise{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolOspfv3AreaTypeNssaNssaExtRangeSuppressXml) MarshalFromObject(s ProtocolOspfv3AreaTypeNssaNssaExtRangeSuppress) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfv3AreaTypeNssaNssaExtRangeSuppressXml) UnmarshalToObject() (*ProtocolOspfv3AreaTypeNssaNssaExtRangeSuppress, error) {
 
 	result := &ProtocolOspfv3AreaTypeNssaNssaExtRangeSuppress{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8545,6 +9355,7 @@ func (o *protocolOspfv3AreaRangeXml) MarshalFromObject(s ProtocolOspfv3AreaRange
 		o.Suppress = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfv3AreaRangeXml) UnmarshalToObject() (*ProtocolOspfv3AreaRange, error) {
@@ -8566,32 +9377,37 @@ func (o protocolOspfv3AreaRangeXml) UnmarshalToObject() (*ProtocolOspfv3AreaRang
 	}
 
 	result := &ProtocolOspfv3AreaRange{
-		Name:      o.Name,
-		Advertise: advertiseVal,
-		Suppress:  suppressVal,
-		Misc:      o.Misc,
+		Name:           o.Name,
+		Advertise:      advertiseVal,
+		Suppress:       suppressVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolOspfv3AreaRangeAdvertiseXml) MarshalFromObject(s ProtocolOspfv3AreaRangeAdvertise) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfv3AreaRangeAdvertiseXml) UnmarshalToObject() (*ProtocolOspfv3AreaRangeAdvertise, error) {
 
 	result := &ProtocolOspfv3AreaRangeAdvertise{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolOspfv3AreaRangeSuppressXml) MarshalFromObject(s ProtocolOspfv3AreaRangeSuppress) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfv3AreaRangeSuppressXml) UnmarshalToObject() (*ProtocolOspfv3AreaRangeSuppress, error) {
 
 	result := &ProtocolOspfv3AreaRangeSuppress{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8628,6 +9444,7 @@ func (o *protocolOspfv3AreaInterfaceXml) MarshalFromObject(s ProtocolOspfv3AreaI
 		o.Bfd = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfv3AreaInterfaceXml) UnmarshalToObject() (*ProtocolOspfv3AreaInterface, error) {
@@ -8675,6 +9492,7 @@ func (o protocolOspfv3AreaInterfaceXml) UnmarshalToObject() (*ProtocolOspfv3Area
 		Neighbor:           neighborVal,
 		Bfd:                bfdVal,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8695,6 +9513,7 @@ func (o *protocolOspfv3AreaInterfaceLinkTypeXml) MarshalFromObject(s ProtocolOsp
 		o.P2mp = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfv3AreaInterfaceLinkTypeXml) UnmarshalToObject() (*ProtocolOspfv3AreaInterfaceLinkType, error) {
@@ -8724,69 +9543,80 @@ func (o protocolOspfv3AreaInterfaceLinkTypeXml) UnmarshalToObject() (*ProtocolOs
 	}
 
 	result := &ProtocolOspfv3AreaInterfaceLinkType{
-		Broadcast: broadcastVal,
-		P2p:       p2pVal,
-		P2mp:      p2mpVal,
-		Misc:      o.Misc,
+		Broadcast:      broadcastVal,
+		P2p:            p2pVal,
+		P2mp:           p2mpVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolOspfv3AreaInterfaceLinkTypeBroadcastXml) MarshalFromObject(s ProtocolOspfv3AreaInterfaceLinkTypeBroadcast) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfv3AreaInterfaceLinkTypeBroadcastXml) UnmarshalToObject() (*ProtocolOspfv3AreaInterfaceLinkTypeBroadcast, error) {
 
 	result := &ProtocolOspfv3AreaInterfaceLinkTypeBroadcast{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolOspfv3AreaInterfaceLinkTypeP2pXml) MarshalFromObject(s ProtocolOspfv3AreaInterfaceLinkTypeP2p) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfv3AreaInterfaceLinkTypeP2pXml) UnmarshalToObject() (*ProtocolOspfv3AreaInterfaceLinkTypeP2p, error) {
 
 	result := &ProtocolOspfv3AreaInterfaceLinkTypeP2p{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolOspfv3AreaInterfaceLinkTypeP2mpXml) MarshalFromObject(s ProtocolOspfv3AreaInterfaceLinkTypeP2mp) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfv3AreaInterfaceLinkTypeP2mpXml) UnmarshalToObject() (*ProtocolOspfv3AreaInterfaceLinkTypeP2mp, error) {
 
 	result := &ProtocolOspfv3AreaInterfaceLinkTypeP2mp{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolOspfv3AreaInterfaceNeighborXml) MarshalFromObject(s ProtocolOspfv3AreaInterfaceNeighbor) {
 	o.Name = s.Name
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfv3AreaInterfaceNeighborXml) UnmarshalToObject() (*ProtocolOspfv3AreaInterfaceNeighbor, error) {
 
 	result := &ProtocolOspfv3AreaInterfaceNeighbor{
-		Name: o.Name,
-		Misc: o.Misc,
+		Name:           o.Name,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolOspfv3AreaInterfaceBfdXml) MarshalFromObject(s ProtocolOspfv3AreaInterfaceBfd) {
 	o.Profile = s.Profile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfv3AreaInterfaceBfdXml) UnmarshalToObject() (*ProtocolOspfv3AreaInterfaceBfd, error) {
 
 	result := &ProtocolOspfv3AreaInterfaceBfd{
-		Profile: o.Profile,
-		Misc:    o.Misc,
+		Profile:        o.Profile,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8807,6 +9637,7 @@ func (o *protocolOspfv3AreaVirtualLinkXml) MarshalFromObject(s ProtocolOspfv3Are
 		o.Bfd = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfv3AreaVirtualLinkXml) UnmarshalToObject() (*ProtocolOspfv3AreaVirtualLink, error) {
@@ -8832,19 +9663,22 @@ func (o protocolOspfv3AreaVirtualLinkXml) UnmarshalToObject() (*ProtocolOspfv3Ar
 		Authentication:     o.Authentication,
 		Bfd:                bfdVal,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolOspfv3AreaVirtualLinkBfdXml) MarshalFromObject(s ProtocolOspfv3AreaVirtualLinkBfd) {
 	o.Profile = s.Profile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfv3AreaVirtualLinkBfdXml) UnmarshalToObject() (*ProtocolOspfv3AreaVirtualLinkBfd, error) {
 
 	result := &ProtocolOspfv3AreaVirtualLinkBfd{
-		Profile: o.Profile,
-		Misc:    o.Misc,
+		Profile:        o.Profile,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8862,6 +9696,7 @@ func (o *protocolOspfv3AuthProfileXml) MarshalFromObject(s ProtocolOspfv3AuthPro
 		o.Ah = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfv3AuthProfileXml) UnmarshalToObject() (*ProtocolOspfv3AuthProfile, error) {
@@ -8883,11 +9718,12 @@ func (o protocolOspfv3AuthProfileXml) UnmarshalToObject() (*ProtocolOspfv3AuthPr
 	}
 
 	result := &ProtocolOspfv3AuthProfile{
-		Name: o.Name,
-		Spi:  o.Spi,
-		Esp:  espVal,
-		Ah:   ahVal,
-		Misc: o.Misc,
+		Name:           o.Name,
+		Spi:            o.Spi,
+		Esp:            espVal,
+		Ah:             ahVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8903,6 +9739,7 @@ func (o *protocolOspfv3AuthProfileEspXml) MarshalFromObject(s ProtocolOspfv3Auth
 		o.Encryption = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfv3AuthProfileEspXml) UnmarshalToObject() (*ProtocolOspfv3AuthProfileEsp, error) {
@@ -8927,6 +9764,7 @@ func (o protocolOspfv3AuthProfileEspXml) UnmarshalToObject() (*ProtocolOspfv3Aut
 		Authentication: authenticationVal,
 		Encryption:     encryptionVal,
 		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8962,6 +9800,7 @@ func (o *protocolOspfv3AuthProfileEspAuthenticationXml) MarshalFromObject(s Prot
 		o.None = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfv3AuthProfileEspAuthenticationXml) UnmarshalToObject() (*ProtocolOspfv3AuthProfileEspAuthentication, error) {
@@ -9015,89 +9854,102 @@ func (o protocolOspfv3AuthProfileEspAuthenticationXml) UnmarshalToObject() (*Pro
 	}
 
 	result := &ProtocolOspfv3AuthProfileEspAuthentication{
-		Md5:    md5Val,
-		Sha1:   sha1Val,
-		Sha256: sha256Val,
-		Sha384: sha384Val,
-		Sha512: sha512Val,
-		None:   noneVal,
-		Misc:   o.Misc,
+		Md5:            md5Val,
+		Sha1:           sha1Val,
+		Sha256:         sha256Val,
+		Sha384:         sha384Val,
+		Sha512:         sha512Val,
+		None:           noneVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolOspfv3AuthProfileEspAuthenticationMd5Xml) MarshalFromObject(s ProtocolOspfv3AuthProfileEspAuthenticationMd5) {
 	o.Key = s.Key
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfv3AuthProfileEspAuthenticationMd5Xml) UnmarshalToObject() (*ProtocolOspfv3AuthProfileEspAuthenticationMd5, error) {
 
 	result := &ProtocolOspfv3AuthProfileEspAuthenticationMd5{
-		Key:  o.Key,
-		Misc: o.Misc,
+		Key:            o.Key,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolOspfv3AuthProfileEspAuthenticationSha1Xml) MarshalFromObject(s ProtocolOspfv3AuthProfileEspAuthenticationSha1) {
 	o.Key = s.Key
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfv3AuthProfileEspAuthenticationSha1Xml) UnmarshalToObject() (*ProtocolOspfv3AuthProfileEspAuthenticationSha1, error) {
 
 	result := &ProtocolOspfv3AuthProfileEspAuthenticationSha1{
-		Key:  o.Key,
-		Misc: o.Misc,
+		Key:            o.Key,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolOspfv3AuthProfileEspAuthenticationSha256Xml) MarshalFromObject(s ProtocolOspfv3AuthProfileEspAuthenticationSha256) {
 	o.Key = s.Key
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfv3AuthProfileEspAuthenticationSha256Xml) UnmarshalToObject() (*ProtocolOspfv3AuthProfileEspAuthenticationSha256, error) {
 
 	result := &ProtocolOspfv3AuthProfileEspAuthenticationSha256{
-		Key:  o.Key,
-		Misc: o.Misc,
+		Key:            o.Key,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolOspfv3AuthProfileEspAuthenticationSha384Xml) MarshalFromObject(s ProtocolOspfv3AuthProfileEspAuthenticationSha384) {
 	o.Key = s.Key
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfv3AuthProfileEspAuthenticationSha384Xml) UnmarshalToObject() (*ProtocolOspfv3AuthProfileEspAuthenticationSha384, error) {
 
 	result := &ProtocolOspfv3AuthProfileEspAuthenticationSha384{
-		Key:  o.Key,
-		Misc: o.Misc,
+		Key:            o.Key,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolOspfv3AuthProfileEspAuthenticationSha512Xml) MarshalFromObject(s ProtocolOspfv3AuthProfileEspAuthenticationSha512) {
 	o.Key = s.Key
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfv3AuthProfileEspAuthenticationSha512Xml) UnmarshalToObject() (*ProtocolOspfv3AuthProfileEspAuthenticationSha512, error) {
 
 	result := &ProtocolOspfv3AuthProfileEspAuthenticationSha512{
-		Key:  o.Key,
-		Misc: o.Misc,
+		Key:            o.Key,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolOspfv3AuthProfileEspAuthenticationNoneXml) MarshalFromObject(s ProtocolOspfv3AuthProfileEspAuthenticationNone) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfv3AuthProfileEspAuthenticationNoneXml) UnmarshalToObject() (*ProtocolOspfv3AuthProfileEspAuthenticationNone, error) {
 
 	result := &ProtocolOspfv3AuthProfileEspAuthenticationNone{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -9105,14 +9957,16 @@ func (o *protocolOspfv3AuthProfileEspEncryptionXml) MarshalFromObject(s Protocol
 	o.Algorithm = s.Algorithm
 	o.Key = s.Key
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfv3AuthProfileEspEncryptionXml) UnmarshalToObject() (*ProtocolOspfv3AuthProfileEspEncryption, error) {
 
 	result := &ProtocolOspfv3AuthProfileEspEncryption{
-		Algorithm: o.Algorithm,
-		Key:       o.Key,
-		Misc:      o.Misc,
+		Algorithm:      o.Algorithm,
+		Key:            o.Key,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -9143,6 +9997,7 @@ func (o *protocolOspfv3AuthProfileAhXml) MarshalFromObject(s ProtocolOspfv3AuthP
 		o.Sha512 = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfv3AuthProfileAhXml) UnmarshalToObject() (*ProtocolOspfv3AuthProfileAh, error) {
@@ -9188,77 +10043,88 @@ func (o protocolOspfv3AuthProfileAhXml) UnmarshalToObject() (*ProtocolOspfv3Auth
 	}
 
 	result := &ProtocolOspfv3AuthProfileAh{
-		Md5:    md5Val,
-		Sha1:   sha1Val,
-		Sha256: sha256Val,
-		Sha384: sha384Val,
-		Sha512: sha512Val,
-		Misc:   o.Misc,
+		Md5:            md5Val,
+		Sha1:           sha1Val,
+		Sha256:         sha256Val,
+		Sha384:         sha384Val,
+		Sha512:         sha512Val,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolOspfv3AuthProfileAhMd5Xml) MarshalFromObject(s ProtocolOspfv3AuthProfileAhMd5) {
 	o.Key = s.Key
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfv3AuthProfileAhMd5Xml) UnmarshalToObject() (*ProtocolOspfv3AuthProfileAhMd5, error) {
 
 	result := &ProtocolOspfv3AuthProfileAhMd5{
-		Key:  o.Key,
-		Misc: o.Misc,
+		Key:            o.Key,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolOspfv3AuthProfileAhSha1Xml) MarshalFromObject(s ProtocolOspfv3AuthProfileAhSha1) {
 	o.Key = s.Key
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfv3AuthProfileAhSha1Xml) UnmarshalToObject() (*ProtocolOspfv3AuthProfileAhSha1, error) {
 
 	result := &ProtocolOspfv3AuthProfileAhSha1{
-		Key:  o.Key,
-		Misc: o.Misc,
+		Key:            o.Key,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolOspfv3AuthProfileAhSha256Xml) MarshalFromObject(s ProtocolOspfv3AuthProfileAhSha256) {
 	o.Key = s.Key
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfv3AuthProfileAhSha256Xml) UnmarshalToObject() (*ProtocolOspfv3AuthProfileAhSha256, error) {
 
 	result := &ProtocolOspfv3AuthProfileAhSha256{
-		Key:  o.Key,
-		Misc: o.Misc,
+		Key:            o.Key,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolOspfv3AuthProfileAhSha384Xml) MarshalFromObject(s ProtocolOspfv3AuthProfileAhSha384) {
 	o.Key = s.Key
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfv3AuthProfileAhSha384Xml) UnmarshalToObject() (*ProtocolOspfv3AuthProfileAhSha384, error) {
 
 	result := &ProtocolOspfv3AuthProfileAhSha384{
-		Key:  o.Key,
-		Misc: o.Misc,
+		Key:            o.Key,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolOspfv3AuthProfileAhSha512Xml) MarshalFromObject(s ProtocolOspfv3AuthProfileAhSha512) {
 	o.Key = s.Key
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfv3AuthProfileAhSha512Xml) UnmarshalToObject() (*ProtocolOspfv3AuthProfileAhSha512, error) {
 
 	result := &ProtocolOspfv3AuthProfileAhSha512{
-		Key:  o.Key,
-		Misc: o.Misc,
+		Key:            o.Key,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -9268,29 +10134,33 @@ func (o *protocolOspfv3ExportRulesXml) MarshalFromObject(s ProtocolOspfv3ExportR
 	o.NewTag = s.NewTag
 	o.Metric = s.Metric
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfv3ExportRulesXml) UnmarshalToObject() (*ProtocolOspfv3ExportRules, error) {
 
 	result := &ProtocolOspfv3ExportRules{
-		Name:        o.Name,
-		NewPathType: o.NewPathType,
-		NewTag:      o.NewTag,
-		Metric:      o.Metric,
-		Misc:        o.Misc,
+		Name:           o.Name,
+		NewPathType:    o.NewPathType,
+		NewTag:         o.NewTag,
+		Metric:         o.Metric,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolOspfv3GlobalBfdXml) MarshalFromObject(s ProtocolOspfv3GlobalBfd) {
 	o.Profile = s.Profile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfv3GlobalBfdXml) UnmarshalToObject() (*ProtocolOspfv3GlobalBfd, error) {
 
 	result := &ProtocolOspfv3GlobalBfd{
-		Profile: o.Profile,
-		Misc:    o.Misc,
+		Profile:        o.Profile,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -9301,6 +10171,7 @@ func (o *protocolOspfv3GracefulRestartXml) MarshalFromObject(s ProtocolOspfv3Gra
 	o.MaxNeighborRestartTime = s.MaxNeighborRestartTime
 	o.StrictLSAChecking = util.YesNo(s.StrictLSAChecking, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfv3GracefulRestartXml) UnmarshalToObject() (*ProtocolOspfv3GracefulRestart, error) {
@@ -9312,6 +10183,7 @@ func (o protocolOspfv3GracefulRestartXml) UnmarshalToObject() (*ProtocolOspfv3Gr
 		MaxNeighborRestartTime: o.MaxNeighborRestartTime,
 		StrictLSAChecking:      util.AsBool(o.StrictLSAChecking, nil),
 		Misc:                   o.Misc,
+		MiscAttributes:         o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -9319,6 +10191,7 @@ func (o *protocolOspfv3TimersXml) MarshalFromObject(s ProtocolOspfv3Timers) {
 	o.LsaInterval = s.LsaInterval
 	o.SpfCalculationDelay = s.SpfCalculationDelay
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolOspfv3TimersXml) UnmarshalToObject() (*ProtocolOspfv3Timers, error) {
@@ -9327,6 +10200,7 @@ func (o protocolOspfv3TimersXml) UnmarshalToObject() (*ProtocolOspfv3Timers, err
 		LsaInterval:         o.LsaInterval,
 		SpfCalculationDelay: o.SpfCalculationDelay,
 		Misc:                o.Misc,
+		MiscAttributes:      o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -9344,6 +10218,7 @@ func (o *protocolRedistProfileXml) MarshalFromObject(s ProtocolRedistProfile) {
 		o.Action = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolRedistProfileXml) UnmarshalToObject() (*ProtocolRedistProfile, error) {
@@ -9365,11 +10240,12 @@ func (o protocolRedistProfileXml) UnmarshalToObject() (*ProtocolRedistProfile, e
 	}
 
 	result := &ProtocolRedistProfile{
-		Name:     o.Name,
-		Priority: o.Priority,
-		Filter:   filterVal,
-		Action:   actionVal,
-		Misc:     o.Misc,
+		Name:           o.Name,
+		Priority:       o.Priority,
+		Filter:         filterVal,
+		Action:         actionVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -9397,6 +10273,7 @@ func (o *protocolRedistProfileFilterXml) MarshalFromObject(s ProtocolRedistProfi
 		o.Bgp = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolRedistProfileFilterXml) UnmarshalToObject() (*ProtocolRedistProfileFilter, error) {
@@ -9434,13 +10311,14 @@ func (o protocolRedistProfileFilterXml) UnmarshalToObject() (*ProtocolRedistProf
 	}
 
 	result := &ProtocolRedistProfileFilter{
-		Type:        typeVal,
-		Interface:   interfaceVal,
-		Destination: destinationVal,
-		Nexthop:     nexthopVal,
-		Ospf:        ospfVal,
-		Bgp:         bgpVal,
-		Misc:        o.Misc,
+		Type:           typeVal,
+		Interface:      interfaceVal,
+		Destination:    destinationVal,
+		Nexthop:        nexthopVal,
+		Ospf:           ospfVal,
+		Bgp:            bgpVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -9455,6 +10333,7 @@ func (o *protocolRedistProfileFilterOspfXml) MarshalFromObject(s ProtocolRedistP
 		o.Tag = util.StrToMem(s.Tag)
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolRedistProfileFilterOspfXml) UnmarshalToObject() (*ProtocolRedistProfileFilterOspf, error) {
@@ -9472,10 +10351,11 @@ func (o protocolRedistProfileFilterOspfXml) UnmarshalToObject() (*ProtocolRedist
 	}
 
 	result := &ProtocolRedistProfileFilterOspf{
-		PathType: pathTypeVal,
-		Area:     areaVal,
-		Tag:      tagVal,
-		Misc:     o.Misc,
+		PathType:       pathTypeVal,
+		Area:           areaVal,
+		Tag:            tagVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -9487,6 +10367,7 @@ func (o *protocolRedistProfileFilterBgpXml) MarshalFromObject(s ProtocolRedistPr
 		o.ExtendedCommunity = util.StrToMem(s.ExtendedCommunity)
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolRedistProfileFilterBgpXml) UnmarshalToObject() (*ProtocolRedistProfileFilterBgp, error) {
@@ -9503,6 +10384,7 @@ func (o protocolRedistProfileFilterBgpXml) UnmarshalToObject() (*ProtocolRedistP
 		Community:         communityVal,
 		ExtendedCommunity: extendedCommunityVal,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -9518,6 +10400,7 @@ func (o *protocolRedistProfileActionXml) MarshalFromObject(s ProtocolRedistProfi
 		o.Redist = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolRedistProfileActionXml) UnmarshalToObject() (*ProtocolRedistProfileAction, error) {
@@ -9539,31 +10422,36 @@ func (o protocolRedistProfileActionXml) UnmarshalToObject() (*ProtocolRedistProf
 	}
 
 	result := &ProtocolRedistProfileAction{
-		NoRedist: noRedistVal,
-		Redist:   redistVal,
-		Misc:     o.Misc,
+		NoRedist:       noRedistVal,
+		Redist:         redistVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolRedistProfileActionNoRedistXml) MarshalFromObject(s ProtocolRedistProfileActionNoRedist) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolRedistProfileActionNoRedistXml) UnmarshalToObject() (*ProtocolRedistProfileActionNoRedist, error) {
 
 	result := &ProtocolRedistProfileActionNoRedist{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolRedistProfileActionRedistXml) MarshalFromObject(s ProtocolRedistProfileActionRedist) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolRedistProfileActionRedistXml) UnmarshalToObject() (*ProtocolRedistProfileActionRedist, error) {
 
 	result := &ProtocolRedistProfileActionRedist{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -9581,6 +10469,7 @@ func (o *protocolRedistProfileIpv6Xml) MarshalFromObject(s ProtocolRedistProfile
 		o.Action = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolRedistProfileIpv6Xml) UnmarshalToObject() (*ProtocolRedistProfileIpv6, error) {
@@ -9602,11 +10491,12 @@ func (o protocolRedistProfileIpv6Xml) UnmarshalToObject() (*ProtocolRedistProfil
 	}
 
 	result := &ProtocolRedistProfileIpv6{
-		Name:     o.Name,
-		Priority: o.Priority,
-		Filter:   filterVal,
-		Action:   actionVal,
-		Misc:     o.Misc,
+		Name:           o.Name,
+		Priority:       o.Priority,
+		Filter:         filterVal,
+		Action:         actionVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -9634,6 +10524,7 @@ func (o *protocolRedistProfileIpv6FilterXml) MarshalFromObject(s ProtocolRedistP
 		o.Bgp = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolRedistProfileIpv6FilterXml) UnmarshalToObject() (*ProtocolRedistProfileIpv6Filter, error) {
@@ -9671,13 +10562,14 @@ func (o protocolRedistProfileIpv6FilterXml) UnmarshalToObject() (*ProtocolRedist
 	}
 
 	result := &ProtocolRedistProfileIpv6Filter{
-		Type:        typeVal,
-		Interface:   interfaceVal,
-		Destination: destinationVal,
-		Nexthop:     nexthopVal,
-		Ospfv3:      ospfv3Val,
-		Bgp:         bgpVal,
-		Misc:        o.Misc,
+		Type:           typeVal,
+		Interface:      interfaceVal,
+		Destination:    destinationVal,
+		Nexthop:        nexthopVal,
+		Ospfv3:         ospfv3Val,
+		Bgp:            bgpVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -9692,6 +10584,7 @@ func (o *protocolRedistProfileIpv6FilterOspfv3Xml) MarshalFromObject(s ProtocolR
 		o.Tag = util.StrToMem(s.Tag)
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolRedistProfileIpv6FilterOspfv3Xml) UnmarshalToObject() (*ProtocolRedistProfileIpv6FilterOspfv3, error) {
@@ -9709,10 +10602,11 @@ func (o protocolRedistProfileIpv6FilterOspfv3Xml) UnmarshalToObject() (*Protocol
 	}
 
 	result := &ProtocolRedistProfileIpv6FilterOspfv3{
-		PathType: pathTypeVal,
-		Area:     areaVal,
-		Tag:      tagVal,
-		Misc:     o.Misc,
+		PathType:       pathTypeVal,
+		Area:           areaVal,
+		Tag:            tagVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -9724,6 +10618,7 @@ func (o *protocolRedistProfileIpv6FilterBgpXml) MarshalFromObject(s ProtocolRedi
 		o.ExtendedCommunity = util.StrToMem(s.ExtendedCommunity)
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolRedistProfileIpv6FilterBgpXml) UnmarshalToObject() (*ProtocolRedistProfileIpv6FilterBgp, error) {
@@ -9740,6 +10635,7 @@ func (o protocolRedistProfileIpv6FilterBgpXml) UnmarshalToObject() (*ProtocolRed
 		Community:         communityVal,
 		ExtendedCommunity: extendedCommunityVal,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -9755,6 +10651,7 @@ func (o *protocolRedistProfileIpv6ActionXml) MarshalFromObject(s ProtocolRedistP
 		o.Redist = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolRedistProfileIpv6ActionXml) UnmarshalToObject() (*ProtocolRedistProfileIpv6Action, error) {
@@ -9776,31 +10673,36 @@ func (o protocolRedistProfileIpv6ActionXml) UnmarshalToObject() (*ProtocolRedist
 	}
 
 	result := &ProtocolRedistProfileIpv6Action{
-		NoRedist: noRedistVal,
-		Redist:   redistVal,
-		Misc:     o.Misc,
+		NoRedist:       noRedistVal,
+		Redist:         redistVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolRedistProfileIpv6ActionNoRedistXml) MarshalFromObject(s ProtocolRedistProfileIpv6ActionNoRedist) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolRedistProfileIpv6ActionNoRedistXml) UnmarshalToObject() (*ProtocolRedistProfileIpv6ActionNoRedist, error) {
 
 	result := &ProtocolRedistProfileIpv6ActionNoRedist{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolRedistProfileIpv6ActionRedistXml) MarshalFromObject(s ProtocolRedistProfileIpv6ActionRedist) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolRedistProfileIpv6ActionRedistXml) UnmarshalToObject() (*ProtocolRedistProfileIpv6ActionRedist, error) {
 
 	result := &ProtocolRedistProfileIpv6ActionRedist{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -9846,6 +10748,7 @@ func (o *protocolRipXml) MarshalFromObject(s ProtocolRip) {
 		o.Timers = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolRipXml) UnmarshalToObject() (*ProtocolRip, error) {
@@ -9906,6 +10809,7 @@ func (o protocolRipXml) UnmarshalToObject() (*ProtocolRip, error) {
 		RejectDefaultRoute:      util.AsBool(o.RejectDefaultRoute, nil),
 		Timers:                  timersVal,
 		Misc:                    o.Misc,
+		MiscAttributes:          o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -9922,6 +10826,7 @@ func (o *protocolRipAuthProfileXml) MarshalFromObject(s ProtocolRipAuthProfile) 
 		o.Md5 = &protocolRipAuthProfileMd5ContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolRipAuthProfileXml) UnmarshalToObject() (*ProtocolRipAuthProfile, error) {
@@ -9937,10 +10842,11 @@ func (o protocolRipAuthProfileXml) UnmarshalToObject() (*ProtocolRipAuthProfile,
 	}
 
 	result := &ProtocolRipAuthProfile{
-		Name:     o.Name,
-		Password: o.Password,
-		Md5:      md5Val,
-		Misc:     o.Misc,
+		Name:           o.Name,
+		Password:       o.Password,
+		Md5:            md5Val,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -9949,15 +10855,17 @@ func (o *protocolRipAuthProfileMd5Xml) MarshalFromObject(s ProtocolRipAuthProfil
 	o.Key = s.Key
 	o.Preferred = util.YesNo(s.Preferred, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolRipAuthProfileMd5Xml) UnmarshalToObject() (*ProtocolRipAuthProfileMd5, error) {
 
 	result := &ProtocolRipAuthProfileMd5{
-		Name:      o.Name,
-		Key:       o.Key,
-		Preferred: util.AsBool(o.Preferred, nil),
-		Misc:      o.Misc,
+		Name:           o.Name,
+		Key:            o.Key,
+		Preferred:      util.AsBool(o.Preferred, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -9965,27 +10873,31 @@ func (o *protocolRipExportRulesXml) MarshalFromObject(s ProtocolRipExportRules) 
 	o.Name = s.Name
 	o.Metric = s.Metric
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolRipExportRulesXml) UnmarshalToObject() (*ProtocolRipExportRules, error) {
 
 	result := &ProtocolRipExportRules{
-		Name:   o.Name,
-		Metric: o.Metric,
-		Misc:   o.Misc,
+		Name:           o.Name,
+		Metric:         o.Metric,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolRipGlobalBfdXml) MarshalFromObject(s ProtocolRipGlobalBfd) {
 	o.Profile = s.Profile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolRipGlobalBfdXml) UnmarshalToObject() (*ProtocolRipGlobalBfd, error) {
 
 	result := &ProtocolRipGlobalBfd{
-		Profile: o.Profile,
-		Misc:    o.Misc,
+		Profile:        o.Profile,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -10005,6 +10917,7 @@ func (o *protocolRipInterfaceXml) MarshalFromObject(s ProtocolRipInterface) {
 		o.Bfd = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolRipInterfaceXml) UnmarshalToObject() (*ProtocolRipInterface, error) {
@@ -10033,6 +10946,7 @@ func (o protocolRipInterfaceXml) UnmarshalToObject() (*ProtocolRipInterface, err
 		DefaultRoute:   defaultRouteVal,
 		Bfd:            bfdVal,
 		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -10048,6 +10962,7 @@ func (o *protocolRipInterfaceDefaultRouteXml) MarshalFromObject(s ProtocolRipInt
 		o.Advertise = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolRipInterfaceDefaultRouteXml) UnmarshalToObject() (*ProtocolRipInterfaceDefaultRoute, error) {
@@ -10069,46 +10984,53 @@ func (o protocolRipInterfaceDefaultRouteXml) UnmarshalToObject() (*ProtocolRipIn
 	}
 
 	result := &ProtocolRipInterfaceDefaultRoute{
-		Disable:   disableVal,
-		Advertise: advertiseVal,
-		Misc:      o.Misc,
+		Disable:        disableVal,
+		Advertise:      advertiseVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolRipInterfaceDefaultRouteDisableXml) MarshalFromObject(s ProtocolRipInterfaceDefaultRouteDisable) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolRipInterfaceDefaultRouteDisableXml) UnmarshalToObject() (*ProtocolRipInterfaceDefaultRouteDisable, error) {
 
 	result := &ProtocolRipInterfaceDefaultRouteDisable{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolRipInterfaceDefaultRouteAdvertiseXml) MarshalFromObject(s ProtocolRipInterfaceDefaultRouteAdvertise) {
 	o.Metric = s.Metric
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolRipInterfaceDefaultRouteAdvertiseXml) UnmarshalToObject() (*ProtocolRipInterfaceDefaultRouteAdvertise, error) {
 
 	result := &ProtocolRipInterfaceDefaultRouteAdvertise{
-		Metric: o.Metric,
-		Misc:   o.Misc,
+		Metric:         o.Metric,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolRipInterfaceBfdXml) MarshalFromObject(s ProtocolRipInterfaceBfd) {
 	o.Profile = s.Profile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolRipInterfaceBfdXml) UnmarshalToObject() (*ProtocolRipInterfaceBfd, error) {
 
 	result := &ProtocolRipInterfaceBfd{
-		Profile: o.Profile,
-		Misc:    o.Misc,
+		Profile:        o.Profile,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -10118,6 +11040,7 @@ func (o *protocolRipTimersXml) MarshalFromObject(s ProtocolRipTimers) {
 	o.IntervalSeconds = s.IntervalSeconds
 	o.UpdateIntervals = s.UpdateIntervals
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolRipTimersXml) UnmarshalToObject() (*ProtocolRipTimers, error) {
@@ -10128,6 +11051,7 @@ func (o protocolRipTimersXml) UnmarshalToObject() (*ProtocolRipTimers, error) {
 		IntervalSeconds: o.IntervalSeconds,
 		UpdateIntervals: o.UpdateIntervals,
 		Misc:            o.Misc,
+		MiscAttributes:  o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -15140,4 +16064,12 @@ func (o *Entry) EntryName() string {
 
 func (o *Entry) SetEntryName(name string) {
 	o.Name = name
+}
+
+func (o *Entry) GetMiscAttributes() []xml.Attr {
+	return o.MiscAttributes
+}
+
+func (o *Entry) SetMiscAttributes(attrs []xml.Attr) {
+	o.MiscAttributes = attrs
 }

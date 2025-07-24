@@ -25,11 +25,13 @@ type Entry struct {
 	Devices           []Devices
 	AuthorizationCode *string
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 type Devices struct {
-	Name string
-	Vsys []string
-	Misc []generic.Xml
+	Name           string
+	Vsys           []string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 
 type entryXmlContainer struct {
@@ -63,15 +65,17 @@ type entryXml struct {
 	Devices           *devicesContainerXml `xml:"devices,omitempty"`
 	AuthorizationCode *string              `xml:"authorization-code,omitempty"`
 	Misc              []generic.Xml        `xml:",any"`
+	MiscAttributes    []xml.Attr           `xml:",any,attr"`
 }
 type devicesContainerXml struct {
 	Entries []devicesXml `xml:"entry"`
 }
 type devicesXml struct {
-	XMLName xml.Name         `xml:"entry"`
-	Name    string           `xml:"name,attr"`
-	Vsys    *util.MemberType `xml:"vsys,omitempty"`
-	Misc    []generic.Xml    `xml:",any"`
+	XMLName        xml.Name         `xml:"entry"`
+	Name           string           `xml:"name,attr"`
+	Vsys           *util.MemberType `xml:"vsys,omitempty"`
+	Misc           []generic.Xml    `xml:",any"`
+	MiscAttributes []xml.Attr       `xml:",any,attr"`
 }
 
 func (o *entryXml) MarshalFromObject(s Entry) {
@@ -91,6 +95,7 @@ func (o *entryXml) MarshalFromObject(s Entry) {
 	}
 	o.AuthorizationCode = s.AuthorizationCode
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o entryXml) UnmarshalToObject() (*Entry, error) {
@@ -116,6 +121,7 @@ func (o entryXml) UnmarshalToObject() (*Entry, error) {
 		Devices:           devicesVal,
 		AuthorizationCode: o.AuthorizationCode,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -125,6 +131,7 @@ func (o *devicesXml) MarshalFromObject(s Devices) {
 		o.Vsys = util.StrToMem(s.Vsys)
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o devicesXml) UnmarshalToObject() (*Devices, error) {
@@ -134,9 +141,10 @@ func (o devicesXml) UnmarshalToObject() (*Devices, error) {
 	}
 
 	result := &Devices{
-		Name: o.Name,
-		Vsys: vsysVal,
-		Misc: o.Misc,
+		Name:           o.Name,
+		Vsys:           vsysVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -236,4 +244,12 @@ func (o *Entry) EntryName() string {
 
 func (o *Entry) SetEntryName(name string) {
 	o.Name = name
+}
+
+func (o *Entry) GetMiscAttributes() []xml.Attr {
+	return o.MiscAttributes
+}
+
+func (o *Entry) SetMiscAttributes(attrs []xml.Attr) {
+	o.MiscAttributes = attrs
 }

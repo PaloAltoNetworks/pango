@@ -31,11 +31,13 @@ type Entry struct {
 	Protocol       *Protocol
 	ProtocolCommon *ProtocolCommon
 	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Authentication struct {
-	Certificate  *AuthenticationCertificate
-	PreSharedKey *AuthenticationPreSharedKey
-	Misc         []generic.Xml
+	Certificate    *AuthenticationCertificate
+	PreSharedKey   *AuthenticationPreSharedKey
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type AuthenticationCertificate struct {
 	AllowIdPayloadMismatch     *bool
@@ -44,91 +46,108 @@ type AuthenticationCertificate struct {
 	StrictValidationRevocation *bool
 	UseManagementAsSource      *bool
 	Misc                       []generic.Xml
+	MiscAttributes             []xml.Attr
 }
 type AuthenticationCertificateLocalCertificate struct {
-	HashAndUrl *AuthenticationCertificateLocalCertificateHashAndUrl
-	Name       *string
-	Misc       []generic.Xml
+	HashAndUrl     *AuthenticationCertificateLocalCertificateHashAndUrl
+	Name           *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type AuthenticationCertificateLocalCertificateHashAndUrl struct {
-	BaseUrl *string
-	Enable  *bool
-	Misc    []generic.Xml
+	BaseUrl        *string
+	Enable         *bool
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type AuthenticationPreSharedKey struct {
-	Key  *string
-	Misc []generic.Xml
+	Key            *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type LocalAddress struct {
-	Interface  *string
-	FloatingIp *string
-	Ip         *string
-	Misc       []generic.Xml
+	Interface      *string
+	FloatingIp     *string
+	Ip             *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type LocalId struct {
-	Id   *string
-	Type *string
-	Misc []generic.Xml
+	Id             *string
+	Type           *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type PeerAddress struct {
-	Dynamic *PeerAddressDynamic
-	Fqdn    *string
-	Ip      *string
-	Misc    []generic.Xml
+	Dynamic        *PeerAddressDynamic
+	Fqdn           *string
+	Ip             *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type PeerAddressDynamic struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type PeerId struct {
-	Id       *string
-	Matching *string
-	Type     *string
-	Misc     []generic.Xml
+	Id             *string
+	Matching       *string
+	Type           *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Protocol struct {
-	Ikev1   *ProtocolIkev1
-	Ikev2   *ProtocolIkev2
-	Version *string
-	Misc    []generic.Xml
+	Ikev1          *ProtocolIkev1
+	Ikev2          *ProtocolIkev2
+	Version        *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolIkev1 struct {
 	Dpd              *ProtocolIkev1Dpd
 	ExchangeMode     *string
 	IkeCryptoProfile *string
 	Misc             []generic.Xml
+	MiscAttributes   []xml.Attr
 }
 type ProtocolIkev1Dpd struct {
-	Enable   *bool
-	Interval *int64
-	Retry    *int64
-	Misc     []generic.Xml
+	Enable         *bool
+	Interval       *int64
+	Retry          *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolIkev2 struct {
 	Dpd              *ProtocolIkev2Dpd
 	IkeCryptoProfile *string
 	RequireCookie    *bool
 	Misc             []generic.Xml
+	MiscAttributes   []xml.Attr
 }
 type ProtocolIkev2Dpd struct {
-	Enable   *bool
-	Interval *int64
-	Misc     []generic.Xml
+	Enable         *bool
+	Interval       *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolCommon struct {
-	Fragmentation *ProtocolCommonFragmentation
-	NatTraversal  *ProtocolCommonNatTraversal
-	PassiveMode   *bool
-	Misc          []generic.Xml
+	Fragmentation  *ProtocolCommonFragmentation
+	NatTraversal   *ProtocolCommonNatTraversal
+	PassiveMode    *bool
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolCommonFragmentation struct {
-	Enable *bool
-	Misc   []generic.Xml
+	Enable         *bool
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolCommonNatTraversal struct {
 	Enable            *bool
 	KeepAliveInterval *int64
 	UdpChecksumEnable *bool
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 
 type entryXmlContainer struct {
@@ -168,11 +187,13 @@ type entryXml struct {
 	Protocol       *protocolXml       `xml:"protocol,omitempty"`
 	ProtocolCommon *protocolCommonXml `xml:"protocol-common,omitempty"`
 	Misc           []generic.Xml      `xml:",any"`
+	MiscAttributes []xml.Attr         `xml:",any,attr"`
 }
 type authenticationXml struct {
-	Certificate  *authenticationCertificateXml  `xml:"certificate,omitempty"`
-	PreSharedKey *authenticationPreSharedKeyXml `xml:"pre-shared-key,omitempty"`
-	Misc         []generic.Xml                  `xml:",any"`
+	Certificate    *authenticationCertificateXml  `xml:"certificate,omitempty"`
+	PreSharedKey   *authenticationPreSharedKeyXml `xml:"pre-shared-key,omitempty"`
+	Misc           []generic.Xml                  `xml:",any"`
+	MiscAttributes []xml.Attr                     `xml:",any,attr"`
 }
 type authenticationCertificateXml struct {
 	AllowIdPayloadMismatch     *string                                       `xml:"allow-id-payload-mismatch,omitempty"`
@@ -181,91 +202,108 @@ type authenticationCertificateXml struct {
 	StrictValidationRevocation *string                                       `xml:"strict-validation-revocation,omitempty"`
 	UseManagementAsSource      *string                                       `xml:"use-management-as-source,omitempty"`
 	Misc                       []generic.Xml                                 `xml:",any"`
+	MiscAttributes             []xml.Attr                                    `xml:",any,attr"`
 }
 type authenticationCertificateLocalCertificateXml struct {
-	HashAndUrl *authenticationCertificateLocalCertificateHashAndUrlXml `xml:"hash-and-url,omitempty"`
-	Name       *string                                                 `xml:"name,attr,omitempty"`
-	Misc       []generic.Xml                                           `xml:",any"`
+	HashAndUrl     *authenticationCertificateLocalCertificateHashAndUrlXml `xml:"hash-and-url,omitempty"`
+	Name           *string                                                 `xml:"name,attr,omitempty"`
+	Misc           []generic.Xml                                           `xml:",any"`
+	MiscAttributes []xml.Attr                                              `xml:",any,attr"`
 }
 type authenticationCertificateLocalCertificateHashAndUrlXml struct {
-	BaseUrl *string       `xml:"base-url,omitempty"`
-	Enable  *string       `xml:"enable,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	BaseUrl        *string       `xml:"base-url,omitempty"`
+	Enable         *string       `xml:"enable,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type authenticationPreSharedKeyXml struct {
-	Key  *string       `xml:"key,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Key            *string       `xml:"key,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type localAddressXml struct {
-	Interface  *string       `xml:"interface,omitempty"`
-	FloatingIp *string       `xml:"floating-ip,omitempty"`
-	Ip         *string       `xml:"ip,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	Interface      *string       `xml:"interface,omitempty"`
+	FloatingIp     *string       `xml:"floating-ip,omitempty"`
+	Ip             *string       `xml:"ip,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type localIdXml struct {
-	Id   *string       `xml:"id,omitempty"`
-	Type *string       `xml:"type,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Id             *string       `xml:"id,omitempty"`
+	Type           *string       `xml:"type,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type peerAddressXml struct {
-	Dynamic *peerAddressDynamicXml `xml:"dynamic,omitempty"`
-	Fqdn    *string                `xml:"fqdn,omitempty"`
-	Ip      *string                `xml:"ip,omitempty"`
-	Misc    []generic.Xml          `xml:",any"`
+	Dynamic        *peerAddressDynamicXml `xml:"dynamic,omitempty"`
+	Fqdn           *string                `xml:"fqdn,omitempty"`
+	Ip             *string                `xml:"ip,omitempty"`
+	Misc           []generic.Xml          `xml:",any"`
+	MiscAttributes []xml.Attr             `xml:",any,attr"`
 }
 type peerAddressDynamicXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type peerIdXml struct {
-	Id       *string       `xml:"id,omitempty"`
-	Matching *string       `xml:"matching,omitempty"`
-	Type     *string       `xml:"type,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	Id             *string       `xml:"id,omitempty"`
+	Matching       *string       `xml:"matching,omitempty"`
+	Type           *string       `xml:"type,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolXml struct {
-	Ikev1   *protocolIkev1Xml `xml:"ikev1,omitempty"`
-	Ikev2   *protocolIkev2Xml `xml:"ikev2,omitempty"`
-	Version *string           `xml:"version,omitempty"`
-	Misc    []generic.Xml     `xml:",any"`
+	Ikev1          *protocolIkev1Xml `xml:"ikev1,omitempty"`
+	Ikev2          *protocolIkev2Xml `xml:"ikev2,omitempty"`
+	Version        *string           `xml:"version,omitempty"`
+	Misc           []generic.Xml     `xml:",any"`
+	MiscAttributes []xml.Attr        `xml:",any,attr"`
 }
 type protocolIkev1Xml struct {
 	Dpd              *protocolIkev1DpdXml `xml:"dpd,omitempty"`
 	ExchangeMode     *string              `xml:"exchange-mode,omitempty"`
 	IkeCryptoProfile *string              `xml:"ike-crypto-profile,omitempty"`
 	Misc             []generic.Xml        `xml:",any"`
+	MiscAttributes   []xml.Attr           `xml:",any,attr"`
 }
 type protocolIkev1DpdXml struct {
-	Enable   *string       `xml:"enable,omitempty"`
-	Interval *int64        `xml:"interval,omitempty"`
-	Retry    *int64        `xml:"retry,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	Enable         *string       `xml:"enable,omitempty"`
+	Interval       *int64        `xml:"interval,omitempty"`
+	Retry          *int64        `xml:"retry,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolIkev2Xml struct {
 	Dpd              *protocolIkev2DpdXml `xml:"dpd,omitempty"`
 	IkeCryptoProfile *string              `xml:"ike-crypto-profile,omitempty"`
 	RequireCookie    *string              `xml:"require-cookie,omitempty"`
 	Misc             []generic.Xml        `xml:",any"`
+	MiscAttributes   []xml.Attr           `xml:",any,attr"`
 }
 type protocolIkev2DpdXml struct {
-	Enable   *string       `xml:"enable,omitempty"`
-	Interval *int64        `xml:"interval,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	Enable         *string       `xml:"enable,omitempty"`
+	Interval       *int64        `xml:"interval,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolCommonXml struct {
-	Fragmentation *protocolCommonFragmentationXml `xml:"fragmentation,omitempty"`
-	NatTraversal  *protocolCommonNatTraversalXml  `xml:"nat-traversal,omitempty"`
-	PassiveMode   *string                         `xml:"passive-mode,omitempty"`
-	Misc          []generic.Xml                   `xml:",any"`
+	Fragmentation  *protocolCommonFragmentationXml `xml:"fragmentation,omitempty"`
+	NatTraversal   *protocolCommonNatTraversalXml  `xml:"nat-traversal,omitempty"`
+	PassiveMode    *string                         `xml:"passive-mode,omitempty"`
+	Misc           []generic.Xml                   `xml:",any"`
+	MiscAttributes []xml.Attr                      `xml:",any,attr"`
 }
 type protocolCommonFragmentationXml struct {
-	Enable *string       `xml:"enable,omitempty"`
-	Misc   []generic.Xml `xml:",any"`
+	Enable         *string       `xml:"enable,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type protocolCommonNatTraversalXml struct {
 	Enable            *string       `xml:"enable,omitempty"`
 	KeepAliveInterval *int64        `xml:"keep-alive-interval,omitempty"`
 	UdpChecksumEnable *string       `xml:"udp-checksum-enable,omitempty"`
 	Misc              []generic.Xml `xml:",any"`
+	MiscAttributes    []xml.Attr    `xml:",any,attr"`
 }
 
 func (o *entryXml) MarshalFromObject(s Entry) {
@@ -309,6 +347,7 @@ func (o *entryXml) MarshalFromObject(s Entry) {
 		o.ProtocolCommon = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o entryXml) UnmarshalToObject() (*Entry, error) {
@@ -382,6 +421,7 @@ func (o entryXml) UnmarshalToObject() (*Entry, error) {
 		Protocol:       protocolVal,
 		ProtocolCommon: protocolCommonVal,
 		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -397,6 +437,7 @@ func (o *authenticationXml) MarshalFromObject(s Authentication) {
 		o.PreSharedKey = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o authenticationXml) UnmarshalToObject() (*Authentication, error) {
@@ -418,9 +459,10 @@ func (o authenticationXml) UnmarshalToObject() (*Authentication, error) {
 	}
 
 	result := &Authentication{
-		Certificate:  certificateVal,
-		PreSharedKey: preSharedKeyVal,
-		Misc:         o.Misc,
+		Certificate:    certificateVal,
+		PreSharedKey:   preSharedKeyVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -435,6 +477,7 @@ func (o *authenticationCertificateXml) MarshalFromObject(s AuthenticationCertifi
 	o.StrictValidationRevocation = util.YesNo(s.StrictValidationRevocation, nil)
 	o.UseManagementAsSource = util.YesNo(s.UseManagementAsSource, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o authenticationCertificateXml) UnmarshalToObject() (*AuthenticationCertificate, error) {
@@ -454,6 +497,7 @@ func (o authenticationCertificateXml) UnmarshalToObject() (*AuthenticationCertif
 		StrictValidationRevocation: util.AsBool(o.StrictValidationRevocation, nil),
 		UseManagementAsSource:      util.AsBool(o.UseManagementAsSource, nil),
 		Misc:                       o.Misc,
+		MiscAttributes:             o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -465,6 +509,7 @@ func (o *authenticationCertificateLocalCertificateXml) MarshalFromObject(s Authe
 	}
 	o.Name = s.Name
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o authenticationCertificateLocalCertificateXml) UnmarshalToObject() (*AuthenticationCertificateLocalCertificate, error) {
@@ -478,9 +523,10 @@ func (o authenticationCertificateLocalCertificateXml) UnmarshalToObject() (*Auth
 	}
 
 	result := &AuthenticationCertificateLocalCertificate{
-		HashAndUrl: hashAndUrlVal,
-		Name:       o.Name,
-		Misc:       o.Misc,
+		HashAndUrl:     hashAndUrlVal,
+		Name:           o.Name,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -488,27 +534,31 @@ func (o *authenticationCertificateLocalCertificateHashAndUrlXml) MarshalFromObje
 	o.BaseUrl = s.BaseUrl
 	o.Enable = util.YesNo(s.Enable, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o authenticationCertificateLocalCertificateHashAndUrlXml) UnmarshalToObject() (*AuthenticationCertificateLocalCertificateHashAndUrl, error) {
 
 	result := &AuthenticationCertificateLocalCertificateHashAndUrl{
-		BaseUrl: o.BaseUrl,
-		Enable:  util.AsBool(o.Enable, nil),
-		Misc:    o.Misc,
+		BaseUrl:        o.BaseUrl,
+		Enable:         util.AsBool(o.Enable, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *authenticationPreSharedKeyXml) MarshalFromObject(s AuthenticationPreSharedKey) {
 	o.Key = s.Key
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o authenticationPreSharedKeyXml) UnmarshalToObject() (*AuthenticationPreSharedKey, error) {
 
 	result := &AuthenticationPreSharedKey{
-		Key:  o.Key,
-		Misc: o.Misc,
+		Key:            o.Key,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -517,15 +567,17 @@ func (o *localAddressXml) MarshalFromObject(s LocalAddress) {
 	o.FloatingIp = s.FloatingIp
 	o.Ip = s.Ip
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o localAddressXml) UnmarshalToObject() (*LocalAddress, error) {
 
 	result := &LocalAddress{
-		Interface:  o.Interface,
-		FloatingIp: o.FloatingIp,
-		Ip:         o.Ip,
-		Misc:       o.Misc,
+		Interface:      o.Interface,
+		FloatingIp:     o.FloatingIp,
+		Ip:             o.Ip,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -533,14 +585,16 @@ func (o *localIdXml) MarshalFromObject(s LocalId) {
 	o.Id = s.Id
 	o.Type = s.Type
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o localIdXml) UnmarshalToObject() (*LocalId, error) {
 
 	result := &LocalId{
-		Id:   o.Id,
-		Type: o.Type,
-		Misc: o.Misc,
+		Id:             o.Id,
+		Type:           o.Type,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -553,6 +607,7 @@ func (o *peerAddressXml) MarshalFromObject(s PeerAddress) {
 	o.Fqdn = s.Fqdn
 	o.Ip = s.Ip
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o peerAddressXml) UnmarshalToObject() (*PeerAddress, error) {
@@ -566,21 +621,24 @@ func (o peerAddressXml) UnmarshalToObject() (*PeerAddress, error) {
 	}
 
 	result := &PeerAddress{
-		Dynamic: dynamicVal,
-		Fqdn:    o.Fqdn,
-		Ip:      o.Ip,
-		Misc:    o.Misc,
+		Dynamic:        dynamicVal,
+		Fqdn:           o.Fqdn,
+		Ip:             o.Ip,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *peerAddressDynamicXml) MarshalFromObject(s PeerAddressDynamic) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o peerAddressDynamicXml) UnmarshalToObject() (*PeerAddressDynamic, error) {
 
 	result := &PeerAddressDynamic{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -589,15 +647,17 @@ func (o *peerIdXml) MarshalFromObject(s PeerId) {
 	o.Matching = s.Matching
 	o.Type = s.Type
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o peerIdXml) UnmarshalToObject() (*PeerId, error) {
 
 	result := &PeerId{
-		Id:       o.Id,
-		Matching: o.Matching,
-		Type:     o.Type,
-		Misc:     o.Misc,
+		Id:             o.Id,
+		Matching:       o.Matching,
+		Type:           o.Type,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -614,6 +674,7 @@ func (o *protocolXml) MarshalFromObject(s Protocol) {
 	}
 	o.Version = s.Version
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolXml) UnmarshalToObject() (*Protocol, error) {
@@ -635,10 +696,11 @@ func (o protocolXml) UnmarshalToObject() (*Protocol, error) {
 	}
 
 	result := &Protocol{
-		Ikev1:   ikev1Val,
-		Ikev2:   ikev2Val,
-		Version: o.Version,
-		Misc:    o.Misc,
+		Ikev1:          ikev1Val,
+		Ikev2:          ikev2Val,
+		Version:        o.Version,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -651,6 +713,7 @@ func (o *protocolIkev1Xml) MarshalFromObject(s ProtocolIkev1) {
 	o.ExchangeMode = s.ExchangeMode
 	o.IkeCryptoProfile = s.IkeCryptoProfile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolIkev1Xml) UnmarshalToObject() (*ProtocolIkev1, error) {
@@ -668,6 +731,7 @@ func (o protocolIkev1Xml) UnmarshalToObject() (*ProtocolIkev1, error) {
 		ExchangeMode:     o.ExchangeMode,
 		IkeCryptoProfile: o.IkeCryptoProfile,
 		Misc:             o.Misc,
+		MiscAttributes:   o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -676,15 +740,17 @@ func (o *protocolIkev1DpdXml) MarshalFromObject(s ProtocolIkev1Dpd) {
 	o.Interval = s.Interval
 	o.Retry = s.Retry
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolIkev1DpdXml) UnmarshalToObject() (*ProtocolIkev1Dpd, error) {
 
 	result := &ProtocolIkev1Dpd{
-		Enable:   util.AsBool(o.Enable, nil),
-		Interval: o.Interval,
-		Retry:    o.Retry,
-		Misc:     o.Misc,
+		Enable:         util.AsBool(o.Enable, nil),
+		Interval:       o.Interval,
+		Retry:          o.Retry,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -697,6 +763,7 @@ func (o *protocolIkev2Xml) MarshalFromObject(s ProtocolIkev2) {
 	o.IkeCryptoProfile = s.IkeCryptoProfile
 	o.RequireCookie = util.YesNo(s.RequireCookie, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolIkev2Xml) UnmarshalToObject() (*ProtocolIkev2, error) {
@@ -714,6 +781,7 @@ func (o protocolIkev2Xml) UnmarshalToObject() (*ProtocolIkev2, error) {
 		IkeCryptoProfile: o.IkeCryptoProfile,
 		RequireCookie:    util.AsBool(o.RequireCookie, nil),
 		Misc:             o.Misc,
+		MiscAttributes:   o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -721,14 +789,16 @@ func (o *protocolIkev2DpdXml) MarshalFromObject(s ProtocolIkev2Dpd) {
 	o.Enable = util.YesNo(s.Enable, nil)
 	o.Interval = s.Interval
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolIkev2DpdXml) UnmarshalToObject() (*ProtocolIkev2Dpd, error) {
 
 	result := &ProtocolIkev2Dpd{
-		Enable:   util.AsBool(o.Enable, nil),
-		Interval: o.Interval,
-		Misc:     o.Misc,
+		Enable:         util.AsBool(o.Enable, nil),
+		Interval:       o.Interval,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -745,6 +815,7 @@ func (o *protocolCommonXml) MarshalFromObject(s ProtocolCommon) {
 	}
 	o.PassiveMode = util.YesNo(s.PassiveMode, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolCommonXml) UnmarshalToObject() (*ProtocolCommon, error) {
@@ -766,23 +837,26 @@ func (o protocolCommonXml) UnmarshalToObject() (*ProtocolCommon, error) {
 	}
 
 	result := &ProtocolCommon{
-		Fragmentation: fragmentationVal,
-		NatTraversal:  natTraversalVal,
-		PassiveMode:   util.AsBool(o.PassiveMode, nil),
-		Misc:          o.Misc,
+		Fragmentation:  fragmentationVal,
+		NatTraversal:   natTraversalVal,
+		PassiveMode:    util.AsBool(o.PassiveMode, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolCommonFragmentationXml) MarshalFromObject(s ProtocolCommonFragmentation) {
 	o.Enable = util.YesNo(s.Enable, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolCommonFragmentationXml) UnmarshalToObject() (*ProtocolCommonFragmentation, error) {
 
 	result := &ProtocolCommonFragmentation{
-		Enable: util.AsBool(o.Enable, nil),
-		Misc:   o.Misc,
+		Enable:         util.AsBool(o.Enable, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -791,6 +865,7 @@ func (o *protocolCommonNatTraversalXml) MarshalFromObject(s ProtocolCommonNatTra
 	o.KeepAliveInterval = s.KeepAliveInterval
 	o.UdpChecksumEnable = util.YesNo(s.UdpChecksumEnable, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolCommonNatTraversalXml) UnmarshalToObject() (*ProtocolCommonNatTraversal, error) {
@@ -800,6 +875,7 @@ func (o protocolCommonNatTraversalXml) UnmarshalToObject() (*ProtocolCommonNatTr
 		KeepAliveInterval: o.KeepAliveInterval,
 		UdpChecksumEnable: util.AsBool(o.UdpChecksumEnable, nil),
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1254,4 +1330,12 @@ func (o *Entry) EntryName() string {
 
 func (o *Entry) SetEntryName(name string) {
 	o.Name = name
+}
+
+func (o *Entry) GetMiscAttributes() []xml.Attr {
+	return o.MiscAttributes
+}
+
+func (o *Entry) SetMiscAttributes(attrs []xml.Attr) {
+	o.MiscAttributes = attrs
 }

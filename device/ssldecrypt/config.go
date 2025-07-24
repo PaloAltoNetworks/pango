@@ -18,12 +18,14 @@ type Config struct {
 	SslExcludeCert                       []SslExcludeCert
 	TrustedRootCa                        []string
 	Misc                                 []generic.Xml
+	MiscAttributes                       []xml.Attr
 }
 type SslExcludeCert struct {
-	Name        string
-	Description *string
-	Exclude     *bool
-	Misc        []generic.Xml
+	Name           string
+	Description    *string
+	Exclude        *bool
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 
 type configXmlContainer struct {
@@ -61,16 +63,18 @@ type configXml struct {
 	SslExcludeCert                       *sslExcludeCertContainerXml `xml:"ssl-exclude-cert,omitempty"`
 	TrustedRootCa                        *util.MemberType            `xml:"trusted-root-CA,omitempty"`
 	Misc                                 []generic.Xml               `xml:",any"`
+	MiscAttributes                       []xml.Attr                  `xml:",any,attr"`
 }
 type sslExcludeCertContainerXml struct {
 	Entries []sslExcludeCertXml `xml:"entry"`
 }
 type sslExcludeCertXml struct {
-	XMLName     xml.Name      `xml:"entry"`
-	Name        string        `xml:"name,attr"`
-	Description *string       `xml:"description,omitempty"`
-	Exclude     *string       `xml:"exclude,omitempty"`
-	Misc        []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Description    *string       `xml:"description,omitempty"`
+	Exclude        *string       `xml:"exclude,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 
 func (o *configXml) MarshalFromObject(s Config) {
@@ -97,6 +101,7 @@ func (o *configXml) MarshalFromObject(s Config) {
 		o.TrustedRootCa = util.StrToMem(s.TrustedRootCa)
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o configXml) UnmarshalToObject() (*Config, error) {
@@ -133,6 +138,7 @@ func (o configXml) UnmarshalToObject() (*Config, error) {
 		SslExcludeCert:                       sslExcludeCertVal,
 		TrustedRootCa:                        trustedRootCaVal,
 		Misc:                                 o.Misc,
+		MiscAttributes:                       o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -141,15 +147,17 @@ func (o *sslExcludeCertXml) MarshalFromObject(s SslExcludeCert) {
 	o.Description = s.Description
 	o.Exclude = util.YesNo(s.Exclude, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o sslExcludeCertXml) UnmarshalToObject() (*SslExcludeCert, error) {
 
 	result := &SslExcludeCert{
-		Name:        o.Name,
-		Description: o.Description,
-		Exclude:     util.AsBool(o.Exclude, nil),
-		Misc:        o.Misc,
+		Name:           o.Name,
+		Description:    o.Description,
+		Exclude:        util.AsBool(o.Exclude, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }

@@ -49,6 +49,7 @@ type Entry struct {
 	UsedByMalware          *bool
 	VirusIdent             *bool
 	Misc                   []generic.Xml
+	MiscAttributes         []xml.Attr
 }
 type Default struct {
 	IdentByIcmpType   *DefaultIdentByIcmpType
@@ -56,81 +57,95 @@ type Default struct {
 	IdentByIpProtocol *string
 	Port              []string
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 type DefaultIdentByIcmpType struct {
-	Code *string
-	Type *string
-	Misc []generic.Xml
+	Code           *string
+	Type           *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type DefaultIdentByIcmp6Type struct {
-	Code *string
-	Type *string
-	Misc []generic.Xml
+	Code           *string
+	Type           *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Signature struct {
-	Name         string
-	Comment      *string
-	Scope        *string
-	OrderFree    *bool
-	AndCondition []SignatureAndCondition
-	Misc         []generic.Xml
+	Name           string
+	Comment        *string
+	Scope          *string
+	OrderFree      *bool
+	AndCondition   []SignatureAndCondition
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type SignatureAndCondition struct {
-	Name        string
-	OrCondition []SignatureAndConditionOrCondition
-	Misc        []generic.Xml
+	Name           string
+	OrCondition    []SignatureAndConditionOrCondition
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type SignatureAndConditionOrCondition struct {
-	Name     string
-	Operator *SignatureAndConditionOrConditionOperator
-	Misc     []generic.Xml
+	Name           string
+	Operator       *SignatureAndConditionOrConditionOperator
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type SignatureAndConditionOrConditionOperator struct {
-	PatternMatch *SignatureAndConditionOrConditionOperatorPatternMatch
-	GreaterThan  *SignatureAndConditionOrConditionOperatorGreaterThan
-	LessThan     *SignatureAndConditionOrConditionOperatorLessThan
-	EqualTo      *SignatureAndConditionOrConditionOperatorEqualTo
-	Misc         []generic.Xml
+	PatternMatch   *SignatureAndConditionOrConditionOperatorPatternMatch
+	GreaterThan    *SignatureAndConditionOrConditionOperatorGreaterThan
+	LessThan       *SignatureAndConditionOrConditionOperatorLessThan
+	EqualTo        *SignatureAndConditionOrConditionOperatorEqualTo
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type SignatureAndConditionOrConditionOperatorPatternMatch struct {
-	Context   *string
-	Pattern   *string
-	Qualifier []SignatureAndConditionOrConditionOperatorPatternMatchQualifier
-	Misc      []generic.Xml
+	Context        *string
+	Pattern        *string
+	Qualifier      []SignatureAndConditionOrConditionOperatorPatternMatchQualifier
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type SignatureAndConditionOrConditionOperatorPatternMatchQualifier struct {
-	Name  string
-	Value *string
-	Misc  []generic.Xml
+	Name           string
+	Value          *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type SignatureAndConditionOrConditionOperatorGreaterThan struct {
-	Context   *string
-	Value     *int64
-	Qualifier []SignatureAndConditionOrConditionOperatorGreaterThanQualifier
-	Misc      []generic.Xml
+	Context        *string
+	Value          *int64
+	Qualifier      []SignatureAndConditionOrConditionOperatorGreaterThanQualifier
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type SignatureAndConditionOrConditionOperatorGreaterThanQualifier struct {
-	Name  string
-	Value *string
-	Misc  []generic.Xml
+	Name           string
+	Value          *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type SignatureAndConditionOrConditionOperatorLessThan struct {
-	Context   *string
-	Value     *int64
-	Qualifier []SignatureAndConditionOrConditionOperatorLessThanQualifier
-	Misc      []generic.Xml
+	Context        *string
+	Value          *int64
+	Qualifier      []SignatureAndConditionOrConditionOperatorLessThanQualifier
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type SignatureAndConditionOrConditionOperatorLessThanQualifier struct {
-	Name  string
-	Value *string
-	Misc  []generic.Xml
+	Name           string
+	Value          *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type SignatureAndConditionOrConditionOperatorEqualTo struct {
-	Context  *string
-	Position *string
-	Mask     *string
-	Value    *string
-	Misc     []generic.Xml
+	Context        *string
+	Position       *string
+	Mask           *string
+	Value          *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 
 type entryXmlContainer struct {
@@ -188,6 +203,7 @@ type entryXml struct {
 	UsedByMalware          *string                `xml:"used-by-malware,omitempty"`
 	VirusIdent             *string                `xml:"virus-ident,omitempty"`
 	Misc                   []generic.Xml          `xml:",any"`
+	MiscAttributes         []xml.Attr             `xml:",any,attr"`
 }
 type defaultXml struct {
 	IdentByIcmpType   *defaultIdentByIcmpTypeXml  `xml:"ident-by-icmp-type,omitempty"`
@@ -195,105 +211,119 @@ type defaultXml struct {
 	IdentByIpProtocol *string                     `xml:"ident-by-ip-protocol,omitempty"`
 	Port              *util.MemberType            `xml:"port,omitempty"`
 	Misc              []generic.Xml               `xml:",any"`
+	MiscAttributes    []xml.Attr                  `xml:",any,attr"`
 }
 type defaultIdentByIcmpTypeXml struct {
-	Code *string       `xml:"code,omitempty"`
-	Type *string       `xml:"type,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Code           *string       `xml:"code,omitempty"`
+	Type           *string       `xml:"type,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type defaultIdentByIcmp6TypeXml struct {
-	Code *string       `xml:"code,omitempty"`
-	Type *string       `xml:"type,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Code           *string       `xml:"code,omitempty"`
+	Type           *string       `xml:"type,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type signatureContainerXml struct {
 	Entries []signatureXml `xml:"entry"`
 }
 type signatureXml struct {
-	XMLName      xml.Name                           `xml:"entry"`
-	Name         string                             `xml:"name,attr"`
-	Comment      *string                            `xml:"comment,omitempty"`
-	Scope        *string                            `xml:"scope,omitempty"`
-	OrderFree    *string                            `xml:"order-free,omitempty"`
-	AndCondition *signatureAndConditionContainerXml `xml:"and-condition,omitempty"`
-	Misc         []generic.Xml                      `xml:",any"`
+	XMLName        xml.Name                           `xml:"entry"`
+	Name           string                             `xml:"name,attr"`
+	Comment        *string                            `xml:"comment,omitempty"`
+	Scope          *string                            `xml:"scope,omitempty"`
+	OrderFree      *string                            `xml:"order-free,omitempty"`
+	AndCondition   *signatureAndConditionContainerXml `xml:"and-condition,omitempty"`
+	Misc           []generic.Xml                      `xml:",any"`
+	MiscAttributes []xml.Attr                         `xml:",any,attr"`
 }
 type signatureAndConditionContainerXml struct {
 	Entries []signatureAndConditionXml `xml:"entry"`
 }
 type signatureAndConditionXml struct {
-	XMLName     xml.Name                                      `xml:"entry"`
-	Name        string                                        `xml:"name,attr"`
-	OrCondition *signatureAndConditionOrConditionContainerXml `xml:"or-condition,omitempty"`
-	Misc        []generic.Xml                                 `xml:",any"`
+	XMLName        xml.Name                                      `xml:"entry"`
+	Name           string                                        `xml:"name,attr"`
+	OrCondition    *signatureAndConditionOrConditionContainerXml `xml:"or-condition,omitempty"`
+	Misc           []generic.Xml                                 `xml:",any"`
+	MiscAttributes []xml.Attr                                    `xml:",any,attr"`
 }
 type signatureAndConditionOrConditionContainerXml struct {
 	Entries []signatureAndConditionOrConditionXml `xml:"entry"`
 }
 type signatureAndConditionOrConditionXml struct {
-	XMLName  xml.Name                                     `xml:"entry"`
-	Name     string                                       `xml:"name,attr"`
-	Operator *signatureAndConditionOrConditionOperatorXml `xml:"operator,omitempty"`
-	Misc     []generic.Xml                                `xml:",any"`
+	XMLName        xml.Name                                     `xml:"entry"`
+	Name           string                                       `xml:"name,attr"`
+	Operator       *signatureAndConditionOrConditionOperatorXml `xml:"operator,omitempty"`
+	Misc           []generic.Xml                                `xml:",any"`
+	MiscAttributes []xml.Attr                                   `xml:",any,attr"`
 }
 type signatureAndConditionOrConditionOperatorXml struct {
-	PatternMatch *signatureAndConditionOrConditionOperatorPatternMatchXml `xml:"pattern-match,omitempty"`
-	GreaterThan  *signatureAndConditionOrConditionOperatorGreaterThanXml  `xml:"greater-than,omitempty"`
-	LessThan     *signatureAndConditionOrConditionOperatorLessThanXml     `xml:"less-than,omitempty"`
-	EqualTo      *signatureAndConditionOrConditionOperatorEqualToXml      `xml:"equal-to,omitempty"`
-	Misc         []generic.Xml                                            `xml:",any"`
+	PatternMatch   *signatureAndConditionOrConditionOperatorPatternMatchXml `xml:"pattern-match,omitempty"`
+	GreaterThan    *signatureAndConditionOrConditionOperatorGreaterThanXml  `xml:"greater-than,omitempty"`
+	LessThan       *signatureAndConditionOrConditionOperatorLessThanXml     `xml:"less-than,omitempty"`
+	EqualTo        *signatureAndConditionOrConditionOperatorEqualToXml      `xml:"equal-to,omitempty"`
+	Misc           []generic.Xml                                            `xml:",any"`
+	MiscAttributes []xml.Attr                                               `xml:",any,attr"`
 }
 type signatureAndConditionOrConditionOperatorPatternMatchXml struct {
-	Context   *string                                                                    `xml:"context,omitempty"`
-	Pattern   *string                                                                    `xml:"pattern,omitempty"`
-	Qualifier *signatureAndConditionOrConditionOperatorPatternMatchQualifierContainerXml `xml:"qualifier,omitempty"`
-	Misc      []generic.Xml                                                              `xml:",any"`
+	Context        *string                                                                    `xml:"context,omitempty"`
+	Pattern        *string                                                                    `xml:"pattern,omitempty"`
+	Qualifier      *signatureAndConditionOrConditionOperatorPatternMatchQualifierContainerXml `xml:"qualifier,omitempty"`
+	Misc           []generic.Xml                                                              `xml:",any"`
+	MiscAttributes []xml.Attr                                                                 `xml:",any,attr"`
 }
 type signatureAndConditionOrConditionOperatorPatternMatchQualifierContainerXml struct {
 	Entries []signatureAndConditionOrConditionOperatorPatternMatchQualifierXml `xml:"entry"`
 }
 type signatureAndConditionOrConditionOperatorPatternMatchQualifierXml struct {
-	XMLName xml.Name      `xml:"entry"`
-	Name    string        `xml:"name,attr"`
-	Value   *string       `xml:"value,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Value          *string       `xml:"value,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type signatureAndConditionOrConditionOperatorGreaterThanXml struct {
-	Context   *string                                                                   `xml:"context,omitempty"`
-	Value     *int64                                                                    `xml:"value,omitempty"`
-	Qualifier *signatureAndConditionOrConditionOperatorGreaterThanQualifierContainerXml `xml:"qualifier,omitempty"`
-	Misc      []generic.Xml                                                             `xml:",any"`
+	Context        *string                                                                   `xml:"context,omitempty"`
+	Value          *int64                                                                    `xml:"value,omitempty"`
+	Qualifier      *signatureAndConditionOrConditionOperatorGreaterThanQualifierContainerXml `xml:"qualifier,omitempty"`
+	Misc           []generic.Xml                                                             `xml:",any"`
+	MiscAttributes []xml.Attr                                                                `xml:",any,attr"`
 }
 type signatureAndConditionOrConditionOperatorGreaterThanQualifierContainerXml struct {
 	Entries []signatureAndConditionOrConditionOperatorGreaterThanQualifierXml `xml:"entry"`
 }
 type signatureAndConditionOrConditionOperatorGreaterThanQualifierXml struct {
-	XMLName xml.Name      `xml:"entry"`
-	Name    string        `xml:"name,attr"`
-	Value   *string       `xml:"value,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Value          *string       `xml:"value,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type signatureAndConditionOrConditionOperatorLessThanXml struct {
-	Context   *string                                                                `xml:"context,omitempty"`
-	Value     *int64                                                                 `xml:"value,omitempty"`
-	Qualifier *signatureAndConditionOrConditionOperatorLessThanQualifierContainerXml `xml:"qualifier,omitempty"`
-	Misc      []generic.Xml                                                          `xml:",any"`
+	Context        *string                                                                `xml:"context,omitempty"`
+	Value          *int64                                                                 `xml:"value,omitempty"`
+	Qualifier      *signatureAndConditionOrConditionOperatorLessThanQualifierContainerXml `xml:"qualifier,omitempty"`
+	Misc           []generic.Xml                                                          `xml:",any"`
+	MiscAttributes []xml.Attr                                                             `xml:",any,attr"`
 }
 type signatureAndConditionOrConditionOperatorLessThanQualifierContainerXml struct {
 	Entries []signatureAndConditionOrConditionOperatorLessThanQualifierXml `xml:"entry"`
 }
 type signatureAndConditionOrConditionOperatorLessThanQualifierXml struct {
-	XMLName xml.Name      `xml:"entry"`
-	Name    string        `xml:"name,attr"`
-	Value   *string       `xml:"value,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Value          *string       `xml:"value,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type signatureAndConditionOrConditionOperatorEqualToXml struct {
-	Context  *string       `xml:"context,omitempty"`
-	Position *string       `xml:"position,omitempty"`
-	Mask     *string       `xml:"mask,omitempty"`
-	Value    *string       `xml:"value,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	Context        *string       `xml:"context,omitempty"`
+	Position       *string       `xml:"position,omitempty"`
+	Mask           *string       `xml:"mask,omitempty"`
+	Value          *string       `xml:"value,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 
 func (o *entryXml) MarshalFromObject(s Entry) {
@@ -339,6 +369,7 @@ func (o *entryXml) MarshalFromObject(s Entry) {
 	o.UsedByMalware = util.YesNo(s.UsedByMalware, nil)
 	o.VirusIdent = util.YesNo(s.VirusIdent, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o entryXml) UnmarshalToObject() (*Entry, error) {
@@ -392,6 +423,7 @@ func (o entryXml) UnmarshalToObject() (*Entry, error) {
 		UsedByMalware:          util.AsBool(o.UsedByMalware, nil),
 		VirusIdent:             util.AsBool(o.VirusIdent, nil),
 		Misc:                   o.Misc,
+		MiscAttributes:         o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -411,6 +443,7 @@ func (o *defaultXml) MarshalFromObject(s Default) {
 		o.Port = util.StrToMem(s.Port)
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o defaultXml) UnmarshalToObject() (*Default, error) {
@@ -441,6 +474,7 @@ func (o defaultXml) UnmarshalToObject() (*Default, error) {
 		IdentByIpProtocol: o.IdentByIpProtocol,
 		Port:              portVal,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -448,14 +482,16 @@ func (o *defaultIdentByIcmpTypeXml) MarshalFromObject(s DefaultIdentByIcmpType) 
 	o.Code = s.Code
 	o.Type = s.Type
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o defaultIdentByIcmpTypeXml) UnmarshalToObject() (*DefaultIdentByIcmpType, error) {
 
 	result := &DefaultIdentByIcmpType{
-		Code: o.Code,
-		Type: o.Type,
-		Misc: o.Misc,
+		Code:           o.Code,
+		Type:           o.Type,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -463,14 +499,16 @@ func (o *defaultIdentByIcmp6TypeXml) MarshalFromObject(s DefaultIdentByIcmp6Type
 	o.Code = s.Code
 	o.Type = s.Type
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o defaultIdentByIcmp6TypeXml) UnmarshalToObject() (*DefaultIdentByIcmp6Type, error) {
 
 	result := &DefaultIdentByIcmp6Type{
-		Code: o.Code,
-		Type: o.Type,
-		Misc: o.Misc,
+		Code:           o.Code,
+		Type:           o.Type,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -489,6 +527,7 @@ func (o *signatureXml) MarshalFromObject(s Signature) {
 		o.AndCondition = &signatureAndConditionContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o signatureXml) UnmarshalToObject() (*Signature, error) {
@@ -504,12 +543,13 @@ func (o signatureXml) UnmarshalToObject() (*Signature, error) {
 	}
 
 	result := &Signature{
-		Name:         o.Name,
-		Comment:      o.Comment,
-		Scope:        o.Scope,
-		OrderFree:    util.AsBool(o.OrderFree, nil),
-		AndCondition: andConditionVal,
-		Misc:         o.Misc,
+		Name:           o.Name,
+		Comment:        o.Comment,
+		Scope:          o.Scope,
+		OrderFree:      util.AsBool(o.OrderFree, nil),
+		AndCondition:   andConditionVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -525,6 +565,7 @@ func (o *signatureAndConditionXml) MarshalFromObject(s SignatureAndCondition) {
 		o.OrCondition = &signatureAndConditionOrConditionContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o signatureAndConditionXml) UnmarshalToObject() (*SignatureAndCondition, error) {
@@ -540,9 +581,10 @@ func (o signatureAndConditionXml) UnmarshalToObject() (*SignatureAndCondition, e
 	}
 
 	result := &SignatureAndCondition{
-		Name:        o.Name,
-		OrCondition: orConditionVal,
-		Misc:        o.Misc,
+		Name:           o.Name,
+		OrCondition:    orConditionVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -554,6 +596,7 @@ func (o *signatureAndConditionOrConditionXml) MarshalFromObject(s SignatureAndCo
 		o.Operator = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o signatureAndConditionOrConditionXml) UnmarshalToObject() (*SignatureAndConditionOrCondition, error) {
@@ -567,9 +610,10 @@ func (o signatureAndConditionOrConditionXml) UnmarshalToObject() (*SignatureAndC
 	}
 
 	result := &SignatureAndConditionOrCondition{
-		Name:     o.Name,
-		Operator: operatorVal,
-		Misc:     o.Misc,
+		Name:           o.Name,
+		Operator:       operatorVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -595,6 +639,7 @@ func (o *signatureAndConditionOrConditionOperatorXml) MarshalFromObject(s Signat
 		o.EqualTo = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o signatureAndConditionOrConditionOperatorXml) UnmarshalToObject() (*SignatureAndConditionOrConditionOperator, error) {
@@ -632,11 +677,12 @@ func (o signatureAndConditionOrConditionOperatorXml) UnmarshalToObject() (*Signa
 	}
 
 	result := &SignatureAndConditionOrConditionOperator{
-		PatternMatch: patternMatchVal,
-		GreaterThan:  greaterThanVal,
-		LessThan:     lessThanVal,
-		EqualTo:      equalToVal,
-		Misc:         o.Misc,
+		PatternMatch:   patternMatchVal,
+		GreaterThan:    greaterThanVal,
+		LessThan:       lessThanVal,
+		EqualTo:        equalToVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -653,6 +699,7 @@ func (o *signatureAndConditionOrConditionOperatorPatternMatchXml) MarshalFromObj
 		o.Qualifier = &signatureAndConditionOrConditionOperatorPatternMatchQualifierContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o signatureAndConditionOrConditionOperatorPatternMatchXml) UnmarshalToObject() (*SignatureAndConditionOrConditionOperatorPatternMatch, error) {
@@ -668,10 +715,11 @@ func (o signatureAndConditionOrConditionOperatorPatternMatchXml) UnmarshalToObje
 	}
 
 	result := &SignatureAndConditionOrConditionOperatorPatternMatch{
-		Context:   o.Context,
-		Pattern:   o.Pattern,
-		Qualifier: qualifierVal,
-		Misc:      o.Misc,
+		Context:        o.Context,
+		Pattern:        o.Pattern,
+		Qualifier:      qualifierVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -679,14 +727,16 @@ func (o *signatureAndConditionOrConditionOperatorPatternMatchQualifierXml) Marsh
 	o.Name = s.Name
 	o.Value = s.Value
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o signatureAndConditionOrConditionOperatorPatternMatchQualifierXml) UnmarshalToObject() (*SignatureAndConditionOrConditionOperatorPatternMatchQualifier, error) {
 
 	result := &SignatureAndConditionOrConditionOperatorPatternMatchQualifier{
-		Name:  o.Name,
-		Value: o.Value,
-		Misc:  o.Misc,
+		Name:           o.Name,
+		Value:          o.Value,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -703,6 +753,7 @@ func (o *signatureAndConditionOrConditionOperatorGreaterThanXml) MarshalFromObje
 		o.Qualifier = &signatureAndConditionOrConditionOperatorGreaterThanQualifierContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o signatureAndConditionOrConditionOperatorGreaterThanXml) UnmarshalToObject() (*SignatureAndConditionOrConditionOperatorGreaterThan, error) {
@@ -718,10 +769,11 @@ func (o signatureAndConditionOrConditionOperatorGreaterThanXml) UnmarshalToObjec
 	}
 
 	result := &SignatureAndConditionOrConditionOperatorGreaterThan{
-		Context:   o.Context,
-		Value:     o.Value,
-		Qualifier: qualifierVal,
-		Misc:      o.Misc,
+		Context:        o.Context,
+		Value:          o.Value,
+		Qualifier:      qualifierVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -729,14 +781,16 @@ func (o *signatureAndConditionOrConditionOperatorGreaterThanQualifierXml) Marsha
 	o.Name = s.Name
 	o.Value = s.Value
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o signatureAndConditionOrConditionOperatorGreaterThanQualifierXml) UnmarshalToObject() (*SignatureAndConditionOrConditionOperatorGreaterThanQualifier, error) {
 
 	result := &SignatureAndConditionOrConditionOperatorGreaterThanQualifier{
-		Name:  o.Name,
-		Value: o.Value,
-		Misc:  o.Misc,
+		Name:           o.Name,
+		Value:          o.Value,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -753,6 +807,7 @@ func (o *signatureAndConditionOrConditionOperatorLessThanXml) MarshalFromObject(
 		o.Qualifier = &signatureAndConditionOrConditionOperatorLessThanQualifierContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o signatureAndConditionOrConditionOperatorLessThanXml) UnmarshalToObject() (*SignatureAndConditionOrConditionOperatorLessThan, error) {
@@ -768,10 +823,11 @@ func (o signatureAndConditionOrConditionOperatorLessThanXml) UnmarshalToObject()
 	}
 
 	result := &SignatureAndConditionOrConditionOperatorLessThan{
-		Context:   o.Context,
-		Value:     o.Value,
-		Qualifier: qualifierVal,
-		Misc:      o.Misc,
+		Context:        o.Context,
+		Value:          o.Value,
+		Qualifier:      qualifierVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -779,14 +835,16 @@ func (o *signatureAndConditionOrConditionOperatorLessThanQualifierXml) MarshalFr
 	o.Name = s.Name
 	o.Value = s.Value
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o signatureAndConditionOrConditionOperatorLessThanQualifierXml) UnmarshalToObject() (*SignatureAndConditionOrConditionOperatorLessThanQualifier, error) {
 
 	result := &SignatureAndConditionOrConditionOperatorLessThanQualifier{
-		Name:  o.Name,
-		Value: o.Value,
-		Misc:  o.Misc,
+		Name:           o.Name,
+		Value:          o.Value,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -796,16 +854,18 @@ func (o *signatureAndConditionOrConditionOperatorEqualToXml) MarshalFromObject(s
 	o.Mask = s.Mask
 	o.Value = s.Value
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o signatureAndConditionOrConditionOperatorEqualToXml) UnmarshalToObject() (*SignatureAndConditionOrConditionOperatorEqualTo, error) {
 
 	result := &SignatureAndConditionOrConditionOperatorEqualTo{
-		Context:  o.Context,
-		Position: o.Position,
-		Mask:     o.Mask,
-		Value:    o.Value,
-		Misc:     o.Misc,
+		Context:        o.Context,
+		Position:       o.Position,
+		Mask:           o.Mask,
+		Value:          o.Value,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1341,4 +1401,12 @@ func (o *Entry) EntryName() string {
 
 func (o *Entry) SetEntryName(name string) {
 	o.Name = name
+}
+
+func (o *Entry) GetMiscAttributes() []xml.Attr {
+	return o.MiscAttributes
+}
+
+func (o *Entry) SetMiscAttributes(attrs []xml.Attr) {
+	o.MiscAttributes = attrs
 }

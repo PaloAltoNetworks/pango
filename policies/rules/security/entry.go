@@ -53,11 +53,13 @@ type Entry struct {
 	To                              []string
 	Uuid                            *string
 	Misc                            []generic.Xml
+	MiscAttributes                  []xml.Attr
 }
 type ProfileSetting struct {
-	Group    []string
-	Profiles *ProfileSettingProfiles
-	Misc     []generic.Xml
+	Group          []string
+	Profiles       *ProfileSettingProfiles
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProfileSettingProfiles struct {
 	DataFiltering    []string
@@ -70,34 +72,41 @@ type ProfileSettingProfiles struct {
 	Vulnerability    []string
 	WildfireAnalysis []string
 	Misc             []generic.Xml
+	MiscAttributes   []xml.Attr
 }
 type Qos struct {
-	Marking *QosMarking
-	Misc    []generic.Xml
+	Marking        *QosMarking
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type QosMarking struct {
-	FollowC2sFlow *QosMarkingFollowC2sFlow
-	IpDscp        *string
-	IpPrecedence  *string
-	Misc          []generic.Xml
+	FollowC2sFlow  *QosMarkingFollowC2sFlow
+	IpDscp         *string
+	IpPrecedence   *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type QosMarkingFollowC2sFlow struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Target struct {
-	Devices []TargetDevices
-	Negate  *bool
-	Tags    []string
-	Misc    []generic.Xml
+	Devices        []TargetDevices
+	Negate         *bool
+	Tags           []string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type TargetDevices struct {
-	Name string
-	Vsys []TargetDevicesVsys
-	Misc []generic.Xml
+	Name           string
+	Vsys           []TargetDevicesVsys
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type TargetDevicesVsys struct {
-	Name string
-	Misc []generic.Xml
+	Name           string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 
 type entryXmlContainer struct {
@@ -159,11 +168,13 @@ type entryXml struct {
 	To                              *util.MemberType   `xml:"to,omitempty"`
 	Uuid                            *string            `xml:"uuid,attr,omitempty"`
 	Misc                            []generic.Xml      `xml:",any"`
+	MiscAttributes                  []xml.Attr         `xml:",any,attr"`
 }
 type profileSettingXml struct {
-	Group    *util.MemberType           `xml:"group,omitempty"`
-	Profiles *profileSettingProfilesXml `xml:"profiles,omitempty"`
-	Misc     []generic.Xml              `xml:",any"`
+	Group          *util.MemberType           `xml:"group,omitempty"`
+	Profiles       *profileSettingProfilesXml `xml:"profiles,omitempty"`
+	Misc           []generic.Xml              `xml:",any"`
+	MiscAttributes []xml.Attr                 `xml:",any,attr"`
 }
 type profileSettingProfilesXml struct {
 	DataFiltering    *util.MemberType `xml:"data-filtering,omitempty"`
@@ -176,42 +187,49 @@ type profileSettingProfilesXml struct {
 	Vulnerability    *util.MemberType `xml:"vulnerability,omitempty"`
 	WildfireAnalysis *util.MemberType `xml:"wildfire-analysis,omitempty"`
 	Misc             []generic.Xml    `xml:",any"`
+	MiscAttributes   []xml.Attr       `xml:",any,attr"`
 }
 type qosXml struct {
-	Marking *qosMarkingXml `xml:"marking,omitempty"`
-	Misc    []generic.Xml  `xml:",any"`
+	Marking        *qosMarkingXml `xml:"marking,omitempty"`
+	Misc           []generic.Xml  `xml:",any"`
+	MiscAttributes []xml.Attr     `xml:",any,attr"`
 }
 type qosMarkingXml struct {
-	FollowC2sFlow *qosMarkingFollowC2sFlowXml `xml:"follow-c2s-flow,omitempty"`
-	IpDscp        *string                     `xml:"ip-dscp,omitempty"`
-	IpPrecedence  *string                     `xml:"ip-precedence,omitempty"`
-	Misc          []generic.Xml               `xml:",any"`
+	FollowC2sFlow  *qosMarkingFollowC2sFlowXml `xml:"follow-c2s-flow,omitempty"`
+	IpDscp         *string                     `xml:"ip-dscp,omitempty"`
+	IpPrecedence   *string                     `xml:"ip-precedence,omitempty"`
+	Misc           []generic.Xml               `xml:",any"`
+	MiscAttributes []xml.Attr                  `xml:",any,attr"`
 }
 type qosMarkingFollowC2sFlowXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type targetXml struct {
-	Devices *targetDevicesContainerXml `xml:"devices,omitempty"`
-	Negate  *string                    `xml:"negate,omitempty"`
-	Tags    *util.MemberType           `xml:"tags,omitempty"`
-	Misc    []generic.Xml              `xml:",any"`
+	Devices        *targetDevicesContainerXml `xml:"devices,omitempty"`
+	Negate         *string                    `xml:"negate,omitempty"`
+	Tags           *util.MemberType           `xml:"tags,omitempty"`
+	Misc           []generic.Xml              `xml:",any"`
+	MiscAttributes []xml.Attr                 `xml:",any,attr"`
 }
 type targetDevicesContainerXml struct {
 	Entries []targetDevicesXml `xml:"entry"`
 }
 type targetDevicesXml struct {
-	XMLName xml.Name                       `xml:"entry"`
-	Name    string                         `xml:"name,attr"`
-	Vsys    *targetDevicesVsysContainerXml `xml:"vsys,omitempty"`
-	Misc    []generic.Xml                  `xml:",any"`
+	XMLName        xml.Name                       `xml:"entry"`
+	Name           string                         `xml:"name,attr"`
+	Vsys           *targetDevicesVsysContainerXml `xml:"vsys,omitempty"`
+	Misc           []generic.Xml                  `xml:",any"`
+	MiscAttributes []xml.Attr                     `xml:",any,attr"`
 }
 type targetDevicesVsysContainerXml struct {
 	Entries []targetDevicesVsysXml `xml:"entry"`
 }
 type targetDevicesVsysXml struct {
-	XMLName xml.Name      `xml:"entry"`
-	Name    string        `xml:"name,attr"`
-	Misc    []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 
 func (o *entryXml) MarshalFromObject(s Entry) {
@@ -289,6 +307,7 @@ func (o *entryXml) MarshalFromObject(s Entry) {
 	}
 	o.Uuid = s.Uuid
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o entryXml) UnmarshalToObject() (*Entry, error) {
@@ -408,6 +427,7 @@ func (o entryXml) UnmarshalToObject() (*Entry, error) {
 		To:                              toVal,
 		Uuid:                            o.Uuid,
 		Misc:                            o.Misc,
+		MiscAttributes:                  o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -421,6 +441,7 @@ func (o *profileSettingXml) MarshalFromObject(s ProfileSetting) {
 		o.Profiles = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o profileSettingXml) UnmarshalToObject() (*ProfileSetting, error) {
@@ -438,9 +459,10 @@ func (o profileSettingXml) UnmarshalToObject() (*ProfileSetting, error) {
 	}
 
 	result := &ProfileSetting{
-		Group:    groupVal,
-		Profiles: profilesVal,
-		Misc:     o.Misc,
+		Group:          groupVal,
+		Profiles:       profilesVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -473,6 +495,7 @@ func (o *profileSettingProfilesXml) MarshalFromObject(s ProfileSettingProfiles) 
 		o.WildfireAnalysis = util.StrToMem(s.WildfireAnalysis)
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o profileSettingProfilesXml) UnmarshalToObject() (*ProfileSettingProfiles, error) {
@@ -524,6 +547,7 @@ func (o profileSettingProfilesXml) UnmarshalToObject() (*ProfileSettingProfiles,
 		Vulnerability:    vulnerabilityVal,
 		WildfireAnalysis: wildfireAnalysisVal,
 		Misc:             o.Misc,
+		MiscAttributes:   o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -534,6 +558,7 @@ func (o *qosXml) MarshalFromObject(s Qos) {
 		o.Marking = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o qosXml) UnmarshalToObject() (*Qos, error) {
@@ -547,8 +572,9 @@ func (o qosXml) UnmarshalToObject() (*Qos, error) {
 	}
 
 	result := &Qos{
-		Marking: markingVal,
-		Misc:    o.Misc,
+		Marking:        markingVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -561,6 +587,7 @@ func (o *qosMarkingXml) MarshalFromObject(s QosMarking) {
 	o.IpDscp = s.IpDscp
 	o.IpPrecedence = s.IpPrecedence
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o qosMarkingXml) UnmarshalToObject() (*QosMarking, error) {
@@ -574,21 +601,24 @@ func (o qosMarkingXml) UnmarshalToObject() (*QosMarking, error) {
 	}
 
 	result := &QosMarking{
-		FollowC2sFlow: followC2sFlowVal,
-		IpDscp:        o.IpDscp,
-		IpPrecedence:  o.IpPrecedence,
-		Misc:          o.Misc,
+		FollowC2sFlow:  followC2sFlowVal,
+		IpDscp:         o.IpDscp,
+		IpPrecedence:   o.IpPrecedence,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *qosMarkingFollowC2sFlowXml) MarshalFromObject(s QosMarkingFollowC2sFlow) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o qosMarkingFollowC2sFlowXml) UnmarshalToObject() (*QosMarkingFollowC2sFlow, error) {
 
 	result := &QosMarkingFollowC2sFlow{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -607,6 +637,7 @@ func (o *targetXml) MarshalFromObject(s Target) {
 		o.Tags = util.StrToMem(s.Tags)
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o targetXml) UnmarshalToObject() (*Target, error) {
@@ -626,10 +657,11 @@ func (o targetXml) UnmarshalToObject() (*Target, error) {
 	}
 
 	result := &Target{
-		Devices: devicesVal,
-		Negate:  util.AsBool(o.Negate, nil),
-		Tags:    tagsVal,
-		Misc:    o.Misc,
+		Devices:        devicesVal,
+		Negate:         util.AsBool(o.Negate, nil),
+		Tags:           tagsVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -645,6 +677,7 @@ func (o *targetDevicesXml) MarshalFromObject(s TargetDevices) {
 		o.Vsys = &targetDevicesVsysContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o targetDevicesXml) UnmarshalToObject() (*TargetDevices, error) {
@@ -660,22 +693,25 @@ func (o targetDevicesXml) UnmarshalToObject() (*TargetDevices, error) {
 	}
 
 	result := &TargetDevices{
-		Name: o.Name,
-		Vsys: vsysVal,
-		Misc: o.Misc,
+		Name:           o.Name,
+		Vsys:           vsysVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *targetDevicesVsysXml) MarshalFromObject(s TargetDevicesVsys) {
 	o.Name = s.Name
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o targetDevicesVsysXml) UnmarshalToObject() (*TargetDevicesVsys, error) {
 
 	result := &TargetDevicesVsys{
-		Name: o.Name,
-		Misc: o.Misc,
+		Name:           o.Name,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1125,6 +1161,14 @@ func (o *Entry) EntryName() string {
 
 func (o *Entry) SetEntryName(name string) {
 	o.Name = name
+}
+
+func (o *Entry) GetMiscAttributes() []xml.Attr {
+	return o.MiscAttributes
+}
+
+func (o *Entry) SetMiscAttributes(attrs []xml.Attr) {
+	o.MiscAttributes = attrs
 }
 func (o *Entry) EntryUuid() *string {
 	return o.Uuid

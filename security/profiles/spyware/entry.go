@@ -30,6 +30,7 @@ type Entry struct {
 	Rules                    []Rules
 	ThreatException          []ThreatException
 	Misc                     []generic.Xml
+	MiscAttributes           []xml.Attr
 }
 type BotnetDomains struct {
 	DnsSecurityCategories []BotnetDomainsDnsSecurityCategories
@@ -39,157 +40,191 @@ type BotnetDomains struct {
 	ThreatException       []BotnetDomainsThreatException
 	Whitelist             []BotnetDomainsWhitelist
 	Misc                  []generic.Xml
+	MiscAttributes        []xml.Attr
 }
 type BotnetDomainsDnsSecurityCategories struct {
-	Name          string
-	Action        *string
-	LogLevel      *string
-	PacketCapture *string
-	Misc          []generic.Xml
+	Name           string
+	Action         *string
+	LogLevel       *string
+	PacketCapture  *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type BotnetDomainsLists struct {
-	Name          string
-	Action        *BotnetDomainsListsAction
-	PacketCapture *string
-	Misc          []generic.Xml
+	Name           string
+	Action         *BotnetDomainsListsAction
+	PacketCapture  *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type BotnetDomainsListsAction struct {
-	Alert    *BotnetDomainsListsActionAlert
-	Allow    *BotnetDomainsListsActionAllow
-	Block    *BotnetDomainsListsActionBlock
-	Sinkhole *BotnetDomainsListsActionSinkhole
-	Misc     []generic.Xml
+	Alert          *BotnetDomainsListsActionAlert
+	Allow          *BotnetDomainsListsActionAllow
+	Block          *BotnetDomainsListsActionBlock
+	Sinkhole       *BotnetDomainsListsActionSinkhole
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type BotnetDomainsListsActionAlert struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type BotnetDomainsListsActionAllow struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type BotnetDomainsListsActionBlock struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type BotnetDomainsListsActionSinkhole struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type BotnetDomainsRtypeAction struct {
-	Any   *string
-	Https *string
-	Svcb  *string
-	Misc  []generic.Xml
+	Any            *string
+	Https          *string
+	Svcb           *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type BotnetDomainsSinkhole struct {
-	Ipv4Address *string
-	Ipv6Address *string
-	Misc        []generic.Xml
+	Ipv4Address    *string
+	Ipv6Address    *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type BotnetDomainsThreatException struct {
-	Name string
-	Misc []generic.Xml
+	Name           string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type BotnetDomainsWhitelist struct {
-	Name        string
-	Description *string
-	Misc        []generic.Xml
+	Name           string
+	Description    *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type MicaEngineSpywareEnabled struct {
 	Name               string
 	InlinePolicyAction *string
 	Misc               []generic.Xml
+	MiscAttributes     []xml.Attr
 }
 type Rules struct {
-	Name          string
-	ThreatName    *string
-	Category      *string
-	PacketCapture *string
-	Severity      []string
-	Action        *RulesAction
-	Misc          []generic.Xml
+	Name           string
+	ThreatName     *string
+	Category       *string
+	PacketCapture  *string
+	Severity       []string
+	Action         *RulesAction
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type RulesAction struct {
-	Default     *RulesActionDefault
-	Allow       *RulesActionAllow
-	Alert       *RulesActionAlert
-	Drop        *RulesActionDrop
-	ResetClient *RulesActionResetClient
-	ResetServer *RulesActionResetServer
-	ResetBoth   *RulesActionResetBoth
-	BlockIp     *RulesActionBlockIp
-	Misc        []generic.Xml
+	Default        *RulesActionDefault
+	Allow          *RulesActionAllow
+	Alert          *RulesActionAlert
+	Drop           *RulesActionDrop
+	ResetClient    *RulesActionResetClient
+	ResetServer    *RulesActionResetServer
+	ResetBoth      *RulesActionResetBoth
+	BlockIp        *RulesActionBlockIp
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type RulesActionDefault struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type RulesActionAllow struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type RulesActionAlert struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type RulesActionDrop struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type RulesActionResetClient struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type RulesActionResetServer struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type RulesActionResetBoth struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type RulesActionBlockIp struct {
-	TrackBy  *string
-	Duration *int64
-	Misc     []generic.Xml
+	TrackBy        *string
+	Duration       *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ThreatException struct {
-	Name          string
-	PacketCapture *string
-	Action        *ThreatExceptionAction
-	ExemptIp      []ThreatExceptionExemptIp
-	Misc          []generic.Xml
+	Name           string
+	PacketCapture  *string
+	Action         *ThreatExceptionAction
+	ExemptIp       []ThreatExceptionExemptIp
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ThreatExceptionAction struct {
-	Default     *ThreatExceptionActionDefault
-	Allow       *ThreatExceptionActionAllow
-	Alert       *ThreatExceptionActionAlert
-	Drop        *ThreatExceptionActionDrop
-	ResetBoth   *ThreatExceptionActionResetBoth
-	ResetClient *ThreatExceptionActionResetClient
-	ResetServer *ThreatExceptionActionResetServer
-	BlockIp     *ThreatExceptionActionBlockIp
-	Misc        []generic.Xml
+	Default        *ThreatExceptionActionDefault
+	Allow          *ThreatExceptionActionAllow
+	Alert          *ThreatExceptionActionAlert
+	Drop           *ThreatExceptionActionDrop
+	ResetBoth      *ThreatExceptionActionResetBoth
+	ResetClient    *ThreatExceptionActionResetClient
+	ResetServer    *ThreatExceptionActionResetServer
+	BlockIp        *ThreatExceptionActionBlockIp
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ThreatExceptionActionDefault struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ThreatExceptionActionAllow struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ThreatExceptionActionAlert struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ThreatExceptionActionDrop struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ThreatExceptionActionResetBoth struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ThreatExceptionActionResetClient struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ThreatExceptionActionResetServer struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ThreatExceptionActionBlockIp struct {
-	TrackBy  *string
-	Duration *int64
-	Misc     []generic.Xml
+	TrackBy        *string
+	Duration       *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ThreatExceptionExemptIp struct {
-	Name string
-	Misc []generic.Xml
+	Name           string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 
 type entryXmlContainer struct {
@@ -249,6 +284,7 @@ type entryXml struct {
 	Rules                    *rulesContainerXml                    `xml:"rules,omitempty"`
 	ThreatException          *threatExceptionContainerXml          `xml:"threat-exception,omitempty"`
 	Misc                     []generic.Xml                         `xml:",any"`
+	MiscAttributes           []xml.Attr                            `xml:",any,attr"`
 }
 type botnetDomainsXml struct {
 	DnsSecurityCategories *botnetDomainsDnsSecurityCategoriesContainerXml `xml:"dns-security-categories,omitempty"`
@@ -258,74 +294,86 @@ type botnetDomainsXml struct {
 	ThreatException       *botnetDomainsThreatExceptionContainerXml       `xml:"threat-exception,omitempty"`
 	Whitelist             *botnetDomainsWhitelistContainerXml             `xml:"whitelist,omitempty"`
 	Misc                  []generic.Xml                                   `xml:",any"`
+	MiscAttributes        []xml.Attr                                      `xml:",any,attr"`
 }
 type botnetDomainsDnsSecurityCategoriesContainerXml struct {
 	Entries []botnetDomainsDnsSecurityCategoriesXml `xml:"entry"`
 }
 type botnetDomainsDnsSecurityCategoriesXml struct {
-	XMLName       xml.Name      `xml:"entry"`
-	Name          string        `xml:"name,attr"`
-	Action        *string       `xml:"action,omitempty"`
-	LogLevel      *string       `xml:"log-level,omitempty"`
-	PacketCapture *string       `xml:"packet-capture,omitempty"`
-	Misc          []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Action         *string       `xml:"action,omitempty"`
+	LogLevel       *string       `xml:"log-level,omitempty"`
+	PacketCapture  *string       `xml:"packet-capture,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type botnetDomainsListsContainerXml struct {
 	Entries []botnetDomainsListsXml `xml:"entry"`
 }
 type botnetDomainsListsXml struct {
-	XMLName       xml.Name                     `xml:"entry"`
-	Name          string                       `xml:"name,attr"`
-	Action        *botnetDomainsListsActionXml `xml:"action,omitempty"`
-	PacketCapture *string                      `xml:"packet-capture,omitempty"`
-	Misc          []generic.Xml                `xml:",any"`
+	XMLName        xml.Name                     `xml:"entry"`
+	Name           string                       `xml:"name,attr"`
+	Action         *botnetDomainsListsActionXml `xml:"action,omitempty"`
+	PacketCapture  *string                      `xml:"packet-capture,omitempty"`
+	Misc           []generic.Xml                `xml:",any"`
+	MiscAttributes []xml.Attr                   `xml:",any,attr"`
 }
 type botnetDomainsListsActionXml struct {
-	Alert    *botnetDomainsListsActionAlertXml    `xml:"alert,omitempty"`
-	Allow    *botnetDomainsListsActionAllowXml    `xml:"allow,omitempty"`
-	Block    *botnetDomainsListsActionBlockXml    `xml:"block,omitempty"`
-	Sinkhole *botnetDomainsListsActionSinkholeXml `xml:"sinkhole,omitempty"`
-	Misc     []generic.Xml                        `xml:",any"`
+	Alert          *botnetDomainsListsActionAlertXml    `xml:"alert,omitempty"`
+	Allow          *botnetDomainsListsActionAllowXml    `xml:"allow,omitempty"`
+	Block          *botnetDomainsListsActionBlockXml    `xml:"block,omitempty"`
+	Sinkhole       *botnetDomainsListsActionSinkholeXml `xml:"sinkhole,omitempty"`
+	Misc           []generic.Xml                        `xml:",any"`
+	MiscAttributes []xml.Attr                           `xml:",any,attr"`
 }
 type botnetDomainsListsActionAlertXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type botnetDomainsListsActionAllowXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type botnetDomainsListsActionBlockXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type botnetDomainsListsActionSinkholeXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type botnetDomainsRtypeActionXml struct {
-	Any   *string       `xml:"any,omitempty"`
-	Https *string       `xml:"https,omitempty"`
-	Svcb  *string       `xml:"svcb,omitempty"`
-	Misc  []generic.Xml `xml:",any"`
+	Any            *string       `xml:"any,omitempty"`
+	Https          *string       `xml:"https,omitempty"`
+	Svcb           *string       `xml:"svcb,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type botnetDomainsSinkholeXml struct {
-	Ipv4Address *string       `xml:"ipv4-address,omitempty"`
-	Ipv6Address *string       `xml:"ipv6-address,omitempty"`
-	Misc        []generic.Xml `xml:",any"`
+	Ipv4Address    *string       `xml:"ipv4-address,omitempty"`
+	Ipv6Address    *string       `xml:"ipv6-address,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type botnetDomainsThreatExceptionContainerXml struct {
 	Entries []botnetDomainsThreatExceptionXml `xml:"entry"`
 }
 type botnetDomainsThreatExceptionXml struct {
-	XMLName xml.Name      `xml:"entry"`
-	Name    string        `xml:"name,attr"`
-	Misc    []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type botnetDomainsWhitelistContainerXml struct {
 	Entries []botnetDomainsWhitelistXml `xml:"entry"`
 }
 type botnetDomainsWhitelistXml struct {
-	XMLName     xml.Name      `xml:"entry"`
-	Name        string        `xml:"name,attr"`
-	Description *string       `xml:"description,omitempty"`
-	Misc        []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Description    *string       `xml:"description,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type micaEngineSpywareEnabledContainerXml struct {
 	Entries []micaEngineSpywareEnabledXml `xml:"entry"`
@@ -335,112 +383,134 @@ type micaEngineSpywareEnabledXml struct {
 	Name               string        `xml:"name,attr"`
 	InlinePolicyAction *string       `xml:"inline-policy-action,omitempty"`
 	Misc               []generic.Xml `xml:",any"`
+	MiscAttributes     []xml.Attr    `xml:",any,attr"`
 }
 type rulesContainerXml struct {
 	Entries []rulesXml `xml:"entry"`
 }
 type rulesXml struct {
-	XMLName       xml.Name         `xml:"entry"`
-	Name          string           `xml:"name,attr"`
-	ThreatName    *string          `xml:"threat-name,omitempty"`
-	Category      *string          `xml:"category,omitempty"`
-	PacketCapture *string          `xml:"packet-capture,omitempty"`
-	Severity      *util.MemberType `xml:"severity,omitempty"`
-	Action        *rulesActionXml  `xml:"action,omitempty"`
-	Misc          []generic.Xml    `xml:",any"`
+	XMLName        xml.Name         `xml:"entry"`
+	Name           string           `xml:"name,attr"`
+	ThreatName     *string          `xml:"threat-name,omitempty"`
+	Category       *string          `xml:"category,omitempty"`
+	PacketCapture  *string          `xml:"packet-capture,omitempty"`
+	Severity       *util.MemberType `xml:"severity,omitempty"`
+	Action         *rulesActionXml  `xml:"action,omitempty"`
+	Misc           []generic.Xml    `xml:",any"`
+	MiscAttributes []xml.Attr       `xml:",any,attr"`
 }
 type rulesActionXml struct {
-	Default     *rulesActionDefaultXml     `xml:"default,omitempty"`
-	Allow       *rulesActionAllowXml       `xml:"allow,omitempty"`
-	Alert       *rulesActionAlertXml       `xml:"alert,omitempty"`
-	Drop        *rulesActionDropXml        `xml:"drop,omitempty"`
-	ResetClient *rulesActionResetClientXml `xml:"reset-client,omitempty"`
-	ResetServer *rulesActionResetServerXml `xml:"reset-server,omitempty"`
-	ResetBoth   *rulesActionResetBothXml   `xml:"reset-both,omitempty"`
-	BlockIp     *rulesActionBlockIpXml     `xml:"block-ip,omitempty"`
-	Misc        []generic.Xml              `xml:",any"`
+	Default        *rulesActionDefaultXml     `xml:"default,omitempty"`
+	Allow          *rulesActionAllowXml       `xml:"allow,omitempty"`
+	Alert          *rulesActionAlertXml       `xml:"alert,omitempty"`
+	Drop           *rulesActionDropXml        `xml:"drop,omitempty"`
+	ResetClient    *rulesActionResetClientXml `xml:"reset-client,omitempty"`
+	ResetServer    *rulesActionResetServerXml `xml:"reset-server,omitempty"`
+	ResetBoth      *rulesActionResetBothXml   `xml:"reset-both,omitempty"`
+	BlockIp        *rulesActionBlockIpXml     `xml:"block-ip,omitempty"`
+	Misc           []generic.Xml              `xml:",any"`
+	MiscAttributes []xml.Attr                 `xml:",any,attr"`
 }
 type rulesActionDefaultXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type rulesActionAllowXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type rulesActionAlertXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type rulesActionDropXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type rulesActionResetClientXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type rulesActionResetServerXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type rulesActionResetBothXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type rulesActionBlockIpXml struct {
-	TrackBy  *string       `xml:"track-by,omitempty"`
-	Duration *int64        `xml:"duration,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	TrackBy        *string       `xml:"track-by,omitempty"`
+	Duration       *int64        `xml:"duration,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type threatExceptionContainerXml struct {
 	Entries []threatExceptionXml `xml:"entry"`
 }
 type threatExceptionXml struct {
-	XMLName       xml.Name                             `xml:"entry"`
-	Name          string                               `xml:"name,attr"`
-	PacketCapture *string                              `xml:"packet-capture,omitempty"`
-	Action        *threatExceptionActionXml            `xml:"action,omitempty"`
-	ExemptIp      *threatExceptionExemptIpContainerXml `xml:"exempt-ip,omitempty"`
-	Misc          []generic.Xml                        `xml:",any"`
+	XMLName        xml.Name                             `xml:"entry"`
+	Name           string                               `xml:"name,attr"`
+	PacketCapture  *string                              `xml:"packet-capture,omitempty"`
+	Action         *threatExceptionActionXml            `xml:"action,omitempty"`
+	ExemptIp       *threatExceptionExemptIpContainerXml `xml:"exempt-ip,omitempty"`
+	Misc           []generic.Xml                        `xml:",any"`
+	MiscAttributes []xml.Attr                           `xml:",any,attr"`
 }
 type threatExceptionActionXml struct {
-	Default     *threatExceptionActionDefaultXml     `xml:"default,omitempty"`
-	Allow       *threatExceptionActionAllowXml       `xml:"allow,omitempty"`
-	Alert       *threatExceptionActionAlertXml       `xml:"alert,omitempty"`
-	Drop        *threatExceptionActionDropXml        `xml:"drop,omitempty"`
-	ResetBoth   *threatExceptionActionResetBothXml   `xml:"reset-both,omitempty"`
-	ResetClient *threatExceptionActionResetClientXml `xml:"reset-client,omitempty"`
-	ResetServer *threatExceptionActionResetServerXml `xml:"reset-server,omitempty"`
-	BlockIp     *threatExceptionActionBlockIpXml     `xml:"block-ip,omitempty"`
-	Misc        []generic.Xml                        `xml:",any"`
+	Default        *threatExceptionActionDefaultXml     `xml:"default,omitempty"`
+	Allow          *threatExceptionActionAllowXml       `xml:"allow,omitempty"`
+	Alert          *threatExceptionActionAlertXml       `xml:"alert,omitempty"`
+	Drop           *threatExceptionActionDropXml        `xml:"drop,omitempty"`
+	ResetBoth      *threatExceptionActionResetBothXml   `xml:"reset-both,omitempty"`
+	ResetClient    *threatExceptionActionResetClientXml `xml:"reset-client,omitempty"`
+	ResetServer    *threatExceptionActionResetServerXml `xml:"reset-server,omitempty"`
+	BlockIp        *threatExceptionActionBlockIpXml     `xml:"block-ip,omitempty"`
+	Misc           []generic.Xml                        `xml:",any"`
+	MiscAttributes []xml.Attr                           `xml:",any,attr"`
 }
 type threatExceptionActionDefaultXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type threatExceptionActionAllowXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type threatExceptionActionAlertXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type threatExceptionActionDropXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type threatExceptionActionResetBothXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type threatExceptionActionResetClientXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type threatExceptionActionResetServerXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type threatExceptionActionBlockIpXml struct {
-	TrackBy  *string       `xml:"track-by,omitempty"`
-	Duration *int64        `xml:"duration,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	TrackBy        *string       `xml:"track-by,omitempty"`
+	Duration       *int64        `xml:"duration,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type threatExceptionExemptIpContainerXml struct {
 	Entries []threatExceptionExemptIpXml `xml:"entry"`
 }
 type threatExceptionExemptIpXml struct {
-	XMLName xml.Name      `xml:"entry"`
-	Name    string        `xml:"name,attr"`
-	Misc    []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type entryXml_11_0_2 struct {
 	XMLName                  xml.Name                                     `xml:"entry"`
@@ -455,6 +525,7 @@ type entryXml_11_0_2 struct {
 	Rules                    *rulesContainerXml_11_0_2                    `xml:"rules,omitempty"`
 	ThreatException          *threatExceptionContainerXml_11_0_2          `xml:"threat-exception,omitempty"`
 	Misc                     []generic.Xml                                `xml:",any"`
+	MiscAttributes           []xml.Attr                                   `xml:",any,attr"`
 }
 type botnetDomainsXml_11_0_2 struct {
 	DnsSecurityCategories *botnetDomainsDnsSecurityCategoriesContainerXml_11_0_2 `xml:"dns-security-categories,omitempty"`
@@ -464,74 +535,86 @@ type botnetDomainsXml_11_0_2 struct {
 	ThreatException       *botnetDomainsThreatExceptionContainerXml_11_0_2       `xml:"threat-exception,omitempty"`
 	Whitelist             *botnetDomainsWhitelistContainerXml_11_0_2             `xml:"whitelist,omitempty"`
 	Misc                  []generic.Xml                                          `xml:",any"`
+	MiscAttributes        []xml.Attr                                             `xml:",any,attr"`
 }
 type botnetDomainsDnsSecurityCategoriesContainerXml_11_0_2 struct {
 	Entries []botnetDomainsDnsSecurityCategoriesXml_11_0_2 `xml:"entry"`
 }
 type botnetDomainsDnsSecurityCategoriesXml_11_0_2 struct {
-	XMLName       xml.Name      `xml:"entry"`
-	Name          string        `xml:"name,attr"`
-	Action        *string       `xml:"action,omitempty"`
-	LogLevel      *string       `xml:"log-level,omitempty"`
-	PacketCapture *string       `xml:"packet-capture,omitempty"`
-	Misc          []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Action         *string       `xml:"action,omitempty"`
+	LogLevel       *string       `xml:"log-level,omitempty"`
+	PacketCapture  *string       `xml:"packet-capture,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type botnetDomainsListsContainerXml_11_0_2 struct {
 	Entries []botnetDomainsListsXml_11_0_2 `xml:"entry"`
 }
 type botnetDomainsListsXml_11_0_2 struct {
-	XMLName       xml.Name                            `xml:"entry"`
-	Name          string                              `xml:"name,attr"`
-	Action        *botnetDomainsListsActionXml_11_0_2 `xml:"action,omitempty"`
-	PacketCapture *string                             `xml:"packet-capture,omitempty"`
-	Misc          []generic.Xml                       `xml:",any"`
+	XMLName        xml.Name                            `xml:"entry"`
+	Name           string                              `xml:"name,attr"`
+	Action         *botnetDomainsListsActionXml_11_0_2 `xml:"action,omitempty"`
+	PacketCapture  *string                             `xml:"packet-capture,omitempty"`
+	Misc           []generic.Xml                       `xml:",any"`
+	MiscAttributes []xml.Attr                          `xml:",any,attr"`
 }
 type botnetDomainsListsActionXml_11_0_2 struct {
-	Alert    *botnetDomainsListsActionAlertXml_11_0_2    `xml:"alert,omitempty"`
-	Allow    *botnetDomainsListsActionAllowXml_11_0_2    `xml:"allow,omitempty"`
-	Block    *botnetDomainsListsActionBlockXml_11_0_2    `xml:"block,omitempty"`
-	Sinkhole *botnetDomainsListsActionSinkholeXml_11_0_2 `xml:"sinkhole,omitempty"`
-	Misc     []generic.Xml                               `xml:",any"`
+	Alert          *botnetDomainsListsActionAlertXml_11_0_2    `xml:"alert,omitempty"`
+	Allow          *botnetDomainsListsActionAllowXml_11_0_2    `xml:"allow,omitempty"`
+	Block          *botnetDomainsListsActionBlockXml_11_0_2    `xml:"block,omitempty"`
+	Sinkhole       *botnetDomainsListsActionSinkholeXml_11_0_2 `xml:"sinkhole,omitempty"`
+	Misc           []generic.Xml                               `xml:",any"`
+	MiscAttributes []xml.Attr                                  `xml:",any,attr"`
 }
 type botnetDomainsListsActionAlertXml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type botnetDomainsListsActionAllowXml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type botnetDomainsListsActionBlockXml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type botnetDomainsListsActionSinkholeXml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type botnetDomainsRtypeActionXml_11_0_2 struct {
-	Any   *string       `xml:"any,omitempty"`
-	Https *string       `xml:"https,omitempty"`
-	Svcb  *string       `xml:"svcb,omitempty"`
-	Misc  []generic.Xml `xml:",any"`
+	Any            *string       `xml:"any,omitempty"`
+	Https          *string       `xml:"https,omitempty"`
+	Svcb           *string       `xml:"svcb,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type botnetDomainsSinkholeXml_11_0_2 struct {
-	Ipv4Address *string       `xml:"ipv4-address,omitempty"`
-	Ipv6Address *string       `xml:"ipv6-address,omitempty"`
-	Misc        []generic.Xml `xml:",any"`
+	Ipv4Address    *string       `xml:"ipv4-address,omitempty"`
+	Ipv6Address    *string       `xml:"ipv6-address,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type botnetDomainsThreatExceptionContainerXml_11_0_2 struct {
 	Entries []botnetDomainsThreatExceptionXml_11_0_2 `xml:"entry"`
 }
 type botnetDomainsThreatExceptionXml_11_0_2 struct {
-	XMLName xml.Name      `xml:"entry"`
-	Name    string        `xml:"name,attr"`
-	Misc    []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type botnetDomainsWhitelistContainerXml_11_0_2 struct {
 	Entries []botnetDomainsWhitelistXml_11_0_2 `xml:"entry"`
 }
 type botnetDomainsWhitelistXml_11_0_2 struct {
-	XMLName     xml.Name      `xml:"entry"`
-	Name        string        `xml:"name,attr"`
-	Description *string       `xml:"description,omitempty"`
-	Misc        []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Description    *string       `xml:"description,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type micaEngineSpywareEnabledContainerXml_11_0_2 struct {
 	Entries []micaEngineSpywareEnabledXml_11_0_2 `xml:"entry"`
@@ -541,112 +624,134 @@ type micaEngineSpywareEnabledXml_11_0_2 struct {
 	Name               string        `xml:"name,attr"`
 	InlinePolicyAction *string       `xml:"inline-policy-action,omitempty"`
 	Misc               []generic.Xml `xml:",any"`
+	MiscAttributes     []xml.Attr    `xml:",any,attr"`
 }
 type rulesContainerXml_11_0_2 struct {
 	Entries []rulesXml_11_0_2 `xml:"entry"`
 }
 type rulesXml_11_0_2 struct {
-	XMLName       xml.Name               `xml:"entry"`
-	Name          string                 `xml:"name,attr"`
-	ThreatName    *string                `xml:"threat-name,omitempty"`
-	Category      *string                `xml:"category,omitempty"`
-	PacketCapture *string                `xml:"packet-capture,omitempty"`
-	Severity      *util.MemberType       `xml:"severity,omitempty"`
-	Action        *rulesActionXml_11_0_2 `xml:"action,omitempty"`
-	Misc          []generic.Xml          `xml:",any"`
+	XMLName        xml.Name               `xml:"entry"`
+	Name           string                 `xml:"name,attr"`
+	ThreatName     *string                `xml:"threat-name,omitempty"`
+	Category       *string                `xml:"category,omitempty"`
+	PacketCapture  *string                `xml:"packet-capture,omitempty"`
+	Severity       *util.MemberType       `xml:"severity,omitempty"`
+	Action         *rulesActionXml_11_0_2 `xml:"action,omitempty"`
+	Misc           []generic.Xml          `xml:",any"`
+	MiscAttributes []xml.Attr             `xml:",any,attr"`
 }
 type rulesActionXml_11_0_2 struct {
-	Default     *rulesActionDefaultXml_11_0_2     `xml:"default,omitempty"`
-	Allow       *rulesActionAllowXml_11_0_2       `xml:"allow,omitempty"`
-	Alert       *rulesActionAlertXml_11_0_2       `xml:"alert,omitempty"`
-	Drop        *rulesActionDropXml_11_0_2        `xml:"drop,omitempty"`
-	ResetClient *rulesActionResetClientXml_11_0_2 `xml:"reset-client,omitempty"`
-	ResetServer *rulesActionResetServerXml_11_0_2 `xml:"reset-server,omitempty"`
-	ResetBoth   *rulesActionResetBothXml_11_0_2   `xml:"reset-both,omitempty"`
-	BlockIp     *rulesActionBlockIpXml_11_0_2     `xml:"block-ip,omitempty"`
-	Misc        []generic.Xml                     `xml:",any"`
+	Default        *rulesActionDefaultXml_11_0_2     `xml:"default,omitempty"`
+	Allow          *rulesActionAllowXml_11_0_2       `xml:"allow,omitempty"`
+	Alert          *rulesActionAlertXml_11_0_2       `xml:"alert,omitempty"`
+	Drop           *rulesActionDropXml_11_0_2        `xml:"drop,omitempty"`
+	ResetClient    *rulesActionResetClientXml_11_0_2 `xml:"reset-client,omitempty"`
+	ResetServer    *rulesActionResetServerXml_11_0_2 `xml:"reset-server,omitempty"`
+	ResetBoth      *rulesActionResetBothXml_11_0_2   `xml:"reset-both,omitempty"`
+	BlockIp        *rulesActionBlockIpXml_11_0_2     `xml:"block-ip,omitempty"`
+	Misc           []generic.Xml                     `xml:",any"`
+	MiscAttributes []xml.Attr                        `xml:",any,attr"`
 }
 type rulesActionDefaultXml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type rulesActionAllowXml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type rulesActionAlertXml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type rulesActionDropXml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type rulesActionResetClientXml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type rulesActionResetServerXml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type rulesActionResetBothXml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type rulesActionBlockIpXml_11_0_2 struct {
-	TrackBy  *string       `xml:"track-by,omitempty"`
-	Duration *int64        `xml:"duration,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	TrackBy        *string       `xml:"track-by,omitempty"`
+	Duration       *int64        `xml:"duration,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type threatExceptionContainerXml_11_0_2 struct {
 	Entries []threatExceptionXml_11_0_2 `xml:"entry"`
 }
 type threatExceptionXml_11_0_2 struct {
-	XMLName       xml.Name                                    `xml:"entry"`
-	Name          string                                      `xml:"name,attr"`
-	PacketCapture *string                                     `xml:"packet-capture,omitempty"`
-	Action        *threatExceptionActionXml_11_0_2            `xml:"action,omitempty"`
-	ExemptIp      *threatExceptionExemptIpContainerXml_11_0_2 `xml:"exempt-ip,omitempty"`
-	Misc          []generic.Xml                               `xml:",any"`
+	XMLName        xml.Name                                    `xml:"entry"`
+	Name           string                                      `xml:"name,attr"`
+	PacketCapture  *string                                     `xml:"packet-capture,omitempty"`
+	Action         *threatExceptionActionXml_11_0_2            `xml:"action,omitempty"`
+	ExemptIp       *threatExceptionExemptIpContainerXml_11_0_2 `xml:"exempt-ip,omitempty"`
+	Misc           []generic.Xml                               `xml:",any"`
+	MiscAttributes []xml.Attr                                  `xml:",any,attr"`
 }
 type threatExceptionActionXml_11_0_2 struct {
-	Default     *threatExceptionActionDefaultXml_11_0_2     `xml:"default,omitempty"`
-	Allow       *threatExceptionActionAllowXml_11_0_2       `xml:"allow,omitempty"`
-	Alert       *threatExceptionActionAlertXml_11_0_2       `xml:"alert,omitempty"`
-	Drop        *threatExceptionActionDropXml_11_0_2        `xml:"drop,omitempty"`
-	ResetBoth   *threatExceptionActionResetBothXml_11_0_2   `xml:"reset-both,omitempty"`
-	ResetClient *threatExceptionActionResetClientXml_11_0_2 `xml:"reset-client,omitempty"`
-	ResetServer *threatExceptionActionResetServerXml_11_0_2 `xml:"reset-server,omitempty"`
-	BlockIp     *threatExceptionActionBlockIpXml_11_0_2     `xml:"block-ip,omitempty"`
-	Misc        []generic.Xml                               `xml:",any"`
+	Default        *threatExceptionActionDefaultXml_11_0_2     `xml:"default,omitempty"`
+	Allow          *threatExceptionActionAllowXml_11_0_2       `xml:"allow,omitempty"`
+	Alert          *threatExceptionActionAlertXml_11_0_2       `xml:"alert,omitempty"`
+	Drop           *threatExceptionActionDropXml_11_0_2        `xml:"drop,omitempty"`
+	ResetBoth      *threatExceptionActionResetBothXml_11_0_2   `xml:"reset-both,omitempty"`
+	ResetClient    *threatExceptionActionResetClientXml_11_0_2 `xml:"reset-client,omitempty"`
+	ResetServer    *threatExceptionActionResetServerXml_11_0_2 `xml:"reset-server,omitempty"`
+	BlockIp        *threatExceptionActionBlockIpXml_11_0_2     `xml:"block-ip,omitempty"`
+	Misc           []generic.Xml                               `xml:",any"`
+	MiscAttributes []xml.Attr                                  `xml:",any,attr"`
 }
 type threatExceptionActionDefaultXml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type threatExceptionActionAllowXml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type threatExceptionActionAlertXml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type threatExceptionActionDropXml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type threatExceptionActionResetBothXml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type threatExceptionActionResetClientXml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type threatExceptionActionResetServerXml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type threatExceptionActionBlockIpXml_11_0_2 struct {
-	TrackBy  *string       `xml:"track-by,omitempty"`
-	Duration *int64        `xml:"duration,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	TrackBy        *string       `xml:"track-by,omitempty"`
+	Duration       *int64        `xml:"duration,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type threatExceptionExemptIpContainerXml_11_0_2 struct {
 	Entries []threatExceptionExemptIpXml_11_0_2 `xml:"entry"`
 }
 type threatExceptionExemptIpXml_11_0_2 struct {
-	XMLName xml.Name      `xml:"entry"`
-	Name    string        `xml:"name,attr"`
-	Misc    []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 
 func (o *entryXml) MarshalFromObject(s Entry) {
@@ -693,6 +798,7 @@ func (o *entryXml) MarshalFromObject(s Entry) {
 		o.ThreatException = &threatExceptionContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o entryXml) UnmarshalToObject() (*Entry, error) {
@@ -755,6 +861,7 @@ func (o entryXml) UnmarshalToObject() (*Entry, error) {
 		Rules:                    rulesVal,
 		ThreatException:          threatExceptionVal,
 		Misc:                     o.Misc,
+		MiscAttributes:           o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -806,6 +913,7 @@ func (o *botnetDomainsXml) MarshalFromObject(s BotnetDomains) {
 		o.Whitelist = &botnetDomainsWhitelistContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o botnetDomainsXml) UnmarshalToObject() (*BotnetDomains, error) {
@@ -874,6 +982,7 @@ func (o botnetDomainsXml) UnmarshalToObject() (*BotnetDomains, error) {
 		ThreatException:       threatExceptionVal,
 		Whitelist:             whitelistVal,
 		Misc:                  o.Misc,
+		MiscAttributes:        o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -883,16 +992,18 @@ func (o *botnetDomainsDnsSecurityCategoriesXml) MarshalFromObject(s BotnetDomain
 	o.LogLevel = s.LogLevel
 	o.PacketCapture = s.PacketCapture
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o botnetDomainsDnsSecurityCategoriesXml) UnmarshalToObject() (*BotnetDomainsDnsSecurityCategories, error) {
 
 	result := &BotnetDomainsDnsSecurityCategories{
-		Name:          o.Name,
-		Action:        o.Action,
-		LogLevel:      o.LogLevel,
-		PacketCapture: o.PacketCapture,
-		Misc:          o.Misc,
+		Name:           o.Name,
+		Action:         o.Action,
+		LogLevel:       o.LogLevel,
+		PacketCapture:  o.PacketCapture,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -905,6 +1016,7 @@ func (o *botnetDomainsListsXml) MarshalFromObject(s BotnetDomainsLists) {
 	}
 	o.PacketCapture = s.PacketCapture
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o botnetDomainsListsXml) UnmarshalToObject() (*BotnetDomainsLists, error) {
@@ -918,10 +1030,11 @@ func (o botnetDomainsListsXml) UnmarshalToObject() (*BotnetDomainsLists, error) 
 	}
 
 	result := &BotnetDomainsLists{
-		Name:          o.Name,
-		Action:        actionVal,
-		PacketCapture: o.PacketCapture,
-		Misc:          o.Misc,
+		Name:           o.Name,
+		Action:         actionVal,
+		PacketCapture:  o.PacketCapture,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -947,6 +1060,7 @@ func (o *botnetDomainsListsActionXml) MarshalFromObject(s BotnetDomainsListsActi
 		o.Sinkhole = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o botnetDomainsListsActionXml) UnmarshalToObject() (*BotnetDomainsListsAction, error) {
@@ -984,55 +1098,64 @@ func (o botnetDomainsListsActionXml) UnmarshalToObject() (*BotnetDomainsListsAct
 	}
 
 	result := &BotnetDomainsListsAction{
-		Alert:    alertVal,
-		Allow:    allowVal,
-		Block:    blockVal,
-		Sinkhole: sinkholeVal,
-		Misc:     o.Misc,
+		Alert:          alertVal,
+		Allow:          allowVal,
+		Block:          blockVal,
+		Sinkhole:       sinkholeVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *botnetDomainsListsActionAlertXml) MarshalFromObject(s BotnetDomainsListsActionAlert) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o botnetDomainsListsActionAlertXml) UnmarshalToObject() (*BotnetDomainsListsActionAlert, error) {
 
 	result := &BotnetDomainsListsActionAlert{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *botnetDomainsListsActionAllowXml) MarshalFromObject(s BotnetDomainsListsActionAllow) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o botnetDomainsListsActionAllowXml) UnmarshalToObject() (*BotnetDomainsListsActionAllow, error) {
 
 	result := &BotnetDomainsListsActionAllow{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *botnetDomainsListsActionBlockXml) MarshalFromObject(s BotnetDomainsListsActionBlock) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o botnetDomainsListsActionBlockXml) UnmarshalToObject() (*BotnetDomainsListsActionBlock, error) {
 
 	result := &BotnetDomainsListsActionBlock{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *botnetDomainsListsActionSinkholeXml) MarshalFromObject(s BotnetDomainsListsActionSinkhole) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o botnetDomainsListsActionSinkholeXml) UnmarshalToObject() (*BotnetDomainsListsActionSinkhole, error) {
 
 	result := &BotnetDomainsListsActionSinkhole{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1041,15 +1164,17 @@ func (o *botnetDomainsRtypeActionXml) MarshalFromObject(s BotnetDomainsRtypeActi
 	o.Https = s.Https
 	o.Svcb = s.Svcb
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o botnetDomainsRtypeActionXml) UnmarshalToObject() (*BotnetDomainsRtypeAction, error) {
 
 	result := &BotnetDomainsRtypeAction{
-		Any:   o.Any,
-		Https: o.Https,
-		Svcb:  o.Svcb,
-		Misc:  o.Misc,
+		Any:            o.Any,
+		Https:          o.Https,
+		Svcb:           o.Svcb,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1057,27 +1182,31 @@ func (o *botnetDomainsSinkholeXml) MarshalFromObject(s BotnetDomainsSinkhole) {
 	o.Ipv4Address = s.Ipv4Address
 	o.Ipv6Address = s.Ipv6Address
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o botnetDomainsSinkholeXml) UnmarshalToObject() (*BotnetDomainsSinkhole, error) {
 
 	result := &BotnetDomainsSinkhole{
-		Ipv4Address: o.Ipv4Address,
-		Ipv6Address: o.Ipv6Address,
-		Misc:        o.Misc,
+		Ipv4Address:    o.Ipv4Address,
+		Ipv6Address:    o.Ipv6Address,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *botnetDomainsThreatExceptionXml) MarshalFromObject(s BotnetDomainsThreatException) {
 	o.Name = s.Name
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o botnetDomainsThreatExceptionXml) UnmarshalToObject() (*BotnetDomainsThreatException, error) {
 
 	result := &BotnetDomainsThreatException{
-		Name: o.Name,
-		Misc: o.Misc,
+		Name:           o.Name,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1085,14 +1214,16 @@ func (o *botnetDomainsWhitelistXml) MarshalFromObject(s BotnetDomainsWhitelist) 
 	o.Name = s.Name
 	o.Description = s.Description
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o botnetDomainsWhitelistXml) UnmarshalToObject() (*BotnetDomainsWhitelist, error) {
 
 	result := &BotnetDomainsWhitelist{
-		Name:        o.Name,
-		Description: o.Description,
-		Misc:        o.Misc,
+		Name:           o.Name,
+		Description:    o.Description,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1100,6 +1231,7 @@ func (o *micaEngineSpywareEnabledXml) MarshalFromObject(s MicaEngineSpywareEnabl
 	o.Name = s.Name
 	o.InlinePolicyAction = s.InlinePolicyAction
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o micaEngineSpywareEnabledXml) UnmarshalToObject() (*MicaEngineSpywareEnabled, error) {
@@ -1108,6 +1240,7 @@ func (o micaEngineSpywareEnabledXml) UnmarshalToObject() (*MicaEngineSpywareEnab
 		Name:               o.Name,
 		InlinePolicyAction: o.InlinePolicyAction,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1125,6 +1258,7 @@ func (o *rulesXml) MarshalFromObject(s Rules) {
 		o.Action = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o rulesXml) UnmarshalToObject() (*Rules, error) {
@@ -1142,13 +1276,14 @@ func (o rulesXml) UnmarshalToObject() (*Rules, error) {
 	}
 
 	result := &Rules{
-		Name:          o.Name,
-		ThreatName:    o.ThreatName,
-		Category:      o.Category,
-		PacketCapture: o.PacketCapture,
-		Severity:      severityVal,
-		Action:        actionVal,
-		Misc:          o.Misc,
+		Name:           o.Name,
+		ThreatName:     o.ThreatName,
+		Category:       o.Category,
+		PacketCapture:  o.PacketCapture,
+		Severity:       severityVal,
+		Action:         actionVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1194,6 +1329,7 @@ func (o *rulesActionXml) MarshalFromObject(s RulesAction) {
 		o.BlockIp = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o rulesActionXml) UnmarshalToObject() (*RulesAction, error) {
@@ -1263,92 +1399,107 @@ func (o rulesActionXml) UnmarshalToObject() (*RulesAction, error) {
 	}
 
 	result := &RulesAction{
-		Default:     defaultVal,
-		Allow:       allowVal,
-		Alert:       alertVal,
-		Drop:        dropVal,
-		ResetClient: resetClientVal,
-		ResetServer: resetServerVal,
-		ResetBoth:   resetBothVal,
-		BlockIp:     blockIpVal,
-		Misc:        o.Misc,
+		Default:        defaultVal,
+		Allow:          allowVal,
+		Alert:          alertVal,
+		Drop:           dropVal,
+		ResetClient:    resetClientVal,
+		ResetServer:    resetServerVal,
+		ResetBoth:      resetBothVal,
+		BlockIp:        blockIpVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *rulesActionDefaultXml) MarshalFromObject(s RulesActionDefault) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o rulesActionDefaultXml) UnmarshalToObject() (*RulesActionDefault, error) {
 
 	result := &RulesActionDefault{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *rulesActionAllowXml) MarshalFromObject(s RulesActionAllow) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o rulesActionAllowXml) UnmarshalToObject() (*RulesActionAllow, error) {
 
 	result := &RulesActionAllow{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *rulesActionAlertXml) MarshalFromObject(s RulesActionAlert) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o rulesActionAlertXml) UnmarshalToObject() (*RulesActionAlert, error) {
 
 	result := &RulesActionAlert{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *rulesActionDropXml) MarshalFromObject(s RulesActionDrop) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o rulesActionDropXml) UnmarshalToObject() (*RulesActionDrop, error) {
 
 	result := &RulesActionDrop{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *rulesActionResetClientXml) MarshalFromObject(s RulesActionResetClient) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o rulesActionResetClientXml) UnmarshalToObject() (*RulesActionResetClient, error) {
 
 	result := &RulesActionResetClient{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *rulesActionResetServerXml) MarshalFromObject(s RulesActionResetServer) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o rulesActionResetServerXml) UnmarshalToObject() (*RulesActionResetServer, error) {
 
 	result := &RulesActionResetServer{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *rulesActionResetBothXml) MarshalFromObject(s RulesActionResetBoth) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o rulesActionResetBothXml) UnmarshalToObject() (*RulesActionResetBoth, error) {
 
 	result := &RulesActionResetBoth{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1356,14 +1507,16 @@ func (o *rulesActionBlockIpXml) MarshalFromObject(s RulesActionBlockIp) {
 	o.TrackBy = s.TrackBy
 	o.Duration = s.Duration
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o rulesActionBlockIpXml) UnmarshalToObject() (*RulesActionBlockIp, error) {
 
 	result := &RulesActionBlockIp{
-		TrackBy:  o.TrackBy,
-		Duration: o.Duration,
-		Misc:     o.Misc,
+		TrackBy:        o.TrackBy,
+		Duration:       o.Duration,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1385,6 +1538,7 @@ func (o *threatExceptionXml) MarshalFromObject(s ThreatException) {
 		o.ExemptIp = &threatExceptionExemptIpContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o threatExceptionXml) UnmarshalToObject() (*ThreatException, error) {
@@ -1408,11 +1562,12 @@ func (o threatExceptionXml) UnmarshalToObject() (*ThreatException, error) {
 	}
 
 	result := &ThreatException{
-		Name:          o.Name,
-		PacketCapture: o.PacketCapture,
-		Action:        actionVal,
-		ExemptIp:      exemptIpVal,
-		Misc:          o.Misc,
+		Name:           o.Name,
+		PacketCapture:  o.PacketCapture,
+		Action:         actionVal,
+		ExemptIp:       exemptIpVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1458,6 +1613,7 @@ func (o *threatExceptionActionXml) MarshalFromObject(s ThreatExceptionAction) {
 		o.BlockIp = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o threatExceptionActionXml) UnmarshalToObject() (*ThreatExceptionAction, error) {
@@ -1527,92 +1683,107 @@ func (o threatExceptionActionXml) UnmarshalToObject() (*ThreatExceptionAction, e
 	}
 
 	result := &ThreatExceptionAction{
-		Default:     defaultVal,
-		Allow:       allowVal,
-		Alert:       alertVal,
-		Drop:        dropVal,
-		ResetBoth:   resetBothVal,
-		ResetClient: resetClientVal,
-		ResetServer: resetServerVal,
-		BlockIp:     blockIpVal,
-		Misc:        o.Misc,
+		Default:        defaultVal,
+		Allow:          allowVal,
+		Alert:          alertVal,
+		Drop:           dropVal,
+		ResetBoth:      resetBothVal,
+		ResetClient:    resetClientVal,
+		ResetServer:    resetServerVal,
+		BlockIp:        blockIpVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *threatExceptionActionDefaultXml) MarshalFromObject(s ThreatExceptionActionDefault) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o threatExceptionActionDefaultXml) UnmarshalToObject() (*ThreatExceptionActionDefault, error) {
 
 	result := &ThreatExceptionActionDefault{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *threatExceptionActionAllowXml) MarshalFromObject(s ThreatExceptionActionAllow) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o threatExceptionActionAllowXml) UnmarshalToObject() (*ThreatExceptionActionAllow, error) {
 
 	result := &ThreatExceptionActionAllow{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *threatExceptionActionAlertXml) MarshalFromObject(s ThreatExceptionActionAlert) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o threatExceptionActionAlertXml) UnmarshalToObject() (*ThreatExceptionActionAlert, error) {
 
 	result := &ThreatExceptionActionAlert{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *threatExceptionActionDropXml) MarshalFromObject(s ThreatExceptionActionDrop) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o threatExceptionActionDropXml) UnmarshalToObject() (*ThreatExceptionActionDrop, error) {
 
 	result := &ThreatExceptionActionDrop{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *threatExceptionActionResetBothXml) MarshalFromObject(s ThreatExceptionActionResetBoth) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o threatExceptionActionResetBothXml) UnmarshalToObject() (*ThreatExceptionActionResetBoth, error) {
 
 	result := &ThreatExceptionActionResetBoth{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *threatExceptionActionResetClientXml) MarshalFromObject(s ThreatExceptionActionResetClient) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o threatExceptionActionResetClientXml) UnmarshalToObject() (*ThreatExceptionActionResetClient, error) {
 
 	result := &ThreatExceptionActionResetClient{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *threatExceptionActionResetServerXml) MarshalFromObject(s ThreatExceptionActionResetServer) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o threatExceptionActionResetServerXml) UnmarshalToObject() (*ThreatExceptionActionResetServer, error) {
 
 	result := &ThreatExceptionActionResetServer{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1620,27 +1791,31 @@ func (o *threatExceptionActionBlockIpXml) MarshalFromObject(s ThreatExceptionAct
 	o.TrackBy = s.TrackBy
 	o.Duration = s.Duration
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o threatExceptionActionBlockIpXml) UnmarshalToObject() (*ThreatExceptionActionBlockIp, error) {
 
 	result := &ThreatExceptionActionBlockIp{
-		TrackBy:  o.TrackBy,
-		Duration: o.Duration,
-		Misc:     o.Misc,
+		TrackBy:        o.TrackBy,
+		Duration:       o.Duration,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *threatExceptionExemptIpXml) MarshalFromObject(s ThreatExceptionExemptIp) {
 	o.Name = s.Name
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o threatExceptionExemptIpXml) UnmarshalToObject() (*ThreatExceptionExemptIp, error) {
 
 	result := &ThreatExceptionExemptIp{
-		Name: o.Name,
-		Misc: o.Misc,
+		Name:           o.Name,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1688,6 +1863,7 @@ func (o *entryXml_11_0_2) MarshalFromObject(s Entry) {
 		o.ThreatException = &threatExceptionContainerXml_11_0_2{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o entryXml_11_0_2) UnmarshalToObject() (*Entry, error) {
@@ -1750,6 +1926,7 @@ func (o entryXml_11_0_2) UnmarshalToObject() (*Entry, error) {
 		Rules:                    rulesVal,
 		ThreatException:          threatExceptionVal,
 		Misc:                     o.Misc,
+		MiscAttributes:           o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1801,6 +1978,7 @@ func (o *botnetDomainsXml_11_0_2) MarshalFromObject(s BotnetDomains) {
 		o.Whitelist = &botnetDomainsWhitelistContainerXml_11_0_2{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o botnetDomainsXml_11_0_2) UnmarshalToObject() (*BotnetDomains, error) {
@@ -1869,6 +2047,7 @@ func (o botnetDomainsXml_11_0_2) UnmarshalToObject() (*BotnetDomains, error) {
 		ThreatException:       threatExceptionVal,
 		Whitelist:             whitelistVal,
 		Misc:                  o.Misc,
+		MiscAttributes:        o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1878,16 +2057,18 @@ func (o *botnetDomainsDnsSecurityCategoriesXml_11_0_2) MarshalFromObject(s Botne
 	o.LogLevel = s.LogLevel
 	o.PacketCapture = s.PacketCapture
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o botnetDomainsDnsSecurityCategoriesXml_11_0_2) UnmarshalToObject() (*BotnetDomainsDnsSecurityCategories, error) {
 
 	result := &BotnetDomainsDnsSecurityCategories{
-		Name:          o.Name,
-		Action:        o.Action,
-		LogLevel:      o.LogLevel,
-		PacketCapture: o.PacketCapture,
-		Misc:          o.Misc,
+		Name:           o.Name,
+		Action:         o.Action,
+		LogLevel:       o.LogLevel,
+		PacketCapture:  o.PacketCapture,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1900,6 +2081,7 @@ func (o *botnetDomainsListsXml_11_0_2) MarshalFromObject(s BotnetDomainsLists) {
 	}
 	o.PacketCapture = s.PacketCapture
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o botnetDomainsListsXml_11_0_2) UnmarshalToObject() (*BotnetDomainsLists, error) {
@@ -1913,10 +2095,11 @@ func (o botnetDomainsListsXml_11_0_2) UnmarshalToObject() (*BotnetDomainsLists, 
 	}
 
 	result := &BotnetDomainsLists{
-		Name:          o.Name,
-		Action:        actionVal,
-		PacketCapture: o.PacketCapture,
-		Misc:          o.Misc,
+		Name:           o.Name,
+		Action:         actionVal,
+		PacketCapture:  o.PacketCapture,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1942,6 +2125,7 @@ func (o *botnetDomainsListsActionXml_11_0_2) MarshalFromObject(s BotnetDomainsLi
 		o.Sinkhole = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o botnetDomainsListsActionXml_11_0_2) UnmarshalToObject() (*BotnetDomainsListsAction, error) {
@@ -1979,55 +2163,64 @@ func (o botnetDomainsListsActionXml_11_0_2) UnmarshalToObject() (*BotnetDomainsL
 	}
 
 	result := &BotnetDomainsListsAction{
-		Alert:    alertVal,
-		Allow:    allowVal,
-		Block:    blockVal,
-		Sinkhole: sinkholeVal,
-		Misc:     o.Misc,
+		Alert:          alertVal,
+		Allow:          allowVal,
+		Block:          blockVal,
+		Sinkhole:       sinkholeVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *botnetDomainsListsActionAlertXml_11_0_2) MarshalFromObject(s BotnetDomainsListsActionAlert) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o botnetDomainsListsActionAlertXml_11_0_2) UnmarshalToObject() (*BotnetDomainsListsActionAlert, error) {
 
 	result := &BotnetDomainsListsActionAlert{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *botnetDomainsListsActionAllowXml_11_0_2) MarshalFromObject(s BotnetDomainsListsActionAllow) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o botnetDomainsListsActionAllowXml_11_0_2) UnmarshalToObject() (*BotnetDomainsListsActionAllow, error) {
 
 	result := &BotnetDomainsListsActionAllow{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *botnetDomainsListsActionBlockXml_11_0_2) MarshalFromObject(s BotnetDomainsListsActionBlock) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o botnetDomainsListsActionBlockXml_11_0_2) UnmarshalToObject() (*BotnetDomainsListsActionBlock, error) {
 
 	result := &BotnetDomainsListsActionBlock{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *botnetDomainsListsActionSinkholeXml_11_0_2) MarshalFromObject(s BotnetDomainsListsActionSinkhole) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o botnetDomainsListsActionSinkholeXml_11_0_2) UnmarshalToObject() (*BotnetDomainsListsActionSinkhole, error) {
 
 	result := &BotnetDomainsListsActionSinkhole{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2036,15 +2229,17 @@ func (o *botnetDomainsRtypeActionXml_11_0_2) MarshalFromObject(s BotnetDomainsRt
 	o.Https = s.Https
 	o.Svcb = s.Svcb
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o botnetDomainsRtypeActionXml_11_0_2) UnmarshalToObject() (*BotnetDomainsRtypeAction, error) {
 
 	result := &BotnetDomainsRtypeAction{
-		Any:   o.Any,
-		Https: o.Https,
-		Svcb:  o.Svcb,
-		Misc:  o.Misc,
+		Any:            o.Any,
+		Https:          o.Https,
+		Svcb:           o.Svcb,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2052,27 +2247,31 @@ func (o *botnetDomainsSinkholeXml_11_0_2) MarshalFromObject(s BotnetDomainsSinkh
 	o.Ipv4Address = s.Ipv4Address
 	o.Ipv6Address = s.Ipv6Address
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o botnetDomainsSinkholeXml_11_0_2) UnmarshalToObject() (*BotnetDomainsSinkhole, error) {
 
 	result := &BotnetDomainsSinkhole{
-		Ipv4Address: o.Ipv4Address,
-		Ipv6Address: o.Ipv6Address,
-		Misc:        o.Misc,
+		Ipv4Address:    o.Ipv4Address,
+		Ipv6Address:    o.Ipv6Address,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *botnetDomainsThreatExceptionXml_11_0_2) MarshalFromObject(s BotnetDomainsThreatException) {
 	o.Name = s.Name
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o botnetDomainsThreatExceptionXml_11_0_2) UnmarshalToObject() (*BotnetDomainsThreatException, error) {
 
 	result := &BotnetDomainsThreatException{
-		Name: o.Name,
-		Misc: o.Misc,
+		Name:           o.Name,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2080,14 +2279,16 @@ func (o *botnetDomainsWhitelistXml_11_0_2) MarshalFromObject(s BotnetDomainsWhit
 	o.Name = s.Name
 	o.Description = s.Description
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o botnetDomainsWhitelistXml_11_0_2) UnmarshalToObject() (*BotnetDomainsWhitelist, error) {
 
 	result := &BotnetDomainsWhitelist{
-		Name:        o.Name,
-		Description: o.Description,
-		Misc:        o.Misc,
+		Name:           o.Name,
+		Description:    o.Description,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2095,6 +2296,7 @@ func (o *micaEngineSpywareEnabledXml_11_0_2) MarshalFromObject(s MicaEngineSpywa
 	o.Name = s.Name
 	o.InlinePolicyAction = s.InlinePolicyAction
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o micaEngineSpywareEnabledXml_11_0_2) UnmarshalToObject() (*MicaEngineSpywareEnabled, error) {
@@ -2103,6 +2305,7 @@ func (o micaEngineSpywareEnabledXml_11_0_2) UnmarshalToObject() (*MicaEngineSpyw
 		Name:               o.Name,
 		InlinePolicyAction: o.InlinePolicyAction,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2120,6 +2323,7 @@ func (o *rulesXml_11_0_2) MarshalFromObject(s Rules) {
 		o.Action = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o rulesXml_11_0_2) UnmarshalToObject() (*Rules, error) {
@@ -2137,13 +2341,14 @@ func (o rulesXml_11_0_2) UnmarshalToObject() (*Rules, error) {
 	}
 
 	result := &Rules{
-		Name:          o.Name,
-		ThreatName:    o.ThreatName,
-		Category:      o.Category,
-		PacketCapture: o.PacketCapture,
-		Severity:      severityVal,
-		Action:        actionVal,
-		Misc:          o.Misc,
+		Name:           o.Name,
+		ThreatName:     o.ThreatName,
+		Category:       o.Category,
+		PacketCapture:  o.PacketCapture,
+		Severity:       severityVal,
+		Action:         actionVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2189,6 +2394,7 @@ func (o *rulesActionXml_11_0_2) MarshalFromObject(s RulesAction) {
 		o.BlockIp = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o rulesActionXml_11_0_2) UnmarshalToObject() (*RulesAction, error) {
@@ -2258,92 +2464,107 @@ func (o rulesActionXml_11_0_2) UnmarshalToObject() (*RulesAction, error) {
 	}
 
 	result := &RulesAction{
-		Default:     defaultVal,
-		Allow:       allowVal,
-		Alert:       alertVal,
-		Drop:        dropVal,
-		ResetClient: resetClientVal,
-		ResetServer: resetServerVal,
-		ResetBoth:   resetBothVal,
-		BlockIp:     blockIpVal,
-		Misc:        o.Misc,
+		Default:        defaultVal,
+		Allow:          allowVal,
+		Alert:          alertVal,
+		Drop:           dropVal,
+		ResetClient:    resetClientVal,
+		ResetServer:    resetServerVal,
+		ResetBoth:      resetBothVal,
+		BlockIp:        blockIpVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *rulesActionDefaultXml_11_0_2) MarshalFromObject(s RulesActionDefault) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o rulesActionDefaultXml_11_0_2) UnmarshalToObject() (*RulesActionDefault, error) {
 
 	result := &RulesActionDefault{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *rulesActionAllowXml_11_0_2) MarshalFromObject(s RulesActionAllow) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o rulesActionAllowXml_11_0_2) UnmarshalToObject() (*RulesActionAllow, error) {
 
 	result := &RulesActionAllow{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *rulesActionAlertXml_11_0_2) MarshalFromObject(s RulesActionAlert) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o rulesActionAlertXml_11_0_2) UnmarshalToObject() (*RulesActionAlert, error) {
 
 	result := &RulesActionAlert{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *rulesActionDropXml_11_0_2) MarshalFromObject(s RulesActionDrop) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o rulesActionDropXml_11_0_2) UnmarshalToObject() (*RulesActionDrop, error) {
 
 	result := &RulesActionDrop{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *rulesActionResetClientXml_11_0_2) MarshalFromObject(s RulesActionResetClient) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o rulesActionResetClientXml_11_0_2) UnmarshalToObject() (*RulesActionResetClient, error) {
 
 	result := &RulesActionResetClient{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *rulesActionResetServerXml_11_0_2) MarshalFromObject(s RulesActionResetServer) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o rulesActionResetServerXml_11_0_2) UnmarshalToObject() (*RulesActionResetServer, error) {
 
 	result := &RulesActionResetServer{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *rulesActionResetBothXml_11_0_2) MarshalFromObject(s RulesActionResetBoth) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o rulesActionResetBothXml_11_0_2) UnmarshalToObject() (*RulesActionResetBoth, error) {
 
 	result := &RulesActionResetBoth{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2351,14 +2572,16 @@ func (o *rulesActionBlockIpXml_11_0_2) MarshalFromObject(s RulesActionBlockIp) {
 	o.TrackBy = s.TrackBy
 	o.Duration = s.Duration
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o rulesActionBlockIpXml_11_0_2) UnmarshalToObject() (*RulesActionBlockIp, error) {
 
 	result := &RulesActionBlockIp{
-		TrackBy:  o.TrackBy,
-		Duration: o.Duration,
-		Misc:     o.Misc,
+		TrackBy:        o.TrackBy,
+		Duration:       o.Duration,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2380,6 +2603,7 @@ func (o *threatExceptionXml_11_0_2) MarshalFromObject(s ThreatException) {
 		o.ExemptIp = &threatExceptionExemptIpContainerXml_11_0_2{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o threatExceptionXml_11_0_2) UnmarshalToObject() (*ThreatException, error) {
@@ -2403,11 +2627,12 @@ func (o threatExceptionXml_11_0_2) UnmarshalToObject() (*ThreatException, error)
 	}
 
 	result := &ThreatException{
-		Name:          o.Name,
-		PacketCapture: o.PacketCapture,
-		Action:        actionVal,
-		ExemptIp:      exemptIpVal,
-		Misc:          o.Misc,
+		Name:           o.Name,
+		PacketCapture:  o.PacketCapture,
+		Action:         actionVal,
+		ExemptIp:       exemptIpVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2453,6 +2678,7 @@ func (o *threatExceptionActionXml_11_0_2) MarshalFromObject(s ThreatExceptionAct
 		o.BlockIp = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o threatExceptionActionXml_11_0_2) UnmarshalToObject() (*ThreatExceptionAction, error) {
@@ -2522,92 +2748,107 @@ func (o threatExceptionActionXml_11_0_2) UnmarshalToObject() (*ThreatExceptionAc
 	}
 
 	result := &ThreatExceptionAction{
-		Default:     defaultVal,
-		Allow:       allowVal,
-		Alert:       alertVal,
-		Drop:        dropVal,
-		ResetBoth:   resetBothVal,
-		ResetClient: resetClientVal,
-		ResetServer: resetServerVal,
-		BlockIp:     blockIpVal,
-		Misc:        o.Misc,
+		Default:        defaultVal,
+		Allow:          allowVal,
+		Alert:          alertVal,
+		Drop:           dropVal,
+		ResetBoth:      resetBothVal,
+		ResetClient:    resetClientVal,
+		ResetServer:    resetServerVal,
+		BlockIp:        blockIpVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *threatExceptionActionDefaultXml_11_0_2) MarshalFromObject(s ThreatExceptionActionDefault) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o threatExceptionActionDefaultXml_11_0_2) UnmarshalToObject() (*ThreatExceptionActionDefault, error) {
 
 	result := &ThreatExceptionActionDefault{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *threatExceptionActionAllowXml_11_0_2) MarshalFromObject(s ThreatExceptionActionAllow) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o threatExceptionActionAllowXml_11_0_2) UnmarshalToObject() (*ThreatExceptionActionAllow, error) {
 
 	result := &ThreatExceptionActionAllow{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *threatExceptionActionAlertXml_11_0_2) MarshalFromObject(s ThreatExceptionActionAlert) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o threatExceptionActionAlertXml_11_0_2) UnmarshalToObject() (*ThreatExceptionActionAlert, error) {
 
 	result := &ThreatExceptionActionAlert{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *threatExceptionActionDropXml_11_0_2) MarshalFromObject(s ThreatExceptionActionDrop) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o threatExceptionActionDropXml_11_0_2) UnmarshalToObject() (*ThreatExceptionActionDrop, error) {
 
 	result := &ThreatExceptionActionDrop{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *threatExceptionActionResetBothXml_11_0_2) MarshalFromObject(s ThreatExceptionActionResetBoth) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o threatExceptionActionResetBothXml_11_0_2) UnmarshalToObject() (*ThreatExceptionActionResetBoth, error) {
 
 	result := &ThreatExceptionActionResetBoth{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *threatExceptionActionResetClientXml_11_0_2) MarshalFromObject(s ThreatExceptionActionResetClient) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o threatExceptionActionResetClientXml_11_0_2) UnmarshalToObject() (*ThreatExceptionActionResetClient, error) {
 
 	result := &ThreatExceptionActionResetClient{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *threatExceptionActionResetServerXml_11_0_2) MarshalFromObject(s ThreatExceptionActionResetServer) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o threatExceptionActionResetServerXml_11_0_2) UnmarshalToObject() (*ThreatExceptionActionResetServer, error) {
 
 	result := &ThreatExceptionActionResetServer{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2615,27 +2856,31 @@ func (o *threatExceptionActionBlockIpXml_11_0_2) MarshalFromObject(s ThreatExcep
 	o.TrackBy = s.TrackBy
 	o.Duration = s.Duration
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o threatExceptionActionBlockIpXml_11_0_2) UnmarshalToObject() (*ThreatExceptionActionBlockIp, error) {
 
 	result := &ThreatExceptionActionBlockIp{
-		TrackBy:  o.TrackBy,
-		Duration: o.Duration,
-		Misc:     o.Misc,
+		TrackBy:        o.TrackBy,
+		Duration:       o.Duration,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *threatExceptionExemptIpXml_11_0_2) MarshalFromObject(s ThreatExceptionExemptIp) {
 	o.Name = s.Name
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o threatExceptionExemptIpXml_11_0_2) UnmarshalToObject() (*ThreatExceptionExemptIp, error) {
 
 	result := &ThreatExceptionExemptIp{
-		Name: o.Name,
-		Misc: o.Misc,
+		Name:           o.Name,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3378,4 +3623,12 @@ func (o *Entry) EntryName() string {
 
 func (o *Entry) SetEntryName(name string) {
 	o.Name = name
+}
+
+func (o *Entry) GetMiscAttributes() []xml.Attr {
+	return o.MiscAttributes
+}
+
+func (o *Entry) SetMiscAttributes(attrs []xml.Attr) {
+	o.MiscAttributes = attrs
 }

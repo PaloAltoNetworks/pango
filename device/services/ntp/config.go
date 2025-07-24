@@ -9,83 +9,101 @@ import (
 )
 
 type Config struct {
-	NtpServers *NtpServers
-	Misc       []generic.Xml
+	NtpServers     *NtpServers
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type NtpServers struct {
 	PrimaryNtpServer   *NtpServersPrimaryNtpServer
 	SecondaryNtpServer *NtpServersSecondaryNtpServer
 	Misc               []generic.Xml
+	MiscAttributes     []xml.Attr
 }
 type NtpServersPrimaryNtpServer struct {
 	AuthenticationType *NtpServersPrimaryNtpServerAuthenticationType
 	NtpServerAddress   *string
 	Misc               []generic.Xml
+	MiscAttributes     []xml.Attr
 }
 type NtpServersPrimaryNtpServerAuthenticationType struct {
-	Autokey      *NtpServersPrimaryNtpServerAuthenticationTypeAutokey
-	None         *NtpServersPrimaryNtpServerAuthenticationTypeNone
-	SymmetricKey *NtpServersPrimaryNtpServerAuthenticationTypeSymmetricKey
-	Misc         []generic.Xml
+	Autokey        *NtpServersPrimaryNtpServerAuthenticationTypeAutokey
+	None           *NtpServersPrimaryNtpServerAuthenticationTypeNone
+	SymmetricKey   *NtpServersPrimaryNtpServerAuthenticationTypeSymmetricKey
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type NtpServersPrimaryNtpServerAuthenticationTypeAutokey struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type NtpServersPrimaryNtpServerAuthenticationTypeNone struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type NtpServersPrimaryNtpServerAuthenticationTypeSymmetricKey struct {
-	Algorithm *NtpServersPrimaryNtpServerAuthenticationTypeSymmetricKeyAlgorithm
-	KeyId     *int64
-	Misc      []generic.Xml
+	Algorithm      *NtpServersPrimaryNtpServerAuthenticationTypeSymmetricKeyAlgorithm
+	KeyId          *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type NtpServersPrimaryNtpServerAuthenticationTypeSymmetricKeyAlgorithm struct {
-	Md5  *NtpServersPrimaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmMd5
-	Sha1 *NtpServersPrimaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmSha1
-	Misc []generic.Xml
+	Md5            *NtpServersPrimaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmMd5
+	Sha1           *NtpServersPrimaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmSha1
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type NtpServersPrimaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmMd5 struct {
 	AuthenticationKey *string
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 type NtpServersPrimaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmSha1 struct {
 	AuthenticationKey *string
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 type NtpServersSecondaryNtpServer struct {
 	AuthenticationType *NtpServersSecondaryNtpServerAuthenticationType
 	NtpServerAddress   *string
 	Misc               []generic.Xml
+	MiscAttributes     []xml.Attr
 }
 type NtpServersSecondaryNtpServerAuthenticationType struct {
-	Autokey      *NtpServersSecondaryNtpServerAuthenticationTypeAutokey
-	None         *NtpServersSecondaryNtpServerAuthenticationTypeNone
-	SymmetricKey *NtpServersSecondaryNtpServerAuthenticationTypeSymmetricKey
-	Misc         []generic.Xml
+	Autokey        *NtpServersSecondaryNtpServerAuthenticationTypeAutokey
+	None           *NtpServersSecondaryNtpServerAuthenticationTypeNone
+	SymmetricKey   *NtpServersSecondaryNtpServerAuthenticationTypeSymmetricKey
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type NtpServersSecondaryNtpServerAuthenticationTypeAutokey struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type NtpServersSecondaryNtpServerAuthenticationTypeNone struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type NtpServersSecondaryNtpServerAuthenticationTypeSymmetricKey struct {
-	Algorithm *NtpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyAlgorithm
-	KeyId     *int64
-	Misc      []generic.Xml
+	Algorithm      *NtpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyAlgorithm
+	KeyId          *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type NtpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyAlgorithm struct {
-	Md5  *NtpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmMd5
-	Sha1 *NtpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmSha1
-	Misc []generic.Xml
+	Md5            *NtpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmMd5
+	Sha1           *NtpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmSha1
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type NtpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmMd5 struct {
 	AuthenticationKey *string
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 type NtpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmSha1 struct {
 	AuthenticationKey *string
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 
 type configXmlContainer struct {
@@ -113,84 +131,102 @@ func specifyConfig(source *Config) (any, error) {
 }
 
 type configXml struct {
-	XMLName    xml.Name       `xml:"system"`
-	NtpServers *ntpServersXml `xml:"ntp-servers,omitempty"`
-	Misc       []generic.Xml  `xml:",any"`
+	XMLName        xml.Name       `xml:"system"`
+	NtpServers     *ntpServersXml `xml:"ntp-servers,omitempty"`
+	Misc           []generic.Xml  `xml:",any"`
+	MiscAttributes []xml.Attr     `xml:",any,attr"`
 }
 type ntpServersXml struct {
 	PrimaryNtpServer   *ntpServersPrimaryNtpServerXml   `xml:"primary-ntp-server,omitempty"`
 	SecondaryNtpServer *ntpServersSecondaryNtpServerXml `xml:"secondary-ntp-server,omitempty"`
 	Misc               []generic.Xml                    `xml:",any"`
+	MiscAttributes     []xml.Attr                       `xml:",any,attr"`
 }
 type ntpServersPrimaryNtpServerXml struct {
 	AuthenticationType *ntpServersPrimaryNtpServerAuthenticationTypeXml `xml:"authentication-type,omitempty"`
 	NtpServerAddress   *string                                          `xml:"ntp-server-address,omitempty"`
 	Misc               []generic.Xml                                    `xml:",any"`
+	MiscAttributes     []xml.Attr                                       `xml:",any,attr"`
 }
 type ntpServersPrimaryNtpServerAuthenticationTypeXml struct {
-	Autokey      *ntpServersPrimaryNtpServerAuthenticationTypeAutokeyXml      `xml:"autokey,omitempty"`
-	None         *ntpServersPrimaryNtpServerAuthenticationTypeNoneXml         `xml:"none,omitempty"`
-	SymmetricKey *ntpServersPrimaryNtpServerAuthenticationTypeSymmetricKeyXml `xml:"symmetric-key,omitempty"`
-	Misc         []generic.Xml                                                `xml:",any"`
+	Autokey        *ntpServersPrimaryNtpServerAuthenticationTypeAutokeyXml      `xml:"autokey,omitempty"`
+	None           *ntpServersPrimaryNtpServerAuthenticationTypeNoneXml         `xml:"none,omitempty"`
+	SymmetricKey   *ntpServersPrimaryNtpServerAuthenticationTypeSymmetricKeyXml `xml:"symmetric-key,omitempty"`
+	Misc           []generic.Xml                                                `xml:",any"`
+	MiscAttributes []xml.Attr                                                   `xml:",any,attr"`
 }
 type ntpServersPrimaryNtpServerAuthenticationTypeAutokeyXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ntpServersPrimaryNtpServerAuthenticationTypeNoneXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ntpServersPrimaryNtpServerAuthenticationTypeSymmetricKeyXml struct {
-	Algorithm *ntpServersPrimaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmXml `xml:"algorithm,omitempty"`
-	KeyId     *int64                                                                `xml:"key-id,omitempty"`
-	Misc      []generic.Xml                                                         `xml:",any"`
+	Algorithm      *ntpServersPrimaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmXml `xml:"algorithm,omitempty"`
+	KeyId          *int64                                                                `xml:"key-id,omitempty"`
+	Misc           []generic.Xml                                                         `xml:",any"`
+	MiscAttributes []xml.Attr                                                            `xml:",any,attr"`
 }
 type ntpServersPrimaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmXml struct {
-	Md5  *ntpServersPrimaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmMd5Xml  `xml:"md5,omitempty"`
-	Sha1 *ntpServersPrimaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmSha1Xml `xml:"sha1,omitempty"`
-	Misc []generic.Xml                                                             `xml:",any"`
+	Md5            *ntpServersPrimaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmMd5Xml  `xml:"md5,omitempty"`
+	Sha1           *ntpServersPrimaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmSha1Xml `xml:"sha1,omitempty"`
+	Misc           []generic.Xml                                                             `xml:",any"`
+	MiscAttributes []xml.Attr                                                                `xml:",any,attr"`
 }
 type ntpServersPrimaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmMd5Xml struct {
 	AuthenticationKey *string       `xml:"authentication-key,omitempty"`
 	Misc              []generic.Xml `xml:",any"`
+	MiscAttributes    []xml.Attr    `xml:",any,attr"`
 }
 type ntpServersPrimaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmSha1Xml struct {
 	AuthenticationKey *string       `xml:"authentication-key,omitempty"`
 	Misc              []generic.Xml `xml:",any"`
+	MiscAttributes    []xml.Attr    `xml:",any,attr"`
 }
 type ntpServersSecondaryNtpServerXml struct {
 	AuthenticationType *ntpServersSecondaryNtpServerAuthenticationTypeXml `xml:"authentication-type,omitempty"`
 	NtpServerAddress   *string                                            `xml:"ntp-server-address,omitempty"`
 	Misc               []generic.Xml                                      `xml:",any"`
+	MiscAttributes     []xml.Attr                                         `xml:",any,attr"`
 }
 type ntpServersSecondaryNtpServerAuthenticationTypeXml struct {
-	Autokey      *ntpServersSecondaryNtpServerAuthenticationTypeAutokeyXml      `xml:"autokey,omitempty"`
-	None         *ntpServersSecondaryNtpServerAuthenticationTypeNoneXml         `xml:"none,omitempty"`
-	SymmetricKey *ntpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyXml `xml:"symmetric-key,omitempty"`
-	Misc         []generic.Xml                                                  `xml:",any"`
+	Autokey        *ntpServersSecondaryNtpServerAuthenticationTypeAutokeyXml      `xml:"autokey,omitempty"`
+	None           *ntpServersSecondaryNtpServerAuthenticationTypeNoneXml         `xml:"none,omitempty"`
+	SymmetricKey   *ntpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyXml `xml:"symmetric-key,omitempty"`
+	Misc           []generic.Xml                                                  `xml:",any"`
+	MiscAttributes []xml.Attr                                                     `xml:",any,attr"`
 }
 type ntpServersSecondaryNtpServerAuthenticationTypeAutokeyXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ntpServersSecondaryNtpServerAuthenticationTypeNoneXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ntpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyXml struct {
-	Algorithm *ntpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmXml `xml:"algorithm,omitempty"`
-	KeyId     *int64                                                                  `xml:"key-id,omitempty"`
-	Misc      []generic.Xml                                                           `xml:",any"`
+	Algorithm      *ntpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmXml `xml:"algorithm,omitempty"`
+	KeyId          *int64                                                                  `xml:"key-id,omitempty"`
+	Misc           []generic.Xml                                                           `xml:",any"`
+	MiscAttributes []xml.Attr                                                              `xml:",any,attr"`
 }
 type ntpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmXml struct {
-	Md5  *ntpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmMd5Xml  `xml:"md5,omitempty"`
-	Sha1 *ntpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmSha1Xml `xml:"sha1,omitempty"`
-	Misc []generic.Xml                                                               `xml:",any"`
+	Md5            *ntpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmMd5Xml  `xml:"md5,omitempty"`
+	Sha1           *ntpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmSha1Xml `xml:"sha1,omitempty"`
+	Misc           []generic.Xml                                                               `xml:",any"`
+	MiscAttributes []xml.Attr                                                                  `xml:",any,attr"`
 }
 type ntpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmMd5Xml struct {
 	AuthenticationKey *string       `xml:"authentication-key,omitempty"`
 	Misc              []generic.Xml `xml:",any"`
+	MiscAttributes    []xml.Attr    `xml:",any,attr"`
 }
 type ntpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmSha1Xml struct {
 	AuthenticationKey *string       `xml:"authentication-key,omitempty"`
 	Misc              []generic.Xml `xml:",any"`
+	MiscAttributes    []xml.Attr    `xml:",any,attr"`
 }
 
 func (o *configXml) MarshalFromObject(s Config) {
@@ -200,6 +236,7 @@ func (o *configXml) MarshalFromObject(s Config) {
 		o.NtpServers = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o configXml) UnmarshalToObject() (*Config, error) {
@@ -213,8 +250,9 @@ func (o configXml) UnmarshalToObject() (*Config, error) {
 	}
 
 	result := &Config{
-		NtpServers: ntpServersVal,
-		Misc:       o.Misc,
+		NtpServers:     ntpServersVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -230,6 +268,7 @@ func (o *ntpServersXml) MarshalFromObject(s NtpServers) {
 		o.SecondaryNtpServer = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ntpServersXml) UnmarshalToObject() (*NtpServers, error) {
@@ -254,6 +293,7 @@ func (o ntpServersXml) UnmarshalToObject() (*NtpServers, error) {
 		PrimaryNtpServer:   primaryNtpServerVal,
 		SecondaryNtpServer: secondaryNtpServerVal,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -265,6 +305,7 @@ func (o *ntpServersPrimaryNtpServerXml) MarshalFromObject(s NtpServersPrimaryNtp
 	}
 	o.NtpServerAddress = s.NtpServerAddress
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ntpServersPrimaryNtpServerXml) UnmarshalToObject() (*NtpServersPrimaryNtpServer, error) {
@@ -281,6 +322,7 @@ func (o ntpServersPrimaryNtpServerXml) UnmarshalToObject() (*NtpServersPrimaryNt
 		AuthenticationType: authenticationTypeVal,
 		NtpServerAddress:   o.NtpServerAddress,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -301,6 +343,7 @@ func (o *ntpServersPrimaryNtpServerAuthenticationTypeXml) MarshalFromObject(s Nt
 		o.SymmetricKey = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ntpServersPrimaryNtpServerAuthenticationTypeXml) UnmarshalToObject() (*NtpServersPrimaryNtpServerAuthenticationType, error) {
@@ -330,32 +373,37 @@ func (o ntpServersPrimaryNtpServerAuthenticationTypeXml) UnmarshalToObject() (*N
 	}
 
 	result := &NtpServersPrimaryNtpServerAuthenticationType{
-		Autokey:      autokeyVal,
-		None:         noneVal,
-		SymmetricKey: symmetricKeyVal,
-		Misc:         o.Misc,
+		Autokey:        autokeyVal,
+		None:           noneVal,
+		SymmetricKey:   symmetricKeyVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *ntpServersPrimaryNtpServerAuthenticationTypeAutokeyXml) MarshalFromObject(s NtpServersPrimaryNtpServerAuthenticationTypeAutokey) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ntpServersPrimaryNtpServerAuthenticationTypeAutokeyXml) UnmarshalToObject() (*NtpServersPrimaryNtpServerAuthenticationTypeAutokey, error) {
 
 	result := &NtpServersPrimaryNtpServerAuthenticationTypeAutokey{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *ntpServersPrimaryNtpServerAuthenticationTypeNoneXml) MarshalFromObject(s NtpServersPrimaryNtpServerAuthenticationTypeNone) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ntpServersPrimaryNtpServerAuthenticationTypeNoneXml) UnmarshalToObject() (*NtpServersPrimaryNtpServerAuthenticationTypeNone, error) {
 
 	result := &NtpServersPrimaryNtpServerAuthenticationTypeNone{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -367,6 +415,7 @@ func (o *ntpServersPrimaryNtpServerAuthenticationTypeSymmetricKeyXml) MarshalFro
 	}
 	o.KeyId = s.KeyId
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ntpServersPrimaryNtpServerAuthenticationTypeSymmetricKeyXml) UnmarshalToObject() (*NtpServersPrimaryNtpServerAuthenticationTypeSymmetricKey, error) {
@@ -380,9 +429,10 @@ func (o ntpServersPrimaryNtpServerAuthenticationTypeSymmetricKeyXml) UnmarshalTo
 	}
 
 	result := &NtpServersPrimaryNtpServerAuthenticationTypeSymmetricKey{
-		Algorithm: algorithmVal,
-		KeyId:     o.KeyId,
-		Misc:      o.Misc,
+		Algorithm:      algorithmVal,
+		KeyId:          o.KeyId,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -398,6 +448,7 @@ func (o *ntpServersPrimaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmXml) M
 		o.Sha1 = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ntpServersPrimaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmXml) UnmarshalToObject() (*NtpServersPrimaryNtpServerAuthenticationTypeSymmetricKeyAlgorithm, error) {
@@ -419,15 +470,17 @@ func (o ntpServersPrimaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmXml) Un
 	}
 
 	result := &NtpServersPrimaryNtpServerAuthenticationTypeSymmetricKeyAlgorithm{
-		Md5:  md5Val,
-		Sha1: sha1Val,
-		Misc: o.Misc,
+		Md5:            md5Val,
+		Sha1:           sha1Val,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *ntpServersPrimaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmMd5Xml) MarshalFromObject(s NtpServersPrimaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmMd5) {
 	o.AuthenticationKey = s.AuthenticationKey
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ntpServersPrimaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmMd5Xml) UnmarshalToObject() (*NtpServersPrimaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmMd5, error) {
@@ -435,12 +488,14 @@ func (o ntpServersPrimaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmMd5Xml)
 	result := &NtpServersPrimaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmMd5{
 		AuthenticationKey: o.AuthenticationKey,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *ntpServersPrimaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmSha1Xml) MarshalFromObject(s NtpServersPrimaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmSha1) {
 	o.AuthenticationKey = s.AuthenticationKey
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ntpServersPrimaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmSha1Xml) UnmarshalToObject() (*NtpServersPrimaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmSha1, error) {
@@ -448,6 +503,7 @@ func (o ntpServersPrimaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmSha1Xml
 	result := &NtpServersPrimaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmSha1{
 		AuthenticationKey: o.AuthenticationKey,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -459,6 +515,7 @@ func (o *ntpServersSecondaryNtpServerXml) MarshalFromObject(s NtpServersSecondar
 	}
 	o.NtpServerAddress = s.NtpServerAddress
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ntpServersSecondaryNtpServerXml) UnmarshalToObject() (*NtpServersSecondaryNtpServer, error) {
@@ -475,6 +532,7 @@ func (o ntpServersSecondaryNtpServerXml) UnmarshalToObject() (*NtpServersSeconda
 		AuthenticationType: authenticationTypeVal,
 		NtpServerAddress:   o.NtpServerAddress,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -495,6 +553,7 @@ func (o *ntpServersSecondaryNtpServerAuthenticationTypeXml) MarshalFromObject(s 
 		o.SymmetricKey = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ntpServersSecondaryNtpServerAuthenticationTypeXml) UnmarshalToObject() (*NtpServersSecondaryNtpServerAuthenticationType, error) {
@@ -524,32 +583,37 @@ func (o ntpServersSecondaryNtpServerAuthenticationTypeXml) UnmarshalToObject() (
 	}
 
 	result := &NtpServersSecondaryNtpServerAuthenticationType{
-		Autokey:      autokeyVal,
-		None:         noneVal,
-		SymmetricKey: symmetricKeyVal,
-		Misc:         o.Misc,
+		Autokey:        autokeyVal,
+		None:           noneVal,
+		SymmetricKey:   symmetricKeyVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *ntpServersSecondaryNtpServerAuthenticationTypeAutokeyXml) MarshalFromObject(s NtpServersSecondaryNtpServerAuthenticationTypeAutokey) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ntpServersSecondaryNtpServerAuthenticationTypeAutokeyXml) UnmarshalToObject() (*NtpServersSecondaryNtpServerAuthenticationTypeAutokey, error) {
 
 	result := &NtpServersSecondaryNtpServerAuthenticationTypeAutokey{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *ntpServersSecondaryNtpServerAuthenticationTypeNoneXml) MarshalFromObject(s NtpServersSecondaryNtpServerAuthenticationTypeNone) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ntpServersSecondaryNtpServerAuthenticationTypeNoneXml) UnmarshalToObject() (*NtpServersSecondaryNtpServerAuthenticationTypeNone, error) {
 
 	result := &NtpServersSecondaryNtpServerAuthenticationTypeNone{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -561,6 +625,7 @@ func (o *ntpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyXml) MarshalF
 	}
 	o.KeyId = s.KeyId
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ntpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyXml) UnmarshalToObject() (*NtpServersSecondaryNtpServerAuthenticationTypeSymmetricKey, error) {
@@ -574,9 +639,10 @@ func (o ntpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyXml) Unmarshal
 	}
 
 	result := &NtpServersSecondaryNtpServerAuthenticationTypeSymmetricKey{
-		Algorithm: algorithmVal,
-		KeyId:     o.KeyId,
-		Misc:      o.Misc,
+		Algorithm:      algorithmVal,
+		KeyId:          o.KeyId,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -592,6 +658,7 @@ func (o *ntpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmXml)
 		o.Sha1 = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ntpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmXml) UnmarshalToObject() (*NtpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyAlgorithm, error) {
@@ -613,15 +680,17 @@ func (o ntpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmXml) 
 	}
 
 	result := &NtpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyAlgorithm{
-		Md5:  md5Val,
-		Sha1: sha1Val,
-		Misc: o.Misc,
+		Md5:            md5Val,
+		Sha1:           sha1Val,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *ntpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmMd5Xml) MarshalFromObject(s NtpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmMd5) {
 	o.AuthenticationKey = s.AuthenticationKey
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ntpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmMd5Xml) UnmarshalToObject() (*NtpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmMd5, error) {
@@ -629,12 +698,14 @@ func (o ntpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmMd5Xm
 	result := &NtpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmMd5{
 		AuthenticationKey: o.AuthenticationKey,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *ntpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmSha1Xml) MarshalFromObject(s NtpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmSha1) {
 	o.AuthenticationKey = s.AuthenticationKey
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ntpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmSha1Xml) UnmarshalToObject() (*NtpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmSha1, error) {
@@ -642,6 +713,7 @@ func (o ntpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmSha1X
 	result := &NtpServersSecondaryNtpServerAuthenticationTypeSymmetricKeyAlgorithmSha1{
 		AuthenticationKey: o.AuthenticationKey,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }

@@ -25,33 +25,39 @@ type Entry struct {
 	Protocol        *Protocol
 	Tag             []string
 	Misc            []generic.Xml
+	MiscAttributes  []xml.Attr
 }
 type Protocol struct {
-	Tcp  *ProtocolTcp
-	Udp  *ProtocolUdp
-	Misc []generic.Xml
+	Tcp            *ProtocolTcp
+	Udp            *ProtocolUdp
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolTcp struct {
-	Override   *ProtocolTcpOverride
-	Port       *string
-	SourcePort *string
-	Misc       []generic.Xml
+	Override       *ProtocolTcpOverride
+	Port           *string
+	SourcePort     *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolTcpOverride struct {
 	HalfcloseTimeout *int64
 	Timeout          *int64
 	TimewaitTimeout  *int64
 	Misc             []generic.Xml
+	MiscAttributes   []xml.Attr
 }
 type ProtocolUdp struct {
-	Override   *ProtocolUdpOverride
-	Port       *string
-	SourcePort *string
-	Misc       []generic.Xml
+	Override       *ProtocolUdpOverride
+	Port           *string
+	SourcePort     *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ProtocolUdpOverride struct {
-	Timeout *int64
-	Misc    []generic.Xml
+	Timeout        *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 
 type entryXmlContainer struct {
@@ -85,33 +91,39 @@ type entryXml struct {
 	Protocol        *protocolXml     `xml:"protocol,omitempty"`
 	Tag             *util.MemberType `xml:"tag,omitempty"`
 	Misc            []generic.Xml    `xml:",any"`
+	MiscAttributes  []xml.Attr       `xml:",any,attr"`
 }
 type protocolXml struct {
-	Tcp  *protocolTcpXml `xml:"tcp,omitempty"`
-	Udp  *protocolUdpXml `xml:"udp,omitempty"`
-	Misc []generic.Xml   `xml:",any"`
+	Tcp            *protocolTcpXml `xml:"tcp,omitempty"`
+	Udp            *protocolUdpXml `xml:"udp,omitempty"`
+	Misc           []generic.Xml   `xml:",any"`
+	MiscAttributes []xml.Attr      `xml:",any,attr"`
 }
 type protocolTcpXml struct {
-	Override   *protocolTcpOverrideXml `xml:"override>yes,omitempty"`
-	Port       *string                 `xml:"port,omitempty"`
-	SourcePort *string                 `xml:"source-port,omitempty"`
-	Misc       []generic.Xml           `xml:",any"`
+	Override       *protocolTcpOverrideXml `xml:"override>yes,omitempty"`
+	Port           *string                 `xml:"port,omitempty"`
+	SourcePort     *string                 `xml:"source-port,omitempty"`
+	Misc           []generic.Xml           `xml:",any"`
+	MiscAttributes []xml.Attr              `xml:",any,attr"`
 }
 type protocolTcpOverrideXml struct {
 	HalfcloseTimeout *int64        `xml:"halfclose-timeout,omitempty"`
 	Timeout          *int64        `xml:"timeout,omitempty"`
 	TimewaitTimeout  *int64        `xml:"timewait-timeout,omitempty"`
 	Misc             []generic.Xml `xml:",any"`
+	MiscAttributes   []xml.Attr    `xml:",any,attr"`
 }
 type protocolUdpXml struct {
-	Override   *protocolUdpOverrideXml `xml:"override>yes,omitempty"`
-	Port       *string                 `xml:"port,omitempty"`
-	SourcePort *string                 `xml:"source-port,omitempty"`
-	Misc       []generic.Xml           `xml:",any"`
+	Override       *protocolUdpOverrideXml `xml:"override>yes,omitempty"`
+	Port           *string                 `xml:"port,omitempty"`
+	SourcePort     *string                 `xml:"source-port,omitempty"`
+	Misc           []generic.Xml           `xml:",any"`
+	MiscAttributes []xml.Attr              `xml:",any,attr"`
 }
 type protocolUdpOverrideXml struct {
-	Timeout *int64        `xml:"timeout,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	Timeout        *int64        `xml:"timeout,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 
 func (o *entryXml) MarshalFromObject(s Entry) {
@@ -127,6 +139,7 @@ func (o *entryXml) MarshalFromObject(s Entry) {
 		o.Tag = util.StrToMem(s.Tag)
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o entryXml) UnmarshalToObject() (*Entry, error) {
@@ -150,6 +163,7 @@ func (o entryXml) UnmarshalToObject() (*Entry, error) {
 		Protocol:        protocolVal,
 		Tag:             tagVal,
 		Misc:            o.Misc,
+		MiscAttributes:  o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -165,6 +179,7 @@ func (o *protocolXml) MarshalFromObject(s Protocol) {
 		o.Udp = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolXml) UnmarshalToObject() (*Protocol, error) {
@@ -186,9 +201,10 @@ func (o protocolXml) UnmarshalToObject() (*Protocol, error) {
 	}
 
 	result := &Protocol{
-		Tcp:  tcpVal,
-		Udp:  udpVal,
-		Misc: o.Misc,
+		Tcp:            tcpVal,
+		Udp:            udpVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -201,6 +217,7 @@ func (o *protocolTcpXml) MarshalFromObject(s ProtocolTcp) {
 	o.Port = s.Port
 	o.SourcePort = s.SourcePort
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolTcpXml) UnmarshalToObject() (*ProtocolTcp, error) {
@@ -214,10 +231,11 @@ func (o protocolTcpXml) UnmarshalToObject() (*ProtocolTcp, error) {
 	}
 
 	result := &ProtocolTcp{
-		Override:   overrideVal,
-		Port:       o.Port,
-		SourcePort: o.SourcePort,
-		Misc:       o.Misc,
+		Override:       overrideVal,
+		Port:           o.Port,
+		SourcePort:     o.SourcePort,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -226,6 +244,7 @@ func (o *protocolTcpOverrideXml) MarshalFromObject(s ProtocolTcpOverride) {
 	o.Timeout = s.Timeout
 	o.TimewaitTimeout = s.TimewaitTimeout
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolTcpOverrideXml) UnmarshalToObject() (*ProtocolTcpOverride, error) {
@@ -235,6 +254,7 @@ func (o protocolTcpOverrideXml) UnmarshalToObject() (*ProtocolTcpOverride, error
 		Timeout:          o.Timeout,
 		TimewaitTimeout:  o.TimewaitTimeout,
 		Misc:             o.Misc,
+		MiscAttributes:   o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -247,6 +267,7 @@ func (o *protocolUdpXml) MarshalFromObject(s ProtocolUdp) {
 	o.Port = s.Port
 	o.SourcePort = s.SourcePort
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolUdpXml) UnmarshalToObject() (*ProtocolUdp, error) {
@@ -260,23 +281,26 @@ func (o protocolUdpXml) UnmarshalToObject() (*ProtocolUdp, error) {
 	}
 
 	result := &ProtocolUdp{
-		Override:   overrideVal,
-		Port:       o.Port,
-		SourcePort: o.SourcePort,
-		Misc:       o.Misc,
+		Override:       overrideVal,
+		Port:           o.Port,
+		SourcePort:     o.SourcePort,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *protocolUdpOverrideXml) MarshalFromObject(s ProtocolUdpOverride) {
 	o.Timeout = s.Timeout
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolUdpOverrideXml) UnmarshalToObject() (*ProtocolUdpOverride, error) {
 
 	result := &ProtocolUdpOverride{
-		Timeout: o.Timeout,
-		Misc:    o.Misc,
+		Timeout:        o.Timeout,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -446,4 +470,12 @@ func (o *Entry) EntryName() string {
 
 func (o *Entry) SetEntryName(name string) {
 	o.Name = name
+}
+
+func (o *Entry) GetMiscAttributes() []xml.Attr {
+	return o.MiscAttributes
+}
+
+func (o *Entry) SetMiscAttributes(attrs []xml.Attr) {
+	o.MiscAttributes = attrs
 }

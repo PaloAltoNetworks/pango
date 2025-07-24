@@ -19,80 +19,93 @@ var (
 )
 
 type Entry struct {
-	Name   string
-	Relay  *Relay
-	Server *Server
-	Misc   []generic.Xml
+	Name           string
+	Relay          *Relay
+	Server         *Server
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Relay struct {
-	Ip   *RelayIp
-	Ipv6 *RelayIpv6
-	Misc []generic.Xml
+	Ip             *RelayIp
+	Ipv6           *RelayIpv6
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type RelayIp struct {
-	Enabled *bool
-	Server  []string
-	Misc    []generic.Xml
+	Enabled        *bool
+	Server         []string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type RelayIpv6 struct {
-	Enabled *bool
-	Server  []RelayIpv6Server
-	Misc    []generic.Xml
+	Enabled        *bool
+	Server         []RelayIpv6Server
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type RelayIpv6Server struct {
-	Name      string
-	Interface *string
-	Misc      []generic.Xml
+	Name           string
+	Interface      *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Server struct {
-	IpPool   []string
-	Mode     *string
-	Option   *ServerOption
-	ProbeIp  *bool
-	Reserved []ServerReserved
-	Misc     []generic.Xml
+	IpPool         []string
+	Mode           *string
+	Option         *ServerOption
+	ProbeIp        *bool
+	Reserved       []ServerReserved
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ServerOption struct {
-	Dns         *ServerOptionDns
-	DnsSuffix   *string
-	Gateway     *string
-	Inheritance *ServerOptionInheritance
-	Lease       *ServerOptionLease
-	Nis         *ServerOptionNis
-	Ntp         *ServerOptionNtp
-	Pop3Server  *string
-	SmtpServer  *string
-	SubnetMask  *string
-	UserDefined []ServerOptionUserDefined
-	Wins        *ServerOptionWins
-	Misc        []generic.Xml
+	Dns            *ServerOptionDns
+	DnsSuffix      *string
+	Gateway        *string
+	Inheritance    *ServerOptionInheritance
+	Lease          *ServerOptionLease
+	Nis            *ServerOptionNis
+	Ntp            *ServerOptionNtp
+	Pop3Server     *string
+	SmtpServer     *string
+	SubnetMask     *string
+	UserDefined    []ServerOptionUserDefined
+	Wins           *ServerOptionWins
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ServerOptionDns struct {
-	Primary   *string
-	Secondary *string
-	Misc      []generic.Xml
+	Primary        *string
+	Secondary      *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ServerOptionInheritance struct {
-	Source *string
-	Misc   []generic.Xml
+	Source         *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ServerOptionLease struct {
-	Timeout   *int64
-	Unlimited *ServerOptionLeaseUnlimited
-	Misc      []generic.Xml
+	Timeout        *int64
+	Unlimited      *ServerOptionLeaseUnlimited
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ServerOptionLeaseUnlimited struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ServerOptionNis struct {
-	Primary   *string
-	Secondary *string
-	Misc      []generic.Xml
+	Primary        *string
+	Secondary      *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ServerOptionNtp struct {
-	Primary   *string
-	Secondary *string
-	Misc      []generic.Xml
+	Primary        *string
+	Secondary      *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ServerOptionUserDefined struct {
 	Name                  string
@@ -103,17 +116,20 @@ type ServerOptionUserDefined struct {
 	Ascii                 []string
 	Hex                   []string
 	Misc                  []generic.Xml
+	MiscAttributes        []xml.Attr
 }
 type ServerOptionWins struct {
-	Primary   *string
-	Secondary *string
-	Misc      []generic.Xml
+	Primary        *string
+	Secondary      *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ServerReserved struct {
-	Name        string
-	Mac         *string
-	Description *string
-	Misc        []generic.Xml
+	Name           string
+	Mac            *string
+	Description    *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 
 type entryXmlContainer struct {
@@ -140,85 +156,98 @@ func specifyEntry(source *Entry) (any, error) {
 }
 
 type entryXml struct {
-	XMLName xml.Name      `xml:"entry"`
-	Name    string        `xml:"name,attr"`
-	Relay   *relayXml     `xml:"relay,omitempty"`
-	Server  *serverXml    `xml:"server,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Relay          *relayXml     `xml:"relay,omitempty"`
+	Server         *serverXml    `xml:"server,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type relayXml struct {
-	Ip   *relayIpXml   `xml:"ip,omitempty"`
-	Ipv6 *relayIpv6Xml `xml:"ipv6,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Ip             *relayIpXml   `xml:"ip,omitempty"`
+	Ipv6           *relayIpv6Xml `xml:"ipv6,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type relayIpXml struct {
-	Enabled *string          `xml:"enabled,omitempty"`
-	Server  *util.MemberType `xml:"server,omitempty"`
-	Misc    []generic.Xml    `xml:",any"`
+	Enabled        *string          `xml:"enabled,omitempty"`
+	Server         *util.MemberType `xml:"server,omitempty"`
+	Misc           []generic.Xml    `xml:",any"`
+	MiscAttributes []xml.Attr       `xml:",any,attr"`
 }
 type relayIpv6Xml struct {
-	Enabled *string                      `xml:"enabled,omitempty"`
-	Server  *relayIpv6ServerContainerXml `xml:"server,omitempty"`
-	Misc    []generic.Xml                `xml:",any"`
+	Enabled        *string                      `xml:"enabled,omitempty"`
+	Server         *relayIpv6ServerContainerXml `xml:"server,omitempty"`
+	Misc           []generic.Xml                `xml:",any"`
+	MiscAttributes []xml.Attr                   `xml:",any,attr"`
 }
 type relayIpv6ServerContainerXml struct {
 	Entries []relayIpv6ServerXml `xml:"entry"`
 }
 type relayIpv6ServerXml struct {
-	XMLName   xml.Name      `xml:"entry"`
-	Name      string        `xml:"name,attr"`
-	Interface *string       `xml:"interface,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Interface      *string       `xml:"interface,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type serverXml struct {
-	IpPool   *util.MemberType            `xml:"ip-pool,omitempty"`
-	Mode     *string                     `xml:"mode,omitempty"`
-	Option   *serverOptionXml            `xml:"option,omitempty"`
-	ProbeIp  *string                     `xml:"probe-ip,omitempty"`
-	Reserved *serverReservedContainerXml `xml:"reserved,omitempty"`
-	Misc     []generic.Xml               `xml:",any"`
+	IpPool         *util.MemberType            `xml:"ip-pool,omitempty"`
+	Mode           *string                     `xml:"mode,omitempty"`
+	Option         *serverOptionXml            `xml:"option,omitempty"`
+	ProbeIp        *string                     `xml:"probe-ip,omitempty"`
+	Reserved       *serverReservedContainerXml `xml:"reserved,omitempty"`
+	Misc           []generic.Xml               `xml:",any"`
+	MiscAttributes []xml.Attr                  `xml:",any,attr"`
 }
 type serverOptionXml struct {
-	Dns         *serverOptionDnsXml                  `xml:"dns,omitempty"`
-	DnsSuffix   *string                              `xml:"dns-suffix,omitempty"`
-	Gateway     *string                              `xml:"gateway,omitempty"`
-	Inheritance *serverOptionInheritanceXml          `xml:"inheritance,omitempty"`
-	Lease       *serverOptionLeaseXml                `xml:"lease,omitempty"`
-	Nis         *serverOptionNisXml                  `xml:"nis,omitempty"`
-	Ntp         *serverOptionNtpXml                  `xml:"ntp,omitempty"`
-	Pop3Server  *string                              `xml:"pop3-server,omitempty"`
-	SmtpServer  *string                              `xml:"smtp-server,omitempty"`
-	SubnetMask  *string                              `xml:"subnet-mask,omitempty"`
-	UserDefined *serverOptionUserDefinedContainerXml `xml:"user-defined,omitempty"`
-	Wins        *serverOptionWinsXml                 `xml:"wins,omitempty"`
-	Misc        []generic.Xml                        `xml:",any"`
+	Dns            *serverOptionDnsXml                  `xml:"dns,omitempty"`
+	DnsSuffix      *string                              `xml:"dns-suffix,omitempty"`
+	Gateway        *string                              `xml:"gateway,omitempty"`
+	Inheritance    *serverOptionInheritanceXml          `xml:"inheritance,omitempty"`
+	Lease          *serverOptionLeaseXml                `xml:"lease,omitempty"`
+	Nis            *serverOptionNisXml                  `xml:"nis,omitempty"`
+	Ntp            *serverOptionNtpXml                  `xml:"ntp,omitempty"`
+	Pop3Server     *string                              `xml:"pop3-server,omitempty"`
+	SmtpServer     *string                              `xml:"smtp-server,omitempty"`
+	SubnetMask     *string                              `xml:"subnet-mask,omitempty"`
+	UserDefined    *serverOptionUserDefinedContainerXml `xml:"user-defined,omitempty"`
+	Wins           *serverOptionWinsXml                 `xml:"wins,omitempty"`
+	Misc           []generic.Xml                        `xml:",any"`
+	MiscAttributes []xml.Attr                           `xml:",any,attr"`
 }
 type serverOptionDnsXml struct {
-	Primary   *string       `xml:"primary,omitempty"`
-	Secondary *string       `xml:"secondary,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	Primary        *string       `xml:"primary,omitempty"`
+	Secondary      *string       `xml:"secondary,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type serverOptionInheritanceXml struct {
-	Source *string       `xml:"source,omitempty"`
-	Misc   []generic.Xml `xml:",any"`
+	Source         *string       `xml:"source,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type serverOptionLeaseXml struct {
-	Timeout   *int64                         `xml:"timeout,omitempty"`
-	Unlimited *serverOptionLeaseUnlimitedXml `xml:"unlimited,omitempty"`
-	Misc      []generic.Xml                  `xml:",any"`
+	Timeout        *int64                         `xml:"timeout,omitempty"`
+	Unlimited      *serverOptionLeaseUnlimitedXml `xml:"unlimited,omitempty"`
+	Misc           []generic.Xml                  `xml:",any"`
+	MiscAttributes []xml.Attr                     `xml:",any,attr"`
 }
 type serverOptionLeaseUnlimitedXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type serverOptionNisXml struct {
-	Primary   *string       `xml:"primary,omitempty"`
-	Secondary *string       `xml:"secondary,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	Primary        *string       `xml:"primary,omitempty"`
+	Secondary      *string       `xml:"secondary,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type serverOptionNtpXml struct {
-	Primary   *string       `xml:"primary,omitempty"`
-	Secondary *string       `xml:"secondary,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	Primary        *string       `xml:"primary,omitempty"`
+	Secondary      *string       `xml:"secondary,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type serverOptionUserDefinedContainerXml struct {
 	Entries []serverOptionUserDefinedXml `xml:"entry"`
@@ -233,21 +262,24 @@ type serverOptionUserDefinedXml struct {
 	Ascii                 *util.MemberType `xml:"ascii,omitempty"`
 	Hex                   *util.MemberType `xml:"hex,omitempty"`
 	Misc                  []generic.Xml    `xml:",any"`
+	MiscAttributes        []xml.Attr       `xml:",any,attr"`
 }
 type serverOptionWinsXml struct {
-	Primary   *string       `xml:"primary,omitempty"`
-	Secondary *string       `xml:"secondary,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	Primary        *string       `xml:"primary,omitempty"`
+	Secondary      *string       `xml:"secondary,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type serverReservedContainerXml struct {
 	Entries []serverReservedXml `xml:"entry"`
 }
 type serverReservedXml struct {
-	XMLName     xml.Name      `xml:"entry"`
-	Name        string        `xml:"name,attr"`
-	Mac         *string       `xml:"mac,omitempty"`
-	Description *string       `xml:"description,omitempty"`
-	Misc        []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Mac            *string       `xml:"mac,omitempty"`
+	Description    *string       `xml:"description,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 
 func (o *entryXml) MarshalFromObject(s Entry) {
@@ -263,6 +295,7 @@ func (o *entryXml) MarshalFromObject(s Entry) {
 		o.Server = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o entryXml) UnmarshalToObject() (*Entry, error) {
@@ -284,10 +317,11 @@ func (o entryXml) UnmarshalToObject() (*Entry, error) {
 	}
 
 	result := &Entry{
-		Name:   o.Name,
-		Relay:  relayVal,
-		Server: serverVal,
-		Misc:   o.Misc,
+		Name:           o.Name,
+		Relay:          relayVal,
+		Server:         serverVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -303,6 +337,7 @@ func (o *relayXml) MarshalFromObject(s Relay) {
 		o.Ipv6 = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o relayXml) UnmarshalToObject() (*Relay, error) {
@@ -324,9 +359,10 @@ func (o relayXml) UnmarshalToObject() (*Relay, error) {
 	}
 
 	result := &Relay{
-		Ip:   ipVal,
-		Ipv6: ipv6Val,
-		Misc: o.Misc,
+		Ip:             ipVal,
+		Ipv6:           ipv6Val,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -336,6 +372,7 @@ func (o *relayIpXml) MarshalFromObject(s RelayIp) {
 		o.Server = util.StrToMem(s.Server)
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o relayIpXml) UnmarshalToObject() (*RelayIp, error) {
@@ -345,9 +382,10 @@ func (o relayIpXml) UnmarshalToObject() (*RelayIp, error) {
 	}
 
 	result := &RelayIp{
-		Enabled: util.AsBool(o.Enabled, nil),
-		Server:  serverVal,
-		Misc:    o.Misc,
+		Enabled:        util.AsBool(o.Enabled, nil),
+		Server:         serverVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -363,6 +401,7 @@ func (o *relayIpv6Xml) MarshalFromObject(s RelayIpv6) {
 		o.Server = &relayIpv6ServerContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o relayIpv6Xml) UnmarshalToObject() (*RelayIpv6, error) {
@@ -378,9 +417,10 @@ func (o relayIpv6Xml) UnmarshalToObject() (*RelayIpv6, error) {
 	}
 
 	result := &RelayIpv6{
-		Enabled: util.AsBool(o.Enabled, nil),
-		Server:  serverVal,
-		Misc:    o.Misc,
+		Enabled:        util.AsBool(o.Enabled, nil),
+		Server:         serverVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -388,14 +428,16 @@ func (o *relayIpv6ServerXml) MarshalFromObject(s RelayIpv6Server) {
 	o.Name = s.Name
 	o.Interface = s.Interface
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o relayIpv6ServerXml) UnmarshalToObject() (*RelayIpv6Server, error) {
 
 	result := &RelayIpv6Server{
-		Name:      o.Name,
-		Interface: o.Interface,
-		Misc:      o.Misc,
+		Name:           o.Name,
+		Interface:      o.Interface,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -420,6 +462,7 @@ func (o *serverXml) MarshalFromObject(s Server) {
 		o.Reserved = &serverReservedContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o serverXml) UnmarshalToObject() (*Server, error) {
@@ -447,12 +490,13 @@ func (o serverXml) UnmarshalToObject() (*Server, error) {
 	}
 
 	result := &Server{
-		IpPool:   ipPoolVal,
-		Mode:     o.Mode,
-		Option:   optionVal,
-		ProbeIp:  util.AsBool(o.ProbeIp, nil),
-		Reserved: reservedVal,
-		Misc:     o.Misc,
+		IpPool:         ipPoolVal,
+		Mode:           o.Mode,
+		Option:         optionVal,
+		ProbeIp:        util.AsBool(o.ProbeIp, nil),
+		Reserved:       reservedVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -502,6 +546,7 @@ func (o *serverOptionXml) MarshalFromObject(s ServerOption) {
 		o.Wins = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o serverOptionXml) UnmarshalToObject() (*ServerOption, error) {
@@ -565,19 +610,20 @@ func (o serverOptionXml) UnmarshalToObject() (*ServerOption, error) {
 	}
 
 	result := &ServerOption{
-		Dns:         dnsVal,
-		DnsSuffix:   o.DnsSuffix,
-		Gateway:     o.Gateway,
-		Inheritance: inheritanceVal,
-		Lease:       leaseVal,
-		Nis:         nisVal,
-		Ntp:         ntpVal,
-		Pop3Server:  o.Pop3Server,
-		SmtpServer:  o.SmtpServer,
-		SubnetMask:  o.SubnetMask,
-		UserDefined: userDefinedVal,
-		Wins:        winsVal,
-		Misc:        o.Misc,
+		Dns:            dnsVal,
+		DnsSuffix:      o.DnsSuffix,
+		Gateway:        o.Gateway,
+		Inheritance:    inheritanceVal,
+		Lease:          leaseVal,
+		Nis:            nisVal,
+		Ntp:            ntpVal,
+		Pop3Server:     o.Pop3Server,
+		SmtpServer:     o.SmtpServer,
+		SubnetMask:     o.SubnetMask,
+		UserDefined:    userDefinedVal,
+		Wins:           winsVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -585,27 +631,31 @@ func (o *serverOptionDnsXml) MarshalFromObject(s ServerOptionDns) {
 	o.Primary = s.Primary
 	o.Secondary = s.Secondary
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o serverOptionDnsXml) UnmarshalToObject() (*ServerOptionDns, error) {
 
 	result := &ServerOptionDns{
-		Primary:   o.Primary,
-		Secondary: o.Secondary,
-		Misc:      o.Misc,
+		Primary:        o.Primary,
+		Secondary:      o.Secondary,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *serverOptionInheritanceXml) MarshalFromObject(s ServerOptionInheritance) {
 	o.Source = s.Source
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o serverOptionInheritanceXml) UnmarshalToObject() (*ServerOptionInheritance, error) {
 
 	result := &ServerOptionInheritance{
-		Source: o.Source,
-		Misc:   o.Misc,
+		Source:         o.Source,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -617,6 +667,7 @@ func (o *serverOptionLeaseXml) MarshalFromObject(s ServerOptionLease) {
 		o.Unlimited = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o serverOptionLeaseXml) UnmarshalToObject() (*ServerOptionLease, error) {
@@ -630,20 +681,23 @@ func (o serverOptionLeaseXml) UnmarshalToObject() (*ServerOptionLease, error) {
 	}
 
 	result := &ServerOptionLease{
-		Timeout:   o.Timeout,
-		Unlimited: unlimitedVal,
-		Misc:      o.Misc,
+		Timeout:        o.Timeout,
+		Unlimited:      unlimitedVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *serverOptionLeaseUnlimitedXml) MarshalFromObject(s ServerOptionLeaseUnlimited) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o serverOptionLeaseUnlimitedXml) UnmarshalToObject() (*ServerOptionLeaseUnlimited, error) {
 
 	result := &ServerOptionLeaseUnlimited{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -651,14 +705,16 @@ func (o *serverOptionNisXml) MarshalFromObject(s ServerOptionNis) {
 	o.Primary = s.Primary
 	o.Secondary = s.Secondary
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o serverOptionNisXml) UnmarshalToObject() (*ServerOptionNis, error) {
 
 	result := &ServerOptionNis{
-		Primary:   o.Primary,
-		Secondary: o.Secondary,
-		Misc:      o.Misc,
+		Primary:        o.Primary,
+		Secondary:      o.Secondary,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -666,14 +722,16 @@ func (o *serverOptionNtpXml) MarshalFromObject(s ServerOptionNtp) {
 	o.Primary = s.Primary
 	o.Secondary = s.Secondary
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o serverOptionNtpXml) UnmarshalToObject() (*ServerOptionNtp, error) {
 
 	result := &ServerOptionNtp{
-		Primary:   o.Primary,
-		Secondary: o.Secondary,
-		Misc:      o.Misc,
+		Primary:        o.Primary,
+		Secondary:      o.Secondary,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -692,6 +750,7 @@ func (o *serverOptionUserDefinedXml) MarshalFromObject(s ServerOptionUserDefined
 		o.Hex = util.StrToMem(s.Hex)
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o serverOptionUserDefinedXml) UnmarshalToObject() (*ServerOptionUserDefined, error) {
@@ -717,6 +776,7 @@ func (o serverOptionUserDefinedXml) UnmarshalToObject() (*ServerOptionUserDefine
 		Ascii:                 asciiVal,
 		Hex:                   hexVal,
 		Misc:                  o.Misc,
+		MiscAttributes:        o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -724,14 +784,16 @@ func (o *serverOptionWinsXml) MarshalFromObject(s ServerOptionWins) {
 	o.Primary = s.Primary
 	o.Secondary = s.Secondary
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o serverOptionWinsXml) UnmarshalToObject() (*ServerOptionWins, error) {
 
 	result := &ServerOptionWins{
-		Primary:   o.Primary,
-		Secondary: o.Secondary,
-		Misc:      o.Misc,
+		Primary:        o.Primary,
+		Secondary:      o.Secondary,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -740,15 +802,17 @@ func (o *serverReservedXml) MarshalFromObject(s ServerReserved) {
 	o.Mac = s.Mac
 	o.Description = s.Description
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o serverReservedXml) UnmarshalToObject() (*ServerReserved, error) {
 
 	result := &ServerReserved{
-		Name:        o.Name,
-		Mac:         o.Mac,
-		Description: o.Description,
-		Misc:        o.Misc,
+		Name:           o.Name,
+		Mac:            o.Mac,
+		Description:    o.Description,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1140,4 +1204,12 @@ func (o *Entry) EntryName() string {
 
 func (o *Entry) SetEntryName(name string) {
 	o.Name = name
+}
+
+func (o *Entry) GetMiscAttributes() []xml.Attr {
+	return o.MiscAttributes
+}
+
+func (o *Entry) SetMiscAttributes(attrs []xml.Attr) {
+	o.MiscAttributes = attrs
 }

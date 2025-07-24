@@ -32,12 +32,14 @@ type Entry struct {
 	Timelimit               *int64
 	VerifyServerCertificate *bool
 	Misc                    []generic.Xml
+	MiscAttributes          []xml.Attr
 }
 type Server struct {
-	Name    string
-	Address *string
-	Port    *int64
-	Misc    []generic.Xml
+	Name           string
+	Address        *string
+	Port           *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 
 type entryXmlContainer struct {
@@ -78,16 +80,18 @@ type entryXml struct {
 	Timelimit               *int64              `xml:"timelimit,omitempty"`
 	VerifyServerCertificate *string             `xml:"verify-server-certificate,omitempty"`
 	Misc                    []generic.Xml       `xml:",any"`
+	MiscAttributes          []xml.Attr          `xml:",any,attr"`
 }
 type serverContainerXml struct {
 	Entries []serverXml `xml:"entry"`
 }
 type serverXml struct {
-	XMLName xml.Name      `xml:"entry"`
-	Name    string        `xml:"name,attr"`
-	Address *string       `xml:"address,omitempty"`
-	Port    *int64        `xml:"port,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Address        *string       `xml:"address,omitempty"`
+	Port           *int64        `xml:"port,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 
 func (o *entryXml) MarshalFromObject(s Entry) {
@@ -112,6 +116,7 @@ func (o *entryXml) MarshalFromObject(s Entry) {
 	o.Timelimit = s.Timelimit
 	o.VerifyServerCertificate = util.YesNo(s.VerifyServerCertificate, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o entryXml) UnmarshalToObject() (*Entry, error) {
@@ -140,6 +145,7 @@ func (o entryXml) UnmarshalToObject() (*Entry, error) {
 		Timelimit:               o.Timelimit,
 		VerifyServerCertificate: util.AsBool(o.VerifyServerCertificate, nil),
 		Misc:                    o.Misc,
+		MiscAttributes:          o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -148,15 +154,17 @@ func (o *serverXml) MarshalFromObject(s Server) {
 	o.Address = s.Address
 	o.Port = s.Port
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o serverXml) UnmarshalToObject() (*Server, error) {
 
 	result := &Server{
-		Name:    o.Name,
-		Address: o.Address,
-		Port:    o.Port,
-		Misc:    o.Misc,
+		Name:           o.Name,
+		Address:        o.Address,
+		Port:           o.Port,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -298,4 +306,12 @@ func (o *Entry) EntryName() string {
 
 func (o *Entry) SetEntryName(name string) {
 	o.Name = name
+}
+
+func (o *Entry) GetMiscAttributes() []xml.Attr {
+	return o.MiscAttributes
+}
+
+func (o *Entry) SetMiscAttributes(attrs []xml.Attr) {
+	o.MiscAttributes = attrs
 }

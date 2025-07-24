@@ -39,15 +39,17 @@ type Entry struct {
 	Override              []string
 	SafeSearchEnforcement *bool
 	Misc                  []generic.Xml
+	MiscAttributes        []xml.Attr
 }
 type CredentialEnforcement struct {
-	Alert       []string
-	Allow       []string
-	Block       []string
-	Continue    []string
-	LogSeverity *string
-	Mode        *CredentialEnforcementMode
-	Misc        []generic.Xml
+	Alert          []string
+	Allow          []string
+	Block          []string
+	Continue       []string
+	LogSeverity    *string
+	Mode           *CredentialEnforcementMode
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type CredentialEnforcementMode struct {
 	Disabled          *CredentialEnforcementModeDisabled
@@ -55,34 +57,41 @@ type CredentialEnforcementMode struct {
 	GroupMapping      *string
 	IpUser            *CredentialEnforcementModeIpUser
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 type CredentialEnforcementModeDisabled struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type CredentialEnforcementModeDomainCredentials struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type CredentialEnforcementModeIpUser struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type HttpHeaderInsertion struct {
 	Name            string
 	DisableOverride *string
 	Type            []HttpHeaderInsertionType
 	Misc            []generic.Xml
+	MiscAttributes  []xml.Attr
 }
 type HttpHeaderInsertionType struct {
-	Name    string
-	Headers []HttpHeaderInsertionTypeHeaders
-	Domains []string
-	Misc    []generic.Xml
+	Name           string
+	Headers        []HttpHeaderInsertionTypeHeaders
+	Domains        []string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type HttpHeaderInsertionTypeHeaders struct {
-	Name   string
-	Header *string
-	Value  *string
-	Log    *bool
-	Misc   []generic.Xml
+	Name           string
+	Header         *string
+	Value          *string
+	Log            *bool
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 
 type entryXmlContainer struct {
@@ -130,15 +139,17 @@ type entryXml struct {
 	Override              *util.MemberType                 `xml:"override,omitempty"`
 	SafeSearchEnforcement *string                          `xml:"safe-search-enforcement,omitempty"`
 	Misc                  []generic.Xml                    `xml:",any"`
+	MiscAttributes        []xml.Attr                       `xml:",any,attr"`
 }
 type credentialEnforcementXml struct {
-	Alert       *util.MemberType              `xml:"alert,omitempty"`
-	Allow       *util.MemberType              `xml:"allow,omitempty"`
-	Block       *util.MemberType              `xml:"block,omitempty"`
-	Continue    *util.MemberType              `xml:"continue,omitempty"`
-	LogSeverity *string                       `xml:"log-severity,omitempty"`
-	Mode        *credentialEnforcementModeXml `xml:"mode,omitempty"`
-	Misc        []generic.Xml                 `xml:",any"`
+	Alert          *util.MemberType              `xml:"alert,omitempty"`
+	Allow          *util.MemberType              `xml:"allow,omitempty"`
+	Block          *util.MemberType              `xml:"block,omitempty"`
+	Continue       *util.MemberType              `xml:"continue,omitempty"`
+	LogSeverity    *string                       `xml:"log-severity,omitempty"`
+	Mode           *credentialEnforcementModeXml `xml:"mode,omitempty"`
+	Misc           []generic.Xml                 `xml:",any"`
+	MiscAttributes []xml.Attr                    `xml:",any,attr"`
 }
 type credentialEnforcementModeXml struct {
 	Disabled          *credentialEnforcementModeDisabledXml          `xml:"disabled,omitempty"`
@@ -146,15 +157,19 @@ type credentialEnforcementModeXml struct {
 	GroupMapping      *string                                        `xml:"group-mapping,omitempty"`
 	IpUser            *credentialEnforcementModeIpUserXml            `xml:"ip-user,omitempty"`
 	Misc              []generic.Xml                                  `xml:",any"`
+	MiscAttributes    []xml.Attr                                     `xml:",any,attr"`
 }
 type credentialEnforcementModeDisabledXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type credentialEnforcementModeDomainCredentialsXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type credentialEnforcementModeIpUserXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type httpHeaderInsertionContainerXml struct {
 	Entries []httpHeaderInsertionXml `xml:"entry"`
@@ -165,27 +180,30 @@ type httpHeaderInsertionXml struct {
 	DisableOverride *string                              `xml:"disable-override,omitempty"`
 	Type            *httpHeaderInsertionTypeContainerXml `xml:"type,omitempty"`
 	Misc            []generic.Xml                        `xml:",any"`
+	MiscAttributes  []xml.Attr                           `xml:",any,attr"`
 }
 type httpHeaderInsertionTypeContainerXml struct {
 	Entries []httpHeaderInsertionTypeXml `xml:"entry"`
 }
 type httpHeaderInsertionTypeXml struct {
-	XMLName xml.Name                                    `xml:"entry"`
-	Name    string                                      `xml:"name,attr"`
-	Headers *httpHeaderInsertionTypeHeadersContainerXml `xml:"headers,omitempty"`
-	Domains *util.MemberType                            `xml:"domains,omitempty"`
-	Misc    []generic.Xml                               `xml:",any"`
+	XMLName        xml.Name                                    `xml:"entry"`
+	Name           string                                      `xml:"name,attr"`
+	Headers        *httpHeaderInsertionTypeHeadersContainerXml `xml:"headers,omitempty"`
+	Domains        *util.MemberType                            `xml:"domains,omitempty"`
+	Misc           []generic.Xml                               `xml:",any"`
+	MiscAttributes []xml.Attr                                  `xml:",any,attr"`
 }
 type httpHeaderInsertionTypeHeadersContainerXml struct {
 	Entries []httpHeaderInsertionTypeHeadersXml `xml:"entry"`
 }
 type httpHeaderInsertionTypeHeadersXml struct {
-	XMLName xml.Name      `xml:"entry"`
-	Name    string        `xml:"name,attr"`
-	Header  *string       `xml:"header,omitempty"`
-	Value   *string       `xml:"value,omitempty"`
-	Log     *string       `xml:"log,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Header         *string       `xml:"header,omitempty"`
+	Value          *string       `xml:"value,omitempty"`
+	Log            *string       `xml:"log,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 
 func (o *entryXml) MarshalFromObject(s Entry) {
@@ -233,6 +251,7 @@ func (o *entryXml) MarshalFromObject(s Entry) {
 	}
 	o.SafeSearchEnforcement = util.YesNo(s.SafeSearchEnforcement, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o entryXml) UnmarshalToObject() (*Entry, error) {
@@ -300,6 +319,7 @@ func (o entryXml) UnmarshalToObject() (*Entry, error) {
 		Override:              overrideVal,
 		SafeSearchEnforcement: util.AsBool(o.SafeSearchEnforcement, nil),
 		Misc:                  o.Misc,
+		MiscAttributes:        o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -323,6 +343,7 @@ func (o *credentialEnforcementXml) MarshalFromObject(s CredentialEnforcement) {
 		o.Mode = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o credentialEnforcementXml) UnmarshalToObject() (*CredentialEnforcement, error) {
@@ -352,13 +373,14 @@ func (o credentialEnforcementXml) UnmarshalToObject() (*CredentialEnforcement, e
 	}
 
 	result := &CredentialEnforcement{
-		Alert:       alertVal,
-		Allow:       allowVal,
-		Block:       blockVal,
-		Continue:    continueVal,
-		LogSeverity: o.LogSeverity,
-		Mode:        modeVal,
-		Misc:        o.Misc,
+		Alert:          alertVal,
+		Allow:          allowVal,
+		Block:          blockVal,
+		Continue:       continueVal,
+		LogSeverity:    o.LogSeverity,
+		Mode:           modeVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -380,6 +402,7 @@ func (o *credentialEnforcementModeXml) MarshalFromObject(s CredentialEnforcement
 		o.IpUser = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o credentialEnforcementModeXml) UnmarshalToObject() (*CredentialEnforcementMode, error) {
@@ -414,39 +437,46 @@ func (o credentialEnforcementModeXml) UnmarshalToObject() (*CredentialEnforcemen
 		GroupMapping:      o.GroupMapping,
 		IpUser:            ipUserVal,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *credentialEnforcementModeDisabledXml) MarshalFromObject(s CredentialEnforcementModeDisabled) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o credentialEnforcementModeDisabledXml) UnmarshalToObject() (*CredentialEnforcementModeDisabled, error) {
 
 	result := &CredentialEnforcementModeDisabled{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *credentialEnforcementModeDomainCredentialsXml) MarshalFromObject(s CredentialEnforcementModeDomainCredentials) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o credentialEnforcementModeDomainCredentialsXml) UnmarshalToObject() (*CredentialEnforcementModeDomainCredentials, error) {
 
 	result := &CredentialEnforcementModeDomainCredentials{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *credentialEnforcementModeIpUserXml) MarshalFromObject(s CredentialEnforcementModeIpUser) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o credentialEnforcementModeIpUserXml) UnmarshalToObject() (*CredentialEnforcementModeIpUser, error) {
 
 	result := &CredentialEnforcementModeIpUser{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -463,6 +493,7 @@ func (o *httpHeaderInsertionXml) MarshalFromObject(s HttpHeaderInsertion) {
 		o.Type = &httpHeaderInsertionTypeContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o httpHeaderInsertionXml) UnmarshalToObject() (*HttpHeaderInsertion, error) {
@@ -482,6 +513,7 @@ func (o httpHeaderInsertionXml) UnmarshalToObject() (*HttpHeaderInsertion, error
 		DisableOverride: o.DisableOverride,
 		Type:            typeVal,
 		Misc:            o.Misc,
+		MiscAttributes:  o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -500,6 +532,7 @@ func (o *httpHeaderInsertionTypeXml) MarshalFromObject(s HttpHeaderInsertionType
 		o.Domains = util.StrToMem(s.Domains)
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o httpHeaderInsertionTypeXml) UnmarshalToObject() (*HttpHeaderInsertionType, error) {
@@ -519,10 +552,11 @@ func (o httpHeaderInsertionTypeXml) UnmarshalToObject() (*HttpHeaderInsertionTyp
 	}
 
 	result := &HttpHeaderInsertionType{
-		Name:    o.Name,
-		Headers: headersVal,
-		Domains: domainsVal,
-		Misc:    o.Misc,
+		Name:           o.Name,
+		Headers:        headersVal,
+		Domains:        domainsVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -532,16 +566,18 @@ func (o *httpHeaderInsertionTypeHeadersXml) MarshalFromObject(s HttpHeaderInsert
 	o.Value = s.Value
 	o.Log = util.YesNo(s.Log, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o httpHeaderInsertionTypeHeadersXml) UnmarshalToObject() (*HttpHeaderInsertionTypeHeaders, error) {
 
 	result := &HttpHeaderInsertionTypeHeaders{
-		Name:   o.Name,
-		Header: o.Header,
-		Value:  o.Value,
-		Log:    util.AsBool(o.Log, nil),
-		Misc:   o.Misc,
+		Name:           o.Name,
+		Header:         o.Header,
+		Value:          o.Value,
+		Log:            util.AsBool(o.Log, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -888,4 +924,12 @@ func (o *Entry) EntryName() string {
 
 func (o *Entry) SetEntryName(name string) {
 	o.Name = name
+}
+
+func (o *Entry) GetMiscAttributes() []xml.Attr {
+	return o.MiscAttributes
+}
+
+func (o *Entry) SetMiscAttributes(attrs []xml.Attr) {
+	o.MiscAttributes = attrs
 }

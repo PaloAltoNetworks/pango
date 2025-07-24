@@ -26,11 +26,13 @@ type Entry struct {
 	Network                    *Network
 	UserAcl                    *UserAcl
 	Misc                       []generic.Xml
+	MiscAttributes             []xml.Attr
 }
 type DeviceAcl struct {
-	ExcludeList []string
-	IncludeList []string
-	Misc        []generic.Xml
+	ExcludeList    []string
+	IncludeList    []string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Network struct {
 	EnablePacketBufferProtection *bool
@@ -44,14 +46,17 @@ type Network struct {
 	Tunnel                       *NetworkTunnel
 	VirtualWire                  []string
 	Misc                         []generic.Xml
+	MiscAttributes               []xml.Attr
 }
 type NetworkTunnel struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type UserAcl struct {
-	ExcludeList []string
-	IncludeList []string
-	Misc        []generic.Xml
+	ExcludeList    []string
+	IncludeList    []string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 
 type entryXmlContainer struct {
@@ -107,11 +112,13 @@ type entryXml struct {
 	Network                    *networkXml   `xml:"network,omitempty"`
 	UserAcl                    *userAclXml   `xml:"user-acl,omitempty"`
 	Misc                       []generic.Xml `xml:",any"`
+	MiscAttributes             []xml.Attr    `xml:",any,attr"`
 }
 type deviceAclXml struct {
-	ExcludeList *util.MemberType `xml:"exclude-list,omitempty"`
-	IncludeList *util.MemberType `xml:"include-list,omitempty"`
-	Misc        []generic.Xml    `xml:",any"`
+	ExcludeList    *util.MemberType `xml:"exclude-list,omitempty"`
+	IncludeList    *util.MemberType `xml:"include-list,omitempty"`
+	Misc           []generic.Xml    `xml:",any"`
+	MiscAttributes []xml.Attr       `xml:",any,attr"`
 }
 type networkXml struct {
 	EnablePacketBufferProtection *string           `xml:"enable-packet-buffer-protection,omitempty"`
@@ -125,14 +132,17 @@ type networkXml struct {
 	Tunnel                       *networkTunnelXml `xml:"tunnel,omitempty"`
 	VirtualWire                  *util.MemberType  `xml:"virtual-wire,omitempty"`
 	Misc                         []generic.Xml     `xml:",any"`
+	MiscAttributes               []xml.Attr        `xml:",any,attr"`
 }
 type networkTunnelXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type userAclXml struct {
-	ExcludeList *util.MemberType `xml:"exclude-list,omitempty"`
-	IncludeList *util.MemberType `xml:"include-list,omitempty"`
-	Misc        []generic.Xml    `xml:",any"`
+	ExcludeList    *util.MemberType `xml:"exclude-list,omitempty"`
+	IncludeList    *util.MemberType `xml:"include-list,omitempty"`
+	Misc           []generic.Xml    `xml:",any"`
+	MiscAttributes []xml.Attr       `xml:",any,attr"`
 }
 type entryXml_11_0_2 struct {
 	XMLName                    xml.Name             `xml:"entry"`
@@ -143,11 +153,13 @@ type entryXml_11_0_2 struct {
 	Network                    *networkXml_11_0_2   `xml:"network,omitempty"`
 	UserAcl                    *userAclXml_11_0_2   `xml:"user-acl,omitempty"`
 	Misc                       []generic.Xml        `xml:",any"`
+	MiscAttributes             []xml.Attr           `xml:",any,attr"`
 }
 type deviceAclXml_11_0_2 struct {
-	ExcludeList *util.MemberType `xml:"exclude-list,omitempty"`
-	IncludeList *util.MemberType `xml:"include-list,omitempty"`
-	Misc        []generic.Xml    `xml:",any"`
+	ExcludeList    *util.MemberType `xml:"exclude-list,omitempty"`
+	IncludeList    *util.MemberType `xml:"include-list,omitempty"`
+	Misc           []generic.Xml    `xml:",any"`
+	MiscAttributes []xml.Attr       `xml:",any,attr"`
 }
 type networkXml_11_0_2 struct {
 	EnablePacketBufferProtection *string                  `xml:"enable-packet-buffer-protection,omitempty"`
@@ -161,14 +173,17 @@ type networkXml_11_0_2 struct {
 	Tunnel                       *networkTunnelXml_11_0_2 `xml:"tunnel,omitempty"`
 	VirtualWire                  *util.MemberType         `xml:"virtual-wire,omitempty"`
 	Misc                         []generic.Xml            `xml:",any"`
+	MiscAttributes               []xml.Attr               `xml:",any,attr"`
 }
 type networkTunnelXml_11_0_2 struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type userAclXml_11_0_2 struct {
-	ExcludeList *util.MemberType `xml:"exclude-list,omitempty"`
-	IncludeList *util.MemberType `xml:"include-list,omitempty"`
-	Misc        []generic.Xml    `xml:",any"`
+	ExcludeList    *util.MemberType `xml:"exclude-list,omitempty"`
+	IncludeList    *util.MemberType `xml:"include-list,omitempty"`
+	Misc           []generic.Xml    `xml:",any"`
+	MiscAttributes []xml.Attr       `xml:",any,attr"`
 }
 
 func (o *entryXml) MarshalFromObject(s Entry) {
@@ -191,6 +206,7 @@ func (o *entryXml) MarshalFromObject(s Entry) {
 		o.UserAcl = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o entryXml) UnmarshalToObject() (*Entry, error) {
@@ -227,6 +243,7 @@ func (o entryXml) UnmarshalToObject() (*Entry, error) {
 		Network:                    networkVal,
 		UserAcl:                    userAclVal,
 		Misc:                       o.Misc,
+		MiscAttributes:             o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -238,6 +255,7 @@ func (o *deviceAclXml) MarshalFromObject(s DeviceAcl) {
 		o.IncludeList = util.StrToMem(s.IncludeList)
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o deviceAclXml) UnmarshalToObject() (*DeviceAcl, error) {
@@ -251,9 +269,10 @@ func (o deviceAclXml) UnmarshalToObject() (*DeviceAcl, error) {
 	}
 
 	result := &DeviceAcl{
-		ExcludeList: excludeListVal,
-		IncludeList: includeListVal,
-		Misc:        o.Misc,
+		ExcludeList:    excludeListVal,
+		IncludeList:    includeListVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -283,6 +302,7 @@ func (o *networkXml) MarshalFromObject(s Network) {
 		o.VirtualWire = util.StrToMem(s.VirtualWire)
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o networkXml) UnmarshalToObject() (*Network, error) {
@@ -327,17 +347,20 @@ func (o networkXml) UnmarshalToObject() (*Network, error) {
 		Tunnel:                       tunnelVal,
 		VirtualWire:                  virtualWireVal,
 		Misc:                         o.Misc,
+		MiscAttributes:               o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *networkTunnelXml) MarshalFromObject(s NetworkTunnel) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o networkTunnelXml) UnmarshalToObject() (*NetworkTunnel, error) {
 
 	result := &NetworkTunnel{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -349,6 +372,7 @@ func (o *userAclXml) MarshalFromObject(s UserAcl) {
 		o.IncludeList = util.StrToMem(s.IncludeList)
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o userAclXml) UnmarshalToObject() (*UserAcl, error) {
@@ -362,9 +386,10 @@ func (o userAclXml) UnmarshalToObject() (*UserAcl, error) {
 	}
 
 	result := &UserAcl{
-		ExcludeList: excludeListVal,
-		IncludeList: includeListVal,
-		Misc:        o.Misc,
+		ExcludeList:    excludeListVal,
+		IncludeList:    includeListVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -388,6 +413,7 @@ func (o *entryXml_11_0_2) MarshalFromObject(s Entry) {
 		o.UserAcl = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o entryXml_11_0_2) UnmarshalToObject() (*Entry, error) {
@@ -424,6 +450,7 @@ func (o entryXml_11_0_2) UnmarshalToObject() (*Entry, error) {
 		Network:                    networkVal,
 		UserAcl:                    userAclVal,
 		Misc:                       o.Misc,
+		MiscAttributes:             o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -435,6 +462,7 @@ func (o *deviceAclXml_11_0_2) MarshalFromObject(s DeviceAcl) {
 		o.IncludeList = util.StrToMem(s.IncludeList)
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o deviceAclXml_11_0_2) UnmarshalToObject() (*DeviceAcl, error) {
@@ -448,9 +476,10 @@ func (o deviceAclXml_11_0_2) UnmarshalToObject() (*DeviceAcl, error) {
 	}
 
 	result := &DeviceAcl{
-		ExcludeList: excludeListVal,
-		IncludeList: includeListVal,
-		Misc:        o.Misc,
+		ExcludeList:    excludeListVal,
+		IncludeList:    includeListVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -480,6 +509,7 @@ func (o *networkXml_11_0_2) MarshalFromObject(s Network) {
 		o.VirtualWire = util.StrToMem(s.VirtualWire)
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o networkXml_11_0_2) UnmarshalToObject() (*Network, error) {
@@ -524,17 +554,20 @@ func (o networkXml_11_0_2) UnmarshalToObject() (*Network, error) {
 		Tunnel:                       tunnelVal,
 		VirtualWire:                  virtualWireVal,
 		Misc:                         o.Misc,
+		MiscAttributes:               o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *networkTunnelXml_11_0_2) MarshalFromObject(s NetworkTunnel) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o networkTunnelXml_11_0_2) UnmarshalToObject() (*NetworkTunnel, error) {
 
 	result := &NetworkTunnel{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -546,6 +579,7 @@ func (o *userAclXml_11_0_2) MarshalFromObject(s UserAcl) {
 		o.IncludeList = util.StrToMem(s.IncludeList)
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o userAclXml_11_0_2) UnmarshalToObject() (*UserAcl, error) {
@@ -559,9 +593,10 @@ func (o userAclXml_11_0_2) UnmarshalToObject() (*UserAcl, error) {
 	}
 
 	result := &UserAcl{
-		ExcludeList: excludeListVal,
-		IncludeList: includeListVal,
-		Misc:        o.Misc,
+		ExcludeList:    excludeListVal,
+		IncludeList:    includeListVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -733,4 +768,12 @@ func (o *Entry) EntryName() string {
 
 func (o *Entry) SetEntryName(name string) {
 	o.Name = name
+}
+
+func (o *Entry) GetMiscAttributes() []xml.Attr {
+	return o.MiscAttributes
+}
+
+func (o *Entry) SetMiscAttributes(attrs []xml.Attr) {
+	o.MiscAttributes = attrs
 }

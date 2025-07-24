@@ -25,6 +25,7 @@ type Entry struct {
 	EnhancedApplicationLogging *bool
 	MatchList                  []MatchList
 	Misc                       []generic.Xml
+	MiscAttributes             []xml.Attr
 }
 type MatchList struct {
 	Name           string
@@ -39,44 +40,53 @@ type MatchList struct {
 	SendHttp       []string
 	Actions        []MatchListActions
 	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type MatchListActions struct {
-	Name string
-	Type *MatchListActionsType
-	Misc []generic.Xml
+	Name           string
+	Type           *MatchListActionsType
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type MatchListActionsType struct {
-	Integration *MatchListActionsTypeIntegration
-	Tagging     *MatchListActionsTypeTagging
-	Misc        []generic.Xml
+	Integration    *MatchListActionsTypeIntegration
+	Tagging        *MatchListActionsTypeTagging
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type MatchListActionsTypeIntegration struct {
-	Action *string
-	Misc   []generic.Xml
+	Action         *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type MatchListActionsTypeTagging struct {
-	Target       *string
-	Action       *string
-	Timeout      *int64
-	Registration *MatchListActionsTypeTaggingRegistration
-	Tags         []string
-	Misc         []generic.Xml
+	Target         *string
+	Action         *string
+	Timeout        *int64
+	Registration   *MatchListActionsTypeTaggingRegistration
+	Tags           []string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type MatchListActionsTypeTaggingRegistration struct {
-	Localhost *MatchListActionsTypeTaggingRegistrationLocalhost
-	Panorama  *MatchListActionsTypeTaggingRegistrationPanorama
-	Remote    *MatchListActionsTypeTaggingRegistrationRemote
-	Misc      []generic.Xml
+	Localhost      *MatchListActionsTypeTaggingRegistrationLocalhost
+	Panorama       *MatchListActionsTypeTaggingRegistrationPanorama
+	Remote         *MatchListActionsTypeTaggingRegistrationRemote
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type MatchListActionsTypeTaggingRegistrationLocalhost struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type MatchListActionsTypeTaggingRegistrationPanorama struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type MatchListActionsTypeTaggingRegistrationRemote struct {
-	HttpProfile *string
-	Misc        []generic.Xml
+	HttpProfile    *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 
 type entryXmlContainer struct {
@@ -110,6 +120,7 @@ type entryXml struct {
 	EnhancedApplicationLogging *string                `xml:"enhanced-application-logging,omitempty"`
 	MatchList                  *matchListContainerXml `xml:"match-list,omitempty"`
 	Misc                       []generic.Xml          `xml:",any"`
+	MiscAttributes             []xml.Attr             `xml:",any,attr"`
 }
 type matchListContainerXml struct {
 	Entries []matchListXml `xml:"entry"`
@@ -128,48 +139,57 @@ type matchListXml struct {
 	SendHttp       *util.MemberType              `xml:"send-http,omitempty"`
 	Actions        *matchListActionsContainerXml `xml:"actions,omitempty"`
 	Misc           []generic.Xml                 `xml:",any"`
+	MiscAttributes []xml.Attr                    `xml:",any,attr"`
 }
 type matchListActionsContainerXml struct {
 	Entries []matchListActionsXml `xml:"entry"`
 }
 type matchListActionsXml struct {
-	XMLName xml.Name                 `xml:"entry"`
-	Name    string                   `xml:"name,attr"`
-	Type    *matchListActionsTypeXml `xml:"type,omitempty"`
-	Misc    []generic.Xml            `xml:",any"`
+	XMLName        xml.Name                 `xml:"entry"`
+	Name           string                   `xml:"name,attr"`
+	Type           *matchListActionsTypeXml `xml:"type,omitempty"`
+	Misc           []generic.Xml            `xml:",any"`
+	MiscAttributes []xml.Attr               `xml:",any,attr"`
 }
 type matchListActionsTypeXml struct {
-	Integration *matchListActionsTypeIntegrationXml `xml:"integration,omitempty"`
-	Tagging     *matchListActionsTypeTaggingXml     `xml:"tagging,omitempty"`
-	Misc        []generic.Xml                       `xml:",any"`
+	Integration    *matchListActionsTypeIntegrationXml `xml:"integration,omitempty"`
+	Tagging        *matchListActionsTypeTaggingXml     `xml:"tagging,omitempty"`
+	Misc           []generic.Xml                       `xml:",any"`
+	MiscAttributes []xml.Attr                          `xml:",any,attr"`
 }
 type matchListActionsTypeIntegrationXml struct {
-	Action *string       `xml:"action,omitempty"`
-	Misc   []generic.Xml `xml:",any"`
+	Action         *string       `xml:"action,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type matchListActionsTypeTaggingXml struct {
-	Target       *string                                     `xml:"target,omitempty"`
-	Action       *string                                     `xml:"action,omitempty"`
-	Timeout      *int64                                      `xml:"timeout,omitempty"`
-	Registration *matchListActionsTypeTaggingRegistrationXml `xml:"registration,omitempty"`
-	Tags         *util.MemberType                            `xml:"tags,omitempty"`
-	Misc         []generic.Xml                               `xml:",any"`
+	Target         *string                                     `xml:"target,omitempty"`
+	Action         *string                                     `xml:"action,omitempty"`
+	Timeout        *int64                                      `xml:"timeout,omitempty"`
+	Registration   *matchListActionsTypeTaggingRegistrationXml `xml:"registration,omitempty"`
+	Tags           *util.MemberType                            `xml:"tags,omitempty"`
+	Misc           []generic.Xml                               `xml:",any"`
+	MiscAttributes []xml.Attr                                  `xml:",any,attr"`
 }
 type matchListActionsTypeTaggingRegistrationXml struct {
-	Localhost *matchListActionsTypeTaggingRegistrationLocalhostXml `xml:"localhost,omitempty"`
-	Panorama  *matchListActionsTypeTaggingRegistrationPanoramaXml  `xml:"panorama,omitempty"`
-	Remote    *matchListActionsTypeTaggingRegistrationRemoteXml    `xml:"remote,omitempty"`
-	Misc      []generic.Xml                                        `xml:",any"`
+	Localhost      *matchListActionsTypeTaggingRegistrationLocalhostXml `xml:"localhost,omitempty"`
+	Panorama       *matchListActionsTypeTaggingRegistrationPanoramaXml  `xml:"panorama,omitempty"`
+	Remote         *matchListActionsTypeTaggingRegistrationRemoteXml    `xml:"remote,omitempty"`
+	Misc           []generic.Xml                                        `xml:",any"`
+	MiscAttributes []xml.Attr                                           `xml:",any,attr"`
 }
 type matchListActionsTypeTaggingRegistrationLocalhostXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type matchListActionsTypeTaggingRegistrationPanoramaXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type matchListActionsTypeTaggingRegistrationRemoteXml struct {
-	HttpProfile *string       `xml:"http-profile,omitempty"`
-	Misc        []generic.Xml `xml:",any"`
+	HttpProfile    *string       `xml:"http-profile,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 
 func (o *entryXml) MarshalFromObject(s Entry) {
@@ -187,6 +207,7 @@ func (o *entryXml) MarshalFromObject(s Entry) {
 		o.MatchList = &matchListContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o entryXml) UnmarshalToObject() (*Entry, error) {
@@ -208,6 +229,7 @@ func (o entryXml) UnmarshalToObject() (*Entry, error) {
 		EnhancedApplicationLogging: util.AsBool(o.EnhancedApplicationLogging, nil),
 		MatchList:                  matchListVal,
 		Misc:                       o.Misc,
+		MiscAttributes:             o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -240,6 +262,7 @@ func (o *matchListXml) MarshalFromObject(s MatchList) {
 		o.Actions = &matchListActionsContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o matchListXml) UnmarshalToObject() (*MatchList, error) {
@@ -283,6 +306,7 @@ func (o matchListXml) UnmarshalToObject() (*MatchList, error) {
 		SendHttp:       sendHttpVal,
 		Actions:        actionsVal,
 		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -294,6 +318,7 @@ func (o *matchListActionsXml) MarshalFromObject(s MatchListActions) {
 		o.Type = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o matchListActionsXml) UnmarshalToObject() (*MatchListActions, error) {
@@ -307,9 +332,10 @@ func (o matchListActionsXml) UnmarshalToObject() (*MatchListActions, error) {
 	}
 
 	result := &MatchListActions{
-		Name: o.Name,
-		Type: typeVal,
-		Misc: o.Misc,
+		Name:           o.Name,
+		Type:           typeVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -325,6 +351,7 @@ func (o *matchListActionsTypeXml) MarshalFromObject(s MatchListActionsType) {
 		o.Tagging = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o matchListActionsTypeXml) UnmarshalToObject() (*MatchListActionsType, error) {
@@ -346,22 +373,25 @@ func (o matchListActionsTypeXml) UnmarshalToObject() (*MatchListActionsType, err
 	}
 
 	result := &MatchListActionsType{
-		Integration: integrationVal,
-		Tagging:     taggingVal,
-		Misc:        o.Misc,
+		Integration:    integrationVal,
+		Tagging:        taggingVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *matchListActionsTypeIntegrationXml) MarshalFromObject(s MatchListActionsTypeIntegration) {
 	o.Action = s.Action
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o matchListActionsTypeIntegrationXml) UnmarshalToObject() (*MatchListActionsTypeIntegration, error) {
 
 	result := &MatchListActionsTypeIntegration{
-		Action: o.Action,
-		Misc:   o.Misc,
+		Action:         o.Action,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -378,6 +408,7 @@ func (o *matchListActionsTypeTaggingXml) MarshalFromObject(s MatchListActionsTyp
 		o.Tags = util.StrToMem(s.Tags)
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o matchListActionsTypeTaggingXml) UnmarshalToObject() (*MatchListActionsTypeTagging, error) {
@@ -395,12 +426,13 @@ func (o matchListActionsTypeTaggingXml) UnmarshalToObject() (*MatchListActionsTy
 	}
 
 	result := &MatchListActionsTypeTagging{
-		Target:       o.Target,
-		Action:       o.Action,
-		Timeout:      o.Timeout,
-		Registration: registrationVal,
-		Tags:         tagsVal,
-		Misc:         o.Misc,
+		Target:         o.Target,
+		Action:         o.Action,
+		Timeout:        o.Timeout,
+		Registration:   registrationVal,
+		Tags:           tagsVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -421,6 +453,7 @@ func (o *matchListActionsTypeTaggingRegistrationXml) MarshalFromObject(s MatchLi
 		o.Remote = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o matchListActionsTypeTaggingRegistrationXml) UnmarshalToObject() (*MatchListActionsTypeTaggingRegistration, error) {
@@ -450,45 +483,52 @@ func (o matchListActionsTypeTaggingRegistrationXml) UnmarshalToObject() (*MatchL
 	}
 
 	result := &MatchListActionsTypeTaggingRegistration{
-		Localhost: localhostVal,
-		Panorama:  panoramaVal,
-		Remote:    remoteVal,
-		Misc:      o.Misc,
+		Localhost:      localhostVal,
+		Panorama:       panoramaVal,
+		Remote:         remoteVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *matchListActionsTypeTaggingRegistrationLocalhostXml) MarshalFromObject(s MatchListActionsTypeTaggingRegistrationLocalhost) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o matchListActionsTypeTaggingRegistrationLocalhostXml) UnmarshalToObject() (*MatchListActionsTypeTaggingRegistrationLocalhost, error) {
 
 	result := &MatchListActionsTypeTaggingRegistrationLocalhost{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *matchListActionsTypeTaggingRegistrationPanoramaXml) MarshalFromObject(s MatchListActionsTypeTaggingRegistrationPanorama) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o matchListActionsTypeTaggingRegistrationPanoramaXml) UnmarshalToObject() (*MatchListActionsTypeTaggingRegistrationPanorama, error) {
 
 	result := &MatchListActionsTypeTaggingRegistrationPanorama{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *matchListActionsTypeTaggingRegistrationRemoteXml) MarshalFromObject(s MatchListActionsTypeTaggingRegistrationRemote) {
 	o.HttpProfile = s.HttpProfile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o matchListActionsTypeTaggingRegistrationRemoteXml) UnmarshalToObject() (*MatchListActionsTypeTaggingRegistrationRemote, error) {
 
 	result := &MatchListActionsTypeTaggingRegistrationRemote{
-		HttpProfile: o.HttpProfile,
-		Misc:        o.Misc,
+		HttpProfile:    o.HttpProfile,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -755,4 +795,12 @@ func (o *Entry) EntryName() string {
 
 func (o *Entry) SetEntryName(name string) {
 	o.Name = name
+}
+
+func (o *Entry) GetMiscAttributes() []xml.Attr {
+	return o.MiscAttributes
+}
+
+func (o *Entry) SetMiscAttributes(attrs []xml.Attr) {
+	o.MiscAttributes = attrs
 }

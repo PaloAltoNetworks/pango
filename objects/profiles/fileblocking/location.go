@@ -86,6 +86,19 @@ func (o Location) IsValid() error {
 	return nil
 }
 
+func (o Location) LocationFilter() *string {
+
+	if o.DeviceGroup != nil {
+		if o.DeviceGroup.DeviceGroup == "" {
+			return nil
+		} else {
+			return &o.DeviceGroup.DeviceGroup
+		}
+	}
+
+	return nil
+}
+
 func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 
 	var ans []string

@@ -12,15 +12,18 @@ type Config struct {
 	DnsSetting      *DnsSetting
 	FqdnRefreshTime *int64
 	Misc            []generic.Xml
+	MiscAttributes  []xml.Attr
 }
 type DnsSetting struct {
-	Servers *DnsSettingServers
-	Misc    []generic.Xml
+	Servers        *DnsSettingServers
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type DnsSettingServers struct {
-	Primary   *string
-	Secondary *string
-	Misc      []generic.Xml
+	Primary        *string
+	Secondary      *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 
 type configXmlContainer struct {
@@ -52,15 +55,18 @@ type configXml struct {
 	DnsSetting      *dnsSettingXml `xml:"dns-setting,omitempty"`
 	FqdnRefreshTime *int64         `xml:"fqdn-refresh-time,omitempty"`
 	Misc            []generic.Xml  `xml:",any"`
+	MiscAttributes  []xml.Attr     `xml:",any,attr"`
 }
 type dnsSettingXml struct {
-	Servers *dnsSettingServersXml `xml:"servers,omitempty"`
-	Misc    []generic.Xml         `xml:",any"`
+	Servers        *dnsSettingServersXml `xml:"servers,omitempty"`
+	Misc           []generic.Xml         `xml:",any"`
+	MiscAttributes []xml.Attr            `xml:",any,attr"`
 }
 type dnsSettingServersXml struct {
-	Primary   *string       `xml:"primary,omitempty"`
-	Secondary *string       `xml:"secondary,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	Primary        *string       `xml:"primary,omitempty"`
+	Secondary      *string       `xml:"secondary,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 
 func (o *configXml) MarshalFromObject(s Config) {
@@ -71,6 +77,7 @@ func (o *configXml) MarshalFromObject(s Config) {
 	}
 	o.FqdnRefreshTime = s.FqdnRefreshTime
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o configXml) UnmarshalToObject() (*Config, error) {
@@ -87,6 +94,7 @@ func (o configXml) UnmarshalToObject() (*Config, error) {
 		DnsSetting:      dnsSettingVal,
 		FqdnRefreshTime: o.FqdnRefreshTime,
 		Misc:            o.Misc,
+		MiscAttributes:  o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -97,6 +105,7 @@ func (o *dnsSettingXml) MarshalFromObject(s DnsSetting) {
 		o.Servers = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o dnsSettingXml) UnmarshalToObject() (*DnsSetting, error) {
@@ -110,8 +119,9 @@ func (o dnsSettingXml) UnmarshalToObject() (*DnsSetting, error) {
 	}
 
 	result := &DnsSetting{
-		Servers: serversVal,
-		Misc:    o.Misc,
+		Servers:        serversVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -119,14 +129,16 @@ func (o *dnsSettingServersXml) MarshalFromObject(s DnsSettingServers) {
 	o.Primary = s.Primary
 	o.Secondary = s.Secondary
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o dnsSettingServersXml) UnmarshalToObject() (*DnsSettingServers, error) {
 
 	result := &DnsSettingServers{
-		Primary:   o.Primary,
-		Secondary: o.Secondary,
-		Misc:      o.Misc,
+		Primary:        o.Primary,
+		Secondary:      o.Secondary,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }

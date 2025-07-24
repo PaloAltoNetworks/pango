@@ -19,33 +19,39 @@ var (
 )
 
 type Entry struct {
-	Name        string
-	Description *string
-	DefaultVsys *string
-	Config      *Config
-	Misc        []generic.Xml
+	Name           string
+	Description    *string
+	DefaultVsys    *string
+	Config         *Config
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Config struct {
-	Devices []ConfigDevices
-	Misc    []generic.Xml
+	Devices        []ConfigDevices
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ConfigDevices struct {
-	Name string
-	Vsys []ConfigDevicesVsys
-	Misc []generic.Xml
+	Name           string
+	Vsys           []ConfigDevicesVsys
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ConfigDevicesVsys struct {
-	Name   string
-	Import *ConfigDevicesVsysImport
-	Misc   []generic.Xml
+	Name           string
+	Import         *ConfigDevicesVsysImport
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ConfigDevicesVsysImport struct {
-	Network *ConfigDevicesVsysImportNetwork
-	Misc    []generic.Xml
+	Network        *ConfigDevicesVsysImportNetwork
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ConfigDevicesVsysImportNetwork struct {
-	Interfaces []string
-	Misc       []generic.Xml
+	Interfaces     []string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 
 type entryXmlContainer struct {
@@ -72,42 +78,48 @@ func specifyEntry(source *Entry) (any, error) {
 }
 
 type entryXml struct {
-	XMLName     xml.Name      `xml:"entry"`
-	Name        string        `xml:"name,attr"`
-	Description *string       `xml:"description,omitempty"`
-	DefaultVsys *string       `xml:"settings>default-vsys,omitempty"`
-	Config      *configXml    `xml:"config,omitempty"`
-	Misc        []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Description    *string       `xml:"description,omitempty"`
+	DefaultVsys    *string       `xml:"settings>default-vsys,omitempty"`
+	Config         *configXml    `xml:"config,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type configXml struct {
-	Devices *configDevicesContainerXml `xml:"devices,omitempty"`
-	Misc    []generic.Xml              `xml:",any"`
+	Devices        *configDevicesContainerXml `xml:"devices,omitempty"`
+	Misc           []generic.Xml              `xml:",any"`
+	MiscAttributes []xml.Attr                 `xml:",any,attr"`
 }
 type configDevicesContainerXml struct {
 	Entries []configDevicesXml `xml:"entry"`
 }
 type configDevicesXml struct {
-	XMLName xml.Name                       `xml:"entry"`
-	Name    string                         `xml:"name,attr"`
-	Vsys    *configDevicesVsysContainerXml `xml:"vsys,omitempty"`
-	Misc    []generic.Xml                  `xml:",any"`
+	XMLName        xml.Name                       `xml:"entry"`
+	Name           string                         `xml:"name,attr"`
+	Vsys           *configDevicesVsysContainerXml `xml:"vsys,omitempty"`
+	Misc           []generic.Xml                  `xml:",any"`
+	MiscAttributes []xml.Attr                     `xml:",any,attr"`
 }
 type configDevicesVsysContainerXml struct {
 	Entries []configDevicesVsysXml `xml:"entry"`
 }
 type configDevicesVsysXml struct {
-	XMLName xml.Name                    `xml:"entry"`
-	Name    string                      `xml:"name,attr"`
-	Import  *configDevicesVsysImportXml `xml:"import,omitempty"`
-	Misc    []generic.Xml               `xml:",any"`
+	XMLName        xml.Name                    `xml:"entry"`
+	Name           string                      `xml:"name,attr"`
+	Import         *configDevicesVsysImportXml `xml:"import,omitempty"`
+	Misc           []generic.Xml               `xml:",any"`
+	MiscAttributes []xml.Attr                  `xml:",any,attr"`
 }
 type configDevicesVsysImportXml struct {
-	Network *configDevicesVsysImportNetworkXml `xml:"network,omitempty"`
-	Misc    []generic.Xml                      `xml:",any"`
+	Network        *configDevicesVsysImportNetworkXml `xml:"network,omitempty"`
+	Misc           []generic.Xml                      `xml:",any"`
+	MiscAttributes []xml.Attr                         `xml:",any,attr"`
 }
 type configDevicesVsysImportNetworkXml struct {
-	Interfaces *util.MemberType `xml:"interface,omitempty"`
-	Misc       []generic.Xml    `xml:",any"`
+	Interfaces     *util.MemberType `xml:"interface,omitempty"`
+	Misc           []generic.Xml    `xml:",any"`
+	MiscAttributes []xml.Attr       `xml:",any,attr"`
 }
 
 func (o *entryXml) MarshalFromObject(s Entry) {
@@ -120,6 +132,7 @@ func (o *entryXml) MarshalFromObject(s Entry) {
 		o.Config = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o entryXml) UnmarshalToObject() (*Entry, error) {
@@ -133,11 +146,12 @@ func (o entryXml) UnmarshalToObject() (*Entry, error) {
 	}
 
 	result := &Entry{
-		Name:        o.Name,
-		Description: o.Description,
-		DefaultVsys: o.DefaultVsys,
-		Config:      configVal,
-		Misc:        o.Misc,
+		Name:           o.Name,
+		Description:    o.Description,
+		DefaultVsys:    o.DefaultVsys,
+		Config:         configVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -152,6 +166,7 @@ func (o *configXml) MarshalFromObject(s Config) {
 		o.Devices = &configDevicesContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o configXml) UnmarshalToObject() (*Config, error) {
@@ -167,8 +182,9 @@ func (o configXml) UnmarshalToObject() (*Config, error) {
 	}
 
 	result := &Config{
-		Devices: devicesVal,
-		Misc:    o.Misc,
+		Devices:        devicesVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -184,6 +200,7 @@ func (o *configDevicesXml) MarshalFromObject(s ConfigDevices) {
 		o.Vsys = &configDevicesVsysContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o configDevicesXml) UnmarshalToObject() (*ConfigDevices, error) {
@@ -199,9 +216,10 @@ func (o configDevicesXml) UnmarshalToObject() (*ConfigDevices, error) {
 	}
 
 	result := &ConfigDevices{
-		Name: o.Name,
-		Vsys: vsysVal,
-		Misc: o.Misc,
+		Name:           o.Name,
+		Vsys:           vsysVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -213,6 +231,7 @@ func (o *configDevicesVsysXml) MarshalFromObject(s ConfigDevicesVsys) {
 		o.Import = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o configDevicesVsysXml) UnmarshalToObject() (*ConfigDevicesVsys, error) {
@@ -226,9 +245,10 @@ func (o configDevicesVsysXml) UnmarshalToObject() (*ConfigDevicesVsys, error) {
 	}
 
 	result := &ConfigDevicesVsys{
-		Name:   o.Name,
-		Import: importVal,
-		Misc:   o.Misc,
+		Name:           o.Name,
+		Import:         importVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -239,6 +259,7 @@ func (o *configDevicesVsysImportXml) MarshalFromObject(s ConfigDevicesVsysImport
 		o.Network = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o configDevicesVsysImportXml) UnmarshalToObject() (*ConfigDevicesVsysImport, error) {
@@ -252,8 +273,9 @@ func (o configDevicesVsysImportXml) UnmarshalToObject() (*ConfigDevicesVsysImpor
 	}
 
 	result := &ConfigDevicesVsysImport{
-		Network: networkVal,
-		Misc:    o.Misc,
+		Network:        networkVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -262,6 +284,7 @@ func (o *configDevicesVsysImportNetworkXml) MarshalFromObject(s ConfigDevicesVsy
 		o.Interfaces = util.StrToMem(s.Interfaces)
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o configDevicesVsysImportNetworkXml) UnmarshalToObject() (*ConfigDevicesVsysImportNetwork, error) {
@@ -271,8 +294,9 @@ func (o configDevicesVsysImportNetworkXml) UnmarshalToObject() (*ConfigDevicesVs
 	}
 
 	result := &ConfigDevicesVsysImportNetwork{
-		Interfaces: interfacesVal,
-		Misc:       o.Misc,
+		Interfaces:     interfacesVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -428,4 +452,12 @@ func (o *Entry) EntryName() string {
 
 func (o *Entry) SetEntryName(name string) {
 	o.Name = name
+}
+
+func (o *Entry) GetMiscAttributes() []xml.Attr {
+	return o.MiscAttributes
+}
+
+func (o *Entry) SetMiscAttributes(attrs []xml.Attr) {
+	o.MiscAttributes = attrs
 }

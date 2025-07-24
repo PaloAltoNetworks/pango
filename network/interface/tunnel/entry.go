@@ -30,22 +30,26 @@ type Entry struct {
 	Mtu                        *int64
 	NetflowProfile             *string
 	Misc                       []generic.Xml
+	MiscAttributes             []xml.Attr
 }
 type Bonjour struct {
-	Enable   *bool
-	GroupId  *int64
-	TtlCheck *bool
-	Misc     []generic.Xml
+	Enable         *bool
+	GroupId        *int64
+	TtlCheck       *bool
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Ip struct {
-	Name string
-	Misc []generic.Xml
+	Name           string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Ipv6 struct {
-	Address     []Ipv6Address
-	Enabled     *bool
-	InterfaceId *string
-	Misc        []generic.Xml
+	Address        []Ipv6Address
+	Enabled        *bool
+	InterfaceId    *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Ipv6Address struct {
 	Name              string
@@ -53,12 +57,15 @@ type Ipv6Address struct {
 	Prefix            *Ipv6AddressPrefix
 	Anycast           *Ipv6AddressAnycast
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 type Ipv6AddressPrefix struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Ipv6AddressAnycast struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 
 type entryXmlContainer struct {
@@ -97,26 +104,30 @@ type entryXml struct {
 	Mtu                        *int64          `xml:"mtu,omitempty"`
 	NetflowProfile             *string         `xml:"netflow-profile,omitempty"`
 	Misc                       []generic.Xml   `xml:",any"`
+	MiscAttributes             []xml.Attr      `xml:",any,attr"`
 }
 type bonjourXml struct {
-	Enable   *string       `xml:"enable,omitempty"`
-	GroupId  *int64        `xml:"group-id,omitempty"`
-	TtlCheck *string       `xml:"ttl-check,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	Enable         *string       `xml:"enable,omitempty"`
+	GroupId        *int64        `xml:"group-id,omitempty"`
+	TtlCheck       *string       `xml:"ttl-check,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ipContainerXml struct {
 	Entries []ipXml `xml:"entry"`
 }
 type ipXml struct {
-	XMLName xml.Name      `xml:"entry"`
-	Name    string        `xml:"name,attr"`
-	Misc    []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ipv6Xml struct {
-	Address     *ipv6AddressContainerXml `xml:"address,omitempty"`
-	Enabled     *string                  `xml:"enabled,omitempty"`
-	InterfaceId *string                  `xml:"interface-id,omitempty"`
-	Misc        []generic.Xml            `xml:",any"`
+	Address        *ipv6AddressContainerXml `xml:"address,omitempty"`
+	Enabled        *string                  `xml:"enabled,omitempty"`
+	InterfaceId    *string                  `xml:"interface-id,omitempty"`
+	Misc           []generic.Xml            `xml:",any"`
+	MiscAttributes []xml.Attr               `xml:",any,attr"`
 }
 type ipv6AddressContainerXml struct {
 	Entries []ipv6AddressXml `xml:"entry"`
@@ -128,12 +139,15 @@ type ipv6AddressXml struct {
 	Prefix            *ipv6AddressPrefixXml  `xml:"prefix,omitempty"`
 	Anycast           *ipv6AddressAnycastXml `xml:"anycast,omitempty"`
 	Misc              []generic.Xml          `xml:",any"`
+	MiscAttributes    []xml.Attr             `xml:",any,attr"`
 }
 type ipv6AddressPrefixXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type ipv6AddressAnycastXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 
 func (o *entryXml) MarshalFromObject(s Entry) {
@@ -164,6 +178,7 @@ func (o *entryXml) MarshalFromObject(s Entry) {
 	o.Mtu = s.Mtu
 	o.NetflowProfile = s.NetflowProfile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o entryXml) UnmarshalToObject() (*Entry, error) {
@@ -206,6 +221,7 @@ func (o entryXml) UnmarshalToObject() (*Entry, error) {
 		Mtu:                        o.Mtu,
 		NetflowProfile:             o.NetflowProfile,
 		Misc:                       o.Misc,
+		MiscAttributes:             o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -214,28 +230,32 @@ func (o *bonjourXml) MarshalFromObject(s Bonjour) {
 	o.GroupId = s.GroupId
 	o.TtlCheck = util.YesNo(s.TtlCheck, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o bonjourXml) UnmarshalToObject() (*Bonjour, error) {
 
 	result := &Bonjour{
-		Enable:   util.AsBool(o.Enable, nil),
-		GroupId:  o.GroupId,
-		TtlCheck: util.AsBool(o.TtlCheck, nil),
-		Misc:     o.Misc,
+		Enable:         util.AsBool(o.Enable, nil),
+		GroupId:        o.GroupId,
+		TtlCheck:       util.AsBool(o.TtlCheck, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *ipXml) MarshalFromObject(s Ip) {
 	o.Name = s.Name
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipXml) UnmarshalToObject() (*Ip, error) {
 
 	result := &Ip{
-		Name: o.Name,
-		Misc: o.Misc,
+		Name:           o.Name,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -252,6 +272,7 @@ func (o *ipv6Xml) MarshalFromObject(s Ipv6) {
 	o.Enabled = util.YesNo(s.Enabled, nil)
 	o.InterfaceId = s.InterfaceId
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6Xml) UnmarshalToObject() (*Ipv6, error) {
@@ -267,10 +288,11 @@ func (o ipv6Xml) UnmarshalToObject() (*Ipv6, error) {
 	}
 
 	result := &Ipv6{
-		Address:     addressVal,
-		Enabled:     util.AsBool(o.Enabled, nil),
-		InterfaceId: o.InterfaceId,
-		Misc:        o.Misc,
+		Address:        addressVal,
+		Enabled:        util.AsBool(o.Enabled, nil),
+		InterfaceId:    o.InterfaceId,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -288,6 +310,7 @@ func (o *ipv6AddressXml) MarshalFromObject(s Ipv6Address) {
 		o.Anycast = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6AddressXml) UnmarshalToObject() (*Ipv6Address, error) {
@@ -314,28 +337,33 @@ func (o ipv6AddressXml) UnmarshalToObject() (*Ipv6Address, error) {
 		Prefix:            prefixVal,
 		Anycast:           anycastVal,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *ipv6AddressPrefixXml) MarshalFromObject(s Ipv6AddressPrefix) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6AddressPrefixXml) UnmarshalToObject() (*Ipv6AddressPrefix, error) {
 
 	result := &Ipv6AddressPrefix{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *ipv6AddressAnycastXml) MarshalFromObject(s Ipv6AddressAnycast) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o ipv6AddressAnycastXml) UnmarshalToObject() (*Ipv6AddressAnycast, error) {
 
 	result := &Ipv6AddressAnycast{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -554,4 +582,12 @@ func (o *Entry) EntryName() string {
 
 func (o *Entry) SetEntryName(name string) {
 	o.Name = name
+}
+
+func (o *Entry) GetMiscAttributes() []xml.Attr {
+	return o.MiscAttributes
+}
+
+func (o *Entry) SetMiscAttributes(attrs []xml.Attr) {
+	o.MiscAttributes = attrs
 }

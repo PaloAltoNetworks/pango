@@ -23,16 +23,18 @@ type Entry struct {
 	DisableOverride *string
 	Type            *Type
 	Misc            []generic.Xml
+	MiscAttributes  []xml.Attr
 }
 type Type struct {
-	Domain        *TypeDomain
-	Imei          *TypeImei
-	Imsi          *TypeImsi
-	Ip            *TypeIp
-	PredefinedIp  *TypePredefinedIp
-	PredefinedUrl *TypePredefinedUrl
-	Url           *TypeUrl
-	Misc          []generic.Xml
+	Domain         *TypeDomain
+	Imei           *TypeImei
+	Imsi           *TypeImsi
+	Ip             *TypeIp
+	PredefinedIp   *TypePredefinedIp
+	PredefinedUrl  *TypePredefinedUrl
+	Url            *TypeUrl
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type TypeDomain struct {
 	Auth               *TypeDomainAuth
@@ -43,39 +45,47 @@ type TypeDomain struct {
 	Recurring          *TypeDomainRecurring
 	Url                *string
 	Misc               []generic.Xml
+	MiscAttributes     []xml.Attr
 }
 type TypeDomainAuth struct {
-	Password *string
-	Username *string
-	Misc     []generic.Xml
+	Password       *string
+	Username       *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type TypeDomainRecurring struct {
-	Daily      *TypeDomainRecurringDaily
-	FiveMinute *TypeDomainRecurringFiveMinute
-	Hourly     *TypeDomainRecurringHourly
-	Monthly    *TypeDomainRecurringMonthly
-	Weekly     *TypeDomainRecurringWeekly
-	Misc       []generic.Xml
+	Daily          *TypeDomainRecurringDaily
+	FiveMinute     *TypeDomainRecurringFiveMinute
+	Hourly         *TypeDomainRecurringHourly
+	Monthly        *TypeDomainRecurringMonthly
+	Weekly         *TypeDomainRecurringWeekly
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type TypeDomainRecurringDaily struct {
-	At   *string
-	Misc []generic.Xml
+	At             *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type TypeDomainRecurringFiveMinute struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type TypeDomainRecurringHourly struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type TypeDomainRecurringMonthly struct {
-	At         *string
-	DayOfMonth *int64
-	Misc       []generic.Xml
+	At             *string
+	DayOfMonth     *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type TypeDomainRecurringWeekly struct {
-	At        *string
-	DayOfWeek *string
-	Misc      []generic.Xml
+	At             *string
+	DayOfWeek      *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type TypeImei struct {
 	Auth               *TypeImeiAuth
@@ -85,39 +95,47 @@ type TypeImei struct {
 	Recurring          *TypeImeiRecurring
 	Url                *string
 	Misc               []generic.Xml
+	MiscAttributes     []xml.Attr
 }
 type TypeImeiAuth struct {
-	Password *string
-	Username *string
-	Misc     []generic.Xml
+	Password       *string
+	Username       *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type TypeImeiRecurring struct {
-	Daily      *TypeImeiRecurringDaily
-	FiveMinute *TypeImeiRecurringFiveMinute
-	Hourly     *TypeImeiRecurringHourly
-	Monthly    *TypeImeiRecurringMonthly
-	Weekly     *TypeImeiRecurringWeekly
-	Misc       []generic.Xml
+	Daily          *TypeImeiRecurringDaily
+	FiveMinute     *TypeImeiRecurringFiveMinute
+	Hourly         *TypeImeiRecurringHourly
+	Monthly        *TypeImeiRecurringMonthly
+	Weekly         *TypeImeiRecurringWeekly
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type TypeImeiRecurringDaily struct {
-	At   *string
-	Misc []generic.Xml
+	At             *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type TypeImeiRecurringFiveMinute struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type TypeImeiRecurringHourly struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type TypeImeiRecurringMonthly struct {
-	At         *string
-	DayOfMonth *int64
-	Misc       []generic.Xml
+	At             *string
+	DayOfMonth     *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type TypeImeiRecurringWeekly struct {
-	At        *string
-	DayOfWeek *string
-	Misc      []generic.Xml
+	At             *string
+	DayOfWeek      *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type TypeImsi struct {
 	Auth               *TypeImsiAuth
@@ -127,39 +145,47 @@ type TypeImsi struct {
 	Recurring          *TypeImsiRecurring
 	Url                *string
 	Misc               []generic.Xml
+	MiscAttributes     []xml.Attr
 }
 type TypeImsiAuth struct {
-	Password *string
-	Username *string
-	Misc     []generic.Xml
+	Password       *string
+	Username       *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type TypeImsiRecurring struct {
-	Daily      *TypeImsiRecurringDaily
-	FiveMinute *TypeImsiRecurringFiveMinute
-	Hourly     *TypeImsiRecurringHourly
-	Monthly    *TypeImsiRecurringMonthly
-	Weekly     *TypeImsiRecurringWeekly
-	Misc       []generic.Xml
+	Daily          *TypeImsiRecurringDaily
+	FiveMinute     *TypeImsiRecurringFiveMinute
+	Hourly         *TypeImsiRecurringHourly
+	Monthly        *TypeImsiRecurringMonthly
+	Weekly         *TypeImsiRecurringWeekly
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type TypeImsiRecurringDaily struct {
-	At   *string
-	Misc []generic.Xml
+	At             *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type TypeImsiRecurringFiveMinute struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type TypeImsiRecurringHourly struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type TypeImsiRecurringMonthly struct {
-	At         *string
-	DayOfMonth *int64
-	Misc       []generic.Xml
+	At             *string
+	DayOfMonth     *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type TypeImsiRecurringWeekly struct {
-	At        *string
-	DayOfWeek *string
-	Misc      []generic.Xml
+	At             *string
+	DayOfWeek      *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type TypeIp struct {
 	Auth               *TypeIpAuth
@@ -169,51 +195,61 @@ type TypeIp struct {
 	Recurring          *TypeIpRecurring
 	Url                *string
 	Misc               []generic.Xml
+	MiscAttributes     []xml.Attr
 }
 type TypeIpAuth struct {
-	Password *string
-	Username *string
-	Misc     []generic.Xml
+	Password       *string
+	Username       *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type TypeIpRecurring struct {
-	Daily      *TypeIpRecurringDaily
-	FiveMinute *TypeIpRecurringFiveMinute
-	Hourly     *TypeIpRecurringHourly
-	Monthly    *TypeIpRecurringMonthly
-	Weekly     *TypeIpRecurringWeekly
-	Misc       []generic.Xml
+	Daily          *TypeIpRecurringDaily
+	FiveMinute     *TypeIpRecurringFiveMinute
+	Hourly         *TypeIpRecurringHourly
+	Monthly        *TypeIpRecurringMonthly
+	Weekly         *TypeIpRecurringWeekly
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type TypeIpRecurringDaily struct {
-	At   *string
-	Misc []generic.Xml
+	At             *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type TypeIpRecurringFiveMinute struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type TypeIpRecurringHourly struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type TypeIpRecurringMonthly struct {
-	At         *string
-	DayOfMonth *int64
-	Misc       []generic.Xml
+	At             *string
+	DayOfMonth     *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type TypeIpRecurringWeekly struct {
-	At        *string
-	DayOfWeek *string
-	Misc      []generic.Xml
+	At             *string
+	DayOfWeek      *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type TypePredefinedIp struct {
-	Description   *string
-	ExceptionList []string
-	Url           *string
-	Misc          []generic.Xml
+	Description    *string
+	ExceptionList  []string
+	Url            *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type TypePredefinedUrl struct {
-	Description   *string
-	ExceptionList []string
-	Url           *string
-	Misc          []generic.Xml
+	Description    *string
+	ExceptionList  []string
+	Url            *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type TypeUrl struct {
 	Auth               *TypeUrlAuth
@@ -223,39 +259,47 @@ type TypeUrl struct {
 	Recurring          *TypeUrlRecurring
 	Url                *string
 	Misc               []generic.Xml
+	MiscAttributes     []xml.Attr
 }
 type TypeUrlAuth struct {
-	Password *string
-	Username *string
-	Misc     []generic.Xml
+	Password       *string
+	Username       *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type TypeUrlRecurring struct {
-	Daily      *TypeUrlRecurringDaily
-	FiveMinute *TypeUrlRecurringFiveMinute
-	Hourly     *TypeUrlRecurringHourly
-	Monthly    *TypeUrlRecurringMonthly
-	Weekly     *TypeUrlRecurringWeekly
-	Misc       []generic.Xml
+	Daily          *TypeUrlRecurringDaily
+	FiveMinute     *TypeUrlRecurringFiveMinute
+	Hourly         *TypeUrlRecurringHourly
+	Monthly        *TypeUrlRecurringMonthly
+	Weekly         *TypeUrlRecurringWeekly
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type TypeUrlRecurringDaily struct {
-	At   *string
-	Misc []generic.Xml
+	At             *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type TypeUrlRecurringFiveMinute struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type TypeUrlRecurringHourly struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type TypeUrlRecurringMonthly struct {
-	At         *string
-	DayOfMonth *int64
-	Misc       []generic.Xml
+	At             *string
+	DayOfMonth     *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type TypeUrlRecurringWeekly struct {
-	At        *string
-	DayOfWeek *string
-	Misc      []generic.Xml
+	At             *string
+	DayOfWeek      *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 
 type entryXmlContainer struct {
@@ -287,16 +331,18 @@ type entryXml struct {
 	DisableOverride *string       `xml:"disable-override,omitempty"`
 	Type            *typeXml      `xml:"type,omitempty"`
 	Misc            []generic.Xml `xml:",any"`
+	MiscAttributes  []xml.Attr    `xml:",any,attr"`
 }
 type typeXml struct {
-	Domain        *typeDomainXml        `xml:"domain,omitempty"`
-	Imei          *typeImeiXml          `xml:"imei,omitempty"`
-	Imsi          *typeImsiXml          `xml:"imsi,omitempty"`
-	Ip            *typeIpXml            `xml:"ip,omitempty"`
-	PredefinedIp  *typePredefinedIpXml  `xml:"predefined-ip,omitempty"`
-	PredefinedUrl *typePredefinedUrlXml `xml:"predefined-url,omitempty"`
-	Url           *typeUrlXml           `xml:"url,omitempty"`
-	Misc          []generic.Xml         `xml:",any"`
+	Domain         *typeDomainXml        `xml:"domain,omitempty"`
+	Imei           *typeImeiXml          `xml:"imei,omitempty"`
+	Imsi           *typeImsiXml          `xml:"imsi,omitempty"`
+	Ip             *typeIpXml            `xml:"ip,omitempty"`
+	PredefinedIp   *typePredefinedIpXml  `xml:"predefined-ip,omitempty"`
+	PredefinedUrl  *typePredefinedUrlXml `xml:"predefined-url,omitempty"`
+	Url            *typeUrlXml           `xml:"url,omitempty"`
+	Misc           []generic.Xml         `xml:",any"`
+	MiscAttributes []xml.Attr            `xml:",any,attr"`
 }
 type typeDomainXml struct {
 	Auth               *typeDomainAuthXml      `xml:"auth,omitempty"`
@@ -307,39 +353,47 @@ type typeDomainXml struct {
 	Recurring          *typeDomainRecurringXml `xml:"recurring,omitempty"`
 	Url                *string                 `xml:"url,omitempty"`
 	Misc               []generic.Xml           `xml:",any"`
+	MiscAttributes     []xml.Attr              `xml:",any,attr"`
 }
 type typeDomainAuthXml struct {
-	Password *string       `xml:"password,omitempty"`
-	Username *string       `xml:"username,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	Password       *string       `xml:"password,omitempty"`
+	Username       *string       `xml:"username,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type typeDomainRecurringXml struct {
-	Daily      *typeDomainRecurringDailyXml      `xml:"daily,omitempty"`
-	FiveMinute *typeDomainRecurringFiveMinuteXml `xml:"five-minute,omitempty"`
-	Hourly     *typeDomainRecurringHourlyXml     `xml:"hourly,omitempty"`
-	Monthly    *typeDomainRecurringMonthlyXml    `xml:"monthly,omitempty"`
-	Weekly     *typeDomainRecurringWeeklyXml     `xml:"weekly,omitempty"`
-	Misc       []generic.Xml                     `xml:",any"`
+	Daily          *typeDomainRecurringDailyXml      `xml:"daily,omitempty"`
+	FiveMinute     *typeDomainRecurringFiveMinuteXml `xml:"five-minute,omitempty"`
+	Hourly         *typeDomainRecurringHourlyXml     `xml:"hourly,omitempty"`
+	Monthly        *typeDomainRecurringMonthlyXml    `xml:"monthly,omitempty"`
+	Weekly         *typeDomainRecurringWeeklyXml     `xml:"weekly,omitempty"`
+	Misc           []generic.Xml                     `xml:",any"`
+	MiscAttributes []xml.Attr                        `xml:",any,attr"`
 }
 type typeDomainRecurringDailyXml struct {
-	At   *string       `xml:"at,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	At             *string       `xml:"at,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type typeDomainRecurringFiveMinuteXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type typeDomainRecurringHourlyXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type typeDomainRecurringMonthlyXml struct {
-	At         *string       `xml:"at,omitempty"`
-	DayOfMonth *int64        `xml:"day-of-month,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	At             *string       `xml:"at,omitempty"`
+	DayOfMonth     *int64        `xml:"day-of-month,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type typeDomainRecurringWeeklyXml struct {
-	At        *string       `xml:"at,omitempty"`
-	DayOfWeek *string       `xml:"day-of-week,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	At             *string       `xml:"at,omitempty"`
+	DayOfWeek      *string       `xml:"day-of-week,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type typeImeiXml struct {
 	Auth               *typeImeiAuthXml      `xml:"auth,omitempty"`
@@ -349,39 +403,47 @@ type typeImeiXml struct {
 	Recurring          *typeImeiRecurringXml `xml:"recurring,omitempty"`
 	Url                *string               `xml:"url,omitempty"`
 	Misc               []generic.Xml         `xml:",any"`
+	MiscAttributes     []xml.Attr            `xml:",any,attr"`
 }
 type typeImeiAuthXml struct {
-	Password *string       `xml:"password,omitempty"`
-	Username *string       `xml:"username,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	Password       *string       `xml:"password,omitempty"`
+	Username       *string       `xml:"username,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type typeImeiRecurringXml struct {
-	Daily      *typeImeiRecurringDailyXml      `xml:"daily,omitempty"`
-	FiveMinute *typeImeiRecurringFiveMinuteXml `xml:"five-minute,omitempty"`
-	Hourly     *typeImeiRecurringHourlyXml     `xml:"hourly,omitempty"`
-	Monthly    *typeImeiRecurringMonthlyXml    `xml:"monthly,omitempty"`
-	Weekly     *typeImeiRecurringWeeklyXml     `xml:"weekly,omitempty"`
-	Misc       []generic.Xml                   `xml:",any"`
+	Daily          *typeImeiRecurringDailyXml      `xml:"daily,omitempty"`
+	FiveMinute     *typeImeiRecurringFiveMinuteXml `xml:"five-minute,omitempty"`
+	Hourly         *typeImeiRecurringHourlyXml     `xml:"hourly,omitempty"`
+	Monthly        *typeImeiRecurringMonthlyXml    `xml:"monthly,omitempty"`
+	Weekly         *typeImeiRecurringWeeklyXml     `xml:"weekly,omitempty"`
+	Misc           []generic.Xml                   `xml:",any"`
+	MiscAttributes []xml.Attr                      `xml:",any,attr"`
 }
 type typeImeiRecurringDailyXml struct {
-	At   *string       `xml:"at,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	At             *string       `xml:"at,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type typeImeiRecurringFiveMinuteXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type typeImeiRecurringHourlyXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type typeImeiRecurringMonthlyXml struct {
-	At         *string       `xml:"at,omitempty"`
-	DayOfMonth *int64        `xml:"day-of-month,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	At             *string       `xml:"at,omitempty"`
+	DayOfMonth     *int64        `xml:"day-of-month,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type typeImeiRecurringWeeklyXml struct {
-	At        *string       `xml:"at,omitempty"`
-	DayOfWeek *string       `xml:"day-of-week,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	At             *string       `xml:"at,omitempty"`
+	DayOfWeek      *string       `xml:"day-of-week,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type typeImsiXml struct {
 	Auth               *typeImsiAuthXml      `xml:"auth,omitempty"`
@@ -391,39 +453,47 @@ type typeImsiXml struct {
 	Recurring          *typeImsiRecurringXml `xml:"recurring,omitempty"`
 	Url                *string               `xml:"url,omitempty"`
 	Misc               []generic.Xml         `xml:",any"`
+	MiscAttributes     []xml.Attr            `xml:",any,attr"`
 }
 type typeImsiAuthXml struct {
-	Password *string       `xml:"password,omitempty"`
-	Username *string       `xml:"username,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	Password       *string       `xml:"password,omitempty"`
+	Username       *string       `xml:"username,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type typeImsiRecurringXml struct {
-	Daily      *typeImsiRecurringDailyXml      `xml:"daily,omitempty"`
-	FiveMinute *typeImsiRecurringFiveMinuteXml `xml:"five-minute,omitempty"`
-	Hourly     *typeImsiRecurringHourlyXml     `xml:"hourly,omitempty"`
-	Monthly    *typeImsiRecurringMonthlyXml    `xml:"monthly,omitempty"`
-	Weekly     *typeImsiRecurringWeeklyXml     `xml:"weekly,omitempty"`
-	Misc       []generic.Xml                   `xml:",any"`
+	Daily          *typeImsiRecurringDailyXml      `xml:"daily,omitempty"`
+	FiveMinute     *typeImsiRecurringFiveMinuteXml `xml:"five-minute,omitempty"`
+	Hourly         *typeImsiRecurringHourlyXml     `xml:"hourly,omitempty"`
+	Monthly        *typeImsiRecurringMonthlyXml    `xml:"monthly,omitempty"`
+	Weekly         *typeImsiRecurringWeeklyXml     `xml:"weekly,omitempty"`
+	Misc           []generic.Xml                   `xml:",any"`
+	MiscAttributes []xml.Attr                      `xml:",any,attr"`
 }
 type typeImsiRecurringDailyXml struct {
-	At   *string       `xml:"at,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	At             *string       `xml:"at,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type typeImsiRecurringFiveMinuteXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type typeImsiRecurringHourlyXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type typeImsiRecurringMonthlyXml struct {
-	At         *string       `xml:"at,omitempty"`
-	DayOfMonth *int64        `xml:"day-of-month,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	At             *string       `xml:"at,omitempty"`
+	DayOfMonth     *int64        `xml:"day-of-month,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type typeImsiRecurringWeeklyXml struct {
-	At        *string       `xml:"at,omitempty"`
-	DayOfWeek *string       `xml:"day-of-week,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	At             *string       `xml:"at,omitempty"`
+	DayOfWeek      *string       `xml:"day-of-week,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type typeIpXml struct {
 	Auth               *typeIpAuthXml      `xml:"auth,omitempty"`
@@ -433,51 +503,61 @@ type typeIpXml struct {
 	Recurring          *typeIpRecurringXml `xml:"recurring,omitempty"`
 	Url                *string             `xml:"url,omitempty"`
 	Misc               []generic.Xml       `xml:",any"`
+	MiscAttributes     []xml.Attr          `xml:",any,attr"`
 }
 type typeIpAuthXml struct {
-	Password *string       `xml:"password,omitempty"`
-	Username *string       `xml:"username,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	Password       *string       `xml:"password,omitempty"`
+	Username       *string       `xml:"username,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type typeIpRecurringXml struct {
-	Daily      *typeIpRecurringDailyXml      `xml:"daily,omitempty"`
-	FiveMinute *typeIpRecurringFiveMinuteXml `xml:"five-minute,omitempty"`
-	Hourly     *typeIpRecurringHourlyXml     `xml:"hourly,omitempty"`
-	Monthly    *typeIpRecurringMonthlyXml    `xml:"monthly,omitempty"`
-	Weekly     *typeIpRecurringWeeklyXml     `xml:"weekly,omitempty"`
-	Misc       []generic.Xml                 `xml:",any"`
+	Daily          *typeIpRecurringDailyXml      `xml:"daily,omitempty"`
+	FiveMinute     *typeIpRecurringFiveMinuteXml `xml:"five-minute,omitempty"`
+	Hourly         *typeIpRecurringHourlyXml     `xml:"hourly,omitempty"`
+	Monthly        *typeIpRecurringMonthlyXml    `xml:"monthly,omitempty"`
+	Weekly         *typeIpRecurringWeeklyXml     `xml:"weekly,omitempty"`
+	Misc           []generic.Xml                 `xml:",any"`
+	MiscAttributes []xml.Attr                    `xml:",any,attr"`
 }
 type typeIpRecurringDailyXml struct {
-	At   *string       `xml:"at,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	At             *string       `xml:"at,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type typeIpRecurringFiveMinuteXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type typeIpRecurringHourlyXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type typeIpRecurringMonthlyXml struct {
-	At         *string       `xml:"at,omitempty"`
-	DayOfMonth *int64        `xml:"day-of-month,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	At             *string       `xml:"at,omitempty"`
+	DayOfMonth     *int64        `xml:"day-of-month,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type typeIpRecurringWeeklyXml struct {
-	At        *string       `xml:"at,omitempty"`
-	DayOfWeek *string       `xml:"day-of-week,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	At             *string       `xml:"at,omitempty"`
+	DayOfWeek      *string       `xml:"day-of-week,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type typePredefinedIpXml struct {
-	Description   *string          `xml:"description,omitempty"`
-	ExceptionList *util.MemberType `xml:"exception-list,omitempty"`
-	Url           *string          `xml:"url,omitempty"`
-	Misc          []generic.Xml    `xml:",any"`
+	Description    *string          `xml:"description,omitempty"`
+	ExceptionList  *util.MemberType `xml:"exception-list,omitempty"`
+	Url            *string          `xml:"url,omitempty"`
+	Misc           []generic.Xml    `xml:",any"`
+	MiscAttributes []xml.Attr       `xml:",any,attr"`
 }
 type typePredefinedUrlXml struct {
-	Description   *string          `xml:"description,omitempty"`
-	ExceptionList *util.MemberType `xml:"exception-list,omitempty"`
-	Url           *string          `xml:"url,omitempty"`
-	Misc          []generic.Xml    `xml:",any"`
+	Description    *string          `xml:"description,omitempty"`
+	ExceptionList  *util.MemberType `xml:"exception-list,omitempty"`
+	Url            *string          `xml:"url,omitempty"`
+	Misc           []generic.Xml    `xml:",any"`
+	MiscAttributes []xml.Attr       `xml:",any,attr"`
 }
 type typeUrlXml struct {
 	Auth               *typeUrlAuthXml      `xml:"auth,omitempty"`
@@ -487,39 +567,47 @@ type typeUrlXml struct {
 	Recurring          *typeUrlRecurringXml `xml:"recurring,omitempty"`
 	Url                *string              `xml:"url,omitempty"`
 	Misc               []generic.Xml        `xml:",any"`
+	MiscAttributes     []xml.Attr           `xml:",any,attr"`
 }
 type typeUrlAuthXml struct {
-	Password *string       `xml:"password,omitempty"`
-	Username *string       `xml:"username,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	Password       *string       `xml:"password,omitempty"`
+	Username       *string       `xml:"username,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type typeUrlRecurringXml struct {
-	Daily      *typeUrlRecurringDailyXml      `xml:"daily,omitempty"`
-	FiveMinute *typeUrlRecurringFiveMinuteXml `xml:"five-minute,omitempty"`
-	Hourly     *typeUrlRecurringHourlyXml     `xml:"hourly,omitempty"`
-	Monthly    *typeUrlRecurringMonthlyXml    `xml:"monthly,omitempty"`
-	Weekly     *typeUrlRecurringWeeklyXml     `xml:"weekly,omitempty"`
-	Misc       []generic.Xml                  `xml:",any"`
+	Daily          *typeUrlRecurringDailyXml      `xml:"daily,omitempty"`
+	FiveMinute     *typeUrlRecurringFiveMinuteXml `xml:"five-minute,omitempty"`
+	Hourly         *typeUrlRecurringHourlyXml     `xml:"hourly,omitempty"`
+	Monthly        *typeUrlRecurringMonthlyXml    `xml:"monthly,omitempty"`
+	Weekly         *typeUrlRecurringWeeklyXml     `xml:"weekly,omitempty"`
+	Misc           []generic.Xml                  `xml:",any"`
+	MiscAttributes []xml.Attr                     `xml:",any,attr"`
 }
 type typeUrlRecurringDailyXml struct {
-	At   *string       `xml:"at,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	At             *string       `xml:"at,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type typeUrlRecurringFiveMinuteXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type typeUrlRecurringHourlyXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type typeUrlRecurringMonthlyXml struct {
-	At         *string       `xml:"at,omitempty"`
-	DayOfMonth *int64        `xml:"day-of-month,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	At             *string       `xml:"at,omitempty"`
+	DayOfMonth     *int64        `xml:"day-of-month,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type typeUrlRecurringWeeklyXml struct {
-	At        *string       `xml:"at,omitempty"`
-	DayOfWeek *string       `xml:"day-of-week,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	At             *string       `xml:"at,omitempty"`
+	DayOfWeek      *string       `xml:"day-of-week,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 
 func (o *entryXml) MarshalFromObject(s Entry) {
@@ -531,6 +619,7 @@ func (o *entryXml) MarshalFromObject(s Entry) {
 		o.Type = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o entryXml) UnmarshalToObject() (*Entry, error) {
@@ -548,6 +637,7 @@ func (o entryXml) UnmarshalToObject() (*Entry, error) {
 		DisableOverride: o.DisableOverride,
 		Type:            typeVal,
 		Misc:            o.Misc,
+		MiscAttributes:  o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -588,6 +678,7 @@ func (o *typeXml) MarshalFromObject(s Type) {
 		o.Url = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o typeXml) UnmarshalToObject() (*Type, error) {
@@ -649,14 +740,15 @@ func (o typeXml) UnmarshalToObject() (*Type, error) {
 	}
 
 	result := &Type{
-		Domain:        domainVal,
-		Imei:          imeiVal,
-		Imsi:          imsiVal,
-		Ip:            ipVal,
-		PredefinedIp:  predefinedIpVal,
-		PredefinedUrl: predefinedUrlVal,
-		Url:           urlVal,
-		Misc:          o.Misc,
+		Domain:         domainVal,
+		Imei:           imeiVal,
+		Imsi:           imsiVal,
+		Ip:             ipVal,
+		PredefinedIp:   predefinedIpVal,
+		PredefinedUrl:  predefinedUrlVal,
+		Url:            urlVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -679,6 +771,7 @@ func (o *typeDomainXml) MarshalFromObject(s TypeDomain) {
 	}
 	o.Url = s.Url
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o typeDomainXml) UnmarshalToObject() (*TypeDomain, error) {
@@ -712,6 +805,7 @@ func (o typeDomainXml) UnmarshalToObject() (*TypeDomain, error) {
 		Recurring:          recurringVal,
 		Url:                o.Url,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -719,14 +813,16 @@ func (o *typeDomainAuthXml) MarshalFromObject(s TypeDomainAuth) {
 	o.Password = s.Password
 	o.Username = s.Username
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o typeDomainAuthXml) UnmarshalToObject() (*TypeDomainAuth, error) {
 
 	result := &TypeDomainAuth{
-		Password: o.Password,
-		Username: o.Username,
-		Misc:     o.Misc,
+		Password:       o.Password,
+		Username:       o.Username,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -757,6 +853,7 @@ func (o *typeDomainRecurringXml) MarshalFromObject(s TypeDomainRecurring) {
 		o.Weekly = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o typeDomainRecurringXml) UnmarshalToObject() (*TypeDomainRecurring, error) {
@@ -802,47 +899,54 @@ func (o typeDomainRecurringXml) UnmarshalToObject() (*TypeDomainRecurring, error
 	}
 
 	result := &TypeDomainRecurring{
-		Daily:      dailyVal,
-		FiveMinute: fiveMinuteVal,
-		Hourly:     hourlyVal,
-		Monthly:    monthlyVal,
-		Weekly:     weeklyVal,
-		Misc:       o.Misc,
+		Daily:          dailyVal,
+		FiveMinute:     fiveMinuteVal,
+		Hourly:         hourlyVal,
+		Monthly:        monthlyVal,
+		Weekly:         weeklyVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *typeDomainRecurringDailyXml) MarshalFromObject(s TypeDomainRecurringDaily) {
 	o.At = s.At
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o typeDomainRecurringDailyXml) UnmarshalToObject() (*TypeDomainRecurringDaily, error) {
 
 	result := &TypeDomainRecurringDaily{
-		At:   o.At,
-		Misc: o.Misc,
+		At:             o.At,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *typeDomainRecurringFiveMinuteXml) MarshalFromObject(s TypeDomainRecurringFiveMinute) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o typeDomainRecurringFiveMinuteXml) UnmarshalToObject() (*TypeDomainRecurringFiveMinute, error) {
 
 	result := &TypeDomainRecurringFiveMinute{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *typeDomainRecurringHourlyXml) MarshalFromObject(s TypeDomainRecurringHourly) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o typeDomainRecurringHourlyXml) UnmarshalToObject() (*TypeDomainRecurringHourly, error) {
 
 	result := &TypeDomainRecurringHourly{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -850,14 +954,16 @@ func (o *typeDomainRecurringMonthlyXml) MarshalFromObject(s TypeDomainRecurringM
 	o.At = s.At
 	o.DayOfMonth = s.DayOfMonth
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o typeDomainRecurringMonthlyXml) UnmarshalToObject() (*TypeDomainRecurringMonthly, error) {
 
 	result := &TypeDomainRecurringMonthly{
-		At:         o.At,
-		DayOfMonth: o.DayOfMonth,
-		Misc:       o.Misc,
+		At:             o.At,
+		DayOfMonth:     o.DayOfMonth,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -865,14 +971,16 @@ func (o *typeDomainRecurringWeeklyXml) MarshalFromObject(s TypeDomainRecurringWe
 	o.At = s.At
 	o.DayOfWeek = s.DayOfWeek
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o typeDomainRecurringWeeklyXml) UnmarshalToObject() (*TypeDomainRecurringWeekly, error) {
 
 	result := &TypeDomainRecurringWeekly{
-		At:        o.At,
-		DayOfWeek: o.DayOfWeek,
-		Misc:      o.Misc,
+		At:             o.At,
+		DayOfWeek:      o.DayOfWeek,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -894,6 +1002,7 @@ func (o *typeImeiXml) MarshalFromObject(s TypeImei) {
 	}
 	o.Url = s.Url
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o typeImeiXml) UnmarshalToObject() (*TypeImei, error) {
@@ -926,6 +1035,7 @@ func (o typeImeiXml) UnmarshalToObject() (*TypeImei, error) {
 		Recurring:          recurringVal,
 		Url:                o.Url,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -933,14 +1043,16 @@ func (o *typeImeiAuthXml) MarshalFromObject(s TypeImeiAuth) {
 	o.Password = s.Password
 	o.Username = s.Username
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o typeImeiAuthXml) UnmarshalToObject() (*TypeImeiAuth, error) {
 
 	result := &TypeImeiAuth{
-		Password: o.Password,
-		Username: o.Username,
-		Misc:     o.Misc,
+		Password:       o.Password,
+		Username:       o.Username,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -971,6 +1083,7 @@ func (o *typeImeiRecurringXml) MarshalFromObject(s TypeImeiRecurring) {
 		o.Weekly = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o typeImeiRecurringXml) UnmarshalToObject() (*TypeImeiRecurring, error) {
@@ -1016,47 +1129,54 @@ func (o typeImeiRecurringXml) UnmarshalToObject() (*TypeImeiRecurring, error) {
 	}
 
 	result := &TypeImeiRecurring{
-		Daily:      dailyVal,
-		FiveMinute: fiveMinuteVal,
-		Hourly:     hourlyVal,
-		Monthly:    monthlyVal,
-		Weekly:     weeklyVal,
-		Misc:       o.Misc,
+		Daily:          dailyVal,
+		FiveMinute:     fiveMinuteVal,
+		Hourly:         hourlyVal,
+		Monthly:        monthlyVal,
+		Weekly:         weeklyVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *typeImeiRecurringDailyXml) MarshalFromObject(s TypeImeiRecurringDaily) {
 	o.At = s.At
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o typeImeiRecurringDailyXml) UnmarshalToObject() (*TypeImeiRecurringDaily, error) {
 
 	result := &TypeImeiRecurringDaily{
-		At:   o.At,
-		Misc: o.Misc,
+		At:             o.At,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *typeImeiRecurringFiveMinuteXml) MarshalFromObject(s TypeImeiRecurringFiveMinute) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o typeImeiRecurringFiveMinuteXml) UnmarshalToObject() (*TypeImeiRecurringFiveMinute, error) {
 
 	result := &TypeImeiRecurringFiveMinute{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *typeImeiRecurringHourlyXml) MarshalFromObject(s TypeImeiRecurringHourly) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o typeImeiRecurringHourlyXml) UnmarshalToObject() (*TypeImeiRecurringHourly, error) {
 
 	result := &TypeImeiRecurringHourly{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1064,14 +1184,16 @@ func (o *typeImeiRecurringMonthlyXml) MarshalFromObject(s TypeImeiRecurringMonth
 	o.At = s.At
 	o.DayOfMonth = s.DayOfMonth
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o typeImeiRecurringMonthlyXml) UnmarshalToObject() (*TypeImeiRecurringMonthly, error) {
 
 	result := &TypeImeiRecurringMonthly{
-		At:         o.At,
-		DayOfMonth: o.DayOfMonth,
-		Misc:       o.Misc,
+		At:             o.At,
+		DayOfMonth:     o.DayOfMonth,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1079,14 +1201,16 @@ func (o *typeImeiRecurringWeeklyXml) MarshalFromObject(s TypeImeiRecurringWeekly
 	o.At = s.At
 	o.DayOfWeek = s.DayOfWeek
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o typeImeiRecurringWeeklyXml) UnmarshalToObject() (*TypeImeiRecurringWeekly, error) {
 
 	result := &TypeImeiRecurringWeekly{
-		At:        o.At,
-		DayOfWeek: o.DayOfWeek,
-		Misc:      o.Misc,
+		At:             o.At,
+		DayOfWeek:      o.DayOfWeek,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1108,6 +1232,7 @@ func (o *typeImsiXml) MarshalFromObject(s TypeImsi) {
 	}
 	o.Url = s.Url
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o typeImsiXml) UnmarshalToObject() (*TypeImsi, error) {
@@ -1140,6 +1265,7 @@ func (o typeImsiXml) UnmarshalToObject() (*TypeImsi, error) {
 		Recurring:          recurringVal,
 		Url:                o.Url,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1147,14 +1273,16 @@ func (o *typeImsiAuthXml) MarshalFromObject(s TypeImsiAuth) {
 	o.Password = s.Password
 	o.Username = s.Username
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o typeImsiAuthXml) UnmarshalToObject() (*TypeImsiAuth, error) {
 
 	result := &TypeImsiAuth{
-		Password: o.Password,
-		Username: o.Username,
-		Misc:     o.Misc,
+		Password:       o.Password,
+		Username:       o.Username,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1185,6 +1313,7 @@ func (o *typeImsiRecurringXml) MarshalFromObject(s TypeImsiRecurring) {
 		o.Weekly = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o typeImsiRecurringXml) UnmarshalToObject() (*TypeImsiRecurring, error) {
@@ -1230,47 +1359,54 @@ func (o typeImsiRecurringXml) UnmarshalToObject() (*TypeImsiRecurring, error) {
 	}
 
 	result := &TypeImsiRecurring{
-		Daily:      dailyVal,
-		FiveMinute: fiveMinuteVal,
-		Hourly:     hourlyVal,
-		Monthly:    monthlyVal,
-		Weekly:     weeklyVal,
-		Misc:       o.Misc,
+		Daily:          dailyVal,
+		FiveMinute:     fiveMinuteVal,
+		Hourly:         hourlyVal,
+		Monthly:        monthlyVal,
+		Weekly:         weeklyVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *typeImsiRecurringDailyXml) MarshalFromObject(s TypeImsiRecurringDaily) {
 	o.At = s.At
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o typeImsiRecurringDailyXml) UnmarshalToObject() (*TypeImsiRecurringDaily, error) {
 
 	result := &TypeImsiRecurringDaily{
-		At:   o.At,
-		Misc: o.Misc,
+		At:             o.At,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *typeImsiRecurringFiveMinuteXml) MarshalFromObject(s TypeImsiRecurringFiveMinute) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o typeImsiRecurringFiveMinuteXml) UnmarshalToObject() (*TypeImsiRecurringFiveMinute, error) {
 
 	result := &TypeImsiRecurringFiveMinute{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *typeImsiRecurringHourlyXml) MarshalFromObject(s TypeImsiRecurringHourly) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o typeImsiRecurringHourlyXml) UnmarshalToObject() (*TypeImsiRecurringHourly, error) {
 
 	result := &TypeImsiRecurringHourly{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1278,14 +1414,16 @@ func (o *typeImsiRecurringMonthlyXml) MarshalFromObject(s TypeImsiRecurringMonth
 	o.At = s.At
 	o.DayOfMonth = s.DayOfMonth
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o typeImsiRecurringMonthlyXml) UnmarshalToObject() (*TypeImsiRecurringMonthly, error) {
 
 	result := &TypeImsiRecurringMonthly{
-		At:         o.At,
-		DayOfMonth: o.DayOfMonth,
-		Misc:       o.Misc,
+		At:             o.At,
+		DayOfMonth:     o.DayOfMonth,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1293,14 +1431,16 @@ func (o *typeImsiRecurringWeeklyXml) MarshalFromObject(s TypeImsiRecurringWeekly
 	o.At = s.At
 	o.DayOfWeek = s.DayOfWeek
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o typeImsiRecurringWeeklyXml) UnmarshalToObject() (*TypeImsiRecurringWeekly, error) {
 
 	result := &TypeImsiRecurringWeekly{
-		At:        o.At,
-		DayOfWeek: o.DayOfWeek,
-		Misc:      o.Misc,
+		At:             o.At,
+		DayOfWeek:      o.DayOfWeek,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1322,6 +1462,7 @@ func (o *typeIpXml) MarshalFromObject(s TypeIp) {
 	}
 	o.Url = s.Url
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o typeIpXml) UnmarshalToObject() (*TypeIp, error) {
@@ -1354,6 +1495,7 @@ func (o typeIpXml) UnmarshalToObject() (*TypeIp, error) {
 		Recurring:          recurringVal,
 		Url:                o.Url,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1361,14 +1503,16 @@ func (o *typeIpAuthXml) MarshalFromObject(s TypeIpAuth) {
 	o.Password = s.Password
 	o.Username = s.Username
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o typeIpAuthXml) UnmarshalToObject() (*TypeIpAuth, error) {
 
 	result := &TypeIpAuth{
-		Password: o.Password,
-		Username: o.Username,
-		Misc:     o.Misc,
+		Password:       o.Password,
+		Username:       o.Username,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1399,6 +1543,7 @@ func (o *typeIpRecurringXml) MarshalFromObject(s TypeIpRecurring) {
 		o.Weekly = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o typeIpRecurringXml) UnmarshalToObject() (*TypeIpRecurring, error) {
@@ -1444,47 +1589,54 @@ func (o typeIpRecurringXml) UnmarshalToObject() (*TypeIpRecurring, error) {
 	}
 
 	result := &TypeIpRecurring{
-		Daily:      dailyVal,
-		FiveMinute: fiveMinuteVal,
-		Hourly:     hourlyVal,
-		Monthly:    monthlyVal,
-		Weekly:     weeklyVal,
-		Misc:       o.Misc,
+		Daily:          dailyVal,
+		FiveMinute:     fiveMinuteVal,
+		Hourly:         hourlyVal,
+		Monthly:        monthlyVal,
+		Weekly:         weeklyVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *typeIpRecurringDailyXml) MarshalFromObject(s TypeIpRecurringDaily) {
 	o.At = s.At
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o typeIpRecurringDailyXml) UnmarshalToObject() (*TypeIpRecurringDaily, error) {
 
 	result := &TypeIpRecurringDaily{
-		At:   o.At,
-		Misc: o.Misc,
+		At:             o.At,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *typeIpRecurringFiveMinuteXml) MarshalFromObject(s TypeIpRecurringFiveMinute) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o typeIpRecurringFiveMinuteXml) UnmarshalToObject() (*TypeIpRecurringFiveMinute, error) {
 
 	result := &TypeIpRecurringFiveMinute{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *typeIpRecurringHourlyXml) MarshalFromObject(s TypeIpRecurringHourly) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o typeIpRecurringHourlyXml) UnmarshalToObject() (*TypeIpRecurringHourly, error) {
 
 	result := &TypeIpRecurringHourly{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1492,14 +1644,16 @@ func (o *typeIpRecurringMonthlyXml) MarshalFromObject(s TypeIpRecurringMonthly) 
 	o.At = s.At
 	o.DayOfMonth = s.DayOfMonth
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o typeIpRecurringMonthlyXml) UnmarshalToObject() (*TypeIpRecurringMonthly, error) {
 
 	result := &TypeIpRecurringMonthly{
-		At:         o.At,
-		DayOfMonth: o.DayOfMonth,
-		Misc:       o.Misc,
+		At:             o.At,
+		DayOfMonth:     o.DayOfMonth,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1507,14 +1661,16 @@ func (o *typeIpRecurringWeeklyXml) MarshalFromObject(s TypeIpRecurringWeekly) {
 	o.At = s.At
 	o.DayOfWeek = s.DayOfWeek
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o typeIpRecurringWeeklyXml) UnmarshalToObject() (*TypeIpRecurringWeekly, error) {
 
 	result := &TypeIpRecurringWeekly{
-		At:        o.At,
-		DayOfWeek: o.DayOfWeek,
-		Misc:      o.Misc,
+		At:             o.At,
+		DayOfWeek:      o.DayOfWeek,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1525,6 +1681,7 @@ func (o *typePredefinedIpXml) MarshalFromObject(s TypePredefinedIp) {
 	}
 	o.Url = s.Url
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o typePredefinedIpXml) UnmarshalToObject() (*TypePredefinedIp, error) {
@@ -1534,10 +1691,11 @@ func (o typePredefinedIpXml) UnmarshalToObject() (*TypePredefinedIp, error) {
 	}
 
 	result := &TypePredefinedIp{
-		Description:   o.Description,
-		ExceptionList: exceptionListVal,
-		Url:           o.Url,
-		Misc:          o.Misc,
+		Description:    o.Description,
+		ExceptionList:  exceptionListVal,
+		Url:            o.Url,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1548,6 +1706,7 @@ func (o *typePredefinedUrlXml) MarshalFromObject(s TypePredefinedUrl) {
 	}
 	o.Url = s.Url
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o typePredefinedUrlXml) UnmarshalToObject() (*TypePredefinedUrl, error) {
@@ -1557,10 +1716,11 @@ func (o typePredefinedUrlXml) UnmarshalToObject() (*TypePredefinedUrl, error) {
 	}
 
 	result := &TypePredefinedUrl{
-		Description:   o.Description,
-		ExceptionList: exceptionListVal,
-		Url:           o.Url,
-		Misc:          o.Misc,
+		Description:    o.Description,
+		ExceptionList:  exceptionListVal,
+		Url:            o.Url,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1582,6 +1742,7 @@ func (o *typeUrlXml) MarshalFromObject(s TypeUrl) {
 	}
 	o.Url = s.Url
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o typeUrlXml) UnmarshalToObject() (*TypeUrl, error) {
@@ -1614,6 +1775,7 @@ func (o typeUrlXml) UnmarshalToObject() (*TypeUrl, error) {
 		Recurring:          recurringVal,
 		Url:                o.Url,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1621,14 +1783,16 @@ func (o *typeUrlAuthXml) MarshalFromObject(s TypeUrlAuth) {
 	o.Password = s.Password
 	o.Username = s.Username
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o typeUrlAuthXml) UnmarshalToObject() (*TypeUrlAuth, error) {
 
 	result := &TypeUrlAuth{
-		Password: o.Password,
-		Username: o.Username,
-		Misc:     o.Misc,
+		Password:       o.Password,
+		Username:       o.Username,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1659,6 +1823,7 @@ func (o *typeUrlRecurringXml) MarshalFromObject(s TypeUrlRecurring) {
 		o.Weekly = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o typeUrlRecurringXml) UnmarshalToObject() (*TypeUrlRecurring, error) {
@@ -1704,47 +1869,54 @@ func (o typeUrlRecurringXml) UnmarshalToObject() (*TypeUrlRecurring, error) {
 	}
 
 	result := &TypeUrlRecurring{
-		Daily:      dailyVal,
-		FiveMinute: fiveMinuteVal,
-		Hourly:     hourlyVal,
-		Monthly:    monthlyVal,
-		Weekly:     weeklyVal,
-		Misc:       o.Misc,
+		Daily:          dailyVal,
+		FiveMinute:     fiveMinuteVal,
+		Hourly:         hourlyVal,
+		Monthly:        monthlyVal,
+		Weekly:         weeklyVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *typeUrlRecurringDailyXml) MarshalFromObject(s TypeUrlRecurringDaily) {
 	o.At = s.At
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o typeUrlRecurringDailyXml) UnmarshalToObject() (*TypeUrlRecurringDaily, error) {
 
 	result := &TypeUrlRecurringDaily{
-		At:   o.At,
-		Misc: o.Misc,
+		At:             o.At,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *typeUrlRecurringFiveMinuteXml) MarshalFromObject(s TypeUrlRecurringFiveMinute) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o typeUrlRecurringFiveMinuteXml) UnmarshalToObject() (*TypeUrlRecurringFiveMinute, error) {
 
 	result := &TypeUrlRecurringFiveMinute{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *typeUrlRecurringHourlyXml) MarshalFromObject(s TypeUrlRecurringHourly) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o typeUrlRecurringHourlyXml) UnmarshalToObject() (*TypeUrlRecurringHourly, error) {
 
 	result := &TypeUrlRecurringHourly{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1752,14 +1924,16 @@ func (o *typeUrlRecurringMonthlyXml) MarshalFromObject(s TypeUrlRecurringMonthly
 	o.At = s.At
 	o.DayOfMonth = s.DayOfMonth
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o typeUrlRecurringMonthlyXml) UnmarshalToObject() (*TypeUrlRecurringMonthly, error) {
 
 	result := &TypeUrlRecurringMonthly{
-		At:         o.At,
-		DayOfMonth: o.DayOfMonth,
-		Misc:       o.Misc,
+		At:             o.At,
+		DayOfMonth:     o.DayOfMonth,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1767,14 +1941,16 @@ func (o *typeUrlRecurringWeeklyXml) MarshalFromObject(s TypeUrlRecurringWeekly) 
 	o.At = s.At
 	o.DayOfWeek = s.DayOfWeek
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o typeUrlRecurringWeeklyXml) UnmarshalToObject() (*TypeUrlRecurringWeekly, error) {
 
 	result := &TypeUrlRecurringWeekly{
-		At:        o.At,
-		DayOfWeek: o.DayOfWeek,
-		Misc:      o.Misc,
+		At:             o.At,
+		DayOfWeek:      o.DayOfWeek,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2661,4 +2837,12 @@ func (o *Entry) EntryName() string {
 
 func (o *Entry) SetEntryName(name string) {
 	o.Name = name
+}
+
+func (o *Entry) GetMiscAttributes() []xml.Attr {
+	return o.MiscAttributes
+}
+
+func (o *Entry) SetMiscAttributes(attrs []xml.Attr) {
+	o.MiscAttributes = attrs
 }

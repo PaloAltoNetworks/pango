@@ -26,10 +26,12 @@ type Entry struct {
 	DefaultVsys     *string
 	UserGroupSource *UserGroupSource
 	Misc            []generic.Xml
+	MiscAttributes  []xml.Attr
 }
 type UserGroupSource struct {
-	MasterDevice *string
-	Misc         []generic.Xml
+	MasterDevice   *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 
 type entryXmlContainer struct {
@@ -64,10 +66,12 @@ type entryXml struct {
 	DefaultVsys     *string             `xml:"settings>default-vsys,omitempty"`
 	UserGroupSource *userGroupSourceXml `xml:"user-group-source,omitempty"`
 	Misc            []generic.Xml       `xml:",any"`
+	MiscAttributes  []xml.Attr          `xml:",any,attr"`
 }
 type userGroupSourceXml struct {
-	MasterDevice *string       `xml:"master-device,omitempty"`
-	Misc         []generic.Xml `xml:",any"`
+	MasterDevice   *string       `xml:"master-device,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 
 func (o *entryXml) MarshalFromObject(s Entry) {
@@ -86,6 +90,7 @@ func (o *entryXml) MarshalFromObject(s Entry) {
 		o.UserGroupSource = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o entryXml) UnmarshalToObject() (*Entry, error) {
@@ -114,19 +119,22 @@ func (o entryXml) UnmarshalToObject() (*Entry, error) {
 		DefaultVsys:     o.DefaultVsys,
 		UserGroupSource: userGroupSourceVal,
 		Misc:            o.Misc,
+		MiscAttributes:  o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *userGroupSourceXml) MarshalFromObject(s UserGroupSource) {
 	o.MasterDevice = s.MasterDevice
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o userGroupSourceXml) UnmarshalToObject() (*UserGroupSource, error) {
 
 	result := &UserGroupSource{
-		MasterDevice: o.MasterDevice,
-		Misc:         o.Misc,
+		MasterDevice:   o.MasterDevice,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -224,4 +232,12 @@ func (o *Entry) EntryName() string {
 
 func (o *Entry) SetEntryName(name string) {
 	o.Name = name
+}
+
+func (o *Entry) GetMiscAttributes() []xml.Attr {
+	return o.MiscAttributes
+}
+
+func (o *Entry) SetMiscAttributes(attrs []xml.Attr) {
+	o.MiscAttributes = attrs
 }

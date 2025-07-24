@@ -287,3 +287,29 @@ func (s *Service) ListWithXpath(ctx context.Context, xpath string, action, filte
 
 	return filtered, nil
 }
+
+func (s *Service) filterEntriesByLocation(location Location, entries []*Entry) []*Entry {
+	filter := location.LocationFilter()
+	if filter == nil {
+		return entries
+	}
+
+	getLocAttribute := func(entry *Entry) *string {
+		for _, elt := range entry.GetMiscAttributes() {
+			if elt.Name.Local == "loc" {
+				return &elt.Value
+			}
+		}
+		return nil
+	}
+
+	var filtered []*Entry
+	for _, elt := range entries {
+		location := getLocAttribute(elt)
+		if location == nil || *location == *filter {
+			filtered = append(filtered, elt)
+		}
+	}
+
+	return filtered
+}

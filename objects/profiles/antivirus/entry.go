@@ -30,11 +30,13 @@ type Entry struct {
 	ThreatException            []ThreatException
 	WfrtHoldMode               *bool
 	Misc                       []generic.Xml
+	MiscAttributes             []xml.Attr
 }
 type Application struct {
-	Name   string
-	Action *string
-	Misc   []generic.Xml
+	Name           string
+	Action         *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Decoder struct {
 	Name           string
@@ -42,21 +44,25 @@ type Decoder struct {
 	WildfireAction *string
 	MlavAction     *string
 	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type MlavEngineFilebasedEnabled struct {
 	Name             string
 	MlavPolicyAction *string
 	Misc             []generic.Xml
+	MiscAttributes   []xml.Attr
 }
 type MlavException struct {
-	Name        string
-	Filename    *string
-	Description *string
-	Misc        []generic.Xml
+	Name           string
+	Filename       *string
+	Description    *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type ThreatException struct {
-	Name string
-	Misc []generic.Xml
+	Name           string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 
 type entryXmlContainer struct {
@@ -116,15 +122,17 @@ type entryXml struct {
 	ThreatException            *threatExceptionContainerXml            `xml:"threat-exception,omitempty"`
 	WfrtHoldMode               *string                                 `xml:"wfrt-hold-mode,omitempty"`
 	Misc                       []generic.Xml                           `xml:",any"`
+	MiscAttributes             []xml.Attr                              `xml:",any,attr"`
 }
 type applicationContainerXml struct {
 	Entries []applicationXml `xml:"entry"`
 }
 type applicationXml struct {
-	XMLName xml.Name      `xml:"entry"`
-	Name    string        `xml:"name,attr"`
-	Action  *string       `xml:"action,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Action         *string       `xml:"action,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type decoderContainerXml struct {
 	Entries []decoderXml `xml:"entry"`
@@ -136,6 +144,7 @@ type decoderXml struct {
 	WildfireAction *string       `xml:"wildfire-action,omitempty"`
 	MlavAction     *string       `xml:"mlav-action,omitempty"`
 	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type mlavEngineFilebasedEnabledContainerXml struct {
 	Entries []mlavEngineFilebasedEnabledXml `xml:"entry"`
@@ -145,24 +154,27 @@ type mlavEngineFilebasedEnabledXml struct {
 	Name             string        `xml:"name,attr"`
 	MlavPolicyAction *string       `xml:"mlav-policy-action,omitempty"`
 	Misc             []generic.Xml `xml:",any"`
+	MiscAttributes   []xml.Attr    `xml:",any,attr"`
 }
 type mlavExceptionContainerXml struct {
 	Entries []mlavExceptionXml `xml:"entry"`
 }
 type mlavExceptionXml struct {
-	XMLName     xml.Name      `xml:"entry"`
-	Name        string        `xml:"name,attr"`
-	Filename    *string       `xml:"filename,omitempty"`
-	Description *string       `xml:"description,omitempty"`
-	Misc        []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Filename       *string       `xml:"filename,omitempty"`
+	Description    *string       `xml:"description,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type threatExceptionContainerXml struct {
 	Entries []threatExceptionXml `xml:"entry"`
 }
 type threatExceptionXml struct {
-	XMLName xml.Name      `xml:"entry"`
-	Name    string        `xml:"name,attr"`
-	Misc    []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type entryXml_11_0_2 struct {
 	XMLName                    xml.Name                                       `xml:"entry"`
@@ -177,15 +189,17 @@ type entryXml_11_0_2 struct {
 	ThreatException            *threatExceptionContainerXml_11_0_2            `xml:"threat-exception,omitempty"`
 	WfrtHoldMode               *string                                        `xml:"wfrt-hold-mode,omitempty"`
 	Misc                       []generic.Xml                                  `xml:",any"`
+	MiscAttributes             []xml.Attr                                     `xml:",any,attr"`
 }
 type applicationContainerXml_11_0_2 struct {
 	Entries []applicationXml_11_0_2 `xml:"entry"`
 }
 type applicationXml_11_0_2 struct {
-	XMLName xml.Name      `xml:"entry"`
-	Name    string        `xml:"name,attr"`
-	Action  *string       `xml:"action,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Action         *string       `xml:"action,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type decoderContainerXml_11_0_2 struct {
 	Entries []decoderXml_11_0_2 `xml:"entry"`
@@ -197,6 +211,7 @@ type decoderXml_11_0_2 struct {
 	WildfireAction *string       `xml:"wildfire-action,omitempty"`
 	MlavAction     *string       `xml:"mlav-action,omitempty"`
 	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type mlavEngineFilebasedEnabledContainerXml_11_0_2 struct {
 	Entries []mlavEngineFilebasedEnabledXml_11_0_2 `xml:"entry"`
@@ -206,24 +221,27 @@ type mlavEngineFilebasedEnabledXml_11_0_2 struct {
 	Name             string        `xml:"name,attr"`
 	MlavPolicyAction *string       `xml:"mlav-policy-action,omitempty"`
 	Misc             []generic.Xml `xml:",any"`
+	MiscAttributes   []xml.Attr    `xml:",any,attr"`
 }
 type mlavExceptionContainerXml_11_0_2 struct {
 	Entries []mlavExceptionXml_11_0_2 `xml:"entry"`
 }
 type mlavExceptionXml_11_0_2 struct {
-	XMLName     xml.Name      `xml:"entry"`
-	Name        string        `xml:"name,attr"`
-	Filename    *string       `xml:"filename,omitempty"`
-	Description *string       `xml:"description,omitempty"`
-	Misc        []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Filename       *string       `xml:"filename,omitempty"`
+	Description    *string       `xml:"description,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type threatExceptionContainerXml_11_0_2 struct {
 	Entries []threatExceptionXml_11_0_2 `xml:"entry"`
 }
 type threatExceptionXml_11_0_2 struct {
-	XMLName xml.Name      `xml:"entry"`
-	Name    string        `xml:"name,attr"`
-	Misc    []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 
 func (o *entryXml) MarshalFromObject(s Entry) {
@@ -278,6 +296,7 @@ func (o *entryXml) MarshalFromObject(s Entry) {
 	}
 	o.WfrtHoldMode = util.YesNo(s.WfrtHoldMode, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o entryXml) UnmarshalToObject() (*Entry, error) {
@@ -344,6 +363,7 @@ func (o entryXml) UnmarshalToObject() (*Entry, error) {
 		ThreatException:            threatExceptionVal,
 		WfrtHoldMode:               util.AsBool(o.WfrtHoldMode, nil),
 		Misc:                       o.Misc,
+		MiscAttributes:             o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -351,14 +371,16 @@ func (o *applicationXml) MarshalFromObject(s Application) {
 	o.Name = s.Name
 	o.Action = s.Action
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o applicationXml) UnmarshalToObject() (*Application, error) {
 
 	result := &Application{
-		Name:   o.Name,
-		Action: o.Action,
-		Misc:   o.Misc,
+		Name:           o.Name,
+		Action:         o.Action,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -368,6 +390,7 @@ func (o *decoderXml) MarshalFromObject(s Decoder) {
 	o.WildfireAction = s.WildfireAction
 	o.MlavAction = s.MlavAction
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o decoderXml) UnmarshalToObject() (*Decoder, error) {
@@ -378,6 +401,7 @@ func (o decoderXml) UnmarshalToObject() (*Decoder, error) {
 		WildfireAction: o.WildfireAction,
 		MlavAction:     o.MlavAction,
 		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -385,6 +409,7 @@ func (o *mlavEngineFilebasedEnabledXml) MarshalFromObject(s MlavEngineFilebasedE
 	o.Name = s.Name
 	o.MlavPolicyAction = s.MlavPolicyAction
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o mlavEngineFilebasedEnabledXml) UnmarshalToObject() (*MlavEngineFilebasedEnabled, error) {
@@ -393,6 +418,7 @@ func (o mlavEngineFilebasedEnabledXml) UnmarshalToObject() (*MlavEngineFilebased
 		Name:             o.Name,
 		MlavPolicyAction: o.MlavPolicyAction,
 		Misc:             o.Misc,
+		MiscAttributes:   o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -401,28 +427,32 @@ func (o *mlavExceptionXml) MarshalFromObject(s MlavException) {
 	o.Filename = s.Filename
 	o.Description = s.Description
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o mlavExceptionXml) UnmarshalToObject() (*MlavException, error) {
 
 	result := &MlavException{
-		Name:        o.Name,
-		Filename:    o.Filename,
-		Description: o.Description,
-		Misc:        o.Misc,
+		Name:           o.Name,
+		Filename:       o.Filename,
+		Description:    o.Description,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *threatExceptionXml) MarshalFromObject(s ThreatException) {
 	o.Name = s.Name
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o threatExceptionXml) UnmarshalToObject() (*ThreatException, error) {
 
 	result := &ThreatException{
-		Name: o.Name,
-		Misc: o.Misc,
+		Name:           o.Name,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -478,6 +508,7 @@ func (o *entryXml_11_0_2) MarshalFromObject(s Entry) {
 	}
 	o.WfrtHoldMode = util.YesNo(s.WfrtHoldMode, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o entryXml_11_0_2) UnmarshalToObject() (*Entry, error) {
@@ -544,6 +575,7 @@ func (o entryXml_11_0_2) UnmarshalToObject() (*Entry, error) {
 		ThreatException:            threatExceptionVal,
 		WfrtHoldMode:               util.AsBool(o.WfrtHoldMode, nil),
 		Misc:                       o.Misc,
+		MiscAttributes:             o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -551,14 +583,16 @@ func (o *applicationXml_11_0_2) MarshalFromObject(s Application) {
 	o.Name = s.Name
 	o.Action = s.Action
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o applicationXml_11_0_2) UnmarshalToObject() (*Application, error) {
 
 	result := &Application{
-		Name:   o.Name,
-		Action: o.Action,
-		Misc:   o.Misc,
+		Name:           o.Name,
+		Action:         o.Action,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -568,6 +602,7 @@ func (o *decoderXml_11_0_2) MarshalFromObject(s Decoder) {
 	o.WildfireAction = s.WildfireAction
 	o.MlavAction = s.MlavAction
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o decoderXml_11_0_2) UnmarshalToObject() (*Decoder, error) {
@@ -578,6 +613,7 @@ func (o decoderXml_11_0_2) UnmarshalToObject() (*Decoder, error) {
 		WildfireAction: o.WildfireAction,
 		MlavAction:     o.MlavAction,
 		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -585,6 +621,7 @@ func (o *mlavEngineFilebasedEnabledXml_11_0_2) MarshalFromObject(s MlavEngineFil
 	o.Name = s.Name
 	o.MlavPolicyAction = s.MlavPolicyAction
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o mlavEngineFilebasedEnabledXml_11_0_2) UnmarshalToObject() (*MlavEngineFilebasedEnabled, error) {
@@ -593,6 +630,7 @@ func (o mlavEngineFilebasedEnabledXml_11_0_2) UnmarshalToObject() (*MlavEngineFi
 		Name:             o.Name,
 		MlavPolicyAction: o.MlavPolicyAction,
 		Misc:             o.Misc,
+		MiscAttributes:   o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -601,28 +639,32 @@ func (o *mlavExceptionXml_11_0_2) MarshalFromObject(s MlavException) {
 	o.Filename = s.Filename
 	o.Description = s.Description
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o mlavExceptionXml_11_0_2) UnmarshalToObject() (*MlavException, error) {
 
 	result := &MlavException{
-		Name:        o.Name,
-		Filename:    o.Filename,
-		Description: o.Description,
-		Misc:        o.Misc,
+		Name:           o.Name,
+		Filename:       o.Filename,
+		Description:    o.Description,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *threatExceptionXml_11_0_2) MarshalFromObject(s ThreatException) {
 	o.Name = s.Name
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o threatExceptionXml_11_0_2) UnmarshalToObject() (*ThreatException, error) {
 
 	result := &ThreatException{
-		Name: o.Name,
-		Misc: o.Misc,
+		Name:           o.Name,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -864,4 +906,12 @@ func (o *Entry) EntryName() string {
 
 func (o *Entry) SetEntryName(name string) {
 	o.Name = name
+}
+
+func (o *Entry) GetMiscAttributes() []xml.Attr {
+	return o.MiscAttributes
+}
+
+func (o *Entry) SetMiscAttributes(attrs []xml.Attr) {
+	o.MiscAttributes = attrs
 }

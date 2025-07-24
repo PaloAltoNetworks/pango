@@ -19,10 +19,11 @@ var (
 )
 
 type Entry struct {
-	Name        string
-	Description *string
-	Type        *Type
-	Misc        []generic.Xml
+	Name           string
+	Description    *string
+	Type           *Type
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Type struct {
 	IpNetmask      *string
@@ -37,6 +38,7 @@ type Type struct {
 	EgressMax      *string
 	LinkTag        *string
 	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 
 type entryXmlContainer struct {
@@ -63,11 +65,12 @@ func specifyEntry(source *Entry) (any, error) {
 }
 
 type entryXml struct {
-	XMLName     xml.Name      `xml:"entry"`
-	Name        string        `xml:"name,attr"`
-	Description *string       `xml:"description,omitempty"`
-	Type        *typeXml      `xml:"type,omitempty"`
-	Misc        []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Description    *string       `xml:"description,omitempty"`
+	Type           *typeXml      `xml:"type,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type typeXml struct {
 	IpNetmask      *string       `xml:"ip-netmask,omitempty"`
@@ -82,6 +85,7 @@ type typeXml struct {
 	EgressMax      *string       `xml:"egress-max,omitempty"`
 	LinkTag        *string       `xml:"link-tag,omitempty"`
 	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 
 func (o *entryXml) MarshalFromObject(s Entry) {
@@ -93,6 +97,7 @@ func (o *entryXml) MarshalFromObject(s Entry) {
 		o.Type = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o entryXml) UnmarshalToObject() (*Entry, error) {
@@ -106,10 +111,11 @@ func (o entryXml) UnmarshalToObject() (*Entry, error) {
 	}
 
 	result := &Entry{
-		Name:        o.Name,
-		Description: o.Description,
-		Type:        typeVal,
-		Misc:        o.Misc,
+		Name:           o.Name,
+		Description:    o.Description,
+		Type:           typeVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -126,6 +132,7 @@ func (o *typeXml) MarshalFromObject(s Type) {
 	o.EgressMax = s.EgressMax
 	o.LinkTag = s.LinkTag
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o typeXml) UnmarshalToObject() (*Type, error) {
@@ -143,6 +150,7 @@ func (o typeXml) UnmarshalToObject() (*Type, error) {
 		EgressMax:      o.EgressMax,
 		LinkTag:        o.LinkTag,
 		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -246,4 +254,12 @@ func (o *Entry) EntryName() string {
 
 func (o *Entry) SetEntryName(name string) {
 	o.Name = name
+}
+
+func (o *Entry) GetMiscAttributes() []xml.Attr {
+	return o.MiscAttributes
+}
+
+func (o *Entry) SetMiscAttributes(attrs []xml.Attr) {
+	o.MiscAttributes = attrs
 }

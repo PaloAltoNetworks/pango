@@ -45,37 +45,45 @@ type Entry struct {
 	Type                *Type
 	Uuid                *string
 	Misc                []generic.Xml
+	MiscAttributes      []xml.Attr
 }
 type Target struct {
-	Devices []TargetDevices
-	Negate  *bool
-	Tags    []string
-	Misc    []generic.Xml
+	Devices        []TargetDevices
+	Negate         *bool
+	Tags           []string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type TargetDevices struct {
-	Name string
-	Vsys []TargetDevicesVsys
-	Misc []generic.Xml
+	Name           string
+	Vsys           []TargetDevicesVsys
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type TargetDevicesVsys struct {
-	Name string
-	Misc []generic.Xml
+	Name           string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Type struct {
 	SshProxy             *TypeSshProxy
 	SslForwardProxy      *TypeSslForwardProxy
 	SslInboundInspection *TypeSslInboundInspection
 	Misc                 []generic.Xml
+	MiscAttributes       []xml.Attr
 }
 type TypeSshProxy struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type TypeSslForwardProxy struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type TypeSslInboundInspection struct {
-	Certificates []string
-	Misc         []generic.Xml
+	Certificates   []string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 
 type entryXmlContainer struct {
@@ -129,45 +137,53 @@ type entryXml struct {
 	Type                *typeXml         `xml:"type,omitempty"`
 	Uuid                *string          `xml:"uuid,attr,omitempty"`
 	Misc                []generic.Xml    `xml:",any"`
+	MiscAttributes      []xml.Attr       `xml:",any,attr"`
 }
 type targetXml struct {
-	Devices *targetDevicesContainerXml `xml:"devices,omitempty"`
-	Negate  *string                    `xml:"negate,omitempty"`
-	Tags    *util.MemberType           `xml:"tags,omitempty"`
-	Misc    []generic.Xml              `xml:",any"`
+	Devices        *targetDevicesContainerXml `xml:"devices,omitempty"`
+	Negate         *string                    `xml:"negate,omitempty"`
+	Tags           *util.MemberType           `xml:"tags,omitempty"`
+	Misc           []generic.Xml              `xml:",any"`
+	MiscAttributes []xml.Attr                 `xml:",any,attr"`
 }
 type targetDevicesContainerXml struct {
 	Entries []targetDevicesXml `xml:"entry"`
 }
 type targetDevicesXml struct {
-	XMLName xml.Name                       `xml:"entry"`
-	Name    string                         `xml:"name,attr"`
-	Vsys    *targetDevicesVsysContainerXml `xml:"vsys,omitempty"`
-	Misc    []generic.Xml                  `xml:",any"`
+	XMLName        xml.Name                       `xml:"entry"`
+	Name           string                         `xml:"name,attr"`
+	Vsys           *targetDevicesVsysContainerXml `xml:"vsys,omitempty"`
+	Misc           []generic.Xml                  `xml:",any"`
+	MiscAttributes []xml.Attr                     `xml:",any,attr"`
 }
 type targetDevicesVsysContainerXml struct {
 	Entries []targetDevicesVsysXml `xml:"entry"`
 }
 type targetDevicesVsysXml struct {
-	XMLName xml.Name      `xml:"entry"`
-	Name    string        `xml:"name,attr"`
-	Misc    []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type typeXml struct {
 	SshProxy             *typeSshProxyXml             `xml:"ssh-proxy,omitempty"`
 	SslForwardProxy      *typeSslForwardProxyXml      `xml:"ssl-forward-proxy,omitempty"`
 	SslInboundInspection *typeSslInboundInspectionXml `xml:"ssl-inbound-inspection,omitempty"`
 	Misc                 []generic.Xml                `xml:",any"`
+	MiscAttributes       []xml.Attr                   `xml:",any,attr"`
 }
 type typeSshProxyXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type typeSslForwardProxyXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type typeSslInboundInspectionXml struct {
-	Certificates *util.MemberType `xml:"certificates,omitempty"`
-	Misc         []generic.Xml    `xml:",any"`
+	Certificates   *util.MemberType `xml:"certificates,omitempty"`
+	Misc           []generic.Xml    `xml:",any"`
+	MiscAttributes []xml.Attr       `xml:",any,attr"`
 }
 
 func (o *entryXml) MarshalFromObject(s Entry) {
@@ -225,6 +241,7 @@ func (o *entryXml) MarshalFromObject(s Entry) {
 	}
 	o.Uuid = s.Uuid
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o entryXml) UnmarshalToObject() (*Entry, error) {
@@ -312,6 +329,7 @@ func (o entryXml) UnmarshalToObject() (*Entry, error) {
 		Type:                typeVal,
 		Uuid:                o.Uuid,
 		Misc:                o.Misc,
+		MiscAttributes:      o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -330,6 +348,7 @@ func (o *targetXml) MarshalFromObject(s Target) {
 		o.Tags = util.StrToMem(s.Tags)
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o targetXml) UnmarshalToObject() (*Target, error) {
@@ -349,10 +368,11 @@ func (o targetXml) UnmarshalToObject() (*Target, error) {
 	}
 
 	result := &Target{
-		Devices: devicesVal,
-		Negate:  util.AsBool(o.Negate, nil),
-		Tags:    tagsVal,
-		Misc:    o.Misc,
+		Devices:        devicesVal,
+		Negate:         util.AsBool(o.Negate, nil),
+		Tags:           tagsVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -368,6 +388,7 @@ func (o *targetDevicesXml) MarshalFromObject(s TargetDevices) {
 		o.Vsys = &targetDevicesVsysContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o targetDevicesXml) UnmarshalToObject() (*TargetDevices, error) {
@@ -383,22 +404,25 @@ func (o targetDevicesXml) UnmarshalToObject() (*TargetDevices, error) {
 	}
 
 	result := &TargetDevices{
-		Name: o.Name,
-		Vsys: vsysVal,
-		Misc: o.Misc,
+		Name:           o.Name,
+		Vsys:           vsysVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *targetDevicesVsysXml) MarshalFromObject(s TargetDevicesVsys) {
 	o.Name = s.Name
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o targetDevicesVsysXml) UnmarshalToObject() (*TargetDevicesVsys, error) {
 
 	result := &TargetDevicesVsys{
-		Name: o.Name,
-		Misc: o.Misc,
+		Name:           o.Name,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -419,6 +443,7 @@ func (o *typeXml) MarshalFromObject(s Type) {
 		o.SslInboundInspection = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o typeXml) UnmarshalToObject() (*Type, error) {
@@ -452,28 +477,33 @@ func (o typeXml) UnmarshalToObject() (*Type, error) {
 		SslForwardProxy:      sslForwardProxyVal,
 		SslInboundInspection: sslInboundInspectionVal,
 		Misc:                 o.Misc,
+		MiscAttributes:       o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *typeSshProxyXml) MarshalFromObject(s TypeSshProxy) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o typeSshProxyXml) UnmarshalToObject() (*TypeSshProxy, error) {
 
 	result := &TypeSshProxy{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *typeSslForwardProxyXml) MarshalFromObject(s TypeSslForwardProxy) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o typeSslForwardProxyXml) UnmarshalToObject() (*TypeSslForwardProxy, error) {
 
 	result := &TypeSslForwardProxy{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -482,6 +512,7 @@ func (o *typeSslInboundInspectionXml) MarshalFromObject(s TypeSslInboundInspecti
 		o.Certificates = util.StrToMem(s.Certificates)
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o typeSslInboundInspectionXml) UnmarshalToObject() (*TypeSslInboundInspection, error) {
@@ -491,8 +522,9 @@ func (o typeSslInboundInspectionXml) UnmarshalToObject() (*TypeSslInboundInspect
 	}
 
 	result := &TypeSslInboundInspection{
-		Certificates: certificatesVal,
-		Misc:         o.Misc,
+		Certificates:   certificatesVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -837,6 +869,14 @@ func (o *Entry) EntryName() string {
 
 func (o *Entry) SetEntryName(name string) {
 	o.Name = name
+}
+
+func (o *Entry) GetMiscAttributes() []xml.Attr {
+	return o.MiscAttributes
+}
+
+func (o *Entry) SetMiscAttributes(attrs []xml.Attr) {
+	o.MiscAttributes = attrs
 }
 func (o *Entry) EntryUuid() *string {
 	return o.Uuid

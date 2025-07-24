@@ -16,11 +16,13 @@ type Config struct {
 	SslTlsServiceProfile *string
 	Timezone             *string
 	Misc                 []generic.Xml
+	MiscAttributes       []xml.Attr
 }
 type GeoLocation struct {
-	Latitude  *string
-	Longitude *string
-	Misc      []generic.Xml
+	Latitude       *string
+	Longitude      *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 
 type configXmlContainer struct {
@@ -56,11 +58,13 @@ type configXml struct {
 	SslTlsServiceProfile *string         `xml:"ssl-tls-service-profile,omitempty"`
 	Timezone             *string         `xml:"timezone,omitempty"`
 	Misc                 []generic.Xml   `xml:",any"`
+	MiscAttributes       []xml.Attr      `xml:",any,attr"`
 }
 type geoLocationXml struct {
-	Latitude  *string       `xml:"latitude,omitempty"`
-	Longitude *string       `xml:"longitude,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	Latitude       *string       `xml:"latitude,omitempty"`
+	Longitude      *string       `xml:"longitude,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 
 func (o *configXml) MarshalFromObject(s Config) {
@@ -75,6 +79,7 @@ func (o *configXml) MarshalFromObject(s Config) {
 	o.SslTlsServiceProfile = s.SslTlsServiceProfile
 	o.Timezone = s.Timezone
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o configXml) UnmarshalToObject() (*Config, error) {
@@ -95,6 +100,7 @@ func (o configXml) UnmarshalToObject() (*Config, error) {
 		SslTlsServiceProfile: o.SslTlsServiceProfile,
 		Timezone:             o.Timezone,
 		Misc:                 o.Misc,
+		MiscAttributes:       o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -102,14 +108,16 @@ func (o *geoLocationXml) MarshalFromObject(s GeoLocation) {
 	o.Latitude = s.Latitude
 	o.Longitude = s.Longitude
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o geoLocationXml) UnmarshalToObject() (*GeoLocation, error) {
 
 	result := &GeoLocation{
-		Latitude:  o.Latitude,
-		Longitude: o.Longitude,
-		Misc:      o.Misc,
+		Latitude:       o.Latitude,
+		Longitude:      o.Longitude,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }

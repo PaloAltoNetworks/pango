@@ -11,6 +11,7 @@ import (
 type Config struct {
 	UpdateSchedule *UpdateSchedule
 	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type UpdateSchedule struct {
 	AntiVirus                  *UpdateScheduleAntiVirus
@@ -22,124 +23,148 @@ type UpdateSchedule struct {
 	WfPrivate                  *UpdateScheduleWfPrivate
 	Wildfire                   *UpdateScheduleWildfire
 	Misc                       []generic.Xml
+	MiscAttributes             []xml.Attr
 }
 type UpdateScheduleAntiVirus struct {
-	Recurring *UpdateScheduleAntiVirusRecurring
-	Misc      []generic.Xml
+	Recurring      *UpdateScheduleAntiVirusRecurring
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type UpdateScheduleAntiVirusRecurring struct {
-	SyncToPeer *bool
-	Threshold  *int64
-	Daily      *UpdateScheduleAntiVirusRecurringDaily
-	Hourly     *UpdateScheduleAntiVirusRecurringHourly
-	None       *UpdateScheduleAntiVirusRecurringNone
-	Weekly     *UpdateScheduleAntiVirusRecurringWeekly
-	Misc       []generic.Xml
+	SyncToPeer     *bool
+	Threshold      *int64
+	Daily          *UpdateScheduleAntiVirusRecurringDaily
+	Hourly         *UpdateScheduleAntiVirusRecurringHourly
+	None           *UpdateScheduleAntiVirusRecurringNone
+	Weekly         *UpdateScheduleAntiVirusRecurringWeekly
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type UpdateScheduleAntiVirusRecurringDaily struct {
-	Action *string
-	At     *string
-	Misc   []generic.Xml
+	Action         *string
+	At             *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type UpdateScheduleAntiVirusRecurringHourly struct {
-	Action *string
-	At     *int64
-	Misc   []generic.Xml
+	Action         *string
+	At             *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type UpdateScheduleAntiVirusRecurringNone struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type UpdateScheduleAntiVirusRecurringWeekly struct {
-	Action    *string
-	At        *string
-	DayOfWeek *string
-	Misc      []generic.Xml
+	Action         *string
+	At             *string
+	DayOfWeek      *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type UpdateScheduleAppProfile struct {
-	Recurring *UpdateScheduleAppProfileRecurring
-	Misc      []generic.Xml
+	Recurring      *UpdateScheduleAppProfileRecurring
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type UpdateScheduleAppProfileRecurring struct {
-	SyncToPeer *bool
-	Threshold  *int64
-	Daily      *UpdateScheduleAppProfileRecurringDaily
-	None       *UpdateScheduleAppProfileRecurringNone
-	Weekly     *UpdateScheduleAppProfileRecurringWeekly
-	Misc       []generic.Xml
+	SyncToPeer     *bool
+	Threshold      *int64
+	Daily          *UpdateScheduleAppProfileRecurringDaily
+	None           *UpdateScheduleAppProfileRecurringNone
+	Weekly         *UpdateScheduleAppProfileRecurringWeekly
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type UpdateScheduleAppProfileRecurringDaily struct {
-	Action *string
-	At     *string
-	Misc   []generic.Xml
+	Action         *string
+	At             *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type UpdateScheduleAppProfileRecurringNone struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type UpdateScheduleAppProfileRecurringWeekly struct {
-	Action    *string
-	At        *string
-	DayOfWeek *string
-	Misc      []generic.Xml
+	Action         *string
+	At             *string
+	DayOfWeek      *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type UpdateScheduleGlobalProtectClientlessVpn struct {
-	Recurring *UpdateScheduleGlobalProtectClientlessVpnRecurring
-	Misc      []generic.Xml
+	Recurring      *UpdateScheduleGlobalProtectClientlessVpnRecurring
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type UpdateScheduleGlobalProtectClientlessVpnRecurring struct {
-	Daily  *UpdateScheduleGlobalProtectClientlessVpnRecurringDaily
-	Hourly *UpdateScheduleGlobalProtectClientlessVpnRecurringHourly
-	None   *UpdateScheduleGlobalProtectClientlessVpnRecurringNone
-	Weekly *UpdateScheduleGlobalProtectClientlessVpnRecurringWeekly
-	Misc   []generic.Xml
+	Daily          *UpdateScheduleGlobalProtectClientlessVpnRecurringDaily
+	Hourly         *UpdateScheduleGlobalProtectClientlessVpnRecurringHourly
+	None           *UpdateScheduleGlobalProtectClientlessVpnRecurringNone
+	Weekly         *UpdateScheduleGlobalProtectClientlessVpnRecurringWeekly
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type UpdateScheduleGlobalProtectClientlessVpnRecurringDaily struct {
-	Action *string
-	At     *string
-	Misc   []generic.Xml
+	Action         *string
+	At             *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type UpdateScheduleGlobalProtectClientlessVpnRecurringHourly struct {
-	Action *string
-	At     *int64
-	Misc   []generic.Xml
+	Action         *string
+	At             *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type UpdateScheduleGlobalProtectClientlessVpnRecurringNone struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type UpdateScheduleGlobalProtectClientlessVpnRecurringWeekly struct {
-	Action    *string
-	At        *string
-	DayOfWeek *string
-	Misc      []generic.Xml
+	Action         *string
+	At             *string
+	DayOfWeek      *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type UpdateScheduleGlobalProtectDatafile struct {
-	Recurring *UpdateScheduleGlobalProtectDatafileRecurring
-	Misc      []generic.Xml
+	Recurring      *UpdateScheduleGlobalProtectDatafileRecurring
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type UpdateScheduleGlobalProtectDatafileRecurring struct {
-	Daily  *UpdateScheduleGlobalProtectDatafileRecurringDaily
-	Hourly *UpdateScheduleGlobalProtectDatafileRecurringHourly
-	None   *UpdateScheduleGlobalProtectDatafileRecurringNone
-	Weekly *UpdateScheduleGlobalProtectDatafileRecurringWeekly
-	Misc   []generic.Xml
+	Daily          *UpdateScheduleGlobalProtectDatafileRecurringDaily
+	Hourly         *UpdateScheduleGlobalProtectDatafileRecurringHourly
+	None           *UpdateScheduleGlobalProtectDatafileRecurringNone
+	Weekly         *UpdateScheduleGlobalProtectDatafileRecurringWeekly
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type UpdateScheduleGlobalProtectDatafileRecurringDaily struct {
-	Action *string
-	At     *string
-	Misc   []generic.Xml
+	Action         *string
+	At             *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type UpdateScheduleGlobalProtectDatafileRecurringHourly struct {
-	Action *string
-	At     *int64
-	Misc   []generic.Xml
+	Action         *string
+	At             *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type UpdateScheduleGlobalProtectDatafileRecurringNone struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type UpdateScheduleGlobalProtectDatafileRecurringWeekly struct {
-	Action    *string
-	At        *string
-	DayOfWeek *string
-	Misc      []generic.Xml
+	Action         *string
+	At             *string
+	DayOfWeek      *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type UpdateScheduleStatisticsService struct {
 	ApplicationReports          *bool
@@ -151,10 +176,12 @@ type UpdateScheduleStatisticsService struct {
 	ThreatPreventionReports     *bool
 	UrlReports                  *bool
 	Misc                        []generic.Xml
+	MiscAttributes              []xml.Attr
 }
 type UpdateScheduleThreats struct {
-	Recurring *UpdateScheduleThreatsRecurring
-	Misc      []generic.Xml
+	Recurring      *UpdateScheduleThreatsRecurring
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type UpdateScheduleThreatsRecurring struct {
 	NewAppThreshold *int64
@@ -166,27 +193,32 @@ type UpdateScheduleThreatsRecurring struct {
 	None            *UpdateScheduleThreatsRecurringNone
 	Weekly          *UpdateScheduleThreatsRecurringWeekly
 	Misc            []generic.Xml
+	MiscAttributes  []xml.Attr
 }
 type UpdateScheduleThreatsRecurringDaily struct {
 	Action            *string
 	At                *string
 	DisableNewContent *bool
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 type UpdateScheduleThreatsRecurringEvery30Mins struct {
 	Action            *string
 	At                *int64
 	DisableNewContent *bool
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 type UpdateScheduleThreatsRecurringHourly struct {
 	Action            *string
 	At                *int64
 	DisableNewContent *bool
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 type UpdateScheduleThreatsRecurringNone struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type UpdateScheduleThreatsRecurringWeekly struct {
 	Action            *string
@@ -194,84 +226,100 @@ type UpdateScheduleThreatsRecurringWeekly struct {
 	DayOfWeek         *string
 	DisableNewContent *bool
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 type UpdateScheduleWfPrivate struct {
-	Recurring *UpdateScheduleWfPrivateRecurring
-	Misc      []generic.Xml
+	Recurring      *UpdateScheduleWfPrivateRecurring
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type UpdateScheduleWfPrivateRecurring struct {
-	SyncToPeer  *bool
-	Every15Mins *UpdateScheduleWfPrivateRecurringEvery15Mins
-	Every30Mins *UpdateScheduleWfPrivateRecurringEvery30Mins
-	Every5Mins  *UpdateScheduleWfPrivateRecurringEvery5Mins
-	EveryHour   *UpdateScheduleWfPrivateRecurringEveryHour
-	None        *UpdateScheduleWfPrivateRecurringNone
-	Misc        []generic.Xml
+	SyncToPeer     *bool
+	Every15Mins    *UpdateScheduleWfPrivateRecurringEvery15Mins
+	Every30Mins    *UpdateScheduleWfPrivateRecurringEvery30Mins
+	Every5Mins     *UpdateScheduleWfPrivateRecurringEvery5Mins
+	EveryHour      *UpdateScheduleWfPrivateRecurringEveryHour
+	None           *UpdateScheduleWfPrivateRecurringNone
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type UpdateScheduleWfPrivateRecurringEvery15Mins struct {
-	Action *string
-	At     *int64
-	Misc   []generic.Xml
+	Action         *string
+	At             *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type UpdateScheduleWfPrivateRecurringEvery30Mins struct {
-	Action *string
-	At     *int64
-	Misc   []generic.Xml
+	Action         *string
+	At             *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type UpdateScheduleWfPrivateRecurringEvery5Mins struct {
-	Action *string
-	At     *int64
-	Misc   []generic.Xml
+	Action         *string
+	At             *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type UpdateScheduleWfPrivateRecurringEveryHour struct {
-	Action *string
-	At     *int64
-	Misc   []generic.Xml
+	Action         *string
+	At             *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type UpdateScheduleWfPrivateRecurringNone struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type UpdateScheduleWildfire struct {
-	Recurring *UpdateScheduleWildfireRecurring
-	Misc      []generic.Xml
+	Recurring      *UpdateScheduleWildfireRecurring
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type UpdateScheduleWildfireRecurring struct {
-	Every15Mins *UpdateScheduleWildfireRecurringEvery15Mins
-	Every30Mins *UpdateScheduleWildfireRecurringEvery30Mins
-	EveryHour   *UpdateScheduleWildfireRecurringEveryHour
-	EveryMin    *UpdateScheduleWildfireRecurringEveryMin
-	None        *UpdateScheduleWildfireRecurringNone
-	RealTime    *UpdateScheduleWildfireRecurringRealTime
-	Misc        []generic.Xml
+	Every15Mins    *UpdateScheduleWildfireRecurringEvery15Mins
+	Every30Mins    *UpdateScheduleWildfireRecurringEvery30Mins
+	EveryHour      *UpdateScheduleWildfireRecurringEveryHour
+	EveryMin       *UpdateScheduleWildfireRecurringEveryMin
+	None           *UpdateScheduleWildfireRecurringNone
+	RealTime       *UpdateScheduleWildfireRecurringRealTime
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type UpdateScheduleWildfireRecurringEvery15Mins struct {
-	Action     *string
-	At         *int64
-	SyncToPeer *bool
-	Misc       []generic.Xml
+	Action         *string
+	At             *int64
+	SyncToPeer     *bool
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type UpdateScheduleWildfireRecurringEvery30Mins struct {
-	Action     *string
-	At         *int64
-	SyncToPeer *bool
-	Misc       []generic.Xml
+	Action         *string
+	At             *int64
+	SyncToPeer     *bool
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type UpdateScheduleWildfireRecurringEveryHour struct {
-	Action     *string
-	At         *int64
-	SyncToPeer *bool
-	Misc       []generic.Xml
+	Action         *string
+	At             *int64
+	SyncToPeer     *bool
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type UpdateScheduleWildfireRecurringEveryMin struct {
-	Action     *string
-	SyncToPeer *bool
-	Misc       []generic.Xml
+	Action         *string
+	SyncToPeer     *bool
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type UpdateScheduleWildfireRecurringNone struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type UpdateScheduleWildfireRecurringRealTime struct {
-	Misc []generic.Xml
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 
 type configXmlContainer struct {
@@ -302,6 +350,7 @@ type configXml struct {
 	XMLName        xml.Name           `xml:"system"`
 	UpdateSchedule *updateScheduleXml `xml:"update-schedule,omitempty"`
 	Misc           []generic.Xml      `xml:",any"`
+	MiscAttributes []xml.Attr         `xml:",any,attr"`
 }
 type updateScheduleXml struct {
 	AntiVirus                  *updateScheduleAntiVirusXml                  `xml:"anti-virus,omitempty"`
@@ -313,124 +362,148 @@ type updateScheduleXml struct {
 	WfPrivate                  *updateScheduleWfPrivateXml                  `xml:"wf-private,omitempty"`
 	Wildfire                   *updateScheduleWildfireXml                   `xml:"wildfire,omitempty"`
 	Misc                       []generic.Xml                                `xml:",any"`
+	MiscAttributes             []xml.Attr                                   `xml:",any,attr"`
 }
 type updateScheduleAntiVirusXml struct {
-	Recurring *updateScheduleAntiVirusRecurringXml `xml:"recurring,omitempty"`
-	Misc      []generic.Xml                        `xml:",any"`
+	Recurring      *updateScheduleAntiVirusRecurringXml `xml:"recurring,omitempty"`
+	Misc           []generic.Xml                        `xml:",any"`
+	MiscAttributes []xml.Attr                           `xml:",any,attr"`
 }
 type updateScheduleAntiVirusRecurringXml struct {
-	SyncToPeer *string                                    `xml:"sync-to-peer,omitempty"`
-	Threshold  *int64                                     `xml:"threshold,omitempty"`
-	Daily      *updateScheduleAntiVirusRecurringDailyXml  `xml:"daily,omitempty"`
-	Hourly     *updateScheduleAntiVirusRecurringHourlyXml `xml:"hourly,omitempty"`
-	None       *updateScheduleAntiVirusRecurringNoneXml   `xml:"none,omitempty"`
-	Weekly     *updateScheduleAntiVirusRecurringWeeklyXml `xml:"weekly,omitempty"`
-	Misc       []generic.Xml                              `xml:",any"`
+	SyncToPeer     *string                                    `xml:"sync-to-peer,omitempty"`
+	Threshold      *int64                                     `xml:"threshold,omitempty"`
+	Daily          *updateScheduleAntiVirusRecurringDailyXml  `xml:"daily,omitempty"`
+	Hourly         *updateScheduleAntiVirusRecurringHourlyXml `xml:"hourly,omitempty"`
+	None           *updateScheduleAntiVirusRecurringNoneXml   `xml:"none,omitempty"`
+	Weekly         *updateScheduleAntiVirusRecurringWeeklyXml `xml:"weekly,omitempty"`
+	Misc           []generic.Xml                              `xml:",any"`
+	MiscAttributes []xml.Attr                                 `xml:",any,attr"`
 }
 type updateScheduleAntiVirusRecurringDailyXml struct {
-	Action *string       `xml:"action,omitempty"`
-	At     *string       `xml:"at,omitempty"`
-	Misc   []generic.Xml `xml:",any"`
+	Action         *string       `xml:"action,omitempty"`
+	At             *string       `xml:"at,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type updateScheduleAntiVirusRecurringHourlyXml struct {
-	Action *string       `xml:"action,omitempty"`
-	At     *int64        `xml:"at,omitempty"`
-	Misc   []generic.Xml `xml:",any"`
+	Action         *string       `xml:"action,omitempty"`
+	At             *int64        `xml:"at,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type updateScheduleAntiVirusRecurringNoneXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type updateScheduleAntiVirusRecurringWeeklyXml struct {
-	Action    *string       `xml:"action,omitempty"`
-	At        *string       `xml:"at,omitempty"`
-	DayOfWeek *string       `xml:"day-of-week,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	Action         *string       `xml:"action,omitempty"`
+	At             *string       `xml:"at,omitempty"`
+	DayOfWeek      *string       `xml:"day-of-week,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type updateScheduleAppProfileXml struct {
-	Recurring *updateScheduleAppProfileRecurringXml `xml:"recurring,omitempty"`
-	Misc      []generic.Xml                         `xml:",any"`
+	Recurring      *updateScheduleAppProfileRecurringXml `xml:"recurring,omitempty"`
+	Misc           []generic.Xml                         `xml:",any"`
+	MiscAttributes []xml.Attr                            `xml:",any,attr"`
 }
 type updateScheduleAppProfileRecurringXml struct {
-	SyncToPeer *string                                     `xml:"sync-to-peer,omitempty"`
-	Threshold  *int64                                      `xml:"threshold,omitempty"`
-	Daily      *updateScheduleAppProfileRecurringDailyXml  `xml:"daily,omitempty"`
-	None       *updateScheduleAppProfileRecurringNoneXml   `xml:"none,omitempty"`
-	Weekly     *updateScheduleAppProfileRecurringWeeklyXml `xml:"weekly,omitempty"`
-	Misc       []generic.Xml                               `xml:",any"`
+	SyncToPeer     *string                                     `xml:"sync-to-peer,omitempty"`
+	Threshold      *int64                                      `xml:"threshold,omitempty"`
+	Daily          *updateScheduleAppProfileRecurringDailyXml  `xml:"daily,omitempty"`
+	None           *updateScheduleAppProfileRecurringNoneXml   `xml:"none,omitempty"`
+	Weekly         *updateScheduleAppProfileRecurringWeeklyXml `xml:"weekly,omitempty"`
+	Misc           []generic.Xml                               `xml:",any"`
+	MiscAttributes []xml.Attr                                  `xml:",any,attr"`
 }
 type updateScheduleAppProfileRecurringDailyXml struct {
-	Action *string       `xml:"action,omitempty"`
-	At     *string       `xml:"at,omitempty"`
-	Misc   []generic.Xml `xml:",any"`
+	Action         *string       `xml:"action,omitempty"`
+	At             *string       `xml:"at,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type updateScheduleAppProfileRecurringNoneXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type updateScheduleAppProfileRecurringWeeklyXml struct {
-	Action    *string       `xml:"action,omitempty"`
-	At        *string       `xml:"at,omitempty"`
-	DayOfWeek *string       `xml:"day-of-week,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	Action         *string       `xml:"action,omitempty"`
+	At             *string       `xml:"at,omitempty"`
+	DayOfWeek      *string       `xml:"day-of-week,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type updateScheduleGlobalProtectClientlessVpnXml struct {
-	Recurring *updateScheduleGlobalProtectClientlessVpnRecurringXml `xml:"recurring,omitempty"`
-	Misc      []generic.Xml                                         `xml:",any"`
+	Recurring      *updateScheduleGlobalProtectClientlessVpnRecurringXml `xml:"recurring,omitempty"`
+	Misc           []generic.Xml                                         `xml:",any"`
+	MiscAttributes []xml.Attr                                            `xml:",any,attr"`
 }
 type updateScheduleGlobalProtectClientlessVpnRecurringXml struct {
-	Daily  *updateScheduleGlobalProtectClientlessVpnRecurringDailyXml  `xml:"daily,omitempty"`
-	Hourly *updateScheduleGlobalProtectClientlessVpnRecurringHourlyXml `xml:"hourly,omitempty"`
-	None   *updateScheduleGlobalProtectClientlessVpnRecurringNoneXml   `xml:"none,omitempty"`
-	Weekly *updateScheduleGlobalProtectClientlessVpnRecurringWeeklyXml `xml:"weekly,omitempty"`
-	Misc   []generic.Xml                                               `xml:",any"`
+	Daily          *updateScheduleGlobalProtectClientlessVpnRecurringDailyXml  `xml:"daily,omitempty"`
+	Hourly         *updateScheduleGlobalProtectClientlessVpnRecurringHourlyXml `xml:"hourly,omitempty"`
+	None           *updateScheduleGlobalProtectClientlessVpnRecurringNoneXml   `xml:"none,omitempty"`
+	Weekly         *updateScheduleGlobalProtectClientlessVpnRecurringWeeklyXml `xml:"weekly,omitempty"`
+	Misc           []generic.Xml                                               `xml:",any"`
+	MiscAttributes []xml.Attr                                                  `xml:",any,attr"`
 }
 type updateScheduleGlobalProtectClientlessVpnRecurringDailyXml struct {
-	Action *string       `xml:"action,omitempty"`
-	At     *string       `xml:"at,omitempty"`
-	Misc   []generic.Xml `xml:",any"`
+	Action         *string       `xml:"action,omitempty"`
+	At             *string       `xml:"at,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type updateScheduleGlobalProtectClientlessVpnRecurringHourlyXml struct {
-	Action *string       `xml:"action,omitempty"`
-	At     *int64        `xml:"at,omitempty"`
-	Misc   []generic.Xml `xml:",any"`
+	Action         *string       `xml:"action,omitempty"`
+	At             *int64        `xml:"at,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type updateScheduleGlobalProtectClientlessVpnRecurringNoneXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type updateScheduleGlobalProtectClientlessVpnRecurringWeeklyXml struct {
-	Action    *string       `xml:"action,omitempty"`
-	At        *string       `xml:"at,omitempty"`
-	DayOfWeek *string       `xml:"day-of-week,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	Action         *string       `xml:"action,omitempty"`
+	At             *string       `xml:"at,omitempty"`
+	DayOfWeek      *string       `xml:"day-of-week,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type updateScheduleGlobalProtectDatafileXml struct {
-	Recurring *updateScheduleGlobalProtectDatafileRecurringXml `xml:"recurring,omitempty"`
-	Misc      []generic.Xml                                    `xml:",any"`
+	Recurring      *updateScheduleGlobalProtectDatafileRecurringXml `xml:"recurring,omitempty"`
+	Misc           []generic.Xml                                    `xml:",any"`
+	MiscAttributes []xml.Attr                                       `xml:",any,attr"`
 }
 type updateScheduleGlobalProtectDatafileRecurringXml struct {
-	Daily  *updateScheduleGlobalProtectDatafileRecurringDailyXml  `xml:"daily,omitempty"`
-	Hourly *updateScheduleGlobalProtectDatafileRecurringHourlyXml `xml:"hourly,omitempty"`
-	None   *updateScheduleGlobalProtectDatafileRecurringNoneXml   `xml:"none,omitempty"`
-	Weekly *updateScheduleGlobalProtectDatafileRecurringWeeklyXml `xml:"weekly,omitempty"`
-	Misc   []generic.Xml                                          `xml:",any"`
+	Daily          *updateScheduleGlobalProtectDatafileRecurringDailyXml  `xml:"daily,omitempty"`
+	Hourly         *updateScheduleGlobalProtectDatafileRecurringHourlyXml `xml:"hourly,omitempty"`
+	None           *updateScheduleGlobalProtectDatafileRecurringNoneXml   `xml:"none,omitempty"`
+	Weekly         *updateScheduleGlobalProtectDatafileRecurringWeeklyXml `xml:"weekly,omitempty"`
+	Misc           []generic.Xml                                          `xml:",any"`
+	MiscAttributes []xml.Attr                                             `xml:",any,attr"`
 }
 type updateScheduleGlobalProtectDatafileRecurringDailyXml struct {
-	Action *string       `xml:"action,omitempty"`
-	At     *string       `xml:"at,omitempty"`
-	Misc   []generic.Xml `xml:",any"`
+	Action         *string       `xml:"action,omitempty"`
+	At             *string       `xml:"at,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type updateScheduleGlobalProtectDatafileRecurringHourlyXml struct {
-	Action *string       `xml:"action,omitempty"`
-	At     *int64        `xml:"at,omitempty"`
-	Misc   []generic.Xml `xml:",any"`
+	Action         *string       `xml:"action,omitempty"`
+	At             *int64        `xml:"at,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type updateScheduleGlobalProtectDatafileRecurringNoneXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type updateScheduleGlobalProtectDatafileRecurringWeeklyXml struct {
-	Action    *string       `xml:"action,omitempty"`
-	At        *string       `xml:"at,omitempty"`
-	DayOfWeek *string       `xml:"day-of-week,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	Action         *string       `xml:"action,omitempty"`
+	At             *string       `xml:"at,omitempty"`
+	DayOfWeek      *string       `xml:"day-of-week,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type updateScheduleStatisticsServiceXml struct {
 	ApplicationReports          *string       `xml:"application-reports,omitempty"`
@@ -442,10 +515,12 @@ type updateScheduleStatisticsServiceXml struct {
 	ThreatPreventionReports     *string       `xml:"threat-prevention-reports,omitempty"`
 	UrlReports                  *string       `xml:"url-reports,omitempty"`
 	Misc                        []generic.Xml `xml:",any"`
+	MiscAttributes              []xml.Attr    `xml:",any,attr"`
 }
 type updateScheduleThreatsXml struct {
-	Recurring *updateScheduleThreatsRecurringXml `xml:"recurring,omitempty"`
-	Misc      []generic.Xml                      `xml:",any"`
+	Recurring      *updateScheduleThreatsRecurringXml `xml:"recurring,omitempty"`
+	Misc           []generic.Xml                      `xml:",any"`
+	MiscAttributes []xml.Attr                         `xml:",any,attr"`
 }
 type updateScheduleThreatsRecurringXml struct {
 	NewAppThreshold *int64                                        `xml:"new-app-threshold,omitempty"`
@@ -457,27 +532,32 @@ type updateScheduleThreatsRecurringXml struct {
 	None            *updateScheduleThreatsRecurringNoneXml        `xml:"none,omitempty"`
 	Weekly          *updateScheduleThreatsRecurringWeeklyXml      `xml:"weekly,omitempty"`
 	Misc            []generic.Xml                                 `xml:",any"`
+	MiscAttributes  []xml.Attr                                    `xml:",any,attr"`
 }
 type updateScheduleThreatsRecurringDailyXml struct {
 	Action            *string       `xml:"action,omitempty"`
 	At                *string       `xml:"at,omitempty"`
 	DisableNewContent *string       `xml:"disable-new-content,omitempty"`
 	Misc              []generic.Xml `xml:",any"`
+	MiscAttributes    []xml.Attr    `xml:",any,attr"`
 }
 type updateScheduleThreatsRecurringEvery30MinsXml struct {
 	Action            *string       `xml:"action,omitempty"`
 	At                *int64        `xml:"at,omitempty"`
 	DisableNewContent *string       `xml:"disable-new-content,omitempty"`
 	Misc              []generic.Xml `xml:",any"`
+	MiscAttributes    []xml.Attr    `xml:",any,attr"`
 }
 type updateScheduleThreatsRecurringHourlyXml struct {
 	Action            *string       `xml:"action,omitempty"`
 	At                *int64        `xml:"at,omitempty"`
 	DisableNewContent *string       `xml:"disable-new-content,omitempty"`
 	Misc              []generic.Xml `xml:",any"`
+	MiscAttributes    []xml.Attr    `xml:",any,attr"`
 }
 type updateScheduleThreatsRecurringNoneXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type updateScheduleThreatsRecurringWeeklyXml struct {
 	Action            *string       `xml:"action,omitempty"`
@@ -485,84 +565,100 @@ type updateScheduleThreatsRecurringWeeklyXml struct {
 	DayOfWeek         *string       `xml:"day-of-week,omitempty"`
 	DisableNewContent *string       `xml:"disable-new-content,omitempty"`
 	Misc              []generic.Xml `xml:",any"`
+	MiscAttributes    []xml.Attr    `xml:",any,attr"`
 }
 type updateScheduleWfPrivateXml struct {
-	Recurring *updateScheduleWfPrivateRecurringXml `xml:"recurring,omitempty"`
-	Misc      []generic.Xml                        `xml:",any"`
+	Recurring      *updateScheduleWfPrivateRecurringXml `xml:"recurring,omitempty"`
+	Misc           []generic.Xml                        `xml:",any"`
+	MiscAttributes []xml.Attr                           `xml:",any,attr"`
 }
 type updateScheduleWfPrivateRecurringXml struct {
-	SyncToPeer  *string                                         `xml:"sync-to-peer,omitempty"`
-	Every15Mins *updateScheduleWfPrivateRecurringEvery15MinsXml `xml:"every-15-mins,omitempty"`
-	Every30Mins *updateScheduleWfPrivateRecurringEvery30MinsXml `xml:"every-30-mins,omitempty"`
-	Every5Mins  *updateScheduleWfPrivateRecurringEvery5MinsXml  `xml:"every-5-mins,omitempty"`
-	EveryHour   *updateScheduleWfPrivateRecurringEveryHourXml   `xml:"every-hour,omitempty"`
-	None        *updateScheduleWfPrivateRecurringNoneXml        `xml:"none,omitempty"`
-	Misc        []generic.Xml                                   `xml:",any"`
+	SyncToPeer     *string                                         `xml:"sync-to-peer,omitempty"`
+	Every15Mins    *updateScheduleWfPrivateRecurringEvery15MinsXml `xml:"every-15-mins,omitempty"`
+	Every30Mins    *updateScheduleWfPrivateRecurringEvery30MinsXml `xml:"every-30-mins,omitempty"`
+	Every5Mins     *updateScheduleWfPrivateRecurringEvery5MinsXml  `xml:"every-5-mins,omitempty"`
+	EveryHour      *updateScheduleWfPrivateRecurringEveryHourXml   `xml:"every-hour,omitempty"`
+	None           *updateScheduleWfPrivateRecurringNoneXml        `xml:"none,omitempty"`
+	Misc           []generic.Xml                                   `xml:",any"`
+	MiscAttributes []xml.Attr                                      `xml:",any,attr"`
 }
 type updateScheduleWfPrivateRecurringEvery15MinsXml struct {
-	Action *string       `xml:"action,omitempty"`
-	At     *int64        `xml:"at,omitempty"`
-	Misc   []generic.Xml `xml:",any"`
+	Action         *string       `xml:"action,omitempty"`
+	At             *int64        `xml:"at,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type updateScheduleWfPrivateRecurringEvery30MinsXml struct {
-	Action *string       `xml:"action,omitempty"`
-	At     *int64        `xml:"at,omitempty"`
-	Misc   []generic.Xml `xml:",any"`
+	Action         *string       `xml:"action,omitempty"`
+	At             *int64        `xml:"at,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type updateScheduleWfPrivateRecurringEvery5MinsXml struct {
-	Action *string       `xml:"action,omitempty"`
-	At     *int64        `xml:"at,omitempty"`
-	Misc   []generic.Xml `xml:",any"`
+	Action         *string       `xml:"action,omitempty"`
+	At             *int64        `xml:"at,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type updateScheduleWfPrivateRecurringEveryHourXml struct {
-	Action *string       `xml:"action,omitempty"`
-	At     *int64        `xml:"at,omitempty"`
-	Misc   []generic.Xml `xml:",any"`
+	Action         *string       `xml:"action,omitempty"`
+	At             *int64        `xml:"at,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type updateScheduleWfPrivateRecurringNoneXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type updateScheduleWildfireXml struct {
-	Recurring *updateScheduleWildfireRecurringXml `xml:"recurring,omitempty"`
-	Misc      []generic.Xml                       `xml:",any"`
+	Recurring      *updateScheduleWildfireRecurringXml `xml:"recurring,omitempty"`
+	Misc           []generic.Xml                       `xml:",any"`
+	MiscAttributes []xml.Attr                          `xml:",any,attr"`
 }
 type updateScheduleWildfireRecurringXml struct {
-	Every15Mins *updateScheduleWildfireRecurringEvery15MinsXml `xml:"every-15-mins,omitempty"`
-	Every30Mins *updateScheduleWildfireRecurringEvery30MinsXml `xml:"every-30-mins,omitempty"`
-	EveryHour   *updateScheduleWildfireRecurringEveryHourXml   `xml:"every-hour,omitempty"`
-	EveryMin    *updateScheduleWildfireRecurringEveryMinXml    `xml:"every-min,omitempty"`
-	None        *updateScheduleWildfireRecurringNoneXml        `xml:"none,omitempty"`
-	RealTime    *updateScheduleWildfireRecurringRealTimeXml    `xml:"real-time,omitempty"`
-	Misc        []generic.Xml                                  `xml:",any"`
+	Every15Mins    *updateScheduleWildfireRecurringEvery15MinsXml `xml:"every-15-mins,omitempty"`
+	Every30Mins    *updateScheduleWildfireRecurringEvery30MinsXml `xml:"every-30-mins,omitempty"`
+	EveryHour      *updateScheduleWildfireRecurringEveryHourXml   `xml:"every-hour,omitempty"`
+	EveryMin       *updateScheduleWildfireRecurringEveryMinXml    `xml:"every-min,omitempty"`
+	None           *updateScheduleWildfireRecurringNoneXml        `xml:"none,omitempty"`
+	RealTime       *updateScheduleWildfireRecurringRealTimeXml    `xml:"real-time,omitempty"`
+	Misc           []generic.Xml                                  `xml:",any"`
+	MiscAttributes []xml.Attr                                     `xml:",any,attr"`
 }
 type updateScheduleWildfireRecurringEvery15MinsXml struct {
-	Action     *string       `xml:"action,omitempty"`
-	At         *int64        `xml:"at,omitempty"`
-	SyncToPeer *string       `xml:"sync-to-peer,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	Action         *string       `xml:"action,omitempty"`
+	At             *int64        `xml:"at,omitempty"`
+	SyncToPeer     *string       `xml:"sync-to-peer,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type updateScheduleWildfireRecurringEvery30MinsXml struct {
-	Action     *string       `xml:"action,omitempty"`
-	At         *int64        `xml:"at,omitempty"`
-	SyncToPeer *string       `xml:"sync-to-peer,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	Action         *string       `xml:"action,omitempty"`
+	At             *int64        `xml:"at,omitempty"`
+	SyncToPeer     *string       `xml:"sync-to-peer,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type updateScheduleWildfireRecurringEveryHourXml struct {
-	Action     *string       `xml:"action,omitempty"`
-	At         *int64        `xml:"at,omitempty"`
-	SyncToPeer *string       `xml:"sync-to-peer,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	Action         *string       `xml:"action,omitempty"`
+	At             *int64        `xml:"at,omitempty"`
+	SyncToPeer     *string       `xml:"sync-to-peer,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type updateScheduleWildfireRecurringEveryMinXml struct {
-	Action     *string       `xml:"action,omitempty"`
-	SyncToPeer *string       `xml:"sync-to-peer,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	Action         *string       `xml:"action,omitempty"`
+	SyncToPeer     *string       `xml:"sync-to-peer,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type updateScheduleWildfireRecurringNoneXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type updateScheduleWildfireRecurringRealTimeXml struct {
-	Misc []generic.Xml `xml:",any"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 
 func (o *configXml) MarshalFromObject(s Config) {
@@ -572,6 +668,7 @@ func (o *configXml) MarshalFromObject(s Config) {
 		o.UpdateSchedule = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o configXml) UnmarshalToObject() (*Config, error) {
@@ -587,6 +684,7 @@ func (o configXml) UnmarshalToObject() (*Config, error) {
 	result := &Config{
 		UpdateSchedule: updateScheduleVal,
 		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -632,6 +730,7 @@ func (o *updateScheduleXml) MarshalFromObject(s UpdateSchedule) {
 		o.Wildfire = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o updateScheduleXml) UnmarshalToObject() (*UpdateSchedule, error) {
@@ -710,6 +809,7 @@ func (o updateScheduleXml) UnmarshalToObject() (*UpdateSchedule, error) {
 		WfPrivate:                  wfPrivateVal,
 		Wildfire:                   wildfireVal,
 		Misc:                       o.Misc,
+		MiscAttributes:             o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -720,6 +820,7 @@ func (o *updateScheduleAntiVirusXml) MarshalFromObject(s UpdateScheduleAntiVirus
 		o.Recurring = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o updateScheduleAntiVirusXml) UnmarshalToObject() (*UpdateScheduleAntiVirus, error) {
@@ -733,8 +834,9 @@ func (o updateScheduleAntiVirusXml) UnmarshalToObject() (*UpdateScheduleAntiViru
 	}
 
 	result := &UpdateScheduleAntiVirus{
-		Recurring: recurringVal,
-		Misc:      o.Misc,
+		Recurring:      recurringVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -762,6 +864,7 @@ func (o *updateScheduleAntiVirusRecurringXml) MarshalFromObject(s UpdateSchedule
 		o.Weekly = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o updateScheduleAntiVirusRecurringXml) UnmarshalToObject() (*UpdateScheduleAntiVirusRecurring, error) {
@@ -799,13 +902,14 @@ func (o updateScheduleAntiVirusRecurringXml) UnmarshalToObject() (*UpdateSchedul
 	}
 
 	result := &UpdateScheduleAntiVirusRecurring{
-		SyncToPeer: util.AsBool(o.SyncToPeer, nil),
-		Threshold:  o.Threshold,
-		Daily:      dailyVal,
-		Hourly:     hourlyVal,
-		None:       noneVal,
-		Weekly:     weeklyVal,
-		Misc:       o.Misc,
+		SyncToPeer:     util.AsBool(o.SyncToPeer, nil),
+		Threshold:      o.Threshold,
+		Daily:          dailyVal,
+		Hourly:         hourlyVal,
+		None:           noneVal,
+		Weekly:         weeklyVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -813,14 +917,16 @@ func (o *updateScheduleAntiVirusRecurringDailyXml) MarshalFromObject(s UpdateSch
 	o.Action = s.Action
 	o.At = s.At
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o updateScheduleAntiVirusRecurringDailyXml) UnmarshalToObject() (*UpdateScheduleAntiVirusRecurringDaily, error) {
 
 	result := &UpdateScheduleAntiVirusRecurringDaily{
-		Action: o.Action,
-		At:     o.At,
-		Misc:   o.Misc,
+		Action:         o.Action,
+		At:             o.At,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -828,25 +934,29 @@ func (o *updateScheduleAntiVirusRecurringHourlyXml) MarshalFromObject(s UpdateSc
 	o.Action = s.Action
 	o.At = s.At
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o updateScheduleAntiVirusRecurringHourlyXml) UnmarshalToObject() (*UpdateScheduleAntiVirusRecurringHourly, error) {
 
 	result := &UpdateScheduleAntiVirusRecurringHourly{
-		Action: o.Action,
-		At:     o.At,
-		Misc:   o.Misc,
+		Action:         o.Action,
+		At:             o.At,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *updateScheduleAntiVirusRecurringNoneXml) MarshalFromObject(s UpdateScheduleAntiVirusRecurringNone) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o updateScheduleAntiVirusRecurringNoneXml) UnmarshalToObject() (*UpdateScheduleAntiVirusRecurringNone, error) {
 
 	result := &UpdateScheduleAntiVirusRecurringNone{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -855,15 +965,17 @@ func (o *updateScheduleAntiVirusRecurringWeeklyXml) MarshalFromObject(s UpdateSc
 	o.At = s.At
 	o.DayOfWeek = s.DayOfWeek
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o updateScheduleAntiVirusRecurringWeeklyXml) UnmarshalToObject() (*UpdateScheduleAntiVirusRecurringWeekly, error) {
 
 	result := &UpdateScheduleAntiVirusRecurringWeekly{
-		Action:    o.Action,
-		At:        o.At,
-		DayOfWeek: o.DayOfWeek,
-		Misc:      o.Misc,
+		Action:         o.Action,
+		At:             o.At,
+		DayOfWeek:      o.DayOfWeek,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -874,6 +986,7 @@ func (o *updateScheduleAppProfileXml) MarshalFromObject(s UpdateScheduleAppProfi
 		o.Recurring = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o updateScheduleAppProfileXml) UnmarshalToObject() (*UpdateScheduleAppProfile, error) {
@@ -887,8 +1000,9 @@ func (o updateScheduleAppProfileXml) UnmarshalToObject() (*UpdateScheduleAppProf
 	}
 
 	result := &UpdateScheduleAppProfile{
-		Recurring: recurringVal,
-		Misc:      o.Misc,
+		Recurring:      recurringVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -911,6 +1025,7 @@ func (o *updateScheduleAppProfileRecurringXml) MarshalFromObject(s UpdateSchedul
 		o.Weekly = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o updateScheduleAppProfileRecurringXml) UnmarshalToObject() (*UpdateScheduleAppProfileRecurring, error) {
@@ -940,12 +1055,13 @@ func (o updateScheduleAppProfileRecurringXml) UnmarshalToObject() (*UpdateSchedu
 	}
 
 	result := &UpdateScheduleAppProfileRecurring{
-		SyncToPeer: util.AsBool(o.SyncToPeer, nil),
-		Threshold:  o.Threshold,
-		Daily:      dailyVal,
-		None:       noneVal,
-		Weekly:     weeklyVal,
-		Misc:       o.Misc,
+		SyncToPeer:     util.AsBool(o.SyncToPeer, nil),
+		Threshold:      o.Threshold,
+		Daily:          dailyVal,
+		None:           noneVal,
+		Weekly:         weeklyVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -953,25 +1069,29 @@ func (o *updateScheduleAppProfileRecurringDailyXml) MarshalFromObject(s UpdateSc
 	o.Action = s.Action
 	o.At = s.At
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o updateScheduleAppProfileRecurringDailyXml) UnmarshalToObject() (*UpdateScheduleAppProfileRecurringDaily, error) {
 
 	result := &UpdateScheduleAppProfileRecurringDaily{
-		Action: o.Action,
-		At:     o.At,
-		Misc:   o.Misc,
+		Action:         o.Action,
+		At:             o.At,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *updateScheduleAppProfileRecurringNoneXml) MarshalFromObject(s UpdateScheduleAppProfileRecurringNone) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o updateScheduleAppProfileRecurringNoneXml) UnmarshalToObject() (*UpdateScheduleAppProfileRecurringNone, error) {
 
 	result := &UpdateScheduleAppProfileRecurringNone{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -980,15 +1100,17 @@ func (o *updateScheduleAppProfileRecurringWeeklyXml) MarshalFromObject(s UpdateS
 	o.At = s.At
 	o.DayOfWeek = s.DayOfWeek
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o updateScheduleAppProfileRecurringWeeklyXml) UnmarshalToObject() (*UpdateScheduleAppProfileRecurringWeekly, error) {
 
 	result := &UpdateScheduleAppProfileRecurringWeekly{
-		Action:    o.Action,
-		At:        o.At,
-		DayOfWeek: o.DayOfWeek,
-		Misc:      o.Misc,
+		Action:         o.Action,
+		At:             o.At,
+		DayOfWeek:      o.DayOfWeek,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -999,6 +1121,7 @@ func (o *updateScheduleGlobalProtectClientlessVpnXml) MarshalFromObject(s Update
 		o.Recurring = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o updateScheduleGlobalProtectClientlessVpnXml) UnmarshalToObject() (*UpdateScheduleGlobalProtectClientlessVpn, error) {
@@ -1012,8 +1135,9 @@ func (o updateScheduleGlobalProtectClientlessVpnXml) UnmarshalToObject() (*Updat
 	}
 
 	result := &UpdateScheduleGlobalProtectClientlessVpn{
-		Recurring: recurringVal,
-		Misc:      o.Misc,
+		Recurring:      recurringVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1039,6 +1163,7 @@ func (o *updateScheduleGlobalProtectClientlessVpnRecurringXml) MarshalFromObject
 		o.Weekly = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o updateScheduleGlobalProtectClientlessVpnRecurringXml) UnmarshalToObject() (*UpdateScheduleGlobalProtectClientlessVpnRecurring, error) {
@@ -1076,11 +1201,12 @@ func (o updateScheduleGlobalProtectClientlessVpnRecurringXml) UnmarshalToObject(
 	}
 
 	result := &UpdateScheduleGlobalProtectClientlessVpnRecurring{
-		Daily:  dailyVal,
-		Hourly: hourlyVal,
-		None:   noneVal,
-		Weekly: weeklyVal,
-		Misc:   o.Misc,
+		Daily:          dailyVal,
+		Hourly:         hourlyVal,
+		None:           noneVal,
+		Weekly:         weeklyVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1088,14 +1214,16 @@ func (o *updateScheduleGlobalProtectClientlessVpnRecurringDailyXml) MarshalFromO
 	o.Action = s.Action
 	o.At = s.At
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o updateScheduleGlobalProtectClientlessVpnRecurringDailyXml) UnmarshalToObject() (*UpdateScheduleGlobalProtectClientlessVpnRecurringDaily, error) {
 
 	result := &UpdateScheduleGlobalProtectClientlessVpnRecurringDaily{
-		Action: o.Action,
-		At:     o.At,
-		Misc:   o.Misc,
+		Action:         o.Action,
+		At:             o.At,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1103,25 +1231,29 @@ func (o *updateScheduleGlobalProtectClientlessVpnRecurringHourlyXml) MarshalFrom
 	o.Action = s.Action
 	o.At = s.At
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o updateScheduleGlobalProtectClientlessVpnRecurringHourlyXml) UnmarshalToObject() (*UpdateScheduleGlobalProtectClientlessVpnRecurringHourly, error) {
 
 	result := &UpdateScheduleGlobalProtectClientlessVpnRecurringHourly{
-		Action: o.Action,
-		At:     o.At,
-		Misc:   o.Misc,
+		Action:         o.Action,
+		At:             o.At,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *updateScheduleGlobalProtectClientlessVpnRecurringNoneXml) MarshalFromObject(s UpdateScheduleGlobalProtectClientlessVpnRecurringNone) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o updateScheduleGlobalProtectClientlessVpnRecurringNoneXml) UnmarshalToObject() (*UpdateScheduleGlobalProtectClientlessVpnRecurringNone, error) {
 
 	result := &UpdateScheduleGlobalProtectClientlessVpnRecurringNone{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1130,15 +1262,17 @@ func (o *updateScheduleGlobalProtectClientlessVpnRecurringWeeklyXml) MarshalFrom
 	o.At = s.At
 	o.DayOfWeek = s.DayOfWeek
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o updateScheduleGlobalProtectClientlessVpnRecurringWeeklyXml) UnmarshalToObject() (*UpdateScheduleGlobalProtectClientlessVpnRecurringWeekly, error) {
 
 	result := &UpdateScheduleGlobalProtectClientlessVpnRecurringWeekly{
-		Action:    o.Action,
-		At:        o.At,
-		DayOfWeek: o.DayOfWeek,
-		Misc:      o.Misc,
+		Action:         o.Action,
+		At:             o.At,
+		DayOfWeek:      o.DayOfWeek,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1149,6 +1283,7 @@ func (o *updateScheduleGlobalProtectDatafileXml) MarshalFromObject(s UpdateSched
 		o.Recurring = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o updateScheduleGlobalProtectDatafileXml) UnmarshalToObject() (*UpdateScheduleGlobalProtectDatafile, error) {
@@ -1162,8 +1297,9 @@ func (o updateScheduleGlobalProtectDatafileXml) UnmarshalToObject() (*UpdateSche
 	}
 
 	result := &UpdateScheduleGlobalProtectDatafile{
-		Recurring: recurringVal,
-		Misc:      o.Misc,
+		Recurring:      recurringVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1189,6 +1325,7 @@ func (o *updateScheduleGlobalProtectDatafileRecurringXml) MarshalFromObject(s Up
 		o.Weekly = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o updateScheduleGlobalProtectDatafileRecurringXml) UnmarshalToObject() (*UpdateScheduleGlobalProtectDatafileRecurring, error) {
@@ -1226,11 +1363,12 @@ func (o updateScheduleGlobalProtectDatafileRecurringXml) UnmarshalToObject() (*U
 	}
 
 	result := &UpdateScheduleGlobalProtectDatafileRecurring{
-		Daily:  dailyVal,
-		Hourly: hourlyVal,
-		None:   noneVal,
-		Weekly: weeklyVal,
-		Misc:   o.Misc,
+		Daily:          dailyVal,
+		Hourly:         hourlyVal,
+		None:           noneVal,
+		Weekly:         weeklyVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1238,14 +1376,16 @@ func (o *updateScheduleGlobalProtectDatafileRecurringDailyXml) MarshalFromObject
 	o.Action = s.Action
 	o.At = s.At
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o updateScheduleGlobalProtectDatafileRecurringDailyXml) UnmarshalToObject() (*UpdateScheduleGlobalProtectDatafileRecurringDaily, error) {
 
 	result := &UpdateScheduleGlobalProtectDatafileRecurringDaily{
-		Action: o.Action,
-		At:     o.At,
-		Misc:   o.Misc,
+		Action:         o.Action,
+		At:             o.At,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1253,25 +1393,29 @@ func (o *updateScheduleGlobalProtectDatafileRecurringHourlyXml) MarshalFromObjec
 	o.Action = s.Action
 	o.At = s.At
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o updateScheduleGlobalProtectDatafileRecurringHourlyXml) UnmarshalToObject() (*UpdateScheduleGlobalProtectDatafileRecurringHourly, error) {
 
 	result := &UpdateScheduleGlobalProtectDatafileRecurringHourly{
-		Action: o.Action,
-		At:     o.At,
-		Misc:   o.Misc,
+		Action:         o.Action,
+		At:             o.At,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *updateScheduleGlobalProtectDatafileRecurringNoneXml) MarshalFromObject(s UpdateScheduleGlobalProtectDatafileRecurringNone) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o updateScheduleGlobalProtectDatafileRecurringNoneXml) UnmarshalToObject() (*UpdateScheduleGlobalProtectDatafileRecurringNone, error) {
 
 	result := &UpdateScheduleGlobalProtectDatafileRecurringNone{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1280,15 +1424,17 @@ func (o *updateScheduleGlobalProtectDatafileRecurringWeeklyXml) MarshalFromObjec
 	o.At = s.At
 	o.DayOfWeek = s.DayOfWeek
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o updateScheduleGlobalProtectDatafileRecurringWeeklyXml) UnmarshalToObject() (*UpdateScheduleGlobalProtectDatafileRecurringWeekly, error) {
 
 	result := &UpdateScheduleGlobalProtectDatafileRecurringWeekly{
-		Action:    o.Action,
-		At:        o.At,
-		DayOfWeek: o.DayOfWeek,
-		Misc:      o.Misc,
+		Action:         o.Action,
+		At:             o.At,
+		DayOfWeek:      o.DayOfWeek,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1302,6 +1448,7 @@ func (o *updateScheduleStatisticsServiceXml) MarshalFromObject(s UpdateScheduleS
 	o.ThreatPreventionReports = util.YesNo(s.ThreatPreventionReports, nil)
 	o.UrlReports = util.YesNo(s.UrlReports, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o updateScheduleStatisticsServiceXml) UnmarshalToObject() (*UpdateScheduleStatisticsService, error) {
@@ -1316,6 +1463,7 @@ func (o updateScheduleStatisticsServiceXml) UnmarshalToObject() (*UpdateSchedule
 		ThreatPreventionReports:     util.AsBool(o.ThreatPreventionReports, nil),
 		UrlReports:                  util.AsBool(o.UrlReports, nil),
 		Misc:                        o.Misc,
+		MiscAttributes:              o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1326,6 +1474,7 @@ func (o *updateScheduleThreatsXml) MarshalFromObject(s UpdateScheduleThreats) {
 		o.Recurring = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o updateScheduleThreatsXml) UnmarshalToObject() (*UpdateScheduleThreats, error) {
@@ -1339,8 +1488,9 @@ func (o updateScheduleThreatsXml) UnmarshalToObject() (*UpdateScheduleThreats, e
 	}
 
 	result := &UpdateScheduleThreats{
-		Recurring: recurringVal,
-		Misc:      o.Misc,
+		Recurring:      recurringVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1374,6 +1524,7 @@ func (o *updateScheduleThreatsRecurringXml) MarshalFromObject(s UpdateScheduleTh
 		o.Weekly = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o updateScheduleThreatsRecurringXml) UnmarshalToObject() (*UpdateScheduleThreatsRecurring, error) {
@@ -1428,6 +1579,7 @@ func (o updateScheduleThreatsRecurringXml) UnmarshalToObject() (*UpdateScheduleT
 		None:            noneVal,
 		Weekly:          weeklyVal,
 		Misc:            o.Misc,
+		MiscAttributes:  o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1436,6 +1588,7 @@ func (o *updateScheduleThreatsRecurringDailyXml) MarshalFromObject(s UpdateSched
 	o.At = s.At
 	o.DisableNewContent = util.YesNo(s.DisableNewContent, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o updateScheduleThreatsRecurringDailyXml) UnmarshalToObject() (*UpdateScheduleThreatsRecurringDaily, error) {
@@ -1445,6 +1598,7 @@ func (o updateScheduleThreatsRecurringDailyXml) UnmarshalToObject() (*UpdateSche
 		At:                o.At,
 		DisableNewContent: util.AsBool(o.DisableNewContent, nil),
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1453,6 +1607,7 @@ func (o *updateScheduleThreatsRecurringEvery30MinsXml) MarshalFromObject(s Updat
 	o.At = s.At
 	o.DisableNewContent = util.YesNo(s.DisableNewContent, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o updateScheduleThreatsRecurringEvery30MinsXml) UnmarshalToObject() (*UpdateScheduleThreatsRecurringEvery30Mins, error) {
@@ -1462,6 +1617,7 @@ func (o updateScheduleThreatsRecurringEvery30MinsXml) UnmarshalToObject() (*Upda
 		At:                o.At,
 		DisableNewContent: util.AsBool(o.DisableNewContent, nil),
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1470,6 +1626,7 @@ func (o *updateScheduleThreatsRecurringHourlyXml) MarshalFromObject(s UpdateSche
 	o.At = s.At
 	o.DisableNewContent = util.YesNo(s.DisableNewContent, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o updateScheduleThreatsRecurringHourlyXml) UnmarshalToObject() (*UpdateScheduleThreatsRecurringHourly, error) {
@@ -1479,17 +1636,20 @@ func (o updateScheduleThreatsRecurringHourlyXml) UnmarshalToObject() (*UpdateSch
 		At:                o.At,
 		DisableNewContent: util.AsBool(o.DisableNewContent, nil),
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *updateScheduleThreatsRecurringNoneXml) MarshalFromObject(s UpdateScheduleThreatsRecurringNone) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o updateScheduleThreatsRecurringNoneXml) UnmarshalToObject() (*UpdateScheduleThreatsRecurringNone, error) {
 
 	result := &UpdateScheduleThreatsRecurringNone{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1499,6 +1659,7 @@ func (o *updateScheduleThreatsRecurringWeeklyXml) MarshalFromObject(s UpdateSche
 	o.DayOfWeek = s.DayOfWeek
 	o.DisableNewContent = util.YesNo(s.DisableNewContent, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o updateScheduleThreatsRecurringWeeklyXml) UnmarshalToObject() (*UpdateScheduleThreatsRecurringWeekly, error) {
@@ -1509,6 +1670,7 @@ func (o updateScheduleThreatsRecurringWeeklyXml) UnmarshalToObject() (*UpdateSch
 		DayOfWeek:         o.DayOfWeek,
 		DisableNewContent: util.AsBool(o.DisableNewContent, nil),
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1519,6 +1681,7 @@ func (o *updateScheduleWfPrivateXml) MarshalFromObject(s UpdateScheduleWfPrivate
 		o.Recurring = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o updateScheduleWfPrivateXml) UnmarshalToObject() (*UpdateScheduleWfPrivate, error) {
@@ -1532,8 +1695,9 @@ func (o updateScheduleWfPrivateXml) UnmarshalToObject() (*UpdateScheduleWfPrivat
 	}
 
 	result := &UpdateScheduleWfPrivate{
-		Recurring: recurringVal,
-		Misc:      o.Misc,
+		Recurring:      recurringVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1565,6 +1729,7 @@ func (o *updateScheduleWfPrivateRecurringXml) MarshalFromObject(s UpdateSchedule
 		o.None = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o updateScheduleWfPrivateRecurringXml) UnmarshalToObject() (*UpdateScheduleWfPrivateRecurring, error) {
@@ -1610,13 +1775,14 @@ func (o updateScheduleWfPrivateRecurringXml) UnmarshalToObject() (*UpdateSchedul
 	}
 
 	result := &UpdateScheduleWfPrivateRecurring{
-		SyncToPeer:  util.AsBool(o.SyncToPeer, nil),
-		Every15Mins: every15MinsVal,
-		Every30Mins: every30MinsVal,
-		Every5Mins:  every5MinsVal,
-		EveryHour:   everyHourVal,
-		None:        noneVal,
-		Misc:        o.Misc,
+		SyncToPeer:     util.AsBool(o.SyncToPeer, nil),
+		Every15Mins:    every15MinsVal,
+		Every30Mins:    every30MinsVal,
+		Every5Mins:     every5MinsVal,
+		EveryHour:      everyHourVal,
+		None:           noneVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1624,14 +1790,16 @@ func (o *updateScheduleWfPrivateRecurringEvery15MinsXml) MarshalFromObject(s Upd
 	o.Action = s.Action
 	o.At = s.At
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o updateScheduleWfPrivateRecurringEvery15MinsXml) UnmarshalToObject() (*UpdateScheduleWfPrivateRecurringEvery15Mins, error) {
 
 	result := &UpdateScheduleWfPrivateRecurringEvery15Mins{
-		Action: o.Action,
-		At:     o.At,
-		Misc:   o.Misc,
+		Action:         o.Action,
+		At:             o.At,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1639,14 +1807,16 @@ func (o *updateScheduleWfPrivateRecurringEvery30MinsXml) MarshalFromObject(s Upd
 	o.Action = s.Action
 	o.At = s.At
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o updateScheduleWfPrivateRecurringEvery30MinsXml) UnmarshalToObject() (*UpdateScheduleWfPrivateRecurringEvery30Mins, error) {
 
 	result := &UpdateScheduleWfPrivateRecurringEvery30Mins{
-		Action: o.Action,
-		At:     o.At,
-		Misc:   o.Misc,
+		Action:         o.Action,
+		At:             o.At,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1654,14 +1824,16 @@ func (o *updateScheduleWfPrivateRecurringEvery5MinsXml) MarshalFromObject(s Upda
 	o.Action = s.Action
 	o.At = s.At
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o updateScheduleWfPrivateRecurringEvery5MinsXml) UnmarshalToObject() (*UpdateScheduleWfPrivateRecurringEvery5Mins, error) {
 
 	result := &UpdateScheduleWfPrivateRecurringEvery5Mins{
-		Action: o.Action,
-		At:     o.At,
-		Misc:   o.Misc,
+		Action:         o.Action,
+		At:             o.At,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1669,25 +1841,29 @@ func (o *updateScheduleWfPrivateRecurringEveryHourXml) MarshalFromObject(s Updat
 	o.Action = s.Action
 	o.At = s.At
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o updateScheduleWfPrivateRecurringEveryHourXml) UnmarshalToObject() (*UpdateScheduleWfPrivateRecurringEveryHour, error) {
 
 	result := &UpdateScheduleWfPrivateRecurringEveryHour{
-		Action: o.Action,
-		At:     o.At,
-		Misc:   o.Misc,
+		Action:         o.Action,
+		At:             o.At,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *updateScheduleWfPrivateRecurringNoneXml) MarshalFromObject(s UpdateScheduleWfPrivateRecurringNone) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o updateScheduleWfPrivateRecurringNoneXml) UnmarshalToObject() (*UpdateScheduleWfPrivateRecurringNone, error) {
 
 	result := &UpdateScheduleWfPrivateRecurringNone{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1698,6 +1874,7 @@ func (o *updateScheduleWildfireXml) MarshalFromObject(s UpdateScheduleWildfire) 
 		o.Recurring = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o updateScheduleWildfireXml) UnmarshalToObject() (*UpdateScheduleWildfire, error) {
@@ -1711,8 +1888,9 @@ func (o updateScheduleWildfireXml) UnmarshalToObject() (*UpdateScheduleWildfire,
 	}
 
 	result := &UpdateScheduleWildfire{
-		Recurring: recurringVal,
-		Misc:      o.Misc,
+		Recurring:      recurringVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1748,6 +1926,7 @@ func (o *updateScheduleWildfireRecurringXml) MarshalFromObject(s UpdateScheduleW
 		o.RealTime = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o updateScheduleWildfireRecurringXml) UnmarshalToObject() (*UpdateScheduleWildfireRecurring, error) {
@@ -1801,13 +1980,14 @@ func (o updateScheduleWildfireRecurringXml) UnmarshalToObject() (*UpdateSchedule
 	}
 
 	result := &UpdateScheduleWildfireRecurring{
-		Every15Mins: every15MinsVal,
-		Every30Mins: every30MinsVal,
-		EveryHour:   everyHourVal,
-		EveryMin:    everyMinVal,
-		None:        noneVal,
-		RealTime:    realTimeVal,
-		Misc:        o.Misc,
+		Every15Mins:    every15MinsVal,
+		Every30Mins:    every30MinsVal,
+		EveryHour:      everyHourVal,
+		EveryMin:       everyMinVal,
+		None:           noneVal,
+		RealTime:       realTimeVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1816,15 +1996,17 @@ func (o *updateScheduleWildfireRecurringEvery15MinsXml) MarshalFromObject(s Upda
 	o.At = s.At
 	o.SyncToPeer = util.YesNo(s.SyncToPeer, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o updateScheduleWildfireRecurringEvery15MinsXml) UnmarshalToObject() (*UpdateScheduleWildfireRecurringEvery15Mins, error) {
 
 	result := &UpdateScheduleWildfireRecurringEvery15Mins{
-		Action:     o.Action,
-		At:         o.At,
-		SyncToPeer: util.AsBool(o.SyncToPeer, nil),
-		Misc:       o.Misc,
+		Action:         o.Action,
+		At:             o.At,
+		SyncToPeer:     util.AsBool(o.SyncToPeer, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1833,15 +2015,17 @@ func (o *updateScheduleWildfireRecurringEvery30MinsXml) MarshalFromObject(s Upda
 	o.At = s.At
 	o.SyncToPeer = util.YesNo(s.SyncToPeer, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o updateScheduleWildfireRecurringEvery30MinsXml) UnmarshalToObject() (*UpdateScheduleWildfireRecurringEvery30Mins, error) {
 
 	result := &UpdateScheduleWildfireRecurringEvery30Mins{
-		Action:     o.Action,
-		At:         o.At,
-		SyncToPeer: util.AsBool(o.SyncToPeer, nil),
-		Misc:       o.Misc,
+		Action:         o.Action,
+		At:             o.At,
+		SyncToPeer:     util.AsBool(o.SyncToPeer, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1850,15 +2034,17 @@ func (o *updateScheduleWildfireRecurringEveryHourXml) MarshalFromObject(s Update
 	o.At = s.At
 	o.SyncToPeer = util.YesNo(s.SyncToPeer, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o updateScheduleWildfireRecurringEveryHourXml) UnmarshalToObject() (*UpdateScheduleWildfireRecurringEveryHour, error) {
 
 	result := &UpdateScheduleWildfireRecurringEveryHour{
-		Action:     o.Action,
-		At:         o.At,
-		SyncToPeer: util.AsBool(o.SyncToPeer, nil),
-		Misc:       o.Misc,
+		Action:         o.Action,
+		At:             o.At,
+		SyncToPeer:     util.AsBool(o.SyncToPeer, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -1866,36 +2052,42 @@ func (o *updateScheduleWildfireRecurringEveryMinXml) MarshalFromObject(s UpdateS
 	o.Action = s.Action
 	o.SyncToPeer = util.YesNo(s.SyncToPeer, nil)
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o updateScheduleWildfireRecurringEveryMinXml) UnmarshalToObject() (*UpdateScheduleWildfireRecurringEveryMin, error) {
 
 	result := &UpdateScheduleWildfireRecurringEveryMin{
-		Action:     o.Action,
-		SyncToPeer: util.AsBool(o.SyncToPeer, nil),
-		Misc:       o.Misc,
+		Action:         o.Action,
+		SyncToPeer:     util.AsBool(o.SyncToPeer, nil),
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *updateScheduleWildfireRecurringNoneXml) MarshalFromObject(s UpdateScheduleWildfireRecurringNone) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o updateScheduleWildfireRecurringNoneXml) UnmarshalToObject() (*UpdateScheduleWildfireRecurringNone, error) {
 
 	result := &UpdateScheduleWildfireRecurringNone{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *updateScheduleWildfireRecurringRealTimeXml) MarshalFromObject(s UpdateScheduleWildfireRecurringRealTime) {
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o updateScheduleWildfireRecurringRealTimeXml) UnmarshalToObject() (*UpdateScheduleWildfireRecurringRealTime, error) {
 
 	result := &UpdateScheduleWildfireRecurringRealTime{
-		Misc: o.Misc,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }

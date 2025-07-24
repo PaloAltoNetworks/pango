@@ -24,6 +24,7 @@ type Entry struct {
 	Members         []string
 	Tag             []string
 	Misc            []generic.Xml
+	MiscAttributes  []xml.Attr
 }
 
 type entryXmlContainer struct {
@@ -56,6 +57,7 @@ type entryXml struct {
 	Members         *util.MemberType `xml:"members,omitempty"`
 	Tag             *util.MemberType `xml:"tag,omitempty"`
 	Misc            []generic.Xml    `xml:",any"`
+	MiscAttributes  []xml.Attr       `xml:",any,attr"`
 }
 
 func (o *entryXml) MarshalFromObject(s Entry) {
@@ -68,6 +70,7 @@ func (o *entryXml) MarshalFromObject(s Entry) {
 		o.Tag = util.StrToMem(s.Tag)
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o entryXml) UnmarshalToObject() (*Entry, error) {
@@ -86,6 +89,7 @@ func (o entryXml) UnmarshalToObject() (*Entry, error) {
 		Members:         membersVal,
 		Tag:             tagVal,
 		Misc:            o.Misc,
+		MiscAttributes:  o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -156,4 +160,12 @@ func (o *Entry) EntryName() string {
 
 func (o *Entry) SetEntryName(name string) {
 	o.Name = name
+}
+
+func (o *Entry) GetMiscAttributes() []xml.Attr {
+	return o.MiscAttributes
+}
+
+func (o *Entry) SetMiscAttributes(attrs []xml.Attr) {
+	o.MiscAttributes = attrs
 }

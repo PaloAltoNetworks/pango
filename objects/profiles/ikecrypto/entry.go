@@ -26,13 +26,15 @@ type Entry struct {
 	Hash                   []string
 	Lifetime               *Lifetime
 	Misc                   []generic.Xml
+	MiscAttributes         []xml.Attr
 }
 type Lifetime struct {
-	Days    *int64
-	Hours   *int64
-	Minutes *int64
-	Seconds *int64
-	Misc    []generic.Xml
+	Days           *int64
+	Hours          *int64
+	Minutes        *int64
+	Seconds        *int64
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 
 type entryXmlContainer struct {
@@ -67,13 +69,15 @@ type entryXml struct {
 	Hash                   *util.MemberType `xml:"hash,omitempty"`
 	Lifetime               *lifetimeXml     `xml:"lifetime,omitempty"`
 	Misc                   []generic.Xml    `xml:",any"`
+	MiscAttributes         []xml.Attr       `xml:",any,attr"`
 }
 type lifetimeXml struct {
-	Days    *int64        `xml:"days,omitempty"`
-	Hours   *int64        `xml:"hours,omitempty"`
-	Minutes *int64        `xml:"minutes,omitempty"`
-	Seconds *int64        `xml:"seconds,omitempty"`
-	Misc    []generic.Xml `xml:",any"`
+	Days           *int64        `xml:"days,omitempty"`
+	Hours          *int64        `xml:"hours,omitempty"`
+	Minutes        *int64        `xml:"minutes,omitempty"`
+	Seconds        *int64        `xml:"seconds,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 
 func (o *entryXml) MarshalFromObject(s Entry) {
@@ -94,6 +98,7 @@ func (o *entryXml) MarshalFromObject(s Entry) {
 		o.Lifetime = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o entryXml) UnmarshalToObject() (*Entry, error) {
@@ -126,6 +131,7 @@ func (o entryXml) UnmarshalToObject() (*Entry, error) {
 		Hash:                   hashVal,
 		Lifetime:               lifetimeVal,
 		Misc:                   o.Misc,
+		MiscAttributes:         o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -135,16 +141,18 @@ func (o *lifetimeXml) MarshalFromObject(s Lifetime) {
 	o.Minutes = s.Minutes
 	o.Seconds = s.Seconds
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o lifetimeXml) UnmarshalToObject() (*Lifetime, error) {
 
 	result := &Lifetime{
-		Days:    o.Days,
-		Hours:   o.Hours,
-		Minutes: o.Minutes,
-		Seconds: o.Seconds,
-		Misc:    o.Misc,
+		Days:           o.Days,
+		Hours:          o.Hours,
+		Minutes:        o.Minutes,
+		Seconds:        o.Seconds,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -254,4 +262,12 @@ func (o *Entry) EntryName() string {
 
 func (o *Entry) SetEntryName(name string) {
 	o.Name = name
+}
+
+func (o *Entry) GetMiscAttributes() []xml.Attr {
+	return o.MiscAttributes
+}
+
+func (o *Entry) SetMiscAttributes(attrs []xml.Attr) {
+	o.MiscAttributes = attrs
 }

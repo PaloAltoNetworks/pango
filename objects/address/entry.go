@@ -28,6 +28,7 @@ type Entry struct {
 	IpRange         *string
 	IpWildcard      *string
 	Misc            []generic.Xml
+	MiscAttributes  []xml.Attr
 }
 
 type entryXmlContainer struct {
@@ -64,6 +65,7 @@ type entryXml struct {
 	IpRange         *string          `xml:"ip-range,omitempty"`
 	IpWildcard      *string          `xml:"ip-wildcard,omitempty"`
 	Misc            []generic.Xml    `xml:",any"`
+	MiscAttributes  []xml.Attr       `xml:",any,attr"`
 }
 
 func (o *entryXml) MarshalFromObject(s Entry) {
@@ -78,6 +80,7 @@ func (o *entryXml) MarshalFromObject(s Entry) {
 	o.IpRange = s.IpRange
 	o.IpWildcard = s.IpWildcard
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o entryXml) UnmarshalToObject() (*Entry, error) {
@@ -96,6 +99,7 @@ func (o entryXml) UnmarshalToObject() (*Entry, error) {
 		IpRange:         o.IpRange,
 		IpWildcard:      o.IpWildcard,
 		Misc:            o.Misc,
+		MiscAttributes:  o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -187,4 +191,12 @@ func (o *Entry) EntryName() string {
 
 func (o *Entry) SetEntryName(name string) {
 	o.Name = name
+}
+
+func (o *Entry) GetMiscAttributes() []xml.Attr {
+	return o.MiscAttributes
+}
+
+func (o *Entry) SetMiscAttributes(attrs []xml.Attr) {
+	o.MiscAttributes = attrs
 }

@@ -19,30 +19,34 @@ var (
 )
 
 type Entry struct {
-	Name        string
-	Description *string
-	Role        *Role
-	Misc        []generic.Xml
+	Name           string
+	Description    *string
+	Role           *Role
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type Role struct {
-	Device *RoleDevice
-	Vsys   *RoleVsys
-	Misc   []generic.Xml
+	Device         *RoleDevice
+	Vsys           *RoleVsys
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type RoleDevice struct {
-	Cli     *string
-	Restapi *RoleDeviceRestapi
-	Webui   *RoleDeviceWebui
-	Xmlapi  *RoleDeviceXmlapi
-	Misc    []generic.Xml
+	Cli            *string
+	Restapi        *RoleDeviceRestapi
+	Webui          *RoleDeviceWebui
+	Xmlapi         *RoleDeviceXmlapi
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type RoleDeviceRestapi struct {
-	Device   *RoleDeviceRestapiDevice
-	Network  *RoleDeviceRestapiNetwork
-	Objects  *RoleDeviceRestapiObjects
-	Policies *RoleDeviceRestapiPolicies
-	System   *RoleDeviceRestapiSystem
-	Misc     []generic.Xml
+	Device         *RoleDeviceRestapiDevice
+	Network        *RoleDeviceRestapiNetwork
+	Objects        *RoleDeviceRestapiObjects
+	Policies       *RoleDeviceRestapiPolicies
+	System         *RoleDeviceRestapiSystem
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type RoleDeviceRestapiDevice struct {
 	EmailServerProfiles    *string
@@ -53,6 +57,7 @@ type RoleDeviceRestapiDevice struct {
 	SyslogServerProfiles   *string
 	VirtualSystems         *string
 	Misc                   []generic.Xml
+	MiscAttributes         []xml.Attr
 }
 type RoleDeviceRestapiNetwork struct {
 	AggregateEthernetInterfaces             *string
@@ -91,6 +96,7 @@ type RoleDeviceRestapiNetwork struct {
 	ZoneProtectionNetworkProfiles           *string
 	Zones                                   *string
 	Misc                                    []generic.Xml
+	MiscAttributes                          []xml.Attr
 }
 type RoleDeviceRestapiObjects struct {
 	AddressGroups                           *string
@@ -132,6 +138,7 @@ type RoleDeviceRestapiObjects struct {
 	VulnerabilityProtectionSecurityProfiles *string
 	WildfireAnalysisSecurityProfiles        *string
 	Misc                                    []generic.Xml
+	MiscAttributes                          []xml.Attr
 }
 type RoleDeviceRestapiPolicies struct {
 	ApplicationOverrideRules   *string
@@ -146,33 +153,37 @@ type RoleDeviceRestapiPolicies struct {
 	SecurityRules              *string
 	TunnelInspectionRules      *string
 	Misc                       []generic.Xml
+	MiscAttributes             []xml.Attr
 }
 type RoleDeviceRestapiSystem struct {
-	Configuration *string
-	Misc          []generic.Xml
+	Configuration  *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type RoleDeviceWebui struct {
-	Acc        *string
-	Commit     *RoleDeviceWebuiCommit
-	Dashboard  *string
-	Device     *RoleDeviceWebuiDevice
-	Global     *RoleDeviceWebuiGlobal
-	Monitor    *RoleDeviceWebuiMonitor
-	Network    *RoleDeviceWebuiNetwork
-	Objects    *RoleDeviceWebuiObjects
-	Operations *RoleDeviceWebuiOperations
-	Policies   *RoleDeviceWebuiPolicies
-	Privacy    *RoleDeviceWebuiPrivacy
-	Save       *RoleDeviceWebuiSave
-	Tasks      *string
-	Validate   *string
-	Misc       []generic.Xml
+	Acc            *string
+	Commit         *RoleDeviceWebuiCommit
+	Dashboard      *string
+	Device         *RoleDeviceWebuiDevice
+	Global         *RoleDeviceWebuiGlobal
+	Monitor        *RoleDeviceWebuiMonitor
+	Network        *RoleDeviceWebuiNetwork
+	Objects        *RoleDeviceWebuiObjects
+	Operations     *RoleDeviceWebuiOperations
+	Policies       *RoleDeviceWebuiPolicies
+	Privacy        *RoleDeviceWebuiPrivacy
+	Save           *RoleDeviceWebuiSave
+	Tasks          *string
+	Validate       *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type RoleDeviceWebuiCommit struct {
 	CommitForOtherAdmins *string
 	Device               *string
 	ObjectLevelChanges   *string
 	Misc                 []generic.Xml
+	MiscAttributes       []xml.Attr
 }
 type RoleDeviceWebuiDevice struct {
 	AccessDomain           *string
@@ -207,6 +218,7 @@ type RoleDeviceWebuiDevice struct {
 	VirtualSystems         *string
 	VmInfoSource           *string
 	Misc                   []generic.Xml
+	MiscAttributes         []xml.Attr
 }
 type RoleDeviceWebuiDeviceCertificateManagement struct {
 	CertificateProfile     *string
@@ -217,60 +229,67 @@ type RoleDeviceWebuiDeviceCertificateManagement struct {
 	SslDecryptionExclusion *string
 	SslTlsServiceProfile   *string
 	Misc                   []generic.Xml
+	MiscAttributes         []xml.Attr
 }
 type RoleDeviceWebuiDeviceLocalUserDatabase struct {
-	UserGroups *string
-	Users      *string
-	Misc       []generic.Xml
+	UserGroups     *string
+	Users          *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type RoleDeviceWebuiDeviceLogSettings struct {
-	CcAlarm       *string
-	Config        *string
-	Correlation   *string
-	Globalprotect *string
-	Hipmatch      *string
-	Iptag         *string
-	ManageLog     *string
-	System        *string
-	UserId        *string
-	Misc          []generic.Xml
+	CcAlarm        *string
+	Config         *string
+	Correlation    *string
+	Globalprotect  *string
+	Hipmatch       *string
+	Iptag          *string
+	ManageLog      *string
+	System         *string
+	UserId         *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type RoleDeviceWebuiDevicePolicyRecommendations struct {
-	Iot  *string
-	Saas *string
-	Misc []generic.Xml
+	Iot            *string
+	Saas           *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type RoleDeviceWebuiDeviceServerProfile struct {
-	Dns      *string
-	Email    *string
-	Http     *string
-	Kerberos *string
-	Ldap     *string
-	Mfa      *string
-	Netflow  *string
-	Radius   *string
-	SamlIdp  *string
-	Scp      *string
-	SnmpTrap *string
-	Syslog   *string
-	Tacplus  *string
-	Misc     []generic.Xml
+	Dns            *string
+	Email          *string
+	Http           *string
+	Kerberos       *string
+	Ldap           *string
+	Mfa            *string
+	Netflow        *string
+	Radius         *string
+	SamlIdp        *string
+	Scp            *string
+	SnmpTrap       *string
+	Syslog         *string
+	Tacplus        *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type RoleDeviceWebuiDeviceSetup struct {
-	ContentId  *string
-	Hsm        *string
-	Interfaces *string
-	Management *string
-	Operations *string
-	Services   *string
-	Session    *string
-	Telemetry  *string
-	Wildfire   *string
-	Misc       []generic.Xml
+	ContentId      *string
+	Hsm            *string
+	Interfaces     *string
+	Management     *string
+	Operations     *string
+	Services       *string
+	Session        *string
+	Telemetry      *string
+	Wildfire       *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type RoleDeviceWebuiGlobal struct {
-	SystemAlarms *string
-	Misc         []generic.Xml
+	SystemAlarms   *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type RoleDeviceWebuiMonitor struct {
 	AppScope                   *string
@@ -291,11 +310,13 @@ type RoleDeviceWebuiMonitor struct {
 	UrlFilteringReports        *string
 	ViewCustomReports          *string
 	Misc                       []generic.Xml
+	MiscAttributes             []xml.Attr
 }
 type RoleDeviceWebuiMonitorAutomatedCorrelationEngine struct {
 	CorrelatedEvents   *string
 	CorrelationObjects *string
 	Misc               []generic.Xml
+	MiscAttributes     []xml.Attr
 }
 type RoleDeviceWebuiMonitorCustomReports struct {
 	ApplicationStatistics *string
@@ -321,6 +342,7 @@ type RoleDeviceWebuiMonitorCustomReports struct {
 	Userid                *string
 	WildfireLog           *string
 	Misc                  []generic.Xml
+	MiscAttributes        []xml.Attr
 }
 type RoleDeviceWebuiMonitorLogs struct {
 	Alarm          *string
@@ -341,6 +363,7 @@ type RoleDeviceWebuiMonitorLogs struct {
 	Userid         *string
 	Wildfire       *string
 	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type RoleDeviceWebuiMonitorPdfReports struct {
 	EmailScheduler             *string
@@ -350,6 +373,7 @@ type RoleDeviceWebuiMonitorPdfReports struct {
 	SaasApplicationUsageReport *string
 	UserActivityReport         *string
 	Misc                       []generic.Xml
+	MiscAttributes             []xml.Attr
 }
 type RoleDeviceWebuiNetwork struct {
 	Dhcp                  *string
@@ -369,6 +393,7 @@ type RoleDeviceWebuiNetwork struct {
 	Vlans                 *string
 	Zones                 *string
 	Misc                  []generic.Xml
+	MiscAttributes        []xml.Attr
 }
 type RoleDeviceWebuiNetworkGlobalProtect struct {
 	ClientlessAppGroups *string
@@ -377,6 +402,7 @@ type RoleDeviceWebuiNetworkGlobalProtect struct {
 	Mdm                 *string
 	Portals             *string
 	Misc                []generic.Xml
+	MiscAttributes      []xml.Attr
 }
 type RoleDeviceWebuiNetworkNetworkProfiles struct {
 	BfdProfile       *string
@@ -390,21 +416,24 @@ type RoleDeviceWebuiNetworkNetworkProfiles struct {
 	TunnelMonitor    *string
 	ZoneProtection   *string
 	Misc             []generic.Xml
+	MiscAttributes   []xml.Attr
 }
 type RoleDeviceWebuiNetworkRouting struct {
 	LogicalRouters  *string
 	RoutingProfiles *RoleDeviceWebuiNetworkRoutingRoutingProfiles
 	Misc            []generic.Xml
+	MiscAttributes  []xml.Attr
 }
 type RoleDeviceWebuiNetworkRoutingRoutingProfiles struct {
-	Bfd       *string
-	Bgp       *string
-	Filters   *string
-	Multicast *string
-	Ospf      *string
-	Ospfv3    *string
-	Ripv2     *string
-	Misc      []generic.Xml
+	Bfd            *string
+	Bgp            *string
+	Filters        *string
+	Multicast      *string
+	Ospf           *string
+	Ospfv3         *string
+	Ripv2          *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type RoleDeviceWebuiObjects struct {
 	AddressGroups         *string
@@ -430,22 +459,26 @@ type RoleDeviceWebuiObjects struct {
 	Services              *string
 	Tags                  *string
 	Misc                  []generic.Xml
+	MiscAttributes        []xml.Attr
 }
 type RoleDeviceWebuiObjectsCustomObjects struct {
-	DataPatterns  *string
-	Spyware       *string
-	UrlCategory   *string
-	Vulnerability *string
-	Misc          []generic.Xml
+	DataPatterns   *string
+	Spyware        *string
+	UrlCategory    *string
+	Vulnerability  *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type RoleDeviceWebuiObjectsDecryption struct {
 	DecryptionProfile *string
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 type RoleDeviceWebuiObjectsGlobalProtect struct {
-	HipObjects  *string
-	HipProfiles *string
-	Misc        []generic.Xml
+	HipObjects     *string
+	HipProfiles    *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type RoleDeviceWebuiObjectsSdwan struct {
 	SdwanDistProfile            *string
@@ -453,6 +486,7 @@ type RoleDeviceWebuiObjectsSdwan struct {
 	SdwanProfile                *string
 	SdwanSaasQualityProfile     *string
 	Misc                        []generic.Xml
+	MiscAttributes              []xml.Attr
 }
 type RoleDeviceWebuiObjectsSecurityProfiles struct {
 	AntiSpyware             *string
@@ -466,6 +500,7 @@ type RoleDeviceWebuiObjectsSecurityProfiles struct {
 	VulnerabilityProtection *string
 	WildfireAnalysis        *string
 	Misc                    []generic.Xml
+	MiscAttributes          []xml.Attr
 }
 type RoleDeviceWebuiOperations struct {
 	DownloadCoreFiles       *string
@@ -474,6 +509,7 @@ type RoleDeviceWebuiOperations struct {
 	GenerateTechSupportFile *string
 	Reboot                  *string
 	Misc                    []generic.Xml
+	MiscAttributes          []xml.Attr
 }
 type RoleDeviceWebuiPolicies struct {
 	ApplicationOverrideRulebase *string
@@ -489,45 +525,51 @@ type RoleDeviceWebuiPolicies struct {
 	SslDecryptionRulebase       *string
 	TunnelInspectRulebase       *string
 	Misc                        []generic.Xml
+	MiscAttributes              []xml.Attr
 }
 type RoleDeviceWebuiPrivacy struct {
 	ShowFullIpAddresses           *string
 	ShowUserNamesInLogsAndReports *string
 	ViewPcapFiles                 *string
 	Misc                          []generic.Xml
+	MiscAttributes                []xml.Attr
 }
 type RoleDeviceWebuiSave struct {
 	ObjectLevelChanges *string
 	PartialSave        *string
 	SaveForOtherAdmins *string
 	Misc               []generic.Xml
+	MiscAttributes     []xml.Attr
 }
 type RoleDeviceXmlapi struct {
-	Commit *string
-	Config *string
-	Export *string
-	Import *string
-	Iot    *string
-	Log    *string
-	Op     *string
-	Report *string
-	UserId *string
-	Misc   []generic.Xml
+	Commit         *string
+	Config         *string
+	Export         *string
+	Import         *string
+	Iot            *string
+	Log            *string
+	Op             *string
+	Report         *string
+	UserId         *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type RoleVsys struct {
-	Cli     *string
-	Restapi *RoleVsysRestapi
-	Webui   *RoleVsysWebui
-	Xmlapi  *RoleVsysXmlapi
-	Misc    []generic.Xml
+	Cli            *string
+	Restapi        *RoleVsysRestapi
+	Webui          *RoleVsysWebui
+	Xmlapi         *RoleVsysXmlapi
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type RoleVsysRestapi struct {
-	Device   *RoleVsysRestapiDevice
-	Network  *RoleVsysRestapiNetwork
-	Objects  *RoleVsysRestapiObjects
-	Policies *RoleVsysRestapiPolicies
-	System   *RoleVsysRestapiSystem
-	Misc     []generic.Xml
+	Device         *RoleVsysRestapiDevice
+	Network        *RoleVsysRestapiNetwork
+	Objects        *RoleVsysRestapiObjects
+	Policies       *RoleVsysRestapiPolicies
+	System         *RoleVsysRestapiSystem
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type RoleVsysRestapiDevice struct {
 	EmailServerProfiles    *string
@@ -538,6 +580,7 @@ type RoleVsysRestapiDevice struct {
 	SyslogServerProfiles   *string
 	VirtualSystems         *string
 	Misc                   []generic.Xml
+	MiscAttributes         []xml.Attr
 }
 type RoleVsysRestapiNetwork struct {
 	GlobalprotectClientlessAppGroups *string
@@ -548,6 +591,7 @@ type RoleVsysRestapiNetwork struct {
 	SdwanInterfaceProfiles           *string
 	Zones                            *string
 	Misc                             []generic.Xml
+	MiscAttributes                   []xml.Attr
 }
 type RoleVsysRestapiObjects struct {
 	AddressGroups                           *string
@@ -589,6 +633,7 @@ type RoleVsysRestapiObjects struct {
 	VulnerabilityProtectionSecurityProfiles *string
 	WildfireAnalysisSecurityProfiles        *string
 	Misc                                    []generic.Xml
+	MiscAttributes                          []xml.Attr
 }
 type RoleVsysRestapiPolicies struct {
 	ApplicationOverrideRules   *string
@@ -603,31 +648,35 @@ type RoleVsysRestapiPolicies struct {
 	SecurityRules              *string
 	TunnelInspectionRules      *string
 	Misc                       []generic.Xml
+	MiscAttributes             []xml.Attr
 }
 type RoleVsysRestapiSystem struct {
-	Configuration *string
-	Misc          []generic.Xml
+	Configuration  *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type RoleVsysWebui struct {
-	Acc        *string
-	Commit     *RoleVsysWebuiCommit
-	Dashboard  *string
-	Device     *RoleVsysWebuiDevice
-	Monitor    *RoleVsysWebuiMonitor
-	Network    *RoleVsysWebuiNetwork
-	Objects    *RoleVsysWebuiObjects
-	Operations *RoleVsysWebuiOperations
-	Policies   *RoleVsysWebuiPolicies
-	Privacy    *RoleVsysWebuiPrivacy
-	Save       *RoleVsysWebuiSave
-	Tasks      *string
-	Validate   *string
-	Misc       []generic.Xml
+	Acc            *string
+	Commit         *RoleVsysWebuiCommit
+	Dashboard      *string
+	Device         *RoleVsysWebuiDevice
+	Monitor        *RoleVsysWebuiMonitor
+	Network        *RoleVsysWebuiNetwork
+	Objects        *RoleVsysWebuiObjects
+	Operations     *RoleVsysWebuiOperations
+	Policies       *RoleVsysWebuiPolicies
+	Privacy        *RoleVsysWebuiPrivacy
+	Save           *RoleVsysWebuiSave
+	Tasks          *string
+	Validate       *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type RoleVsysWebuiCommit struct {
 	CommitForOtherAdmins *string
 	VirtualSystems       *string
 	Misc                 []generic.Xml
+	MiscAttributes       []xml.Attr
 }
 type RoleVsysWebuiDevice struct {
 	Administrators         *string
@@ -647,6 +696,7 @@ type RoleVsysWebuiDevice struct {
 	UserIdentification     *string
 	VmInfoSource           *string
 	Misc                   []generic.Xml
+	MiscAttributes         []xml.Attr
 }
 type RoleVsysWebuiDeviceCertificateManagement struct {
 	CertificateProfile     *string
@@ -657,54 +707,60 @@ type RoleVsysWebuiDeviceCertificateManagement struct {
 	SslDecryptionExclusion *string
 	SslTlsServiceProfile   *string
 	Misc                   []generic.Xml
+	MiscAttributes         []xml.Attr
 }
 type RoleVsysWebuiDeviceLocalUserDatabase struct {
-	UserGroups *string
-	Users      *string
-	Misc       []generic.Xml
+	UserGroups     *string
+	Users          *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type RoleVsysWebuiDeviceLogSettings struct {
-	Config        *string
-	Correlation   *string
-	Globalprotect *string
-	Hipmatch      *string
-	Iptag         *string
-	System        *string
-	UserId        *string
-	Misc          []generic.Xml
+	Config         *string
+	Correlation    *string
+	Globalprotect  *string
+	Hipmatch       *string
+	Iptag          *string
+	System         *string
+	UserId         *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type RoleVsysWebuiDevicePolicyRecommendations struct {
-	Iot  *string
-	Saas *string
-	Misc []generic.Xml
+	Iot            *string
+	Saas           *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type RoleVsysWebuiDeviceServerProfile struct {
-	Dns      *string
-	Email    *string
-	Http     *string
-	Kerberos *string
-	Ldap     *string
-	Mfa      *string
-	Netflow  *string
-	Radius   *string
-	SamlIdp  *string
-	Scp      *string
-	SnmpTrap *string
-	Syslog   *string
-	Tacplus  *string
-	Misc     []generic.Xml
+	Dns            *string
+	Email          *string
+	Http           *string
+	Kerberos       *string
+	Ldap           *string
+	Mfa            *string
+	Netflow        *string
+	Radius         *string
+	SamlIdp        *string
+	Scp            *string
+	SnmpTrap       *string
+	Syslog         *string
+	Tacplus        *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type RoleVsysWebuiDeviceSetup struct {
-	ContentId  *string
-	Hsm        *string
-	Interfaces *string
-	Management *string
-	Operations *string
-	Services   *string
-	Session    *string
-	Telemetry  *string
-	Wildfire   *string
-	Misc       []generic.Xml
+	ContentId      *string
+	Hsm            *string
+	Interfaces     *string
+	Management     *string
+	Operations     *string
+	Services       *string
+	Session        *string
+	Telemetry      *string
+	Wildfire       *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type RoleVsysWebuiMonitor struct {
 	AppScope                   *string
@@ -717,11 +773,13 @@ type RoleVsysWebuiMonitor struct {
 	SessionBrowser             *string
 	ViewCustomReports          *string
 	Misc                       []generic.Xml
+	MiscAttributes             []xml.Attr
 }
 type RoleVsysWebuiMonitorAutomatedCorrelationEngine struct {
 	CorrelatedEvents   *string
 	CorrelationObjects *string
 	Misc               []generic.Xml
+	MiscAttributes     []xml.Attr
 }
 type RoleVsysWebuiMonitorCustomReports struct {
 	ApplicationStatistics *string
@@ -747,6 +805,7 @@ type RoleVsysWebuiMonitorCustomReports struct {
 	Userid                *string
 	WildfireLog           *string
 	Misc                  []generic.Xml
+	MiscAttributes        []xml.Attr
 }
 type RoleVsysWebuiMonitorLogs struct {
 	Authentication *string
@@ -764,6 +823,7 @@ type RoleVsysWebuiMonitorLogs struct {
 	Userid         *string
 	Wildfire       *string
 	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type RoleVsysWebuiMonitorPdfReports struct {
 	EmailScheduler             *string
@@ -773,12 +833,14 @@ type RoleVsysWebuiMonitorPdfReports struct {
 	SaasApplicationUsageReport *string
 	UserActivityReport         *string
 	Misc                       []generic.Xml
+	MiscAttributes             []xml.Attr
 }
 type RoleVsysWebuiNetwork struct {
 	GlobalProtect         *RoleVsysWebuiNetworkGlobalProtect
 	SdwanInterfaceProfile *string
 	Zones                 *string
 	Misc                  []generic.Xml
+	MiscAttributes        []xml.Attr
 }
 type RoleVsysWebuiNetworkGlobalProtect struct {
 	ClientlessAppGroups *string
@@ -787,6 +849,7 @@ type RoleVsysWebuiNetworkGlobalProtect struct {
 	Mdm                 *string
 	Portals             *string
 	Misc                []generic.Xml
+	MiscAttributes      []xml.Attr
 }
 type RoleVsysWebuiObjects struct {
 	AddressGroups         *string
@@ -812,22 +875,26 @@ type RoleVsysWebuiObjects struct {
 	Services              *string
 	Tags                  *string
 	Misc                  []generic.Xml
+	MiscAttributes        []xml.Attr
 }
 type RoleVsysWebuiObjectsCustomObjects struct {
-	DataPatterns  *string
-	Spyware       *string
-	UrlCategory   *string
-	Vulnerability *string
-	Misc          []generic.Xml
+	DataPatterns   *string
+	Spyware        *string
+	UrlCategory    *string
+	Vulnerability  *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type RoleVsysWebuiObjectsDecryption struct {
 	DecryptionProfile *string
 	Misc              []generic.Xml
+	MiscAttributes    []xml.Attr
 }
 type RoleVsysWebuiObjectsGlobalProtect struct {
-	HipObjects  *string
-	HipProfiles *string
-	Misc        []generic.Xml
+	HipObjects     *string
+	HipProfiles    *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type RoleVsysWebuiObjectsSdwan struct {
 	SdwanDistProfile            *string
@@ -835,6 +902,7 @@ type RoleVsysWebuiObjectsSdwan struct {
 	SdwanProfile                *string
 	SdwanSaasQualityProfile     *string
 	Misc                        []generic.Xml
+	MiscAttributes              []xml.Attr
 }
 type RoleVsysWebuiObjectsSecurityProfiles struct {
 	AntiSpyware             *string
@@ -848,6 +916,7 @@ type RoleVsysWebuiObjectsSecurityProfiles struct {
 	VulnerabilityProtection *string
 	WildfireAnalysis        *string
 	Misc                    []generic.Xml
+	MiscAttributes          []xml.Attr
 }
 type RoleVsysWebuiOperations struct {
 	DownloadCoreFiles       *string
@@ -856,6 +925,7 @@ type RoleVsysWebuiOperations struct {
 	GenerateTechSupportFile *string
 	Reboot                  *string
 	Misc                    []generic.Xml
+	MiscAttributes          []xml.Attr
 }
 type RoleVsysWebuiPolicies struct {
 	ApplicationOverrideRulebase *string
@@ -871,30 +941,34 @@ type RoleVsysWebuiPolicies struct {
 	SslDecryptionRulebase       *string
 	TunnelInspectRulebase       *string
 	Misc                        []generic.Xml
+	MiscAttributes              []xml.Attr
 }
 type RoleVsysWebuiPrivacy struct {
 	ShowFullIpAddresses           *string
 	ShowUserNamesInLogsAndReports *string
 	ViewPcapFiles                 *string
 	Misc                          []generic.Xml
+	MiscAttributes                []xml.Attr
 }
 type RoleVsysWebuiSave struct {
 	ObjectLevelChanges *string
 	PartialSave        *string
 	SaveForOtherAdmins *string
 	Misc               []generic.Xml
+	MiscAttributes     []xml.Attr
 }
 type RoleVsysXmlapi struct {
-	Commit *string
-	Config *string
-	Export *string
-	Import *string
-	Iot    *string
-	Log    *string
-	Op     *string
-	Report *string
-	UserId *string
-	Misc   []generic.Xml
+	Commit         *string
+	Config         *string
+	Export         *string
+	Import         *string
+	Iot            *string
+	Log            *string
+	Op             *string
+	Report         *string
+	UserId         *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 
 type entryXmlContainer struct {
@@ -942,31 +1016,35 @@ func specifyEntry_11_0_2(source *Entry) (any, error) {
 }
 
 type entryXml struct {
-	XMLName     xml.Name      `xml:"entry"`
-	Name        string        `xml:"name,attr"`
-	Description *string       `xml:"description,omitempty"`
-	Role        *roleXml      `xml:"role,omitempty"`
-	Misc        []generic.Xml `xml:",any"`
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Description    *string       `xml:"description,omitempty"`
+	Role           *roleXml      `xml:"role,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type roleXml struct {
-	Device *roleDeviceXml `xml:"device,omitempty"`
-	Vsys   *roleVsysXml   `xml:"vsys,omitempty"`
-	Misc   []generic.Xml  `xml:",any"`
+	Device         *roleDeviceXml `xml:"device,omitempty"`
+	Vsys           *roleVsysXml   `xml:"vsys,omitempty"`
+	Misc           []generic.Xml  `xml:",any"`
+	MiscAttributes []xml.Attr     `xml:",any,attr"`
 }
 type roleDeviceXml struct {
-	Cli     *string               `xml:"cli,omitempty"`
-	Restapi *roleDeviceRestapiXml `xml:"restapi,omitempty"`
-	Webui   *roleDeviceWebuiXml   `xml:"webui,omitempty"`
-	Xmlapi  *roleDeviceXmlapiXml  `xml:"xmlapi,omitempty"`
-	Misc    []generic.Xml         `xml:",any"`
+	Cli            *string               `xml:"cli,omitempty"`
+	Restapi        *roleDeviceRestapiXml `xml:"restapi,omitempty"`
+	Webui          *roleDeviceWebuiXml   `xml:"webui,omitempty"`
+	Xmlapi         *roleDeviceXmlapiXml  `xml:"xmlapi,omitempty"`
+	Misc           []generic.Xml         `xml:",any"`
+	MiscAttributes []xml.Attr            `xml:",any,attr"`
 }
 type roleDeviceRestapiXml struct {
-	Device   *roleDeviceRestapiDeviceXml   `xml:"device,omitempty"`
-	Network  *roleDeviceRestapiNetworkXml  `xml:"network,omitempty"`
-	Objects  *roleDeviceRestapiObjectsXml  `xml:"objects,omitempty"`
-	Policies *roleDeviceRestapiPoliciesXml `xml:"policies,omitempty"`
-	System   *roleDeviceRestapiSystemXml   `xml:"system,omitempty"`
-	Misc     []generic.Xml                 `xml:",any"`
+	Device         *roleDeviceRestapiDeviceXml   `xml:"device,omitempty"`
+	Network        *roleDeviceRestapiNetworkXml  `xml:"network,omitempty"`
+	Objects        *roleDeviceRestapiObjectsXml  `xml:"objects,omitempty"`
+	Policies       *roleDeviceRestapiPoliciesXml `xml:"policies,omitempty"`
+	System         *roleDeviceRestapiSystemXml   `xml:"system,omitempty"`
+	Misc           []generic.Xml                 `xml:",any"`
+	MiscAttributes []xml.Attr                    `xml:",any,attr"`
 }
 type roleDeviceRestapiDeviceXml struct {
 	EmailServerProfiles    *string       `xml:"email-server-profiles,omitempty"`
@@ -977,6 +1055,7 @@ type roleDeviceRestapiDeviceXml struct {
 	SyslogServerProfiles   *string       `xml:"syslog-server-profiles,omitempty"`
 	VirtualSystems         *string       `xml:"virtual-systems,omitempty"`
 	Misc                   []generic.Xml `xml:",any"`
+	MiscAttributes         []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceRestapiNetworkXml struct {
 	AggregateEthernetInterfaces             *string       `xml:"aggregate-ethernet-interfaces,omitempty"`
@@ -1015,6 +1094,7 @@ type roleDeviceRestapiNetworkXml struct {
 	ZoneProtectionNetworkProfiles           *string       `xml:"zone-protection-network-profiles,omitempty"`
 	Zones                                   *string       `xml:"zones,omitempty"`
 	Misc                                    []generic.Xml `xml:",any"`
+	MiscAttributes                          []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceRestapiObjectsXml struct {
 	AddressGroups                           *string       `xml:"address-groups,omitempty"`
@@ -1056,6 +1136,7 @@ type roleDeviceRestapiObjectsXml struct {
 	VulnerabilityProtectionSecurityProfiles *string       `xml:"vulnerability-protection-security-profiles,omitempty"`
 	WildfireAnalysisSecurityProfiles        *string       `xml:"wildfire-analysis-security-profiles,omitempty"`
 	Misc                                    []generic.Xml `xml:",any"`
+	MiscAttributes                          []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceRestapiPoliciesXml struct {
 	ApplicationOverrideRules   *string       `xml:"application-override-rules,omitempty"`
@@ -1070,33 +1151,37 @@ type roleDeviceRestapiPoliciesXml struct {
 	SecurityRules              *string       `xml:"security-rules,omitempty"`
 	TunnelInspectionRules      *string       `xml:"tunnel-inspection-rules,omitempty"`
 	Misc                       []generic.Xml `xml:",any"`
+	MiscAttributes             []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceRestapiSystemXml struct {
-	Configuration *string       `xml:"configuration,omitempty"`
-	Misc          []generic.Xml `xml:",any"`
+	Configuration  *string       `xml:"configuration,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceWebuiXml struct {
-	Acc        *string                       `xml:"acc,omitempty"`
-	Commit     *roleDeviceWebuiCommitXml     `xml:"commit,omitempty"`
-	Dashboard  *string                       `xml:"dashboard,omitempty"`
-	Device     *roleDeviceWebuiDeviceXml     `xml:"device,omitempty"`
-	Global     *roleDeviceWebuiGlobalXml     `xml:"global,omitempty"`
-	Monitor    *roleDeviceWebuiMonitorXml    `xml:"monitor,omitempty"`
-	Network    *roleDeviceWebuiNetworkXml    `xml:"network,omitempty"`
-	Objects    *roleDeviceWebuiObjectsXml    `xml:"objects,omitempty"`
-	Operations *roleDeviceWebuiOperationsXml `xml:"operations,omitempty"`
-	Policies   *roleDeviceWebuiPoliciesXml   `xml:"policies,omitempty"`
-	Privacy    *roleDeviceWebuiPrivacyXml    `xml:"privacy,omitempty"`
-	Save       *roleDeviceWebuiSaveXml       `xml:"save,omitempty"`
-	Tasks      *string                       `xml:"tasks,omitempty"`
-	Validate   *string                       `xml:"validate,omitempty"`
-	Misc       []generic.Xml                 `xml:",any"`
+	Acc            *string                       `xml:"acc,omitempty"`
+	Commit         *roleDeviceWebuiCommitXml     `xml:"commit,omitempty"`
+	Dashboard      *string                       `xml:"dashboard,omitempty"`
+	Device         *roleDeviceWebuiDeviceXml     `xml:"device,omitempty"`
+	Global         *roleDeviceWebuiGlobalXml     `xml:"global,omitempty"`
+	Monitor        *roleDeviceWebuiMonitorXml    `xml:"monitor,omitempty"`
+	Network        *roleDeviceWebuiNetworkXml    `xml:"network,omitempty"`
+	Objects        *roleDeviceWebuiObjectsXml    `xml:"objects,omitempty"`
+	Operations     *roleDeviceWebuiOperationsXml `xml:"operations,omitempty"`
+	Policies       *roleDeviceWebuiPoliciesXml   `xml:"policies,omitempty"`
+	Privacy        *roleDeviceWebuiPrivacyXml    `xml:"privacy,omitempty"`
+	Save           *roleDeviceWebuiSaveXml       `xml:"save,omitempty"`
+	Tasks          *string                       `xml:"tasks,omitempty"`
+	Validate       *string                       `xml:"validate,omitempty"`
+	Misc           []generic.Xml                 `xml:",any"`
+	MiscAttributes []xml.Attr                    `xml:",any,attr"`
 }
 type roleDeviceWebuiCommitXml struct {
 	CommitForOtherAdmins *string       `xml:"commit-for-other-admins,omitempty"`
 	Device               *string       `xml:"device,omitempty"`
 	ObjectLevelChanges   *string       `xml:"object-level-changes,omitempty"`
 	Misc                 []generic.Xml `xml:",any"`
+	MiscAttributes       []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceWebuiDeviceXml struct {
 	AccessDomain           *string                                        `xml:"access-domain,omitempty"`
@@ -1131,6 +1216,7 @@ type roleDeviceWebuiDeviceXml struct {
 	VirtualSystems         *string                                        `xml:"virtual-systems,omitempty"`
 	VmInfoSource           *string                                        `xml:"vm-info-source,omitempty"`
 	Misc                   []generic.Xml                                  `xml:",any"`
+	MiscAttributes         []xml.Attr                                     `xml:",any,attr"`
 }
 type roleDeviceWebuiDeviceCertificateManagementXml struct {
 	CertificateProfile     *string       `xml:"certificate-profile,omitempty"`
@@ -1141,60 +1227,67 @@ type roleDeviceWebuiDeviceCertificateManagementXml struct {
 	SslDecryptionExclusion *string       `xml:"ssl-decryption-exclusion,omitempty"`
 	SslTlsServiceProfile   *string       `xml:"ssl-tls-service-profile,omitempty"`
 	Misc                   []generic.Xml `xml:",any"`
+	MiscAttributes         []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceWebuiDeviceLocalUserDatabaseXml struct {
-	UserGroups *string       `xml:"user-groups,omitempty"`
-	Users      *string       `xml:"users,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	UserGroups     *string       `xml:"user-groups,omitempty"`
+	Users          *string       `xml:"users,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceWebuiDeviceLogSettingsXml struct {
-	CcAlarm       *string       `xml:"cc-alarm,omitempty"`
-	Config        *string       `xml:"config,omitempty"`
-	Correlation   *string       `xml:"correlation,omitempty"`
-	Globalprotect *string       `xml:"globalprotect,omitempty"`
-	Hipmatch      *string       `xml:"hipmatch,omitempty"`
-	Iptag         *string       `xml:"iptag,omitempty"`
-	ManageLog     *string       `xml:"manage-log,omitempty"`
-	System        *string       `xml:"system,omitempty"`
-	UserId        *string       `xml:"user-id,omitempty"`
-	Misc          []generic.Xml `xml:",any"`
+	CcAlarm        *string       `xml:"cc-alarm,omitempty"`
+	Config         *string       `xml:"config,omitempty"`
+	Correlation    *string       `xml:"correlation,omitempty"`
+	Globalprotect  *string       `xml:"globalprotect,omitempty"`
+	Hipmatch       *string       `xml:"hipmatch,omitempty"`
+	Iptag          *string       `xml:"iptag,omitempty"`
+	ManageLog      *string       `xml:"manage-log,omitempty"`
+	System         *string       `xml:"system,omitempty"`
+	UserId         *string       `xml:"user-id,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceWebuiDevicePolicyRecommendationsXml struct {
-	Iot  *string       `xml:"iot,omitempty"`
-	Saas *string       `xml:"saas,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Iot            *string       `xml:"iot,omitempty"`
+	Saas           *string       `xml:"saas,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceWebuiDeviceServerProfileXml struct {
-	Dns      *string       `xml:"dns,omitempty"`
-	Email    *string       `xml:"email,omitempty"`
-	Http     *string       `xml:"http,omitempty"`
-	Kerberos *string       `xml:"kerberos,omitempty"`
-	Ldap     *string       `xml:"ldap,omitempty"`
-	Mfa      *string       `xml:"mfa,omitempty"`
-	Netflow  *string       `xml:"netflow,omitempty"`
-	Radius   *string       `xml:"radius,omitempty"`
-	SamlIdp  *string       `xml:"saml_idp,omitempty"`
-	Scp      *string       `xml:"scp,omitempty"`
-	SnmpTrap *string       `xml:"snmp-trap,omitempty"`
-	Syslog   *string       `xml:"syslog,omitempty"`
-	Tacplus  *string       `xml:"tacplus,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	Dns            *string       `xml:"dns,omitempty"`
+	Email          *string       `xml:"email,omitempty"`
+	Http           *string       `xml:"http,omitempty"`
+	Kerberos       *string       `xml:"kerberos,omitempty"`
+	Ldap           *string       `xml:"ldap,omitempty"`
+	Mfa            *string       `xml:"mfa,omitempty"`
+	Netflow        *string       `xml:"netflow,omitempty"`
+	Radius         *string       `xml:"radius,omitempty"`
+	SamlIdp        *string       `xml:"saml_idp,omitempty"`
+	Scp            *string       `xml:"scp,omitempty"`
+	SnmpTrap       *string       `xml:"snmp-trap,omitempty"`
+	Syslog         *string       `xml:"syslog,omitempty"`
+	Tacplus        *string       `xml:"tacplus,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceWebuiDeviceSetupXml struct {
-	ContentId  *string       `xml:"content-id,omitempty"`
-	Hsm        *string       `xml:"hsm,omitempty"`
-	Interfaces *string       `xml:"interfaces,omitempty"`
-	Management *string       `xml:"management,omitempty"`
-	Operations *string       `xml:"operations,omitempty"`
-	Services   *string       `xml:"services,omitempty"`
-	Session    *string       `xml:"session,omitempty"`
-	Telemetry  *string       `xml:"telemetry,omitempty"`
-	Wildfire   *string       `xml:"wildfire,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	ContentId      *string       `xml:"content-id,omitempty"`
+	Hsm            *string       `xml:"hsm,omitempty"`
+	Interfaces     *string       `xml:"interfaces,omitempty"`
+	Management     *string       `xml:"management,omitempty"`
+	Operations     *string       `xml:"operations,omitempty"`
+	Services       *string       `xml:"services,omitempty"`
+	Session        *string       `xml:"session,omitempty"`
+	Telemetry      *string       `xml:"telemetry,omitempty"`
+	Wildfire       *string       `xml:"wildfire,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceWebuiGlobalXml struct {
-	SystemAlarms *string       `xml:"system-alarms,omitempty"`
-	Misc         []generic.Xml `xml:",any"`
+	SystemAlarms   *string       `xml:"system-alarms,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceWebuiMonitorXml struct {
 	AppScope                   *string                                              `xml:"app-scope,omitempty"`
@@ -1215,11 +1308,13 @@ type roleDeviceWebuiMonitorXml struct {
 	UrlFilteringReports        *string                                              `xml:"url-filtering-reports,omitempty"`
 	ViewCustomReports          *string                                              `xml:"view-custom-reports,omitempty"`
 	Misc                       []generic.Xml                                        `xml:",any"`
+	MiscAttributes             []xml.Attr                                           `xml:",any,attr"`
 }
 type roleDeviceWebuiMonitorAutomatedCorrelationEngineXml struct {
 	CorrelatedEvents   *string       `xml:"correlated-events,omitempty"`
 	CorrelationObjects *string       `xml:"correlation-objects,omitempty"`
 	Misc               []generic.Xml `xml:",any"`
+	MiscAttributes     []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceWebuiMonitorCustomReportsXml struct {
 	ApplicationStatistics *string       `xml:"application-statistics,omitempty"`
@@ -1245,6 +1340,7 @@ type roleDeviceWebuiMonitorCustomReportsXml struct {
 	Userid                *string       `xml:"userid,omitempty"`
 	WildfireLog           *string       `xml:"wildfire-log,omitempty"`
 	Misc                  []generic.Xml `xml:",any"`
+	MiscAttributes        []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceWebuiMonitorLogsXml struct {
 	Alarm          *string       `xml:"alarm,omitempty"`
@@ -1265,6 +1361,7 @@ type roleDeviceWebuiMonitorLogsXml struct {
 	Userid         *string       `xml:"userid,omitempty"`
 	Wildfire       *string       `xml:"wildfire,omitempty"`
 	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceWebuiMonitorPdfReportsXml struct {
 	EmailScheduler             *string       `xml:"email-scheduler,omitempty"`
@@ -1274,6 +1371,7 @@ type roleDeviceWebuiMonitorPdfReportsXml struct {
 	SaasApplicationUsageReport *string       `xml:"saas-application-usage-report,omitempty"`
 	UserActivityReport         *string       `xml:"user-activity-report,omitempty"`
 	Misc                       []generic.Xml `xml:",any"`
+	MiscAttributes             []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceWebuiNetworkXml struct {
 	Dhcp                  *string                                   `xml:"dhcp,omitempty"`
@@ -1293,6 +1391,7 @@ type roleDeviceWebuiNetworkXml struct {
 	Vlans                 *string                                   `xml:"vlans,omitempty"`
 	Zones                 *string                                   `xml:"zones,omitempty"`
 	Misc                  []generic.Xml                             `xml:",any"`
+	MiscAttributes        []xml.Attr                                `xml:",any,attr"`
 }
 type roleDeviceWebuiNetworkGlobalProtectXml struct {
 	ClientlessAppGroups *string       `xml:"clientless-app-groups,omitempty"`
@@ -1301,6 +1400,7 @@ type roleDeviceWebuiNetworkGlobalProtectXml struct {
 	Mdm                 *string       `xml:"mdm,omitempty"`
 	Portals             *string       `xml:"portals,omitempty"`
 	Misc                []generic.Xml `xml:",any"`
+	MiscAttributes      []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceWebuiNetworkNetworkProfilesXml struct {
 	BfdProfile       *string       `xml:"bfd-profile,omitempty"`
@@ -1314,21 +1414,24 @@ type roleDeviceWebuiNetworkNetworkProfilesXml struct {
 	TunnelMonitor    *string       `xml:"tunnel-monitor,omitempty"`
 	ZoneProtection   *string       `xml:"zone-protection,omitempty"`
 	Misc             []generic.Xml `xml:",any"`
+	MiscAttributes   []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceWebuiNetworkRoutingXml struct {
 	LogicalRouters  *string                                          `xml:"logical-routers,omitempty"`
 	RoutingProfiles *roleDeviceWebuiNetworkRoutingRoutingProfilesXml `xml:"routing-profiles,omitempty"`
 	Misc            []generic.Xml                                    `xml:",any"`
+	MiscAttributes  []xml.Attr                                       `xml:",any,attr"`
 }
 type roleDeviceWebuiNetworkRoutingRoutingProfilesXml struct {
-	Bfd       *string       `xml:"bfd,omitempty"`
-	Bgp       *string       `xml:"bgp,omitempty"`
-	Filters   *string       `xml:"filters,omitempty"`
-	Multicast *string       `xml:"multicast,omitempty"`
-	Ospf      *string       `xml:"ospf,omitempty"`
-	Ospfv3    *string       `xml:"ospfv3,omitempty"`
-	Ripv2     *string       `xml:"ripv2,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	Bfd            *string       `xml:"bfd,omitempty"`
+	Bgp            *string       `xml:"bgp,omitempty"`
+	Filters        *string       `xml:"filters,omitempty"`
+	Multicast      *string       `xml:"multicast,omitempty"`
+	Ospf           *string       `xml:"ospf,omitempty"`
+	Ospfv3         *string       `xml:"ospfv3,omitempty"`
+	Ripv2          *string       `xml:"ripv2,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceWebuiObjectsXml struct {
 	AddressGroups         *string                                    `xml:"address-groups,omitempty"`
@@ -1354,22 +1457,26 @@ type roleDeviceWebuiObjectsXml struct {
 	Services              *string                                    `xml:"services,omitempty"`
 	Tags                  *string                                    `xml:"tags,omitempty"`
 	Misc                  []generic.Xml                              `xml:",any"`
+	MiscAttributes        []xml.Attr                                 `xml:",any,attr"`
 }
 type roleDeviceWebuiObjectsCustomObjectsXml struct {
-	DataPatterns  *string       `xml:"data-patterns,omitempty"`
-	Spyware       *string       `xml:"spyware,omitempty"`
-	UrlCategory   *string       `xml:"url-category,omitempty"`
-	Vulnerability *string       `xml:"vulnerability,omitempty"`
-	Misc          []generic.Xml `xml:",any"`
+	DataPatterns   *string       `xml:"data-patterns,omitempty"`
+	Spyware        *string       `xml:"spyware,omitempty"`
+	UrlCategory    *string       `xml:"url-category,omitempty"`
+	Vulnerability  *string       `xml:"vulnerability,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceWebuiObjectsDecryptionXml struct {
 	DecryptionProfile *string       `xml:"decryption-profile,omitempty"`
 	Misc              []generic.Xml `xml:",any"`
+	MiscAttributes    []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceWebuiObjectsGlobalProtectXml struct {
-	HipObjects  *string       `xml:"hip-objects,omitempty"`
-	HipProfiles *string       `xml:"hip-profiles,omitempty"`
-	Misc        []generic.Xml `xml:",any"`
+	HipObjects     *string       `xml:"hip-objects,omitempty"`
+	HipProfiles    *string       `xml:"hip-profiles,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceWebuiObjectsSdwanXml struct {
 	SdwanDistProfile            *string       `xml:"sdwan-dist-profile,omitempty"`
@@ -1377,6 +1484,7 @@ type roleDeviceWebuiObjectsSdwanXml struct {
 	SdwanProfile                *string       `xml:"sdwan-profile,omitempty"`
 	SdwanSaasQualityProfile     *string       `xml:"sdwan-saas-quality-profile,omitempty"`
 	Misc                        []generic.Xml `xml:",any"`
+	MiscAttributes              []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceWebuiObjectsSecurityProfilesXml struct {
 	AntiSpyware             *string       `xml:"anti-spyware,omitempty"`
@@ -1390,6 +1498,7 @@ type roleDeviceWebuiObjectsSecurityProfilesXml struct {
 	VulnerabilityProtection *string       `xml:"vulnerability-protection,omitempty"`
 	WildfireAnalysis        *string       `xml:"wildfire-analysis,omitempty"`
 	Misc                    []generic.Xml `xml:",any"`
+	MiscAttributes          []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceWebuiOperationsXml struct {
 	DownloadCoreFiles       *string       `xml:"download-core-files,omitempty"`
@@ -1398,6 +1507,7 @@ type roleDeviceWebuiOperationsXml struct {
 	GenerateTechSupportFile *string       `xml:"generate-tech-support-file,omitempty"`
 	Reboot                  *string       `xml:"reboot,omitempty"`
 	Misc                    []generic.Xml `xml:",any"`
+	MiscAttributes          []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceWebuiPoliciesXml struct {
 	ApplicationOverrideRulebase *string       `xml:"application-override-rulebase,omitempty"`
@@ -1413,45 +1523,51 @@ type roleDeviceWebuiPoliciesXml struct {
 	SslDecryptionRulebase       *string       `xml:"ssl-decryption-rulebase,omitempty"`
 	TunnelInspectRulebase       *string       `xml:"tunnel-inspect-rulebase,omitempty"`
 	Misc                        []generic.Xml `xml:",any"`
+	MiscAttributes              []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceWebuiPrivacyXml struct {
 	ShowFullIpAddresses           *string       `xml:"show-full-ip-addresses,omitempty"`
 	ShowUserNamesInLogsAndReports *string       `xml:"show-user-names-in-logs-and-reports,omitempty"`
 	ViewPcapFiles                 *string       `xml:"view-pcap-files,omitempty"`
 	Misc                          []generic.Xml `xml:",any"`
+	MiscAttributes                []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceWebuiSaveXml struct {
 	ObjectLevelChanges *string       `xml:"object-level-changes,omitempty"`
 	PartialSave        *string       `xml:"partial-save,omitempty"`
 	SaveForOtherAdmins *string       `xml:"save-for-other-admins,omitempty"`
 	Misc               []generic.Xml `xml:",any"`
+	MiscAttributes     []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceXmlapiXml struct {
-	Commit *string       `xml:"commit,omitempty"`
-	Config *string       `xml:"config,omitempty"`
-	Export *string       `xml:"export,omitempty"`
-	Import *string       `xml:"import,omitempty"`
-	Iot    *string       `xml:"iot,omitempty"`
-	Log    *string       `xml:"log,omitempty"`
-	Op     *string       `xml:"op,omitempty"`
-	Report *string       `xml:"report,omitempty"`
-	UserId *string       `xml:"user-id,omitempty"`
-	Misc   []generic.Xml `xml:",any"`
+	Commit         *string       `xml:"commit,omitempty"`
+	Config         *string       `xml:"config,omitempty"`
+	Export         *string       `xml:"export,omitempty"`
+	Import         *string       `xml:"import,omitempty"`
+	Iot            *string       `xml:"iot,omitempty"`
+	Log            *string       `xml:"log,omitempty"`
+	Op             *string       `xml:"op,omitempty"`
+	Report         *string       `xml:"report,omitempty"`
+	UserId         *string       `xml:"user-id,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysXml struct {
-	Cli     *string             `xml:"cli,omitempty"`
-	Restapi *roleVsysRestapiXml `xml:"restapi,omitempty"`
-	Webui   *roleVsysWebuiXml   `xml:"webui,omitempty"`
-	Xmlapi  *roleVsysXmlapiXml  `xml:"xmlapi,omitempty"`
-	Misc    []generic.Xml       `xml:",any"`
+	Cli            *string             `xml:"cli,omitempty"`
+	Restapi        *roleVsysRestapiXml `xml:"restapi,omitempty"`
+	Webui          *roleVsysWebuiXml   `xml:"webui,omitempty"`
+	Xmlapi         *roleVsysXmlapiXml  `xml:"xmlapi,omitempty"`
+	Misc           []generic.Xml       `xml:",any"`
+	MiscAttributes []xml.Attr          `xml:",any,attr"`
 }
 type roleVsysRestapiXml struct {
-	Device   *roleVsysRestapiDeviceXml   `xml:"device,omitempty"`
-	Network  *roleVsysRestapiNetworkXml  `xml:"network,omitempty"`
-	Objects  *roleVsysRestapiObjectsXml  `xml:"objects,omitempty"`
-	Policies *roleVsysRestapiPoliciesXml `xml:"policies,omitempty"`
-	System   *roleVsysRestapiSystemXml   `xml:"system,omitempty"`
-	Misc     []generic.Xml               `xml:",any"`
+	Device         *roleVsysRestapiDeviceXml   `xml:"device,omitempty"`
+	Network        *roleVsysRestapiNetworkXml  `xml:"network,omitempty"`
+	Objects        *roleVsysRestapiObjectsXml  `xml:"objects,omitempty"`
+	Policies       *roleVsysRestapiPoliciesXml `xml:"policies,omitempty"`
+	System         *roleVsysRestapiSystemXml   `xml:"system,omitempty"`
+	Misc           []generic.Xml               `xml:",any"`
+	MiscAttributes []xml.Attr                  `xml:",any,attr"`
 }
 type roleVsysRestapiDeviceXml struct {
 	EmailServerProfiles    *string       `xml:"email-server-profiles,omitempty"`
@@ -1462,6 +1578,7 @@ type roleVsysRestapiDeviceXml struct {
 	SyslogServerProfiles   *string       `xml:"syslog-server-profiles,omitempty"`
 	VirtualSystems         *string       `xml:"virtual-systems,omitempty"`
 	Misc                   []generic.Xml `xml:",any"`
+	MiscAttributes         []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysRestapiNetworkXml struct {
 	GlobalprotectClientlessAppGroups *string       `xml:"globalprotect-clientless-app-groups,omitempty"`
@@ -1472,6 +1589,7 @@ type roleVsysRestapiNetworkXml struct {
 	SdwanInterfaceProfiles           *string       `xml:"sdwan-interface-profiles,omitempty"`
 	Zones                            *string       `xml:"zones,omitempty"`
 	Misc                             []generic.Xml `xml:",any"`
+	MiscAttributes                   []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysRestapiObjectsXml struct {
 	AddressGroups                           *string       `xml:"address-groups,omitempty"`
@@ -1513,6 +1631,7 @@ type roleVsysRestapiObjectsXml struct {
 	VulnerabilityProtectionSecurityProfiles *string       `xml:"vulnerability-protection-security-profiles,omitempty"`
 	WildfireAnalysisSecurityProfiles        *string       `xml:"wildfire-analysis-security-profiles,omitempty"`
 	Misc                                    []generic.Xml `xml:",any"`
+	MiscAttributes                          []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysRestapiPoliciesXml struct {
 	ApplicationOverrideRules   *string       `xml:"application-override-rules,omitempty"`
@@ -1527,31 +1646,35 @@ type roleVsysRestapiPoliciesXml struct {
 	SecurityRules              *string       `xml:"security-rules,omitempty"`
 	TunnelInspectionRules      *string       `xml:"tunnel-inspection-rules,omitempty"`
 	Misc                       []generic.Xml `xml:",any"`
+	MiscAttributes             []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysRestapiSystemXml struct {
-	Configuration *string       `xml:"configuration,omitempty"`
-	Misc          []generic.Xml `xml:",any"`
+	Configuration  *string       `xml:"configuration,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysWebuiXml struct {
-	Acc        *string                     `xml:"acc,omitempty"`
-	Commit     *roleVsysWebuiCommitXml     `xml:"commit,omitempty"`
-	Dashboard  *string                     `xml:"dashboard,omitempty"`
-	Device     *roleVsysWebuiDeviceXml     `xml:"device,omitempty"`
-	Monitor    *roleVsysWebuiMonitorXml    `xml:"monitor,omitempty"`
-	Network    *roleVsysWebuiNetworkXml    `xml:"network,omitempty"`
-	Objects    *roleVsysWebuiObjectsXml    `xml:"objects,omitempty"`
-	Operations *roleVsysWebuiOperationsXml `xml:"operations,omitempty"`
-	Policies   *roleVsysWebuiPoliciesXml   `xml:"policies,omitempty"`
-	Privacy    *roleVsysWebuiPrivacyXml    `xml:"privacy,omitempty"`
-	Save       *roleVsysWebuiSaveXml       `xml:"save,omitempty"`
-	Tasks      *string                     `xml:"tasks,omitempty"`
-	Validate   *string                     `xml:"validate,omitempty"`
-	Misc       []generic.Xml               `xml:",any"`
+	Acc            *string                     `xml:"acc,omitempty"`
+	Commit         *roleVsysWebuiCommitXml     `xml:"commit,omitempty"`
+	Dashboard      *string                     `xml:"dashboard,omitempty"`
+	Device         *roleVsysWebuiDeviceXml     `xml:"device,omitempty"`
+	Monitor        *roleVsysWebuiMonitorXml    `xml:"monitor,omitempty"`
+	Network        *roleVsysWebuiNetworkXml    `xml:"network,omitempty"`
+	Objects        *roleVsysWebuiObjectsXml    `xml:"objects,omitempty"`
+	Operations     *roleVsysWebuiOperationsXml `xml:"operations,omitempty"`
+	Policies       *roleVsysWebuiPoliciesXml   `xml:"policies,omitempty"`
+	Privacy        *roleVsysWebuiPrivacyXml    `xml:"privacy,omitempty"`
+	Save           *roleVsysWebuiSaveXml       `xml:"save,omitempty"`
+	Tasks          *string                     `xml:"tasks,omitempty"`
+	Validate       *string                     `xml:"validate,omitempty"`
+	Misc           []generic.Xml               `xml:",any"`
+	MiscAttributes []xml.Attr                  `xml:",any,attr"`
 }
 type roleVsysWebuiCommitXml struct {
 	CommitForOtherAdmins *string       `xml:"commit-for-other-admins,omitempty"`
 	VirtualSystems       *string       `xml:"virtual-systems,omitempty"`
 	Misc                 []generic.Xml `xml:",any"`
+	MiscAttributes       []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysWebuiDeviceXml struct {
 	Administrators         *string                                      `xml:"administrators,omitempty"`
@@ -1571,6 +1694,7 @@ type roleVsysWebuiDeviceXml struct {
 	UserIdentification     *string                                      `xml:"user-identification,omitempty"`
 	VmInfoSource           *string                                      `xml:"vm-info-source,omitempty"`
 	Misc                   []generic.Xml                                `xml:",any"`
+	MiscAttributes         []xml.Attr                                   `xml:",any,attr"`
 }
 type roleVsysWebuiDeviceCertificateManagementXml struct {
 	CertificateProfile     *string       `xml:"certificate-profile,omitempty"`
@@ -1581,54 +1705,60 @@ type roleVsysWebuiDeviceCertificateManagementXml struct {
 	SslDecryptionExclusion *string       `xml:"ssl-decryption-exclusion,omitempty"`
 	SslTlsServiceProfile   *string       `xml:"ssl-tls-service-profile,omitempty"`
 	Misc                   []generic.Xml `xml:",any"`
+	MiscAttributes         []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysWebuiDeviceLocalUserDatabaseXml struct {
-	UserGroups *string       `xml:"user-groups,omitempty"`
-	Users      *string       `xml:"users,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	UserGroups     *string       `xml:"user-groups,omitempty"`
+	Users          *string       `xml:"users,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysWebuiDeviceLogSettingsXml struct {
-	Config        *string       `xml:"config,omitempty"`
-	Correlation   *string       `xml:"correlation,omitempty"`
-	Globalprotect *string       `xml:"globalprotect,omitempty"`
-	Hipmatch      *string       `xml:"hipmatch,omitempty"`
-	Iptag         *string       `xml:"iptag,omitempty"`
-	System        *string       `xml:"system,omitempty"`
-	UserId        *string       `xml:"user-id,omitempty"`
-	Misc          []generic.Xml `xml:",any"`
+	Config         *string       `xml:"config,omitempty"`
+	Correlation    *string       `xml:"correlation,omitempty"`
+	Globalprotect  *string       `xml:"globalprotect,omitempty"`
+	Hipmatch       *string       `xml:"hipmatch,omitempty"`
+	Iptag          *string       `xml:"iptag,omitempty"`
+	System         *string       `xml:"system,omitempty"`
+	UserId         *string       `xml:"user-id,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysWebuiDevicePolicyRecommendationsXml struct {
-	Iot  *string       `xml:"iot,omitempty"`
-	Saas *string       `xml:"saas,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Iot            *string       `xml:"iot,omitempty"`
+	Saas           *string       `xml:"saas,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysWebuiDeviceServerProfileXml struct {
-	Dns      *string       `xml:"dns,omitempty"`
-	Email    *string       `xml:"email,omitempty"`
-	Http     *string       `xml:"http,omitempty"`
-	Kerberos *string       `xml:"kerberos,omitempty"`
-	Ldap     *string       `xml:"ldap,omitempty"`
-	Mfa      *string       `xml:"mfa,omitempty"`
-	Netflow  *string       `xml:"netflow,omitempty"`
-	Radius   *string       `xml:"radius,omitempty"`
-	SamlIdp  *string       `xml:"saml_idp,omitempty"`
-	Scp      *string       `xml:"scp,omitempty"`
-	SnmpTrap *string       `xml:"snmp-trap,omitempty"`
-	Syslog   *string       `xml:"syslog,omitempty"`
-	Tacplus  *string       `xml:"tacplus,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	Dns            *string       `xml:"dns,omitempty"`
+	Email          *string       `xml:"email,omitempty"`
+	Http           *string       `xml:"http,omitempty"`
+	Kerberos       *string       `xml:"kerberos,omitempty"`
+	Ldap           *string       `xml:"ldap,omitempty"`
+	Mfa            *string       `xml:"mfa,omitempty"`
+	Netflow        *string       `xml:"netflow,omitempty"`
+	Radius         *string       `xml:"radius,omitempty"`
+	SamlIdp        *string       `xml:"saml_idp,omitempty"`
+	Scp            *string       `xml:"scp,omitempty"`
+	SnmpTrap       *string       `xml:"snmp-trap,omitempty"`
+	Syslog         *string       `xml:"syslog,omitempty"`
+	Tacplus        *string       `xml:"tacplus,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysWebuiDeviceSetupXml struct {
-	ContentId  *string       `xml:"content-id,omitempty"`
-	Hsm        *string       `xml:"hsm,omitempty"`
-	Interfaces *string       `xml:"interfaces,omitempty"`
-	Management *string       `xml:"management,omitempty"`
-	Operations *string       `xml:"operations,omitempty"`
-	Services   *string       `xml:"services,omitempty"`
-	Session    *string       `xml:"session,omitempty"`
-	Telemetry  *string       `xml:"telemetry,omitempty"`
-	Wildfire   *string       `xml:"wildfire,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	ContentId      *string       `xml:"content-id,omitempty"`
+	Hsm            *string       `xml:"hsm,omitempty"`
+	Interfaces     *string       `xml:"interfaces,omitempty"`
+	Management     *string       `xml:"management,omitempty"`
+	Operations     *string       `xml:"operations,omitempty"`
+	Services       *string       `xml:"services,omitempty"`
+	Session        *string       `xml:"session,omitempty"`
+	Telemetry      *string       `xml:"telemetry,omitempty"`
+	Wildfire       *string       `xml:"wildfire,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysWebuiMonitorXml struct {
 	AppScope                   *string                                            `xml:"app-scope,omitempty"`
@@ -1641,11 +1771,13 @@ type roleVsysWebuiMonitorXml struct {
 	SessionBrowser             *string                                            `xml:"session-browser,omitempty"`
 	ViewCustomReports          *string                                            `xml:"view-custom-reports,omitempty"`
 	Misc                       []generic.Xml                                      `xml:",any"`
+	MiscAttributes             []xml.Attr                                         `xml:",any,attr"`
 }
 type roleVsysWebuiMonitorAutomatedCorrelationEngineXml struct {
 	CorrelatedEvents   *string       `xml:"correlated-events,omitempty"`
 	CorrelationObjects *string       `xml:"correlation-objects,omitempty"`
 	Misc               []generic.Xml `xml:",any"`
+	MiscAttributes     []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysWebuiMonitorCustomReportsXml struct {
 	ApplicationStatistics *string       `xml:"application-statistics,omitempty"`
@@ -1671,6 +1803,7 @@ type roleVsysWebuiMonitorCustomReportsXml struct {
 	Userid                *string       `xml:"userid,omitempty"`
 	WildfireLog           *string       `xml:"wildfire-log,omitempty"`
 	Misc                  []generic.Xml `xml:",any"`
+	MiscAttributes        []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysWebuiMonitorLogsXml struct {
 	Authentication *string       `xml:"authentication,omitempty"`
@@ -1688,6 +1821,7 @@ type roleVsysWebuiMonitorLogsXml struct {
 	Userid         *string       `xml:"userid,omitempty"`
 	Wildfire       *string       `xml:"wildfire,omitempty"`
 	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysWebuiMonitorPdfReportsXml struct {
 	EmailScheduler             *string       `xml:"email-scheduler,omitempty"`
@@ -1697,12 +1831,14 @@ type roleVsysWebuiMonitorPdfReportsXml struct {
 	SaasApplicationUsageReport *string       `xml:"saas-application-usage-report,omitempty"`
 	UserActivityReport         *string       `xml:"user-activity-report,omitempty"`
 	Misc                       []generic.Xml `xml:",any"`
+	MiscAttributes             []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysWebuiNetworkXml struct {
 	GlobalProtect         *roleVsysWebuiNetworkGlobalProtectXml `xml:"global-protect,omitempty"`
 	SdwanInterfaceProfile *string                               `xml:"sdwan-interface-profile,omitempty"`
 	Zones                 *string                               `xml:"zones,omitempty"`
 	Misc                  []generic.Xml                         `xml:",any"`
+	MiscAttributes        []xml.Attr                            `xml:",any,attr"`
 }
 type roleVsysWebuiNetworkGlobalProtectXml struct {
 	ClientlessAppGroups *string       `xml:"clientless-app-groups,omitempty"`
@@ -1711,6 +1847,7 @@ type roleVsysWebuiNetworkGlobalProtectXml struct {
 	Mdm                 *string       `xml:"mdm,omitempty"`
 	Portals             *string       `xml:"portals,omitempty"`
 	Misc                []generic.Xml `xml:",any"`
+	MiscAttributes      []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysWebuiObjectsXml struct {
 	AddressGroups         *string                                  `xml:"address-groups,omitempty"`
@@ -1736,22 +1873,26 @@ type roleVsysWebuiObjectsXml struct {
 	Services              *string                                  `xml:"services,omitempty"`
 	Tags                  *string                                  `xml:"tags,omitempty"`
 	Misc                  []generic.Xml                            `xml:",any"`
+	MiscAttributes        []xml.Attr                               `xml:",any,attr"`
 }
 type roleVsysWebuiObjectsCustomObjectsXml struct {
-	DataPatterns  *string       `xml:"data-patterns,omitempty"`
-	Spyware       *string       `xml:"spyware,omitempty"`
-	UrlCategory   *string       `xml:"url-category,omitempty"`
-	Vulnerability *string       `xml:"vulnerability,omitempty"`
-	Misc          []generic.Xml `xml:",any"`
+	DataPatterns   *string       `xml:"data-patterns,omitempty"`
+	Spyware        *string       `xml:"spyware,omitempty"`
+	UrlCategory    *string       `xml:"url-category,omitempty"`
+	Vulnerability  *string       `xml:"vulnerability,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysWebuiObjectsDecryptionXml struct {
 	DecryptionProfile *string       `xml:"decryption-profile,omitempty"`
 	Misc              []generic.Xml `xml:",any"`
+	MiscAttributes    []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysWebuiObjectsGlobalProtectXml struct {
-	HipObjects  *string       `xml:"hip-objects,omitempty"`
-	HipProfiles *string       `xml:"hip-profiles,omitempty"`
-	Misc        []generic.Xml `xml:",any"`
+	HipObjects     *string       `xml:"hip-objects,omitempty"`
+	HipProfiles    *string       `xml:"hip-profiles,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysWebuiObjectsSdwanXml struct {
 	SdwanDistProfile            *string       `xml:"sdwan-dist-profile,omitempty"`
@@ -1759,6 +1900,7 @@ type roleVsysWebuiObjectsSdwanXml struct {
 	SdwanProfile                *string       `xml:"sdwan-profile,omitempty"`
 	SdwanSaasQualityProfile     *string       `xml:"sdwan-saas-quality-profile,omitempty"`
 	Misc                        []generic.Xml `xml:",any"`
+	MiscAttributes              []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysWebuiObjectsSecurityProfilesXml struct {
 	AntiSpyware             *string       `xml:"anti-spyware,omitempty"`
@@ -1772,6 +1914,7 @@ type roleVsysWebuiObjectsSecurityProfilesXml struct {
 	VulnerabilityProtection *string       `xml:"vulnerability-protection,omitempty"`
 	WildfireAnalysis        *string       `xml:"wildfire-analysis,omitempty"`
 	Misc                    []generic.Xml `xml:",any"`
+	MiscAttributes          []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysWebuiOperationsXml struct {
 	DownloadCoreFiles       *string       `xml:"download-core-files,omitempty"`
@@ -1780,6 +1923,7 @@ type roleVsysWebuiOperationsXml struct {
 	GenerateTechSupportFile *string       `xml:"generate-tech-support-file,omitempty"`
 	Reboot                  *string       `xml:"reboot,omitempty"`
 	Misc                    []generic.Xml `xml:",any"`
+	MiscAttributes          []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysWebuiPoliciesXml struct {
 	ApplicationOverrideRulebase *string       `xml:"application-override-rulebase,omitempty"`
@@ -1795,57 +1939,65 @@ type roleVsysWebuiPoliciesXml struct {
 	SslDecryptionRulebase       *string       `xml:"ssl-decryption-rulebase,omitempty"`
 	TunnelInspectRulebase       *string       `xml:"tunnel-inspect-rulebase,omitempty"`
 	Misc                        []generic.Xml `xml:",any"`
+	MiscAttributes              []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysWebuiPrivacyXml struct {
 	ShowFullIpAddresses           *string       `xml:"show-full-ip-addresses,omitempty"`
 	ShowUserNamesInLogsAndReports *string       `xml:"show-user-names-in-logs-and-reports,omitempty"`
 	ViewPcapFiles                 *string       `xml:"view-pcap-files,omitempty"`
 	Misc                          []generic.Xml `xml:",any"`
+	MiscAttributes                []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysWebuiSaveXml struct {
 	ObjectLevelChanges *string       `xml:"object-level-changes,omitempty"`
 	PartialSave        *string       `xml:"partial-save,omitempty"`
 	SaveForOtherAdmins *string       `xml:"save-for-other-admins,omitempty"`
 	Misc               []generic.Xml `xml:",any"`
+	MiscAttributes     []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysXmlapiXml struct {
-	Commit *string       `xml:"commit,omitempty"`
-	Config *string       `xml:"config,omitempty"`
-	Export *string       `xml:"export,omitempty"`
-	Import *string       `xml:"import,omitempty"`
-	Iot    *string       `xml:"iot,omitempty"`
-	Log    *string       `xml:"log,omitempty"`
-	Op     *string       `xml:"op,omitempty"`
-	Report *string       `xml:"report,omitempty"`
-	UserId *string       `xml:"user-id,omitempty"`
-	Misc   []generic.Xml `xml:",any"`
+	Commit         *string       `xml:"commit,omitempty"`
+	Config         *string       `xml:"config,omitempty"`
+	Export         *string       `xml:"export,omitempty"`
+	Import         *string       `xml:"import,omitempty"`
+	Iot            *string       `xml:"iot,omitempty"`
+	Log            *string       `xml:"log,omitempty"`
+	Op             *string       `xml:"op,omitempty"`
+	Report         *string       `xml:"report,omitempty"`
+	UserId         *string       `xml:"user-id,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type entryXml_11_0_2 struct {
-	XMLName     xml.Name        `xml:"entry"`
-	Name        string          `xml:"name,attr"`
-	Description *string         `xml:"description,omitempty"`
-	Role        *roleXml_11_0_2 `xml:"role,omitempty"`
-	Misc        []generic.Xml   `xml:",any"`
+	XMLName        xml.Name        `xml:"entry"`
+	Name           string          `xml:"name,attr"`
+	Description    *string         `xml:"description,omitempty"`
+	Role           *roleXml_11_0_2 `xml:"role,omitempty"`
+	Misc           []generic.Xml   `xml:",any"`
+	MiscAttributes []xml.Attr      `xml:",any,attr"`
 }
 type roleXml_11_0_2 struct {
-	Device *roleDeviceXml_11_0_2 `xml:"device,omitempty"`
-	Vsys   *roleVsysXml_11_0_2   `xml:"vsys,omitempty"`
-	Misc   []generic.Xml         `xml:",any"`
+	Device         *roleDeviceXml_11_0_2 `xml:"device,omitempty"`
+	Vsys           *roleVsysXml_11_0_2   `xml:"vsys,omitempty"`
+	Misc           []generic.Xml         `xml:",any"`
+	MiscAttributes []xml.Attr            `xml:",any,attr"`
 }
 type roleDeviceXml_11_0_2 struct {
-	Cli     *string                      `xml:"cli,omitempty"`
-	Restapi *roleDeviceRestapiXml_11_0_2 `xml:"restapi,omitempty"`
-	Webui   *roleDeviceWebuiXml_11_0_2   `xml:"webui,omitempty"`
-	Xmlapi  *roleDeviceXmlapiXml_11_0_2  `xml:"xmlapi,omitempty"`
-	Misc    []generic.Xml                `xml:",any"`
+	Cli            *string                      `xml:"cli,omitempty"`
+	Restapi        *roleDeviceRestapiXml_11_0_2 `xml:"restapi,omitempty"`
+	Webui          *roleDeviceWebuiXml_11_0_2   `xml:"webui,omitempty"`
+	Xmlapi         *roleDeviceXmlapiXml_11_0_2  `xml:"xmlapi,omitempty"`
+	Misc           []generic.Xml                `xml:",any"`
+	MiscAttributes []xml.Attr                   `xml:",any,attr"`
 }
 type roleDeviceRestapiXml_11_0_2 struct {
-	Device   *roleDeviceRestapiDeviceXml_11_0_2   `xml:"device,omitempty"`
-	Network  *roleDeviceRestapiNetworkXml_11_0_2  `xml:"network,omitempty"`
-	Objects  *roleDeviceRestapiObjectsXml_11_0_2  `xml:"objects,omitempty"`
-	Policies *roleDeviceRestapiPoliciesXml_11_0_2 `xml:"policies,omitempty"`
-	System   *roleDeviceRestapiSystemXml_11_0_2   `xml:"system,omitempty"`
-	Misc     []generic.Xml                        `xml:",any"`
+	Device         *roleDeviceRestapiDeviceXml_11_0_2   `xml:"device,omitempty"`
+	Network        *roleDeviceRestapiNetworkXml_11_0_2  `xml:"network,omitempty"`
+	Objects        *roleDeviceRestapiObjectsXml_11_0_2  `xml:"objects,omitempty"`
+	Policies       *roleDeviceRestapiPoliciesXml_11_0_2 `xml:"policies,omitempty"`
+	System         *roleDeviceRestapiSystemXml_11_0_2   `xml:"system,omitempty"`
+	Misc           []generic.Xml                        `xml:",any"`
+	MiscAttributes []xml.Attr                           `xml:",any,attr"`
 }
 type roleDeviceRestapiDeviceXml_11_0_2 struct {
 	EmailServerProfiles    *string       `xml:"email-server-profiles,omitempty"`
@@ -1856,6 +2008,7 @@ type roleDeviceRestapiDeviceXml_11_0_2 struct {
 	SyslogServerProfiles   *string       `xml:"syslog-server-profiles,omitempty"`
 	VirtualSystems         *string       `xml:"virtual-systems,omitempty"`
 	Misc                   []generic.Xml `xml:",any"`
+	MiscAttributes         []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceRestapiNetworkXml_11_0_2 struct {
 	AggregateEthernetInterfaces             *string       `xml:"aggregate-ethernet-interfaces,omitempty"`
@@ -1894,6 +2047,7 @@ type roleDeviceRestapiNetworkXml_11_0_2 struct {
 	ZoneProtectionNetworkProfiles           *string       `xml:"zone-protection-network-profiles,omitempty"`
 	Zones                                   *string       `xml:"zones,omitempty"`
 	Misc                                    []generic.Xml `xml:",any"`
+	MiscAttributes                          []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceRestapiObjectsXml_11_0_2 struct {
 	AddressGroups                           *string       `xml:"address-groups,omitempty"`
@@ -1935,6 +2089,7 @@ type roleDeviceRestapiObjectsXml_11_0_2 struct {
 	VulnerabilityProtectionSecurityProfiles *string       `xml:"vulnerability-protection-security-profiles,omitempty"`
 	WildfireAnalysisSecurityProfiles        *string       `xml:"wildfire-analysis-security-profiles,omitempty"`
 	Misc                                    []generic.Xml `xml:",any"`
+	MiscAttributes                          []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceRestapiPoliciesXml_11_0_2 struct {
 	ApplicationOverrideRules   *string       `xml:"application-override-rules,omitempty"`
@@ -1949,33 +2104,37 @@ type roleDeviceRestapiPoliciesXml_11_0_2 struct {
 	SecurityRules              *string       `xml:"security-rules,omitempty"`
 	TunnelInspectionRules      *string       `xml:"tunnel-inspection-rules,omitempty"`
 	Misc                       []generic.Xml `xml:",any"`
+	MiscAttributes             []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceRestapiSystemXml_11_0_2 struct {
-	Configuration *string       `xml:"configuration,omitempty"`
-	Misc          []generic.Xml `xml:",any"`
+	Configuration  *string       `xml:"configuration,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceWebuiXml_11_0_2 struct {
-	Acc        *string                              `xml:"acc,omitempty"`
-	Commit     *roleDeviceWebuiCommitXml_11_0_2     `xml:"commit,omitempty"`
-	Dashboard  *string                              `xml:"dashboard,omitempty"`
-	Device     *roleDeviceWebuiDeviceXml_11_0_2     `xml:"device,omitempty"`
-	Global     *roleDeviceWebuiGlobalXml_11_0_2     `xml:"global,omitempty"`
-	Monitor    *roleDeviceWebuiMonitorXml_11_0_2    `xml:"monitor,omitempty"`
-	Network    *roleDeviceWebuiNetworkXml_11_0_2    `xml:"network,omitempty"`
-	Objects    *roleDeviceWebuiObjectsXml_11_0_2    `xml:"objects,omitempty"`
-	Operations *roleDeviceWebuiOperationsXml_11_0_2 `xml:"operations,omitempty"`
-	Policies   *roleDeviceWebuiPoliciesXml_11_0_2   `xml:"policies,omitempty"`
-	Privacy    *roleDeviceWebuiPrivacyXml_11_0_2    `xml:"privacy,omitempty"`
-	Save       *roleDeviceWebuiSaveXml_11_0_2       `xml:"save,omitempty"`
-	Tasks      *string                              `xml:"tasks,omitempty"`
-	Validate   *string                              `xml:"validate,omitempty"`
-	Misc       []generic.Xml                        `xml:",any"`
+	Acc            *string                              `xml:"acc,omitempty"`
+	Commit         *roleDeviceWebuiCommitXml_11_0_2     `xml:"commit,omitempty"`
+	Dashboard      *string                              `xml:"dashboard,omitempty"`
+	Device         *roleDeviceWebuiDeviceXml_11_0_2     `xml:"device,omitempty"`
+	Global         *roleDeviceWebuiGlobalXml_11_0_2     `xml:"global,omitempty"`
+	Monitor        *roleDeviceWebuiMonitorXml_11_0_2    `xml:"monitor,omitempty"`
+	Network        *roleDeviceWebuiNetworkXml_11_0_2    `xml:"network,omitempty"`
+	Objects        *roleDeviceWebuiObjectsXml_11_0_2    `xml:"objects,omitempty"`
+	Operations     *roleDeviceWebuiOperationsXml_11_0_2 `xml:"operations,omitempty"`
+	Policies       *roleDeviceWebuiPoliciesXml_11_0_2   `xml:"policies,omitempty"`
+	Privacy        *roleDeviceWebuiPrivacyXml_11_0_2    `xml:"privacy,omitempty"`
+	Save           *roleDeviceWebuiSaveXml_11_0_2       `xml:"save,omitempty"`
+	Tasks          *string                              `xml:"tasks,omitempty"`
+	Validate       *string                              `xml:"validate,omitempty"`
+	Misc           []generic.Xml                        `xml:",any"`
+	MiscAttributes []xml.Attr                           `xml:",any,attr"`
 }
 type roleDeviceWebuiCommitXml_11_0_2 struct {
 	CommitForOtherAdmins *string       `xml:"commit-for-other-admins,omitempty"`
 	Device               *string       `xml:"device,omitempty"`
 	ObjectLevelChanges   *string       `xml:"object-level-changes,omitempty"`
 	Misc                 []generic.Xml `xml:",any"`
+	MiscAttributes       []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceWebuiDeviceXml_11_0_2 struct {
 	AccessDomain           *string                                               `xml:"access-domain,omitempty"`
@@ -2010,6 +2169,7 @@ type roleDeviceWebuiDeviceXml_11_0_2 struct {
 	VirtualSystems         *string                                               `xml:"virtual-systems,omitempty"`
 	VmInfoSource           *string                                               `xml:"vm-info-source,omitempty"`
 	Misc                   []generic.Xml                                         `xml:",any"`
+	MiscAttributes         []xml.Attr                                            `xml:",any,attr"`
 }
 type roleDeviceWebuiDeviceCertificateManagementXml_11_0_2 struct {
 	CertificateProfile     *string       `xml:"certificate-profile,omitempty"`
@@ -2020,60 +2180,67 @@ type roleDeviceWebuiDeviceCertificateManagementXml_11_0_2 struct {
 	SslDecryptionExclusion *string       `xml:"ssl-decryption-exclusion,omitempty"`
 	SslTlsServiceProfile   *string       `xml:"ssl-tls-service-profile,omitempty"`
 	Misc                   []generic.Xml `xml:",any"`
+	MiscAttributes         []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceWebuiDeviceLocalUserDatabaseXml_11_0_2 struct {
-	UserGroups *string       `xml:"user-groups,omitempty"`
-	Users      *string       `xml:"users,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	UserGroups     *string       `xml:"user-groups,omitempty"`
+	Users          *string       `xml:"users,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceWebuiDeviceLogSettingsXml_11_0_2 struct {
-	CcAlarm       *string       `xml:"cc-alarm,omitempty"`
-	Config        *string       `xml:"config,omitempty"`
-	Correlation   *string       `xml:"correlation,omitempty"`
-	Globalprotect *string       `xml:"globalprotect,omitempty"`
-	Hipmatch      *string       `xml:"hipmatch,omitempty"`
-	Iptag         *string       `xml:"iptag,omitempty"`
-	ManageLog     *string       `xml:"manage-log,omitempty"`
-	System        *string       `xml:"system,omitempty"`
-	UserId        *string       `xml:"user-id,omitempty"`
-	Misc          []generic.Xml `xml:",any"`
+	CcAlarm        *string       `xml:"cc-alarm,omitempty"`
+	Config         *string       `xml:"config,omitempty"`
+	Correlation    *string       `xml:"correlation,omitempty"`
+	Globalprotect  *string       `xml:"globalprotect,omitempty"`
+	Hipmatch       *string       `xml:"hipmatch,omitempty"`
+	Iptag          *string       `xml:"iptag,omitempty"`
+	ManageLog      *string       `xml:"manage-log,omitempty"`
+	System         *string       `xml:"system,omitempty"`
+	UserId         *string       `xml:"user-id,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceWebuiDevicePolicyRecommendationsXml_11_0_2 struct {
-	Iot  *string       `xml:"iot,omitempty"`
-	Saas *string       `xml:"saas,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Iot            *string       `xml:"iot,omitempty"`
+	Saas           *string       `xml:"saas,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceWebuiDeviceServerProfileXml_11_0_2 struct {
-	Dns      *string       `xml:"dns,omitempty"`
-	Email    *string       `xml:"email,omitempty"`
-	Http     *string       `xml:"http,omitempty"`
-	Kerberos *string       `xml:"kerberos,omitempty"`
-	Ldap     *string       `xml:"ldap,omitempty"`
-	Mfa      *string       `xml:"mfa,omitempty"`
-	Netflow  *string       `xml:"netflow,omitempty"`
-	Radius   *string       `xml:"radius,omitempty"`
-	SamlIdp  *string       `xml:"saml_idp,omitempty"`
-	Scp      *string       `xml:"scp,omitempty"`
-	SnmpTrap *string       `xml:"snmp-trap,omitempty"`
-	Syslog   *string       `xml:"syslog,omitempty"`
-	Tacplus  *string       `xml:"tacplus,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	Dns            *string       `xml:"dns,omitempty"`
+	Email          *string       `xml:"email,omitempty"`
+	Http           *string       `xml:"http,omitempty"`
+	Kerberos       *string       `xml:"kerberos,omitempty"`
+	Ldap           *string       `xml:"ldap,omitempty"`
+	Mfa            *string       `xml:"mfa,omitempty"`
+	Netflow        *string       `xml:"netflow,omitempty"`
+	Radius         *string       `xml:"radius,omitempty"`
+	SamlIdp        *string       `xml:"saml_idp,omitempty"`
+	Scp            *string       `xml:"scp,omitempty"`
+	SnmpTrap       *string       `xml:"snmp-trap,omitempty"`
+	Syslog         *string       `xml:"syslog,omitempty"`
+	Tacplus        *string       `xml:"tacplus,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceWebuiDeviceSetupXml_11_0_2 struct {
-	ContentId  *string       `xml:"content-id,omitempty"`
-	Hsm        *string       `xml:"hsm,omitempty"`
-	Interfaces *string       `xml:"interfaces,omitempty"`
-	Management *string       `xml:"management,omitempty"`
-	Operations *string       `xml:"operations,omitempty"`
-	Services   *string       `xml:"services,omitempty"`
-	Session    *string       `xml:"session,omitempty"`
-	Telemetry  *string       `xml:"telemetry,omitempty"`
-	Wildfire   *string       `xml:"wildfire,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	ContentId      *string       `xml:"content-id,omitempty"`
+	Hsm            *string       `xml:"hsm,omitempty"`
+	Interfaces     *string       `xml:"interfaces,omitempty"`
+	Management     *string       `xml:"management,omitempty"`
+	Operations     *string       `xml:"operations,omitempty"`
+	Services       *string       `xml:"services,omitempty"`
+	Session        *string       `xml:"session,omitempty"`
+	Telemetry      *string       `xml:"telemetry,omitempty"`
+	Wildfire       *string       `xml:"wildfire,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceWebuiGlobalXml_11_0_2 struct {
-	SystemAlarms *string       `xml:"system-alarms,omitempty"`
-	Misc         []generic.Xml `xml:",any"`
+	SystemAlarms   *string       `xml:"system-alarms,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceWebuiMonitorXml_11_0_2 struct {
 	AppScope                   *string                                                     `xml:"app-scope,omitempty"`
@@ -2094,11 +2261,13 @@ type roleDeviceWebuiMonitorXml_11_0_2 struct {
 	UrlFilteringReports        *string                                                     `xml:"url-filtering-reports,omitempty"`
 	ViewCustomReports          *string                                                     `xml:"view-custom-reports,omitempty"`
 	Misc                       []generic.Xml                                               `xml:",any"`
+	MiscAttributes             []xml.Attr                                                  `xml:",any,attr"`
 }
 type roleDeviceWebuiMonitorAutomatedCorrelationEngineXml_11_0_2 struct {
 	CorrelatedEvents   *string       `xml:"correlated-events,omitempty"`
 	CorrelationObjects *string       `xml:"correlation-objects,omitempty"`
 	Misc               []generic.Xml `xml:",any"`
+	MiscAttributes     []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceWebuiMonitorCustomReportsXml_11_0_2 struct {
 	ApplicationStatistics *string       `xml:"application-statistics,omitempty"`
@@ -2124,6 +2293,7 @@ type roleDeviceWebuiMonitorCustomReportsXml_11_0_2 struct {
 	Userid                *string       `xml:"userid,omitempty"`
 	WildfireLog           *string       `xml:"wildfire-log,omitempty"`
 	Misc                  []generic.Xml `xml:",any"`
+	MiscAttributes        []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceWebuiMonitorLogsXml_11_0_2 struct {
 	Alarm          *string       `xml:"alarm,omitempty"`
@@ -2144,6 +2314,7 @@ type roleDeviceWebuiMonitorLogsXml_11_0_2 struct {
 	Userid         *string       `xml:"userid,omitempty"`
 	Wildfire       *string       `xml:"wildfire,omitempty"`
 	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceWebuiMonitorPdfReportsXml_11_0_2 struct {
 	EmailScheduler             *string       `xml:"email-scheduler,omitempty"`
@@ -2153,6 +2324,7 @@ type roleDeviceWebuiMonitorPdfReportsXml_11_0_2 struct {
 	SaasApplicationUsageReport *string       `xml:"saas-application-usage-report,omitempty"`
 	UserActivityReport         *string       `xml:"user-activity-report,omitempty"`
 	Misc                       []generic.Xml `xml:",any"`
+	MiscAttributes             []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceWebuiNetworkXml_11_0_2 struct {
 	Dhcp                  *string                                          `xml:"dhcp,omitempty"`
@@ -2172,6 +2344,7 @@ type roleDeviceWebuiNetworkXml_11_0_2 struct {
 	Vlans                 *string                                          `xml:"vlans,omitempty"`
 	Zones                 *string                                          `xml:"zones,omitempty"`
 	Misc                  []generic.Xml                                    `xml:",any"`
+	MiscAttributes        []xml.Attr                                       `xml:",any,attr"`
 }
 type roleDeviceWebuiNetworkGlobalProtectXml_11_0_2 struct {
 	ClientlessAppGroups *string       `xml:"clientless-app-groups,omitempty"`
@@ -2180,6 +2353,7 @@ type roleDeviceWebuiNetworkGlobalProtectXml_11_0_2 struct {
 	Mdm                 *string       `xml:"mdm,omitempty"`
 	Portals             *string       `xml:"portals,omitempty"`
 	Misc                []generic.Xml `xml:",any"`
+	MiscAttributes      []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceWebuiNetworkNetworkProfilesXml_11_0_2 struct {
 	BfdProfile       *string       `xml:"bfd-profile,omitempty"`
@@ -2193,21 +2367,24 @@ type roleDeviceWebuiNetworkNetworkProfilesXml_11_0_2 struct {
 	TunnelMonitor    *string       `xml:"tunnel-monitor,omitempty"`
 	ZoneProtection   *string       `xml:"zone-protection,omitempty"`
 	Misc             []generic.Xml `xml:",any"`
+	MiscAttributes   []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceWebuiNetworkRoutingXml_11_0_2 struct {
 	LogicalRouters  *string                                                 `xml:"logical-routers,omitempty"`
 	RoutingProfiles *roleDeviceWebuiNetworkRoutingRoutingProfilesXml_11_0_2 `xml:"routing-profiles,omitempty"`
 	Misc            []generic.Xml                                           `xml:",any"`
+	MiscAttributes  []xml.Attr                                              `xml:",any,attr"`
 }
 type roleDeviceWebuiNetworkRoutingRoutingProfilesXml_11_0_2 struct {
-	Bfd       *string       `xml:"bfd,omitempty"`
-	Bgp       *string       `xml:"bgp,omitempty"`
-	Filters   *string       `xml:"filters,omitempty"`
-	Multicast *string       `xml:"multicast,omitempty"`
-	Ospf      *string       `xml:"ospf,omitempty"`
-	Ospfv3    *string       `xml:"ospfv3,omitempty"`
-	Ripv2     *string       `xml:"ripv2,omitempty"`
-	Misc      []generic.Xml `xml:",any"`
+	Bfd            *string       `xml:"bfd,omitempty"`
+	Bgp            *string       `xml:"bgp,omitempty"`
+	Filters        *string       `xml:"filters,omitempty"`
+	Multicast      *string       `xml:"multicast,omitempty"`
+	Ospf           *string       `xml:"ospf,omitempty"`
+	Ospfv3         *string       `xml:"ospfv3,omitempty"`
+	Ripv2          *string       `xml:"ripv2,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceWebuiObjectsXml_11_0_2 struct {
 	AddressGroups         *string                                           `xml:"address-groups,omitempty"`
@@ -2233,22 +2410,26 @@ type roleDeviceWebuiObjectsXml_11_0_2 struct {
 	Services              *string                                           `xml:"services,omitempty"`
 	Tags                  *string                                           `xml:"tags,omitempty"`
 	Misc                  []generic.Xml                                     `xml:",any"`
+	MiscAttributes        []xml.Attr                                        `xml:",any,attr"`
 }
 type roleDeviceWebuiObjectsCustomObjectsXml_11_0_2 struct {
-	DataPatterns  *string       `xml:"data-patterns,omitempty"`
-	Spyware       *string       `xml:"spyware,omitempty"`
-	UrlCategory   *string       `xml:"url-category,omitempty"`
-	Vulnerability *string       `xml:"vulnerability,omitempty"`
-	Misc          []generic.Xml `xml:",any"`
+	DataPatterns   *string       `xml:"data-patterns,omitempty"`
+	Spyware        *string       `xml:"spyware,omitempty"`
+	UrlCategory    *string       `xml:"url-category,omitempty"`
+	Vulnerability  *string       `xml:"vulnerability,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceWebuiObjectsDecryptionXml_11_0_2 struct {
 	DecryptionProfile *string       `xml:"decryption-profile,omitempty"`
 	Misc              []generic.Xml `xml:",any"`
+	MiscAttributes    []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceWebuiObjectsGlobalProtectXml_11_0_2 struct {
-	HipObjects  *string       `xml:"hip-objects,omitempty"`
-	HipProfiles *string       `xml:"hip-profiles,omitempty"`
-	Misc        []generic.Xml `xml:",any"`
+	HipObjects     *string       `xml:"hip-objects,omitempty"`
+	HipProfiles    *string       `xml:"hip-profiles,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceWebuiObjectsSdwanXml_11_0_2 struct {
 	SdwanDistProfile            *string       `xml:"sdwan-dist-profile,omitempty"`
@@ -2256,6 +2437,7 @@ type roleDeviceWebuiObjectsSdwanXml_11_0_2 struct {
 	SdwanProfile                *string       `xml:"sdwan-profile,omitempty"`
 	SdwanSaasQualityProfile     *string       `xml:"sdwan-saas-quality-profile,omitempty"`
 	Misc                        []generic.Xml `xml:",any"`
+	MiscAttributes              []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceWebuiObjectsSecurityProfilesXml_11_0_2 struct {
 	AntiSpyware             *string       `xml:"anti-spyware,omitempty"`
@@ -2269,6 +2451,7 @@ type roleDeviceWebuiObjectsSecurityProfilesXml_11_0_2 struct {
 	VulnerabilityProtection *string       `xml:"vulnerability-protection,omitempty"`
 	WildfireAnalysis        *string       `xml:"wildfire-analysis,omitempty"`
 	Misc                    []generic.Xml `xml:",any"`
+	MiscAttributes          []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceWebuiOperationsXml_11_0_2 struct {
 	DownloadCoreFiles       *string       `xml:"download-core-files,omitempty"`
@@ -2277,6 +2460,7 @@ type roleDeviceWebuiOperationsXml_11_0_2 struct {
 	GenerateTechSupportFile *string       `xml:"generate-tech-support-file,omitempty"`
 	Reboot                  *string       `xml:"reboot,omitempty"`
 	Misc                    []generic.Xml `xml:",any"`
+	MiscAttributes          []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceWebuiPoliciesXml_11_0_2 struct {
 	ApplicationOverrideRulebase *string       `xml:"application-override-rulebase,omitempty"`
@@ -2292,45 +2476,51 @@ type roleDeviceWebuiPoliciesXml_11_0_2 struct {
 	SslDecryptionRulebase       *string       `xml:"ssl-decryption-rulebase,omitempty"`
 	TunnelInspectRulebase       *string       `xml:"tunnel-inspect-rulebase,omitempty"`
 	Misc                        []generic.Xml `xml:",any"`
+	MiscAttributes              []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceWebuiPrivacyXml_11_0_2 struct {
 	ShowFullIpAddresses           *string       `xml:"show-full-ip-addresses,omitempty"`
 	ShowUserNamesInLogsAndReports *string       `xml:"show-user-names-in-logs-and-reports,omitempty"`
 	ViewPcapFiles                 *string       `xml:"view-pcap-files,omitempty"`
 	Misc                          []generic.Xml `xml:",any"`
+	MiscAttributes                []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceWebuiSaveXml_11_0_2 struct {
 	ObjectLevelChanges *string       `xml:"object-level-changes,omitempty"`
 	PartialSave        *string       `xml:"partial-save,omitempty"`
 	SaveForOtherAdmins *string       `xml:"save-for-other-admins,omitempty"`
 	Misc               []generic.Xml `xml:",any"`
+	MiscAttributes     []xml.Attr    `xml:",any,attr"`
 }
 type roleDeviceXmlapiXml_11_0_2 struct {
-	Commit *string       `xml:"commit,omitempty"`
-	Config *string       `xml:"config,omitempty"`
-	Export *string       `xml:"export,omitempty"`
-	Import *string       `xml:"import,omitempty"`
-	Iot    *string       `xml:"iot,omitempty"`
-	Log    *string       `xml:"log,omitempty"`
-	Op     *string       `xml:"op,omitempty"`
-	Report *string       `xml:"report,omitempty"`
-	UserId *string       `xml:"user-id,omitempty"`
-	Misc   []generic.Xml `xml:",any"`
+	Commit         *string       `xml:"commit,omitempty"`
+	Config         *string       `xml:"config,omitempty"`
+	Export         *string       `xml:"export,omitempty"`
+	Import         *string       `xml:"import,omitempty"`
+	Iot            *string       `xml:"iot,omitempty"`
+	Log            *string       `xml:"log,omitempty"`
+	Op             *string       `xml:"op,omitempty"`
+	Report         *string       `xml:"report,omitempty"`
+	UserId         *string       `xml:"user-id,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysXml_11_0_2 struct {
-	Cli     *string                    `xml:"cli,omitempty"`
-	Restapi *roleVsysRestapiXml_11_0_2 `xml:"restapi,omitempty"`
-	Webui   *roleVsysWebuiXml_11_0_2   `xml:"webui,omitempty"`
-	Xmlapi  *roleVsysXmlapiXml_11_0_2  `xml:"xmlapi,omitempty"`
-	Misc    []generic.Xml              `xml:",any"`
+	Cli            *string                    `xml:"cli,omitempty"`
+	Restapi        *roleVsysRestapiXml_11_0_2 `xml:"restapi,omitempty"`
+	Webui          *roleVsysWebuiXml_11_0_2   `xml:"webui,omitempty"`
+	Xmlapi         *roleVsysXmlapiXml_11_0_2  `xml:"xmlapi,omitempty"`
+	Misc           []generic.Xml              `xml:",any"`
+	MiscAttributes []xml.Attr                 `xml:",any,attr"`
 }
 type roleVsysRestapiXml_11_0_2 struct {
-	Device   *roleVsysRestapiDeviceXml_11_0_2   `xml:"device,omitempty"`
-	Network  *roleVsysRestapiNetworkXml_11_0_2  `xml:"network,omitempty"`
-	Objects  *roleVsysRestapiObjectsXml_11_0_2  `xml:"objects,omitempty"`
-	Policies *roleVsysRestapiPoliciesXml_11_0_2 `xml:"policies,omitempty"`
-	System   *roleVsysRestapiSystemXml_11_0_2   `xml:"system,omitempty"`
-	Misc     []generic.Xml                      `xml:",any"`
+	Device         *roleVsysRestapiDeviceXml_11_0_2   `xml:"device,omitempty"`
+	Network        *roleVsysRestapiNetworkXml_11_0_2  `xml:"network,omitempty"`
+	Objects        *roleVsysRestapiObjectsXml_11_0_2  `xml:"objects,omitempty"`
+	Policies       *roleVsysRestapiPoliciesXml_11_0_2 `xml:"policies,omitempty"`
+	System         *roleVsysRestapiSystemXml_11_0_2   `xml:"system,omitempty"`
+	Misc           []generic.Xml                      `xml:",any"`
+	MiscAttributes []xml.Attr                         `xml:",any,attr"`
 }
 type roleVsysRestapiDeviceXml_11_0_2 struct {
 	EmailServerProfiles    *string       `xml:"email-server-profiles,omitempty"`
@@ -2341,6 +2531,7 @@ type roleVsysRestapiDeviceXml_11_0_2 struct {
 	SyslogServerProfiles   *string       `xml:"syslog-server-profiles,omitempty"`
 	VirtualSystems         *string       `xml:"virtual-systems,omitempty"`
 	Misc                   []generic.Xml `xml:",any"`
+	MiscAttributes         []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysRestapiNetworkXml_11_0_2 struct {
 	GlobalprotectClientlessAppGroups *string       `xml:"globalprotect-clientless-app-groups,omitempty"`
@@ -2351,6 +2542,7 @@ type roleVsysRestapiNetworkXml_11_0_2 struct {
 	SdwanInterfaceProfiles           *string       `xml:"sdwan-interface-profiles,omitempty"`
 	Zones                            *string       `xml:"zones,omitempty"`
 	Misc                             []generic.Xml `xml:",any"`
+	MiscAttributes                   []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysRestapiObjectsXml_11_0_2 struct {
 	AddressGroups                           *string       `xml:"address-groups,omitempty"`
@@ -2392,6 +2584,7 @@ type roleVsysRestapiObjectsXml_11_0_2 struct {
 	VulnerabilityProtectionSecurityProfiles *string       `xml:"vulnerability-protection-security-profiles,omitempty"`
 	WildfireAnalysisSecurityProfiles        *string       `xml:"wildfire-analysis-security-profiles,omitempty"`
 	Misc                                    []generic.Xml `xml:",any"`
+	MiscAttributes                          []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysRestapiPoliciesXml_11_0_2 struct {
 	ApplicationOverrideRules   *string       `xml:"application-override-rules,omitempty"`
@@ -2406,31 +2599,35 @@ type roleVsysRestapiPoliciesXml_11_0_2 struct {
 	SecurityRules              *string       `xml:"security-rules,omitempty"`
 	TunnelInspectionRules      *string       `xml:"tunnel-inspection-rules,omitempty"`
 	Misc                       []generic.Xml `xml:",any"`
+	MiscAttributes             []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysRestapiSystemXml_11_0_2 struct {
-	Configuration *string       `xml:"configuration,omitempty"`
-	Misc          []generic.Xml `xml:",any"`
+	Configuration  *string       `xml:"configuration,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysWebuiXml_11_0_2 struct {
-	Acc        *string                            `xml:"acc,omitempty"`
-	Commit     *roleVsysWebuiCommitXml_11_0_2     `xml:"commit,omitempty"`
-	Dashboard  *string                            `xml:"dashboard,omitempty"`
-	Device     *roleVsysWebuiDeviceXml_11_0_2     `xml:"device,omitempty"`
-	Monitor    *roleVsysWebuiMonitorXml_11_0_2    `xml:"monitor,omitempty"`
-	Network    *roleVsysWebuiNetworkXml_11_0_2    `xml:"network,omitempty"`
-	Objects    *roleVsysWebuiObjectsXml_11_0_2    `xml:"objects,omitempty"`
-	Operations *roleVsysWebuiOperationsXml_11_0_2 `xml:"operations,omitempty"`
-	Policies   *roleVsysWebuiPoliciesXml_11_0_2   `xml:"policies,omitempty"`
-	Privacy    *roleVsysWebuiPrivacyXml_11_0_2    `xml:"privacy,omitempty"`
-	Save       *roleVsysWebuiSaveXml_11_0_2       `xml:"save,omitempty"`
-	Tasks      *string                            `xml:"tasks,omitempty"`
-	Validate   *string                            `xml:"validate,omitempty"`
-	Misc       []generic.Xml                      `xml:",any"`
+	Acc            *string                            `xml:"acc,omitempty"`
+	Commit         *roleVsysWebuiCommitXml_11_0_2     `xml:"commit,omitempty"`
+	Dashboard      *string                            `xml:"dashboard,omitempty"`
+	Device         *roleVsysWebuiDeviceXml_11_0_2     `xml:"device,omitempty"`
+	Monitor        *roleVsysWebuiMonitorXml_11_0_2    `xml:"monitor,omitempty"`
+	Network        *roleVsysWebuiNetworkXml_11_0_2    `xml:"network,omitempty"`
+	Objects        *roleVsysWebuiObjectsXml_11_0_2    `xml:"objects,omitempty"`
+	Operations     *roleVsysWebuiOperationsXml_11_0_2 `xml:"operations,omitempty"`
+	Policies       *roleVsysWebuiPoliciesXml_11_0_2   `xml:"policies,omitempty"`
+	Privacy        *roleVsysWebuiPrivacyXml_11_0_2    `xml:"privacy,omitempty"`
+	Save           *roleVsysWebuiSaveXml_11_0_2       `xml:"save,omitempty"`
+	Tasks          *string                            `xml:"tasks,omitempty"`
+	Validate       *string                            `xml:"validate,omitempty"`
+	Misc           []generic.Xml                      `xml:",any"`
+	MiscAttributes []xml.Attr                         `xml:",any,attr"`
 }
 type roleVsysWebuiCommitXml_11_0_2 struct {
 	CommitForOtherAdmins *string       `xml:"commit-for-other-admins,omitempty"`
 	VirtualSystems       *string       `xml:"virtual-systems,omitempty"`
 	Misc                 []generic.Xml `xml:",any"`
+	MiscAttributes       []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysWebuiDeviceXml_11_0_2 struct {
 	Administrators         *string                                             `xml:"administrators,omitempty"`
@@ -2450,6 +2647,7 @@ type roleVsysWebuiDeviceXml_11_0_2 struct {
 	UserIdentification     *string                                             `xml:"user-identification,omitempty"`
 	VmInfoSource           *string                                             `xml:"vm-info-source,omitempty"`
 	Misc                   []generic.Xml                                       `xml:",any"`
+	MiscAttributes         []xml.Attr                                          `xml:",any,attr"`
 }
 type roleVsysWebuiDeviceCertificateManagementXml_11_0_2 struct {
 	CertificateProfile     *string       `xml:"certificate-profile,omitempty"`
@@ -2460,54 +2658,60 @@ type roleVsysWebuiDeviceCertificateManagementXml_11_0_2 struct {
 	SslDecryptionExclusion *string       `xml:"ssl-decryption-exclusion,omitempty"`
 	SslTlsServiceProfile   *string       `xml:"ssl-tls-service-profile,omitempty"`
 	Misc                   []generic.Xml `xml:",any"`
+	MiscAttributes         []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysWebuiDeviceLocalUserDatabaseXml_11_0_2 struct {
-	UserGroups *string       `xml:"user-groups,omitempty"`
-	Users      *string       `xml:"users,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	UserGroups     *string       `xml:"user-groups,omitempty"`
+	Users          *string       `xml:"users,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysWebuiDeviceLogSettingsXml_11_0_2 struct {
-	Config        *string       `xml:"config,omitempty"`
-	Correlation   *string       `xml:"correlation,omitempty"`
-	Globalprotect *string       `xml:"globalprotect,omitempty"`
-	Hipmatch      *string       `xml:"hipmatch,omitempty"`
-	Iptag         *string       `xml:"iptag,omitempty"`
-	System        *string       `xml:"system,omitempty"`
-	UserId        *string       `xml:"user-id,omitempty"`
-	Misc          []generic.Xml `xml:",any"`
+	Config         *string       `xml:"config,omitempty"`
+	Correlation    *string       `xml:"correlation,omitempty"`
+	Globalprotect  *string       `xml:"globalprotect,omitempty"`
+	Hipmatch       *string       `xml:"hipmatch,omitempty"`
+	Iptag          *string       `xml:"iptag,omitempty"`
+	System         *string       `xml:"system,omitempty"`
+	UserId         *string       `xml:"user-id,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysWebuiDevicePolicyRecommendationsXml_11_0_2 struct {
-	Iot  *string       `xml:"iot,omitempty"`
-	Saas *string       `xml:"saas,omitempty"`
-	Misc []generic.Xml `xml:",any"`
+	Iot            *string       `xml:"iot,omitempty"`
+	Saas           *string       `xml:"saas,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysWebuiDeviceServerProfileXml_11_0_2 struct {
-	Dns      *string       `xml:"dns,omitempty"`
-	Email    *string       `xml:"email,omitempty"`
-	Http     *string       `xml:"http,omitempty"`
-	Kerberos *string       `xml:"kerberos,omitempty"`
-	Ldap     *string       `xml:"ldap,omitempty"`
-	Mfa      *string       `xml:"mfa,omitempty"`
-	Netflow  *string       `xml:"netflow,omitempty"`
-	Radius   *string       `xml:"radius,omitempty"`
-	SamlIdp  *string       `xml:"saml_idp,omitempty"`
-	Scp      *string       `xml:"scp,omitempty"`
-	SnmpTrap *string       `xml:"snmp-trap,omitempty"`
-	Syslog   *string       `xml:"syslog,omitempty"`
-	Tacplus  *string       `xml:"tacplus,omitempty"`
-	Misc     []generic.Xml `xml:",any"`
+	Dns            *string       `xml:"dns,omitempty"`
+	Email          *string       `xml:"email,omitempty"`
+	Http           *string       `xml:"http,omitempty"`
+	Kerberos       *string       `xml:"kerberos,omitempty"`
+	Ldap           *string       `xml:"ldap,omitempty"`
+	Mfa            *string       `xml:"mfa,omitempty"`
+	Netflow        *string       `xml:"netflow,omitempty"`
+	Radius         *string       `xml:"radius,omitempty"`
+	SamlIdp        *string       `xml:"saml_idp,omitempty"`
+	Scp            *string       `xml:"scp,omitempty"`
+	SnmpTrap       *string       `xml:"snmp-trap,omitempty"`
+	Syslog         *string       `xml:"syslog,omitempty"`
+	Tacplus        *string       `xml:"tacplus,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysWebuiDeviceSetupXml_11_0_2 struct {
-	ContentId  *string       `xml:"content-id,omitempty"`
-	Hsm        *string       `xml:"hsm,omitempty"`
-	Interfaces *string       `xml:"interfaces,omitempty"`
-	Management *string       `xml:"management,omitempty"`
-	Operations *string       `xml:"operations,omitempty"`
-	Services   *string       `xml:"services,omitempty"`
-	Session    *string       `xml:"session,omitempty"`
-	Telemetry  *string       `xml:"telemetry,omitempty"`
-	Wildfire   *string       `xml:"wildfire,omitempty"`
-	Misc       []generic.Xml `xml:",any"`
+	ContentId      *string       `xml:"content-id,omitempty"`
+	Hsm            *string       `xml:"hsm,omitempty"`
+	Interfaces     *string       `xml:"interfaces,omitempty"`
+	Management     *string       `xml:"management,omitempty"`
+	Operations     *string       `xml:"operations,omitempty"`
+	Services       *string       `xml:"services,omitempty"`
+	Session        *string       `xml:"session,omitempty"`
+	Telemetry      *string       `xml:"telemetry,omitempty"`
+	Wildfire       *string       `xml:"wildfire,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysWebuiMonitorXml_11_0_2 struct {
 	AppScope                   *string                                                   `xml:"app-scope,omitempty"`
@@ -2520,11 +2724,13 @@ type roleVsysWebuiMonitorXml_11_0_2 struct {
 	SessionBrowser             *string                                                   `xml:"session-browser,omitempty"`
 	ViewCustomReports          *string                                                   `xml:"view-custom-reports,omitempty"`
 	Misc                       []generic.Xml                                             `xml:",any"`
+	MiscAttributes             []xml.Attr                                                `xml:",any,attr"`
 }
 type roleVsysWebuiMonitorAutomatedCorrelationEngineXml_11_0_2 struct {
 	CorrelatedEvents   *string       `xml:"correlated-events,omitempty"`
 	CorrelationObjects *string       `xml:"correlation-objects,omitempty"`
 	Misc               []generic.Xml `xml:",any"`
+	MiscAttributes     []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysWebuiMonitorCustomReportsXml_11_0_2 struct {
 	ApplicationStatistics *string       `xml:"application-statistics,omitempty"`
@@ -2550,6 +2756,7 @@ type roleVsysWebuiMonitorCustomReportsXml_11_0_2 struct {
 	Userid                *string       `xml:"userid,omitempty"`
 	WildfireLog           *string       `xml:"wildfire-log,omitempty"`
 	Misc                  []generic.Xml `xml:",any"`
+	MiscAttributes        []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysWebuiMonitorLogsXml_11_0_2 struct {
 	Authentication *string       `xml:"authentication,omitempty"`
@@ -2567,6 +2774,7 @@ type roleVsysWebuiMonitorLogsXml_11_0_2 struct {
 	Userid         *string       `xml:"userid,omitempty"`
 	Wildfire       *string       `xml:"wildfire,omitempty"`
 	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysWebuiMonitorPdfReportsXml_11_0_2 struct {
 	EmailScheduler             *string       `xml:"email-scheduler,omitempty"`
@@ -2576,12 +2784,14 @@ type roleVsysWebuiMonitorPdfReportsXml_11_0_2 struct {
 	SaasApplicationUsageReport *string       `xml:"saas-application-usage-report,omitempty"`
 	UserActivityReport         *string       `xml:"user-activity-report,omitempty"`
 	Misc                       []generic.Xml `xml:",any"`
+	MiscAttributes             []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysWebuiNetworkXml_11_0_2 struct {
 	GlobalProtect         *roleVsysWebuiNetworkGlobalProtectXml_11_0_2 `xml:"global-protect,omitempty"`
 	SdwanInterfaceProfile *string                                      `xml:"sdwan-interface-profile,omitempty"`
 	Zones                 *string                                      `xml:"zones,omitempty"`
 	Misc                  []generic.Xml                                `xml:",any"`
+	MiscAttributes        []xml.Attr                                   `xml:",any,attr"`
 }
 type roleVsysWebuiNetworkGlobalProtectXml_11_0_2 struct {
 	ClientlessAppGroups *string       `xml:"clientless-app-groups,omitempty"`
@@ -2590,6 +2800,7 @@ type roleVsysWebuiNetworkGlobalProtectXml_11_0_2 struct {
 	Mdm                 *string       `xml:"mdm,omitempty"`
 	Portals             *string       `xml:"portals,omitempty"`
 	Misc                []generic.Xml `xml:",any"`
+	MiscAttributes      []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysWebuiObjectsXml_11_0_2 struct {
 	AddressGroups         *string                                         `xml:"address-groups,omitempty"`
@@ -2615,22 +2826,26 @@ type roleVsysWebuiObjectsXml_11_0_2 struct {
 	Services              *string                                         `xml:"services,omitempty"`
 	Tags                  *string                                         `xml:"tags,omitempty"`
 	Misc                  []generic.Xml                                   `xml:",any"`
+	MiscAttributes        []xml.Attr                                      `xml:",any,attr"`
 }
 type roleVsysWebuiObjectsCustomObjectsXml_11_0_2 struct {
-	DataPatterns  *string       `xml:"data-patterns,omitempty"`
-	Spyware       *string       `xml:"spyware,omitempty"`
-	UrlCategory   *string       `xml:"url-category,omitempty"`
-	Vulnerability *string       `xml:"vulnerability,omitempty"`
-	Misc          []generic.Xml `xml:",any"`
+	DataPatterns   *string       `xml:"data-patterns,omitempty"`
+	Spyware        *string       `xml:"spyware,omitempty"`
+	UrlCategory    *string       `xml:"url-category,omitempty"`
+	Vulnerability  *string       `xml:"vulnerability,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysWebuiObjectsDecryptionXml_11_0_2 struct {
 	DecryptionProfile *string       `xml:"decryption-profile,omitempty"`
 	Misc              []generic.Xml `xml:",any"`
+	MiscAttributes    []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysWebuiObjectsGlobalProtectXml_11_0_2 struct {
-	HipObjects  *string       `xml:"hip-objects,omitempty"`
-	HipProfiles *string       `xml:"hip-profiles,omitempty"`
-	Misc        []generic.Xml `xml:",any"`
+	HipObjects     *string       `xml:"hip-objects,omitempty"`
+	HipProfiles    *string       `xml:"hip-profiles,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysWebuiObjectsSdwanXml_11_0_2 struct {
 	SdwanDistProfile            *string       `xml:"sdwan-dist-profile,omitempty"`
@@ -2638,6 +2853,7 @@ type roleVsysWebuiObjectsSdwanXml_11_0_2 struct {
 	SdwanProfile                *string       `xml:"sdwan-profile,omitempty"`
 	SdwanSaasQualityProfile     *string       `xml:"sdwan-saas-quality-profile,omitempty"`
 	Misc                        []generic.Xml `xml:",any"`
+	MiscAttributes              []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysWebuiObjectsSecurityProfilesXml_11_0_2 struct {
 	AntiSpyware             *string       `xml:"anti-spyware,omitempty"`
@@ -2651,6 +2867,7 @@ type roleVsysWebuiObjectsSecurityProfilesXml_11_0_2 struct {
 	VulnerabilityProtection *string       `xml:"vulnerability-protection,omitempty"`
 	WildfireAnalysis        *string       `xml:"wildfire-analysis,omitempty"`
 	Misc                    []generic.Xml `xml:",any"`
+	MiscAttributes          []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysWebuiOperationsXml_11_0_2 struct {
 	DownloadCoreFiles       *string       `xml:"download-core-files,omitempty"`
@@ -2659,6 +2876,7 @@ type roleVsysWebuiOperationsXml_11_0_2 struct {
 	GenerateTechSupportFile *string       `xml:"generate-tech-support-file,omitempty"`
 	Reboot                  *string       `xml:"reboot,omitempty"`
 	Misc                    []generic.Xml `xml:",any"`
+	MiscAttributes          []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysWebuiPoliciesXml_11_0_2 struct {
 	ApplicationOverrideRulebase *string       `xml:"application-override-rulebase,omitempty"`
@@ -2674,30 +2892,34 @@ type roleVsysWebuiPoliciesXml_11_0_2 struct {
 	SslDecryptionRulebase       *string       `xml:"ssl-decryption-rulebase,omitempty"`
 	TunnelInspectRulebase       *string       `xml:"tunnel-inspect-rulebase,omitempty"`
 	Misc                        []generic.Xml `xml:",any"`
+	MiscAttributes              []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysWebuiPrivacyXml_11_0_2 struct {
 	ShowFullIpAddresses           *string       `xml:"show-full-ip-addresses,omitempty"`
 	ShowUserNamesInLogsAndReports *string       `xml:"show-user-names-in-logs-and-reports,omitempty"`
 	ViewPcapFiles                 *string       `xml:"view-pcap-files,omitempty"`
 	Misc                          []generic.Xml `xml:",any"`
+	MiscAttributes                []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysWebuiSaveXml_11_0_2 struct {
 	ObjectLevelChanges *string       `xml:"object-level-changes,omitempty"`
 	PartialSave        *string       `xml:"partial-save,omitempty"`
 	SaveForOtherAdmins *string       `xml:"save-for-other-admins,omitempty"`
 	Misc               []generic.Xml `xml:",any"`
+	MiscAttributes     []xml.Attr    `xml:",any,attr"`
 }
 type roleVsysXmlapiXml_11_0_2 struct {
-	Commit *string       `xml:"commit,omitempty"`
-	Config *string       `xml:"config,omitempty"`
-	Export *string       `xml:"export,omitempty"`
-	Import *string       `xml:"import,omitempty"`
-	Iot    *string       `xml:"iot,omitempty"`
-	Log    *string       `xml:"log,omitempty"`
-	Op     *string       `xml:"op,omitempty"`
-	Report *string       `xml:"report,omitempty"`
-	UserId *string       `xml:"user-id,omitempty"`
-	Misc   []generic.Xml `xml:",any"`
+	Commit         *string       `xml:"commit,omitempty"`
+	Config         *string       `xml:"config,omitempty"`
+	Export         *string       `xml:"export,omitempty"`
+	Import         *string       `xml:"import,omitempty"`
+	Iot            *string       `xml:"iot,omitempty"`
+	Log            *string       `xml:"log,omitempty"`
+	Op             *string       `xml:"op,omitempty"`
+	Report         *string       `xml:"report,omitempty"`
+	UserId         *string       `xml:"user-id,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 
 func (o *entryXml) MarshalFromObject(s Entry) {
@@ -2709,6 +2931,7 @@ func (o *entryXml) MarshalFromObject(s Entry) {
 		o.Role = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o entryXml) UnmarshalToObject() (*Entry, error) {
@@ -2722,10 +2945,11 @@ func (o entryXml) UnmarshalToObject() (*Entry, error) {
 	}
 
 	result := &Entry{
-		Name:        o.Name,
-		Description: o.Description,
-		Role:        roleVal,
-		Misc:        o.Misc,
+		Name:           o.Name,
+		Description:    o.Description,
+		Role:           roleVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2741,6 +2965,7 @@ func (o *roleXml) MarshalFromObject(s Role) {
 		o.Vsys = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleXml) UnmarshalToObject() (*Role, error) {
@@ -2762,9 +2987,10 @@ func (o roleXml) UnmarshalToObject() (*Role, error) {
 	}
 
 	result := &Role{
-		Device: deviceVal,
-		Vsys:   vsysVal,
-		Misc:   o.Misc,
+		Device:         deviceVal,
+		Vsys:           vsysVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2786,6 +3012,7 @@ func (o *roleDeviceXml) MarshalFromObject(s RoleDevice) {
 		o.Xmlapi = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceXml) UnmarshalToObject() (*RoleDevice, error) {
@@ -2815,11 +3042,12 @@ func (o roleDeviceXml) UnmarshalToObject() (*RoleDevice, error) {
 	}
 
 	result := &RoleDevice{
-		Cli:     o.Cli,
-		Restapi: restapiVal,
-		Webui:   webuiVal,
-		Xmlapi:  xmlapiVal,
-		Misc:    o.Misc,
+		Cli:            o.Cli,
+		Restapi:        restapiVal,
+		Webui:          webuiVal,
+		Xmlapi:         xmlapiVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2850,6 +3078,7 @@ func (o *roleDeviceRestapiXml) MarshalFromObject(s RoleDeviceRestapi) {
 		o.System = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceRestapiXml) UnmarshalToObject() (*RoleDeviceRestapi, error) {
@@ -2895,12 +3124,13 @@ func (o roleDeviceRestapiXml) UnmarshalToObject() (*RoleDeviceRestapi, error) {
 	}
 
 	result := &RoleDeviceRestapi{
-		Device:   deviceVal,
-		Network:  networkVal,
-		Objects:  objectsVal,
-		Policies: policiesVal,
-		System:   systemVal,
-		Misc:     o.Misc,
+		Device:         deviceVal,
+		Network:        networkVal,
+		Objects:        objectsVal,
+		Policies:       policiesVal,
+		System:         systemVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2913,6 +3143,7 @@ func (o *roleDeviceRestapiDeviceXml) MarshalFromObject(s RoleDeviceRestapiDevice
 	o.SyslogServerProfiles = s.SyslogServerProfiles
 	o.VirtualSystems = s.VirtualSystems
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceRestapiDeviceXml) UnmarshalToObject() (*RoleDeviceRestapiDevice, error) {
@@ -2926,6 +3157,7 @@ func (o roleDeviceRestapiDeviceXml) UnmarshalToObject() (*RoleDeviceRestapiDevic
 		SyslogServerProfiles:   o.SyslogServerProfiles,
 		VirtualSystems:         o.VirtualSystems,
 		Misc:                   o.Misc,
+		MiscAttributes:         o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -2966,6 +3198,7 @@ func (o *roleDeviceRestapiNetworkXml) MarshalFromObject(s RoleDeviceRestapiNetwo
 	o.ZoneProtectionNetworkProfiles = s.ZoneProtectionNetworkProfiles
 	o.Zones = s.Zones
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceRestapiNetworkXml) UnmarshalToObject() (*RoleDeviceRestapiNetwork, error) {
@@ -3007,6 +3240,7 @@ func (o roleDeviceRestapiNetworkXml) UnmarshalToObject() (*RoleDeviceRestapiNetw
 		ZoneProtectionNetworkProfiles:           o.ZoneProtectionNetworkProfiles,
 		Zones:                                   o.Zones,
 		Misc:                                    o.Misc,
+		MiscAttributes:                          o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3050,6 +3284,7 @@ func (o *roleDeviceRestapiObjectsXml) MarshalFromObject(s RoleDeviceRestapiObjec
 	o.VulnerabilityProtectionSecurityProfiles = s.VulnerabilityProtectionSecurityProfiles
 	o.WildfireAnalysisSecurityProfiles = s.WildfireAnalysisSecurityProfiles
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceRestapiObjectsXml) UnmarshalToObject() (*RoleDeviceRestapiObjects, error) {
@@ -3094,6 +3329,7 @@ func (o roleDeviceRestapiObjectsXml) UnmarshalToObject() (*RoleDeviceRestapiObje
 		VulnerabilityProtectionSecurityProfiles: o.VulnerabilityProtectionSecurityProfiles,
 		WildfireAnalysisSecurityProfiles:        o.WildfireAnalysisSecurityProfiles,
 		Misc:                                    o.Misc,
+		MiscAttributes:                          o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3110,6 +3346,7 @@ func (o *roleDeviceRestapiPoliciesXml) MarshalFromObject(s RoleDeviceRestapiPoli
 	o.SecurityRules = s.SecurityRules
 	o.TunnelInspectionRules = s.TunnelInspectionRules
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceRestapiPoliciesXml) UnmarshalToObject() (*RoleDeviceRestapiPolicies, error) {
@@ -3127,19 +3364,22 @@ func (o roleDeviceRestapiPoliciesXml) UnmarshalToObject() (*RoleDeviceRestapiPol
 		SecurityRules:              o.SecurityRules,
 		TunnelInspectionRules:      o.TunnelInspectionRules,
 		Misc:                       o.Misc,
+		MiscAttributes:             o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *roleDeviceRestapiSystemXml) MarshalFromObject(s RoleDeviceRestapiSystem) {
 	o.Configuration = s.Configuration
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceRestapiSystemXml) UnmarshalToObject() (*RoleDeviceRestapiSystem, error) {
 
 	result := &RoleDeviceRestapiSystem{
-		Configuration: o.Configuration,
-		Misc:          o.Misc,
+		Configuration:  o.Configuration,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3199,6 +3439,7 @@ func (o *roleDeviceWebuiXml) MarshalFromObject(s RoleDeviceWebui) {
 	o.Tasks = s.Tasks
 	o.Validate = s.Validate
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiXml) UnmarshalToObject() (*RoleDeviceWebui, error) {
@@ -3284,21 +3525,22 @@ func (o roleDeviceWebuiXml) UnmarshalToObject() (*RoleDeviceWebui, error) {
 	}
 
 	result := &RoleDeviceWebui{
-		Acc:        o.Acc,
-		Commit:     commitVal,
-		Dashboard:  o.Dashboard,
-		Device:     deviceVal,
-		Global:     globalVal,
-		Monitor:    monitorVal,
-		Network:    networkVal,
-		Objects:    objectsVal,
-		Operations: operationsVal,
-		Policies:   policiesVal,
-		Privacy:    privacyVal,
-		Save:       saveVal,
-		Tasks:      o.Tasks,
-		Validate:   o.Validate,
-		Misc:       o.Misc,
+		Acc:            o.Acc,
+		Commit:         commitVal,
+		Dashboard:      o.Dashboard,
+		Device:         deviceVal,
+		Global:         globalVal,
+		Monitor:        monitorVal,
+		Network:        networkVal,
+		Objects:        objectsVal,
+		Operations:     operationsVal,
+		Policies:       policiesVal,
+		Privacy:        privacyVal,
+		Save:           saveVal,
+		Tasks:          o.Tasks,
+		Validate:       o.Validate,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3307,6 +3549,7 @@ func (o *roleDeviceWebuiCommitXml) MarshalFromObject(s RoleDeviceWebuiCommit) {
 	o.Device = s.Device
 	o.ObjectLevelChanges = s.ObjectLevelChanges
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiCommitXml) UnmarshalToObject() (*RoleDeviceWebuiCommit, error) {
@@ -3316,6 +3559,7 @@ func (o roleDeviceWebuiCommitXml) UnmarshalToObject() (*RoleDeviceWebuiCommit, e
 		Device:               o.Device,
 		ObjectLevelChanges:   o.ObjectLevelChanges,
 		Misc:                 o.Misc,
+		MiscAttributes:       o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3376,6 +3620,7 @@ func (o *roleDeviceWebuiDeviceXml) MarshalFromObject(s RoleDeviceWebuiDevice) {
 	o.VirtualSystems = s.VirtualSystems
 	o.VmInfoSource = s.VmInfoSource
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiDeviceXml) UnmarshalToObject() (*RoleDeviceWebuiDevice, error) {
@@ -3461,6 +3706,7 @@ func (o roleDeviceWebuiDeviceXml) UnmarshalToObject() (*RoleDeviceWebuiDevice, e
 		VirtualSystems:         o.VirtualSystems,
 		VmInfoSource:           o.VmInfoSource,
 		Misc:                   o.Misc,
+		MiscAttributes:         o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3473,6 +3719,7 @@ func (o *roleDeviceWebuiDeviceCertificateManagementXml) MarshalFromObject(s Role
 	o.SslDecryptionExclusion = s.SslDecryptionExclusion
 	o.SslTlsServiceProfile = s.SslTlsServiceProfile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiDeviceCertificateManagementXml) UnmarshalToObject() (*RoleDeviceWebuiDeviceCertificateManagement, error) {
@@ -3486,6 +3733,7 @@ func (o roleDeviceWebuiDeviceCertificateManagementXml) UnmarshalToObject() (*Rol
 		SslDecryptionExclusion: o.SslDecryptionExclusion,
 		SslTlsServiceProfile:   o.SslTlsServiceProfile,
 		Misc:                   o.Misc,
+		MiscAttributes:         o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3493,14 +3741,16 @@ func (o *roleDeviceWebuiDeviceLocalUserDatabaseXml) MarshalFromObject(s RoleDevi
 	o.UserGroups = s.UserGroups
 	o.Users = s.Users
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiDeviceLocalUserDatabaseXml) UnmarshalToObject() (*RoleDeviceWebuiDeviceLocalUserDatabase, error) {
 
 	result := &RoleDeviceWebuiDeviceLocalUserDatabase{
-		UserGroups: o.UserGroups,
-		Users:      o.Users,
-		Misc:       o.Misc,
+		UserGroups:     o.UserGroups,
+		Users:          o.Users,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3515,21 +3765,23 @@ func (o *roleDeviceWebuiDeviceLogSettingsXml) MarshalFromObject(s RoleDeviceWebu
 	o.System = s.System
 	o.UserId = s.UserId
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiDeviceLogSettingsXml) UnmarshalToObject() (*RoleDeviceWebuiDeviceLogSettings, error) {
 
 	result := &RoleDeviceWebuiDeviceLogSettings{
-		CcAlarm:       o.CcAlarm,
-		Config:        o.Config,
-		Correlation:   o.Correlation,
-		Globalprotect: o.Globalprotect,
-		Hipmatch:      o.Hipmatch,
-		Iptag:         o.Iptag,
-		ManageLog:     o.ManageLog,
-		System:        o.System,
-		UserId:        o.UserId,
-		Misc:          o.Misc,
+		CcAlarm:        o.CcAlarm,
+		Config:         o.Config,
+		Correlation:    o.Correlation,
+		Globalprotect:  o.Globalprotect,
+		Hipmatch:       o.Hipmatch,
+		Iptag:          o.Iptag,
+		ManageLog:      o.ManageLog,
+		System:         o.System,
+		UserId:         o.UserId,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3537,14 +3789,16 @@ func (o *roleDeviceWebuiDevicePolicyRecommendationsXml) MarshalFromObject(s Role
 	o.Iot = s.Iot
 	o.Saas = s.Saas
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiDevicePolicyRecommendationsXml) UnmarshalToObject() (*RoleDeviceWebuiDevicePolicyRecommendations, error) {
 
 	result := &RoleDeviceWebuiDevicePolicyRecommendations{
-		Iot:  o.Iot,
-		Saas: o.Saas,
-		Misc: o.Misc,
+		Iot:            o.Iot,
+		Saas:           o.Saas,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3563,25 +3817,27 @@ func (o *roleDeviceWebuiDeviceServerProfileXml) MarshalFromObject(s RoleDeviceWe
 	o.Syslog = s.Syslog
 	o.Tacplus = s.Tacplus
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiDeviceServerProfileXml) UnmarshalToObject() (*RoleDeviceWebuiDeviceServerProfile, error) {
 
 	result := &RoleDeviceWebuiDeviceServerProfile{
-		Dns:      o.Dns,
-		Email:    o.Email,
-		Http:     o.Http,
-		Kerberos: o.Kerberos,
-		Ldap:     o.Ldap,
-		Mfa:      o.Mfa,
-		Netflow:  o.Netflow,
-		Radius:   o.Radius,
-		SamlIdp:  o.SamlIdp,
-		Scp:      o.Scp,
-		SnmpTrap: o.SnmpTrap,
-		Syslog:   o.Syslog,
-		Tacplus:  o.Tacplus,
-		Misc:     o.Misc,
+		Dns:            o.Dns,
+		Email:          o.Email,
+		Http:           o.Http,
+		Kerberos:       o.Kerberos,
+		Ldap:           o.Ldap,
+		Mfa:            o.Mfa,
+		Netflow:        o.Netflow,
+		Radius:         o.Radius,
+		SamlIdp:        o.SamlIdp,
+		Scp:            o.Scp,
+		SnmpTrap:       o.SnmpTrap,
+		Syslog:         o.Syslog,
+		Tacplus:        o.Tacplus,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3596,34 +3852,38 @@ func (o *roleDeviceWebuiDeviceSetupXml) MarshalFromObject(s RoleDeviceWebuiDevic
 	o.Telemetry = s.Telemetry
 	o.Wildfire = s.Wildfire
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiDeviceSetupXml) UnmarshalToObject() (*RoleDeviceWebuiDeviceSetup, error) {
 
 	result := &RoleDeviceWebuiDeviceSetup{
-		ContentId:  o.ContentId,
-		Hsm:        o.Hsm,
-		Interfaces: o.Interfaces,
-		Management: o.Management,
-		Operations: o.Operations,
-		Services:   o.Services,
-		Session:    o.Session,
-		Telemetry:  o.Telemetry,
-		Wildfire:   o.Wildfire,
-		Misc:       o.Misc,
+		ContentId:      o.ContentId,
+		Hsm:            o.Hsm,
+		Interfaces:     o.Interfaces,
+		Management:     o.Management,
+		Operations:     o.Operations,
+		Services:       o.Services,
+		Session:        o.Session,
+		Telemetry:      o.Telemetry,
+		Wildfire:       o.Wildfire,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *roleDeviceWebuiGlobalXml) MarshalFromObject(s RoleDeviceWebuiGlobal) {
 	o.SystemAlarms = s.SystemAlarms
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiGlobalXml) UnmarshalToObject() (*RoleDeviceWebuiGlobal, error) {
 
 	result := &RoleDeviceWebuiGlobal{
-		SystemAlarms: o.SystemAlarms,
-		Misc:         o.Misc,
+		SystemAlarms:   o.SystemAlarms,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3662,6 +3922,7 @@ func (o *roleDeviceWebuiMonitorXml) MarshalFromObject(s RoleDeviceWebuiMonitor) 
 	o.UrlFilteringReports = s.UrlFilteringReports
 	o.ViewCustomReports = s.ViewCustomReports
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiMonitorXml) UnmarshalToObject() (*RoleDeviceWebuiMonitor, error) {
@@ -3717,6 +3978,7 @@ func (o roleDeviceWebuiMonitorXml) UnmarshalToObject() (*RoleDeviceWebuiMonitor,
 		UrlFilteringReports:        o.UrlFilteringReports,
 		ViewCustomReports:          o.ViewCustomReports,
 		Misc:                       o.Misc,
+		MiscAttributes:             o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3724,6 +3986,7 @@ func (o *roleDeviceWebuiMonitorAutomatedCorrelationEngineXml) MarshalFromObject(
 	o.CorrelatedEvents = s.CorrelatedEvents
 	o.CorrelationObjects = s.CorrelationObjects
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiMonitorAutomatedCorrelationEngineXml) UnmarshalToObject() (*RoleDeviceWebuiMonitorAutomatedCorrelationEngine, error) {
@@ -3732,6 +3995,7 @@ func (o roleDeviceWebuiMonitorAutomatedCorrelationEngineXml) UnmarshalToObject()
 		CorrelatedEvents:   o.CorrelatedEvents,
 		CorrelationObjects: o.CorrelationObjects,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3759,6 +4023,7 @@ func (o *roleDeviceWebuiMonitorCustomReportsXml) MarshalFromObject(s RoleDeviceW
 	o.Userid = s.Userid
 	o.WildfireLog = s.WildfireLog
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiMonitorCustomReportsXml) UnmarshalToObject() (*RoleDeviceWebuiMonitorCustomReports, error) {
@@ -3787,6 +4052,7 @@ func (o roleDeviceWebuiMonitorCustomReportsXml) UnmarshalToObject() (*RoleDevice
 		Userid:                o.Userid,
 		WildfireLog:           o.WildfireLog,
 		Misc:                  o.Misc,
+		MiscAttributes:        o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3809,6 +4075,7 @@ func (o *roleDeviceWebuiMonitorLogsXml) MarshalFromObject(s RoleDeviceWebuiMonit
 	o.Userid = s.Userid
 	o.Wildfire = s.Wildfire
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiMonitorLogsXml) UnmarshalToObject() (*RoleDeviceWebuiMonitorLogs, error) {
@@ -3832,6 +4099,7 @@ func (o roleDeviceWebuiMonitorLogsXml) UnmarshalToObject() (*RoleDeviceWebuiMoni
 		Userid:         o.Userid,
 		Wildfire:       o.Wildfire,
 		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3843,6 +4111,7 @@ func (o *roleDeviceWebuiMonitorPdfReportsXml) MarshalFromObject(s RoleDeviceWebu
 	o.SaasApplicationUsageReport = s.SaasApplicationUsageReport
 	o.UserActivityReport = s.UserActivityReport
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiMonitorPdfReportsXml) UnmarshalToObject() (*RoleDeviceWebuiMonitorPdfReports, error) {
@@ -3855,6 +4124,7 @@ func (o roleDeviceWebuiMonitorPdfReportsXml) UnmarshalToObject() (*RoleDeviceWeb
 		SaasApplicationUsageReport: o.SaasApplicationUsageReport,
 		UserActivityReport:         o.UserActivityReport,
 		Misc:                       o.Misc,
+		MiscAttributes:             o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3888,6 +4158,7 @@ func (o *roleDeviceWebuiNetworkXml) MarshalFromObject(s RoleDeviceWebuiNetwork) 
 	o.Vlans = s.Vlans
 	o.Zones = s.Zones
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiNetworkXml) UnmarshalToObject() (*RoleDeviceWebuiNetwork, error) {
@@ -3934,6 +4205,7 @@ func (o roleDeviceWebuiNetworkXml) UnmarshalToObject() (*RoleDeviceWebuiNetwork,
 		Vlans:                 o.Vlans,
 		Zones:                 o.Zones,
 		Misc:                  o.Misc,
+		MiscAttributes:        o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3944,6 +4216,7 @@ func (o *roleDeviceWebuiNetworkGlobalProtectXml) MarshalFromObject(s RoleDeviceW
 	o.Mdm = s.Mdm
 	o.Portals = s.Portals
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiNetworkGlobalProtectXml) UnmarshalToObject() (*RoleDeviceWebuiNetworkGlobalProtect, error) {
@@ -3955,6 +4228,7 @@ func (o roleDeviceWebuiNetworkGlobalProtectXml) UnmarshalToObject() (*RoleDevice
 		Mdm:                 o.Mdm,
 		Portals:             o.Portals,
 		Misc:                o.Misc,
+		MiscAttributes:      o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3970,6 +4244,7 @@ func (o *roleDeviceWebuiNetworkNetworkProfilesXml) MarshalFromObject(s RoleDevic
 	o.TunnelMonitor = s.TunnelMonitor
 	o.ZoneProtection = s.ZoneProtection
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiNetworkNetworkProfilesXml) UnmarshalToObject() (*RoleDeviceWebuiNetworkNetworkProfiles, error) {
@@ -3986,6 +4261,7 @@ func (o roleDeviceWebuiNetworkNetworkProfilesXml) UnmarshalToObject() (*RoleDevi
 		TunnelMonitor:    o.TunnelMonitor,
 		ZoneProtection:   o.ZoneProtection,
 		Misc:             o.Misc,
+		MiscAttributes:   o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -3997,6 +4273,7 @@ func (o *roleDeviceWebuiNetworkRoutingXml) MarshalFromObject(s RoleDeviceWebuiNe
 		o.RoutingProfiles = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiNetworkRoutingXml) UnmarshalToObject() (*RoleDeviceWebuiNetworkRouting, error) {
@@ -4013,6 +4290,7 @@ func (o roleDeviceWebuiNetworkRoutingXml) UnmarshalToObject() (*RoleDeviceWebuiN
 		LogicalRouters:  o.LogicalRouters,
 		RoutingProfiles: routingProfilesVal,
 		Misc:            o.Misc,
+		MiscAttributes:  o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4025,19 +4303,21 @@ func (o *roleDeviceWebuiNetworkRoutingRoutingProfilesXml) MarshalFromObject(s Ro
 	o.Ospfv3 = s.Ospfv3
 	o.Ripv2 = s.Ripv2
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiNetworkRoutingRoutingProfilesXml) UnmarshalToObject() (*RoleDeviceWebuiNetworkRoutingRoutingProfiles, error) {
 
 	result := &RoleDeviceWebuiNetworkRoutingRoutingProfiles{
-		Bfd:       o.Bfd,
-		Bgp:       o.Bgp,
-		Filters:   o.Filters,
-		Multicast: o.Multicast,
-		Ospf:      o.Ospf,
-		Ospfv3:    o.Ospfv3,
-		Ripv2:     o.Ripv2,
-		Misc:      o.Misc,
+		Bfd:            o.Bfd,
+		Bgp:            o.Bgp,
+		Filters:        o.Filters,
+		Multicast:      o.Multicast,
+		Ospf:           o.Ospf,
+		Ospfv3:         o.Ospfv3,
+		Ripv2:          o.Ripv2,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4085,6 +4365,7 @@ func (o *roleDeviceWebuiObjectsXml) MarshalFromObject(s RoleDeviceWebuiObjects) 
 	o.Services = s.Services
 	o.Tags = s.Tags
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiObjectsXml) UnmarshalToObject() (*RoleDeviceWebuiObjects, error) {
@@ -4153,6 +4434,7 @@ func (o roleDeviceWebuiObjectsXml) UnmarshalToObject() (*RoleDeviceWebuiObjects,
 		Services:              o.Services,
 		Tags:                  o.Tags,
 		Misc:                  o.Misc,
+		MiscAttributes:        o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4162,22 +4444,25 @@ func (o *roleDeviceWebuiObjectsCustomObjectsXml) MarshalFromObject(s RoleDeviceW
 	o.UrlCategory = s.UrlCategory
 	o.Vulnerability = s.Vulnerability
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiObjectsCustomObjectsXml) UnmarshalToObject() (*RoleDeviceWebuiObjectsCustomObjects, error) {
 
 	result := &RoleDeviceWebuiObjectsCustomObjects{
-		DataPatterns:  o.DataPatterns,
-		Spyware:       o.Spyware,
-		UrlCategory:   o.UrlCategory,
-		Vulnerability: o.Vulnerability,
-		Misc:          o.Misc,
+		DataPatterns:   o.DataPatterns,
+		Spyware:        o.Spyware,
+		UrlCategory:    o.UrlCategory,
+		Vulnerability:  o.Vulnerability,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *roleDeviceWebuiObjectsDecryptionXml) MarshalFromObject(s RoleDeviceWebuiObjectsDecryption) {
 	o.DecryptionProfile = s.DecryptionProfile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiObjectsDecryptionXml) UnmarshalToObject() (*RoleDeviceWebuiObjectsDecryption, error) {
@@ -4185,6 +4470,7 @@ func (o roleDeviceWebuiObjectsDecryptionXml) UnmarshalToObject() (*RoleDeviceWeb
 	result := &RoleDeviceWebuiObjectsDecryption{
 		DecryptionProfile: o.DecryptionProfile,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4192,14 +4478,16 @@ func (o *roleDeviceWebuiObjectsGlobalProtectXml) MarshalFromObject(s RoleDeviceW
 	o.HipObjects = s.HipObjects
 	o.HipProfiles = s.HipProfiles
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiObjectsGlobalProtectXml) UnmarshalToObject() (*RoleDeviceWebuiObjectsGlobalProtect, error) {
 
 	result := &RoleDeviceWebuiObjectsGlobalProtect{
-		HipObjects:  o.HipObjects,
-		HipProfiles: o.HipProfiles,
-		Misc:        o.Misc,
+		HipObjects:     o.HipObjects,
+		HipProfiles:    o.HipProfiles,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4209,6 +4497,7 @@ func (o *roleDeviceWebuiObjectsSdwanXml) MarshalFromObject(s RoleDeviceWebuiObje
 	o.SdwanProfile = s.SdwanProfile
 	o.SdwanSaasQualityProfile = s.SdwanSaasQualityProfile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiObjectsSdwanXml) UnmarshalToObject() (*RoleDeviceWebuiObjectsSdwan, error) {
@@ -4219,6 +4508,7 @@ func (o roleDeviceWebuiObjectsSdwanXml) UnmarshalToObject() (*RoleDeviceWebuiObj
 		SdwanProfile:                o.SdwanProfile,
 		SdwanSaasQualityProfile:     o.SdwanSaasQualityProfile,
 		Misc:                        o.Misc,
+		MiscAttributes:              o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4234,6 +4524,7 @@ func (o *roleDeviceWebuiObjectsSecurityProfilesXml) MarshalFromObject(s RoleDevi
 	o.VulnerabilityProtection = s.VulnerabilityProtection
 	o.WildfireAnalysis = s.WildfireAnalysis
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiObjectsSecurityProfilesXml) UnmarshalToObject() (*RoleDeviceWebuiObjectsSecurityProfiles, error) {
@@ -4250,6 +4541,7 @@ func (o roleDeviceWebuiObjectsSecurityProfilesXml) UnmarshalToObject() (*RoleDev
 		VulnerabilityProtection: o.VulnerabilityProtection,
 		WildfireAnalysis:        o.WildfireAnalysis,
 		Misc:                    o.Misc,
+		MiscAttributes:          o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4260,6 +4552,7 @@ func (o *roleDeviceWebuiOperationsXml) MarshalFromObject(s RoleDeviceWebuiOperat
 	o.GenerateTechSupportFile = s.GenerateTechSupportFile
 	o.Reboot = s.Reboot
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiOperationsXml) UnmarshalToObject() (*RoleDeviceWebuiOperations, error) {
@@ -4271,6 +4564,7 @@ func (o roleDeviceWebuiOperationsXml) UnmarshalToObject() (*RoleDeviceWebuiOpera
 		GenerateTechSupportFile: o.GenerateTechSupportFile,
 		Reboot:                  o.Reboot,
 		Misc:                    o.Misc,
+		MiscAttributes:          o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4288,6 +4582,7 @@ func (o *roleDeviceWebuiPoliciesXml) MarshalFromObject(s RoleDeviceWebuiPolicies
 	o.SslDecryptionRulebase = s.SslDecryptionRulebase
 	o.TunnelInspectRulebase = s.TunnelInspectRulebase
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiPoliciesXml) UnmarshalToObject() (*RoleDeviceWebuiPolicies, error) {
@@ -4306,6 +4601,7 @@ func (o roleDeviceWebuiPoliciesXml) UnmarshalToObject() (*RoleDeviceWebuiPolicie
 		SslDecryptionRulebase:       o.SslDecryptionRulebase,
 		TunnelInspectRulebase:       o.TunnelInspectRulebase,
 		Misc:                        o.Misc,
+		MiscAttributes:              o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4314,6 +4610,7 @@ func (o *roleDeviceWebuiPrivacyXml) MarshalFromObject(s RoleDeviceWebuiPrivacy) 
 	o.ShowUserNamesInLogsAndReports = s.ShowUserNamesInLogsAndReports
 	o.ViewPcapFiles = s.ViewPcapFiles
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiPrivacyXml) UnmarshalToObject() (*RoleDeviceWebuiPrivacy, error) {
@@ -4323,6 +4620,7 @@ func (o roleDeviceWebuiPrivacyXml) UnmarshalToObject() (*RoleDeviceWebuiPrivacy,
 		ShowUserNamesInLogsAndReports: o.ShowUserNamesInLogsAndReports,
 		ViewPcapFiles:                 o.ViewPcapFiles,
 		Misc:                          o.Misc,
+		MiscAttributes:                o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4331,6 +4629,7 @@ func (o *roleDeviceWebuiSaveXml) MarshalFromObject(s RoleDeviceWebuiSave) {
 	o.PartialSave = s.PartialSave
 	o.SaveForOtherAdmins = s.SaveForOtherAdmins
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiSaveXml) UnmarshalToObject() (*RoleDeviceWebuiSave, error) {
@@ -4340,6 +4639,7 @@ func (o roleDeviceWebuiSaveXml) UnmarshalToObject() (*RoleDeviceWebuiSave, error
 		PartialSave:        o.PartialSave,
 		SaveForOtherAdmins: o.SaveForOtherAdmins,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4354,21 +4654,23 @@ func (o *roleDeviceXmlapiXml) MarshalFromObject(s RoleDeviceXmlapi) {
 	o.Report = s.Report
 	o.UserId = s.UserId
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceXmlapiXml) UnmarshalToObject() (*RoleDeviceXmlapi, error) {
 
 	result := &RoleDeviceXmlapi{
-		Commit: o.Commit,
-		Config: o.Config,
-		Export: o.Export,
-		Import: o.Import,
-		Iot:    o.Iot,
-		Log:    o.Log,
-		Op:     o.Op,
-		Report: o.Report,
-		UserId: o.UserId,
-		Misc:   o.Misc,
+		Commit:         o.Commit,
+		Config:         o.Config,
+		Export:         o.Export,
+		Import:         o.Import,
+		Iot:            o.Iot,
+		Log:            o.Log,
+		Op:             o.Op,
+		Report:         o.Report,
+		UserId:         o.UserId,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4390,6 +4692,7 @@ func (o *roleVsysXml) MarshalFromObject(s RoleVsys) {
 		o.Xmlapi = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysXml) UnmarshalToObject() (*RoleVsys, error) {
@@ -4419,11 +4722,12 @@ func (o roleVsysXml) UnmarshalToObject() (*RoleVsys, error) {
 	}
 
 	result := &RoleVsys{
-		Cli:     o.Cli,
-		Restapi: restapiVal,
-		Webui:   webuiVal,
-		Xmlapi:  xmlapiVal,
-		Misc:    o.Misc,
+		Cli:            o.Cli,
+		Restapi:        restapiVal,
+		Webui:          webuiVal,
+		Xmlapi:         xmlapiVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4454,6 +4758,7 @@ func (o *roleVsysRestapiXml) MarshalFromObject(s RoleVsysRestapi) {
 		o.System = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysRestapiXml) UnmarshalToObject() (*RoleVsysRestapi, error) {
@@ -4499,12 +4804,13 @@ func (o roleVsysRestapiXml) UnmarshalToObject() (*RoleVsysRestapi, error) {
 	}
 
 	result := &RoleVsysRestapi{
-		Device:   deviceVal,
-		Network:  networkVal,
-		Objects:  objectsVal,
-		Policies: policiesVal,
-		System:   systemVal,
-		Misc:     o.Misc,
+		Device:         deviceVal,
+		Network:        networkVal,
+		Objects:        objectsVal,
+		Policies:       policiesVal,
+		System:         systemVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4517,6 +4823,7 @@ func (o *roleVsysRestapiDeviceXml) MarshalFromObject(s RoleVsysRestapiDevice) {
 	o.SyslogServerProfiles = s.SyslogServerProfiles
 	o.VirtualSystems = s.VirtualSystems
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysRestapiDeviceXml) UnmarshalToObject() (*RoleVsysRestapiDevice, error) {
@@ -4530,6 +4837,7 @@ func (o roleVsysRestapiDeviceXml) UnmarshalToObject() (*RoleVsysRestapiDevice, e
 		SyslogServerProfiles:   o.SyslogServerProfiles,
 		VirtualSystems:         o.VirtualSystems,
 		Misc:                   o.Misc,
+		MiscAttributes:         o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4542,6 +4850,7 @@ func (o *roleVsysRestapiNetworkXml) MarshalFromObject(s RoleVsysRestapiNetwork) 
 	o.SdwanInterfaceProfiles = s.SdwanInterfaceProfiles
 	o.Zones = s.Zones
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysRestapiNetworkXml) UnmarshalToObject() (*RoleVsysRestapiNetwork, error) {
@@ -4555,6 +4864,7 @@ func (o roleVsysRestapiNetworkXml) UnmarshalToObject() (*RoleVsysRestapiNetwork,
 		SdwanInterfaceProfiles:           o.SdwanInterfaceProfiles,
 		Zones:                            o.Zones,
 		Misc:                             o.Misc,
+		MiscAttributes:                   o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4598,6 +4908,7 @@ func (o *roleVsysRestapiObjectsXml) MarshalFromObject(s RoleVsysRestapiObjects) 
 	o.VulnerabilityProtectionSecurityProfiles = s.VulnerabilityProtectionSecurityProfiles
 	o.WildfireAnalysisSecurityProfiles = s.WildfireAnalysisSecurityProfiles
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysRestapiObjectsXml) UnmarshalToObject() (*RoleVsysRestapiObjects, error) {
@@ -4642,6 +4953,7 @@ func (o roleVsysRestapiObjectsXml) UnmarshalToObject() (*RoleVsysRestapiObjects,
 		VulnerabilityProtectionSecurityProfiles: o.VulnerabilityProtectionSecurityProfiles,
 		WildfireAnalysisSecurityProfiles:        o.WildfireAnalysisSecurityProfiles,
 		Misc:                                    o.Misc,
+		MiscAttributes:                          o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4658,6 +4970,7 @@ func (o *roleVsysRestapiPoliciesXml) MarshalFromObject(s RoleVsysRestapiPolicies
 	o.SecurityRules = s.SecurityRules
 	o.TunnelInspectionRules = s.TunnelInspectionRules
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysRestapiPoliciesXml) UnmarshalToObject() (*RoleVsysRestapiPolicies, error) {
@@ -4675,19 +4988,22 @@ func (o roleVsysRestapiPoliciesXml) UnmarshalToObject() (*RoleVsysRestapiPolicie
 		SecurityRules:              o.SecurityRules,
 		TunnelInspectionRules:      o.TunnelInspectionRules,
 		Misc:                       o.Misc,
+		MiscAttributes:             o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *roleVsysRestapiSystemXml) MarshalFromObject(s RoleVsysRestapiSystem) {
 	o.Configuration = s.Configuration
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysRestapiSystemXml) UnmarshalToObject() (*RoleVsysRestapiSystem, error) {
 
 	result := &RoleVsysRestapiSystem{
-		Configuration: o.Configuration,
-		Misc:          o.Misc,
+		Configuration:  o.Configuration,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4742,6 +5058,7 @@ func (o *roleVsysWebuiXml) MarshalFromObject(s RoleVsysWebui) {
 	o.Tasks = s.Tasks
 	o.Validate = s.Validate
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiXml) UnmarshalToObject() (*RoleVsysWebui, error) {
@@ -4819,20 +5136,21 @@ func (o roleVsysWebuiXml) UnmarshalToObject() (*RoleVsysWebui, error) {
 	}
 
 	result := &RoleVsysWebui{
-		Acc:        o.Acc,
-		Commit:     commitVal,
-		Dashboard:  o.Dashboard,
-		Device:     deviceVal,
-		Monitor:    monitorVal,
-		Network:    networkVal,
-		Objects:    objectsVal,
-		Operations: operationsVal,
-		Policies:   policiesVal,
-		Privacy:    privacyVal,
-		Save:       saveVal,
-		Tasks:      o.Tasks,
-		Validate:   o.Validate,
-		Misc:       o.Misc,
+		Acc:            o.Acc,
+		Commit:         commitVal,
+		Dashboard:      o.Dashboard,
+		Device:         deviceVal,
+		Monitor:        monitorVal,
+		Network:        networkVal,
+		Objects:        objectsVal,
+		Operations:     operationsVal,
+		Policies:       policiesVal,
+		Privacy:        privacyVal,
+		Save:           saveVal,
+		Tasks:          o.Tasks,
+		Validate:       o.Validate,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4840,6 +5158,7 @@ func (o *roleVsysWebuiCommitXml) MarshalFromObject(s RoleVsysWebuiCommit) {
 	o.CommitForOtherAdmins = s.CommitForOtherAdmins
 	o.VirtualSystems = s.VirtualSystems
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiCommitXml) UnmarshalToObject() (*RoleVsysWebuiCommit, error) {
@@ -4848,6 +5167,7 @@ func (o roleVsysWebuiCommitXml) UnmarshalToObject() (*RoleVsysWebuiCommit, error
 		CommitForOtherAdmins: o.CommitForOtherAdmins,
 		VirtualSystems:       o.VirtualSystems,
 		Misc:                 o.Misc,
+		MiscAttributes:       o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4893,6 +5213,7 @@ func (o *roleVsysWebuiDeviceXml) MarshalFromObject(s RoleVsysWebuiDevice) {
 	o.UserIdentification = s.UserIdentification
 	o.VmInfoSource = s.VmInfoSource
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiDeviceXml) UnmarshalToObject() (*RoleVsysWebuiDevice, error) {
@@ -4963,6 +5284,7 @@ func (o roleVsysWebuiDeviceXml) UnmarshalToObject() (*RoleVsysWebuiDevice, error
 		UserIdentification:     o.UserIdentification,
 		VmInfoSource:           o.VmInfoSource,
 		Misc:                   o.Misc,
+		MiscAttributes:         o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4975,6 +5297,7 @@ func (o *roleVsysWebuiDeviceCertificateManagementXml) MarshalFromObject(s RoleVs
 	o.SslDecryptionExclusion = s.SslDecryptionExclusion
 	o.SslTlsServiceProfile = s.SslTlsServiceProfile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiDeviceCertificateManagementXml) UnmarshalToObject() (*RoleVsysWebuiDeviceCertificateManagement, error) {
@@ -4988,6 +5311,7 @@ func (o roleVsysWebuiDeviceCertificateManagementXml) UnmarshalToObject() (*RoleV
 		SslDecryptionExclusion: o.SslDecryptionExclusion,
 		SslTlsServiceProfile:   o.SslTlsServiceProfile,
 		Misc:                   o.Misc,
+		MiscAttributes:         o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -4995,14 +5319,16 @@ func (o *roleVsysWebuiDeviceLocalUserDatabaseXml) MarshalFromObject(s RoleVsysWe
 	o.UserGroups = s.UserGroups
 	o.Users = s.Users
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiDeviceLocalUserDatabaseXml) UnmarshalToObject() (*RoleVsysWebuiDeviceLocalUserDatabase, error) {
 
 	result := &RoleVsysWebuiDeviceLocalUserDatabase{
-		UserGroups: o.UserGroups,
-		Users:      o.Users,
-		Misc:       o.Misc,
+		UserGroups:     o.UserGroups,
+		Users:          o.Users,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5015,19 +5341,21 @@ func (o *roleVsysWebuiDeviceLogSettingsXml) MarshalFromObject(s RoleVsysWebuiDev
 	o.System = s.System
 	o.UserId = s.UserId
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiDeviceLogSettingsXml) UnmarshalToObject() (*RoleVsysWebuiDeviceLogSettings, error) {
 
 	result := &RoleVsysWebuiDeviceLogSettings{
-		Config:        o.Config,
-		Correlation:   o.Correlation,
-		Globalprotect: o.Globalprotect,
-		Hipmatch:      o.Hipmatch,
-		Iptag:         o.Iptag,
-		System:        o.System,
-		UserId:        o.UserId,
-		Misc:          o.Misc,
+		Config:         o.Config,
+		Correlation:    o.Correlation,
+		Globalprotect:  o.Globalprotect,
+		Hipmatch:       o.Hipmatch,
+		Iptag:          o.Iptag,
+		System:         o.System,
+		UserId:         o.UserId,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5035,14 +5363,16 @@ func (o *roleVsysWebuiDevicePolicyRecommendationsXml) MarshalFromObject(s RoleVs
 	o.Iot = s.Iot
 	o.Saas = s.Saas
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiDevicePolicyRecommendationsXml) UnmarshalToObject() (*RoleVsysWebuiDevicePolicyRecommendations, error) {
 
 	result := &RoleVsysWebuiDevicePolicyRecommendations{
-		Iot:  o.Iot,
-		Saas: o.Saas,
-		Misc: o.Misc,
+		Iot:            o.Iot,
+		Saas:           o.Saas,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5061,25 +5391,27 @@ func (o *roleVsysWebuiDeviceServerProfileXml) MarshalFromObject(s RoleVsysWebuiD
 	o.Syslog = s.Syslog
 	o.Tacplus = s.Tacplus
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiDeviceServerProfileXml) UnmarshalToObject() (*RoleVsysWebuiDeviceServerProfile, error) {
 
 	result := &RoleVsysWebuiDeviceServerProfile{
-		Dns:      o.Dns,
-		Email:    o.Email,
-		Http:     o.Http,
-		Kerberos: o.Kerberos,
-		Ldap:     o.Ldap,
-		Mfa:      o.Mfa,
-		Netflow:  o.Netflow,
-		Radius:   o.Radius,
-		SamlIdp:  o.SamlIdp,
-		Scp:      o.Scp,
-		SnmpTrap: o.SnmpTrap,
-		Syslog:   o.Syslog,
-		Tacplus:  o.Tacplus,
-		Misc:     o.Misc,
+		Dns:            o.Dns,
+		Email:          o.Email,
+		Http:           o.Http,
+		Kerberos:       o.Kerberos,
+		Ldap:           o.Ldap,
+		Mfa:            o.Mfa,
+		Netflow:        o.Netflow,
+		Radius:         o.Radius,
+		SamlIdp:        o.SamlIdp,
+		Scp:            o.Scp,
+		SnmpTrap:       o.SnmpTrap,
+		Syslog:         o.Syslog,
+		Tacplus:        o.Tacplus,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5094,21 +5426,23 @@ func (o *roleVsysWebuiDeviceSetupXml) MarshalFromObject(s RoleVsysWebuiDeviceSet
 	o.Telemetry = s.Telemetry
 	o.Wildfire = s.Wildfire
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiDeviceSetupXml) UnmarshalToObject() (*RoleVsysWebuiDeviceSetup, error) {
 
 	result := &RoleVsysWebuiDeviceSetup{
-		ContentId:  o.ContentId,
-		Hsm:        o.Hsm,
-		Interfaces: o.Interfaces,
-		Management: o.Management,
-		Operations: o.Operations,
-		Services:   o.Services,
-		Session:    o.Session,
-		Telemetry:  o.Telemetry,
-		Wildfire:   o.Wildfire,
-		Misc:       o.Misc,
+		ContentId:      o.ContentId,
+		Hsm:            o.Hsm,
+		Interfaces:     o.Interfaces,
+		Management:     o.Management,
+		Operations:     o.Operations,
+		Services:       o.Services,
+		Session:        o.Session,
+		Telemetry:      o.Telemetry,
+		Wildfire:       o.Wildfire,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5139,6 +5473,7 @@ func (o *roleVsysWebuiMonitorXml) MarshalFromObject(s RoleVsysWebuiMonitor) {
 	o.SessionBrowser = s.SessionBrowser
 	o.ViewCustomReports = s.ViewCustomReports
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiMonitorXml) UnmarshalToObject() (*RoleVsysWebuiMonitor, error) {
@@ -5186,6 +5521,7 @@ func (o roleVsysWebuiMonitorXml) UnmarshalToObject() (*RoleVsysWebuiMonitor, err
 		SessionBrowser:             o.SessionBrowser,
 		ViewCustomReports:          o.ViewCustomReports,
 		Misc:                       o.Misc,
+		MiscAttributes:             o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5193,6 +5529,7 @@ func (o *roleVsysWebuiMonitorAutomatedCorrelationEngineXml) MarshalFromObject(s 
 	o.CorrelatedEvents = s.CorrelatedEvents
 	o.CorrelationObjects = s.CorrelationObjects
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiMonitorAutomatedCorrelationEngineXml) UnmarshalToObject() (*RoleVsysWebuiMonitorAutomatedCorrelationEngine, error) {
@@ -5201,6 +5538,7 @@ func (o roleVsysWebuiMonitorAutomatedCorrelationEngineXml) UnmarshalToObject() (
 		CorrelatedEvents:   o.CorrelatedEvents,
 		CorrelationObjects: o.CorrelationObjects,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5228,6 +5566,7 @@ func (o *roleVsysWebuiMonitorCustomReportsXml) MarshalFromObject(s RoleVsysWebui
 	o.Userid = s.Userid
 	o.WildfireLog = s.WildfireLog
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiMonitorCustomReportsXml) UnmarshalToObject() (*RoleVsysWebuiMonitorCustomReports, error) {
@@ -5256,6 +5595,7 @@ func (o roleVsysWebuiMonitorCustomReportsXml) UnmarshalToObject() (*RoleVsysWebu
 		Userid:                o.Userid,
 		WildfireLog:           o.WildfireLog,
 		Misc:                  o.Misc,
+		MiscAttributes:        o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5275,6 +5615,7 @@ func (o *roleVsysWebuiMonitorLogsXml) MarshalFromObject(s RoleVsysWebuiMonitorLo
 	o.Userid = s.Userid
 	o.Wildfire = s.Wildfire
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiMonitorLogsXml) UnmarshalToObject() (*RoleVsysWebuiMonitorLogs, error) {
@@ -5295,6 +5636,7 @@ func (o roleVsysWebuiMonitorLogsXml) UnmarshalToObject() (*RoleVsysWebuiMonitorL
 		Userid:         o.Userid,
 		Wildfire:       o.Wildfire,
 		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5306,6 +5648,7 @@ func (o *roleVsysWebuiMonitorPdfReportsXml) MarshalFromObject(s RoleVsysWebuiMon
 	o.SaasApplicationUsageReport = s.SaasApplicationUsageReport
 	o.UserActivityReport = s.UserActivityReport
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiMonitorPdfReportsXml) UnmarshalToObject() (*RoleVsysWebuiMonitorPdfReports, error) {
@@ -5318,6 +5661,7 @@ func (o roleVsysWebuiMonitorPdfReportsXml) UnmarshalToObject() (*RoleVsysWebuiMo
 		SaasApplicationUsageReport: o.SaasApplicationUsageReport,
 		UserActivityReport:         o.UserActivityReport,
 		Misc:                       o.Misc,
+		MiscAttributes:             o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5330,6 +5674,7 @@ func (o *roleVsysWebuiNetworkXml) MarshalFromObject(s RoleVsysWebuiNetwork) {
 	o.SdwanInterfaceProfile = s.SdwanInterfaceProfile
 	o.Zones = s.Zones
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiNetworkXml) UnmarshalToObject() (*RoleVsysWebuiNetwork, error) {
@@ -5347,6 +5692,7 @@ func (o roleVsysWebuiNetworkXml) UnmarshalToObject() (*RoleVsysWebuiNetwork, err
 		SdwanInterfaceProfile: o.SdwanInterfaceProfile,
 		Zones:                 o.Zones,
 		Misc:                  o.Misc,
+		MiscAttributes:        o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5357,6 +5703,7 @@ func (o *roleVsysWebuiNetworkGlobalProtectXml) MarshalFromObject(s RoleVsysWebui
 	o.Mdm = s.Mdm
 	o.Portals = s.Portals
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiNetworkGlobalProtectXml) UnmarshalToObject() (*RoleVsysWebuiNetworkGlobalProtect, error) {
@@ -5368,6 +5715,7 @@ func (o roleVsysWebuiNetworkGlobalProtectXml) UnmarshalToObject() (*RoleVsysWebu
 		Mdm:                 o.Mdm,
 		Portals:             o.Portals,
 		Misc:                o.Misc,
+		MiscAttributes:      o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5415,6 +5763,7 @@ func (o *roleVsysWebuiObjectsXml) MarshalFromObject(s RoleVsysWebuiObjects) {
 	o.Services = s.Services
 	o.Tags = s.Tags
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiObjectsXml) UnmarshalToObject() (*RoleVsysWebuiObjects, error) {
@@ -5483,6 +5832,7 @@ func (o roleVsysWebuiObjectsXml) UnmarshalToObject() (*RoleVsysWebuiObjects, err
 		Services:              o.Services,
 		Tags:                  o.Tags,
 		Misc:                  o.Misc,
+		MiscAttributes:        o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5492,22 +5842,25 @@ func (o *roleVsysWebuiObjectsCustomObjectsXml) MarshalFromObject(s RoleVsysWebui
 	o.UrlCategory = s.UrlCategory
 	o.Vulnerability = s.Vulnerability
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiObjectsCustomObjectsXml) UnmarshalToObject() (*RoleVsysWebuiObjectsCustomObjects, error) {
 
 	result := &RoleVsysWebuiObjectsCustomObjects{
-		DataPatterns:  o.DataPatterns,
-		Spyware:       o.Spyware,
-		UrlCategory:   o.UrlCategory,
-		Vulnerability: o.Vulnerability,
-		Misc:          o.Misc,
+		DataPatterns:   o.DataPatterns,
+		Spyware:        o.Spyware,
+		UrlCategory:    o.UrlCategory,
+		Vulnerability:  o.Vulnerability,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *roleVsysWebuiObjectsDecryptionXml) MarshalFromObject(s RoleVsysWebuiObjectsDecryption) {
 	o.DecryptionProfile = s.DecryptionProfile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiObjectsDecryptionXml) UnmarshalToObject() (*RoleVsysWebuiObjectsDecryption, error) {
@@ -5515,6 +5868,7 @@ func (o roleVsysWebuiObjectsDecryptionXml) UnmarshalToObject() (*RoleVsysWebuiOb
 	result := &RoleVsysWebuiObjectsDecryption{
 		DecryptionProfile: o.DecryptionProfile,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5522,14 +5876,16 @@ func (o *roleVsysWebuiObjectsGlobalProtectXml) MarshalFromObject(s RoleVsysWebui
 	o.HipObjects = s.HipObjects
 	o.HipProfiles = s.HipProfiles
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiObjectsGlobalProtectXml) UnmarshalToObject() (*RoleVsysWebuiObjectsGlobalProtect, error) {
 
 	result := &RoleVsysWebuiObjectsGlobalProtect{
-		HipObjects:  o.HipObjects,
-		HipProfiles: o.HipProfiles,
-		Misc:        o.Misc,
+		HipObjects:     o.HipObjects,
+		HipProfiles:    o.HipProfiles,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5539,6 +5895,7 @@ func (o *roleVsysWebuiObjectsSdwanXml) MarshalFromObject(s RoleVsysWebuiObjectsS
 	o.SdwanProfile = s.SdwanProfile
 	o.SdwanSaasQualityProfile = s.SdwanSaasQualityProfile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiObjectsSdwanXml) UnmarshalToObject() (*RoleVsysWebuiObjectsSdwan, error) {
@@ -5549,6 +5906,7 @@ func (o roleVsysWebuiObjectsSdwanXml) UnmarshalToObject() (*RoleVsysWebuiObjects
 		SdwanProfile:                o.SdwanProfile,
 		SdwanSaasQualityProfile:     o.SdwanSaasQualityProfile,
 		Misc:                        o.Misc,
+		MiscAttributes:              o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5564,6 +5922,7 @@ func (o *roleVsysWebuiObjectsSecurityProfilesXml) MarshalFromObject(s RoleVsysWe
 	o.VulnerabilityProtection = s.VulnerabilityProtection
 	o.WildfireAnalysis = s.WildfireAnalysis
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiObjectsSecurityProfilesXml) UnmarshalToObject() (*RoleVsysWebuiObjectsSecurityProfiles, error) {
@@ -5580,6 +5939,7 @@ func (o roleVsysWebuiObjectsSecurityProfilesXml) UnmarshalToObject() (*RoleVsysW
 		VulnerabilityProtection: o.VulnerabilityProtection,
 		WildfireAnalysis:        o.WildfireAnalysis,
 		Misc:                    o.Misc,
+		MiscAttributes:          o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5590,6 +5950,7 @@ func (o *roleVsysWebuiOperationsXml) MarshalFromObject(s RoleVsysWebuiOperations
 	o.GenerateTechSupportFile = s.GenerateTechSupportFile
 	o.Reboot = s.Reboot
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiOperationsXml) UnmarshalToObject() (*RoleVsysWebuiOperations, error) {
@@ -5601,6 +5962,7 @@ func (o roleVsysWebuiOperationsXml) UnmarshalToObject() (*RoleVsysWebuiOperation
 		GenerateTechSupportFile: o.GenerateTechSupportFile,
 		Reboot:                  o.Reboot,
 		Misc:                    o.Misc,
+		MiscAttributes:          o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5618,6 +5980,7 @@ func (o *roleVsysWebuiPoliciesXml) MarshalFromObject(s RoleVsysWebuiPolicies) {
 	o.SslDecryptionRulebase = s.SslDecryptionRulebase
 	o.TunnelInspectRulebase = s.TunnelInspectRulebase
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiPoliciesXml) UnmarshalToObject() (*RoleVsysWebuiPolicies, error) {
@@ -5636,6 +5999,7 @@ func (o roleVsysWebuiPoliciesXml) UnmarshalToObject() (*RoleVsysWebuiPolicies, e
 		SslDecryptionRulebase:       o.SslDecryptionRulebase,
 		TunnelInspectRulebase:       o.TunnelInspectRulebase,
 		Misc:                        o.Misc,
+		MiscAttributes:              o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5644,6 +6008,7 @@ func (o *roleVsysWebuiPrivacyXml) MarshalFromObject(s RoleVsysWebuiPrivacy) {
 	o.ShowUserNamesInLogsAndReports = s.ShowUserNamesInLogsAndReports
 	o.ViewPcapFiles = s.ViewPcapFiles
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiPrivacyXml) UnmarshalToObject() (*RoleVsysWebuiPrivacy, error) {
@@ -5653,6 +6018,7 @@ func (o roleVsysWebuiPrivacyXml) UnmarshalToObject() (*RoleVsysWebuiPrivacy, err
 		ShowUserNamesInLogsAndReports: o.ShowUserNamesInLogsAndReports,
 		ViewPcapFiles:                 o.ViewPcapFiles,
 		Misc:                          o.Misc,
+		MiscAttributes:                o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5661,6 +6027,7 @@ func (o *roleVsysWebuiSaveXml) MarshalFromObject(s RoleVsysWebuiSave) {
 	o.PartialSave = s.PartialSave
 	o.SaveForOtherAdmins = s.SaveForOtherAdmins
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiSaveXml) UnmarshalToObject() (*RoleVsysWebuiSave, error) {
@@ -5670,6 +6037,7 @@ func (o roleVsysWebuiSaveXml) UnmarshalToObject() (*RoleVsysWebuiSave, error) {
 		PartialSave:        o.PartialSave,
 		SaveForOtherAdmins: o.SaveForOtherAdmins,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5684,21 +6052,23 @@ func (o *roleVsysXmlapiXml) MarshalFromObject(s RoleVsysXmlapi) {
 	o.Report = s.Report
 	o.UserId = s.UserId
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysXmlapiXml) UnmarshalToObject() (*RoleVsysXmlapi, error) {
 
 	result := &RoleVsysXmlapi{
-		Commit: o.Commit,
-		Config: o.Config,
-		Export: o.Export,
-		Import: o.Import,
-		Iot:    o.Iot,
-		Log:    o.Log,
-		Op:     o.Op,
-		Report: o.Report,
-		UserId: o.UserId,
-		Misc:   o.Misc,
+		Commit:         o.Commit,
+		Config:         o.Config,
+		Export:         o.Export,
+		Import:         o.Import,
+		Iot:            o.Iot,
+		Log:            o.Log,
+		Op:             o.Op,
+		Report:         o.Report,
+		UserId:         o.UserId,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5711,6 +6081,7 @@ func (o *entryXml_11_0_2) MarshalFromObject(s Entry) {
 		o.Role = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o entryXml_11_0_2) UnmarshalToObject() (*Entry, error) {
@@ -5724,10 +6095,11 @@ func (o entryXml_11_0_2) UnmarshalToObject() (*Entry, error) {
 	}
 
 	result := &Entry{
-		Name:        o.Name,
-		Description: o.Description,
-		Role:        roleVal,
-		Misc:        o.Misc,
+		Name:           o.Name,
+		Description:    o.Description,
+		Role:           roleVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5743,6 +6115,7 @@ func (o *roleXml_11_0_2) MarshalFromObject(s Role) {
 		o.Vsys = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleXml_11_0_2) UnmarshalToObject() (*Role, error) {
@@ -5764,9 +6137,10 @@ func (o roleXml_11_0_2) UnmarshalToObject() (*Role, error) {
 	}
 
 	result := &Role{
-		Device: deviceVal,
-		Vsys:   vsysVal,
-		Misc:   o.Misc,
+		Device:         deviceVal,
+		Vsys:           vsysVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5788,6 +6162,7 @@ func (o *roleDeviceXml_11_0_2) MarshalFromObject(s RoleDevice) {
 		o.Xmlapi = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceXml_11_0_2) UnmarshalToObject() (*RoleDevice, error) {
@@ -5817,11 +6192,12 @@ func (o roleDeviceXml_11_0_2) UnmarshalToObject() (*RoleDevice, error) {
 	}
 
 	result := &RoleDevice{
-		Cli:     o.Cli,
-		Restapi: restapiVal,
-		Webui:   webuiVal,
-		Xmlapi:  xmlapiVal,
-		Misc:    o.Misc,
+		Cli:            o.Cli,
+		Restapi:        restapiVal,
+		Webui:          webuiVal,
+		Xmlapi:         xmlapiVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5852,6 +6228,7 @@ func (o *roleDeviceRestapiXml_11_0_2) MarshalFromObject(s RoleDeviceRestapi) {
 		o.System = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceRestapiXml_11_0_2) UnmarshalToObject() (*RoleDeviceRestapi, error) {
@@ -5897,12 +6274,13 @@ func (o roleDeviceRestapiXml_11_0_2) UnmarshalToObject() (*RoleDeviceRestapi, er
 	}
 
 	result := &RoleDeviceRestapi{
-		Device:   deviceVal,
-		Network:  networkVal,
-		Objects:  objectsVal,
-		Policies: policiesVal,
-		System:   systemVal,
-		Misc:     o.Misc,
+		Device:         deviceVal,
+		Network:        networkVal,
+		Objects:        objectsVal,
+		Policies:       policiesVal,
+		System:         systemVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5915,6 +6293,7 @@ func (o *roleDeviceRestapiDeviceXml_11_0_2) MarshalFromObject(s RoleDeviceRestap
 	o.SyslogServerProfiles = s.SyslogServerProfiles
 	o.VirtualSystems = s.VirtualSystems
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceRestapiDeviceXml_11_0_2) UnmarshalToObject() (*RoleDeviceRestapiDevice, error) {
@@ -5928,6 +6307,7 @@ func (o roleDeviceRestapiDeviceXml_11_0_2) UnmarshalToObject() (*RoleDeviceResta
 		SyslogServerProfiles:   o.SyslogServerProfiles,
 		VirtualSystems:         o.VirtualSystems,
 		Misc:                   o.Misc,
+		MiscAttributes:         o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -5968,6 +6348,7 @@ func (o *roleDeviceRestapiNetworkXml_11_0_2) MarshalFromObject(s RoleDeviceResta
 	o.ZoneProtectionNetworkProfiles = s.ZoneProtectionNetworkProfiles
 	o.Zones = s.Zones
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceRestapiNetworkXml_11_0_2) UnmarshalToObject() (*RoleDeviceRestapiNetwork, error) {
@@ -6009,6 +6390,7 @@ func (o roleDeviceRestapiNetworkXml_11_0_2) UnmarshalToObject() (*RoleDeviceRest
 		ZoneProtectionNetworkProfiles:           o.ZoneProtectionNetworkProfiles,
 		Zones:                                   o.Zones,
 		Misc:                                    o.Misc,
+		MiscAttributes:                          o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6052,6 +6434,7 @@ func (o *roleDeviceRestapiObjectsXml_11_0_2) MarshalFromObject(s RoleDeviceResta
 	o.VulnerabilityProtectionSecurityProfiles = s.VulnerabilityProtectionSecurityProfiles
 	o.WildfireAnalysisSecurityProfiles = s.WildfireAnalysisSecurityProfiles
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceRestapiObjectsXml_11_0_2) UnmarshalToObject() (*RoleDeviceRestapiObjects, error) {
@@ -6096,6 +6479,7 @@ func (o roleDeviceRestapiObjectsXml_11_0_2) UnmarshalToObject() (*RoleDeviceRest
 		VulnerabilityProtectionSecurityProfiles: o.VulnerabilityProtectionSecurityProfiles,
 		WildfireAnalysisSecurityProfiles:        o.WildfireAnalysisSecurityProfiles,
 		Misc:                                    o.Misc,
+		MiscAttributes:                          o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6112,6 +6496,7 @@ func (o *roleDeviceRestapiPoliciesXml_11_0_2) MarshalFromObject(s RoleDeviceRest
 	o.SecurityRules = s.SecurityRules
 	o.TunnelInspectionRules = s.TunnelInspectionRules
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceRestapiPoliciesXml_11_0_2) UnmarshalToObject() (*RoleDeviceRestapiPolicies, error) {
@@ -6129,19 +6514,22 @@ func (o roleDeviceRestapiPoliciesXml_11_0_2) UnmarshalToObject() (*RoleDeviceRes
 		SecurityRules:              o.SecurityRules,
 		TunnelInspectionRules:      o.TunnelInspectionRules,
 		Misc:                       o.Misc,
+		MiscAttributes:             o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *roleDeviceRestapiSystemXml_11_0_2) MarshalFromObject(s RoleDeviceRestapiSystem) {
 	o.Configuration = s.Configuration
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceRestapiSystemXml_11_0_2) UnmarshalToObject() (*RoleDeviceRestapiSystem, error) {
 
 	result := &RoleDeviceRestapiSystem{
-		Configuration: o.Configuration,
-		Misc:          o.Misc,
+		Configuration:  o.Configuration,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6201,6 +6589,7 @@ func (o *roleDeviceWebuiXml_11_0_2) MarshalFromObject(s RoleDeviceWebui) {
 	o.Tasks = s.Tasks
 	o.Validate = s.Validate
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiXml_11_0_2) UnmarshalToObject() (*RoleDeviceWebui, error) {
@@ -6286,21 +6675,22 @@ func (o roleDeviceWebuiXml_11_0_2) UnmarshalToObject() (*RoleDeviceWebui, error)
 	}
 
 	result := &RoleDeviceWebui{
-		Acc:        o.Acc,
-		Commit:     commitVal,
-		Dashboard:  o.Dashboard,
-		Device:     deviceVal,
-		Global:     globalVal,
-		Monitor:    monitorVal,
-		Network:    networkVal,
-		Objects:    objectsVal,
-		Operations: operationsVal,
-		Policies:   policiesVal,
-		Privacy:    privacyVal,
-		Save:       saveVal,
-		Tasks:      o.Tasks,
-		Validate:   o.Validate,
-		Misc:       o.Misc,
+		Acc:            o.Acc,
+		Commit:         commitVal,
+		Dashboard:      o.Dashboard,
+		Device:         deviceVal,
+		Global:         globalVal,
+		Monitor:        monitorVal,
+		Network:        networkVal,
+		Objects:        objectsVal,
+		Operations:     operationsVal,
+		Policies:       policiesVal,
+		Privacy:        privacyVal,
+		Save:           saveVal,
+		Tasks:          o.Tasks,
+		Validate:       o.Validate,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6309,6 +6699,7 @@ func (o *roleDeviceWebuiCommitXml_11_0_2) MarshalFromObject(s RoleDeviceWebuiCom
 	o.Device = s.Device
 	o.ObjectLevelChanges = s.ObjectLevelChanges
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiCommitXml_11_0_2) UnmarshalToObject() (*RoleDeviceWebuiCommit, error) {
@@ -6318,6 +6709,7 @@ func (o roleDeviceWebuiCommitXml_11_0_2) UnmarshalToObject() (*RoleDeviceWebuiCo
 		Device:               o.Device,
 		ObjectLevelChanges:   o.ObjectLevelChanges,
 		Misc:                 o.Misc,
+		MiscAttributes:       o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6378,6 +6770,7 @@ func (o *roleDeviceWebuiDeviceXml_11_0_2) MarshalFromObject(s RoleDeviceWebuiDev
 	o.VirtualSystems = s.VirtualSystems
 	o.VmInfoSource = s.VmInfoSource
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiDeviceXml_11_0_2) UnmarshalToObject() (*RoleDeviceWebuiDevice, error) {
@@ -6463,6 +6856,7 @@ func (o roleDeviceWebuiDeviceXml_11_0_2) UnmarshalToObject() (*RoleDeviceWebuiDe
 		VirtualSystems:         o.VirtualSystems,
 		VmInfoSource:           o.VmInfoSource,
 		Misc:                   o.Misc,
+		MiscAttributes:         o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6475,6 +6869,7 @@ func (o *roleDeviceWebuiDeviceCertificateManagementXml_11_0_2) MarshalFromObject
 	o.SslDecryptionExclusion = s.SslDecryptionExclusion
 	o.SslTlsServiceProfile = s.SslTlsServiceProfile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiDeviceCertificateManagementXml_11_0_2) UnmarshalToObject() (*RoleDeviceWebuiDeviceCertificateManagement, error) {
@@ -6488,6 +6883,7 @@ func (o roleDeviceWebuiDeviceCertificateManagementXml_11_0_2) UnmarshalToObject(
 		SslDecryptionExclusion: o.SslDecryptionExclusion,
 		SslTlsServiceProfile:   o.SslTlsServiceProfile,
 		Misc:                   o.Misc,
+		MiscAttributes:         o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6495,14 +6891,16 @@ func (o *roleDeviceWebuiDeviceLocalUserDatabaseXml_11_0_2) MarshalFromObject(s R
 	o.UserGroups = s.UserGroups
 	o.Users = s.Users
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiDeviceLocalUserDatabaseXml_11_0_2) UnmarshalToObject() (*RoleDeviceWebuiDeviceLocalUserDatabase, error) {
 
 	result := &RoleDeviceWebuiDeviceLocalUserDatabase{
-		UserGroups: o.UserGroups,
-		Users:      o.Users,
-		Misc:       o.Misc,
+		UserGroups:     o.UserGroups,
+		Users:          o.Users,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6517,21 +6915,23 @@ func (o *roleDeviceWebuiDeviceLogSettingsXml_11_0_2) MarshalFromObject(s RoleDev
 	o.System = s.System
 	o.UserId = s.UserId
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiDeviceLogSettingsXml_11_0_2) UnmarshalToObject() (*RoleDeviceWebuiDeviceLogSettings, error) {
 
 	result := &RoleDeviceWebuiDeviceLogSettings{
-		CcAlarm:       o.CcAlarm,
-		Config:        o.Config,
-		Correlation:   o.Correlation,
-		Globalprotect: o.Globalprotect,
-		Hipmatch:      o.Hipmatch,
-		Iptag:         o.Iptag,
-		ManageLog:     o.ManageLog,
-		System:        o.System,
-		UserId:        o.UserId,
-		Misc:          o.Misc,
+		CcAlarm:        o.CcAlarm,
+		Config:         o.Config,
+		Correlation:    o.Correlation,
+		Globalprotect:  o.Globalprotect,
+		Hipmatch:       o.Hipmatch,
+		Iptag:          o.Iptag,
+		ManageLog:      o.ManageLog,
+		System:         o.System,
+		UserId:         o.UserId,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6539,14 +6939,16 @@ func (o *roleDeviceWebuiDevicePolicyRecommendationsXml_11_0_2) MarshalFromObject
 	o.Iot = s.Iot
 	o.Saas = s.Saas
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiDevicePolicyRecommendationsXml_11_0_2) UnmarshalToObject() (*RoleDeviceWebuiDevicePolicyRecommendations, error) {
 
 	result := &RoleDeviceWebuiDevicePolicyRecommendations{
-		Iot:  o.Iot,
-		Saas: o.Saas,
-		Misc: o.Misc,
+		Iot:            o.Iot,
+		Saas:           o.Saas,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6565,25 +6967,27 @@ func (o *roleDeviceWebuiDeviceServerProfileXml_11_0_2) MarshalFromObject(s RoleD
 	o.Syslog = s.Syslog
 	o.Tacplus = s.Tacplus
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiDeviceServerProfileXml_11_0_2) UnmarshalToObject() (*RoleDeviceWebuiDeviceServerProfile, error) {
 
 	result := &RoleDeviceWebuiDeviceServerProfile{
-		Dns:      o.Dns,
-		Email:    o.Email,
-		Http:     o.Http,
-		Kerberos: o.Kerberos,
-		Ldap:     o.Ldap,
-		Mfa:      o.Mfa,
-		Netflow:  o.Netflow,
-		Radius:   o.Radius,
-		SamlIdp:  o.SamlIdp,
-		Scp:      o.Scp,
-		SnmpTrap: o.SnmpTrap,
-		Syslog:   o.Syslog,
-		Tacplus:  o.Tacplus,
-		Misc:     o.Misc,
+		Dns:            o.Dns,
+		Email:          o.Email,
+		Http:           o.Http,
+		Kerberos:       o.Kerberos,
+		Ldap:           o.Ldap,
+		Mfa:            o.Mfa,
+		Netflow:        o.Netflow,
+		Radius:         o.Radius,
+		SamlIdp:        o.SamlIdp,
+		Scp:            o.Scp,
+		SnmpTrap:       o.SnmpTrap,
+		Syslog:         o.Syslog,
+		Tacplus:        o.Tacplus,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6598,34 +7002,38 @@ func (o *roleDeviceWebuiDeviceSetupXml_11_0_2) MarshalFromObject(s RoleDeviceWeb
 	o.Telemetry = s.Telemetry
 	o.Wildfire = s.Wildfire
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiDeviceSetupXml_11_0_2) UnmarshalToObject() (*RoleDeviceWebuiDeviceSetup, error) {
 
 	result := &RoleDeviceWebuiDeviceSetup{
-		ContentId:  o.ContentId,
-		Hsm:        o.Hsm,
-		Interfaces: o.Interfaces,
-		Management: o.Management,
-		Operations: o.Operations,
-		Services:   o.Services,
-		Session:    o.Session,
-		Telemetry:  o.Telemetry,
-		Wildfire:   o.Wildfire,
-		Misc:       o.Misc,
+		ContentId:      o.ContentId,
+		Hsm:            o.Hsm,
+		Interfaces:     o.Interfaces,
+		Management:     o.Management,
+		Operations:     o.Operations,
+		Services:       o.Services,
+		Session:        o.Session,
+		Telemetry:      o.Telemetry,
+		Wildfire:       o.Wildfire,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *roleDeviceWebuiGlobalXml_11_0_2) MarshalFromObject(s RoleDeviceWebuiGlobal) {
 	o.SystemAlarms = s.SystemAlarms
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiGlobalXml_11_0_2) UnmarshalToObject() (*RoleDeviceWebuiGlobal, error) {
 
 	result := &RoleDeviceWebuiGlobal{
-		SystemAlarms: o.SystemAlarms,
-		Misc:         o.Misc,
+		SystemAlarms:   o.SystemAlarms,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6664,6 +7072,7 @@ func (o *roleDeviceWebuiMonitorXml_11_0_2) MarshalFromObject(s RoleDeviceWebuiMo
 	o.UrlFilteringReports = s.UrlFilteringReports
 	o.ViewCustomReports = s.ViewCustomReports
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiMonitorXml_11_0_2) UnmarshalToObject() (*RoleDeviceWebuiMonitor, error) {
@@ -6719,6 +7128,7 @@ func (o roleDeviceWebuiMonitorXml_11_0_2) UnmarshalToObject() (*RoleDeviceWebuiM
 		UrlFilteringReports:        o.UrlFilteringReports,
 		ViewCustomReports:          o.ViewCustomReports,
 		Misc:                       o.Misc,
+		MiscAttributes:             o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6726,6 +7136,7 @@ func (o *roleDeviceWebuiMonitorAutomatedCorrelationEngineXml_11_0_2) MarshalFrom
 	o.CorrelatedEvents = s.CorrelatedEvents
 	o.CorrelationObjects = s.CorrelationObjects
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiMonitorAutomatedCorrelationEngineXml_11_0_2) UnmarshalToObject() (*RoleDeviceWebuiMonitorAutomatedCorrelationEngine, error) {
@@ -6734,6 +7145,7 @@ func (o roleDeviceWebuiMonitorAutomatedCorrelationEngineXml_11_0_2) UnmarshalToO
 		CorrelatedEvents:   o.CorrelatedEvents,
 		CorrelationObjects: o.CorrelationObjects,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6761,6 +7173,7 @@ func (o *roleDeviceWebuiMonitorCustomReportsXml_11_0_2) MarshalFromObject(s Role
 	o.Userid = s.Userid
 	o.WildfireLog = s.WildfireLog
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiMonitorCustomReportsXml_11_0_2) UnmarshalToObject() (*RoleDeviceWebuiMonitorCustomReports, error) {
@@ -6789,6 +7202,7 @@ func (o roleDeviceWebuiMonitorCustomReportsXml_11_0_2) UnmarshalToObject() (*Rol
 		Userid:                o.Userid,
 		WildfireLog:           o.WildfireLog,
 		Misc:                  o.Misc,
+		MiscAttributes:        o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6811,6 +7225,7 @@ func (o *roleDeviceWebuiMonitorLogsXml_11_0_2) MarshalFromObject(s RoleDeviceWeb
 	o.Userid = s.Userid
 	o.Wildfire = s.Wildfire
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiMonitorLogsXml_11_0_2) UnmarshalToObject() (*RoleDeviceWebuiMonitorLogs, error) {
@@ -6834,6 +7249,7 @@ func (o roleDeviceWebuiMonitorLogsXml_11_0_2) UnmarshalToObject() (*RoleDeviceWe
 		Userid:         o.Userid,
 		Wildfire:       o.Wildfire,
 		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6845,6 +7261,7 @@ func (o *roleDeviceWebuiMonitorPdfReportsXml_11_0_2) MarshalFromObject(s RoleDev
 	o.SaasApplicationUsageReport = s.SaasApplicationUsageReport
 	o.UserActivityReport = s.UserActivityReport
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiMonitorPdfReportsXml_11_0_2) UnmarshalToObject() (*RoleDeviceWebuiMonitorPdfReports, error) {
@@ -6857,6 +7274,7 @@ func (o roleDeviceWebuiMonitorPdfReportsXml_11_0_2) UnmarshalToObject() (*RoleDe
 		SaasApplicationUsageReport: o.SaasApplicationUsageReport,
 		UserActivityReport:         o.UserActivityReport,
 		Misc:                       o.Misc,
+		MiscAttributes:             o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6890,6 +7308,7 @@ func (o *roleDeviceWebuiNetworkXml_11_0_2) MarshalFromObject(s RoleDeviceWebuiNe
 	o.Vlans = s.Vlans
 	o.Zones = s.Zones
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiNetworkXml_11_0_2) UnmarshalToObject() (*RoleDeviceWebuiNetwork, error) {
@@ -6936,6 +7355,7 @@ func (o roleDeviceWebuiNetworkXml_11_0_2) UnmarshalToObject() (*RoleDeviceWebuiN
 		Vlans:                 o.Vlans,
 		Zones:                 o.Zones,
 		Misc:                  o.Misc,
+		MiscAttributes:        o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6946,6 +7366,7 @@ func (o *roleDeviceWebuiNetworkGlobalProtectXml_11_0_2) MarshalFromObject(s Role
 	o.Mdm = s.Mdm
 	o.Portals = s.Portals
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiNetworkGlobalProtectXml_11_0_2) UnmarshalToObject() (*RoleDeviceWebuiNetworkGlobalProtect, error) {
@@ -6957,6 +7378,7 @@ func (o roleDeviceWebuiNetworkGlobalProtectXml_11_0_2) UnmarshalToObject() (*Rol
 		Mdm:                 o.Mdm,
 		Portals:             o.Portals,
 		Misc:                o.Misc,
+		MiscAttributes:      o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6972,6 +7394,7 @@ func (o *roleDeviceWebuiNetworkNetworkProfilesXml_11_0_2) MarshalFromObject(s Ro
 	o.TunnelMonitor = s.TunnelMonitor
 	o.ZoneProtection = s.ZoneProtection
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiNetworkNetworkProfilesXml_11_0_2) UnmarshalToObject() (*RoleDeviceWebuiNetworkNetworkProfiles, error) {
@@ -6988,6 +7411,7 @@ func (o roleDeviceWebuiNetworkNetworkProfilesXml_11_0_2) UnmarshalToObject() (*R
 		TunnelMonitor:    o.TunnelMonitor,
 		ZoneProtection:   o.ZoneProtection,
 		Misc:             o.Misc,
+		MiscAttributes:   o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -6999,6 +7423,7 @@ func (o *roleDeviceWebuiNetworkRoutingXml_11_0_2) MarshalFromObject(s RoleDevice
 		o.RoutingProfiles = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiNetworkRoutingXml_11_0_2) UnmarshalToObject() (*RoleDeviceWebuiNetworkRouting, error) {
@@ -7015,6 +7440,7 @@ func (o roleDeviceWebuiNetworkRoutingXml_11_0_2) UnmarshalToObject() (*RoleDevic
 		LogicalRouters:  o.LogicalRouters,
 		RoutingProfiles: routingProfilesVal,
 		Misc:            o.Misc,
+		MiscAttributes:  o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7027,19 +7453,21 @@ func (o *roleDeviceWebuiNetworkRoutingRoutingProfilesXml_11_0_2) MarshalFromObje
 	o.Ospfv3 = s.Ospfv3
 	o.Ripv2 = s.Ripv2
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiNetworkRoutingRoutingProfilesXml_11_0_2) UnmarshalToObject() (*RoleDeviceWebuiNetworkRoutingRoutingProfiles, error) {
 
 	result := &RoleDeviceWebuiNetworkRoutingRoutingProfiles{
-		Bfd:       o.Bfd,
-		Bgp:       o.Bgp,
-		Filters:   o.Filters,
-		Multicast: o.Multicast,
-		Ospf:      o.Ospf,
-		Ospfv3:    o.Ospfv3,
-		Ripv2:     o.Ripv2,
-		Misc:      o.Misc,
+		Bfd:            o.Bfd,
+		Bgp:            o.Bgp,
+		Filters:        o.Filters,
+		Multicast:      o.Multicast,
+		Ospf:           o.Ospf,
+		Ospfv3:         o.Ospfv3,
+		Ripv2:          o.Ripv2,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7087,6 +7515,7 @@ func (o *roleDeviceWebuiObjectsXml_11_0_2) MarshalFromObject(s RoleDeviceWebuiOb
 	o.Services = s.Services
 	o.Tags = s.Tags
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiObjectsXml_11_0_2) UnmarshalToObject() (*RoleDeviceWebuiObjects, error) {
@@ -7155,6 +7584,7 @@ func (o roleDeviceWebuiObjectsXml_11_0_2) UnmarshalToObject() (*RoleDeviceWebuiO
 		Services:              o.Services,
 		Tags:                  o.Tags,
 		Misc:                  o.Misc,
+		MiscAttributes:        o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7164,22 +7594,25 @@ func (o *roleDeviceWebuiObjectsCustomObjectsXml_11_0_2) MarshalFromObject(s Role
 	o.UrlCategory = s.UrlCategory
 	o.Vulnerability = s.Vulnerability
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiObjectsCustomObjectsXml_11_0_2) UnmarshalToObject() (*RoleDeviceWebuiObjectsCustomObjects, error) {
 
 	result := &RoleDeviceWebuiObjectsCustomObjects{
-		DataPatterns:  o.DataPatterns,
-		Spyware:       o.Spyware,
-		UrlCategory:   o.UrlCategory,
-		Vulnerability: o.Vulnerability,
-		Misc:          o.Misc,
+		DataPatterns:   o.DataPatterns,
+		Spyware:        o.Spyware,
+		UrlCategory:    o.UrlCategory,
+		Vulnerability:  o.Vulnerability,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *roleDeviceWebuiObjectsDecryptionXml_11_0_2) MarshalFromObject(s RoleDeviceWebuiObjectsDecryption) {
 	o.DecryptionProfile = s.DecryptionProfile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiObjectsDecryptionXml_11_0_2) UnmarshalToObject() (*RoleDeviceWebuiObjectsDecryption, error) {
@@ -7187,6 +7620,7 @@ func (o roleDeviceWebuiObjectsDecryptionXml_11_0_2) UnmarshalToObject() (*RoleDe
 	result := &RoleDeviceWebuiObjectsDecryption{
 		DecryptionProfile: o.DecryptionProfile,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7194,14 +7628,16 @@ func (o *roleDeviceWebuiObjectsGlobalProtectXml_11_0_2) MarshalFromObject(s Role
 	o.HipObjects = s.HipObjects
 	o.HipProfiles = s.HipProfiles
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiObjectsGlobalProtectXml_11_0_2) UnmarshalToObject() (*RoleDeviceWebuiObjectsGlobalProtect, error) {
 
 	result := &RoleDeviceWebuiObjectsGlobalProtect{
-		HipObjects:  o.HipObjects,
-		HipProfiles: o.HipProfiles,
-		Misc:        o.Misc,
+		HipObjects:     o.HipObjects,
+		HipProfiles:    o.HipProfiles,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7211,6 +7647,7 @@ func (o *roleDeviceWebuiObjectsSdwanXml_11_0_2) MarshalFromObject(s RoleDeviceWe
 	o.SdwanProfile = s.SdwanProfile
 	o.SdwanSaasQualityProfile = s.SdwanSaasQualityProfile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiObjectsSdwanXml_11_0_2) UnmarshalToObject() (*RoleDeviceWebuiObjectsSdwan, error) {
@@ -7221,6 +7658,7 @@ func (o roleDeviceWebuiObjectsSdwanXml_11_0_2) UnmarshalToObject() (*RoleDeviceW
 		SdwanProfile:                o.SdwanProfile,
 		SdwanSaasQualityProfile:     o.SdwanSaasQualityProfile,
 		Misc:                        o.Misc,
+		MiscAttributes:              o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7236,6 +7674,7 @@ func (o *roleDeviceWebuiObjectsSecurityProfilesXml_11_0_2) MarshalFromObject(s R
 	o.VulnerabilityProtection = s.VulnerabilityProtection
 	o.WildfireAnalysis = s.WildfireAnalysis
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiObjectsSecurityProfilesXml_11_0_2) UnmarshalToObject() (*RoleDeviceWebuiObjectsSecurityProfiles, error) {
@@ -7252,6 +7691,7 @@ func (o roleDeviceWebuiObjectsSecurityProfilesXml_11_0_2) UnmarshalToObject() (*
 		VulnerabilityProtection: o.VulnerabilityProtection,
 		WildfireAnalysis:        o.WildfireAnalysis,
 		Misc:                    o.Misc,
+		MiscAttributes:          o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7262,6 +7702,7 @@ func (o *roleDeviceWebuiOperationsXml_11_0_2) MarshalFromObject(s RoleDeviceWebu
 	o.GenerateTechSupportFile = s.GenerateTechSupportFile
 	o.Reboot = s.Reboot
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiOperationsXml_11_0_2) UnmarshalToObject() (*RoleDeviceWebuiOperations, error) {
@@ -7273,6 +7714,7 @@ func (o roleDeviceWebuiOperationsXml_11_0_2) UnmarshalToObject() (*RoleDeviceWeb
 		GenerateTechSupportFile: o.GenerateTechSupportFile,
 		Reboot:                  o.Reboot,
 		Misc:                    o.Misc,
+		MiscAttributes:          o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7290,6 +7732,7 @@ func (o *roleDeviceWebuiPoliciesXml_11_0_2) MarshalFromObject(s RoleDeviceWebuiP
 	o.SslDecryptionRulebase = s.SslDecryptionRulebase
 	o.TunnelInspectRulebase = s.TunnelInspectRulebase
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiPoliciesXml_11_0_2) UnmarshalToObject() (*RoleDeviceWebuiPolicies, error) {
@@ -7308,6 +7751,7 @@ func (o roleDeviceWebuiPoliciesXml_11_0_2) UnmarshalToObject() (*RoleDeviceWebui
 		SslDecryptionRulebase:       o.SslDecryptionRulebase,
 		TunnelInspectRulebase:       o.TunnelInspectRulebase,
 		Misc:                        o.Misc,
+		MiscAttributes:              o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7316,6 +7760,7 @@ func (o *roleDeviceWebuiPrivacyXml_11_0_2) MarshalFromObject(s RoleDeviceWebuiPr
 	o.ShowUserNamesInLogsAndReports = s.ShowUserNamesInLogsAndReports
 	o.ViewPcapFiles = s.ViewPcapFiles
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiPrivacyXml_11_0_2) UnmarshalToObject() (*RoleDeviceWebuiPrivacy, error) {
@@ -7325,6 +7770,7 @@ func (o roleDeviceWebuiPrivacyXml_11_0_2) UnmarshalToObject() (*RoleDeviceWebuiP
 		ShowUserNamesInLogsAndReports: o.ShowUserNamesInLogsAndReports,
 		ViewPcapFiles:                 o.ViewPcapFiles,
 		Misc:                          o.Misc,
+		MiscAttributes:                o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7333,6 +7779,7 @@ func (o *roleDeviceWebuiSaveXml_11_0_2) MarshalFromObject(s RoleDeviceWebuiSave)
 	o.PartialSave = s.PartialSave
 	o.SaveForOtherAdmins = s.SaveForOtherAdmins
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceWebuiSaveXml_11_0_2) UnmarshalToObject() (*RoleDeviceWebuiSave, error) {
@@ -7342,6 +7789,7 @@ func (o roleDeviceWebuiSaveXml_11_0_2) UnmarshalToObject() (*RoleDeviceWebuiSave
 		PartialSave:        o.PartialSave,
 		SaveForOtherAdmins: o.SaveForOtherAdmins,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7356,21 +7804,23 @@ func (o *roleDeviceXmlapiXml_11_0_2) MarshalFromObject(s RoleDeviceXmlapi) {
 	o.Report = s.Report
 	o.UserId = s.UserId
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleDeviceXmlapiXml_11_0_2) UnmarshalToObject() (*RoleDeviceXmlapi, error) {
 
 	result := &RoleDeviceXmlapi{
-		Commit: o.Commit,
-		Config: o.Config,
-		Export: o.Export,
-		Import: o.Import,
-		Iot:    o.Iot,
-		Log:    o.Log,
-		Op:     o.Op,
-		Report: o.Report,
-		UserId: o.UserId,
-		Misc:   o.Misc,
+		Commit:         o.Commit,
+		Config:         o.Config,
+		Export:         o.Export,
+		Import:         o.Import,
+		Iot:            o.Iot,
+		Log:            o.Log,
+		Op:             o.Op,
+		Report:         o.Report,
+		UserId:         o.UserId,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7392,6 +7842,7 @@ func (o *roleVsysXml_11_0_2) MarshalFromObject(s RoleVsys) {
 		o.Xmlapi = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysXml_11_0_2) UnmarshalToObject() (*RoleVsys, error) {
@@ -7421,11 +7872,12 @@ func (o roleVsysXml_11_0_2) UnmarshalToObject() (*RoleVsys, error) {
 	}
 
 	result := &RoleVsys{
-		Cli:     o.Cli,
-		Restapi: restapiVal,
-		Webui:   webuiVal,
-		Xmlapi:  xmlapiVal,
-		Misc:    o.Misc,
+		Cli:            o.Cli,
+		Restapi:        restapiVal,
+		Webui:          webuiVal,
+		Xmlapi:         xmlapiVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7456,6 +7908,7 @@ func (o *roleVsysRestapiXml_11_0_2) MarshalFromObject(s RoleVsysRestapi) {
 		o.System = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysRestapiXml_11_0_2) UnmarshalToObject() (*RoleVsysRestapi, error) {
@@ -7501,12 +7954,13 @@ func (o roleVsysRestapiXml_11_0_2) UnmarshalToObject() (*RoleVsysRestapi, error)
 	}
 
 	result := &RoleVsysRestapi{
-		Device:   deviceVal,
-		Network:  networkVal,
-		Objects:  objectsVal,
-		Policies: policiesVal,
-		System:   systemVal,
-		Misc:     o.Misc,
+		Device:         deviceVal,
+		Network:        networkVal,
+		Objects:        objectsVal,
+		Policies:       policiesVal,
+		System:         systemVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7519,6 +7973,7 @@ func (o *roleVsysRestapiDeviceXml_11_0_2) MarshalFromObject(s RoleVsysRestapiDev
 	o.SyslogServerProfiles = s.SyslogServerProfiles
 	o.VirtualSystems = s.VirtualSystems
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysRestapiDeviceXml_11_0_2) UnmarshalToObject() (*RoleVsysRestapiDevice, error) {
@@ -7532,6 +7987,7 @@ func (o roleVsysRestapiDeviceXml_11_0_2) UnmarshalToObject() (*RoleVsysRestapiDe
 		SyslogServerProfiles:   o.SyslogServerProfiles,
 		VirtualSystems:         o.VirtualSystems,
 		Misc:                   o.Misc,
+		MiscAttributes:         o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7544,6 +8000,7 @@ func (o *roleVsysRestapiNetworkXml_11_0_2) MarshalFromObject(s RoleVsysRestapiNe
 	o.SdwanInterfaceProfiles = s.SdwanInterfaceProfiles
 	o.Zones = s.Zones
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysRestapiNetworkXml_11_0_2) UnmarshalToObject() (*RoleVsysRestapiNetwork, error) {
@@ -7557,6 +8014,7 @@ func (o roleVsysRestapiNetworkXml_11_0_2) UnmarshalToObject() (*RoleVsysRestapiN
 		SdwanInterfaceProfiles:           o.SdwanInterfaceProfiles,
 		Zones:                            o.Zones,
 		Misc:                             o.Misc,
+		MiscAttributes:                   o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7600,6 +8058,7 @@ func (o *roleVsysRestapiObjectsXml_11_0_2) MarshalFromObject(s RoleVsysRestapiOb
 	o.VulnerabilityProtectionSecurityProfiles = s.VulnerabilityProtectionSecurityProfiles
 	o.WildfireAnalysisSecurityProfiles = s.WildfireAnalysisSecurityProfiles
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysRestapiObjectsXml_11_0_2) UnmarshalToObject() (*RoleVsysRestapiObjects, error) {
@@ -7644,6 +8103,7 @@ func (o roleVsysRestapiObjectsXml_11_0_2) UnmarshalToObject() (*RoleVsysRestapiO
 		VulnerabilityProtectionSecurityProfiles: o.VulnerabilityProtectionSecurityProfiles,
 		WildfireAnalysisSecurityProfiles:        o.WildfireAnalysisSecurityProfiles,
 		Misc:                                    o.Misc,
+		MiscAttributes:                          o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7660,6 +8120,7 @@ func (o *roleVsysRestapiPoliciesXml_11_0_2) MarshalFromObject(s RoleVsysRestapiP
 	o.SecurityRules = s.SecurityRules
 	o.TunnelInspectionRules = s.TunnelInspectionRules
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysRestapiPoliciesXml_11_0_2) UnmarshalToObject() (*RoleVsysRestapiPolicies, error) {
@@ -7677,19 +8138,22 @@ func (o roleVsysRestapiPoliciesXml_11_0_2) UnmarshalToObject() (*RoleVsysRestapi
 		SecurityRules:              o.SecurityRules,
 		TunnelInspectionRules:      o.TunnelInspectionRules,
 		Misc:                       o.Misc,
+		MiscAttributes:             o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *roleVsysRestapiSystemXml_11_0_2) MarshalFromObject(s RoleVsysRestapiSystem) {
 	o.Configuration = s.Configuration
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysRestapiSystemXml_11_0_2) UnmarshalToObject() (*RoleVsysRestapiSystem, error) {
 
 	result := &RoleVsysRestapiSystem{
-		Configuration: o.Configuration,
-		Misc:          o.Misc,
+		Configuration:  o.Configuration,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7744,6 +8208,7 @@ func (o *roleVsysWebuiXml_11_0_2) MarshalFromObject(s RoleVsysWebui) {
 	o.Tasks = s.Tasks
 	o.Validate = s.Validate
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiXml_11_0_2) UnmarshalToObject() (*RoleVsysWebui, error) {
@@ -7821,20 +8286,21 @@ func (o roleVsysWebuiXml_11_0_2) UnmarshalToObject() (*RoleVsysWebui, error) {
 	}
 
 	result := &RoleVsysWebui{
-		Acc:        o.Acc,
-		Commit:     commitVal,
-		Dashboard:  o.Dashboard,
-		Device:     deviceVal,
-		Monitor:    monitorVal,
-		Network:    networkVal,
-		Objects:    objectsVal,
-		Operations: operationsVal,
-		Policies:   policiesVal,
-		Privacy:    privacyVal,
-		Save:       saveVal,
-		Tasks:      o.Tasks,
-		Validate:   o.Validate,
-		Misc:       o.Misc,
+		Acc:            o.Acc,
+		Commit:         commitVal,
+		Dashboard:      o.Dashboard,
+		Device:         deviceVal,
+		Monitor:        monitorVal,
+		Network:        networkVal,
+		Objects:        objectsVal,
+		Operations:     operationsVal,
+		Policies:       policiesVal,
+		Privacy:        privacyVal,
+		Save:           saveVal,
+		Tasks:          o.Tasks,
+		Validate:       o.Validate,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7842,6 +8308,7 @@ func (o *roleVsysWebuiCommitXml_11_0_2) MarshalFromObject(s RoleVsysWebuiCommit)
 	o.CommitForOtherAdmins = s.CommitForOtherAdmins
 	o.VirtualSystems = s.VirtualSystems
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiCommitXml_11_0_2) UnmarshalToObject() (*RoleVsysWebuiCommit, error) {
@@ -7850,6 +8317,7 @@ func (o roleVsysWebuiCommitXml_11_0_2) UnmarshalToObject() (*RoleVsysWebuiCommit
 		CommitForOtherAdmins: o.CommitForOtherAdmins,
 		VirtualSystems:       o.VirtualSystems,
 		Misc:                 o.Misc,
+		MiscAttributes:       o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7895,6 +8363,7 @@ func (o *roleVsysWebuiDeviceXml_11_0_2) MarshalFromObject(s RoleVsysWebuiDevice)
 	o.UserIdentification = s.UserIdentification
 	o.VmInfoSource = s.VmInfoSource
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiDeviceXml_11_0_2) UnmarshalToObject() (*RoleVsysWebuiDevice, error) {
@@ -7965,6 +8434,7 @@ func (o roleVsysWebuiDeviceXml_11_0_2) UnmarshalToObject() (*RoleVsysWebuiDevice
 		UserIdentification:     o.UserIdentification,
 		VmInfoSource:           o.VmInfoSource,
 		Misc:                   o.Misc,
+		MiscAttributes:         o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7977,6 +8447,7 @@ func (o *roleVsysWebuiDeviceCertificateManagementXml_11_0_2) MarshalFromObject(s
 	o.SslDecryptionExclusion = s.SslDecryptionExclusion
 	o.SslTlsServiceProfile = s.SslTlsServiceProfile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiDeviceCertificateManagementXml_11_0_2) UnmarshalToObject() (*RoleVsysWebuiDeviceCertificateManagement, error) {
@@ -7990,6 +8461,7 @@ func (o roleVsysWebuiDeviceCertificateManagementXml_11_0_2) UnmarshalToObject() 
 		SslDecryptionExclusion: o.SslDecryptionExclusion,
 		SslTlsServiceProfile:   o.SslTlsServiceProfile,
 		Misc:                   o.Misc,
+		MiscAttributes:         o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -7997,14 +8469,16 @@ func (o *roleVsysWebuiDeviceLocalUserDatabaseXml_11_0_2) MarshalFromObject(s Rol
 	o.UserGroups = s.UserGroups
 	o.Users = s.Users
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiDeviceLocalUserDatabaseXml_11_0_2) UnmarshalToObject() (*RoleVsysWebuiDeviceLocalUserDatabase, error) {
 
 	result := &RoleVsysWebuiDeviceLocalUserDatabase{
-		UserGroups: o.UserGroups,
-		Users:      o.Users,
-		Misc:       o.Misc,
+		UserGroups:     o.UserGroups,
+		Users:          o.Users,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8017,19 +8491,21 @@ func (o *roleVsysWebuiDeviceLogSettingsXml_11_0_2) MarshalFromObject(s RoleVsysW
 	o.System = s.System
 	o.UserId = s.UserId
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiDeviceLogSettingsXml_11_0_2) UnmarshalToObject() (*RoleVsysWebuiDeviceLogSettings, error) {
 
 	result := &RoleVsysWebuiDeviceLogSettings{
-		Config:        o.Config,
-		Correlation:   o.Correlation,
-		Globalprotect: o.Globalprotect,
-		Hipmatch:      o.Hipmatch,
-		Iptag:         o.Iptag,
-		System:        o.System,
-		UserId:        o.UserId,
-		Misc:          o.Misc,
+		Config:         o.Config,
+		Correlation:    o.Correlation,
+		Globalprotect:  o.Globalprotect,
+		Hipmatch:       o.Hipmatch,
+		Iptag:          o.Iptag,
+		System:         o.System,
+		UserId:         o.UserId,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8037,14 +8513,16 @@ func (o *roleVsysWebuiDevicePolicyRecommendationsXml_11_0_2) MarshalFromObject(s
 	o.Iot = s.Iot
 	o.Saas = s.Saas
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiDevicePolicyRecommendationsXml_11_0_2) UnmarshalToObject() (*RoleVsysWebuiDevicePolicyRecommendations, error) {
 
 	result := &RoleVsysWebuiDevicePolicyRecommendations{
-		Iot:  o.Iot,
-		Saas: o.Saas,
-		Misc: o.Misc,
+		Iot:            o.Iot,
+		Saas:           o.Saas,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8063,25 +8541,27 @@ func (o *roleVsysWebuiDeviceServerProfileXml_11_0_2) MarshalFromObject(s RoleVsy
 	o.Syslog = s.Syslog
 	o.Tacplus = s.Tacplus
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiDeviceServerProfileXml_11_0_2) UnmarshalToObject() (*RoleVsysWebuiDeviceServerProfile, error) {
 
 	result := &RoleVsysWebuiDeviceServerProfile{
-		Dns:      o.Dns,
-		Email:    o.Email,
-		Http:     o.Http,
-		Kerberos: o.Kerberos,
-		Ldap:     o.Ldap,
-		Mfa:      o.Mfa,
-		Netflow:  o.Netflow,
-		Radius:   o.Radius,
-		SamlIdp:  o.SamlIdp,
-		Scp:      o.Scp,
-		SnmpTrap: o.SnmpTrap,
-		Syslog:   o.Syslog,
-		Tacplus:  o.Tacplus,
-		Misc:     o.Misc,
+		Dns:            o.Dns,
+		Email:          o.Email,
+		Http:           o.Http,
+		Kerberos:       o.Kerberos,
+		Ldap:           o.Ldap,
+		Mfa:            o.Mfa,
+		Netflow:        o.Netflow,
+		Radius:         o.Radius,
+		SamlIdp:        o.SamlIdp,
+		Scp:            o.Scp,
+		SnmpTrap:       o.SnmpTrap,
+		Syslog:         o.Syslog,
+		Tacplus:        o.Tacplus,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8096,21 +8576,23 @@ func (o *roleVsysWebuiDeviceSetupXml_11_0_2) MarshalFromObject(s RoleVsysWebuiDe
 	o.Telemetry = s.Telemetry
 	o.Wildfire = s.Wildfire
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiDeviceSetupXml_11_0_2) UnmarshalToObject() (*RoleVsysWebuiDeviceSetup, error) {
 
 	result := &RoleVsysWebuiDeviceSetup{
-		ContentId:  o.ContentId,
-		Hsm:        o.Hsm,
-		Interfaces: o.Interfaces,
-		Management: o.Management,
-		Operations: o.Operations,
-		Services:   o.Services,
-		Session:    o.Session,
-		Telemetry:  o.Telemetry,
-		Wildfire:   o.Wildfire,
-		Misc:       o.Misc,
+		ContentId:      o.ContentId,
+		Hsm:            o.Hsm,
+		Interfaces:     o.Interfaces,
+		Management:     o.Management,
+		Operations:     o.Operations,
+		Services:       o.Services,
+		Session:        o.Session,
+		Telemetry:      o.Telemetry,
+		Wildfire:       o.Wildfire,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8141,6 +8623,7 @@ func (o *roleVsysWebuiMonitorXml_11_0_2) MarshalFromObject(s RoleVsysWebuiMonito
 	o.SessionBrowser = s.SessionBrowser
 	o.ViewCustomReports = s.ViewCustomReports
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiMonitorXml_11_0_2) UnmarshalToObject() (*RoleVsysWebuiMonitor, error) {
@@ -8188,6 +8671,7 @@ func (o roleVsysWebuiMonitorXml_11_0_2) UnmarshalToObject() (*RoleVsysWebuiMonit
 		SessionBrowser:             o.SessionBrowser,
 		ViewCustomReports:          o.ViewCustomReports,
 		Misc:                       o.Misc,
+		MiscAttributes:             o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8195,6 +8679,7 @@ func (o *roleVsysWebuiMonitorAutomatedCorrelationEngineXml_11_0_2) MarshalFromOb
 	o.CorrelatedEvents = s.CorrelatedEvents
 	o.CorrelationObjects = s.CorrelationObjects
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiMonitorAutomatedCorrelationEngineXml_11_0_2) UnmarshalToObject() (*RoleVsysWebuiMonitorAutomatedCorrelationEngine, error) {
@@ -8203,6 +8688,7 @@ func (o roleVsysWebuiMonitorAutomatedCorrelationEngineXml_11_0_2) UnmarshalToObj
 		CorrelatedEvents:   o.CorrelatedEvents,
 		CorrelationObjects: o.CorrelationObjects,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8230,6 +8716,7 @@ func (o *roleVsysWebuiMonitorCustomReportsXml_11_0_2) MarshalFromObject(s RoleVs
 	o.Userid = s.Userid
 	o.WildfireLog = s.WildfireLog
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiMonitorCustomReportsXml_11_0_2) UnmarshalToObject() (*RoleVsysWebuiMonitorCustomReports, error) {
@@ -8258,6 +8745,7 @@ func (o roleVsysWebuiMonitorCustomReportsXml_11_0_2) UnmarshalToObject() (*RoleV
 		Userid:                o.Userid,
 		WildfireLog:           o.WildfireLog,
 		Misc:                  o.Misc,
+		MiscAttributes:        o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8277,6 +8765,7 @@ func (o *roleVsysWebuiMonitorLogsXml_11_0_2) MarshalFromObject(s RoleVsysWebuiMo
 	o.Userid = s.Userid
 	o.Wildfire = s.Wildfire
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiMonitorLogsXml_11_0_2) UnmarshalToObject() (*RoleVsysWebuiMonitorLogs, error) {
@@ -8297,6 +8786,7 @@ func (o roleVsysWebuiMonitorLogsXml_11_0_2) UnmarshalToObject() (*RoleVsysWebuiM
 		Userid:         o.Userid,
 		Wildfire:       o.Wildfire,
 		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8308,6 +8798,7 @@ func (o *roleVsysWebuiMonitorPdfReportsXml_11_0_2) MarshalFromObject(s RoleVsysW
 	o.SaasApplicationUsageReport = s.SaasApplicationUsageReport
 	o.UserActivityReport = s.UserActivityReport
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiMonitorPdfReportsXml_11_0_2) UnmarshalToObject() (*RoleVsysWebuiMonitorPdfReports, error) {
@@ -8320,6 +8811,7 @@ func (o roleVsysWebuiMonitorPdfReportsXml_11_0_2) UnmarshalToObject() (*RoleVsys
 		SaasApplicationUsageReport: o.SaasApplicationUsageReport,
 		UserActivityReport:         o.UserActivityReport,
 		Misc:                       o.Misc,
+		MiscAttributes:             o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8332,6 +8824,7 @@ func (o *roleVsysWebuiNetworkXml_11_0_2) MarshalFromObject(s RoleVsysWebuiNetwor
 	o.SdwanInterfaceProfile = s.SdwanInterfaceProfile
 	o.Zones = s.Zones
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiNetworkXml_11_0_2) UnmarshalToObject() (*RoleVsysWebuiNetwork, error) {
@@ -8349,6 +8842,7 @@ func (o roleVsysWebuiNetworkXml_11_0_2) UnmarshalToObject() (*RoleVsysWebuiNetwo
 		SdwanInterfaceProfile: o.SdwanInterfaceProfile,
 		Zones:                 o.Zones,
 		Misc:                  o.Misc,
+		MiscAttributes:        o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8359,6 +8853,7 @@ func (o *roleVsysWebuiNetworkGlobalProtectXml_11_0_2) MarshalFromObject(s RoleVs
 	o.Mdm = s.Mdm
 	o.Portals = s.Portals
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiNetworkGlobalProtectXml_11_0_2) UnmarshalToObject() (*RoleVsysWebuiNetworkGlobalProtect, error) {
@@ -8370,6 +8865,7 @@ func (o roleVsysWebuiNetworkGlobalProtectXml_11_0_2) UnmarshalToObject() (*RoleV
 		Mdm:                 o.Mdm,
 		Portals:             o.Portals,
 		Misc:                o.Misc,
+		MiscAttributes:      o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8417,6 +8913,7 @@ func (o *roleVsysWebuiObjectsXml_11_0_2) MarshalFromObject(s RoleVsysWebuiObject
 	o.Services = s.Services
 	o.Tags = s.Tags
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiObjectsXml_11_0_2) UnmarshalToObject() (*RoleVsysWebuiObjects, error) {
@@ -8485,6 +8982,7 @@ func (o roleVsysWebuiObjectsXml_11_0_2) UnmarshalToObject() (*RoleVsysWebuiObjec
 		Services:              o.Services,
 		Tags:                  o.Tags,
 		Misc:                  o.Misc,
+		MiscAttributes:        o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8494,22 +8992,25 @@ func (o *roleVsysWebuiObjectsCustomObjectsXml_11_0_2) MarshalFromObject(s RoleVs
 	o.UrlCategory = s.UrlCategory
 	o.Vulnerability = s.Vulnerability
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiObjectsCustomObjectsXml_11_0_2) UnmarshalToObject() (*RoleVsysWebuiObjectsCustomObjects, error) {
 
 	result := &RoleVsysWebuiObjectsCustomObjects{
-		DataPatterns:  o.DataPatterns,
-		Spyware:       o.Spyware,
-		UrlCategory:   o.UrlCategory,
-		Vulnerability: o.Vulnerability,
-		Misc:          o.Misc,
+		DataPatterns:   o.DataPatterns,
+		Spyware:        o.Spyware,
+		UrlCategory:    o.UrlCategory,
+		Vulnerability:  o.Vulnerability,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *roleVsysWebuiObjectsDecryptionXml_11_0_2) MarshalFromObject(s RoleVsysWebuiObjectsDecryption) {
 	o.DecryptionProfile = s.DecryptionProfile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiObjectsDecryptionXml_11_0_2) UnmarshalToObject() (*RoleVsysWebuiObjectsDecryption, error) {
@@ -8517,6 +9018,7 @@ func (o roleVsysWebuiObjectsDecryptionXml_11_0_2) UnmarshalToObject() (*RoleVsys
 	result := &RoleVsysWebuiObjectsDecryption{
 		DecryptionProfile: o.DecryptionProfile,
 		Misc:              o.Misc,
+		MiscAttributes:    o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8524,14 +9026,16 @@ func (o *roleVsysWebuiObjectsGlobalProtectXml_11_0_2) MarshalFromObject(s RoleVs
 	o.HipObjects = s.HipObjects
 	o.HipProfiles = s.HipProfiles
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiObjectsGlobalProtectXml_11_0_2) UnmarshalToObject() (*RoleVsysWebuiObjectsGlobalProtect, error) {
 
 	result := &RoleVsysWebuiObjectsGlobalProtect{
-		HipObjects:  o.HipObjects,
-		HipProfiles: o.HipProfiles,
-		Misc:        o.Misc,
+		HipObjects:     o.HipObjects,
+		HipProfiles:    o.HipProfiles,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8541,6 +9045,7 @@ func (o *roleVsysWebuiObjectsSdwanXml_11_0_2) MarshalFromObject(s RoleVsysWebuiO
 	o.SdwanProfile = s.SdwanProfile
 	o.SdwanSaasQualityProfile = s.SdwanSaasQualityProfile
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiObjectsSdwanXml_11_0_2) UnmarshalToObject() (*RoleVsysWebuiObjectsSdwan, error) {
@@ -8551,6 +9056,7 @@ func (o roleVsysWebuiObjectsSdwanXml_11_0_2) UnmarshalToObject() (*RoleVsysWebui
 		SdwanProfile:                o.SdwanProfile,
 		SdwanSaasQualityProfile:     o.SdwanSaasQualityProfile,
 		Misc:                        o.Misc,
+		MiscAttributes:              o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8566,6 +9072,7 @@ func (o *roleVsysWebuiObjectsSecurityProfilesXml_11_0_2) MarshalFromObject(s Rol
 	o.VulnerabilityProtection = s.VulnerabilityProtection
 	o.WildfireAnalysis = s.WildfireAnalysis
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiObjectsSecurityProfilesXml_11_0_2) UnmarshalToObject() (*RoleVsysWebuiObjectsSecurityProfiles, error) {
@@ -8582,6 +9089,7 @@ func (o roleVsysWebuiObjectsSecurityProfilesXml_11_0_2) UnmarshalToObject() (*Ro
 		VulnerabilityProtection: o.VulnerabilityProtection,
 		WildfireAnalysis:        o.WildfireAnalysis,
 		Misc:                    o.Misc,
+		MiscAttributes:          o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8592,6 +9100,7 @@ func (o *roleVsysWebuiOperationsXml_11_0_2) MarshalFromObject(s RoleVsysWebuiOpe
 	o.GenerateTechSupportFile = s.GenerateTechSupportFile
 	o.Reboot = s.Reboot
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiOperationsXml_11_0_2) UnmarshalToObject() (*RoleVsysWebuiOperations, error) {
@@ -8603,6 +9112,7 @@ func (o roleVsysWebuiOperationsXml_11_0_2) UnmarshalToObject() (*RoleVsysWebuiOp
 		GenerateTechSupportFile: o.GenerateTechSupportFile,
 		Reboot:                  o.Reboot,
 		Misc:                    o.Misc,
+		MiscAttributes:          o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8620,6 +9130,7 @@ func (o *roleVsysWebuiPoliciesXml_11_0_2) MarshalFromObject(s RoleVsysWebuiPolic
 	o.SslDecryptionRulebase = s.SslDecryptionRulebase
 	o.TunnelInspectRulebase = s.TunnelInspectRulebase
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiPoliciesXml_11_0_2) UnmarshalToObject() (*RoleVsysWebuiPolicies, error) {
@@ -8638,6 +9149,7 @@ func (o roleVsysWebuiPoliciesXml_11_0_2) UnmarshalToObject() (*RoleVsysWebuiPoli
 		SslDecryptionRulebase:       o.SslDecryptionRulebase,
 		TunnelInspectRulebase:       o.TunnelInspectRulebase,
 		Misc:                        o.Misc,
+		MiscAttributes:              o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8646,6 +9158,7 @@ func (o *roleVsysWebuiPrivacyXml_11_0_2) MarshalFromObject(s RoleVsysWebuiPrivac
 	o.ShowUserNamesInLogsAndReports = s.ShowUserNamesInLogsAndReports
 	o.ViewPcapFiles = s.ViewPcapFiles
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiPrivacyXml_11_0_2) UnmarshalToObject() (*RoleVsysWebuiPrivacy, error) {
@@ -8655,6 +9168,7 @@ func (o roleVsysWebuiPrivacyXml_11_0_2) UnmarshalToObject() (*RoleVsysWebuiPriva
 		ShowUserNamesInLogsAndReports: o.ShowUserNamesInLogsAndReports,
 		ViewPcapFiles:                 o.ViewPcapFiles,
 		Misc:                          o.Misc,
+		MiscAttributes:                o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8663,6 +9177,7 @@ func (o *roleVsysWebuiSaveXml_11_0_2) MarshalFromObject(s RoleVsysWebuiSave) {
 	o.PartialSave = s.PartialSave
 	o.SaveForOtherAdmins = s.SaveForOtherAdmins
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysWebuiSaveXml_11_0_2) UnmarshalToObject() (*RoleVsysWebuiSave, error) {
@@ -8672,6 +9187,7 @@ func (o roleVsysWebuiSaveXml_11_0_2) UnmarshalToObject() (*RoleVsysWebuiSave, er
 		PartialSave:        o.PartialSave,
 		SaveForOtherAdmins: o.SaveForOtherAdmins,
 		Misc:               o.Misc,
+		MiscAttributes:     o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -8686,21 +9202,23 @@ func (o *roleVsysXmlapiXml_11_0_2) MarshalFromObject(s RoleVsysXmlapi) {
 	o.Report = s.Report
 	o.UserId = s.UserId
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o roleVsysXmlapiXml_11_0_2) UnmarshalToObject() (*RoleVsysXmlapi, error) {
 
 	result := &RoleVsysXmlapi{
-		Commit: o.Commit,
-		Config: o.Config,
-		Export: o.Export,
-		Import: o.Import,
-		Iot:    o.Iot,
-		Log:    o.Log,
-		Op:     o.Op,
-		Report: o.Report,
-		UserId: o.UserId,
-		Misc:   o.Misc,
+		Commit:         o.Commit,
+		Config:         o.Config,
+		Export:         o.Export,
+		Import:         o.Import,
+		Iot:            o.Iot,
+		Log:            o.Log,
+		Op:             o.Op,
+		Report:         o.Report,
+		UserId:         o.UserId,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -11599,4 +12117,12 @@ func (o *Entry) EntryName() string {
 
 func (o *Entry) SetEntryName(name string) {
 	o.Name = name
+}
+
+func (o *Entry) GetMiscAttributes() []xml.Attr {
+	return o.MiscAttributes
+}
+
+func (o *Entry) SetMiscAttributes(attrs []xml.Attr) {
+	o.MiscAttributes = attrs
 }

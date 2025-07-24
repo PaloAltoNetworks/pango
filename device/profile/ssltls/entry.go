@@ -23,6 +23,7 @@ type Entry struct {
 	Certificate      *string
 	ProtocolSettings *ProtocolSettings
 	Misc             []generic.Xml
+	MiscAttributes   []xml.Attr
 }
 type ProtocolSettings struct {
 	AllowAlgorithm3des        *bool
@@ -40,6 +41,7 @@ type ProtocolSettings struct {
 	MaxVersion                *string
 	MinVersion                *string
 	Misc                      []generic.Xml
+	MiscAttributes            []xml.Attr
 }
 
 type entryXmlContainer struct {
@@ -71,6 +73,7 @@ type entryXml struct {
 	Certificate      *string              `xml:"certificate,omitempty"`
 	ProtocolSettings *protocolSettingsXml `xml:"protocol-settings,omitempty"`
 	Misc             []generic.Xml        `xml:",any"`
+	MiscAttributes   []xml.Attr           `xml:",any,attr"`
 }
 type protocolSettingsXml struct {
 	AllowAlgorithm3des        *string       `xml:"enc-algo-3des,omitempty"`
@@ -88,6 +91,7 @@ type protocolSettingsXml struct {
 	MaxVersion                *string       `xml:"max-version,omitempty"`
 	MinVersion                *string       `xml:"min-version,omitempty"`
 	Misc                      []generic.Xml `xml:",any"`
+	MiscAttributes            []xml.Attr    `xml:",any,attr"`
 }
 
 func (o *entryXml) MarshalFromObject(s Entry) {
@@ -99,6 +103,7 @@ func (o *entryXml) MarshalFromObject(s Entry) {
 		o.ProtocolSettings = &obj
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o entryXml) UnmarshalToObject() (*Entry, error) {
@@ -116,6 +121,7 @@ func (o entryXml) UnmarshalToObject() (*Entry, error) {
 		Certificate:      o.Certificate,
 		ProtocolSettings: protocolSettingsVal,
 		Misc:             o.Misc,
+		MiscAttributes:   o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -135,6 +141,7 @@ func (o *protocolSettingsXml) MarshalFromObject(s ProtocolSettings) {
 	o.MaxVersion = s.MaxVersion
 	o.MinVersion = s.MinVersion
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o protocolSettingsXml) UnmarshalToObject() (*ProtocolSettings, error) {
@@ -155,6 +162,7 @@ func (o protocolSettingsXml) UnmarshalToObject() (*ProtocolSettings, error) {
 		MaxVersion:                o.MaxVersion,
 		MinVersion:                o.MinVersion,
 		Misc:                      o.Misc,
+		MiscAttributes:            o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -267,4 +275,12 @@ func (o *Entry) EntryName() string {
 
 func (o *Entry) SetEntryName(name string) {
 	o.Name = name
+}
+
+func (o *Entry) GetMiscAttributes() []xml.Attr {
+	return o.MiscAttributes
+}
+
+func (o *Entry) SetMiscAttributes(attrs []xml.Attr) {
+	o.MiscAttributes = attrs
 }

@@ -24,14 +24,16 @@ type Entry struct {
 	DisableOverride *string
 	Rules           []Rules
 	Misc            []generic.Xml
+	MiscAttributes  []xml.Attr
 }
 type Rules struct {
-	Name        string
-	Application []string
-	FileType    []string
-	Direction   *string
-	Action      *string
-	Misc        []generic.Xml
+	Name           string
+	Application    []string
+	FileType       []string
+	Direction      *string
+	Action         *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 
 type entryXmlContainer struct {
@@ -64,18 +66,20 @@ type entryXml struct {
 	DisableOverride *string            `xml:"disable-override,omitempty"`
 	Rules           *rulesContainerXml `xml:"rules,omitempty"`
 	Misc            []generic.Xml      `xml:",any"`
+	MiscAttributes  []xml.Attr         `xml:",any,attr"`
 }
 type rulesContainerXml struct {
 	Entries []rulesXml `xml:"entry"`
 }
 type rulesXml struct {
-	XMLName     xml.Name         `xml:"entry"`
-	Name        string           `xml:"name,attr"`
-	Application *util.MemberType `xml:"application,omitempty"`
-	FileType    *util.MemberType `xml:"file-type,omitempty"`
-	Direction   *string          `xml:"direction,omitempty"`
-	Action      *string          `xml:"action,omitempty"`
-	Misc        []generic.Xml    `xml:",any"`
+	XMLName        xml.Name         `xml:"entry"`
+	Name           string           `xml:"name,attr"`
+	Application    *util.MemberType `xml:"application,omitempty"`
+	FileType       *util.MemberType `xml:"file-type,omitempty"`
+	Direction      *string          `xml:"direction,omitempty"`
+	Action         *string          `xml:"action,omitempty"`
+	Misc           []generic.Xml    `xml:",any"`
+	MiscAttributes []xml.Attr       `xml:",any,attr"`
 }
 
 func (o *entryXml) MarshalFromObject(s Entry) {
@@ -92,6 +96,7 @@ func (o *entryXml) MarshalFromObject(s Entry) {
 		o.Rules = &rulesContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o entryXml) UnmarshalToObject() (*Entry, error) {
@@ -112,6 +117,7 @@ func (o entryXml) UnmarshalToObject() (*Entry, error) {
 		DisableOverride: o.DisableOverride,
 		Rules:           rulesVal,
 		Misc:            o.Misc,
+		MiscAttributes:  o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -126,6 +132,7 @@ func (o *rulesXml) MarshalFromObject(s Rules) {
 	o.Direction = s.Direction
 	o.Action = s.Action
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o rulesXml) UnmarshalToObject() (*Rules, error) {
@@ -139,12 +146,13 @@ func (o rulesXml) UnmarshalToObject() (*Rules, error) {
 	}
 
 	result := &Rules{
-		Name:        o.Name,
-		Application: applicationVal,
-		FileType:    fileTypeVal,
-		Direction:   o.Direction,
-		Action:      o.Action,
-		Misc:        o.Misc,
+		Name:           o.Name,
+		Application:    applicationVal,
+		FileType:       fileTypeVal,
+		Direction:      o.Direction,
+		Action:         o.Action,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -244,4 +252,12 @@ func (o *Entry) EntryName() string {
 
 func (o *Entry) SetEntryName(name string) {
 	o.Name = name
+}
+
+func (o *Entry) GetMiscAttributes() []xml.Attr {
+	return o.MiscAttributes
+}
+
+func (o *Entry) SetMiscAttributes(attrs []xml.Attr) {
+	o.MiscAttributes = attrs
 }

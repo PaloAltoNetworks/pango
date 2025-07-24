@@ -23,6 +23,7 @@ type Entry struct {
 	DisableOverride *string
 	Members         []string
 	Misc            []generic.Xml
+	MiscAttributes  []xml.Attr
 }
 
 type entryXmlContainer struct {
@@ -54,6 +55,7 @@ type entryXml struct {
 	DisableOverride *string          `xml:"disable-override,omitempty"`
 	Members         *util.MemberType `xml:"members,omitempty"`
 	Misc            []generic.Xml    `xml:",any"`
+	MiscAttributes  []xml.Attr       `xml:",any,attr"`
 }
 
 func (o *entryXml) MarshalFromObject(s Entry) {
@@ -63,6 +65,7 @@ func (o *entryXml) MarshalFromObject(s Entry) {
 		o.Members = util.StrToMem(s.Members)
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o entryXml) UnmarshalToObject() (*Entry, error) {
@@ -76,6 +79,7 @@ func (o entryXml) UnmarshalToObject() (*Entry, error) {
 		DisableOverride: o.DisableOverride,
 		Members:         membersVal,
 		Misc:            o.Misc,
+		MiscAttributes:  o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -137,4 +141,12 @@ func (o *Entry) EntryName() string {
 
 func (o *Entry) SetEntryName(name string) {
 	o.Name = name
+}
+
+func (o *Entry) GetMiscAttributes() []xml.Attr {
+	return o.MiscAttributes
+}
+
+func (o *Entry) SetMiscAttributes(attrs []xml.Attr) {
+	o.MiscAttributes = attrs
 }

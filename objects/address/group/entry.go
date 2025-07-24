@@ -26,10 +26,12 @@ type Entry struct {
 	Dynamic         *Dynamic
 	Static          []string
 	Misc            []generic.Xml
+	MiscAttributes  []xml.Attr
 }
 type Dynamic struct {
-	Filter *string
-	Misc   []generic.Xml
+	Filter         *string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 
 type entryXmlContainer struct {
@@ -64,10 +66,12 @@ type entryXml struct {
 	Dynamic         *dynamicXml      `xml:"dynamic,omitempty"`
 	Static          *util.MemberType `xml:"static,omitempty"`
 	Misc            []generic.Xml    `xml:",any"`
+	MiscAttributes  []xml.Attr       `xml:",any,attr"`
 }
 type dynamicXml struct {
-	Filter *string       `xml:"filter,omitempty"`
-	Misc   []generic.Xml `xml:",any"`
+	Filter         *string       `xml:"filter,omitempty"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 
 func (o *entryXml) MarshalFromObject(s Entry) {
@@ -86,6 +90,7 @@ func (o *entryXml) MarshalFromObject(s Entry) {
 		o.Static = util.StrToMem(s.Static)
 	}
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o entryXml) UnmarshalToObject() (*Entry, error) {
@@ -114,19 +119,22 @@ func (o entryXml) UnmarshalToObject() (*Entry, error) {
 		Dynamic:         dynamicVal,
 		Static:          staticVal,
 		Misc:            o.Misc,
+		MiscAttributes:  o.MiscAttributes,
 	}
 	return result, nil
 }
 func (o *dynamicXml) MarshalFromObject(s Dynamic) {
 	o.Filter = s.Filter
 	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o dynamicXml) UnmarshalToObject() (*Dynamic, error) {
 
 	result := &Dynamic{
-		Filter: o.Filter,
-		Misc:   o.Misc,
+		Filter:         o.Filter,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -221,4 +229,12 @@ func (o *Entry) EntryName() string {
 
 func (o *Entry) SetEntryName(name string) {
 	o.Name = name
+}
+
+func (o *Entry) GetMiscAttributes() []xml.Attr {
+	return o.MiscAttributes
+}
+
+func (o *Entry) SetMiscAttributes(attrs []xml.Attr) {
+	o.MiscAttributes = attrs
 }
