@@ -15,7 +15,7 @@ var (
 )
 
 var (
-	suffix = []string{"certificate", "$name"}
+	suffix = []string{"certificate-profile", "$name"}
 )
 
 type Entry struct {

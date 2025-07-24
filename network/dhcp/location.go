@@ -1,4 +1,4 @@
-package logical_router
+package dhcp
 
 import (
 	"fmt"
@@ -16,16 +16,11 @@ type ImportLocation interface {
 }
 
 type Location struct {
-	Vsys          *VsysLocation          `json:"vsys,omitempty"`
 	Template      *TemplateLocation      `json:"template,omitempty"`
 	TemplateStack *TemplateStackLocation `json:"template_stack,omitempty"`
 	Ngfw          *NgfwLocation          `json:"ngfw,omitempty"`
 }
 
-type VsysLocation struct {
-	NgfwDevice string `json:"ngfw_device"`
-	Vsys       string `json:"vsys"`
-}
 type TemplateLocation struct {
 	NgfwDevice     string `json:"ngfw_device"`
 	PanoramaDevice string `json:"panorama_device"`
@@ -40,13 +35,6 @@ type NgfwLocation struct {
 	NgfwDevice string `json:"ngfw_device"`
 }
 
-func NewVsysLocation() *Location {
-	return &Location{Vsys: &VsysLocation{
-		NgfwDevice: "localhost.localdomain",
-		Vsys:       "vsys1",
-	},
-	}
-}
 func NewTemplateLocation() *Location {
 	return &Location{Template: &TemplateLocation{
 		NgfwDevice:     "localhost.localdomain",
@@ -74,14 +62,6 @@ func (o Location) IsValid() error {
 	count := 0
 
 	switch {
-	case o.Vsys != nil:
-		if o.Vsys.NgfwDevice == "" {
-			return fmt.Errorf("NgfwDevice is unspecified")
-		}
-		if o.Vsys.Vsys == "" {
-			return fmt.Errorf("Vsys is unspecified")
-		}
-		count++
 	case o.Template != nil:
 		if o.Template.NgfwDevice == "" {
 			return fmt.Errorf("NgfwDevice is unspecified")
@@ -127,20 +107,6 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 	var ans []string
 
 	switch {
-	case o.Vsys != nil:
-		if o.Vsys.NgfwDevice == "" {
-			return nil, fmt.Errorf("NgfwDevice is unspecified")
-		}
-		if o.Vsys.Vsys == "" {
-			return nil, fmt.Errorf("Vsys is unspecified")
-		}
-		ans = []string{
-			"config",
-			"devices",
-			util.AsEntryXpath(o.Vsys.NgfwDevice),
-			"vsys",
-			util.AsEntryXpath(o.Vsys.Vsys),
-		}
 	case o.Template != nil:
 		if o.Template.NgfwDevice == "" {
 			return nil, fmt.Errorf("NgfwDevice is unspecified")
@@ -221,7 +187,8 @@ func (o Location) XpathWithComponents(vn version.Number, components ...string) (
 	}
 
 	ans = append(ans, "network")
-	ans = append(ans, "logical-router")
+	ans = append(ans, "dhcp")
+	ans = append(ans, "interface")
 	ans = append(ans, components[0])
 
 	return ans, nil

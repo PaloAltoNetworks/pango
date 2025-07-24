@@ -17,14 +17,16 @@ type ImportLocation interface {
 
 type Location struct {
 	Panorama          *PanoramaLocation          `json:"panorama"`
+	Shared            *SharedLocation            `json:"shared"`
 	Template          *TemplateLocation          `json:"template,omitempty"`
 	TemplateVsys      *TemplateVsysLocation      `json:"template_vsys,omitempty"`
 	TemplateStack     *TemplateStackLocation     `json:"template_stack,omitempty"`
 	TemplateStackVsys *TemplateStackVsysLocation `json:"template_stack_vsys,omitempty"`
-	Shared            *SharedLocation            `json:"shared"`
 }
 
 type PanoramaLocation struct {
+}
+type SharedLocation struct {
 }
 type TemplateLocation struct {
 	PanoramaDevice string `json:"panorama_device"`
@@ -46,11 +48,13 @@ type TemplateStackVsysLocation struct {
 	TemplateStack  string `json:"template_stack"`
 	Vsys           string `json:"vsys"`
 }
-type SharedLocation struct {
-}
 
 func NewPanoramaLocation() *Location {
 	return &Location{Panorama: &PanoramaLocation{},
+	}
+}
+func NewSharedLocation() *Location {
+	return &Location{Shared: &SharedLocation{},
 	}
 }
 func NewTemplateLocation() *Location {
@@ -85,16 +89,14 @@ func NewTemplateStackVsysLocation() *Location {
 	},
 	}
 }
-func NewSharedLocation() *Location {
-	return &Location{Shared: &SharedLocation{},
-	}
-}
 
 func (o Location) IsValid() error {
 	count := 0
 
 	switch {
 	case o.Panorama != nil:
+		count++
+	case o.Shared != nil:
 		count++
 	case o.Template != nil:
 		if o.Template.PanoramaDevice == "" {
@@ -140,8 +142,6 @@ func (o Location) IsValid() error {
 			return fmt.Errorf("Vsys is unspecified")
 		}
 		count++
-	case o.Shared != nil:
-		count++
 	}
 
 	if count == 0 {
@@ -164,6 +164,11 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 		ans = []string{
 			"config",
 			"panorama",
+		}
+	case o.Shared != nil:
+		ans = []string{
+			"config",
+			"shared",
 		}
 	case o.Template != nil:
 		if o.Template.PanoramaDevice == "" {
@@ -247,11 +252,6 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 			"vsys",
 			util.AsEntryXpath(o.TemplateStackVsys.Vsys),
 		}
-	case o.Shared != nil:
-		ans = []string{
-			"config",
-			"shared",
-		}
 	default:
 		return nil, errors.NoLocationSpecifiedError
 	}
@@ -282,7 +282,7 @@ func (o Location) XpathWithComponents(vn version.Number, components ...string) (
 		return nil, err
 	}
 
-	ans = append(ans, "certificate")
+	ans = append(ans, "certificate-profile")
 	ans = append(ans, components[0])
 
 	return ans, nil
