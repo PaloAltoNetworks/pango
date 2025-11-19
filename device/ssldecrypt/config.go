@@ -30,7 +30,7 @@ type SslExcludeCert struct {
 
 type configXmlContainer struct {
 	XMLName xml.Name    `xml:"result"`
-	Answer  []configXml `xml:"system"`
+	Answer  []configXml `xml:"ssl-decrypt"`
 }
 
 func (o *configXmlContainer) Normalize() ([]*Config, error) {
@@ -53,7 +53,7 @@ func specifyConfig(source *Config) (any, error) {
 }
 
 type configXml struct {
-	XMLName                              xml.Name                    `xml:"system"`
+	XMLName                              xml.Name                    `xml:"ssl-decrypt"`
 	DisabledSslExcludeCertFromPredefined *util.MemberType            `xml:"disabled-ssl-exclude-cert-from-predefined,omitempty"`
 	ForwardTrustCertificateEcdsa         *string                     `xml:"forward-trust-certificate>ecdsa,omitempty"`
 	ForwardTrustCertificateRsa           *string                     `xml:"forward-trust-certificate>rsa,omitempty"`

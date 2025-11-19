@@ -1,4 +1,4 @@
-package ssltls
+package authprofile
 
 import (
 	"fmt"
@@ -16,17 +16,19 @@ type ImportLocation interface {
 }
 
 type Location struct {
-	Shared            *SharedLocation            `json:"shared"`
 	Panorama          *PanoramaLocation          `json:"panorama"`
+	Vsys              *VsysLocation              `json:"vsys,omitempty"`
 	Template          *TemplateLocation          `json:"template,omitempty"`
 	TemplateVsys      *TemplateVsysLocation      `json:"template_vsys,omitempty"`
 	TemplateStack     *TemplateStackLocation     `json:"template_stack,omitempty"`
 	TemplateStackVsys *TemplateStackVsysLocation `json:"template_stack_vsys,omitempty"`
 }
 
-type SharedLocation struct {
-}
 type PanoramaLocation struct {
+}
+type VsysLocation struct {
+	NgfwDevice string `json:"ngfw_device"`
+	Vsys       string `json:"vsys"`
 }
 type TemplateLocation struct {
 	PanoramaDevice string `json:"panorama_device"`
@@ -49,12 +51,15 @@ type TemplateStackVsysLocation struct {
 	Vsys           string `json:"vsys"`
 }
 
-func NewSharedLocation() *Location {
-	return &Location{Shared: &SharedLocation{},
-	}
-}
 func NewPanoramaLocation() *Location {
 	return &Location{Panorama: &PanoramaLocation{},
+	}
+}
+func NewVsysLocation() *Location {
+	return &Location{Vsys: &VsysLocation{
+		NgfwDevice: "localhost.localdomain",
+		Vsys:       "vsys1",
+	},
 	}
 }
 func NewTemplateLocation() *Location {
@@ -94,9 +99,15 @@ func (o Location) IsValid() error {
 	count := 0
 
 	switch {
-	case o.Shared != nil:
-		count++
 	case o.Panorama != nil:
+		count++
+	case o.Vsys != nil:
+		if o.Vsys.NgfwDevice == "" {
+			return fmt.Errorf("NgfwDevice is unspecified")
+		}
+		if o.Vsys.Vsys == "" {
+			return fmt.Errorf("Vsys is unspecified")
+		}
 		count++
 	case o.Template != nil:
 		if o.Template.PanoramaDevice == "" {
@@ -165,15 +176,24 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 	var ans []string
 
 	switch {
-	case o.Shared != nil:
-		ans = []string{
-			"config",
-			"shared",
-		}
 	case o.Panorama != nil:
 		ans = []string{
 			"config",
 			"panorama",
+		}
+	case o.Vsys != nil:
+		if o.Vsys.NgfwDevice == "" {
+			return nil, fmt.Errorf("NgfwDevice is unspecified")
+		}
+		if o.Vsys.Vsys == "" {
+			return nil, fmt.Errorf("Vsys is unspecified")
+		}
+		ans = []string{
+			"config",
+			"devices",
+			util.AsEntryXpath(o.Vsys.NgfwDevice),
+			"vsys",
+			util.AsEntryXpath(o.Vsys.Vsys),
 		}
 	case o.Template != nil:
 		if o.Template.PanoramaDevice == "" {
@@ -287,7 +307,7 @@ func (o Location) XpathWithComponents(vn version.Number, components ...string) (
 		return nil, err
 	}
 
-	ans = append(ans, "ssl-tls-service-profile")
+	ans = append(ans, "authentication-profile")
 	ans = append(ans, components[0])
 
 	return ans, nil

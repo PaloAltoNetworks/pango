@@ -273,5 +273,7 @@ func (o Location) XpathWithComponents(vn version.Number, components ...string) (
 		return nil, err
 	}
 
+	ans = append(ans, "ssl-decrypt")
+
 	return ans, nil
 }

@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"crypto/tls"
+	"encoding/base64"
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
@@ -44,6 +45,7 @@ type Client struct {
 	Protocol        string            `json:"protocol"`
 	Port            int               `json:"port"`
 	Target          string            `json:"target"`
+	UseCredentials  *bool             `json:"use_credentials"`
 	ApiKeyInRequest bool              `json:"api_key_in_request"`
 	Headers         map[string]string `json:"headers"`
 	Logging         LoggingInfo       `json:"logging"`
@@ -190,6 +192,24 @@ func (c *Client) Setup() error {
 		}
 	}
 
+	if val := os.Getenv("PANOS_API_KEY_IN_REQUEST"); c.CheckEnvironment && val != "" {
+		if val == "true" || val == "TRUE" || val == "t" || val == "1" {
+			c.ApiKeyInRequest = true
+		}
+	}
+	// Whether to use Basic Auth credentials instead of API key
+	if c.UseCredentials == nil {
+		if val := os.Getenv("PANOS_USE_CREDENTIALS"); c.CheckEnvironment && val != "" {
+			var useCredentials bool
+			if val == "true" || val == "TRUE" || val == "t" || val == "1" {
+				useCredentials = true
+			} else {
+				useCredentials = false
+			}
+			c.UseCredentials = &useCredentials
+		}
+	}
+
 	// Protocol.
 	if c.Protocol == "" {
 		if val := os.Getenv("PANOS_PROTOCOL"); c.CheckEnvironment && val != "" {
@@ -294,6 +314,14 @@ func (c *Client) Setup() error {
 	return nil
 }
 
+func (c *Client) shouldUseCredentials() bool {
+	if c.UseCredentials == nil || !*c.UseCredentials {
+		return false
+	}
+
+	return true
+}
+
 // SetupLocalInspection configures the client for local inspection.
 //
 // The version number is taken from the schema if it's present.  If it is not
@@ -323,7 +351,7 @@ func (c *Client) SetupLocalInspection(schema, panosVersion string) error {
 func (c *Client) Initialize(ctx context.Context) error {
 	var err error
 
-	if c.ApiKey == "" {
+	if !c.shouldUseCredentials() && c.ApiKey == "" {
 		if err = c.RetrieveApiKey(ctx); err != nil {
 			return err
 		}
@@ -954,7 +982,7 @@ func (c *Client) Communicate(ctx context.Context, cmd util.PangoCommand, strip b
 		return nil, nil, err
 	}
 
-	if c.ApiKeyInRequest && c.ApiKey != "" && data.Get("key") == "" {
+	if !c.shouldUseCredentials() && c.ApiKeyInRequest && c.ApiKey != "" && data.Get("key") == "" {
 		data.Set("key", c.ApiKey)
 	}
 
@@ -981,7 +1009,7 @@ func (c *Client) ImportFile(ctx context.Context, cmd *xmlapi.Import, content []b
 		return nil, nil, err
 	}
 
-	if c.ApiKeyInRequest && c.ApiKey != "" && data.Get("key") == "" {
+	if !c.shouldUseCredentials() && c.ApiKeyInRequest && c.ApiKey != "" && data.Get("key") == "" {
 		data.Set("key", c.ApiKey)
 	}
 
@@ -1029,7 +1057,7 @@ func (c *Client) ExportFile(ctx context.Context, cmd *xmlapi.Export, ans any) (s
 		return "", nil, nil, err
 	}
 
-	if c.ApiKeyInRequest && c.ApiKey != "" && data.Get("key") == "" {
+	if !c.shouldUseCredentials() && c.ApiKeyInRequest && c.ApiKey != "" && data.Get("key") == "" {
 		data.Set("key", c.ApiKey)
 	}
 
@@ -1169,8 +1197,12 @@ func (c *Client) setupLogging(logging LoggingInfo) error {
 }
 
 func (c *Client) sendRequest(ctx context.Context, req *http.Request, strip bool, ans any) ([]byte, *http.Response, error) {
-	// Optional: set the API key in the header.
-	if !c.ApiKeyInRequest && c.ApiKey != "" {
+	// Optionally, set Authorization or X-PAN-KEY headers based on authentication type
+	if c.shouldUseCredentials() && c.Username != "" && c.Password != "" {
+		data := fmt.Sprintf("%s:%s", c.Username, c.Password)
+		value := base64.StdEncoding.EncodeToString([]byte(data))
+		req.Header.Set("Authorization", fmt.Sprintf("Basic %s", value))
+	} else if !c.ApiKeyInRequest && c.ApiKey != "" {
 		req.Header.Set("X-PAN-KEY", c.ApiKey)
 	}
 

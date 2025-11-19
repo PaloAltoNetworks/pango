@@ -1,4 +1,4 @@
-package ssltls
+package hipmatch
 
 import (
 	"fmt"
@@ -16,7 +16,6 @@ type ImportLocation interface {
 }
 
 type Location struct {
-	Shared            *SharedLocation            `json:"shared"`
 	Panorama          *PanoramaLocation          `json:"panorama"`
 	Template          *TemplateLocation          `json:"template,omitempty"`
 	TemplateVsys      *TemplateVsysLocation      `json:"template_vsys,omitempty"`
@@ -24,8 +23,6 @@ type Location struct {
 	TemplateStackVsys *TemplateStackVsysLocation `json:"template_stack_vsys,omitempty"`
 }
 
-type SharedLocation struct {
-}
 type PanoramaLocation struct {
 }
 type TemplateLocation struct {
@@ -49,10 +46,6 @@ type TemplateStackVsysLocation struct {
 	Vsys           string `json:"vsys"`
 }
 
-func NewSharedLocation() *Location {
-	return &Location{Shared: &SharedLocation{},
-	}
-}
 func NewPanoramaLocation() *Location {
 	return &Location{Panorama: &PanoramaLocation{},
 	}
@@ -94,8 +87,6 @@ func (o Location) IsValid() error {
 	count := 0
 
 	switch {
-	case o.Shared != nil:
-		count++
 	case o.Panorama != nil:
 		count++
 	case o.Template != nil:
@@ -165,11 +156,6 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 	var ans []string
 
 	switch {
-	case o.Shared != nil:
-		ans = []string{
-			"config",
-			"shared",
-		}
 	case o.Panorama != nil:
 		ans = []string{
 			"config",
@@ -287,7 +273,9 @@ func (o Location) XpathWithComponents(vn version.Number, components ...string) (
 		return nil, err
 	}
 
-	ans = append(ans, "ssl-tls-service-profile")
+	ans = append(ans, "log-settings")
+	ans = append(ans, "hipmatch")
+	ans = append(ans, "match-list")
 	ans = append(ans, components[0])
 
 	return ans, nil
