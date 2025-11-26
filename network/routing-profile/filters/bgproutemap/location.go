@@ -1,4 +1,4 @@
-package ipsec
+package bgproutemap
 
 import (
 	"fmt"
@@ -192,8 +192,11 @@ func (o Location) XpathWithComponents(vn version.Number, components ...string) (
 	}
 
 	ans = append(ans, "network")
-	ans = append(ans, "tunnel")
-	ans = append(ans, "ipsec")
+	ans = append(ans, "routing-profile")
+	ans = append(ans, "filters")
+	ans = append(ans, "route-maps")
+	ans = append(ans, "bgp")
+	ans = append(ans, "bgp-entry")
 	ans = append(ans, components[0])
 
 	return ans, nil

@@ -1,4 +1,4 @@
-package ipsec
+package acl
 
 import (
 	"fmt"
@@ -192,8 +192,9 @@ func (o Location) XpathWithComponents(vn version.Number, components ...string) (
 	}
 
 	ans = append(ans, "network")
-	ans = append(ans, "tunnel")
-	ans = append(ans, "ipsec")
+	ans = append(ans, "routing-profile")
+	ans = append(ans, "filters")
+	ans = append(ans, "access-list")
 	ans = append(ans, components[0])
 
 	return ans, nil

@@ -22,11 +22,16 @@ type Entry struct {
 	Name            string
 	Description     *string
 	Templates       []string
-	Devices         []string
+	Devices         []Devices
 	DefaultVsys     *string
 	UserGroupSource *UserGroupSource
 	Misc            []generic.Xml
 	MiscAttributes  []xml.Attr
+}
+type Devices struct {
+	Name           string
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
 }
 type UserGroupSource struct {
 	MasterDevice   *string
@@ -58,15 +63,24 @@ func specifyEntry(source *Entry) (any, error) {
 }
 
 type entryXml struct {
-	XMLName         xml.Name            `xml:"entry"`
-	Name            string              `xml:"name,attr"`
-	Description     *string             `xml:"description,omitempty"`
-	Templates       *util.MemberType    `xml:"templates,omitempty"`
-	Devices         *util.MemberType    `xml:"devices,omitempty"`
-	DefaultVsys     *string             `xml:"settings>default-vsys,omitempty"`
-	UserGroupSource *userGroupSourceXml `xml:"user-group-source,omitempty"`
-	Misc            []generic.Xml       `xml:",any"`
-	MiscAttributes  []xml.Attr          `xml:",any,attr"`
+	XMLName         xml.Name             `xml:"entry"`
+	Name            string               `xml:"name,attr"`
+	Description     *string              `xml:"description,omitempty"`
+	Templates       *util.MemberType     `xml:"templates,omitempty"`
+	Devices         *devicesContainerXml `xml:"devices,omitempty"`
+	DefaultVsys     *string              `xml:"settings>default-vsys,omitempty"`
+	UserGroupSource *userGroupSourceXml  `xml:"user-group-source,omitempty"`
+	Misc            []generic.Xml        `xml:",any"`
+	MiscAttributes  []xml.Attr           `xml:",any,attr"`
+}
+type devicesContainerXml struct {
+	Entries []devicesXml `xml:"entry"`
+}
+type devicesXml struct {
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 type userGroupSourceXml struct {
 	MasterDevice   *string       `xml:"master-device,omitempty"`
@@ -81,7 +95,13 @@ func (o *entryXml) MarshalFromObject(s Entry) {
 		o.Templates = util.StrToMem(s.Templates)
 	}
 	if s.Devices != nil {
-		o.Devices = util.StrToMem(s.Devices)
+		var objs []devicesXml
+		for _, elt := range s.Devices {
+			var obj devicesXml
+			obj.MarshalFromObject(elt)
+			objs = append(objs, obj)
+		}
+		o.Devices = &devicesContainerXml{Entries: objs}
 	}
 	o.DefaultVsys = s.DefaultVsys
 	if s.UserGroupSource != nil {
@@ -98,9 +118,15 @@ func (o entryXml) UnmarshalToObject() (*Entry, error) {
 	if o.Templates != nil {
 		templatesVal = util.MemToStr(o.Templates)
 	}
-	var devicesVal []string
+	var devicesVal []Devices
 	if o.Devices != nil {
-		devicesVal = util.MemToStr(o.Devices)
+		for _, elt := range o.Devices.Entries {
+			obj, err := elt.UnmarshalToObject()
+			if err != nil {
+				return nil, err
+			}
+			devicesVal = append(devicesVal, *obj)
+		}
 	}
 	var userGroupSourceVal *UserGroupSource
 	if o.UserGroupSource != nil {
@@ -120,6 +146,21 @@ func (o entryXml) UnmarshalToObject() (*Entry, error) {
 		UserGroupSource: userGroupSourceVal,
 		Misc:            o.Misc,
 		MiscAttributes:  o.MiscAttributes,
+	}
+	return result, nil
+}
+func (o *devicesXml) MarshalFromObject(s Devices) {
+	o.Name = s.Name
+	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
+}
+
+func (o devicesXml) UnmarshalToObject() (*Devices, error) {
+
+	result := &Devices{
+		Name:           o.Name,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
 	}
 	return result, nil
 }
@@ -198,13 +239,33 @@ func (o *Entry) matches(other *Entry) bool {
 	if !util.OrderedListsMatch[string](o.Templates, other.Templates) {
 		return false
 	}
-	if !util.OrderedListsMatch[string](o.Devices, other.Devices) {
+	if len(o.Devices) != len(other.Devices) {
 		return false
+	}
+	for idx := range o.Devices {
+		if !o.Devices[idx].matches(&other.Devices[idx]) {
+			return false
+		}
 	}
 	if !util.StringsMatch(o.DefaultVsys, other.DefaultVsys) {
 		return false
 	}
 	if !o.UserGroupSource.matches(other.UserGroupSource) {
+		return false
+	}
+
+	return true
+}
+
+func (o *Devices) matches(other *Devices) bool {
+	if o == nil && other == nil {
+		return true
+	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
+	}
+	if o.Name != other.Name {
 		return false
 	}
 
