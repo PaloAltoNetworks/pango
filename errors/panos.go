@@ -81,7 +81,22 @@ type errorCheckMsg struct {
 }
 
 type errLine struct {
-	Text string `xml:",cdata"`
+	Text  string    `xml:",cdata"`
+	Lines []errLine `xml:"line"`
+}
+
+func (e errLine) message() string {
+	if e.Text != "" {
+		return strings.TrimSpace(e.Text)
+	}
+	var b strings.Builder
+	for i, l := range e.Lines {
+		if i != 0 {
+			b.WriteString(" | ")
+		}
+		b.WriteString(l.message())
+	}
+	return b.String()
 }
 
 func (e *errorCheck) Failed() bool {
@@ -102,7 +117,7 @@ func (e *errorCheck) Message() string {
 				if i != 0 {
 					b.WriteString(" | ")
 				}
-				b.WriteString(strings.TrimSpace(e.Msg.Line[i].Text))
+				b.WriteString(e.Msg.Line[i].message())
 			}
 			return b.String()
 		}
