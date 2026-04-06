@@ -20,12 +20,11 @@ var (
 
 // Entry represents a PAN-OS decryption profile.
 type Entry struct {
-	Name                string
-	Description         *string
-	SslForwardProxy     *SslForwardProxy
+	Name                 string
+	SslForwardProxy      *SslForwardProxy
 	SslInboundInspection *SslInboundInspection
-	SslNoProxy          *SslNoProxy
-	SslProtocolSettings *SslProtocolSettings
+	SslNoProxy           *SslNoProxy
+	SslProtocolSettings  *SslProtocolSettings
 
 	Misc           []generic.Xml
 	MiscAttributes []xml.Attr
@@ -46,10 +45,11 @@ type SslForwardProxy struct {
 }
 
 type SslInboundInspection struct {
-	BlockIfHsmUnavailable   *bool
-	BlockIfNoResource       *bool
-	BlockUnsupportedCipher  *bool
-	BlockUnsupportedVersion *bool
+	BlockIfHsmUnavailable         *bool
+	BlockIfNoResource             *bool
+	BlockTls13DowngradeNoResource *bool
+	BlockUnsupportedCipher        *bool
+	BlockUnsupportedVersion       *bool
 }
 
 type SslNoProxy struct {
@@ -105,15 +105,14 @@ type entryXmlContainer struct {
 }
 
 type entryXml struct {
-	XMLName              xml.Name                  `xml:"entry"`
-	Name                 string                    `xml:"name,attr"`
-	Description          *string                   `xml:"description,omitempty"`
-	SslForwardProxy      *sslForwardProxyXml       `xml:"ssl-forward-proxy,omitempty"`
-	SslInboundInspection *sslInboundInspectionXml  `xml:"ssl-inbound-inspection,omitempty"`
-	SslNoProxy           *sslNoProxyXml            `xml:"ssl-no-proxy,omitempty"`
-	SslProtocolSettings  *sslProtocolSettingsXml   `xml:"ssl-protocol-settings,omitempty"`
-	Misc                 []generic.Xml             `xml:",any"`
-	MiscAttributes       []xml.Attr                `xml:",any,attr"`
+	XMLName              xml.Name                 `xml:"entry"`
+	Name                 string                   `xml:"name,attr"`
+	SslForwardProxy      *sslForwardProxyXml      `xml:"ssl-forward-proxy,omitempty"`
+	SslInboundInspection *sslInboundInspectionXml `xml:"ssl-inbound-proxy,omitempty"`
+	SslNoProxy           *sslNoProxyXml           `xml:"ssl-no-proxy,omitempty"`
+	SslProtocolSettings  *sslProtocolSettingsXml  `xml:"ssl-protocol-settings,omitempty"`
+	Misc                 []generic.Xml            `xml:",any"`
+	MiscAttributes       []xml.Attr               `xml:",any,attr"`
 }
 
 type sslForwardProxyXml struct {
@@ -131,10 +130,11 @@ type sslForwardProxyXml struct {
 }
 
 type sslInboundInspectionXml struct {
-	BlockIfHsmUnavailable   *string `xml:"block-if-hsm-unavailable,omitempty"`
-	BlockIfNoResource       *string `xml:"block-if-no-resource,omitempty"`
-	BlockUnsupportedCipher  *string `xml:"block-unsupported-cipher,omitempty"`
-	BlockUnsupportedVersion *string `xml:"block-unsupported-version,omitempty"`
+	BlockIfHsmUnavailable         *string `xml:"block-if-hsm-unavailable,omitempty"`
+	BlockIfNoResource             *string `xml:"block-if-no-resource,omitempty"`
+	BlockTls13DowngradeNoResource *string `xml:"block-tls13-downgrade-no-resource,omitempty"`
+	BlockUnsupportedCipher        *string `xml:"block-unsupported-cipher,omitempty"`
+	BlockUnsupportedVersion       *string `xml:"block-unsupported-version,omitempty"`
 }
 
 type sslNoProxyXml struct {
@@ -180,7 +180,6 @@ func (o *entryXmlContainer) Normalize() ([]*Entry, error) {
 func specifyEntry(o *Entry) (any, error) {
 	entry := entryXml{
 		Name:           o.Name,
-		Description:    o.Description,
 		Misc:           o.Misc,
 		MiscAttributes: o.MiscAttributes,
 	}
@@ -203,10 +202,11 @@ func specifyEntry(o *Entry) (any, error) {
 
 	if o.SslInboundInspection != nil {
 		entry.SslInboundInspection = &sslInboundInspectionXml{
-			BlockIfHsmUnavailable:   util.YesNo(o.SslInboundInspection.BlockIfHsmUnavailable, nil),
-			BlockIfNoResource:       util.YesNo(o.SslInboundInspection.BlockIfNoResource, nil),
-			BlockUnsupportedCipher:  util.YesNo(o.SslInboundInspection.BlockUnsupportedCipher, nil),
-			BlockUnsupportedVersion: util.YesNo(o.SslInboundInspection.BlockUnsupportedVersion, nil),
+			BlockIfHsmUnavailable:         util.YesNo(o.SslInboundInspection.BlockIfHsmUnavailable, nil),
+			BlockIfNoResource:             util.YesNo(o.SslInboundInspection.BlockIfNoResource, nil),
+			BlockTls13DowngradeNoResource: util.YesNo(o.SslInboundInspection.BlockTls13DowngradeNoResource, nil),
+			BlockUnsupportedCipher:        util.YesNo(o.SslInboundInspection.BlockUnsupportedCipher, nil),
+			BlockUnsupportedVersion:       util.YesNo(o.SslInboundInspection.BlockUnsupportedVersion, nil),
 		}
 	}
 
@@ -248,7 +248,6 @@ func specifyEntry(o *Entry) (any, error) {
 func (o entryXml) unmarshalToObject() (*Entry, error) {
 	result := &Entry{
 		Name:           o.Name,
-		Description:    o.Description,
 		Misc:           o.Misc,
 		MiscAttributes: o.MiscAttributes,
 	}
@@ -271,10 +270,11 @@ func (o entryXml) unmarshalToObject() (*Entry, error) {
 
 	if o.SslInboundInspection != nil {
 		result.SslInboundInspection = &SslInboundInspection{
-			BlockIfHsmUnavailable:   util.AsBool(o.SslInboundInspection.BlockIfHsmUnavailable, nil),
-			BlockIfNoResource:       util.AsBool(o.SslInboundInspection.BlockIfNoResource, nil),
-			BlockUnsupportedCipher:  util.AsBool(o.SslInboundInspection.BlockUnsupportedCipher, nil),
-			BlockUnsupportedVersion: util.AsBool(o.SslInboundInspection.BlockUnsupportedVersion, nil),
+			BlockIfHsmUnavailable:         util.AsBool(o.SslInboundInspection.BlockIfHsmUnavailable, nil),
+			BlockIfNoResource:             util.AsBool(o.SslInboundInspection.BlockIfNoResource, nil),
+			BlockTls13DowngradeNoResource: util.AsBool(o.SslInboundInspection.BlockTls13DowngradeNoResource, nil),
+			BlockUnsupportedCipher:        util.AsBool(o.SslInboundInspection.BlockUnsupportedCipher, nil),
+			BlockUnsupportedVersion:       util.AsBool(o.SslInboundInspection.BlockUnsupportedVersion, nil),
 		}
 	}
 
@@ -317,9 +317,6 @@ func (e *Entry) Field(v string) (any, error) {
 	if v == "name" || v == "Name" {
 		return e.Name, nil
 	}
-	if v == "description" || v == "Description" {
-		return e.Description, nil
-	}
 	if v == "ssl_forward_proxy" || v == "SslForwardProxy" {
 		return e.SslForwardProxy, nil
 	}
@@ -350,9 +347,6 @@ func SpecMatches(a, b *Entry) bool {
 }
 
 func (o *Entry) matches(other *Entry) bool {
-	if !util.StringsMatch(o.Description, other.Description) {
-		return false
-	}
 	if !o.SslForwardProxy.matches(other.SslForwardProxy) {
 		return false
 	}
@@ -422,6 +416,9 @@ func (o *SslInboundInspection) matches(other *SslInboundInspection) bool {
 		return false
 	}
 	if !util.BoolsMatch(o.BlockIfNoResource, other.BlockIfNoResource) {
+		return false
+	}
+	if !util.BoolsMatch(o.BlockTls13DowngradeNoResource, other.BlockTls13DowngradeNoResource) {
 		return false
 	}
 	if !util.BoolsMatch(o.BlockUnsupportedCipher, other.BlockUnsupportedCipher) {
