@@ -9,21 +9,12 @@ import (
 	"github.com/PaloAltoNetworks/pango/version"
 )
 
-type ImportLocation interface {
-	XpathForLocation(version.Number, util.ILocation) ([]string, error)
-	MarshalPangoXML([]string) (string, error)
-	UnmarshalPangoXML([]byte) ([]string, error)
-}
-
 type Location struct {
-	Shared        *SharedLocation        `json:"shared"`
 	Template      *TemplateLocation      `json:"template,omitempty"`
 	TemplateStack *TemplateStackLocation `json:"template_stack,omitempty"`
 	Ngfw          *NgfwLocation          `json:"ngfw,omitempty"`
 }
 
-type SharedLocation struct {
-}
 type TemplateLocation struct {
 	NgfwDevice     string `json:"ngfw_device"`
 	PanoramaDevice string `json:"panorama_device"`
@@ -38,10 +29,6 @@ type NgfwLocation struct {
 	NgfwDevice string `json:"ngfw_device"`
 }
 
-func NewSharedLocation() *Location {
-	return &Location{Shared: &SharedLocation{},
-	}
-}
 func NewTemplateLocation() *Location {
 	return &Location{Template: &TemplateLocation{
 		NgfwDevice:     "localhost.localdomain",
@@ -69,8 +56,6 @@ func (o Location) IsValid() error {
 	count := 0
 
 	switch {
-	case o.Shared != nil:
-		count++
 	case o.Template != nil:
 		if o.Template.NgfwDevice == "" {
 			return fmt.Errorf("NgfwDevice is unspecified")
@@ -121,11 +106,6 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 	var ans []string
 
 	switch {
-	case o.Shared != nil:
-		ans = []string{
-			"config",
-			"shared",
-		}
 	case o.Template != nil:
 		if o.Template.NgfwDevice == "" {
 			return nil, fmt.Errorf("NgfwDevice is unspecified")

@@ -292,10 +292,9 @@ func checkEthernetLayer3Static(c *pango.Client, ctx context.Context) {
 		location = ethernet.NewNgfwLocation()
 	}
 
-	var importLocation []ethernet.ImportLocation
 	api := ethernet.NewService(c)
 
-	reply, err := api.Create(ctx, *location, importLocation, entry)
+	reply, err := api.Create(ctx, *location, entry)
 	if err != nil {
 		log.Printf("Failed to create ethernet: %s", err)
 		return
@@ -329,10 +328,9 @@ func checkEthernetLayer3Dhcp(c *pango.Client, ctx context.Context) {
 		location = ethernet.NewNgfwLocation()
 	}
 
-	var importLocation []ethernet.ImportLocation
 	api := ethernet.NewService(c)
 
-	reply, err := api.Create(ctx, *location, importLocation, entry)
+	reply, err := api.Create(ctx, *location, entry)
 	if err != nil {
 		log.Printf("Failed to create ethernet: %s", err)
 		return
@@ -355,10 +353,9 @@ func checkEthernetHa(c *pango.Client, ctx context.Context) {
 		location = ethernet.NewNgfwLocation()
 	}
 
-	var importLocation []ethernet.ImportLocation
 	api := ethernet.NewService(c)
 
-	reply, err := api.Create(ctx, *location, importLocation, entry)
+	reply, err := api.Create(ctx, *location, entry)
 	if err != nil {
 		log.Printf("Failed to create ethernet: %s", err)
 		return
@@ -570,12 +567,11 @@ func checkVrZoneWithEthernet(c *pango.Client, ctx context.Context) {
 		ethernetLocation = ethernet.NewNgfwLocation()
 	}
 
-	var importLocation []ethernet.ImportLocation
 	api := ethernet.NewService(c)
 
 	interfacesToDelete := []string{"ethernet1/2", "ethernet1/3"}
 	for _, iface := range interfacesToDelete {
-		err = api.Delete(ctx, *ethernetLocation, importLocation, iface)
+		err = api.Delete(ctx, *ethernetLocation, iface)
 		if err != nil {
 			log.Printf("Failed to delete ethernet: %s", err)
 			return

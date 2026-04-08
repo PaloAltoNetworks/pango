@@ -206,6 +206,7 @@ func (s *Service) delete(ctx context.Context, loc Location, values []string) err
 	vn := s.client.Versioning()
 	var err error
 	deletes := xmlapi.NewMultiConfig(len(values))
+
 	for _, value := range values {
 		var path []string
 		path, err = loc.XpathWithComponents(vn, util.AsEntryXpath(value))

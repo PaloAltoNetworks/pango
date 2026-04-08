@@ -9,12 +9,6 @@ import (
 	"github.com/PaloAltoNetworks/pango/version"
 )
 
-type ImportLocation interface {
-	XpathForLocation(version.Number, util.ILocation) ([]string, error)
-	MarshalPangoXML([]string) (string, error)
-	UnmarshalPangoXML([]byte) ([]string, error)
-}
-
 type Location struct {
 	Shared      *SharedLocation      `json:"shared"`
 	Vsys        *VsysLocation        `json:"vsys,omitempty"`

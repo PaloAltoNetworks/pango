@@ -1144,7 +1144,7 @@ func (c *Client) setupLogging(logging LoggingInfo) error {
 			return err
 		}
 	} else {
-		logLevel = slog.LevelInfo
+		logLevel = logging.LogLevel
 	}
 
 	if logging.SLogHandler == nil {
@@ -1189,7 +1189,7 @@ func (c *Client) setupLogging(logging LoggingInfo) error {
 	}
 
 	enabledLogging, _ := LogCategoryAsStrings(logMask)
-	logger.Info("Pango logging configured", "symbols", enabledLogging)
+	logger.Info("Pango logging configured", "symbols", enabledLogging, "level", logLevel)
 
 	c.logger = newCategoryLogger(logger, logMask)
 
@@ -1270,7 +1270,6 @@ func (c *Client) sendRequest(ctx context.Context, req *http.Request, strip bool,
 }
 
 func (c *Client) logSend(data url.Values) {
-	c.logger.WithLogCategory(LogCategoryPango).Debug("Hello World!")
 	sendData := slog.Group("data", c.prepareSendDataForLogging(data)...)
 	if c.logger.enabledFor(LogCategoryCurl) {
 		curlEquivalent := slog.Group("curl", c.prepareSendDataAsCurl(data)...)

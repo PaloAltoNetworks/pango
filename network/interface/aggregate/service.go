@@ -2,10 +2,12 @@ package aggregate
 
 import (
 	"context"
+	"encoding/xml"
 	"fmt"
 
 	"github.com/PaloAltoNetworks/pango/errors"
 	"github.com/PaloAltoNetworks/pango/filtering"
+	"github.com/PaloAltoNetworks/pango/locking"
 	"github.com/PaloAltoNetworks/pango/util"
 	"github.com/PaloAltoNetworks/pango/xmlapi"
 )
@@ -58,6 +60,149 @@ func (s *Service) CreateWithXpath(ctx context.Context, xpath string, entry *Entr
 	}
 
 	if _, _, err = s.client.Communicate(ctx, cmd, false, nil); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+type member struct {
+	Name string `xml:",chardata"`
+}
+
+type response struct {
+	Members []member `xml:"result>interface>member"`
+}
+
+type request struct {
+	XMLName xml.Name `xml:"interface"`
+	Members []member `xml:"member"`
+}
+
+func (s *Service) ImportToLocation(ctx context.Context, loc Location, vsys string, name string) error {
+	vn := s.client.Versioning()
+
+	xpath, err := loc.XpathPrefix(vn)
+	if err != nil {
+		return err
+	}
+	xpath = append(xpath, []string{"vsys", util.AsEntryXpath(vsys), "import", "network", "interface"}...)
+
+	mutex := locking.GetMutex(locking.XpathLockCategory, util.AsXpath(xpath))
+	mutex.Lock()
+	defer mutex.Unlock()
+
+	cmd := &xmlapi.Config{
+		Action: "get",
+		Xpath:  util.AsXpath(xpath),
+	}
+
+	bytes, _, err := s.client.Communicate(ctx, cmd, false, nil)
+	if err != nil && !errors.IsObjectNotFound(err) {
+		return err
+	}
+
+	var resp response
+	err = xml.Unmarshal(bytes, &resp)
+	if err != nil {
+		return err
+	}
+
+	existing := resp.Members
+
+	for _, elt := range existing {
+		if elt.Name == name {
+			return nil
+		}
+	}
+
+	existing = append(existing, member{Name: name})
+
+	req := request{
+		Members: existing,
+	}
+
+	element, err := xml.Marshal(req)
+	if err != nil {
+		return err
+	}
+
+	cmd = &xmlapi.Config{
+		Action:  "set",
+		Xpath:   util.AsXpath(xpath[:len(xpath)-1]),
+		Element: string(element),
+	}
+
+	_, _, err = s.client.Communicate(ctx, cmd, false, nil)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s *Service) UnimportFromLocation(ctx context.Context, loc Location, vsys string, name string) error {
+	vn := s.client.Versioning()
+
+	xpath, err := loc.XpathPrefix(vn)
+	if err != nil {
+		return err
+	}
+	xpath = append(xpath, []string{"vsys", util.AsEntryXpath(vsys), "import", "network", "interface"}...)
+
+	mutex := locking.GetMutex(locking.XpathLockCategory, util.AsXpath(xpath))
+	mutex.Lock()
+	defer mutex.Unlock()
+
+	cmd := &xmlapi.Config{
+		Action: "get",
+		Xpath:  util.AsXpath(xpath),
+	}
+
+	bytes, _, err := s.client.Communicate(ctx, cmd, false, nil)
+	if err != nil && !errors.IsObjectNotFound(err) {
+		return err
+	}
+
+	var resp response
+	err = xml.Unmarshal(bytes, &resp)
+	if err != nil {
+		return err
+	}
+
+	existing := resp.Members
+
+	var filtered []member
+	var updateRequired bool
+	for _, elt := range existing {
+		if elt.Name == name {
+			updateRequired = true
+		} else {
+			filtered = append(filtered, elt)
+		}
+	}
+
+	if !updateRequired {
+		return nil
+	}
+
+	req := request{
+		Members: filtered,
+	}
+
+	element, err := xml.Marshal(req)
+	if err != nil {
+		return err
+	}
+
+	cmd = &xmlapi.Config{
+		Action:  "edit",
+		Xpath:   util.AsXpath(xpath),
+		Element: string(element),
+	}
+
+	_, _, err = s.client.Communicate(ctx, cmd, false, nil)
+	if err != nil {
 		return err
 	}
 
@@ -206,6 +351,7 @@ func (s *Service) delete(ctx context.Context, loc Location, values []string) err
 	vn := s.client.Versioning()
 	var err error
 	deletes := xmlapi.NewMultiConfig(len(values))
+
 	for _, value := range values {
 		var path []string
 		path, err = loc.XpathWithComponents(vn, util.AsEntryXpath(value))
