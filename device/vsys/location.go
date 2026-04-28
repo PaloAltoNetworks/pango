@@ -1,4 +1,4 @@
-package zone
+package vsys
 
 import (
 	"fmt"
@@ -10,41 +10,26 @@ import (
 )
 
 type Location struct {
-	Vsys          *VsysLocation          `json:"vsys,omitempty"`
 	Template      *TemplateLocation      `json:"template,omitempty"`
 	TemplateStack *TemplateStackLocation `json:"template_stack,omitempty"`
 }
 
-type VsysLocation struct {
-	NgfwDevice string `json:"ngfw_device"`
-	Vsys       string `json:"vsys"`
-}
 type TemplateLocation struct {
 	NgfwDevice     string `json:"ngfw_device"`
 	PanoramaDevice string `json:"panorama_device"`
 	Template       string `json:"template"`
-	Vsys           string `json:"vsys"`
 }
 type TemplateStackLocation struct {
 	NgfwDevice     string `json:"ngfw_device"`
 	PanoramaDevice string `json:"panorama_device"`
 	TemplateStack  string `json:"template_stack"`
-	Vsys           string `json:"vsys"`
 }
 
-func NewVsysLocation() *Location {
-	return &Location{Vsys: &VsysLocation{
-		NgfwDevice: "localhost.localdomain",
-		Vsys:       "vsys1",
-	},
-	}
-}
 func NewTemplateLocation() *Location {
 	return &Location{Template: &TemplateLocation{
 		NgfwDevice:     "localhost.localdomain",
 		PanoramaDevice: "localhost.localdomain",
 		Template:       "",
-		Vsys:           "vsys1",
 	},
 	}
 }
@@ -53,7 +38,6 @@ func NewTemplateStackLocation() *Location {
 		NgfwDevice:     "localhost.localdomain",
 		PanoramaDevice: "localhost.localdomain",
 		TemplateStack:  "",
-		Vsys:           "vsys1",
 	},
 	}
 }
@@ -62,14 +46,6 @@ func (o Location) IsValid() error {
 	count := 0
 
 	switch {
-	case o.Vsys != nil:
-		if o.Vsys.NgfwDevice == "" {
-			return fmt.Errorf("NgfwDevice is unspecified")
-		}
-		if o.Vsys.Vsys == "" {
-			return fmt.Errorf("Vsys is unspecified")
-		}
-		count++
 	case o.Template != nil:
 		if o.Template.NgfwDevice == "" {
 			return fmt.Errorf("NgfwDevice is unspecified")
@@ -79,9 +55,6 @@ func (o Location) IsValid() error {
 		}
 		if o.Template.Template == "" {
 			return fmt.Errorf("Template is unspecified")
-		}
-		if o.Template.Vsys == "" {
-			return fmt.Errorf("Vsys is unspecified")
 		}
 		count++
 	case o.TemplateStack != nil:
@@ -93,9 +66,6 @@ func (o Location) IsValid() error {
 		}
 		if o.TemplateStack.TemplateStack == "" {
 			return fmt.Errorf("TemplateStack is unspecified")
-		}
-		if o.TemplateStack.Vsys == "" {
-			return fmt.Errorf("Vsys is unspecified")
 		}
 		count++
 	}
@@ -121,20 +91,6 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 	var ans []string
 
 	switch {
-	case o.Vsys != nil:
-		if o.Vsys.NgfwDevice == "" {
-			return nil, fmt.Errorf("NgfwDevice is unspecified")
-		}
-		if o.Vsys.Vsys == "" {
-			return nil, fmt.Errorf("Vsys is unspecified")
-		}
-		ans = []string{
-			"config",
-			"devices",
-			util.AsEntryXpath(o.Vsys.NgfwDevice),
-			"vsys",
-			util.AsEntryXpath(o.Vsys.Vsys),
-		}
 	case o.Template != nil:
 		if o.Template.NgfwDevice == "" {
 			return nil, fmt.Errorf("NgfwDevice is unspecified")
@@ -145,9 +101,6 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 		if o.Template.Template == "" {
 			return nil, fmt.Errorf("Template is unspecified")
 		}
-		if o.Template.Vsys == "" {
-			return nil, fmt.Errorf("Vsys is unspecified")
-		}
 		ans = []string{
 			"config",
 			"devices",
@@ -157,8 +110,6 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 			"config",
 			"devices",
 			util.AsEntryXpath(o.Template.NgfwDevice),
-			"vsys",
-			util.AsEntryXpath(o.Template.Vsys),
 		}
 	case o.TemplateStack != nil:
 		if o.TemplateStack.NgfwDevice == "" {
@@ -170,9 +121,6 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 		if o.TemplateStack.TemplateStack == "" {
 			return nil, fmt.Errorf("TemplateStack is unspecified")
 		}
-		if o.TemplateStack.Vsys == "" {
-			return nil, fmt.Errorf("Vsys is unspecified")
-		}
 		ans = []string{
 			"config",
 			"devices",
@@ -182,8 +130,6 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 			"config",
 			"devices",
 			util.AsEntryXpath(o.TemplateStack.NgfwDevice),
-			"vsys",
-			util.AsEntryXpath(o.TemplateStack.Vsys),
 		}
 	default:
 		return nil, errors.NoLocationSpecifiedError
@@ -215,7 +161,7 @@ func (o Location) XpathWithComponents(vn version.Number, components ...string) (
 		return nil, err
 	}
 
-	ans = append(ans, "zone")
+	ans = append(ans, "vsys")
 	ans = append(ans, components[0])
 
 	return ans, nil

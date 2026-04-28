@@ -424,7 +424,7 @@ func (s *Service) SetAuditComment(ctx context.Context, loc Location, name, comme
 
 	vn := s.client.Versioning()
 
-	path, err := loc.XpathWithComponents(vn, name)
+	path, err := loc.XpathWithComponents(vn, util.AsEntryXpath(name))
 	if err != nil {
 		return err
 	}
@@ -449,7 +449,7 @@ func (s *Service) CurrentAuditComment(ctx context.Context, loc Location, name st
 
 	vn := s.client.Versioning()
 
-	path, err := loc.XpathWithComponents(vn, name)
+	path, err := loc.XpathWithComponents(vn, util.AsEntryXpath(name))
 	if err != nil {
 		return "", err
 	}
