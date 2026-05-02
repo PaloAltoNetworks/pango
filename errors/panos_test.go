@@ -71,3 +71,57 @@ func TestFailedExportErrorMessage(t *testing.T) {
 		}
 	}
 }
+
+func TestDoubleNestedLineErrorMessage(t *testing.T) {
+	data := `<response status="error" code="12"><msg><line><line><![CDATA[ profiles -> zone-protection-profile -> entry -> tcp-syn-with-data unexpected here]]></line><line><![CDATA[ profiles -> zone-protection-profile is invalid]]></line></line></msg></response>`
+
+	err := Parse([]byte(data))
+	if err == nil {
+		t.Errorf("Error is nil")
+		return
+	}
+	e2, ok := err.(Panos)
+	if !ok {
+		t.Errorf("Not a panos error")
+		return
+	}
+	if !strings.Contains(e2.Msg, "unexpected here") {
+		t.Errorf("Expected 'unexpected here' in message, got: %s", e2.Msg)
+	}
+	if !strings.Contains(e2.Msg, "is invalid") {
+		t.Errorf("Expected 'is invalid' in message, got: %s", e2.Msg)
+	}
+	if !strings.Contains(e2.Msg, " | ") {
+		t.Errorf("Expected lines to be joined with ' | ', got: %s", e2.Msg)
+	}
+}
+
+func TestSingleNestedLineErrorMessageUnchanged(t *testing.T) {
+	// Flat <line> with CDATA — existing behaviour must be preserved.
+	expected := "No such node"
+	data := `<response status="error"><msg><line>No such node</line></msg></response>`
+
+	err := Parse([]byte(data))
+	if err == nil {
+		t.Errorf("Error is nil")
+		return
+	}
+	e2, ok := err.(Panos)
+	if !ok {
+		t.Errorf("Not a panos error")
+		return
+	}
+	if e2.Msg != expected {
+		t.Errorf("Expected %q, got %q", expected, e2.Msg)
+	}
+}
+
+func TestSuccessCodeNotAnError(t *testing.T) {
+	for _, code := range []int{19, 20} {
+		data := fmt.Sprintf(`<response status="success" code="%d"/>`, code)
+		err := Parse([]byte(data))
+		if err != nil {
+			t.Errorf("code %d should not produce an error, got: %v", code, err)
+		}
+	}
+}
