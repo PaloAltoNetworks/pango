@@ -58,8 +58,12 @@ func Parse(body []byte) error {
 
 	_ = xml.Unmarshal(body, &e)
 	if e.Failed() {
+		msg := e.Message()
+		if msg == "" {
+			msg = fmt.Sprintf("(raw response: %s)", strings.TrimSpace(string(body)))
+		}
 		return Panos{
-			Msg:  e.Message(),
+			Msg:  msg,
 			Code: e.Code,
 		}
 	}

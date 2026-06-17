@@ -1,4 +1,4 @@
-package syslog
+package snmptrap
 
 import (
 	"fmt"
@@ -11,7 +11,6 @@ import (
 
 type Location struct {
 	Panorama          *PanoramaLocation          `json:"panorama"`
-	Shared            *SharedLocation            `json:"shared"`
 	Vsys              *VsysLocation              `json:"vsys,omitempty"`
 	Template          *TemplateLocation          `json:"template,omitempty"`
 	TemplateVsys      *TemplateVsysLocation      `json:"template_vsys,omitempty"`
@@ -20,8 +19,6 @@ type Location struct {
 }
 
 type PanoramaLocation struct {
-}
-type SharedLocation struct {
 }
 type VsysLocation struct {
 	NgfwDevice string `json:"ngfw_device"`
@@ -50,10 +47,6 @@ type TemplateStackVsysLocation struct {
 
 func NewPanoramaLocation() *Location {
 	return &Location{Panorama: &PanoramaLocation{},
-	}
-}
-func NewSharedLocation() *Location {
-	return &Location{Shared: &SharedLocation{},
 	}
 }
 func NewVsysLocation() *Location {
@@ -101,8 +94,6 @@ func (o Location) IsValid() error {
 
 	switch {
 	case o.Panorama != nil:
-		count++
-	case o.Shared != nil:
 		count++
 	case o.Vsys != nil:
 		if o.Vsys.NgfwDevice == "" {
@@ -183,11 +174,6 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 		ans = []string{
 			"config",
 			"panorama",
-		}
-	case o.Shared != nil:
-		ans = []string{
-			"config",
-			"shared",
 		}
 	case o.Vsys != nil:
 		if o.Vsys.NgfwDevice == "" {
@@ -316,7 +302,7 @@ func (o Location) XpathWithComponents(vn version.Number, components ...string) (
 	}
 
 	ans = append(ans, "log-settings")
-	ans = append(ans, "syslog")
+	ans = append(ans, "snmptrap")
 	ans = append(ans, components[0])
 
 	return ans, nil
