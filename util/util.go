@@ -108,6 +108,30 @@ func AsXpath(i interface{}) string {
 	}
 }
 
+// xpathSafe returns val as an XPath string expression that is safe to embed
+// in a predicate, guarding against XPath injection (CWE-643) when val
+// contains single-quote characters.
+//
+// XPath 1.0 provides no escape mechanism for a quote character inside a
+// string literal, so values containing a single quote are emitted using the
+// concat() function (e.g. a'b becomes concat('a',"'",'b')). Values without a
+// single quote are simply wrapped in single quotes. The returned expression
+// always evaluates to val as a literal string and can never alter the
+// surrounding predicate structure.
+func xpathSafe(val string) string {
+	if !strings.Contains(val, "'") {
+		return "'" + val + "'"
+	}
+
+	parts := strings.Split(val, "'")
+	quoted := make([]string, len(parts))
+	for i, p := range parts {
+		quoted[i] = "'" + p + "'"
+	}
+
+	return "concat(" + strings.Join(quoted, `,"'",`) + ")"
+}
+
 // AsEntryXpath returns the given values as an entry xpath segment.
 func AsEntryXpath(vals ...string) string {
 	if len(vals) == 0 || (len(vals) == 1 && vals[0] == "") {
@@ -121,9 +145,8 @@ func AsEntryXpath(vals ...string) string {
 		if i != 0 {
 			buf.WriteString(" or ")
 		}
-		buf.WriteString("@name='")
-		buf.WriteString(vals[i])
-		buf.WriteString("'")
+		buf.WriteString("@name=")
+		buf.WriteString(xpathSafe(vals[i]))
 	}
 	buf.WriteString("]")
 
@@ -132,7 +155,66 @@ func AsEntryXpath(vals ...string) string {
 
 // AsUuidXpath returns an xpath segment as a UUID location.
 func AsUuidXpath(v string) string {
-	return fmt.Sprintf("entry[@uuid='%s']", v)
+	return "entry[@uuid=" + xpathSafe(v) + "]"
+}
+
+// EntryName is the inverse of AsEntryXpath for a single value: given an entry
+// xpath segment such as entry[@name='foo'] or the injection-safe
+// entry[@name=concat('a',"'",'b')] form produced by xpathSafe, it returns the
+// literal name. Any input that is not a recognizable entry-name predicate
+// (including the bare "entry" listing segment) is returned unchanged.
+func EntryName(component string) string {
+	const prefix = "entry[@name="
+	const suffix = "]"
+
+	expr := component
+	if strings.HasPrefix(expr, prefix) && strings.HasSuffix(expr, suffix) {
+		expr = expr[len(prefix) : len(expr)-len(suffix)]
+	}
+
+	return xpathUnquote(expr)
+}
+
+// xpathUnquote decodes an XPath string expression produced by xpathSafe back to
+// its literal value. It handles both a single-quoted literal ('foo') and the
+// concat('a',"'",'b') form. Unrecognized input is returned unchanged.
+func xpathUnquote(expr string) string {
+	// Injection-safe concat(...) form.
+	if strings.HasPrefix(expr, "concat(") && strings.HasSuffix(expr, ")") {
+		body := expr[len("concat(") : len(expr)-1]
+
+		var buf bytes.Buffer
+		for i := 0; i < len(body); {
+			switch body[i] {
+			case '\'':
+				// A single-quoted segment: '...'. Segments never contain a
+				// single quote because that is xpathSafe's split delimiter.
+				j := strings.IndexByte(body[i+1:], '\'')
+				if j < 0 {
+					return expr // malformed; leave as-is.
+				}
+				buf.WriteString(body[i+1 : i+1+j])
+				i += j + 2
+			case '"':
+				// The literal single quote is always emitted as "'".
+				buf.WriteByte('\'')
+				i += 3
+			case ',':
+				i++
+			default:
+				return expr // unexpected token; leave as-is.
+			}
+		}
+
+		return buf.String()
+	}
+
+	// Plain single-quoted literal.
+	if len(expr) >= 2 && expr[0] == '\'' && expr[len(expr)-1] == '\'' {
+		return expr[1 : len(expr)-1]
+	}
+
+	return expr
 }
 
 // AsMemberXpath returns the given values as a member xpath segment.
@@ -144,9 +226,8 @@ func AsMemberXpath(vals []string) string {
 		if i != 0 {
 			buf.WriteString(" or ")
 		}
-		buf.WriteString("text()='")
-		buf.WriteString(vals[i])
-		buf.WriteString("'")
+		buf.WriteString("text()=")
+		buf.WriteString(xpathSafe(vals[i]))
 	}
 
 	buf.WriteString("]")

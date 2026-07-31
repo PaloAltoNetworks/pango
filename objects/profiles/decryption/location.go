@@ -11,36 +11,36 @@ import (
 
 type Location struct {
 	Shared      *SharedLocation      `json:"shared"`
-	Vsys        *VsysLocation        `json:"vsys,omitempty"`
 	DeviceGroup *DeviceGroupLocation `json:"device_group,omitempty"`
+	Vsys        *VsysLocation        `json:"vsys,omitempty"`
 }
 
 type SharedLocation struct {
 }
-type VsysLocation struct {
-	NgfwDevice string `json:"ngfw_device"`
-	Vsys       string `json:"vsys"`
-}
 type DeviceGroupLocation struct {
 	DeviceGroup    string `json:"device_group"`
 	PanoramaDevice string `json:"panorama_device"`
+}
+type VsysLocation struct {
+	NgfwDevice string `json:"ngfw_device"`
+	Vsys       string `json:"vsys"`
 }
 
 func NewSharedLocation() *Location {
 	return &Location{Shared: &SharedLocation{},
 	}
 }
-func NewVsysLocation() *Location {
-	return &Location{Vsys: &VsysLocation{
-		NgfwDevice: "localhost.localdomain",
-		Vsys:       "vsys1",
-	},
-	}
-}
 func NewDeviceGroupLocation() *Location {
 	return &Location{DeviceGroup: &DeviceGroupLocation{
 		DeviceGroup:    "",
 		PanoramaDevice: "localhost.localdomain",
+	},
+	}
+}
+func NewVsysLocation() *Location {
+	return &Location{Vsys: &VsysLocation{
+		NgfwDevice: "localhost.localdomain",
+		Vsys:       "vsys1",
 	},
 	}
 }
@@ -51,20 +51,20 @@ func (o Location) IsValid() error {
 	switch {
 	case o.Shared != nil:
 		count++
-	case o.Vsys != nil:
-		if o.Vsys.NgfwDevice == "" {
-			return fmt.Errorf("NgfwDevice is unspecified")
-		}
-		if o.Vsys.Vsys == "" {
-			return fmt.Errorf("Vsys is unspecified")
-		}
-		count++
 	case o.DeviceGroup != nil:
 		if o.DeviceGroup.DeviceGroup == "" {
 			return fmt.Errorf("DeviceGroup is unspecified")
 		}
 		if o.DeviceGroup.PanoramaDevice == "" {
 			return fmt.Errorf("PanoramaDevice is unspecified")
+		}
+		count++
+	case o.Vsys != nil:
+		if o.Vsys.NgfwDevice == "" {
+			return fmt.Errorf("NgfwDevice is unspecified")
+		}
+		if o.Vsys.Vsys == "" {
+			return fmt.Errorf("Vsys is unspecified")
 		}
 		count++
 	}
@@ -89,6 +89,7 @@ func (o Location) LocationFilter() *string {
 			return &o.DeviceGroup.DeviceGroup
 		}
 	}
+
 	return nil
 }
 
@@ -101,20 +102,6 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 		ans = []string{
 			"config",
 			"shared",
-		}
-	case o.Vsys != nil:
-		if o.Vsys.NgfwDevice == "" {
-			return nil, fmt.Errorf("NgfwDevice is unspecified")
-		}
-		if o.Vsys.Vsys == "" {
-			return nil, fmt.Errorf("Vsys is unspecified")
-		}
-		ans = []string{
-			"config",
-			"devices",
-			util.AsEntryXpath(o.Vsys.NgfwDevice),
-			"vsys",
-			util.AsEntryXpath(o.Vsys.Vsys),
 		}
 	case o.DeviceGroup != nil:
 		if o.DeviceGroup.DeviceGroup == "" {
@@ -129,6 +116,20 @@ func (o Location) XpathPrefix(vn version.Number) ([]string, error) {
 			util.AsEntryXpath(o.DeviceGroup.PanoramaDevice),
 			"device-group",
 			util.AsEntryXpath(o.DeviceGroup.DeviceGroup),
+		}
+	case o.Vsys != nil:
+		if o.Vsys.NgfwDevice == "" {
+			return nil, fmt.Errorf("NgfwDevice is unspecified")
+		}
+		if o.Vsys.Vsys == "" {
+			return nil, fmt.Errorf("Vsys is unspecified")
+		}
+		ans = []string{
+			"config",
+			"devices",
+			util.AsEntryXpath(o.Vsys.NgfwDevice),
+			"vsys",
+			util.AsEntryXpath(o.Vsys.Vsys),
 		}
 	default:
 		return nil, errors.NoLocationSpecifiedError
@@ -145,11 +146,9 @@ func (o Location) XpathWithComponents(vn version.Number, components ...string) (
 	{
 		component := components[0]
 		if component != "entry" {
-			if !strings.HasPrefix(component, "entry[@name=\"]") && !strings.HasPrefix(component, "entry[@name='") {
-				return nil, errors.NewInvalidXpathComponentError(fmt.Sprintf("Name must be formatted as entry: %s", component))
-			}
-
-			if !strings.HasSuffix(component, "\"]") && !strings.HasSuffix(component, "']") {
+			// Accept any entry predicate produced by util.AsEntryXpath, including the
+			// injection-safe entry[@name=concat(...)] form (CWE-643).
+			if !strings.HasPrefix(component, "entry[") || !strings.HasSuffix(component, "]") {
 				return nil, errors.NewInvalidXpathComponentError(fmt.Sprintf("Name must be formatted as entry: %s", component))
 			}
 		}

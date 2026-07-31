@@ -542,15 +542,15 @@ func (c *Client) ReadFromConfig(ctx context.Context, path []string, withPackagin
 		return nil, fmt.Errorf("path is empty")
 	}
 
-	entryPrefix := "entry[@name='"
-	entrySuffix := "']"
-
 	config := c.configTree
 	for _, pp := range path {
 		var tag, name string
-		if strings.HasPrefix(pp, entryPrefix) && strings.HasSuffix(pp, entrySuffix) {
+		// Match any entry name predicate produced by util.AsEntryXpath,
+		// including the injection-safe concat(...) form, and decode the
+		// literal name via its inverse util.EntryName.
+		if strings.HasPrefix(pp, "entry[@name=") && strings.HasSuffix(pp, "]") {
 			tag = "entry"
-			name = strings.TrimSuffix(strings.TrimPrefix(pp, entryPrefix), entrySuffix)
+			name = util.EntryName(pp)
 		} else {
 			tag = pp
 		}

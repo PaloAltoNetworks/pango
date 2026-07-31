@@ -156,11 +156,9 @@ func (o Location) XpathWithComponents(vn version.Number, components ...string) (
 	{
 		component := components[0]
 		if component != "entry" {
-			if !strings.HasPrefix(component, "entry[@name=\"]") && !strings.HasPrefix(component, "entry[@name='") {
-				return nil, errors.NewInvalidXpathComponentError(fmt.Sprintf("Name must be formatted as entry: %s", component))
-			}
-
-			if !strings.HasSuffix(component, "\"]") && !strings.HasSuffix(component, "']") {
+			// Accept any entry predicate produced by util.AsEntryXpath, including the
+			// injection-safe entry[@name=concat(...)] form (CWE-643).
+			if !strings.HasPrefix(component, "entry[") || !strings.HasSuffix(component, "]") {
 				return nil, errors.NewInvalidXpathComponentError(fmt.Sprintf("Name must be formatted as entry: %s", component))
 			}
 		}

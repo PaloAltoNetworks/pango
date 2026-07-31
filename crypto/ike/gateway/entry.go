@@ -206,7 +206,7 @@ type authenticationCertificateXml struct {
 }
 type authenticationCertificateLocalCertificateXml struct {
 	HashAndUrl     *authenticationCertificateLocalCertificateHashAndUrlXml `xml:"hash-and-url,omitempty"`
-	Name           *string                                                 `xml:"name,attr,omitempty"`
+	Name           *string                                                 `xml:"name,omitempty"`
 	Misc           []generic.Xml                                           `xml:",any"`
 	MiscAttributes []xml.Attr                                              `xml:",any,attr"`
 }
