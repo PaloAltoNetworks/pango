@@ -838,7 +838,7 @@ func (c *Client) WaitForLogs(ctx context.Context, id uint, sleep time.Duration, 
 
 	if ans.Result == "FAIL" {
 		if len(ans.Details.Lines) > 0 {
-			return data, fmt.Errorf(ans.Details.String())
+			return data, fmt.Errorf("%s", ans.Details.String())
 		} else {
 			return data, fmt.Errorf("Job %d has failed", id)
 		}
@@ -919,7 +919,7 @@ func (c *Client) WaitForJob(ctx context.Context, id uint, sleep time.Duration, r
 
 	if ans.Result == "FAIL" {
 		if len(ans.Details.Lines) > 0 {
-			return fmt.Errorf(ans.Details.String())
+			return fmt.Errorf("%s", ans.Details.String())
 		} else {
 			return fmt.Errorf("Job %d has failed", id)
 		}
@@ -1120,7 +1120,7 @@ func (c *Client) GetTechSupportFile(ctx context.Context) (string, []byte, error)
 	}
 
 	if resp.Result == "FAIL" {
-		return "", nil, fmt.Errorf(resp.Details.String())
+		return "", nil, fmt.Errorf("%s", resp.Details.String())
 	}
 
 	cmd.Action = "get"

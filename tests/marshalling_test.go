@@ -172,7 +172,7 @@ var _ = Describe("XML Marshalling and Unmarshalling tests", func() {
 						TrimmedText: &fakeTextString,
 					},
 				}
-				Expect(entries[0].Signature[0].Misc).To(HaveExactElements())
+				Expect(entries[0].Signature[0].Misc).To(HaveExactElements(expectedXmlNodes))
 
 				fakeTextString = "fake-text2"
 				expectedXmlNodes = []generic.Xml{
@@ -182,7 +182,7 @@ var _ = Describe("XML Marshalling and Unmarshalling tests", func() {
 						TrimmedText: &fakeTextString,
 					},
 				}
-				Expect(entries[0].Signature[1].Misc).To(HaveExactElements())
+				Expect(entries[0].Signature[1].Misc).To(HaveExactElements(expectedXmlNodes))
 
 				specified, err := specifier(entries[0])
 				Expect(err).To(Not(HaveOccurred()))
