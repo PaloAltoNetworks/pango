@@ -1,6 +1,6 @@
 module github.com/PaloAltoNetworks/pango
 
-go 1.26.8
+go 1.26.9
 
 require (
 	github.com/onsi/ginkgo/v2 v2.33.0
@@ -15,7 +15,7 @@ require (
 	github.com/google/pprof v0.0.0-20260402051712-545e8a4df936 // indirect
 	go.yaml.in/yaml/v3 v3.0.5 // indirect
 	golang.org/x/mod v0.41.0 // indirect
-	golang.org/x/net v0.59.0 // indirect
+	golang.org/x/net v0.60.0 // indirect
 	golang.org/x/sync v0.23.0 // indirect
 	golang.org/x/sys v0.48.0 // indirect
 	golang.org/x/text v0.42.0 // indirect

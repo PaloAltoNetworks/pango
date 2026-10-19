@@ -29,7 +29,12 @@ type Entry struct {
 }
 type Devices struct {
 	Name           string
-	Vsys           []string
+	Vsys           []DevicesVsys
+	Misc           []generic.Xml
+	MiscAttributes []xml.Attr
+}
+type DevicesVsys struct {
+	Name           string
 	Misc           []generic.Xml
 	MiscAttributes []xml.Attr
 }
@@ -71,11 +76,20 @@ type devicesContainerXml struct {
 	Entries []devicesXml `xml:"entry"`
 }
 type devicesXml struct {
-	XMLName        xml.Name         `xml:"entry"`
-	Name           string           `xml:"name,attr"`
-	Vsys           *util.MemberType `xml:"vsys,omitempty"`
-	Misc           []generic.Xml    `xml:",any"`
-	MiscAttributes []xml.Attr       `xml:",any,attr"`
+	XMLName        xml.Name                 `xml:"entry"`
+	Name           string                   `xml:"name,attr"`
+	Vsys           *devicesVsysContainerXml `xml:"vsys,omitempty"`
+	Misc           []generic.Xml            `xml:",any"`
+	MiscAttributes []xml.Attr               `xml:",any,attr"`
+}
+type devicesVsysContainerXml struct {
+	Entries []devicesVsysXml `xml:"entry"`
+}
+type devicesVsysXml struct {
+	XMLName        xml.Name      `xml:"entry"`
+	Name           string        `xml:"name,attr"`
+	Misc           []generic.Xml `xml:",any"`
+	MiscAttributes []xml.Attr    `xml:",any,attr"`
 }
 
 func (o *entryXml) MarshalFromObject(s Entry) {
@@ -128,21 +142,48 @@ func (o entryXml) UnmarshalToObject() (*Entry, error) {
 func (o *devicesXml) MarshalFromObject(s Devices) {
 	o.Name = s.Name
 	if s.Vsys != nil {
-		o.Vsys = util.StrToMem(s.Vsys)
+		var objs []devicesVsysXml
+		for _, elt := range s.Vsys {
+			var obj devicesVsysXml
+			obj.MarshalFromObject(elt)
+			objs = append(objs, obj)
+		}
+		o.Vsys = &devicesVsysContainerXml{Entries: objs}
 	}
 	o.Misc = s.Misc
 	o.MiscAttributes = s.MiscAttributes
 }
 
 func (o devicesXml) UnmarshalToObject() (*Devices, error) {
-	var vsysVal []string
+	var vsysVal []DevicesVsys
 	if o.Vsys != nil {
-		vsysVal = util.MemToStr(o.Vsys)
+		for _, elt := range o.Vsys.Entries {
+			obj, err := elt.UnmarshalToObject()
+			if err != nil {
+				return nil, err
+			}
+			vsysVal = append(vsysVal, *obj)
+		}
 	}
 
 	result := &Devices{
 		Name:           o.Name,
 		Vsys:           vsysVal,
+		Misc:           o.Misc,
+		MiscAttributes: o.MiscAttributes,
+	}
+	return result, nil
+}
+func (o *devicesVsysXml) MarshalFromObject(s DevicesVsys) {
+	o.Name = s.Name
+	o.Misc = s.Misc
+	o.MiscAttributes = s.MiscAttributes
+}
+
+func (o devicesVsysXml) UnmarshalToObject() (*DevicesVsys, error) {
+
+	result := &DevicesVsys{
+		Name:           o.Name,
 		Misc:           o.Misc,
 		MiscAttributes: o.MiscAttributes,
 	}
@@ -231,7 +272,27 @@ func (o *Devices) matches(other *Devices) bool {
 	if o.Name != other.Name {
 		return false
 	}
-	if !util.OrderedListsMatch[string](o.Vsys, other.Vsys) {
+	if len(o.Vsys) != len(other.Vsys) {
+		return false
+	}
+	for idx := range o.Vsys {
+		if !o.Vsys[idx].matches(&other.Vsys[idx]) {
+			return false
+		}
+	}
+
+	return true
+}
+
+func (o *DevicesVsys) matches(other *DevicesVsys) bool {
+	if o == nil && other == nil {
+		return true
+	}
+
+	if (o == nil && other != nil) || (o != nil && other == nil) {
+		return false
+	}
+	if o.Name != other.Name {
 		return false
 	}
 
